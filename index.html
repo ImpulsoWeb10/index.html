@@ -3,110 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ImpulsoWeb10 | Performance & Conversão</title>
+    <title>Modelos Premium | ImpulsoWeb10</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Padronização: Identidade Visual */
-        :root {
-            --brand-blue: #001f3f;
-            --brand-orange: #f97316;
-        }
-        .bg-split-blue { background: linear-gradient(135deg, var(--brand-blue) 0%, #004aad 100%); }
-        .glass-nav { 
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255, 255, 255, 0.2); 
-        }
-        /* Modal: Estado Inicial */
-        #contactModal { display: none; }
-        #contactModal.active { display: flex; }
+        .bg-split-blue { background: linear-gradient(135deg, #001f3f 0%, #004aad 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); border: 1px solid rgba(226, 232, 240, 0.8); }
     </style>
 </head>
-<body class="font-sans text-gray-900 bg-white antialiased">
+<body class="bg-gray-50 font-sans text-gray-900">
 
-    <header class="fixed w-full z-50 px-4 py-4">
-        <nav class="container mx-auto glass-nav rounded-2xl px-6 py-3 flex justify-between items-center shadow-xl">
-            <div class="flex items-center space-x-2">
-                <div class="h-10 w-10 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-xl">I</div>
-                <span class="font-bold text-xl tracking-tight text-white">Impulso<span class="text-orange-400">Web10</span></span>
-            </div>
-            <div class="hidden md:flex space-x-8 text-white font-medium">
-                <button onclick="openModal()" class="bg-orange-500 px-6 py-2 rounded-xl hover:bg-orange-600 transition shadow-lg font-bold">Solicitar Orçamento</button>
-            </div>
-        </nav>
+    <header class="bg-split-blue py-6 shadow-lg">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="/" class="flex items-center space-x-2 text-white">
+                <div class="h-8 w-8 bg-orange-500 rounded flex items-center justify-center font-bold">I</div>
+                <span class="font-bold text-lg">Impulso<span class="text-orange-400">Web10</span></span>
+            </a>
+            <a href="https://wa.me/5511954950044" class="text-white text-sm font-bold border border-white/20 px-4 py-2 rounded-lg hover:bg-white/10 transition">
+                <i class="fab fa-whatsapp mr-1"></i> Contato
+            </a>
+        </div>
     </header>
 
-    <section class="min-h-screen flex flex-col md:flex-row">
-        <div class="md:w-1/2 bg-split-blue flex items-center justify-center p-8 pt-32 md:pt-8 text-white">
-            <div class="max-w-md">
-                <h1 class="text-4xl md:text-6xl font-black leading-tight mb-6">Sua Presença Digital de <span class="text-orange-400 italic">Elite</span>.</h1>
-                <p class="mb-10 opacity-90 text-lg">Landing Pages otimizadas para carregar em milissegundos e converter visitantes em clientes reais.</p>
-                <button onclick="openModal()" class="bg-white text-blue-900 font-bold px-8 py-4 rounded-2xl shadow-2xl hover:bg-orange-400 hover:text-white transition-all transform hover:-translate-y-1">Quero um Site de Alta Performance</button>
-            </div>
+    <main class="container mx-auto px-6 py-12">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl font-black text-blue-950 mb-4">Nossos Modelos <span class="text-orange-500">Premium</span></h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">Escolha o estilo que mais combina com o seu comércio local. Todas as páginas são 100% responsivas e otimizadas.</p>
         </div>
-        <div class="md:w-1/2 bg-orange-50 flex items-center justify-center p-8 relative">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-orange-200/40 via-transparent to-transparent"></div>
-            <div class="relative z-10 bg-white p-4 rounded-[2.5rem] shadow-2xl border border-gray-100 transform -rotate-2 hover:rotate-0 transition-all duration-500">
-                <img src="https://img.freepik.com/fotos-gratis/mulher-trabalhando-no-laptop_23-2148515152.jpg" loading="lazy" class="rounded-[2rem] w-full max-w-sm" alt="Performance Web">
-                <div class="absolute -top-6 -right-6 bg-green-500 text-white p-5 rounded-2xl shadow-xl animate-bounce">
-                    <i class="fab fa-whatsapp text-3xl"></i>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <div id="contactModal" class="fixed inset-0 z-[100] items-center justify-center px-4">
-        <div class="absolute inset-0 bg-blue-950/80 backdrop-blur-md" onclick="closeModal()"></div>
-        <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl relative z-10 overflow-hidden">
-            <div class="bg-orange-500 p-8 text-white text-center">
-                <h3 class="text-3xl font-black mb-2">Vamos Decolar? 🚀</h3>
-                <p class="opacity-90 font-medium">Atendimento Premium via WhatsApp</p>
-            </div>
-            <div class="p-8 space-y-4">
-                <a href="https://wa.me/5511954950044" class="flex items-center p-6 bg-green-50 border-2 border-green-500 rounded-2xl hover:bg-green-100 transition-all group">
-                    <div class="bg-green-500 text-white p-4 rounded-xl shadow-lg group-hover:scale-110 transition">
-                        <i class="fab fa-whatsapp text-2xl"></i>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <div class="glass-card rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group">
+                <div class="relative overflow-hidden">
+                    <img src="https://img.freepik.com/fotos-gratis/design-de-interiores-de-sala-de-estar-com-estilo-moderno_23-2148807185.jpg" 
+                         alt="Modelo Decor" class="w-full h-48 object-cover group-hover:scale-110 transition duration-500" loading="lazy">
+                    <div class="absolute inset-0 bg-blue-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                        <span class="bg-white text-blue-900 px-4 py-2 rounded-full font-bold text-sm">Preview Ativo</span>
                     </div>
-                    <div class="ml-5">
-                        <p class="font-black text-gray-900 leading-none mb-1">Falar com Consultor</p>
-                        <p class="text-sm text-green-700 font-bold">Online Agora</p>
-                    </div>
-                </a>
-                <button onclick="closeModal()" class="w-full text-center text-gray-400 font-bold uppercase text-[10px] tracking-[0.2em] hover:text-red-500 transition">Fechar Janela</button>
-            </div>
-        </div>
-    </div>
-
-    <footer class="bg-blue-950 text-white py-12 border-t border-white/5">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
-                <div class="flex items-center space-x-3 text-green-400 bg-green-400/10 px-4 py-2 rounded-full border border-green-400/20">
-                    <i class="fas fa-shield-alt"></i>
-                    <span class="text-xs font-bold tracking-widest uppercase">Certificado SSL Ativo</span>
                 </div>
-                <div class="text-sm font-medium">
-                    Desenvolvido por: 
-                    <a href="https://wa.me/5511954950044" class="text-orange-400 font-black hover:underline decoration-2 underline-offset-4">
-                        ImpulsoWeb10 <i class="fab fa-whatsapp ml-1"></i>
+                <div class="p-8">
+                    <span class="text-orange-500 text-xs font-black uppercase tracking-widest">Decoração & Móveis</span>
+                    <h3 class="text-xl font-bold mt-2 text-blue-950">Li&Li Decor</h3>
+                    <p class="text-gray-500 text-sm mt-3 mb-6">Focado em vitrine visual e agendamento de consultoria.</p>
+                    <a href="https://wa.me/5511954950044?text=Gostei+do+modelo+Li+Li+Decor" 
+                       class="block text-center bg-blue-900 text-white font-bold py-3 rounded-xl hover:bg-orange-500 transition shadow-md">
+                        Selecionar este Modelo
                     </a>
                 </div>
             </div>
-            <p class="text-center mt-10 text-[10px] text-gray-500 uppercase tracking-widest">© 2026 ImpulsoWeb10 | São Paulo - SP</p>
-        </div>
-    </header>
 
-    <script>
-        const modal = document.getElementById('contactModal');
-        // Funções de controle do Modal
-        function openModal() { 
-            modal.classList.add('active'); 
-            document.body.style.overflow = 'hidden'; 
-        }
-        function closeModal() { 
-            modal.classList.remove('active'); 
-            document.body.style.overflow = 'auto'; 
-        }
-    </script>
+            </div>
+    </main>
+
+    <footer class="py-12 text-center border-t border-gray-200">
+        <div class="flex justify-center items-center space-x-2 mb-4 text-green-600 font-bold text-sm">
+            <i class="fas fa-check-circle"></i>
+            <span>Site Seguro | Certificado SSL</span>
+        </div>
+        <p class="text-xs text-gray-400 italic">Desenvolvido por ImpulsoWeb10 - 2026</p>
+    </footer>
+
 </body>
 </html>
