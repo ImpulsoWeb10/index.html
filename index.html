@@ -3,159 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ImpulsoWeb10 | Blindagem de Reputação</title>
+    <title>ImpulsoWeb10 | Blindagem de Reputação e Links de Avaliação</title>
+    <meta name="description" content="Proteja sua empresa com o Sistema de Blindagem ImpulsoWeb10. Gerencie links de avaliação, filtre críticas negativas e aumente sua reputação no Google.">
+    <meta name="keywords" content="reputação digital, link de avaliação, blindagem de reputação, google meu negócio, avaliação 5 estrelas">
+    <meta name="author" content="ImpulsoWeb10">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    
     <style>
         .bg-split-blue { background: linear-gradient(135deg, #001f3f 0%, #004aad 100%); }
         .glass-nav { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.2); }
-        #contactModal { display: none; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; }
+        #contactModal { 
+            display: none; 
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
         #contactModal.active { display: flex; }
         .shield-glow { filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5)); }
         
-        /* Ajustes do Carrossel */
-        .swiper { width: 100%; max-width: 500px; height: auto; border-radius: 2.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); }
-        .swiper-slide img { width: 100%; height: auto; display: block; border-radius: 2.5rem; }
-        .swiper-pagination-bullet-active { background: #f97316 !important; }
-
-        /* Proteção visual */
-        body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        /* Estilo para o FAQ */
+        .faq-item { border-bottom: 1px solid rgba(0,0,0,0.1); }
+        details summary { cursor: pointer; outline: none; list-style: none; }
+        details summary::-webkit-details-marker { display: none; }
     </style>
 </head>
 <body class="font-sans text-gray-900 bg-white">
 
     <header class="fixed w-full z-50 px-4 py-4">
-        <nav class="container mx-auto glass-nav rounded-[2rem] px-8 py-5 flex justify-between items-center shadow-2xl">
-            <div class="flex items-center space-x-5">
-                <img src="logo.png" alt="Logo ImpulsoWeb10" class="h-16 md:h-28 w-auto object-contain transition-transform hover:scale-110 duration-500 drop-shadow-lg">
-                
-                <div class="flex flex-col leading-none hidden sm:flex">
-                    <span class="font-black text-2xl tracking-tighter text-white uppercase">Impulso</span>
-                    <span class="font-bold text-lg text-orange-400 tracking-widest uppercase">Web10</span>
-                </div>
+        <nav class="container mx-auto glass-nav rounded-2xl px-6 py-3 flex justify-between items-center shadow-xl">
+            <div class="flex items-center space-x-3">
+                <img src="impulsoweb10.png" alt="Logo ImpulsoWeb10" class="h-10 md:h-12 w-auto object-contain">
+                <span class="font-bold text-xl tracking-tight text-white">Impulso<span class="text-orange-400">Web10</span></span>
             </div>
-            
-            <div>
-                <button onclick="openModal()" class="bg-orange-500 px-10 py-4 rounded-2xl hover:bg-orange-600 transition-all shadow-lg font-black text-lg text-white uppercase transform hover:-translate-y-1">
-                    Orçamento
-                </button>
+            <div class="hidden md:flex space-x-8 text-white font-medium">
+                <button onclick="openModal()" class="bg-orange-500 px-6 py-2 rounded-xl hover:bg-orange-600 transition shadow-lg font-bold">Orçamento</button>
             </div>
         </nav>
     </header>
 
     <section class="min-h-screen flex flex-col md:flex-row border-b border-gray-100">
-        <div class="md:w-1/2 bg-split-blue flex items-center justify-center p-8 pt-56 md:pt-8 text-white">
+        <div class="md:w-1/2 bg-split-blue flex items-center justify-center p-8 pt-32 md:pt-8 text-white">
             <div class="max-w-md">
-                <div class="inline-block bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-[0.2em]">Tecnologia Anti-Crise</div>
-                <h1 class="text-4xl md:text-6xl font-black leading-tight mb-6 uppercase">
-                    Blindagem de <span class="text-orange-400 italic">Reputação</span> Digital.
+                <h1 class="text-4xl md:text-6xl font-black leading-tight mb-6">
+                    Sua loja com <span class="text-orange-400 italic">Presença Digital</span> de Elite.
                 </h1>
-                <p class="text-blue-100 text-lg mb-10 opacity-90 leading-relaxed">
-                    Não deixe uma avaliação ruim destruir anos de trabalho. Nosso sistema filtra críticas negativas e potencializa seus elogios no Google Maps.
+                <p class="text-blue-100 text-lg mb-10 opacity-90">
+                    Criamos Landing Pages focadas em converter visitantes em clientes reais via WhatsApp. Rápido, moderno e seguro.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="https://wa.me/5511954950044" class="bg-white text-blue-900 font-black px-10 py-5 rounded-2xl shadow-2xl hover:bg-orange-400 hover:text-white transition-all text-center uppercase tracking-wider text-sm">
-                        Ativar Blindagem Agora
+                    <a href="https://impulsoweb10.github.io/Avaliacao/modelos/" target="_blank" rel="noopener noreferrer" class="bg-white text-blue-900 font-bold px-8 py-4 rounded-2xl shadow-2xl hover:bg-orange-400 hover:text-white transition-all text-center">
+                        Ver Planos
+                    </a>
+                    <a href="https://wa.me/5511954950044" class="border-2 border-white/30 text-white font-bold px-8 py-4 rounded-2xl hover:bg-white/10 transition text-center">
+                        Falar com Especialista
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="md:w-1/2 bg-slate-50 flex items-center justify-center p-8 relative overflow-hidden">
-            <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-40"></div>
-            
-            <div class="swiper mySwiper z-10">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="https://img.freepik.com/vetores-premium/infografico-de-crescimento-de-negocios-com-grafico-de-setas-e-icones_24877-51823.jpg" alt="Gráfico">
-                        <div class="p-6 bg-white text-center font-black text-blue-900 uppercase text-sm">Escalada de Autoridade no Google</div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="https://img.freepik.com/vetores-premium/conceito-de-seguranca-de-dados-protecao-de-privacidade-de-rede-e-seguranca-de-computadores_1150-51142.jpg" alt="Segurança">
-                        <div class="p-6 bg-white text-center font-black text-orange-600 uppercase text-sm">Filtro de Críticas Ativado</div>
-                    </div>
+        <div class="md:w-1/2 bg-orange-50 flex items-center justify-center p-8 relative overflow-hidden">
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-orange-200 rounded-full blur-3xl opacity-40"></div>
+            <div class="relative z-10 bg-white p-4 rounded-[2rem] shadow-2xl border border-gray-100 transform rotate-1 hover:rotate-0 transition-all duration-700">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Preview Web" class="rounded-[1.5rem] w-full max-w-sm">
+                <div class="absolute -top-6 -right-6 bg-green-500 text-white p-5 rounded-2xl shadow-xl animate-bounce">
+                    <i class="fab fa-whatsapp text-3xl"></i>
                 </div>
-                <div class="swiper-pagination"></div>
             </div>
         </div>
     </section>
 
-    <section class="py-24 bg-white">
+    <section class="py-20 bg-gray-50">
         <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl md:text-5xl font-black text-blue-950 mb-16 uppercase tracking-tighter">Como a Mágica Acontece</h2>
-            <div class="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto text-left">
-                <div class="group bg-slate-50 p-10 rounded-[3rem] border-b-8 border-orange-500 shadow-xl transition-all hover:-translate-y-2">
-                    <div class="bg-orange-100 text-orange-600 w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner"><i class="fas fa-filter"></i></div>
-                    <h3 class="text-2xl font-black text-blue-950 mb-4 uppercase">Avaliações 1-3 Estrelas</h3>
-                    <p class="text-gray-600 leading-relaxed font-medium">O sistema identifica a insatisfação e bloqueia o link do Google. O cliente cai no seu WhatsApp privado para você resolver e reverter o caso sem danos à marca.</p>
+            <div class="flex justify-center mb-6">
+                <div class="bg-blue-600 w-20 h-20 rounded-3xl flex items-center justify-center text-white text-4xl shadow-2xl shield-glow">
+                    <i class="fas fa-shield-alt"></i>
                 </div>
-                <div class="group bg-slate-50 p-10 rounded-[3rem] border-b-8 border-green-500 shadow-xl transition-all hover:-translate-y-2">
-                    <div class="bg-green-100 text-green-600 w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner"><i class="fas fa-star"></i></div>
-                    <h3 class="text-2xl font-black text-blue-950 mb-4 uppercase">Avaliações 4-5 Estrelas</h3>
-                    <p class="text-gray-600 leading-relaxed font-medium">O sistema parabeniza o cliente e libera automaticamente o link direto do seu Google Maps. Seu negócio ganha autoridade e sobe nas buscas organicamente.</p>
+            </div>
+            <h2 class="text-3xl md:text-5xl font-black text-blue-950 mb-4 text-center">Sistema de Blindagem de Reputação</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-16 text-lg font-medium text-center">
+                Sua reputação é o seu maior ativo. Nós a protegemos com tecnologia exclusiva de filtragem.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto text-left">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border-l-8 border-orange-500 relative overflow-hidden group hover:scale-[1.02] transition-all">
+                    <div class="text-orange-500 text-4xl mb-4"><i class="fas fa-exclamation-triangle"></i></div>
+                    <h3 class="text-2xl font-bold text-blue-950 mb-2 font-center">Até 3 Estrelas</h3>
+                    <p class="text-gray-700 font-semibold mb-2 italic">"Sua reputação está segura"</p>
+                    <p class="text-gray-500 text-sm">
+                        O cliente insatisfeito é direcionado diretamente para o seu WhatsApp pessoal. Você resolve o problema em particular e evita uma nota baixa pública.
+                    </p>
+                    <div class="absolute top-4 right-4 text-orange-100 text-6xl opacity-20"><i class="fas fa-user-shield"></i></div>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border-l-8 border-green-500 relative overflow-hidden group hover:scale-[1.02] transition-all">
+                    <div class="text-green-500 text-4xl mb-4"><i class="fas fa-check-circle"></i></div>
+                    <h3 class="text-2xl font-bold text-blue-950 mb-2 font-center">4 a 5 Estrelas</h3>
+                    <p class="text-gray-700 font-semibold mb-2 italic">"Avaliação liberada com SUCESSO!"</p>
+                    <p class="text-gray-500 text-sm">
+                        O sistema identifica o cliente satisfeito e libera o link direto do Google para que ele publique uma avaliação 5 estrelas instantaneamente.
+                    </p>
+                    <div class="absolute top-4 right-4 text-green-100 text-6xl opacity-20"><i class="fab fa-google"></i></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-blue-950 text-white py-16 border-t border-white/10">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-10">
-                <div class="text-center md:text-left">
-                    <img src="logo.png" alt="Logo" class="h-16 mx-auto md:mx-0 mb-6">
-                    <p class="text-blue-200 text-xs opacity-50 uppercase tracking-widest">© 2026 ImpulsoWeb10 • Todos Direitos Reservados</p>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="flex items-center text-green-400 space-x-2 mb-2">
-                        <i class="fas fa-shield-virus text-2xl"></i>
-                        <span class="font-bold uppercase text-xs tracking-[0.3em]">SSL SECURE SERVER</span>
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <h2 class="text-3xl font-black text-blue-950 mb-10 text-center uppercase">Dúvidas sobre o Link de Avaliação</h2>
+            <div class="space-y-4 text-left">
+                <details class="faq-item p-4 bg-gray-50 rounded-xl group">
+                    <summary class="font-bold text-lg flex justify-between items-center">
+                        Como funciona o link de avaliação inteligente?
+                        <i class="fas fa-chevron-down text-orange-500"></i>
+                    </summary>
+                    <p class="mt-3 text-gray-600 italic">O link identifica a nota do cliente. Se for alta, ele vai para o Google. Se for baixa, ele cai no seu WhatsApp para resolver o conflito antes de virar uma reclamação pública.</p>
+                </details>
+
+                <details class="faq-item p-4 bg-gray-50 rounded-xl group">
+                    <summary class="font-bold text-lg flex justify-between items-center">
+                        Isso ajuda no ranqueamento do Google Maps?
+                        <i class="fas fa-chevron-down text-orange-500"></i>
+                    </summary>
+                    <p class="mt-3 text-gray-600 italic">Sim! O Google prioriza empresas com notas altas e frequência de avaliações. Filtrando as ruins, sua média sobe e você aparece primeiro.</p>
+                </details>
+
+                <details class="faq-item p-4 bg-gray-50 rounded-xl group">
+                    <summary class="font-bold text-lg flex justify-between items-center">
+                        Posso configurar meu próprio link?
+                        <i class="fas fa-chevron-down text-orange-500"></i>
+                    </summary>
+                    <p class="mt-3 text-gray-600 italic">Nossa equipe configura tudo para você, direcionando para o seu estabelecimento específico no Google Meu Negócio.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-blue-950 text-white py-12 border-t border-white/10">
+        <div class="container mx-auto px-6 text-left">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-1 text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start space-x-3 mb-4">
+                        <img src="impulsoweb10.png" alt="Logo" class="h-8 w-auto">
+                        <span class="font-bold text-lg tracking-tight text-white">Impulso<span class="text-orange-400">Web10</span></span>
                     </div>
-                    <p class="text-[9px] text-blue-300 opacity-40 uppercase">Monitoramento em tempo real ativo</p>
+                    <p class="text-blue-200 text-xs opacity-60">Transformando negócios locais em autoridades digitais.</p>
                 </div>
+
+                <div class="text-center md:text-left">
+                    <h4 class="font-bold text-orange-400 mb-4 uppercase text-sm tracking-widest">Mapa do Site</h4>
+                    <ul class="text-xs space-y-2 text-blue-200">
+                        <li><a href="#" class="hover:text-white">Início</a></li>
+                        <li><a href="https://impulsoweb10.github.io/Avaliacao/modelos/" class="hover:text-white">Modelos de Link</a></li>
+                        <li><a href="#contactModal" onclick="openModal()" class="hover:text-white">Solicitar Orçamento</a></li>
+                        <li><a href="https://wa.me/5511954950044" class="hover:text-white">Suporte Técnico</a></li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col items-center justify-center space-y-2 text-center">
+                    <div class="flex items-center space-x-2 text-green-400">
+                        <i class="fas fa-lock text-xl"></i>
+                        <span class="text-xs font-semibold uppercase tracking-widest">Conexão Segura SSL</span>
+                    </div>
+                    <p class="text-[10px] text-blue-300 opacity-50 uppercase tracking-tighter">Ambiente monitorado e protegido</p>
+                </div>
+
                 <div class="text-center md:text-right">
-                    <p class="text-xs text-blue-300 mb-4 uppercase">Tecnologia de Elite</p>
-                    <a href="https://wa.me/5511954950044" class="text-white hover:text-orange-400 font-black transition underline underline-offset-8 uppercase">Suporte Oficial</a>
+                    <p class="text-sm font-medium">© 2026 <span class="text-orange-400">ImpulsoWeb10</span></p>
+                    <p class="text-[10px] text-blue-200 opacity-50 mt-1 uppercase tracking-tighter">Todos os direitos reservados.</p>
                 </div>
             </div>
         </div>
     </footer>
 
     <div id="contactModal">
-        <div class="absolute inset-0 bg-blue-950/90 backdrop-blur-xl" onclick="closeModal()"></div>
-        <div class="bg-white w-full max-w-md rounded-[3rem] shadow-2xl relative z-10 overflow-hidden mx-4">
-            <div class="bg-orange-500 p-10 text-white text-center">
-                <button onclick="closeModal()" class="absolute top-6 right-6 text-white/50 hover:text-white"><i class="fas fa-times text-xl"></i></button>
-                <img src="logo.png" alt="Logo" class="h-14 mx-auto mb-4 brightness-0 invert">
-                <h3 class="text-3xl font-black uppercase tracking-tighter leading-tight">Pronto para blindar seu faturamento?</h3>
+        <div class="absolute inset-0 bg-blue-950/80 backdrop-blur-md" onclick="closeModal()"></div>
+        <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl relative z-10 overflow-hidden mx-4">
+             <div class="bg-orange-500 p-8 text-white text-center relative">
+                <button onclick="closeModal()" class="absolute top-4 right-4 text-white/50 hover:text-white transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                <img src="impulsoweb10.png" alt="Logo" class="h-12 w-auto mx-auto mb-4 brightness-0 invert"> <h3 class="text-3xl font-black mb-2">Vamos decolar? 🚀</h3>
             </div>
-            <div class="p-10">
-                <a href="https://wa.me/5511954950044" class="flex items-center p-6 bg-green-50 border-2 border-green-500 rounded-[2rem] hover:scale-105 transition-all">
-                    <div class="bg-green-500 text-white p-4 rounded-2xl shadow-lg"><i class="fab fa-whatsapp text-2xl"></i></div>
-                    <div class="ml-5 text-left"><p class="font-black text-gray-900 uppercase text-sm">Chamar no WhatsApp</p><p class="text-xs text-green-600 font-bold italic">Consultoria Gratuita</p></div>
+            <div class="p-8 space-y-4 text-center">
+                <a href="https://wa.me/5511954950044" class="flex items-center p-5 bg-green-50 border-2 border-green-500 rounded-2xl hover:scale-[1.02] transition-all group">
+                    <div class="bg-green-500 text-white p-4 rounded-xl shadow-lg">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                    </div>
+                    <div class="ml-5 text-left text-center">
+                        <p class="font-black text-gray-900 leading-none mb-1">WhatsApp Direto</p>
+                        <p class="text-sm text-green-700 font-medium italic">Falar com consultor agora</p>
+                    </div>
                 </a>
+                <button onclick="closeModal()" class="w-full py-4 text-gray-400 font-bold uppercase tracking-widest text-xs">Voltar ao Site</button>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        var swiper = new Swiper(".mySwiper", {
-            loop: true,
-            effect: "fade",
-            autoplay: { delay: 4000, disableOnInteraction: false },
-            pagination: { el: ".swiper-pagination", clickable: true },
-        });
-
-        // Proteção contra cópia
+        const modal = document.getElementById('contactModal');
+        function openModal() { modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeModal() { modal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+        
         document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function(e) {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) return false;
-        };
 
-        function openModal() { document.getElementById('contactModal').classList.add('active'); }
-        function closeModal() { document.getElementById('contactModal').classList.remove('active'); }
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || 
+                (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || 
+                (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) || 
+                (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+                return false;
+            }
+        }
     </script>
 </body>
 </html>
