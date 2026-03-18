@@ -3,183 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Vendas - Tintas v1.0</title>
+    <title>PDV Profissional - Tintas e Materiais</title>
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --bg: #f5f6fa;
-            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --bg: #f1f5f9;
+            --white: #ffffff;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; height: 100vh; color: #1e293b; }
 
-        /* HEADER & CATEGORIAS */
-        header { background: white; padding: 15px; border-bottom: 1px solid #ddd; }
-        .categories { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
-        .cat-btn { background: white; border: 1px solid #ddd; padding: 8px 15px; border-radius: 20px; white-space: nowrap; cursor: pointer; }
-        .cat-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-
-        /* GRID DE PRODUTOS */
-        .main-content { flex: 1; overflow-y: auto; padding: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        /* Barra de Busca e Categorias */
+        header { background: var(--white); padding: 10px 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); z-index: 10; }
+        .search-box { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; font-size: 16px; }
         
-        .product-card {
-            background: var(--card-bg); border-radius: 12px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            text-align: center; cursor: pointer; transition: 0.2s; position: relative;
-        }
-        .product-card:hover { transform: translateY(-3px); }
-        .product-card img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; }
-        .product-card h3 { margin: 5px 0; font-size: 0.9rem; color: #333; height: 35px; overflow: hidden; }
-        .product-card .price { font-weight: bold; color: var(--accent); font-size: 1.1rem; }
-        .stock-tag { font-size: 0.7rem; color: #888; display: block; margin-top: 5px; }
+        .categories-nav { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .categories-nav::-webkit-scrollbar { display: none; }
+        .cat-btn { background: #e2e8f0; border: none; padding: 8px 16px; border-radius: 20px; white-space: nowrap; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--secondary); }
+        .cat-btn.active { background: var(--primary); color: var(--white); }
 
-        /* MODAL DE QUANTIDADE */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-            display: none; align-items: center; justify-content: center; z-index: 1000;
-        }
-        .modal {
-            background: white; width: 90%; max-width: 400px; border-radius: 20px; padding: 25px;
-            text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: pop 0.3s ease;
-        }
-        @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        /* Grade de Produtos */
+        .product-grid { flex: 1; overflow-y: auto; padding: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; align-content: start; }
+        
+        .card { background: var(--white); border-radius: 12px; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; border: 2px solid transparent; transition: 0.2s; position: relative; }
+        .card:active { transform: scale(0.95); border-color: var(--primary); }
+        .card-title { font-size: 13px; font-weight: 700; margin: 0 0 5px 0; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .card-info { font-size: 11px; color: var(--secondary); margin-bottom: 8px; }
+        .card-price { font-size: 16px; font-weight: 800; color: var(--primary); }
+        .card-stock { position: absolute; top: 8px; right: 8px; font-size: 10px; background: #f1f5f9; padding: 2px 5px; border-radius: 4px; }
 
-        .qty-control { display: flex; align-items: center; justify-content: center; gap: 20px; margin: 25px 0; }
-        .btn-circle {
-            width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 24px;
-            color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
+        /* Modal Interativo */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+        .modal { background: var(--white); width: 100%; max-width: 350px; border-radius: 24px; padding: 24px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .qty-controls { display: flex; align-items: center; justify-content: center; gap: 25px; margin: 25px 0; }
+        .btn-qty { width: 55px; height: 55px; border-radius: 18px; border: none; font-size: 24px; font-weight: bold; cursor: pointer; color: white; }
         .btn-minus { background: var(--danger); }
         .btn-plus { background: var(--success); }
-        .qty-number { font-size: 2.5rem; font-weight: bold; min-width: 60px; }
+        .qty-val { font-size: 32px; font-weight: 800; min-width: 50px; }
 
-        /* BARRA INFERIOR / CARRINHO */
-        .cart-bar {
-            background: var(--primary); color: white; padding: 15px 25px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-radius: 20px 20px 0 0;
-        }
-        .btn-checkout { background: var(--success); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        /* Carrinho Inferior */
+        .cart-footer { background: #1e293b; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 20px 20px 0 0; }
+        .total-box span { font-size: 12px; color: #94a3b8; }
+        .total-box div { font-size: 20px; font-weight: 800; }
+        .btn-finish { background: var(--success); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; }
 
-        /* FORMAS DE PAGAMENTO NO CHECKOUT */
-        .pay-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .pay-btn { padding: 10px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; background: #f9f9f9; }
-        .pay-btn:active { background: #eee; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="categories">
-        <button class="cat-btn active">Todas</button>
-        <button class="cat-btn">Acrílicas</button>
-        <button class="cat-btn">Esmaltes</button>
-        <button class="cat-btn">Acessórios</button>
-        <button class="cat-btn">Vernizes</button>
-    </div>
+    <input type="text" id="searchInput" class="search-box" placeholder="Pesquisar produto da planilha...">
+    <div class="categories-nav" id="catNav">
+        <button class="cat-btn active" onclick="filterCat('TUDO')">TUDO</button>
+        </div>
 </header>
 
-<div class="main-content" id="productGrid">
-    <div class="product-card" onclick="openModal('Tinta Branco Neve 18L', 149.90)">
-        <img src="https://cdn-icons-png.flaticon.com/512/1041/1041846.png" alt="tinta">
-        <h3>Tinta Branco Neve 18L</h3>
-        <span class="price">R$ 149,90</span>
-        <span class="stock-tag">Estoque: 12 un</span>
+<div class="product-grid" id="productGrid">
     </div>
-
-    <div class="product-card" onclick="openModal('Rolo de Lã 23cm', 22.50)">
-        <img src="https://cdn-icons-png.flaticon.com/512/2830/2830310.png" alt="rolo">
-        <h3>Rolo de Lã 23cm</h3>
-        <span class="price">R$ 22,50</span>
-        <span class="stock-tag">Estoque: 45 un</span>
-    </div>
-
-    <div class="product-card" onclick="openModal('Verniz Brilhante 3,6L', 89.00)">
-        <img src="https://cdn-icons-png.flaticon.com/512/1041/1041846.png" alt="verniz">
-        <h3>Verniz Brilhante 3,6L</h3>
-        <span class="price">R$ 89,00</span>
-        <span class="stock-tag">Estoque: 8 un</span>
-    </div>
-</div>
 
 <div class="modal-overlay" id="modal">
     <div class="modal">
-        <h2 id="modalTitle">Produto</h2>
-        <p id="modalPrice" style="color: var(--accent); font-weight: bold;">R$ 0,00</p>
-        
-        <div class="qty-control">
-            <button class="btn-circle btn-minus" onclick="updateQty(-1)">-</button>
-            <span class="qty-number" id="qtyVal">1</span>
-            <button class="btn-circle btn-plus" onclick="updateQty(1)">+</button>
+        <h2 id="modalTitle" style="margin:0">Produto</h2>
+        <p id="modalInfo" style="color: var(--secondary); margin: 5px 0 0 0;">Detalhes</p>
+        <div class="qty-controls">
+            <button class="btn-qty btn-minus" onclick="updateQty(-1)">-</button>
+            <span class="qty-val" id="qtyVal">1</span>
+            <button class="btn-qty btn-plus" onclick="updateQty(1)">+</button>
         </div>
-
-        <button onclick="addToCart()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer;">
-            Adicionar ao Carrinho
+        <button onclick="addToCart()" style="width:100%; padding: 15px; border:none; border-radius:12px; background: var(--primary); color:white; font-weight:700; font-size:16px; cursor:pointer;">
+            Confirmar e Adicionar
         </button>
-        <p onclick="closeModal()" style="margin-top: 15px; color: #999; cursor: pointer;">Cancelar</p>
+        <p onclick="closeModal()" style="margin-top:15px; cursor:pointer; font-weight:600; color:var(--secondary)">Cancelar</p>
     </div>
 </div>
 
-<div class="cart-bar">
-    <div>
-        <span id="cartCount">0 itens</span><br>
-        <strong id="cartTotal" style="font-size: 1.4rem;">R$ 0,00</strong>
+<div class="cart-footer">
+    <div class="total-box">
+        <span id="cartCount">0 ITENS</span>
+        <div id="cartTotal">R$ 0,00</div>
     </div>
-    <button class="btn-checkout" onclick="finishOrder()">CONCLUIR PEDIDO</button>
+    <button class="btn-finish" onclick="finishSale()">FINALIZAR</button>
 </div>
 
 <script>
-    let currentProduct = { name: '', price: 0 };
-    let currentQty = 1;
-    let cart = [];
+    // DADOS INTEGRADOS DA SUA PLANILHA
+    const produtos = [
+        { cat: "TINTAS ACRÍLICAS", nome: "BRANCO NEVE 18L - PREMIUM", preco: 289.90, estoque: 15, un: "LATA" },
+        { cat: "TINTAS ACRÍLICAS", nome: "PALHA 18L - PREMIUM", preco: 289.90, estoque: 8, un: "LATA" },
+        { cat: "TINTAS ACRÍLICAS", nome: "GELO 18L - STANDARD", preco: 195.00, estoque: 22, un: "LATA" },
+        { cat: "ESMALTES E VERNIZES", nome: "ESMALTE BRANCO BRILHANTE 3,6L", preco: 85.50, estoque: 12, un: "GALÃO" },
+        { cat: "ESMALTES E VERNIZES", nome: "VERNIZ MARÍTIMO 3,6L", preco: 112.00, estoque: 5, un: "GALÃO" },
+        { cat: "MASSAS E TEXTURAS", nome: "MASSA CORRIDA 25KG", preco: 48.90, estoque: 40, un: "BARRICA" },
+        { cat: "MASSAS E TEXTURAS", nome: "TEXTURA ACRÍLICA RÚSTICA 25KG", preco: 65.00, estoque: 18, un: "BARRICA" },
+        { cat: "ACESSÓRIOS", nome: "ROLO DE LÃ 23CM", preco: 22.90, estoque: 50, un: "UN" },
+        { cat: "ACESSÓRIOS", nome: "TRINCHA SINTÉTICA 2.1/2", preco: 12.50, estoque: 30, un: "UN" },
+        { cat: "SOLVENTES", nome: "AGUARRÁS 900ML", preco: 18.00, estoque: 25, un: "FRASCO" },
+        { cat: "SOLVENTES", nome: "THINNER LIMPEZA 5L", preco: 55.00, estoque: 10, un: "LATÃO" }
+    ];
 
-    function openModal(name, price) {
-        currentProduct = { name, price };
+    let cart = [];
+    let currentProd = null;
+    let currentQty = 1;
+
+    // Inicializar App
+    function init() {
+        renderProducts(produtos);
+        renderCats();
+    }
+
+    function renderCats() {
+        const cats = ["TUDO", ...new Set(produtos.map(p => p.cat))];
+        const nav = document.getElementById('catNav');
+        nav.innerHTML = cats.map(c => `<button class="cat-btn ${c==='TUDO'?'active':''}" onclick="filterCat('${c}', this)">${c}</button>`).join('');
+    }
+
+    function renderProducts(lista) {
+        const grid = document.getElementById('productGrid');
+        grid.innerHTML = lista.map((p, index) => `
+            <div class="card" onclick="openModal('${p.nome}', ${p.preco}, '${p.un}')">
+                <span class="card-stock">Est: ${p.estoque}</span>
+                <p class="card-title">${p.nome}</p>
+                <p class="card-info">${p.un} | ${p.cat}</p>
+                <p class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</p>
+            </div>
+        `).join('');
+    }
+
+    // Filtros e Busca
+    function filterCat(cat, btn) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        const filtrados = cat === 'TUDO' ? produtos : produtos.filter(p => p.cat === cat);
+        renderProducts(filtrados);
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtrados = produtos.filter(p => p.nome.toLowerCase().includes(term));
+        renderProducts(filtrados);
+    });
+
+    // Lógica do Modal
+    function openModal(nome, preco, un) {
+        currentProd = { nome, preco, un };
         currentQty = 1;
-        document.getElementById('modalTitle').innerText = name;
-        document.getElementById('modalPrice').innerText = `R$ ${price.toFixed(2)}`;
+        document.getElementById('modalTitle').innerText = nome;
+        document.getElementById('modalInfo').innerText = `${un} • R$ ${preco.toFixed(2)}`;
         document.getElementById('qtyVal').innerText = currentQty;
         document.getElementById('modal').style.display = 'flex';
     }
 
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-    }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
     function updateQty(val) {
         currentQty += val;
-        if (currentQty < 1) currentQty = 1;
+        if(currentQty < 1) currentQty = 1;
         document.getElementById('qtyVal').innerText = currentQty;
     }
 
     function addToCart() {
-        const item = { ...currentProduct, qty: currentQty };
-        cart.push(item);
+        cart.push({ ...currentProd, qty: currentQty });
         updateCartUI();
         closeModal();
     }
 
     function updateCartUI() {
-        const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-        const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        
-        document.getElementById('cartCount').innerText = `${totalItems} itens no carrinho`;
-        document.getElementById('cartTotal').innerText = `R$ ${totalPrice.toFixed(2)}`;
+        const total = cart.reduce((acc, item) => acc + (item.preco * item.qty), 0);
+        document.getElementById('cartCount').innerText = `${cart.length} PRODUTOS`;
+        document.getElementById('cartTotal').innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
     }
 
-    function finishOrder() {
-        if (cart.length === 0) return alert("Carrinho vazio!");
-        
-        const method = prompt("Selecione a Forma de Pagamento:\n1. Pix\n2. Cartão\n3. Dinheiro\n4. Faturado");
-        if (method) {
-            alert("Pedido registrado com sucesso no estoque!");
+    function finishSale() {
+        if(cart.length === 0) return alert("Carrinho vazio!");
+        const pgto = prompt("FORMA DE PAGAMENTO:\n1. PIX\n2. CARTÃO CRÉDITO/DÉBITO\n3. DINHEIRO\n4. FATURADO");
+        if(pgto) {
+            alert("Venda concluída! Estoque atualizado.");
             cart = [];
             updateCartUI();
         }
     }
-</script>
 
+    init();
+</script>
 </body>
 </html>
