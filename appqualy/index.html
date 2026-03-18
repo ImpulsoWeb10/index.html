@@ -3,191 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDV Profissional - Tintas e Materiais</title>
+    <title>Tintas Qualy Quimy - PDV</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --secondary: #64748b;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --bg: #f1f5f9;
-            --white: #ffffff;
+            --primary: #0056b3;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
         }
 
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; height: 100vh; color: #1e293b; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #e9ecef; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; }
 
-        /* Barra de Busca e Categorias */
-        header { background: var(--white); padding: 10px 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); z-index: 10; }
-        .search-box { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; font-size: 16px; }
+        /* Header */
+        header { background: var(--white); text-align: center; padding: 20px; background: white; border-bottom: 4px solid var(--primary); }
+        header h1 { margin: 0; color: var(--primary); font-size: 24px; text-transform: uppercase; }
+        header p { margin: 5px 0 0; color: var(--secondary); font-style: italic; }
+
+        /* Container Principal */
+        .container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        h2.section-title { color: var(--dark); margin-bottom: 20px; }
+
+        /* Botões de Categorias e Produtos */
+        .grid-buttons { display: grid; grid-template-columns: 1fr; gap: 15px; width: 100%; max-width: 400px; }
+        .btn-main { 
+            background: white; border: 2px solid var(--primary); color: var(--primary);
+            padding: 20px; border-radius: 12px; font-size: 18px; font-weight: bold;
+            cursor: pointer; transition: 0.2s; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-main:active { transform: scale(0.95); background: var(--primary); color: white; }
+
+        /* Lista de Produtos (Escondida por padrão) */
+        #product-list { display: none; width: 100%; max-width: 500px; }
+        .product-item { 
+            background: white; margin-bottom: 10px; padding: 15px; border-radius: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; border-left: 5px solid var(--primary);
+        }
+
+        /* Modal */
+        .modal-overlay { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); 
+            display: none; align-items: center; justify-content: center; z-index: 1000; 
+        }
+        .modal { 
+            background: white; width: 90%; max-width: 350px; border-radius: 20px; 
+            padding: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Controles Qtd */
+        .qty-box { display: flex; align-items: center; justify-content: center; gap: 20px; margin: 20px 0; }
+        .btn-qty { width: 50px; height: 50px; border-radius: 50%; border: none; font-size: 24px; color: white; cursor: pointer; }
+        .qty-val { font-size: 30px; font-weight: bold; }
+
+        /* Botões de Ação */
+        .btn-action { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-back { background: var(--secondary); color: white; margin-bottom: 15px; }
+        .btn-add { background: var(--success); color: white; }
         
-        .categories-nav { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
-        .categories-nav::-webkit-scrollbar { display: none; }
-        .cat-btn { background: #e2e8f0; border: none; padding: 8px 16px; border-radius: 20px; white-space: nowrap; cursor: pointer; font-weight: 600; font-size: 14px; color: var(--secondary); }
-        .cat-btn.active { background: var(--primary); color: var(--white); }
-
-        /* Grade de Produtos */
-        .product-grid { flex: 1; overflow-y: auto; padding: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; align-content: start; }
-        
-        .card { background: var(--white); border-radius: 12px; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; border: 2px solid transparent; transition: 0.2s; position: relative; }
-        .card:active { transform: scale(0.95); border-color: var(--primary); }
-        .card-title { font-size: 13px; font-weight: 700; margin: 0 0 5px 0; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .card-info { font-size: 11px; color: var(--secondary); margin-bottom: 8px; }
-        .card-price { font-size: 16px; font-weight: 800; color: var(--primary); }
-        .card-stock { position: absolute; top: 8px; right: 8px; font-size: 10px; background: #f1f5f9; padding: 2px 5px; border-radius: 4px; }
-
-        /* Modal Interativo */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
-        .modal { background: var(--white); width: 100%; max-width: 350px; border-radius: 24px; padding: 24px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-        .qty-controls { display: flex; align-items: center; justify-content: center; gap: 25px; margin: 25px 0; }
-        .btn-qty { width: 55px; height: 55px; border-radius: 18px; border: none; font-size: 24px; font-weight: bold; cursor: pointer; color: white; }
-        .btn-minus { background: var(--danger); }
-        .btn-plus { background: var(--success); }
-        .qty-val { font-size: 32px; font-weight: 800; min-width: 50px; }
-
-        /* Carrinho Inferior */
-        .cart-footer { background: #1e293b; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 20px 20px 0 0; }
-        .total-box span { font-size: 12px; color: #94a3b8; }
-        .total-box div { font-size: 20px; font-weight: 800; }
-        .btn-finish { background: var(--success); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; }
-
-        .hidden { display: none; }
+        /* Rodapé Carrinho */
+        .cart-footer { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
 
 <header>
-    <input type="text" id="searchInput" class="search-box" placeholder="Pesquisar produto da planilha...">
-    <div class="categories-nav" id="catNav">
-        <button class="cat-btn active" onclick="filterCat('TUDO')">TUDO</button>
-        </div>
+    <h1>Tintas Qualy Quimy</h1>
+    <p>Qualidade em tintas e complementos</p>
 </header>
 
-<div class="product-grid" id="productGrid">
+<div class="container">
+    <div id="view-categories" style="width: 100%; text-align: center;">
+        <h2 class="section-title">Categorias</h2>
+        <div class="grid-buttons">
+            <button class="btn-main" onclick="showProducts('Tintas')">TINTAS</button>
+            <button class="btn-main" onclick="showProducts('Massas')">MASSAS</button>
+            <button class="btn-main" onclick="showProducts('Texturas')">TEXTURAS</button>
+            <button class="btn-main" onclick="showProducts('Selantes')">SELANTES</button>
+            <button class="btn-main" onclick="showProducts('Complementos')">COMPLEMENTOS</button>
+        </div>
     </div>
+
+    <div id="view-products" style="display: none; width: 100%; max-width: 500px;">
+        <button class="btn-action btn-back" onclick="showCategories()">← Voltar para Categorias</button>
+        <h2 id="cat-title" style="text-align: center;">Produtos</h2>
+        <div id="product-list-container"></div>
+    </div>
+</div>
 
 <div class="modal-overlay" id="modal">
     <div class="modal">
-        <h2 id="modalTitle" style="margin:0">Produto</h2>
-        <p id="modalInfo" style="color: var(--secondary); margin: 5px 0 0 0;">Detalhes</p>
-        <div class="qty-controls">
-            <button class="btn-qty btn-minus" onclick="updateQty(-1)">-</button>
-            <span class="qty-val" id="qtyVal">1</span>
-            <button class="btn-qty btn-plus" onclick="updateQty(1)">+</button>
+        <h2 id="modal-p-name">Produto</h2>
+        <p id="modal-p-price" style="font-size: 20px; color: var(--primary); font-weight: bold;">R$ 0,00</p>
+        
+        <div class="qty-box">
+            <button class="btn-qty" style="background: var(--danger);" onclick="changeQty(-1)">-</button>
+            <span class="qty-val" id="qty-display">1</span>
+            <button class="btn-qty" style="background: var(--success);" onclick="changeQty(1)">+</button>
         </div>
-        <button onclick="addToCart()" style="width:100%; padding: 15px; border:none; border-radius:12px; background: var(--primary); color:white; font-weight:700; font-size:16px; cursor:pointer;">
-            Confirmar e Adicionar
-        </button>
-        <p onclick="closeModal()" style="margin-top:15px; cursor:pointer; font-weight:600; color:var(--secondary)">Cancelar</p>
+
+        <button class="btn-action btn-add" onclick="confirmAdd()">Adicionar ao Pedido</button>
+        <button class="btn-action btn-back" onclick="closeModal()" style="background: none; color: var(--secondary);">Voltar</button>
     </div>
 </div>
 
 <div class="cart-footer">
-    <div class="total-box">
-        <span id="cartCount">0 ITENS</span>
-        <div id="cartTotal">R$ 0,00</div>
-    </div>
-    <button class="btn-finish" onclick="finishSale()">FINALIZAR</button>
+    <div id="cart-info">0 itens | R$ 0,00</div>
+    <button onclick="finishOrder()" style="background: var(--success); border: none; color: white; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer;">Finalizar</button>
 </div>
 
 <script>
-    // DADOS INTEGRADOS DA SUA PLANILHA
-    const produtos = [
-        { cat: "TINTAS ACRÍLICAS", nome: "BRANCO NEVE 18L - PREMIUM", preco: 289.90, estoque: 15, un: "LATA" },
-        { cat: "TINTAS ACRÍLICAS", nome: "PALHA 18L - PREMIUM", preco: 289.90, estoque: 8, un: "LATA" },
-        { cat: "TINTAS ACRÍLICAS", nome: "GELO 18L - STANDARD", preco: 195.00, estoque: 22, un: "LATA" },
-        { cat: "ESMALTES E VERNIZES", nome: "ESMALTE BRANCO BRILHANTE 3,6L", preco: 85.50, estoque: 12, un: "GALÃO" },
-        { cat: "ESMALTES E VERNIZES", nome: "VERNIZ MARÍTIMO 3,6L", preco: 112.00, estoque: 5, un: "GALÃO" },
-        { cat: "MASSAS E TEXTURAS", nome: "MASSA CORRIDA 25KG", preco: 48.90, estoque: 40, un: "BARRICA" },
-        { cat: "MASSAS E TEXTURAS", nome: "TEXTURA ACRÍLICA RÚSTICA 25KG", preco: 65.00, estoque: 18, un: "BARRICA" },
-        { cat: "ACESSÓRIOS", nome: "ROLO DE LÃ 23CM", preco: 22.90, estoque: 50, un: "UN" },
-        { cat: "ACESSÓRIOS", nome: "TRINCHA SINTÉTICA 2.1/2", preco: 12.50, estoque: 30, un: "UN" },
-        { cat: "SOLVENTES", nome: "AGUARRÁS 900ML", preco: 18.00, estoque: 25, un: "FRASCO" },
-        { cat: "SOLVENTES", nome: "THINNER LIMPEZA 5L", preco: 55.00, estoque: 10, un: "LATÃO" }
-    ];
+    const db = {
+        "Tintas": [
+            {n: "Qualy Color Econômica 1L", p: 8.90}, {n: "Qualy Color Econômica 3.6L", p: 26.90}, {n: "Qualy Color Econômica 18L (Lata)", p: 79.90},
+            {n: "Latex Uso Interno 18L", p: 64.90}, {n: "Standard 3.6L", p: 34.90}, {n: "Standard 18L", p: 124.90},
+            {n: "Piso Standard 18L", p: 144.90}, {n: "Emborrachada Premium 18L", p: 392.00}
+        ],
+        "Massas": [
+            {n: "Massa Corrida PVA 1L", p: 6.90}, {n: "Massa Corrida PVA 3.6L", p: 14.99}, {n: "Massa Corrida PVA 28kg (Lata)", p: 58.90}, {n: "Massa Corrida PVA 25kg (Barrica)", p: 33.90},
+            {n: "Massa Acrílica 1L", p: 8.50}, {n: "Massa Acrílica 3.6L", p: 18.99}, {n: "Massa Acrílica 28kg (Lata)", p: 72.90}, {n: "Massa Acrílica 25kg (Barrica)", p: 43.90}
+        ],
+        "Texturas": [
+            {n: "Grafiato Malha 10 3.6L", p: 18.50}, {n: "Grafiato Malha 10 25kg (Barrica)", p: 41.90}, {n: "Grafiato Malha 10 28kg (Lata)", p: 58.00},
+            {n: "Textura Rústica 25kg", p: 41.90}, {n: "Textura Lisa 25kg", p: 41.90}, {n: "Textura Lisa 28kg (Lata)", p: 58.00}
+        ],
+        "Selantes": [
+            {n: "Seladora Acrílica 1L", p: 9.90}, {n: "Selador Acrílico 3.6L", p: 19.90}, {n: "Selador Acrílico 18L", p: 79.90},
+            {n: "Fundo Preparador 3.6L", p: 38.00}, {n: "Fundo Preparador 18L", p: 155.00}
+        ],
+        "Complementos": [
+            {n: "Impermeabilizante 3.6L", p: 45.00}, {n: "Impermeabilizante 18L", p: 185.00},
+            {n: "Liqui Brilho 3.6L", p: 35.00}, {n: "Liqui Brilho 18L", p: 140.00}
+        ]
+    };
 
     let cart = [];
-    let currentProd = null;
-    let currentQty = 1;
+    let tempProduct = null;
+    let tempQty = 1;
 
-    // Inicializar App
-    function init() {
-        renderProducts(produtos);
-        renderCats();
+    function showProducts(cat) {
+        document.getElementById('view-categories').style.display = 'none';
+        document.getElementById('view-products').style.display = 'block';
+        document.getElementById('cat-title').innerText = cat;
+        
+        const container = document.getElementById('product-list-container');
+        container.innerHTML = "";
+        
+        db[cat].forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'product-item';
+            div.innerHTML = `<span>${p.n}</span> <strong>R$ ${p.p.toFixed(2)}</strong>`;
+            div.onclick = () => openModal(p);
+            container.appendChild(div);
+        });
     }
 
-    function renderCats() {
-        const cats = ["TUDO", ...new Set(produtos.map(p => p.cat))];
-        const nav = document.getElementById('catNav');
-        nav.innerHTML = cats.map(c => `<button class="cat-btn ${c==='TUDO'?'active':''}" onclick="filterCat('${c}', this)">${c}</button>`).join('');
+    function showCategories() {
+        document.getElementById('view-categories').style.display = 'block';
+        document.getElementById('view-products').style.display = 'none';
     }
 
-    function renderProducts(lista) {
-        const grid = document.getElementById('productGrid');
-        grid.innerHTML = lista.map((p, index) => `
-            <div class="card" onclick="openModal('${p.nome}', ${p.preco}, '${p.un}')">
-                <span class="card-stock">Est: ${p.estoque}</span>
-                <p class="card-title">${p.nome}</p>
-                <p class="card-info">${p.un} | ${p.cat}</p>
-                <p class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</p>
-            </div>
-        `).join('');
-    }
-
-    // Filtros e Busca
-    function filterCat(cat, btn) {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        if(btn) btn.classList.add('active');
-        const filtrados = cat === 'TUDO' ? produtos : produtos.filter(p => p.cat === cat);
-        renderProducts(filtrados);
-    }
-
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtrados = produtos.filter(p => p.nome.toLowerCase().includes(term));
-        renderProducts(filtrados);
-    });
-
-    // Lógica do Modal
-    function openModal(nome, preco, un) {
-        currentProd = { nome, preco, un };
-        currentQty = 1;
-        document.getElementById('modalTitle').innerText = nome;
-        document.getElementById('modalInfo').innerText = `${un} • R$ ${preco.toFixed(2)}`;
-        document.getElementById('qtyVal').innerText = currentQty;
+    function openModal(product) {
+        tempProduct = product;
+        tempQty = 1;
+        document.getElementById('modal-p-name').innerText = product.n;
+        document.getElementById('modal-p-price').innerText = `R$ ${product.p.toFixed(2)}`;
+        document.getElementById('qty-display').innerText = tempQty;
         document.getElementById('modal').style.display = 'flex';
     }
 
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
-    function updateQty(val) {
-        currentQty += val;
-        if(currentQty < 1) currentQty = 1;
-        document.getElementById('qtyVal').innerText = currentQty;
+    function changeQty(val) {
+        tempQty += val;
+        if (tempQty < 1) tempQty = 1;
+        document.getElementById('qty-display').innerText = tempQty;
     }
 
-    function addToCart() {
-        cart.push({ ...currentProd, qty: currentQty });
-        updateCartUI();
+    function confirmAdd() {
+        cart.push({ ...tempProduct, qty: tempQty });
+        updateCart();
         closeModal();
+        // A tela permanece na lista de produtos para continuar comprando
     }
 
-    function updateCartUI() {
-        const total = cart.reduce((acc, item) => acc + (item.preco * item.qty), 0);
-        document.getElementById('cartCount').innerText = `${cart.length} PRODUTOS`;
-        document.getElementById('cartTotal').innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
+    function updateCart() {
+        const totalItems = cart.reduce((acc, i) => acc + i.qty, 0);
+        const totalPrice = cart.reduce((acc, i) => acc + (i.p * i.qty), 0);
+        document.getElementById('cart-info').innerText = `${totalItems} itens | R$ ${totalPrice.toFixed(2)}`;
     }
 
-    function finishSale() {
-        if(cart.length === 0) return alert("Carrinho vazio!");
-        const pgto = prompt("FORMA DE PAGAMENTO:\n1. PIX\n2. CARTÃO CRÉDITO/DÉBITO\n3. DINHEIRO\n4. FATURADO");
-        if(pgto) {
-            alert("Venda concluída! Estoque atualizado.");
+    function finishOrder() {
+        if (cart.length === 0) return alert("Adicione itens!");
+        const total = cart.reduce((acc, i) => acc + (i.p * i.qty), 0);
+        const pgto = prompt("Total: R$ " + total.toFixed(2) + "\nForma de Pagamento:\n1. Pix\n2. Cartão\n3. Dinheiro");
+        if (pgto) {
+            alert("Pedido Enviado!");
             cart = [];
-            updateCartUI();
+            updateCart();
+            showCategories();
         }
     }
-
-    init();
 </script>
+
 </body>
 </html>
