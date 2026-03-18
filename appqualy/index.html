@@ -21,17 +21,18 @@
 <div id="app" class="max-w-md mx-auto min-h-screen relative flex flex-col bg-white shadow-2xl">
     
     <div v-if="tela === 'home'" class="flex flex-col flex-1">
-        <header class="sidebar-blue text-white p-8 rounded-b-[3rem] shadow-xl">
-            <div class="flex justify-between items-center mb-6">
+        <header class="sidebar-blue text-white p-8 rounded-b-[3rem] shadow-xl text-center">
+            <div class="flex flex-col items-center mb-6">
                 <div class="flex items-center gap-3">
-                    <h1 class="text-2xl font-extrabold italic uppercase tracking-tighter">Qualy Quimy</h1>
-                    <div class="relative">
-                        <button @click="$refs.calendario.showPicker()" class="bg-white/20 p-2 rounded-lg"><i class="fas fa-calendar-alt"></i></button>
-                        <input type="date" ref="calendario" v-model="dataPedido" class="absolute opacity-0 w-0 h-0">
-                    </div>
+                    <h1 class="text-3xl font-extrabold italic uppercase tracking-tighter">Qualy Quimy</h1>
+                    <button @click="$refs.calendario.showPicker()" class="bg-white/20 p-2 rounded-lg"><i class="fas fa-calendar-alt"></i></button>
+                    <input type="date" ref="calendario" v-model="dataPedido" class="absolute opacity-0 w-0 h-0">
                 </div>
-                <div class="bg-white/10 p-3 rounded-xl border border-white/20"><i class="fas fa-paint-roller"></i></div>
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-200 mt-1">
+                    {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}
+                </p>
             </div>
+            
             <div class="space-y-3">
                 <input v-model="vendedor" placeholder="Vendedor" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white">
                 <input v-model="cliente" placeholder="Cliente" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white">
@@ -60,11 +61,10 @@
 
     <div v-if="tela === 'resumo'" class="flex flex-col flex-1 p-6 bg-white overflow-y-auto">
         <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-4">
-                <button @click="tela = 'home'" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
-                <h2 class="text-xl font-black text-slate-800 uppercase italic">Resumo</h2>
-            </div>
-            <button @click="zerarPedido" class="text-red-500 font-bold text-[10px] uppercase border border-red-200 px-3 py-1 rounded-lg">Zerar Pedido</button>
+            <button @click="tela = 'home'" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
+            <button @click="zerarPedido" class="bg-red-600 text-white font-black text-[11px] uppercase px-6 py-3 rounded-2xl shadow-lg active:scale-90 transition-all">
+                <i class="fas fa-trash-alt mr-2"></i> Zerar Pedido
+            </button>
         </div>
 
         <div class="flex-1 space-y-2 mb-6">
@@ -73,14 +73,14 @@
                     <p class="font-bold text-slate-800 text-[11px]">{{ item.qty }}x {{ item.nome }}</p>
                     <p class="text-[10px] text-blue-600 font-bold">R$ {{ (item.preco * item.qty).toFixed(2) }}</p>
                 </div>
-                <button @click="removerItem(idx)" class="text-red-300 p-2"><i class="fas fa-trash"></i></button>
+                <button @click="removerItem(idx)" class="text-red-300 p-2"><i class="fas fa-times"></i></button>
             </div>
         </div>
 
-        <div class="bg-slate-50 border-2 p-5 rounded-[2.5rem] mb-6">
+        <div class="bg-slate-50 border-2 p-5 rounded-[2.5rem] mb-6 shadow-inner">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-slate-400 text-[10px] uppercase">Pagamento</h3>
-                <button v-if="pagamento" @click="pagamento = ''; parcelasCartao = null" class="text-blue-700 font-black text-[12px] uppercase bg-blue-100 px-4 py-1 rounded-full">Trocar</button>
+                <button v-if="pagamento" @click="resetPagamento" class="text-blue-700 font-black text-[12px] uppercase bg-blue-100 px-4 py-1 rounded-full">Trocar</button>
             </div>
 
             <div class="grid grid-cols-2 gap-2 mb-4" v-if="!pagamento">
@@ -90,14 +90,24 @@
                 <button @click="setPagamento('Cheque')" class="bg-white border-2 p-3 rounded-xl font-bold text-[9px] uppercase">✍️ Cheque</button>
             </div>
 
-            <div v-if="pagamento === 'Cartão' && !parcelasCartao" class="grid grid-cols-3 gap-2 mb-4 animate-pulse">
-                <button v-for="n in 3" @click="setParcelas(n)" class="bg-blue-600 text-white p-2 rounded-xl text-[10px] font-bold">
+            <div v-if="pagamento === 'Cartão' && !parcelas" class="grid grid-cols-3 gap-2 mb-4">
+                <button v-for="n in 3" @click="setParcelas(n)" class="bg-blue-600 text-white p-2 rounded-xl text-[9px] font-bold">
                     {{n}}x R$ {{ (totalPedido / n).toFixed(2) }}
                 </button>
             </div>
 
-            <div v-if="pagamento && (pagamento !== 'Cartão' || parcelasCartao)" class="p-4 bg-blue-600 rounded-2xl text-white font-black text-center text-xs uppercase mb-4 shadow-lg">
-                {{ (pagamento === 'Cartão') ? `${parcelasCartao}x de R$ ${(totalPedido/parcelasCartao).toFixed(2)}` : pagamento }}
+            <div v-if="pagamento === 'Cheque' && !parcelas" class="grid gap-2 mb-4">
+                <p class="text-[9px] font-bold text-center text-slate-400 uppercase mb-1">Selecione o parcelamento:</p>
+                <button v-if="totalPedido <= 1000" @click="setParcelas(2, '30/45')" class="bg-amber-500 text-white p-3 rounded-xl text-[10px] font-bold">
+                    2x (30/45 dias) de R$ {{ (totalPedido / 2).toFixed(2) }}
+                </button>
+                <button v-else @click="setParcelas(3, '30/45/60')" class="bg-amber-500 text-white p-3 rounded-xl text-[10px] font-bold">
+                    3x (30/45/60 dias) de R$ {{ (totalPedido / 3).toFixed(2) }}
+                </button>
+            </div>
+
+            <div v-if="pagamento && (parcelas || ['Pix', 'Espécie'].includes(pagamento))" class="p-4 bg-blue-600 rounded-2xl text-white font-black text-center text-xs uppercase mb-4 shadow-lg">
+                {{ formatarPagamento() }}
             </div>
 
             <div class="p-4 bg-slate-900 rounded-2xl text-center border-b-4 border-blue-500">
@@ -136,7 +146,7 @@
     <div v-if="modal == 'produtos'" class="fixed inset-0 bg-black/70 z-50 flex items-end">
         <div class="bg-white w-full rounded-t-[3rem] p-8 bottom-sheet max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-black text-slate-800 uppercase">{{ categoriaAtiva }}</h3>
+                <h3 class="text-xl font-black text-slate-800 uppercase italic">{{ categoriaAtiva }}</h3>
                 <button @click="modal = null" class="w-10 h-10 bg-slate-800 text-white rounded-full font-bold">&times;</button>
             </div>
             <div class="overflow-y-auto space-y-2 pb-6">
@@ -145,7 +155,7 @@
                     <p class="text-blue-700 font-black text-sm">R$ {{ p.preco.toFixed(2) }}</p>
                 </div>
             </div>
-            <button @click="modal = null" class="w-full py-4 bg-slate-100 rounded-xl font-black text-slate-600 text-xs uppercase">VOLTAR PARA CATEGORIAS</button>
+            <button @click="modal = null" class="w-full py-4 bg-slate-100 rounded-xl font-black text-slate-600 text-xs uppercase">VOLTAR</button>
         </div>
     </div>
 
@@ -158,12 +168,12 @@
     <div id="pdf-template" style="display:none; color: #1a202c;">
         <div style="border-bottom: 4px solid #1e3a8a; padding-bottom: 20px; text-align: center;">
             <h1 style="font-size: 32px; text-transform: uppercase; margin: 0; color: #1e3a8a;">Qualy Quimy</h1>
-            <p style="font-size: 14px; font-weight: bold; margin: 5px 0;">COMPROVANTE DE PEDIDO</p>
+            <p style="font-size: 14px; font-weight: bold; margin: 5px 0;">PEDIDO DE VENDA</p>
         </div>
         <div style="margin: 30px 0; font-size: 16px; line-height: 1.6;">
             <p><strong>Vendedor:</strong> {{ vendedor || '---' }}</p>
             <p><strong>Cliente:</strong> {{ cliente || '---' }}</p>
-            <p><strong>Data:</strong> {{ dataPedido || new Date().toLocaleDateString() }}</p>
+            <p><strong>Data:</strong> {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}</p>
         </div>
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
@@ -182,8 +192,8 @@
             </tbody>
         </table>
         <div style="margin-top: 40px; padding: 20px; background: #f8fafc; border-radius: 15px; text-align: right;">
-            <p style="font-size: 16px;"><strong>Pagamento:</strong> {{ (pagamento === 'Cartão') ? `${parcelasCartao}x no Cartão` : pagamento }}</p>
-            <h2 style="font-size: 28px; color: #1e3a8a; margin: 10px 0;">Total: R$ {{ totalFinal.toFixed(2) }}</h2>
+            <p style="font-size: 16px;"><strong>Pagamento:</strong> {{ formatarPagamento() }}</p>
+            <h2 style="font-size: 28px; color: #1e3a8a; margin: 10px 0;">Total Final: R$ {{ totalFinal.toFixed(2) }}</h2>
         </div>
     </div>
 
@@ -194,7 +204,7 @@ const { createApp } = Vue;
 createApp({
     data() {
         return {
-            tela: 'home', modal: null, vendedor: '', cliente: '', pagamento: '', parcelasCartao: null,
+            tela: 'home', modal: null, vendedor: '', cliente: '', pagamento: '', parcelas: null, diasCheque: '',
             categoriaAtiva: '', prodSel: {}, qtd: 1, carrinho: [], dataPedido: '',
             categoriasSetup: [
                 { nome: 'Tintas', icon: 'fas fa-fill-drip', color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -276,27 +286,27 @@ createApp({
         selecionarProduto(p) { this.prodSel = p; this.qtd = 1; this.modal = 'detalhe'; },
         confirmarItem() { this.carrinho.push({ ...this.prodSel, qty: this.qtd }); this.modal = null; },
         removerItem(idx) { this.carrinho.splice(idx, 1); if(!this.carrinho.length) this.tela = 'home'; },
-        zerarPedido() { this.carrinho = []; this.pagamento = ''; this.tela = 'home'; },
-        setPagamento(tipo) {
-            if (tipo === 'Cheque') {
-                this.pagamento = this.totalPedido >= 1000 ? 'Cheque (30/45/60)' : 'Cheque (30/45)';
-            } else {
-                this.pagamento = tipo;
-            }
+        zerarPedido() { this.carrinho = []; this.pagamento = ''; this.parcelas = null; this.tela = 'home'; },
+        setPagamento(tipo) { this.pagamento = tipo; this.parcelas = null; },
+        setParcelas(n, dias = '') { this.parcelas = n; this.diasCheque = dias; },
+        resetPagamento() { this.pagamento = ''; this.parcelas = null; },
+        formatarPagamento() {
+            if (this.pagamento === 'Cartão' && this.parcelas) return `${this.parcelas}x no Cartão (R$ ${(this.totalPedido/this.parcelas).toFixed(2)})`;
+            if (this.pagamento === 'Cheque' && this.parcelas) return `${this.parcelas}x no Cheque ${this.diasCheque} (R$ ${(this.totalPedido/this.parcelas).toFixed(2)})`;
+            if (this.pagamento === 'Pix') return 'Pix (-3% Aplicado)';
+            if (this.pagamento === 'Espécie') return 'Dinheiro (-3% Aplicado)';
+            return this.pagamento;
         },
-        setParcelas(n) { this.parcelasCartao = n; },
         enviarWhats() {
-            let pag = this.pagamento === 'Cartão' ? `${this.parcelasCartao}x no Cartão` : this.pagamento;
-            let m = `*QUALY QUIMY*\n*Cliente:* ${this.cliente}\n\n`;
+            let m = `*QUALY QUIMY*\n*Data:* ${this.dataPedido || '---'}\n*Cliente:* ${this.cliente}\n\n`;
             this.carrinho.forEach(i => m += `• ${i.qty}x ${i.nome} = R$ ${(i.preco * i.qty).toFixed(2)}\n`);
-            m += `\n*PAGAMENTO:* ${pag}\n*TOTAL: R$ ${this.totalFinal.toFixed(2)}*`;
+            m += `\n*PAGAMENTO:* ${this.formatarPagamento()}\n*TOTAL LÍQUIDO: R$ ${this.totalFinal.toFixed(2)}*`;
             window.open(`https://api.whatsapp.com/send?phone=5511954950044&text=${encodeURIComponent(m)}`);
         },
         gerarPDF() {
             const el = document.getElementById('pdf-template');
             el.style.display = 'block';
-            const opt = { margin: 0, filename: 'Pedido.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
-            html2pdf().from(el).set(opt).save().then(() => el.style.display = 'none');
+            html2pdf().from(el).set({ margin: 0, filename: 'Pedido_Qualy.pdf', html2canvas: { scale: 3 }, jsPDF: { unit: 'mm', format: 'a4' } }).save().then(() => el.style.display = 'none');
         }
     }
 }).mount('#app')
