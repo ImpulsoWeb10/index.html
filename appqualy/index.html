@@ -3,23 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tintas Qualy Quimy - PDV</title>
+    <title>PDV - Tintas Qualy Quimy</title>
     <style>
-        :root {
-            --primary: #0056b3;
-            --success: #28a745;
-            --danger: #dc3545;
-            --bg: #f4f4f4;
-        }
+        :root { --primary: #0056b3; --success: #28a745; --danger: #dc3545; --bg: #f4f4f4; }
         body { font-family: sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
         .header { background: white; text-align: center; padding: 15px; border-bottom: 3px solid var(--primary); }
         .container { padding: 15px; text-align: center; }
         
-        /* Botões Estilo PDV */
+        /* Layout de Botões */
         .grid-buttons { display: grid; gap: 10px; max-width: 500px; margin: 0 auto; }
-        .btn-main { background: white; border: 2px solid var(--primary); color: var(--primary); padding: 20px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .btn-main { background: white; border: 2px solid var(--primary); color: var(--primary); padding: 20px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         
-        .product-item { background: white; padding: 15px; margin: 8px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; display: flex; justify-content: space-between; font-weight: bold; }
+        .product-item { background: white; padding: 15px; margin: 8px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; text-align: left; }
+        .product-item span { flex: 1; margin-right: 10px; font-size: 14px; }
 
         /* Modais */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; }
@@ -33,10 +29,9 @@
         .footer-cart { position: fixed; bottom: 0; width: 100%; background: #222; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
         .btn-finish { background: var(--success); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* Tela de Pagamento */
+        /* Tela de Checkout */
         .checkout-page { position: fixed; inset: 0; background: white; display: none; flex-direction: column; padding: 20px; z-index: 2000; overflow-y: auto; }
         .pay-btn { background: #eee; border: 2px solid #ddd; padding: 15px; margin: 5px 0; border-radius: 10px; width: 100%; text-align: left; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .pay-btn.selected { border-color: var(--success); background: #eaffea; }
     </style>
 </head>
 <body>
@@ -48,7 +43,7 @@
 
 <div class="container">
     <div id="screen-cats">
-        <h3 style="color:#555">Selecione uma Categoria</h3>
+        <h3 style="color:#555">Categorias</h3>
         <div class="grid-buttons">
             <button class="btn-main" onclick="showProducts('Tintas')">TINTAS</button>
             <button class="btn-main" onclick="showProducts('Massas')">MASSAS</button>
@@ -59,7 +54,7 @@
     </div>
 
     <div id="screen-products" style="display:none">
-        <button onclick="goHome()" style="width:100%; padding:10px; margin-bottom:15px">← VOLTAR</button>
+        <button onclick="goHome()" style="width:100%; padding:12px; margin-bottom:15px; font-weight:bold">← VOLTAR</button>
         <h3 id="cat-title"></h3>
         <div id="product-list"></div>
     </div>
@@ -67,15 +62,15 @@
 
 <div class="modal" id="modal-qty">
     <div class="modal-content">
-        <h2 id="modal-name" style="margin:0">Nome</h2>
-        <p id="modal-price" style="color:var(--primary); font-size:20px; font-weight:bold">R$ 0,00</p>
+        <h2 id="modal-name" style="margin:0; font-size: 18px;">Nome</h2>
+        <p id="modal-price" style="color:var(--primary); font-size:24px; font-weight:bold; margin: 10px 0;">R$ 0,00</p>
         <div class="qty-row">
             <button class="btn-qty" style="background:var(--danger)" onclick="updateQty(-1)">-</button>
             <span class="qty-val" id="qty-val">1</span>
             <button class="btn-qty" style="background:var(--success)" onclick="updateQty(1)">+</button>
         </div>
         <button class="btn-main" style="width:100%; background:var(--primary); color:white" onclick="addItem()">ADICIONAR</button>
-        <p onclick="closeModal()" style="margin-top:20px; color:#888; cursor:pointer">Voltar</p>
+        <p onclick="closeModal()" style="margin-top:20px; color:#888; cursor:pointer; font-weight:bold">CANCELAR</p>
     </div>
 </div>
 
@@ -104,30 +99,64 @@
 </div>
 
 <script>
-// DADOS DOS 5 BLOCOS
-const db = {
-    "Tintas": [
-        {n: "Qualy Color Econômica 1L", p: 8.90}, {n: "Qualy Color Econômica 3.6L", p: 26.90}, {n: "Qualy Color Econômica 18L (Lata)", p: 79.90},
-        {n: "Latex Uso Interno 18L", p: 64.90}, {n: "Standard 3.6L", p: 34.90}, {n: "Standard 18L", p: 124.90},
-        {n: "Piso Standard 18L", p: 144.90}, {n: "Emborrachada Premium 18L", p: 392.00}
-    ],
-    "Massas": [
-        {n: "Massa Corrida PVA 1L", p: 6.90}, {n: "Massa Corrida PVA 3.6L", p: 14.99}, {n: "Massa Corrida PVA 28kg (Lata)", p: 58.90}, {n: "Massa Corrida PVA 25kg (Barrica)", p: 33.90},
-        {n: "Massa Acrílica 1L", p: 8.50}, {n: "Massa Acrílica 3.6L", p: 18.99}, {n: "Massa Acrílica 28kg (Lata)", p: 72.90}, {n: "Massa Acrílica 25kg (Barrica)", p: 43.90}
-    ],
-    "Texturas": [
-        {n: "Grafiato Malha 10 3.6L", p: 18.50}, {n: "Grafiato Malha 10 25kg", p: 41.90}, {n: "Grafiato Malha 10 28kg (Lata)", p: 58.00},
-        {n: "Textura Rústica 25kg", p: 41.90}, {n: "Textura Lisa 25kg", p: 41.90}, {n: "Textura Lisa 28kg (Lata)", p: 58.00}
-    ],
-    "Selantes": [
-        {n: "Seladora Acrílica 1L", p: 9.90}, {n: "Selador Acrílico 3.6L", p: 19.90}, {n: "Selador Acrílico 18L", p: 79.90},
-        {n: "Fundo Preparador 3.6L", p: 38.00}, {n: "Fundo Preparador 18L", p: 155.00}
-    ],
-    "Complementos": [
-        {n: "Impermeabilizante 3.6L", p: 45.00}, {n: "Impermeabilizante 18L", p: 185.00},
-        {n: "Liqui Brilho 3.6L", p: 35.00}, {n: "Liqui Brilho 18L", p: 140.00}
-    ]
-};
+// JSON COMPLETO INTEGRADO
+const produtosJSON = [
+    {"categoria":"Tintas","nome":"Qualy Color Econômica - Pote 1L Branca","preco":8.90},
+    {"categoria":"Tintas","nome":"Qualy Color Econômica - Galão 3.6L Branca","preco":26.90},
+    {"categoria":"Tintas","nome":"Qualy Color Econômica - Galão 3.6L Na Cor","preco":30.00},
+    {"categoria":"Tintas","nome":"Qualy Color Econômica - Balde 18L Branca","preco":76.90},
+    {"categoria":"Tintas","nome":"Qualy Color Econômica - Balde 18L Na Cor","preco":76.90},
+    {"categoria":"Tintas","nome":"Qualy Color Econômica - Lata 18L Branca","preco":79.90},
+    {"categoria":"Tintas","nome":"Qualy Color Econômica - Lata 18L Na Cor","preco":79.90},
+    {"categoria":"Tintas","nome":"Latex Uso Interno - Lata 18L Branca","preco":64.90},
+    {"categoria":"Tintas","nome":"Latex Uso Interno - Balde 16L Branca","preco":51.90},
+    {"categoria":"Tintas","nome":"Standard - Pote 1L Branca","preco":15.90},
+    {"categoria":"Tintas","nome":"Standard - Galão 3.6L","preco":34.90},
+    {"categoria":"Tintas","nome":"Standard - Galão 3.6L Na Cor","preco":37.90},
+    {"categoria":"Tintas","nome":"Standard - Lata 18L Branca","preco":124.90},
+    {"categoria":"Tintas","nome":"Premium - Galão 3.6L","preco":75.90},
+    {"categoria":"Tintas","nome":"Premium - Balde 16L Branca","preco":190.00},
+    {"categoria":"Tintas","nome":"Premium - Lata 18L Branca","preco":219.90},
+    {"categoria":"Tintas","nome":"Piso Standard - Galão 3.6L","preco":46.90},
+    {"categoria":"Tintas","nome":"Piso Standard - Balde 16L Branca","preco":129.00},
+    {"categoria":"Tintas","nome":"Piso Standard - Lata 18L Branca","preco":144.90},
+    {"categoria":"Tintas","nome":"Piso Premium - Galão 3.6L","preco":75.90},
+    {"categoria":"Tintas","nome":"Piso Premium - Balde 16L Branca","preco":189.90},
+    {"categoria":"Tintas","nome":"Piso Premium - Lata 18L Branca","preco":219.90},
+    {"categoria":"Tintas","nome":"Emborrachada Standart - Lata 18L","preco":272.90},
+    {"categoria":"Tintas","nome":"Emborrachada Premium - Lata 18L","preco":392.00},
+    {"categoria":"Massas","nome":"Massa Corrida PVA - Pote 1L","preco":6.90},
+    {"categoria":"Massas","nome":"Massa Corrida PVA - Galão 3.6L","preco":14.99},
+    {"categoria":"Massas","nome":"Massa Corrida PVA - Lata 28kg","preco":58.90},
+    {"categoria":"Massas","nome":"Massa Corrida PVA - Barrica 25kg","preco":33.90},
+    {"categoria":"Massas","nome":"Massa Acrílica - Pote 1L","preco":8.50},
+    {"categoria":"Massas","nome":"Massa Acrílica - Galão 3.6L","preco":18.99},
+    {"categoria":"Massas","nome":"Massa Acrílica - Lata 28kg","preco":72.90},
+    {"categoria":"Massas","nome":"Massa Acrílica - Barrica 25kg","preco":43.90},
+    {"categoria":"Texturas","nome":"Grafiato Malha 10 - Pote 1L","preco":8.50},
+    {"categoria":"Texturas","nome":"Grafiato Malha 10 - Galão 3.6L","preco":18.99},
+    {"categoria":"Texturas","nome":"Grafiato Malha 10 - Barrica 25kg","preco":43.90},
+    {"categoria":"Texturas","nome":"Grafiato Malha 10 - Barrica 50kg","preco":83.99},
+    {"categoria":"Texturas","nome":"Grafiato Malha 10 - Lata 28kg","preco":72.90},
+    {"categoria":"Texturas","nome":"Textura Lisa - Pote 1L","preco":8.50},
+    {"categoria":"Texturas","nome":"Textura Lisa - Galão 3.6L","preco":18.99},
+    {"categoria":"Texturas","nome":"Textura Lisa - Barrica 25kg","preco":43.90},
+    {"categoria":"Texturas","nome":"Textura Lisa - Barrica 50kg","preco":83.99},
+    {"categoria":"Texturas","nome":"Textura Lisa - Lata 28kg","preco":72.90},
+    {"categoria":"Selantes","nome":"Selador Acrílico - Pote 1L","preco":9.50},
+    {"categoria":"Selantes","nome":"Selador Acrílico - Galão 3.6L","preco":19.90},
+    {"categoria":"Selantes","nome":"Selador Acrílico - Balde 16L","preco":52.90},
+    {"categoria":"Selantes","nome":"Selador Acrílico - Lata 18L","preco":79.90},
+    {"categoria":"Selantes","nome":"Selador Gesso - Lata 18L","preco":110.00},
+    {"categoria":"Complementos","nome":"Primer - Galão 3.6L","preco":49.90},
+    {"categoria":"Complementos","nome":"Primer - Balde 16L","preco":138.00},
+    {"categoria":"Complementos","nome":"Primer - Lata 18L","preco":158.00},
+    {"categoria":"Complementos","nome":"Impermeabilizante - Galão 3.6L","preco":49.90},
+    {"categoria":"Complementos","nome":"Impermeabilizante - Balde 16L","preco":138.90},
+    {"categoria":"Complementos","nome":"Impermeabilizante - Lata 18L","preco":149.90},
+    {"categoria":"Complementos","nome":"Liquibrilho - Lata 18L","preco":280.00},
+    {"categoria":"Complementos","nome":"Cimento Queimado - Balde 25kg","preco":188.00}
+];
 
 let cart = [];
 let tempProd = null;
@@ -140,10 +169,14 @@ function showProducts(cat) {
     document.getElementById('cat-title').innerText = cat;
     let list = document.getElementById('product-list');
     list.innerHTML = "";
-    db[cat].forEach(p => {
+    
+    // Filtra exatamente pelo JSON
+    const filtrados = produtosJSON.filter(p => p.categoria === cat);
+    
+    filtrados.forEach(p => {
         let div = document.createElement('div');
         div.className = "product-item";
-        div.innerHTML = `<span>${p.n}</span> <span>R$ ${p.p.toFixed(2)}</span>`;
+        div.innerHTML = `<span>${p.nome}</span> <strong>R$ ${p.preco.toFixed(2)}</strong>`;
         div.onclick = () => openModal(p);
         list.appendChild(div);
     });
@@ -157,8 +190,8 @@ function goHome() {
 function openModal(p) {
     tempProd = p;
     tempQty = 1;
-    document.getElementById('modal-name').innerText = p.n;
-    document.getElementById('modal-price').innerText = "R$ " + p.p.toFixed(2);
+    document.getElementById('modal-name').innerText = p.nome;
+    document.getElementById('modal-price').innerText = "R$ " + p.preco.toFixed(2);
     document.getElementById('qty-val').innerText = tempQty;
     document.getElementById('modal-qty').style.display = 'flex';
 }
@@ -175,22 +208,22 @@ function addItem() {
     cart.push({ ...tempProd, qty: tempQty });
     updateCartUI();
     closeModal();
-    goHome(); // Volta para o início após escolher
+    goHome(); // Volta para o início após escolher, conforme pedido
 }
 
 function updateCartUI() {
     let count = cart.reduce((s, i) => s + i.qty, 0);
-    let total = cart.reduce((s, i) => s + (i.p * i.qty), 0);
+    let total = cart.reduce((s, i) => s + (i.preco * i.qty), 0);
     document.getElementById('cart-count').innerText = count + " itens";
     document.getElementById('cart-total').innerText = "R$ " + total.toFixed(2);
 }
 
 function openCheckout() {
-    if(cart.length === 0) return alert("Carrinho vazio!");
+    if(cart.length === 0) return alert("Adicione produtos primeiro!");
     document.getElementById('screen-checkout').style.display = 'flex';
     let list = document.getElementById('checkout-list');
-    list.innerHTML = cart.map(i => `<p>${i.qty}x ${i.n} - R$ ${(i.p*i.qty).toFixed(2)}</p>`).join('');
-    let total = cart.reduce((s, i) => s + (i.p * i.qty), 0);
+    list.innerHTML = cart.map(i => `<p>${i.qty}x ${i.nome} - R$ ${(i.preco*i.qty).toFixed(2)}</p>`).join('');
+    let total = cart.reduce((s, i) => s + (i.preco * i.qty), 0);
     document.getElementById('checkout-total').innerText = "Total: R$ " + total.toFixed(2);
 }
 
@@ -198,21 +231,20 @@ function closeCheckout() { document.getElementById('screen-checkout').style.disp
 
 function setPay(m) {
     paymentMethod = m;
-    alert("Pagamento selecionado: " + m);
+    alert("Pagamento: " + m);
 }
 
 function sendWhatsApp() {
     if(!paymentMethod) return alert("Selecione a forma de pagamento!");
-    let total = cart.reduce((s, i) => s + (i.p * i.qty), 0);
-    let text = `*NOVO PEDIDO - QUALY QUIMY*\n\n`;
+    let total = cart.reduce((s, i) => s + (i.preco * i.qty), 0);
+    let text = `*PEDIDO QUALY QUIMY*\n\n`;
     cart.forEach(i => {
-        text += `${i.qty}x ${i.n} - R$ ${(i.p*i.qty).toFixed(2)}\n`;
+        text += `${i.qty}x ${i.nome} - R$ ${(i.preco*i.qty).toFixed(2)}\n`;
     });
     text += `\n*TOTAL: R$ ${total.toFixed(2)}*`;
     text += `\n*PAGAMENTO:* ${paymentMethod}`;
     
-    let url = "https://api.whatsapp.com/send?phone=5511954950044&text=" + encodeURIComponent(text);
-    window.open(url, "_blank");
+    window.open("https://api.whatsapp.com/send?phone=5511954950044&text=" + encodeURIComponent(text));
 }
 </script>
 </body>
