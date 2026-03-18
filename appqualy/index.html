@@ -1,312 +1,38 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qualy Quimy - PDV Oficial</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; overflow-x: hidden; }
-        .sidebar-blue { background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%); }
-        .page-transition { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    </style>
-</head>
-<body>
-
-<div id="app" class="max-w-md mx-auto min-h-screen relative flex flex-col bg-white shadow-2xl">
-    
-    <div v-if="tela === 'home'" class="flex flex-col flex-1 page-transition">
-        <header class="sidebar-blue text-white p-8 rounded-b-[3rem] shadow-xl text-center">
-            <div class="flex flex-col items-center mb-6">
-                <div class="flex items-center gap-3">
-                    <h1 class="text-3xl font-extrabold italic uppercase tracking-tighter">Qualy Quimy</h1>
-                    <button @click="$refs.calendario.showPicker()" class="bg-white/20 p-2 rounded-lg"><i class="fas fa-calendar-alt"></i></button>
-                    <input type="date" ref="calendario" v-model="dataPedido" class="absolute opacity-0 w-0 h-0">
-                </div>
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-200 mt-1">
-                    {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}
-                </p>
-            </div>
-            
-            <div class="space-y-3">
-                <input v-model="vendedor" placeholder="Nome do Vendedor" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white placeholder:text-blue-200">
-                <input v-model="cliente" placeholder="Nome do Cliente" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white placeholder:text-blue-200">
-            </div>
-        </header>
-
-        <main class="p-6 flex-1">
-            <div class="grid grid-cols-2 gap-4">
-                <div v-for="cat in categoriasSetup" @click="abrirCategoria(cat.nome)" class="bg-white p-5 rounded-[2.5rem] shadow-sm flex flex-col items-center border border-slate-100 active:scale-95 transition-all cursor-pointer">
-                    <div :class="cat.bg" class="w-14 h-14 rounded-2xl flex items-center justify-center mb-3">
-                        <i :class="[cat.icon, cat.color]" class="text-2xl"></i>
-                    </div>
-                    <span class="font-bold text-gray-700 text-[10px] uppercase">{{ cat.nome }}</span>
-                </div>
-            </div>
-
-            <div v-if="carrinho.length > 0" class="mt-8 space-y-2">
-                <div class="flex justify-between items-center px-2">
-                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Carrinho</h3>
-                    <button @click="zerarPedido" class="text-red-500 font-bold text-[10px] uppercase">Zerar</button>
-                </div>
-                <div v-for="(item, idx) in carrinho" class="bg-slate-50 p-3 rounded-xl flex justify-between items-center border border-slate-100">
-                    <div class="flex-1">
-                        <p class="text-[11px] font-bold text-slate-800">{{ item.qty }}x {{ item.nome }}</p>
-                        <p class="text-[10px] text-blue-600 font-bold">R$ {{ (item.preco * item.qty).toFixed(2) }}</p>
-                    </div>
-                    <button @click="removerItem(idx)" class="text-red-300 ml-2"><i class="fas fa-times-circle"></i></button>
-                </div>
-            </div>
-
-            <div v-if="carrinho.length > 0" class="mt-8 sticky bottom-4">
-                <button @click="tela = 'pagamento'" class="w-full bg-blue-600 text-white py-5 rounded-[2rem] font-black italic shadow-2xl flex items-center justify-center gap-4 active:scale-95 transition-all">
-                    <span>FECHAR PEDIDO</span>
-                    <span class="bg-white/20 px-3 py-1 rounded-full text-sm font-sans">R$ {{ totalPedido.toFixed(2) }}</span>
-                </button>
-            </div>
-        </main>
+<div id="pdf-template" style="display:none; width: 100%; max-width: 100%; padding: 20px; font-family: sans-serif; color: #1a202c; background: white;">
+    <div style="width: 100%; margin: 0 auto; text-align: center; border-bottom: 3px solid #1e3a8a; padding-bottom: 20px;">
+        <h1 style="font-size: 32px; text-transform: uppercase; margin: 0; color: #1e3a8a; letter-spacing: -1px;">Qualy Quimy</h1>
+        <p style="font-size: 14px; font-weight: bold; color: #64748b; margin: 5px 0;">COMPROVANTE DE PEDIDO DE VENDA</p>
+        <p style="font-size: 12px; color: #94a3b8;">Data: {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}</p>
     </div>
 
-    <div v-if="tela === 'pagamento'" class="flex flex-col flex-1 p-6 page-transition">
-        <div class="flex items-center justify-between mb-8">
-            <button @click="tela = 'home'" class="w-12 h-12 rounded-2xl bg-slate-800 text-white flex items-center justify-center shadow-lg"><i class="fas fa-chevron-left"></i></button>
-            <h2 class="text-xl font-black italic text-slate-800 uppercase">Checkout</h2>
-        </div>
-
-        <div class="text-center mb-8">
-            <h2 class="text-2xl font-black text-slate-900 uppercase italic leading-tight">
-                Qual a forma de <br><span class="text-blue-600 underline">pagamento</span>?
-            </h2>
-        </div>
-
-        <div class="bg-slate-50 border-2 p-6 rounded-[3rem] shadow-inner flex-1 space-y-6">
-            <div class="grid grid-cols-2 gap-3" v-if="!pagamento">
-                <button @click="setPagamento('Pix')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">📱 Pix (-3%)</button>
-                <button @click="setPagamento('Espécie')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">💵 Dinheiro (-3%)</button>
-                <button @click="setPagamento('Cartão')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">💳 Cartão</button>
-                <button @click="setPagamento('Cheque')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">✍️ Cheque</button>
-            </div>
-
-            <div v-if="(pagamento === 'Cartão' || pagamento === 'Cheque') && !parcelas" class="space-y-3">
-                <p class="text-center text-[10px] font-black text-slate-400 uppercase">Selecione as Parcelas:</p>
-                
-                <template v-if="pagamento === 'Cartão'">
-                    <button v-for="n in 3" @click="setParcelas(n)" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold text-sm flex justify-between items-center shadow-lg">
-                        <span>{{n}}x Sem Juros</span>
-                        <span>R$ {{ (totalPedido / n).toFixed(2) }}</span>
-                    </button>
-                </template>
-
-                <template v-if="pagamento === 'Cheque'">
-                    <button v-if="totalPedido <= 1000" @click="setParcelas(2, '30/45')" class="w-full bg-amber-500 text-white p-4 rounded-2xl font-bold text-sm flex justify-between items-center shadow-lg">
-                        <span>2x (30/45 dias)</span>
-                        <span>R$ {{ (totalPedido / 2).toFixed(2) }}</span>
-                    </button>
-                    <button v-else @click="setParcelas(3, '30/45/60')" class="w-full bg-amber-500 text-white p-4 rounded-2xl font-bold text-sm flex justify-between items-center shadow-lg">
-                        <span>3x (30/45/60 dias)</span>
-                        <span>R$ {{ (totalPedido / 3).toFixed(2) }}</span>
-                    </button>
-                </template>
-            </div>
-
-            <div v-if="pagamento && (parcelas || ['Pix', 'Espécie'].includes(pagamento))" class="space-y-6">
-                <div class="p-5 bg-blue-600 rounded-[2rem] text-white text-center shadow-xl">
-                    <p class="font-black text-sm uppercase">{{ formatarPagamento() }}</p>
-                    <button @click="resetPagamento" class="mt-2 text-[10px] font-black bg-white/20 px-4 py-1 rounded-full uppercase">Trocar</button>
-                </div>
-
-                <div class="bg-slate-900 p-6 rounded-[2rem] text-center border-b-8 border-blue-500">
-                    <p class="text-slate-500 text-[10px] font-bold uppercase mb-1">Total com Descontos</p>
-                    <p class="text-4xl font-black text-white italic">R$ {{ totalFinal.toFixed(2) }}</p>
-                </div>
-
-                <div class="space-y-3">
-                    <button @click="enviarWhats" class="w-full bg-green-600 text-white py-5 rounded-2xl font-black shadow-lg flex items-center justify-center gap-3">
-                        <i class="fab fa-whatsapp text-2xl"></i> WHATSAPP
-                    </button>
-                    <button @click="gerarPDF" class="w-full bg-slate-800 text-white py-5 rounded-2xl font-black shadow-lg flex items-center justify-center gap-3">
-                        <i class="fas fa-file-pdf text-2xl"></i> GERAR PDF
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div style="padding: 20px 0; font-size: 14px; border-bottom: 1px dashed #e2e8f0;">
+        <p style="margin: 5px 0;"><strong>Vendedor:</strong> {{ vendedor || 'Não informado' }}</p>
+        <p style="margin: 5px 0;"><strong>Cliente:</strong> {{ cliente || 'Não informado' }}</p>
     </div>
 
-    <div v-if="modal == 'produtos'" class="fixed inset-0 bg-black/70 z-50 flex items-end">
-        <div class="bg-white w-full rounded-t-[3rem] p-8 max-h-[85vh] flex flex-col">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-black text-slate-800 uppercase italic">{{ categoriaAtiva }}</h3>
-                <button @click="modal = null" class="w-10 h-10 bg-slate-100 rounded-full font-bold">&times;</button>
-            </div>
-            <div class="overflow-y-auto space-y-2 pb-6">
-                <div v-for="p in produtosFiltrados" @click="selecionarProduto(p)" class="p-4 border border-slate-100 rounded-2xl hover:bg-blue-50 flex justify-between items-center cursor-pointer">
-                    <p class="font-bold text-slate-700 text-sm">{{ p.nome }}</p>
-                    <p class="text-blue-700 font-black text-sm">R$ {{ p.preco.toFixed(2) }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div v-if="modal == 'detalhe'" class="fixed inset-0 z-[60] bg-slate-900/95 backdrop-blur-sm flex items-center justify-center p-6">
-        <div class="bg-white rounded-[3rem] p-8 w-full max-w-sm text-center shadow-2xl">
-            <h4 class="font-black text-slate-800 mb-6 leading-tight">{{ prodSel.nome }}</h4>
-            <div class="flex items-center justify-center gap-6 my-6">
-                <button @click="qtd > 1 ? qtd-- : null" class="w-16 h-16 rounded-2xl bg-slate-100 text-2xl font-black">-</button>
-                <span class="text-5xl font-black text-slate-900">{{ qtd }}</span>
-                <button @click="qtd++" class="w-16 h-16 rounded-2xl bg-blue-600 text-white text-2xl font-black shadow-lg">+</button>
-            </div>
-            <div class="bg-blue-50 p-4 rounded-2xl mb-6 border-2 border-blue-100 text-blue-700">
-                <p class="text-3xl font-black italic">R$ {{ (prodSel.preco * qtd).toFixed(2) }}</p>
-            </div>
-            <button @click="confirmarItem" class="w-full bg-slate-900 text-white py-5 rounded-[2rem] font-black uppercase mb-3">Adicionar</button>
-            <button @click="modal = 'produtos'" class="w-full py-2 bg-slate-100 rounded-xl text-slate-500 text-[10px] font-black uppercase">Voltar</button>
-        </div>
-    </div>
-
-    <div id="pdf-template" style="display:none; color: #1a202c; padding: 40px; background: white; width: 800px;">
-        <div style="border-bottom: 5px solid #1e3a8a; padding-bottom: 20px; text-align: center;">
-            <h1 style="font-size: 38px; text-transform: uppercase; margin: 0; color: #1e3a8a;">Qualy Quimy</h1>
-            <p style="font-size: 16px; font-weight: bold;">DATA: {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}</p>
-        </div>
-        <div style="margin: 30px 0; font-size: 18px;">
-            <p><strong>Vendedor:</strong> {{ vendedor }} | <strong>Cliente:</strong> {{ cliente }}</p>
-        </div>
-        <table style="width: 100%; border-collapse: collapse;">
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
             <tr style="background: #1e3a8a; color: white;">
-                <th style="padding: 15px; border: 1px solid #ddd; text-align: left;">Qtd</th>
-                <th style="padding: 15px; border: 1px solid #ddd; text-align: left;">Produto</th>
-                <th style="padding: 15px; border: 1px solid #ddd; text-align: right;">Total</th>
+                <th style="padding: 10px; text-align: left; font-size: 12px; border: 1px solid #1e3a8a;">Qtd</th>
+                <th style="padding: 10px; text-align: left; font-size: 12px; border: 1px solid #1e3a8a;">Produto</th>
+                <th style="padding: 10px; text-align: right; font-size: 12px; border: 1px solid #1e3a8a;">Total</th>
             </tr>
-            <tr v-for="i in carrinho">
-                <td style="padding: 12px; border: 1px solid #ddd;">{{ i.qty }}</td>
-                <td style="padding: 12px; border: 1px solid #ddd;">{{ i.nome }}</td>
-                <td style="padding: 12px; border: 1px solid #ddd; text-align: right;">R$ {{ (i.preco * i.qty).toFixed(2) }}</td>
+        </thead>
+        <tbody>
+            <tr v-for="i in carrinho" style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px; font-size: 12px; border: 1px solid #e2e8f0;">{{ i.qty }}</td>
+                <td style="padding: 10px; font-size: 12px; border: 1px solid #e2e8f0;">{{ i.nome }}</td>
+                <td style="padding: 10px; font-size: 12px; text-align: right; border: 1px solid #e2e8f0;">R$ {{ (i.preco * i.qty).toFixed(2) }}</td>
             </tr>
-        </table>
-        <div style="margin-top: 40px; text-align: right; background: #f8fafc; padding: 30px; border-radius: 20px;">
-            <p><strong>Pagamento:</strong> {{ formatarPagamento() }}</p>
-            <h2 style="font-size: 32px; color: #1e3a8a;">Total: R$ {{ totalFinal.toFixed(2) }}</h2>
-        </div>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 30px; padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; text-align: right;">
+        <p style="font-size: 13px; margin: 0;"><strong>Forma de Pagamento:</strong> {{ formatarPagamento() }}</p>
+        <h2 style="font-size: 24px; color: #1e3a8a; margin: 10px 0 0 0;">Total Líquido: R$ {{ totalFinal.toFixed(2) }}</h2>
     </div>
-
+    
+    <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #94a3b8;">
+        Este é um orçamento válido por 7 dias.
+    </div>
 </div>
-
-<script>
-const { createApp } = Vue;
-createApp({
-    data() {
-        return {
-            tela: 'home', modal: null, vendedor: '', cliente: '', pagamento: '', parcelas: null, diasCheque: '',
-            categoriaAtiva: '', prodSel: {}, qtd: 1, carrinho: [], dataPedido: '',
-            categoriasSetup: [
-                { nome: 'Tintas', icon: 'fas fa-fill-drip', color: 'text-blue-600', bg: 'bg-blue-50' },
-                { nome: 'Massas', icon: 'fas fa-brush', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                { nome: 'Texturas', icon: 'fas fa-scroll', color: 'text-orange-600', bg: 'bg-orange-50' },
-                { nome: 'Selantes', icon: 'fas fa-spray-can', color: 'text-purple-600', bg: 'bg-purple-50' },
-                { nome: 'Complementos', icon: 'fas fa-tools', color: 'text-rose-600', bg: 'bg-rose-50' }
-            ],
-            produtos: [
-                {"categoria":"Tintas","nome":"Qualy Color Econômica - Pote 1L Branca","preco":8.90},
-                {"categoria":"Tintas","nome":"Qualy Color Econômica - Galão 3.6L Branca","preco":26.90},
-                {"categoria":"Tintas","nome":"Qualy Color Econômica - Galão 3.6L Na Cor","preco":30.00},
-                {"categoria":"Tintas","nome":"Qualy Color Econômica - Balde 18L Branca","preco":76.90},
-                {"categoria":"Tintas","nome":"Qualy Color Econômica - Balde 18L Na Cor","preco":76.90},
-                {"categoria":"Tintas","nome":"Qualy Color Econômica - Lata 18L Branca","preco":79.90},
-                {"categoria":"Tintas","nome":"Qualy Color Econômica - Lata 18L Na Cor","preco":79.90},
-                {"categoria":"Tintas","nome":"Latex Uso Interno - Lata 18L Branca","preco":64.90},
-                {"categoria":"Tintas","nome":"Latex Uso Interno - Balde 16L Branca","preco":51.90},
-                {"categoria":"Tintas","nome":"Standard - Pote 1L Branca","preco":15.90},
-                {"categoria":"Tintas","nome":"Standard - Galão 3.6L","preco":34.90},
-                {"categoria":"Tintas","nome":"Standard - Galão 3.6L Na Cor","preco":37.90},
-                {"categoria":"Tintas","nome":"Standard - Lata 18L Branca","preco":124.90},
-                {"categoria":"Tintas","nome":"Premium - Galão 3.6L","preco":75.90},
-                {"categoria":"Tintas","nome":"Premium - Balde 16L Branca","preco":190.00},
-                {"categoria":"Tintas","nome":"Premium - Lata 18L Branca","preco":219.90},
-                {"categoria":"Tintas","nome":"Piso Standard - Galão 3.6L","preco":46.90},
-                {"categoria":"Tintas","nome":"Piso Standard - Balde 16L Branca","preco":129.00},
-                {"categoria":"Tintas","nome":"Piso Standard - Lata 18L Branca","preco":144.90},
-                {"categoria":"Tintas","nome":"Piso Premium - Galão 3.6L","preco":75.90},
-                {"categoria":"Tintas","nome":"Piso Premium - Balde 16L Branca","preco":189.90},
-                {"categoria":"Tintas","nome":"Piso Premium - Lata 18L Branca","preco":219.90},
-                {"categoria":"Tintas","nome":"Emborrachada Standart - Lata 18L","preco":272.90},
-                {"categoria":"Tintas","nome":"Emborrachada Premium - Lata 18L","preco":392.00},
-                {"categoria":"Massas","nome":"Massa Corrida PVA - Pote 1L","preco":6.90},
-                {"categoria":"Massas","nome":"Massa Corrida PVA - Galão 3.6L","preco":14.99},
-                {"categoria":"Massas","nome":"Massa Corrida PVA - Lata 28kg","preco":58.90},
-                {"categoria":"Massas","nome":"Massa Corrida PVA - Barrica 25kg","preco":33.90},
-                {"categoria":"Massas","nome":"Massa Acrílica - Pote 1L","preco":8.50},
-                {"categoria":"Massas","nome":"Massa Acrílica - Galão 3.6L","preco":18.99},
-                {"categoria":"Massas","nome":"Massa Acrílica - Lata 28kg","preco":72.90},
-                {"categoria":"Massas","nome":"Massa Acrílica - Barrica 25kg","preco":43.90},
-                {"categoria":"Texturas","nome":"Grafiato Malha 10 - Pote 1L","preco":8.50},
-                {"categoria":"Texturas","nome":"Grafiato Malha 10 - Galão 3.6L","preco":18.99},
-                {"categoria":"Texturas","nome":"Grafiato Malha 10 - Barrica 25kg","preco":43.90},
-                {"categoria":"Texturas","nome":"Grafiato Malha 10 - Barrica 50kg","preco":83.99},
-                {"categoria":"Texturas","nome":"Grafiato Malha 10 - Lata 28kg","preco":72.90},
-                {"categoria":"Texturas","nome":"Textura Lisa - Pote 1L","preco":8.50},
-                {"categoria":"Texturas","nome":"Textura Lisa - Galão 3.6L","preco":18.99},
-                {"categoria":"Texturas","nome":"Textura Lisa - Barrica 25kg","preco":43.90},
-                {"categoria":"Texturas","nome":"Textura Lisa - Barrica 50kg","preco":83.99},
-                {"categoria":"Texturas","nome":"Textura Lisa - Lata 28kg","preco":72.90},
-                {"categoria":"Selantes","nome":"Selador Acrílico - Pote 1L","preco":9.50},
-                {"categoria":"Selantes","nome":"Selador Acrílico - Galão 3.6L","preco":19.90},
-                {"categoria":"Selantes","nome":"Selador Acrílico - Balde 16L","preco":52.90},
-                {"categoria":"Selantes","nome":"Selador Acrílico - Lata 18L","preco":79.90},
-                {"categoria":"Selantes","nome":"Selador Gesso - Lata 18L","preco":110.00},
-                {"categoria":"Complementos","nome":"Primer - Galão 3.6L","preco":49.90},
-                {"categoria":"Complementos","nome":"Primer - Balde 16L","preco":138.00},
-                {"categoria":"Complementos","nome":"Primer - Lata 18L","preco":158.00},
-                {"categoria":"Complementos","nome":"Impermeabilizante - Galão 3.6L","preco":49.90},
-                {"categoria":"Complementos","nome":"Impermeabilizante - Balde 16L","preco":138.90},
-                {"categoria":"Complementos","nome":"Impermeabilizante - Lata 18L","preco":149.90},
-                {"categoria":"Complementos","nome":"Liquibrilho - Lata 18L","preco":280.00},
-                {"categoria":"Complementos","nome":"Cimento Queimado - Balde 25kg","preco":188.00}
-            ]
-        }
-    },
-    computed: {
-        produtosFiltrados() { return this.produtos.filter(p => p.categoria === this.categoriaAtiva); },
-        totalPedido() { return this.carrinho.reduce((acc, i) => acc + (i.preco * i.qty), 0); },
-        totalFinal() {
-            let t = this.totalPedido;
-            if(this.pagamento === 'Pix' || this.pagamento === 'Espécie') t *= 0.97;
-            return t;
-        }
-    },
-    methods: {
-        abrirCategoria(c) { this.categoriaAtiva = c; this.modal = 'produtos'; },
-        selecionarProduto(p) { this.prodSel = p; this.qtd = 1; this.modal = 'detalhe'; },
-        confirmarItem() { this.carrinho.push({ ...this.prodSel, qty: this.qtd }); this.modal = null; },
-        removerItem(idx) { this.carrinho.splice(idx, 1); if(!this.carrinho.length) this.tela = 'home'; },
-        zerarPedido() { this.carrinho = []; this.pagamento = ''; this.parcelas = null; this.tela = 'home'; },
-        setPagamento(tipo) { this.pagamento = tipo; this.parcelas = null; },
-        setParcelas(n, dias = '') { this.parcelas = n; this.diasCheque = dias; },
-        resetPagamento() { this.pagamento = ''; this.parcelas = null; },
-        formatarPagamento() {
-            if (this.pagamento === 'Cartão' && this.parcelas) return `${this.parcelas}x no Cartão`;
-            if (this.pagamento === 'Cheque' && this.parcelas) return `${this.parcelas}x no Cheque (${this.diasCheque})`;
-            if (this.pagamento === 'Pix') return 'Pix (-3%)';
-            if (this.pagamento === 'Espécie') return 'Dinheiro (-3%)';
-            return this.pagamento;
-        },
-        enviarWhats() {
-            let m = `*QUALY QUIMY*\n*Cliente:* ${this.cliente}\n\n`;
-            this.carrinho.forEach(i => m += `• ${i.qty}x ${i.nome} = R$ ${(i.preco * i.qty).toFixed(2)}\n`);
-            m += `\n*PAGAMENTO:* ${this.formatarPagamento()}\n*TOTAL: R$ ${this.totalFinal.toFixed(2)}*`;
-            window.open(`https://api.whatsapp.com/send?phone=5511954950044&text=${encodeURIComponent(m)}`);
-        },
-        gerarPDF() {
-            const el = document.getElementById('pdf-template');
-            el.style.display = 'block';
-            html2pdf().from(el).set({ margin: 10, filename: 'Pedido.pdf', html2canvas: { scale: 3 } }).save().then(() => el.style.display = 'none');
-        }
-    }
-}).mount('#app')
-</script>
-</body>
-</html>
