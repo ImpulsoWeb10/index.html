@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qualy Quimy - PDV Premium</title>
+    <title>Qualy Quimy - PDV</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -12,10 +12,8 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
         .sidebar-blue { background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%); }
-        .bottom-sheet { animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .card-menu { transition: all 0.2s ease; border: 1px solid #f1f5f9; cursor: pointer; }
         .card-menu:active { transform: scale(0.95); }
+        #pdf-template { width: 700px; padding: 40px; background: white; }
     </style>
 </head>
 <body>
@@ -28,75 +26,78 @@
                 <div class="flex items-center gap-3">
                     <h1 class="text-2xl font-extrabold italic uppercase tracking-tighter">Qualy Quimy</h1>
                     <div class="relative">
-                        <button @click="$refs.calendario.showPicker()" class="bg-white/20 p-2 rounded-lg hover:bg-white/30 transition-all">
-                            <i class="fas fa-calendar-alt text-lg"></i>
-                        </button>
-                        <input type="date" ref="calendario" class="absolute opacity-0 pointer-events-none w-0 h-0">
+                        <button @click="$refs.calendario.showPicker()" class="bg-white/20 p-2 rounded-lg"><i class="fas fa-calendar-alt"></i></button>
+                        <input type="date" ref="calendario" v-model="dataPedido" class="absolute opacity-0 w-0 h-0">
                     </div>
                 </div>
                 <div class="bg-white/10 p-3 rounded-xl border border-white/20"><i class="fas fa-paint-roller"></i></div>
             </div>
             <div class="space-y-3">
-                <input v-model="vendedor" placeholder="Nome do Vendedor" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm placeholder:text-blue-200 outline-none focus:bg-white focus:text-gray-900 transition-all text-white">
-                <input v-model="cliente" placeholder="Nome do Cliente" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm placeholder:text-blue-200 outline-none focus:bg-white focus:text-gray-900 transition-all text-white">
+                <input v-model="vendedor" placeholder="Vendedor" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white">
+                <input v-model="cliente" placeholder="Cliente" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white">
             </div>
         </header>
 
         <main class="p-6 flex-1">
-            <h2 class="font-bold text-slate-400 mb-6 uppercase text-[10px] tracking-[0.2em] text-center">Categorias</h2>
             <div class="grid grid-cols-2 gap-4">
-                <div v-for="cat in categoriasSetup" :key="cat.nome" @click="abrirCategoria(cat.nome)"
-                     class="card-menu bg-white p-5 rounded-[2.5rem] shadow-sm flex flex-col items-center justify-center text-center">
+                <div v-for="cat in categoriasSetup" @click="abrirCategoria(cat.nome)" class="card-menu bg-white p-5 rounded-[2.5rem] shadow-sm flex flex-col items-center border border-slate-100">
                     <div :class="cat.bg" class="w-14 h-14 rounded-2xl flex items-center justify-center mb-3">
                         <i :class="[cat.icon, cat.color]" class="text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 text-[10px] uppercase tracking-tighter">{{ cat.nome }}</span>
+                    <span class="font-bold text-gray-700 text-[10px] uppercase">{{ cat.nome }}</span>
                 </div>
             </div>
 
             <div v-if="carrinho.length > 0" class="mt-8 bg-slate-900 p-6 rounded-[2.5rem] text-white flex justify-between items-center shadow-2xl">
                 <div>
-                    <p class="text-slate-500 text-[10px] font-bold uppercase">Subtotal</p>
-                    <p class="text-2xl font-black italic text-blue-400">R$ {{ totalPedido.toFixed(2) }}</p>
+                    <p class="text-slate-500 text-[10px] font-bold uppercase">Total Atual</p>
+                    <p class="text-2xl font-black text-blue-400">R$ {{ totalPedido.toFixed(2) }}</p>
                 </div>
-                <button @click="tela = 'resumo'" class="bg-blue-600 w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition-all">
-                    <i class="fas fa-arrow-right"></i>
-                </button>
+                <button @click="tela = 'resumo'" class="bg-blue-600 w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg"><i class="fas fa-arrow-right"></i></button>
             </div>
         </main>
     </div>
 
-    <div v-if="tela === 'resumo'" class="flex flex-col flex-1 p-6 bottom-sheet bg-white">
-        <div class="flex items-center gap-4 mb-6">
-            <button @click="tela = 'home'" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center shadow-md"><i class="fas fa-chevron-left"></i></button>
-            <h2 class="text-xl font-black text-slate-800 uppercase italic">Finalizar</h2>
+    <div v-if="tela === 'resumo'" class="flex flex-col flex-1 p-6 bg-white overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-4">
+                <button @click="tela = 'home'" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
+                <h2 class="text-xl font-black text-slate-800 uppercase italic">Resumo</h2>
+            </div>
+            <button @click="zerarPedido" class="text-red-500 font-bold text-[10px] uppercase border border-red-200 px-3 py-1 rounded-lg">Zerar Pedido</button>
         </div>
 
-        <div class="flex-1 overflow-y-auto space-y-2 mb-6 pr-1">
-            <div v-for="(item, idx) in carrinho" :key="idx" class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex justify-between items-center">
+        <div class="flex-1 space-y-2 mb-6">
+            <div v-for="(item, idx) in carrinho" class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex justify-between items-center">
                 <div class="flex-1">
-                    <p class="font-bold text-slate-800 text-[11px] leading-tight">{{ item.qty }}x {{ item.nome }}</p>
+                    <p class="font-bold text-slate-800 text-[11px]">{{ item.qty }}x {{ item.nome }}</p>
                     <p class="text-[10px] text-blue-600 font-bold">R$ {{ (item.preco * item.qty).toFixed(2) }}</p>
                 </div>
-                <button @click="removerItem(idx)" class="text-red-400 p-2"><i class="fas fa-trash-alt"></i></button>
+                <button @click="removerItem(idx)" class="text-red-300 p-2"><i class="fas fa-trash"></i></button>
             </div>
         </div>
 
-        <div class="bg-slate-50 border-2 border-slate-100 p-5 rounded-[2.5rem] mb-6 shadow-inner">
+        <div class="bg-slate-50 border-2 p-5 rounded-[2.5rem] mb-6">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-slate-400 text-[10px] uppercase">Forma de Pagamento</h3>
-                <button v-if="pagamento" @click="pagamento = ''" class="text-blue-700 font-extrabold text-[12px] uppercase bg-blue-100 px-4 py-1 rounded-full">Trocar</button>
+                <h3 class="font-bold text-slate-400 text-[10px] uppercase">Pagamento</h3>
+                <button v-if="pagamento" @click="pagamento = ''; parcelasCartao = null" class="text-blue-700 font-black text-[12px] uppercase bg-blue-100 px-4 py-1 rounded-full">Trocar</button>
             </div>
 
             <div class="grid grid-cols-2 gap-2 mb-4" v-if="!pagamento">
-                <button @click="setPagamento('Pix')" class="bg-white border-2 p-3 rounded-xl font-bold text-[9px] uppercase hover:border-blue-500">📱 Pix (-3%)</button>
-                <button @click="setPagamento('Espécie')" class="bg-white border-2 p-3 rounded-xl font-bold text-[9px] uppercase hover:border-blue-500">💵 Espécie (-3%)</button>
-                <button @click="setPagamento('Cartão')" class="bg-white border-2 p-3 rounded-xl font-bold text-[9px] uppercase hover:border-blue-500">💳 Cartão (3x)</button>
-                <button @click="setPagamento('Cheque')" class="bg-white border-2 p-3 rounded-xl font-bold text-[9px] uppercase hover:border-blue-500">✍️ Cheque</button>
+                <button @click="setPagamento('Pix')" class="bg-white border-2 p-3 rounded-xl font-bold text-[9px] uppercase">📱 Pix (-3%)</button>
+                <button @click="setPagamento('Espécie')" class="bg-white border-2 p-3 rounded-xl font-bold text-[9px] uppercase">💵 Espécie (-3%)</button>
+                <button @click="setPagamento('Cartão')" class="bg-white border-2 p-3 rounded-xl font-bold text-[9px] uppercase">💳 Cartão</button>
+                <button @click="setPagamento('Cheque')" class="bg-white border-2 p-3 rounded-xl font-bold text-[9px] uppercase">✍️ Cheque</button>
             </div>
 
-            <div v-else class="p-4 bg-blue-600 rounded-2xl text-white font-black text-center text-xs uppercase mb-4 shadow-lg">
-                {{ pagamento }}
+            <div v-if="pagamento === 'Cartão' && !parcelasCartao" class="grid grid-cols-3 gap-2 mb-4 animate-pulse">
+                <button v-for="n in 3" @click="setParcelas(n)" class="bg-blue-600 text-white p-2 rounded-xl text-[10px] font-bold">
+                    {{n}}x R$ {{ (totalPedido / n).toFixed(2) }}
+                </button>
+            </div>
+
+            <div v-if="pagamento && (pagamento !== 'Cartão' || parcelasCartao)" class="p-4 bg-blue-600 rounded-2xl text-white font-black text-center text-xs uppercase mb-4 shadow-lg">
+                {{ (pagamento === 'Cartão') ? `${parcelasCartao}x de R$ ${(totalPedido/parcelasCartao).toFixed(2)}` : pagamento }}
             </div>
 
             <div class="p-4 bg-slate-900 rounded-2xl text-center border-b-4 border-blue-500">
@@ -105,79 +106,84 @@
             </div>
         </div>
 
-        <div class="space-y-3 pb-4">
+        <div class="space-y-3">
             <button @click="enviarWhats" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black shadow-lg flex items-center justify-center gap-3">
                 <i class="fab fa-whatsapp text-xl"></i> WHATSAPP
             </button>
             <button @click="gerarPDF" class="w-full bg-slate-800 text-white py-4 rounded-2xl font-black shadow-lg flex items-center justify-center gap-3">
-                <i class="fas fa-file-pdf text-xl"></i> SALVAR PDF
+                <i class="fas fa-file-pdf text-xl"></i> GERAR PDF
             </button>
+        </div>
+    </div>
+
+    <div v-if="modal == 'detalhe'" class="fixed inset-0 z-[60] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-6">
+        <div class="bg-white rounded-[3rem] p-8 w-full max-w-sm text-center shadow-2xl">
+            <h4 class="font-black text-slate-800 mb-6 leading-tight">{{ prodSel.nome }}</h4>
+            <div class="flex items-center justify-center gap-6 my-6">
+                <button @click="qtd > 1 ? qtd-- : null" class="w-16 h-16 rounded-2xl bg-slate-100 text-2xl font-black">-</button>
+                <span class="text-5xl font-black text-slate-900">{{ qtd }}</span>
+                <button @click="qtd++" class="w-16 h-16 rounded-2xl bg-blue-600 text-white text-2xl font-black shadow-lg">+</button>
+            </div>
+            <div class="bg-blue-50 p-4 rounded-2xl mb-6 border-2 border-blue-100">
+                <p class="text-[10px] font-bold text-blue-400 uppercase">Subtotal</p>
+                <p class="text-3xl font-black text-blue-700">R$ {{ (prodSel.preco * qtd).toFixed(2) }}</p>
+            </div>
+            <button @click="confirmarItem" class="w-full bg-slate-900 text-white py-5 rounded-[2rem] font-black uppercase mb-3">Confirmar</button>
+            <button @click="modal = 'produtos'" class="w-full py-2 bg-slate-100 rounded-xl text-slate-500 text-[10px] font-black uppercase">Voltar</button>
         </div>
     </div>
 
     <div v-if="modal == 'produtos'" class="fixed inset-0 bg-black/70 z-50 flex items-end">
         <div class="bg-white w-full rounded-t-[3rem] p-8 bottom-sheet max-h-[85vh] flex flex-col">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-black text-slate-800 uppercase italic">{{ categoriaAtiva }}</h3>
+                <h3 class="text-xl font-black text-slate-800 uppercase">{{ categoriaAtiva }}</h3>
                 <button @click="modal = null" class="w-10 h-10 bg-slate-800 text-white rounded-full font-bold">&times;</button>
             </div>
-            <div class="overflow-y-auto space-y-2 pb-10">
+            <div class="overflow-y-auto space-y-2 pb-6">
                 <div v-for="p in produtosFiltrados" @click="selecionarProduto(p)" class="p-4 border border-slate-100 rounded-2xl hover:bg-blue-50 flex justify-between items-center cursor-pointer">
                     <p class="font-bold text-slate-800 text-sm">{{ p.nome }}</p>
                     <p class="text-blue-700 font-black text-sm">R$ {{ p.preco.toFixed(2) }}</p>
                 </div>
             </div>
-            <button @click="modal = null" class="w-full py-4 bg-slate-100 rounded-xl font-black text-slate-600 text-xs uppercase mt-2">VOLTAR PARA CATEGORIAS</button>
+            <button @click="modal = null" class="w-full py-4 bg-slate-100 rounded-xl font-black text-slate-600 text-xs uppercase">VOLTAR PARA CATEGORIAS</button>
         </div>
     </div>
 
-    <div v-if="modal == 'detalhe'" class="fixed inset-0 z-[60] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-6">
-        <div class="bg-white rounded-[3rem] p-8 w-full max-w-sm text-center shadow-2xl">
-            <h4 class="font-black text-slate-800 mb-2 leading-tight">{{ prodSel.nome }}</h4>
-            <p class="text-slate-400 text-xs mb-6 font-bold uppercase">Preço Unit: R$ {{ prodSel.preco.toFixed(2) }}</p>
-            
-            <div class="flex items-center justify-center gap-6 my-6">
-                <button @click="qtd > 1 ? qtd-- : null" class="w-16 h-16 rounded-2xl bg-slate-100 text-slate-800 font-black text-2xl shadow-sm">-</button>
-                <span class="text-5xl font-black text-slate-900">{{ qtd }}</span>
-                <button @click="qtd++" class="w-16 h-16 rounded-2xl bg-blue-600 text-white font-black text-2xl shadow-lg shadow-blue-200">+</button>
-            </div>
-
-            <div class="bg-blue-50 p-5 rounded-2xl mb-6 border-2 border-blue-100">
-                <span class="text-blue-400 text-[10px] font-bold uppercase tracking-widest block mb-1">Subtotal do Item</span>
-                <p class="text-3xl font-black text-blue-700 italic">R$ {{ (prodSel.preco * qtd).toFixed(2) }}</p>
-            </div>
-
-            <button @click="confirmarItem" class="w-full bg-slate-900 text-white py-5 rounded-[2rem] font-black shadow-xl mb-4 uppercase">Adicionar ao Pedido</button>
-            <button @click="modal = 'produtos'" class="w-full py-2 bg-slate-100 rounded-xl text-slate-500 text-[10px] font-black uppercase">Voltar</button>
-        </div>
-    </div>
-
-    <footer class="mt-auto py-6 text-center bg-slate-50 border-t border-slate-100">
-        <a href="https://wa.me/5511954950044" target="_blank" class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] hover:text-blue-600">
+    <footer class="mt-auto py-6 text-center bg-slate-50 border-t">
+        <a href="https://wa.me/5511954950044" target="_blank" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
             Desenvolvido por <span class="text-blue-600">ImpulsoWeb10</span>
         </a>
     </footer>
 
-    <div id="pdf-template" style="display:none; padding: 30px; font-family: sans-serif;">
-        <h1 style="text-align:center; color:#1e3a8a; text-transform:uppercase;">Qualy Quimy</h1>
-        <hr>
-        <p><strong>Cliente:</strong> {{ cliente }} | <strong>Vendedor:</strong> {{ vendedor }}</p>
-        <p><strong>Data:</strong> {{ new Date().toLocaleDateString() }}</p>
-        <table style="width:100%; border-collapse: collapse; margin-top:20px;">
-            <tr style="background:#eee; text-align:left;">
-                <th style="padding:10px; border:1px solid #ddd;">Qtd</th>
-                <th style="padding:10px; border:1px solid #ddd;">Produto</th>
-                <th style="padding:10px; border:1px solid #ddd;">Total</th>
-            </tr>
-            <tr v-for="i in carrinho">
-                <td style="padding:8px; border:1px solid #ddd;">{{ i.qty }}</td>
-                <td style="padding:8px; border:1px solid #ddd;">{{ i.nome }}</td>
-                <td style="padding:8px; border:1px solid #ddd;">R$ {{ (i.preco * i.qty).toFixed(2) }}</td>
-            </tr>
+    <div id="pdf-template" style="display:none; color: #1a202c;">
+        <div style="border-bottom: 4px solid #1e3a8a; padding-bottom: 20px; text-align: center;">
+            <h1 style="font-size: 32px; text-transform: uppercase; margin: 0; color: #1e3a8a;">Qualy Quimy</h1>
+            <p style="font-size: 14px; font-weight: bold; margin: 5px 0;">COMPROVANTE DE PEDIDO</p>
+        </div>
+        <div style="margin: 30px 0; font-size: 16px; line-height: 1.6;">
+            <p><strong>Vendedor:</strong> {{ vendedor || '---' }}</p>
+            <p><strong>Cliente:</strong> {{ cliente || '---' }}</p>
+            <p><strong>Data:</strong> {{ dataPedido || new Date().toLocaleDateString() }}</p>
+        </div>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #1e3a8a; color: white;">
+                    <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Qtd</th>
+                    <th style="padding: 12px; border: 1px solid #ddd; text-align: left;">Produto</th>
+                    <th style="padding: 12px; border: 1px solid #ddd; text-align: right;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="i in carrinho">
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ i.qty }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ i.nome }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd; text-align: right;">R$ {{ (i.preco * i.qty).toFixed(2) }}</td>
+                </tr>
+            </tbody>
         </table>
-        <div style="margin-top:20px; text-align:right;">
-            <h3>Pagamento: {{ pagamento }}</h3>
-            <h2>Total Final: R$ {{ totalFinal.toFixed(2) }}</h2>
+        <div style="margin-top: 40px; padding: 20px; background: #f8fafc; border-radius: 15px; text-align: right;">
+            <p style="font-size: 16px;"><strong>Pagamento:</strong> {{ (pagamento === 'Cartão') ? `${parcelasCartao}x no Cartão` : pagamento }}</p>
+            <h2 style="font-size: 28px; color: #1e3a8a; margin: 10px 0;">Total: R$ {{ totalFinal.toFixed(2) }}</h2>
         </div>
     </div>
 
@@ -188,8 +194,8 @@ const { createApp } = Vue;
 createApp({
     data() {
         return {
-            tela: 'home', modal: null, vendedor: '', cliente: '', pagamento: '',
-            categoriaAtiva: '', prodSel: {}, qtd: 1, carrinho: [],
+            tela: 'home', modal: null, vendedor: '', cliente: '', pagamento: '', parcelasCartao: null,
+            categoriaAtiva: '', prodSel: {}, qtd: 1, carrinho: [], dataPedido: '',
             categoriasSetup: [
                 { nome: 'Tintas', icon: 'fas fa-fill-drip', color: 'text-blue-600', bg: 'bg-blue-50' },
                 { nome: 'Massas', icon: 'fas fa-brush', color: 'text-emerald-600', bg: 'bg-emerald-50' },
@@ -261,42 +267,36 @@ createApp({
         totalPedido() { return this.carrinho.reduce((acc, i) => acc + (i.preco * i.qty), 0); },
         totalFinal() {
             let t = this.totalPedido;
-            if(this.pagamento.includes('Pix') || this.pagamento.includes('Espécie')) t *= 0.97;
+            if(this.pagamento === 'Pix' || this.pagamento === 'Espécie') t *= 0.97;
             return t;
         }
     },
     methods: {
         abrirCategoria(c) { this.categoriaAtiva = c; this.modal = 'produtos'; },
         selecionarProduto(p) { this.prodSel = p; this.qtd = 1; this.modal = 'detalhe'; },
-        confirmarItem() {
-            this.carrinho.push({ nome: this.prodSel.nome, preco: this.prodSel.preco, qty: this.qtd });
-            this.modal = null; this.tela = 'home';
-        },
-        removerItem(idx) { 
-            this.carrinho.splice(idx, 1); 
-            if(!this.carrinho.length) { this.tela = 'home'; this.pagamento = ''; }
-        },
+        confirmarItem() { this.carrinho.push({ ...this.prodSel, qty: this.qtd }); this.modal = null; },
+        removerItem(idx) { this.carrinho.splice(idx, 1); if(!this.carrinho.length) this.tela = 'home'; },
+        zerarPedido() { this.carrinho = []; this.pagamento = ''; this.tela = 'home'; },
         setPagamento(tipo) {
             if (tipo === 'Cheque') {
-                this.pagamento = this.totalPedido >= 1000 ? 'Cheque (30/45/60 dias)' : 'Cheque (30/45 dias)';
-            } else if (tipo === 'Cartão') {
-                this.pagamento = 'Cartão (até 3x sem juros)';
+                this.pagamento = this.totalPedido >= 1000 ? 'Cheque (30/45/60)' : 'Cheque (30/45)';
             } else {
                 this.pagamento = tipo;
             }
         },
+        setParcelas(n) { this.parcelasCartao = n; },
         enviarWhats() {
-            if(!this.pagamento) return alert("Selecione o pagamento!");
-            let m = `*PEDIDO QUALY QUIMY*\n*Cliente:* ${this.cliente}\n\n`;
+            let pag = this.pagamento === 'Cartão' ? `${this.parcelasCartao}x no Cartão` : this.pagamento;
+            let m = `*QUALY QUIMY*\n*Cliente:* ${this.cliente}\n\n`;
             this.carrinho.forEach(i => m += `• ${i.qty}x ${i.nome} = R$ ${(i.preco * i.qty).toFixed(2)}\n`);
-            m += `\n*PAGAMENTO:* ${this.pagamento}\n*TOTAL: R$ ${this.totalFinal.toFixed(2)}*`;
+            m += `\n*PAGAMENTO:* ${pag}\n*TOTAL: R$ ${this.totalFinal.toFixed(2)}*`;
             window.open(`https://api.whatsapp.com/send?phone=5511954950044&text=${encodeURIComponent(m)}`);
         },
         gerarPDF() {
-            if(!this.pagamento) return alert("Selecione o pagamento!");
             const el = document.getElementById('pdf-template');
             el.style.display = 'block';
-            html2pdf().from(el).set({ margin: 10, filename: 'Pedido.pdf' }).save().then(() => el.style.display = 'none');
+            const opt = { margin: 0, filename: 'Pedido.pdf', image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 3, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            html2pdf().from(el).set(opt).save().then(() => el.style.display = 'none');
         }
     }
 }).mount('#app')
