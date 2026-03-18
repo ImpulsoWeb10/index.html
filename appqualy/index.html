@@ -82,19 +82,41 @@
 <script>
 let db = {};
 let cart = [];
+let carregado = false;
 
-// carregar JSON
+// 🔥 carregar JSON com segurança
 fetch('produtos.json')
 .then(r => r.json())
 .then(data => {
     data.forEach(i => {
+
+        // ignora linha ruim
+        if (!i.categoria || !i.nome || i.preco == null) return;
+
         if(!db[i.categoria]) db[i.categoria] = [];
-        db[i.categoria].push({n:i.nome,p:i.preco});
+
+        db[i.categoria].push({
+            n: i.nome,
+            p: Number(i.preco)
+        });
     });
+
+    carregado = true;
+    console.log("Produtos carregados:", db);
+})
+.catch(err => {
+    alert("Erro ao carregar produtos.json");
+    console.error(err);
 });
 
 // mostrar produtos
 function showProducts(cat){
+
+    if(!carregado){
+        alert("Carregando produtos... aguarde 1 segundo");
+        return;
+    }
+
     document.getElementById('cats').style.display='none';
     document.getElementById('products').style.display='block';
     document.getElementById('title').innerText = cat;
@@ -102,8 +124,8 @@ function showProducts(cat){
     let list = document.getElementById('list');
     list.innerHTML='';
 
-    if(!db[cat]){
-        list.innerHTML='Nenhum produto';
+    if(!db[cat] || db[cat].length === 0){
+        list.innerHTML='Nenhum produto encontrado';
         return;
     }
 
