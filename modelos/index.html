@@ -1,171 +1,188 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
+<!-- GOOGLE ANALYTICS (já incluso) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H9RSCEX0LD"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-H9RSCEX0LD');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Páginas de Avaliação Profissional</title>
+
+<title>Páginas de Avaliação para Google | ImpulsoWeb10</title>
+
+<meta name="description" content="Aumente suas avaliações no Google e melhore sua reputação com páginas profissionais de alta conversão.">
+<meta name="keywords" content="avaliações google, reputação digital, aumentar avaliações, página de avaliação">
+<meta name="author" content="ImpulsoWeb10">
+
+<link rel="canonical" href="https://impulsoweb10.com.br/modelos/">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Páginas de Avaliação Profissional">
+<meta property="og:description" content="Aumente suas avaliações e reputação no Google.">
+<meta property="og:type" content="website">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(135deg,#0f172a,#1e293b);
-    color:white;
-    text-align:center;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
+text-align:center;
 }
 
 .container{
-    max-width:1100px;
-    margin:60px auto;
-    padding:20px;
+max-width:1100px;
+margin:60px auto;
+padding:20px;
 }
 
-h1{
-    font-size:34px;
-    margin-bottom:15px;
-}
+h1{font-size:34px;margin-bottom:15px;}
 
 .subtitulo{
-    font-size:18px;
-    color:#cbd5e1;
-    margin-bottom:50px;
+font-size:18px;
+color:#cbd5e1;
+margin-bottom:50px;
 }
 
-/* CARDS */
-
 .cards{
-    display:flex;
-    justify-content:center;
-    gap:30px;
-    flex-wrap:wrap;
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap;
 }
 
 .card{
-    background:#1e293b;
-    padding:35px;
-    width:340px;
-    border-radius:15px;
-    box-shadow:0 0 20px rgba(0,0,0,0.4);
-    transition:0.3s;
+background:#1e293b;
+padding:35px;
+width:340px;
+border-radius:15px;
+box-shadow:0 0 20px rgba(0,0,0,0.4);
+transition:0.3s;
 }
 
-.card h2{
-    margin-bottom:15px;
-}
+.card h2{margin-bottom:15px;}
 
 .preco{
-    font-size:28px;
-    font-weight:bold;
-    margin:15px 0;
+font-size:28px;
+font-weight:bold;
+margin:10px 0;
 }
 
 .preco-antigo{
-    text-decoration:line-through;
-    font-size:14px;
-    color:#94a3b8;
+text-decoration:line-through;
+font-size:14px;
+color:#94a3b8;
+}
+
+.info{
+font-size:13px;
+color:#94a3b8;
+margin-bottom:10px;
+}
+
+.destaque{
+font-size:14px;
+color:#cbd5e1;
 }
 
 .card ul{
-    list-style:none;
-    text-align:left;
-    margin-bottom:25px;
+list-style:none;
+text-align:left;
+margin-bottom:25px;
 }
 
-.card ul li{
-    margin-bottom:10px;
-}
+.card ul li{margin-bottom:10px;}
 
 .botao{
-    display:inline-block;
-    padding:13px 28px;
-    border-radius:30px;
-    text-decoration:none;
-    font-weight:bold;
-    transition:0.3s;
-}
-
-/* BASIC */
-
-.basic{
-    border:1px solid #334155;
+display:inline-block;
+padding:13px 28px;
+border-radius:30px;
+text-decoration:none;
+font-weight:bold;
+transition:0.3s;
 }
 
 .basic .botao{
-    background:#22c55e;
-    color:white;
+background:#22c55e;
+color:white;
 }
 
-/* PREMIUM DESTACADO */
-
 .premium{
-    background:#111827;
-    transform:scale(1.07);
-    border:2px solid #facc15;
-    box-shadow:0 0 30px rgba(250,204,21,0.6);
+background:#111827;
+transform:scale(1.07);
+border:2px solid #facc15;
+box-shadow:0 0 30px rgba(250,204,21,0.6);
 }
 
 .tag{
-    background:#facc15;
-    color:#000;
-    font-size:12px;
-    padding:6px 14px;
-    border-radius:20px;
-    display:inline-block;
-    margin-bottom:15px;
-    font-weight:bold;
+background:#facc15;
+color:#000;
+font-size:12px;
+padding:6px 14px;
+border-radius:20px;
+display:inline-block;
+margin-bottom:15px;
+font-weight:bold;
 }
 
 .economia{
-    font-size:13px;
-    color:#22c55e;
-    margin-bottom:10px;
+font-size:13px;
+color:#22c55e;
+margin-bottom:10px;
 }
 
 .premium .botao{
-    background:#facc15;
-    color:#000;
+background:#facc15;
+color:#000;
 }
 
-/* FOOTER */
+/* FAQ */
+.faq{
+max-width:800px;
+margin:60px auto;
+text-align:left;
+}
+
+.faq-item{
+background:#1e293b;
+margin-bottom:10px;
+border-radius:10px;
+overflow:hidden;
+}
+
+.faq-question{
+padding:15px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.faq-answer{
+max-height:0;
+overflow:hidden;
+transition:0.4s;
+padding:0 15px;
+font-size:14px;
+color:#cbd5e1;
+}
+
+.faq-item.active .faq-answer{
+max-height:200px;
+padding:15px;
+}
 
 .footer{
-    margin-top:60px;
-    padding-top:15px;
-    border-top:1px solid #334155; /* linha sutil separando */
-    font-size:13px;
-    color:#94a3b8;
-}
-<div style="margin-top:60px; max-width:600px; margin-left:auto; margin-right:auto; font-size:15px; color:#cbd5e1;">
-    “Depois que começamos a usar a página de avaliação, nossos clientes passaram a avaliar muito mais no Google.”
-    <br><br>
-    <strong>- Cliente Satisfeito</strong>
-</div>
-.footer a{
-    color:#22c55e;
-    text-decoration:none;
-    font-weight:bold;
-}
-    .prova-social{
-    margin-bottom:20px;
-    font-size:16px;
-    color:#22c55e;
-}
-
-.contador{
-    margin-bottom:50px;
-    font-size:15px;
-    color:#facc15;
-}
-
-#timer{
-    font-size:22px;
-    font-weight:bold;
-    margin-top:8px;
+margin-top:60px;
+padding-top:15px;
+border-top:1px solid #334155;
+font-size:13px;
+color:#94a3b8;
 }
 </style>
 </head>
@@ -174,92 +191,99 @@ h1{
 
 <div class="container">
 
-    <h1>Transforme Avaliações em Vendas 🚀</h1>
-    <div class="subtitulo">
-        Aumente sua credibilidade, gere mais confiança e converta mais clientes.
-    </div>
-    <div class="prova-social">
-    ⭐ Empresas estão aumentando em média 32% suas avaliações após implementar a página.
+<h1>Páginas de Avaliação para Google 🚀</h1>
+
+<div class="subtitulo">
+Aumente suas avaliações, ganhe mais credibilidade e converta mais clientes.
 </div>
 
-<div class="contador">
-    Oferta especial termina em:
-    <div id="timer"></div>
+<div class="cards">
+
+<!-- BASIC -->
+<div class="card basic">
+<h2>Plano Basic</h2>
+
+<div class="preco">R$ 49,90</div>
+<div class="destaque">Pagamento único</div>
+<div class="info">Atualizações opcionais por R$ 19,90/mês</div>
+
+<ul>
+<li>✔ Página profissional</li>
+<li>✔ Botão Google</li>
+<li>✔ Botão WhatsApp</li>
+<li>✔ Rodapé com SSL</li>
+<li>✔ Entrega rápida</li>
+</ul>
+
+<a href="basic/" class="botao">Começar Agora</a>
 </div>
 
-    <div class="cards">
+<!-- PREMIUM -->
+<div class="card premium">
+<div class="tag">MAIS ESCOLHIDO</div>
 
-        <!-- BASIC -->
-        <div class="card basic">
-            <h2>Plano Basic- Pago uma unica vez </h2>
+<h2>Plano Premium</h2>
 
-            <div class="preco">R$ 49,90</div>
-            <div class="preco">( Caso queira atualização mensal-19,90 )</div>
-            <ul>
-                <li>✔ Página profissional</li>
-                <li>✔ Botão Google</li>
-                <li>✔ Botão WhatsApp</li>
-                <li>✔ Rodapé com SSL</li>
-                <li>✔ Entrega rápida</li>
-            </ul>
+<div class="preco-antigo">De R$ 149,90</div>
+<div class="preco">R$ 99,90</div>
+<div class="economia">Economize R$ 50</div>
 
-           <a href="basic/" class="botao">Quero Basic</a>
-        </div>
+<div class="destaque">Pagamento único</div>
+<div class="info">Atualizações opcionais por R$ 19,90/mês</div>
 
-        <!-- PREMIUM -->
-        <div class="card premium - Pago Uma única vez ">
-            <div class="tag">MAIS ESCOLHIDO</div>
+<ul>
+<li>✔ Tudo do Basic</li>
+<li>✔ Logo personalizada</li>
+<li>✔ Botões animados</li>
+<li>✔ Efeito premium</li>
+<li>✔ Maior conversão</li>
+</ul>
 
-            <h2>Plano Premium</h2>
-
-            <div class="preco-antigo">De R$ 149,90</div>
-            <div class="preco">R$ 99,90</div>
-            <div class="economia">Economize R$ 50</div>
-            <div class="economia"> ( Caso queira atualização mensal - 19,90 )</div>
-
-            <ul>
-                <li>✔ Tudo do Basic</li>
-                <li>✔ Logo personalizada</li>
-                <li>✔ Botões animados</li>
-                <li>✔ Efeito brilho premium</li>
-                <li>✔ Layout mais impactante</li>
-                <li>✔ Maior taxa de conversão</li>
-            </ul>
-
-            <a href="premium/" class="botao">Quero Premium</a>
-        </div>
-
-    </div>
-
-    <div class="footer">
-        <p>© 2026 ImpulsoWeb10 - Todos os direitos reservados</p>
-        <p>🔒 Site Seguro | Conexão Protegida SSL</p>
-    </div>
+<a href="premium/" class="botao">Quero o Melhor Plano</a>
+</div>
 
 </div>
+
+<!-- FAQ -->
+<div class="faq">
+<h2>Perguntas Frequentes</h2>
+
+<div class="faq-item">
+<div class="faq-question">Isso realmente aumenta minhas avaliações?</div>
+<div class="faq-answer">Sim, direciona clientes satisfeitos diretamente para avaliar no Google.</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question">Preciso pagar mensalmente?</div>
+<div class="faq-answer">Não. O pagamento é único. A mensalidade é opcional.</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question">Em quanto tempo fica pronto?</div>
+<div class="faq-answer">Normalmente em até 24 horas.</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question">Funciona no celular?</div>
+<div class="faq-answer">Sim, é totalmente responsivo.</div>
+</div>
+
+</div>
+
+<div class="footer">
+<p>© 2026 ImpulsoWeb10</p>
+<p>🔒 Site Seguro | SSL</p>
+</div>
+
+</div>
+
 <script>
-function iniciarContador() {
-    let tempo = 3600; // 1 hora em segundos
-
-    const timer = document.getElementById("timer");
-
-    setInterval(() => {
-        let horas = Math.floor(tempo / 3600);
-        let minutos = Math.floor((tempo % 3600) / 60);
-        let segundos = tempo % 60;
-
-        timer.innerHTML =
-            String(horas).padStart(2, '0') + ":" +
-            String(minutos).padStart(2, '0') + ":" +
-            String(segundos).padStart(2, '0');
-
-        if (tempo > 0) {
-            tempo--;
-        }
-    }, 1000);
-}
-
-iniciarContador();
+document.querySelectorAll('.faq-question').forEach(item=>{
+item.addEventListener('click',()=>{
+item.parentElement.classList.toggle('active');
+});
+});
 </script>
+
 </body>
 </html>
