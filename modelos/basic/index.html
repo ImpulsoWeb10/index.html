@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avalie Nosso Atendimento ⭐ | ImpulsoWeb10</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(-45deg, #1e1e1e, #2c3e50, #001f3f, #1e1e1e);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container-glass {
+            background: rgba(0, 0, 0, 0.55);
+            padding: 35px 25px;
+            border-radius: 30px;
+            backdrop-filter: blur(15px);
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .star-btn {
+            font-size: 32px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            color: #4b5563; /* Cor inativa */
+        }
+        .star-btn.active { color: #fbce11; text-shadow: 0 0 15px rgba(251, 206, 17, 0.4); }
+        .star-btn:hover { transform: scale(1.2); }
+
+        textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 15px;
+            padding: 12px;
+            width: 100%;
+            margin-top: 15px;
+            resize: none;
+        }
+
+        .btn-action {
+            display: block;
+            margin: 15px auto 0;
+            padding: 12px 20px;
+            width: 80%;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .google-btn { background: #FFD700; color: #000; }
+        .wpp-btn { background: #25D366; color: white; }
+        
+        .hidden { display: none; }
+
+        footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            font-size: 10px;
+            opacity: 0.6;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-glass">
+    <div class="bg-orange-500 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-bold mx-auto mb-6 shadow-lg">I</div>
+
+    <h1 class="text-xl font-bold mb-2">Sua opinião é o nosso impulso! 💛</h1>
+    <p class="text-sm opacity-80 mb-6">Como foi sua experiência com a ImpulsoWeb10?</p>
+
+    <div class="flex justify-center space-x-2 mb-6">
+        <i class="fas fa-star star-btn" onclick="setRating(1)"></i>
+        <i class="fas fa-star star-btn" onclick="setRating(2)"></i>
+        <i class="fas fa-star star-btn" onclick="setRating(3)"></i>
+        <i class="fas fa-star star-btn" onclick="setRating(4)"></i>
+        <i class="fas fa-star star-btn" onclick="setRating(5)"></i>
+    </div>
+
+    <div id="feedback-bom" class="hidden animate-fade-in">
+        <p class="text-yellow-400 font-bold mb-4">Ficamos muito felizes! 🎉</p>
+        <p class="text-xs mb-4">Poderia compartilhar sua experiência no Google?</p>
+        <a href="https://g.page/r/CRECbD178tUDEAE/review" target="_blank" class="btn-action google-btn">
+            <i class="fab fa-google mr-2"></i> Postar no Google
+        </a>
+    </div>
+
+    <div id="feedback-ruim" class="hidden animate-fade-in">
+        <p class="text-orange-400 font-bold mb-2">Sentimos muito. 😔</p>
+        <p class="text-xs">Em que podemos melhorar?</p>
+        <textarea id="melhoria-texto" rows="3" placeholder="Conte-nos o que aconteceu..."></textarea>
+        <button onclick="enviarWpp()" class="btn-action wpp-btn">
+            <i class="fab fa-whatsapp mr-2"></i> Enviar para o Gerente
+        </button>
+    </div>
+
+    <footer>
+        <div class="mb-1 uppercase tracking-widest">Qualidade • Confiança • Compromisso</div>
+        <div class="mb-2">🔒 Site Seguro | Certificado SSL</div>
+        <div>
+            Desenvolvido por 
+            <a href="https://wa.me/5511954950044" target="_blank" class="text-cyan-400 font-bold hover:text-white">ImpulsoWeb10</a>
+        </div>
+    </footer>
+</div>
+
+<script>
+    let currentRating = 0;
+
+    function setRating(nota) {
+        currentRating = nota;
+        const stars = document.querySelectorAll('.star-btn');
+        const bom = document.getElementById('feedback-bom');
+        const ruim = document.getElementById('feedback-ruim');
+
+        // Atualiza visual das estrelas
+        stars.forEach((s, i) => {
+            if (i < nota) s.classList.add('active');
+            else s.classList.remove('active');
+        });
+
+        // Lógica do Filtro
+        if (nota >= 4) {
+            bom.classList.remove('hidden');
+            ruim.classList.add('hidden');
+        } else {
+            ruim.classList.remove('hidden');
+            bom.classList.add('hidden');
+        }
+    }
+
+    function enviarWpp() {
+        const msg = document.getElementById('melhoria-texto').value;
+        const telefone = "5511954950044"; // Seu número de gerente
+        const textoBase = encodeURIComponent(`Olá, dei uma nota ${currentRating} e gostaria de dizer que: ${msg}`);
+        
+        if(msg.trim() === "") {
+            alert("Por favor, escreva brevemente como podemos melhorar.");
+            return;
+        }
+
+        window.open(`https://wa.me/${telefone}?text=${textoBase}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
