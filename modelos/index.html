@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Páginas de Avaliação Profissional</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    text-align:center;
+}
+
+.container{
+    max-width:1100px;
+    margin:60px auto;
+    padding:20px;
+}
+
+h1{
+    font-size:34px;
+    margin-bottom:15px;
+}
+
+.subtitulo{
+    font-size:18px;
+    color:#cbd5e1;
+    margin-bottom:50px;
+}
+
+/* CARDS */
+
+.cards{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+}
+
+.card{
+    background:#1e293b;
+    padding:35px;
+    width:340px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+    transition:0.3s;
+}
+
+.card h2{
+    margin-bottom:15px;
+}
+
+.preco{
+    font-size:28px;
+    font-weight:bold;
+    margin:15px 0;
+}
+
+.preco-antigo{
+    text-decoration:line-through;
+    font-size:14px;
+    color:#94a3b8;
+}
+
+.card ul{
+    list-style:none;
+    text-align:left;
+    margin-bottom:25px;
+}
+
+.card ul li{
+    margin-bottom:10px;
+}
+
+.botao{
+    display:inline-block;
+    padding:13px 28px;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+/* BASIC */
+
+.basic{
+    border:1px solid #334155;
+}
+
+.basic .botao{
+    background:#22c55e;
+    color:white;
+}
+
+/* PREMIUM DESTACADO */
+
+.premium{
+    background:#111827;
+    transform:scale(1.07);
+    border:2px solid #facc15;
+    box-shadow:0 0 30px rgba(250,204,21,0.6);
+}
+
+.tag{
+    background:#facc15;
+    color:#000;
+    font-size:12px;
+    padding:6px 14px;
+    border-radius:20px;
+    display:inline-block;
+    margin-bottom:15px;
+    font-weight:bold;
+}
+
+.economia{
+    font-size:13px;
+    color:#22c55e;
+    margin-bottom:10px;
+}
+
+.premium .botao{
+    background:#facc15;
+    color:#000;
+}
+
+/* FOOTER */
+
+.footer{
+    margin-top:60px;
+    padding-top:15px;
+    border-top:1px solid #334155; /* linha sutil separando */
+    font-size:13px;
+    color:#94a3b8;
+}
+<div style="margin-top:60px; max-width:600px; margin-left:auto; margin-right:auto; font-size:15px; color:#cbd5e1;">
+    “Depois que começamos a usar a página de avaliação, nossos clientes passaram a avaliar muito mais no Google.”
+    <br><br>
+    <strong>- Cliente Satisfeito</strong>
+</div>
+.footer a{
+    color:#22c55e;
+    text-decoration:none;
+    font-weight:bold;
+}
+    .prova-social{
+    margin-bottom:20px;
+    font-size:16px;
+    color:#22c55e;
+}
+
+.contador{
+    margin-bottom:50px;
+    font-size:15px;
+    color:#facc15;
+}
+
+#timer{
+    font-size:22px;
+    font-weight:bold;
+    margin-top:8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Transforme Avaliações em Vendas 🚀</h1>
+    <div class="subtitulo">
+        Aumente sua credibilidade, gere mais confiança e converta mais clientes.
+    </div>
+    <div class="prova-social">
+    ⭐ Empresas estão aumentando em média 32% suas avaliações após implementar a página.
+</div>
+
+<div class="contador">
+    Oferta especial termina em:
+    <div id="timer"></div>
+</div>
+
+    <div class="cards">
+
+        <!-- BASIC -->
+        <div class="card basic">
+            <h2>Plano Basic</h2>
+
+            <div class="preco">R$ 29,90</div>
+
+            <ul>
+                <li>✔ Página profissional</li>
+                <li>✔ Botão Google</li>
+                <li>✔ Botão WhatsApp</li>
+                <li>✔ Rodapé com SSL</li>
+                <li>✔ Entrega rápida</li>
+            </ul>
+
+           <a href="basic/" class="botao">Quero Basic</a>
+        </div>
+
+        <!-- PREMIUM -->
+        <div class="card premium">
+            <div class="tag">MAIS ESCOLHIDO</div>
+
+            <h2>Plano Premium</h2>
+
+            <div class="preco-antigo">De R$ 99,90</div>
+            <div class="preco">R$ 49,90</div>
+            <div class="economia">Economize R$ 50</div>
+
+            <ul>
+                <li>✔ Tudo do Basic</li>
+                <li>✔ Logo personalizada</li>
+                <li>✔ Botões animados</li>
+                <li>✔ Efeito brilho premium</li>
+                <li>✔ Layout mais impactante</li>
+                <li>✔ Maior taxa de conversão</li>
+            </ul>
+
+            <a href="premium/" class="botao">Quero Premium</a>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>© 2026 ImpulsoWeb10 - Todos os direitos reservados</p>
+        <p>🔒 Site Seguro | Conexão Protegida SSL</p>
+    </div>
+
+</div>
+<script>
+function iniciarContador() {
+    let tempo = 3600; // 1 hora em segundos
+
+    const timer = document.getElementById("timer");
+
+    setInterval(() => {
+        let horas = Math.floor(tempo / 3600);
+        let minutos = Math.floor((tempo % 3600) / 60);
+        let segundos = tempo % 60;
+
+        timer.innerHTML =
+            String(horas).padStart(2, '0') + ":" +
+            String(minutos).padStart(2, '0') + ":" +
+            String(segundos).padStart(2, '0');
+
+        if (tempo > 0) {
+            tempo--;
+        }
+    }, 1000);
+}
+
+iniciarContador();
+</script>
+</body>
+</html>
