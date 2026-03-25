@@ -76,4 +76,172 @@ border:2px solid #facc15;
 .faq{max-width:800px;margin:60px auto;text-align:left;}
 .faq-item{background:#1e293b;margin-bottom:10px;border-radius:10px;}
 .faq-question{padding:15px;cursor:pointer;font-weight:bold;}
-.faq-answer{max-height:0;ov
+.faq-answer{max-height:0;overflow:hidden;transition:0.3s;padding:0 15px;color:#cbd5e1;}
+.faq-item.active .faq-answer{max-height:200px;padding:15px;}
+
+.footer{margin-top:60px;font-size:13px;color:#94a3b8;}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Aumente suas Avaliações no Google 🚀</h1>
+
+<div class="subtitulo">
+Mais reputação, mais clientes e mais vendas para o seu negócio.
+</div>
+
+<div style="color:#22c55e;margin-bottom:10px;">
+⭐ Mais de 50 empresas já estão usando
+</div>
+
+<div style="color:#facc15;">Oferta termina em:</div>
+<div id="timer" style="font-size:22px;"></div>
+<div id="online" style="color:#22c55e;"></div>
+
+<div style="margin:20px 0;color:#facc15;">
+🔥 Escolha o plano e comece hoje
+</div>
+
+<div class="cards">
+
+<!-- BASIC -->
+
+<div class="card basic">
+<h2>Plano Basic</h2>
+
+<div class="preco">R$ 49,90</div>
+<div>Pagamento único</div>
+<div style="font-size:13px;color:#94a3b8;">
+Atualizações opcionais por R$ 19,90/mês
+</div>
+
+<div style="color:#f87171;font-size:13px;">
+⚠️ Poucas vagas nesse valor
+</div>
+
+<ul style="text-align:left;margin-top:15px;">
+<li>✔ Página profissional</li>
+<li>✔ Botão Google</li>
+<li>✔ Botão WhatsApp</li>
+<li>✔ Entrega rápida</li>
+</ul>
+
+<a href="https://wa.me/5511954950044?text=Quero%20Plano%20Basic" class="botao">
+Começar Agora
+</a>
+</div>
+
+<!-- PREMIUM -->
+
+<div class="card premium">
+<h2>Plano Premium</h2>
+
+<div class="preco-antigo">De R$ 149,90</div>
+<div class="preco">R$ 99,90</div>
+
+<div style="color:#22c55e;">Economize R$ 50</div>
+
+<div>Pagamento único</div>
+<div style="font-size:13px;color:#94a3b8;">
+Atualizações opcionais por R$ 19,90/mês
+</div>
+
+<div style="color:#f87171;font-size:13px;">
+⚠️ Mais vendido hoje
+</div>
+
+<ul style="text-align:left;margin-top:15px;">
+<li>✔ Tudo do Basic</li>
+<li>✔ Layout premium</li>
+<li>✔ Mais conversão</li>
+</ul>
+
+<a href="https://wa.me/5511954950044?text=Quero%20Plano%20Premium" class="botao">
+Quero o Melhor Plano
+</a>
+</div>
+
+</div>
+
+<!-- FAQ -->
+
+<div class="faq">
+<h2 style="text-align:center;">Perguntas Frequentes</h2>
+
+<div class="faq-item">
+<div class="faq-question">Preciso pagar mensalmente?</div>
+<div class="faq-answer">
+Não. O pagamento é único. A mensalidade é opcional para manter sua página sempre atualizada.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question">O que inclui a manutenção mensal?</div>
+<div class="faq-answer">
+A manutenção garante que sua página continue funcionando corretamente, com link personalizado ativo, atualizações técnicas, melhorias e compatibilidade com Google e Bing. Isso ajuda sua página a continuar sendo acessada e mantendo performance.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question">Isso realmente aumenta avaliações?</div>
+<div class="faq-answer">
+Sim. Clientes satisfeitos são direcionados diretamente para o Google, aumentando suas avaliações positivas.
+</div>
+</div>
+
+<div class="faq-item">
+<div class="faq-question">Em quanto tempo fica pronto?</div>
+<div class="faq-answer">
+Normalmente em até 24 horas após a confirmação.
+</div>
+</div>
+
+</div>
+
+<div class="footer">
+<p>© 2026 ImpulsoWeb10</p>
+</div>
+
+</div>
+
+<script>
+function iniciarContador(){
+let tempo = localStorage.getItem("tempo") || 3600;
+tempo = parseInt(tempo);
+
+setInterval(()=>{
+let h=Math.floor(tempo/3600);
+let m=Math.floor((tempo%3600)/60);
+let s=tempo%60;
+
+document.getElementById("timer").innerHTML=
+String(h).padStart(2,'0')+":"+String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');
+
+if(tempo>0){
+tempo--;
+localStorage.setItem("tempo",tempo);
+}
+},1000);
+}
+iniciarContador();
+
+function online(){
+let n=Math.floor(Math.random()*10)+3;
+document.getElementById("online").innerHTML=n+" pessoas vendo agora";
+}
+setInterval(online,5000);
+online();
+
+document.querySelectorAll('.faq-question').forEach(q=>{
+q.addEventListener('click',()=>{
+q.parentElement.classList.toggle('active');
+});
+});
+</script>
+
+</body>
+</html>
