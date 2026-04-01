@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Qualy Quimy — Pedidos</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d11;
+    --surface: #18181f;
+    --surface2: #20202a;
+    --border: #2a2a38;
+    --accent: #f5c542;
+    --green: #2ecc71;
+    --red: #ff4d6d;
+    --blue: #4f8ef7;
+    --text: #f0f0f5;
+    --muted: #6b6b88;
+    --radius: 18px;
+    --radius-sm: 11px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+  }
+
+  /* ── TELA INÍCIO ── */
+  #tela-inicio {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100dvh; padding: 32px 22px;
+    background:
+      radial-gradient(ellipse at 20% 10%, #2a1f5e55 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 85%, #5c2a0e44 0%, transparent 55%),
+      var(--bg);
+  }
+
+  .logo-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+  .logo-box {
+    width: 60px; height: 60px; background: var(--accent);
+    border-radius: 16px; display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 24px; color: #0d0d11;
+    box-shadow: 0 0 36px #f5c54244;
+  }
+  .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: -0.5px; }
+  .logo-text span { color: var(--accent); }
+
+  .app-sub { color: var(--muted); font-size: 13px; margin-bottom: 36px; }
+
+  .form-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 26px 24px;
+    width: 100%; max-width: 420px;
+  }
+
+  .field-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; color: var(--muted); margin-bottom: 7px;
+  }
+
+  .field-input {
+    width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: 12px 15px;
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px;
+    outline: none; transition: border-color .2s; margin-bottom: 16px;
+  }
+  .field-input:focus { border-color: var(--accent); }
+  .field-input::placeholder { color: var(--muted); }
+
+  .btn-start {
+    width: 100%; background: var(--accent); color: #0d0d11;
+    border: none; border-radius: var(--radius-sm); padding: 15px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px;
+    cursor: pointer; letter-spacing: 0.3px; transition: opacity .2s, transform .1s;
+  }
+  .btn-start:active { transform: scale(.98); }
+
+  /* ── APP ── */
+  #app { display: none; flex-direction: column; min-height: 100dvh; }
+
+  /* Header */
+  .header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 13px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .hdr-left {}
+  .hdr-vendedor { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; }
+  .hdr-cliente { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+  .hdr-right { display: flex; gap: 8px; align-items: center; }
+
+  .total-pill {
+    background: var(--accent); color: #0d0d11; border-radius: 8px;
+    padding: 6px 11px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+    cursor: pointer; display: none;
+  }
+
+  .cart-btn {
+    position: relative; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 18px;
+  }
+  .cart-badge {
+    position: absolute; top: -6px; right: -6px;
+    background: var(--accent); color: #0d0d11; border-radius: 50%;
+    width: 19px; height: 19px; font-size: 10px; font-weight: 700;
+    display: none; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+  }
+  .cart-badge.show { display: flex; }
+
+  /* Search */
+  .search-wrap {
+    padding: 12px 16px 4px;
+    position: sticky; top: 69px; z-index: 90; background: var(--bg);
+  }
+  .search-row { position: relative; }
+  .search-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 15px; pointer-events: none;
+  }
+  .search-input {
+    width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 50px; padding: 10px 16px 10px 40px;
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
+    transition: border-color .2s;
+  }
+  .search-input:focus { border-color: var(--accent); }
+
+  /* Chips categoria */
+  .cats-scroll {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding: 10px 16px 6px; scrollbar-width: none;
+  }
+  .cats-scroll::-webkit-scrollbar { display: none; }
+
+  .cat-chip {
+    flex-shrink: 0; display: flex; align-items: center; gap: 6px;
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 50px; padding: 7px 14px;
+    font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .cat-chip.active { background: var(--accent); border-color: var(--accent); color: #0d0d11; }
+  .cat-chip .chip-icon { font-size: 14px; }
+
+  /* Grid produtos */
+  .products-list {
+    display: flex; flex-direction: column; gap: 6px;
+    padding: 6px 16px 120px;
+  }
+
+  .prod-row {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: 13px 15px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; transition: all .18s; position: relative; overflow: hidden;
+  }
+  .prod-row::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--accent);
+    transform: scaleY(0); transform-origin: center; transition: transform .2s;
+  }
+  .prod-row.in-cart { border-color: #f5c54233; }
+  .prod-row.in-cart::before { transform: scaleY(1); }
+  .prod-row:active { transform: scale(.99); background: var(--surface2); }
+
+  .prod-cat-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  .prod-info { flex: 1; min-width: 0; }
+  .prod-nome { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .prod-cat-tag { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .prod-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .prod-preco { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent); }
+
+  .qty-mini {
+    background: var(--accent); color: #0d0d11; border-radius: 6px;
+    padding: 2px 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 11px;
+    display: none;
+  }
+  .qty-mini.show { display: block; }
+
+  /* FAB */
+  .fab {
+    position: fixed; bottom: 22px; right: 18px;
+    background: var(--accent); color: #0d0d11; border: none;
+    border-radius: 50px; padding: 13px 20px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+    cursor: pointer; display: none; align-items: center; gap: 8px;
+    box-shadow: 0 4px 24px #f5c54255; z-index: 150; transition: all .2s;
+  }
+  .fab.show { display: flex; }
+  .fab:active { transform: scale(.97); }
+
+  /* ── OVERLAYS / DRAWERS ── */
+  .overlay {
+    position: fixed; inset: 0; background: #000a;
+    z-index: 200; opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  .overlay.open { opacity: 1; pointer-events: all; }
+
+  .drawer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface); border-radius: 22px 22px 0 0;
+    z-index: 201; transform: translateY(100%);
+    transition: transform .35s cubic-bezier(.32,.72,0,1);
+    max-height: 88dvh; display: flex; flex-direction: column;
+  }
+  .drawer.open { transform: translateY(0); }
+
+  .drawer-handle {
+    width: 38px; height: 4px; background: var(--border);
+    border-radius: 2px; margin: 12px auto 0; flex-shrink: 0;
+  }
+
+  .drawer-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .drawer-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; }
+  .btn-zerar {
+    background: none; border: 1px solid var(--red); border-radius: 8px;
+    color: var(--red); font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer;
+  }
+  .btn-back {
+    background: none; border: 1px solid var(--muted); border-radius: 8px;
+    color: var(--muted); font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer;
+  }
+
+  .drawer-body { overflow-y: auto; flex: 1; }
+
+  /* Itens carrinho */
+  .cart-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; border-bottom: 1px solid #ffffff0a;
+  }
+  .ci-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .ci-info { flex: 1; min-width: 0; }
+  .ci-nome { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ci-unit { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .qty-ctrl {
+    display: flex; align-items: center;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 9px; overflow: hidden;
+  }
+  .qty-btn {
+    background: none; border: none; color: var(--text);
+    font-size: 17px; width: 34px; height: 34px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .qty-btn:active { background: var(--border); }
+  .qty-num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; min-width: 28px; text-align: center; }
+
+  .ci-total { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--accent); min-width: 62px; text-align: right; }
+
+  .cart-empty { text-align: center; padding: 48px 24px; color: var(--muted); }
+  .cart-empty-icon { font-size: 44px; margin-bottom: 10px; }
+
+  .drawer-foot {
+    border-top: 1px solid var(--border); padding: 14px 18px; flex-shrink: 0;
+  }
+  .total-row {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+  }
+  .total-lbl { font-size: 13px; color: var(--muted); }
+  .total-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: var(--accent); }
+
+  .btn-pagar {
+    width: 100%; background: var(--green); color: #0d0d11; border: none;
+    border-radius: var(--radius-sm); padding: 14px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+    cursor: pointer; transition: opacity .2s;
+  }
+  .btn-pagar:active { opacity: .85; }
+
+  /* ── PAGAMENTO ── */
+  .pgto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 18px; }
+  .pgto-opt {
+    background: var(--surface2); border: 2px solid var(--border);
+    border-radius: var(--radius-sm); padding: 16px 10px; text-align: center; cursor: pointer; transition: all .2s;
+  }
+  .pgto-opt.sel { border-color: var(--accent); background: #f5c54210; }
+  .pgto-opt:active { transform: scale(.97); }
+  .pgto-icon { font-size: 22px; margin-bottom: 5px; }
+  .pgto-lbl { font-size: 12px; font-weight: 700; }
+  .pgto-desc { font-size: 10px; color: var(--green); margin-top: 3px; }
+  .pgto-desc.neutral { color: var(--muted); }
+
+  .parc-wrap { padding: 0 18px 14px; }
+  .parc-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--muted); margin-bottom: 9px;
+  }
+  .parc-opt {
+    background: var(--surface2); border: 2px solid var(--border);
+    border-radius: var(--radius-sm); padding: 12px 15px;
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer; transition: all .2s; margin-bottom: 8px;
+  }
+  .parc-opt.sel { border-color: var(--accent); background: #f5c54210; }
+  .parc-opt-lbl { font-size: 13px; font-weight: 600; }
+  .parc-opt-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .parc-opt-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent); }
+
+  .resumo-box {
+    margin: 0 18px 14px; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px 16px;
+  }
+  .resumo-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 7px; color: var(--muted); }
+  .resumo-row.final {
+    margin-bottom: 0; padding-top: 10px; border-top: 1px solid var(--border);
+    font-size: 15px; font-weight: 700; color: var(--text);
+  }
+  .resumo-row span:last-child { font-family: 'Syne', sans-serif; font-weight: 700; }
+
+  .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 18px 20px; }
+  .btn-whats {
+    background: #25d366; color: #fff; border: none; border-radius: var(--radius-sm);
+    padding: 14px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-pdf {
+    background: var(--surface2); color: var(--text); border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 22px; left: 50%;
+    transform: translateX(-50%) translateY(70px);
+    background: var(--text); color: var(--bg);
+    border-radius: 50px; padding: 9px 18px; font-size: 12px; font-weight: 600;
+    z-index: 999; transition: transform .3s; white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Print */
+  @media print { body > *:not(#print-area) { display: none !important; } #print-area { display: block !important; } }
+  #print-area { display: none; }
+
+  /* Cat colors */
+  .c-tintas   { background: #4f8ef7; }
+  .c-massas   { background: #2ecc71; }
+  .c-texturas { background: #f39c12; }
+  .c-selantes { background: #9b59b6; }
+  .c-compl    { background: #e74c3c; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  .prod-row { animation: fadeUp .25s ease both; }
+</style>
+</head>
+<body>
+
+<!-- ── TELA INÍCIO ── -->
+<div id="tela-inicio">
+  <div class="logo-wrap">
+    <div class="logo-box">Q</div>
+    <div class="logo-text">Qualy <span>Quimy</span></div>
+  </div>
+  <div class="app-sub">Sistema de pedidos para vendedores</div>
+
+  <div class="form-card">
+    <div class="field-label">Seu nome (vendedor)</div>
+    <input class="field-input" id="inp-vendedor" placeholder="Ex: João Silva" />
+
+    <div class="field-label">Nome do cliente / loja</div>
+    <input class="field-input" id="inp-cliente" placeholder="Ex: Loja das Tintas" />
+
+    <div class="field-label">Data do pedido</div>
+    <input class="field-input" id="inp-data" type="date" />
+
+    <button class="btn-start" onclick="iniciar()">Começar pedido →</button>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app">
+  <div class="header">
+    <div class="hdr-left">
+      <div class="hdr-vendedor" id="hdr-vend">—</div>
+      <div class="hdr-cliente" id="hdr-cli">—</div>
+    </div>
+    <div class="hdr-right">
+      <div class="total-pill" id="total-pill" onclick="abrirCarrinho()">R$ 0,00</div>
+      <div class="cart-btn" onclick="abrirCarrinho()">
+        🛒
+        <div class="cart-badge" id="cart-badge">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-row">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="search" placeholder="Buscar produto..." oninput="renderProdutos()" />
+    </div>
+  </div>
+
+  <div class="cats-scroll" id="cats"></div>
+  <div class="products-list" id="prod-list"></div>
+
+  <button class="fab" id="fab" onclick="abrirCarrinho()">
+    🛒 <span id="fab-val">R$ 0,00</span>
+  </button>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="fecharTudo()"></div>
+
+<!-- DRAWER CARRINHO -->
+<div class="drawer" id="drawer-cart">
+  <div class="drawer-handle"></div>
+  <div class="drawer-head">
+    <div class="drawer-title">🛒 Carrinho</div>
+    <button class="btn-zerar" onclick="zerarCarrinho()">Zerar</button>
+  </div>
+  <div class="drawer-body" id="cart-body"></div>
+  <div class="drawer-foot">
+    <div class="total-row">
+      <span class="total-lbl">Total do pedido</span>
+      <span class="total-val" id="cart-total">R$ 0,00</span>
+    </div>
+    <button class="btn-pagar" onclick="abrirPgto()">Escolher pagamento →</button>
+  </div>
+</div>
+
+<!-- DRAWER PAGAMENTO -->
+<div class="drawer" id="drawer-pgto">
+  <div class="drawer-handle"></div>
+  <div class="drawer-head">
+    <div class="drawer-title">💳 Pagamento</div>
+    <button class="btn-back" onclick="voltarCart()">← Voltar</button>
+  </div>
+  <div class="drawer-body" id="pgto-body"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- PRINT -->
+<div id="print-area"></div>
+
+<script>
+// ── DADOS ─────────────────────────────────────────────────────────────────────
+const CATS = [
+  { nome: 'Tintas',        emoji: '🎨', cls: 'c-tintas'   },
+  { nome: 'Massas',        emoji: '🖌️', cls: 'c-massas'   },
+  { nome: 'Texturas',      emoji: '🪨', cls: 'c-texturas' },
+  { nome: 'Selantes',      emoji: '💧', cls: 'c-selantes' },
+  { nome: 'Complementos',  emoji: '🔧', cls: 'c-compl'    },
+];
+
+const catCls = { Tintas:'c-tintas', Massas:'c-massas', Texturas:'c-texturas', Selantes:'c-selantes', Complementos:'c-compl' };
+
+const PRODUTOS = [
+  // TINTAS
+  {id:1,  cat:'Tintas', nome:'Qualy Color Econômica - Pote 1L Branca',        preco:8.90},
+  {id:2,  cat:'Tintas', nome:'Qualy Color Econômica - Galão 3.6L Branca',     preco:26.90},
+  {id:3,  cat:'Tintas', nome:'Qualy Color Econômica - Galão 3.6L Na Cor',     preco:30.00},
+  {id:4,  cat:'Tintas', nome:'Qualy Color Econômica - Balde 18L Branca',      preco:76.90},
+  {id:5,  cat:'Tintas', nome:'Qualy Color Econômica - Balde 18L Na Cor',      preco:76.90},
+  {id:6,  cat:'Tintas', nome:'Qualy Color Econômica - Lata 18L Branca',       preco:79.90},
+  {id:7,  cat:'Tintas', nome:'Qualy Color Econômica - Lata 18L Na Cor',       preco:79.90},
+  {id:8,  cat:'Tintas', nome:'Latex Uso Interno - Lata 18L Branca',           preco:64.90},
+  {id:9,  cat:'Tintas', nome:'Latex Uso Interno - Balde 16L Branca',          preco:51.90},
+  {id:10, cat:'Tintas', nome:'Standard - Pote 1L Branca',                     preco:15.90},
+  {id:11, cat:'Tintas', nome:'Standard - Galão 3.6L',                         preco:34.90},
+  {id:12, cat:'Tintas', nome:'Standard - Galão 3.6L Na Cor',                  preco:37.90},
+  {id:13, cat:'Tintas', nome:'Standard - Lata 18L Branca',                    preco:124.90},
+  {id:14, cat:'Tintas', nome:'Premium - Galão 3.6L',                          preco:75.90},
+  {id:15, cat:'Tintas', nome:'Premium - Balde 16L Branca',                    preco:190.00},
+  {id:16, cat:'Tintas', nome:'Premium - Lata 18L Branca',                     preco:219.90},
+  {id:17, cat:'Tintas', nome:'Piso Standard - Galão 3.6L',                    preco:46.90},
+  {id:18, cat:'Tintas', nome:'Piso Standard - Balde 16L Branca',              preco:129.00},
+  {id:19, cat:'Tintas', nome:'Piso Standard - Lata 18L Branca',               preco:144.90},
+  {id:20, cat:'Tintas', nome:'Piso Premium - Galão 3.6L',                     preco:75.90},
+  {id:21, cat:'Tintas', nome:'Piso Premium - Balde 16L Branca',               preco:189.90},
+  {id:22, cat:'Tintas', nome:'Piso Premium - Lata 18L Branca',                preco:219.90},
+  {id:23, cat:'Tintas', nome:'Emborrachada Standart - Lata 18L',              preco:272.90},
+  {id:24, cat:'Tintas', nome:'Emborrachada Premium - Lata 18L',               preco:392.00},
+  // MASSAS
+  {id:25, cat:'Massas', nome:'Massa Corrida PVA - Pote 1L',                   preco:6.90},
+  {id:26, cat:'Massas', nome:'Massa Corrida PVA - Galão 3.6L',                preco:14.99},
+  {id:27, cat:'Massas', nome:'Massa Corrida PVA - Lata 28kg',                 preco:58.90},
+  {id:28, cat:'Massas', nome:'Massa Corrida PVA - Barrica 25kg',              preco:33.90},
+  {id:29, cat:'Massas', nome:'Massa Acrílica - Pote 1L',                      preco:8.50},
+  {id:30, cat:'Massas', nome:'Massa Acrílica - Galão 3.6L',                   preco:18.99},
+  {id:31, cat:'Massas', nome:'Massa Acrílica - Lata 28kg',                    preco:72.90},
+  {id:32, cat:'Massas', nome:'Massa Acrílica - Barrica 25kg',                 preco:43.90},
+  // TEXTURAS
+  {id:33, cat:'Texturas', nome:'Grafiato Malha 10 - Pote 1L',                 preco:8.50},
+  {id:34, cat:'Texturas', nome:'Grafiato Malha 10 - Galão 3.6L',              preco:18.99},
+  {id:35, cat:'Texturas', nome:'Grafiato Malha 10 - Barrica 25kg',            preco:43.90},
+  {id:36, cat:'Texturas', nome:'Grafiato Malha 10 - Barrica 50kg',            preco:83.99},
+  {id:37, cat:'Texturas', nome:'Grafiato Malha 10 - Lata 28kg',               preco:72.90},
+  {id:38, cat:'Texturas', nome:'Textura Lisa - Pote 1L',                      preco:8.50},
+  {id:39, cat:'Texturas', nome:'Textura Lisa - Galão 3.6L',                   preco:18.99},
+  {id:40, cat:'Texturas', nome:'Textura Lisa - Barrica 25kg',                 preco:43.90},
+  {id:41, cat:'Texturas', nome:'Textura Lisa - Barrica 50kg',                 preco:83.99},
+  {id:42, cat:'Texturas', nome:'Textura Lisa - Lata 28kg',                    preco:72.90},
+  // SELANTES
+  {id:43, cat:'Selantes', nome:'Selador Acrílico - Pote 1L',                  preco:9.50},
+  {id:44, cat:'Selantes', nome:'Selador Acrílico - Galão 3.6L',               preco:19.90},
+  {id:45, cat:'Selantes', nome:'Selador Acrílico - Balde 16L',                preco:52.90},
+  {id:46, cat:'Selantes', nome:'Selador Acrílico - Lata 18L',                 preco:79.90},
+  {id:47, cat:'Selantes', nome:'Selador Gesso - Lata 18L',                    preco:110.00},
+  // COMPLEMENTOS
+  {id:48, cat:'Complementos', nome:'Primer - Galão 3.6L',                     preco:49.90},
+  {id:49, cat:'Complementos', nome:'Primer - Balde 16L',                      preco:138.00},
+  {id:50, cat:'Complementos', nome:'Primer - Lata 18L',                       preco:158.00},
+  {id:51, cat:'Complementos', nome:'Impermeabilizante - Galão 3.6L',          preco:49.90},
+  {id:52, cat:'Complementos', nome:'Impermeabilizante - Balde 16L',           preco:138.90},
+  {id:53, cat:'Complementos', nome:'Impermeabilizante - Lata 18L',            preco:149.90},
+  {id:54, cat:'Complementos', nome:'Liquibrilho - Lata 18L',                  preco:280.00},
+  {id:55, cat:'Complementos', nome:'Cimento Queimado - Balde 25kg',           preco:188.00},
+];
+
+// ── ESTADO ────────────────────────────────────────────────────────────────────
+const E = {
+  vendedor: '', cliente: '', data: '',
+  carrinho: {}, // id → qty
+  catAtiva: 'Todos',
+  pgto: null,
+  parcelas: null,
+  diasCheque: '',
+};
+
+// ── INÍCIO ────────────────────────────────────────────────────────────────────
+document.getElementById('inp-data').value = new Date().toISOString().split('T')[0];
+
+function iniciar() {
+  const v = document.getElementById('inp-vendedor').value.trim();
+  const c = document.getElementById('inp-cliente').value.trim();
+  const d = document.getElementById('inp-data').value;
+  if (!v || !c) { showToast('⚠️ Preencha vendedor e cliente!'); return; }
+  E.vendedor = v; E.cliente = c; E.data = d;
+  document.getElementById('hdr-vend').textContent = v;
+  document.getElementById('hdr-cli').textContent  = '📍 ' + c;
+  document.getElementById('tela-inicio').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  renderCats();
+  renderProdutos();
+}
+
+// ── CATEGORIAS ────────────────────────────────────────────────────────────────
+function renderCats() {
+  const wrap = document.getElementById('cats');
+  const chips = [{ nome:'Todos', emoji:'⚡', cls:'' }, ...CATS];
+  wrap.innerHTML = chips.map(c => `
+    <div class="cat-chip ${c.nome === E.catAtiva ? 'active' : ''}" onclick="selecionarCat('${c.nome}')">
+      <span class="chip-icon">${c.emoji}</span>${c.nome}
+    </div>`).join('');
+}
+
+function selecionarCat(cat) {
+  E.catAtiva = cat;
+  renderCats();
+  renderProdutos();
+}
+
+// ── PRODUTOS ──────────────────────────────────────────────────────────────────
+function renderProdutos() {
+  const busca = document.getElementById('search').value.toLowerCase();
+  let prods = PRODUTOS;
+  if (E.catAtiva !== 'Todos') prods = prods.filter(p => p.cat === E.catAtiva);
+  if (busca) prods = prods.filter(p => p.nome.toLowerCase().includes(busca));
+
+  document.getElementById('prod-list').innerHTML = prods.map((p, i) => {
+    const qty = E.carrinho[p.id] || 0;
+    const cls = catCls[p.cat] || '';
+    return `
+    <div class="prod-row ${qty > 0 ? 'in-cart' : ''}" onclick="tocarProd(${p.id})" style="animation-delay:${i*18}ms">
+      <div class="prod-cat-dot ${cls}"></div>
+      <div class="prod-info">
+        <div class="prod-nome">${p.nome}</div>
+        <div class="prod-cat-tag">${p.cat}</div>
+      </div>
+      <div class="prod-right">
+        <div class="prod-preco">R$ ${brl(p.preco)}</div>
+        <div class="qty-mini ${qty > 0 ? 'show' : ''}">×${qty}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tocarProd(id) {
+  const p = PRODUTOS.find(x => x.id === id);
+  const atual = E.carrinho[id] || 0;
+  E.carrinho[id] = atual + 1;
+  showToast(`✔ ${p.nome.split(' - ')[0]} ×${E.carrinho[id]}`);
+  atualizarUI();
+}
+
+// ── CARRINHO ──────────────────────────────────────────────────────────────────
+function calcSubtotal() {
+  return Object.entries(E.carrinho).reduce((s, [id, q]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    return s + (p ? p.preco * q : 0);
+  }, 0);
+}
+
+function calcTotal() {
+  const sub = calcSubtotal();
+  if (E.pgto === 'Pix' || E.pgto === 'Espécie') return sub * 0.97;
+  return sub;
+}
+
+function qtdTotal() {
+  return Object.values(E.carrinho).reduce((s, q) => s + q, 0);
+}
+
+function atualizarUI() {
+  const sub = calcSubtotal();
+  const qty = qtdTotal();
+
+  // badge
+  const badge = document.getElementById('cart-badge');
+  badge.textContent = qty;
+  badge.classList.toggle('show', qty > 0);
+
+  // pill
+  const pill = document.getElementById('total-pill');
+  pill.style.display = qty > 0 ? 'block' : 'none';
+  pill.textContent = 'R$ ' + brl(sub);
+
+  // fab
+  const fab = document.getElementById('fab');
+  fab.classList.toggle('show', qty > 0);
+  document.getElementById('fab-val').textContent = 'R$ ' + brl(sub);
+
+  // cart total
+  document.getElementById('cart-total').textContent = 'R$ ' + brl(sub);
+
+  renderProdutos();
+  renderCartBody();
+}
+
+function renderCartBody() {
+  const body = document.getElementById('cart-body');
+  const itens = Object.entries(E.carrinho).filter(([,q]) => q > 0);
+
+  if (itens.length === 0) {
+    body.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><div style="font-size:13px">Carrinho vazio</div></div>`;
+    return;
+  }
+
+  body.innerHTML = itens.map(([id, qty]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    const cls = catCls[p.cat] || '';
+    return `
+    <div class="cart-item">
+      <div class="ci-dot ${cls}"></div>
+      <div class="ci-info">
+        <div class="ci-nome">${p.nome}</div>
+        <div class="ci-unit">R$ ${brl(p.preco)} / un</div>
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="alterarQty(${id},-1)">−</button>
+        <div class="qty-num">${qty}</div>
+        <button class="qty-btn" onclick="alterarQty(${id},1)">+</button>
+      </div>
+      <div class="ci-total">R$ ${brl(p.preco * qty)}</div>
+    </div>`;
+  }).join('');
+}
+
+function alterarQty(id, delta) {
+  const novo = (E.carrinho[id] || 0) + delta;
+  if (novo <= 0) delete E.carrinho[id];
+  else E.carrinho[id] = novo;
+  atualizarUI();
+}
+
+function zerarCarrinho() {
+  if (!confirm('Zerar o carrinho?')) return;
+  E.carrinho = {}; E.pgto = null; E.parcelas = null;
+  atualizarUI(); fecharTudo();
+}
+
+// ── DRAWERS ───────────────────────────────────────────────────────────────────
+function abrirCarrinho() {
+  renderCartBody();
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer-cart').classList.add('open');
+}
+
+function abrirPgto() {
+  if (qtdTotal() === 0) { showToast('⚠️ Adicione produtos!'); return; }
+  E.pgto = null; E.parcelas = null;
+  document.getElementById('drawer-cart').classList.remove('open');
+  document.getElementById('drawer-pgto').classList.add('open');
+  renderPgto();
+}
+
+function voltarCart() {
+  document.getElementById('drawer-pgto').classList.remove('open');
+  document.getElementById('drawer-cart').classList.add('open');
+}
+
+function fecharTudo() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer-cart').classList.remove('open');
+  document.getElementById('drawer-pgto').classList.remove('open');
+}
+
+// ── PAGAMENTO ─────────────────────────────────────────────────────────────────
+function renderPgto() {
+  const sub = calcSubtotal();
+  const body = document.getElementById('pgto-body');
+
+  const pgtoOpts = [
+    { id:'Pix',     icon:'📱', lbl:'Pix',      desc:'-3% desconto', neutral:false },
+    { id:'Espécie', icon:'💵', lbl:'Dinheiro',  desc:'-3% desconto', neutral:false },
+    { id:'Cartão',  icon:'💳', lbl:'Cartão',    desc:'Sem desconto', neutral:true  },
+    { id:'Cheque',  icon:'✍️', lbl:'Cheque',    desc:'Parcelado',    neutral:true  },
+  ];
+
+  let html = `<div class="pgto-grid">`;
+  pgtoOpts.forEach(o => {
+    html += `
+    <div class="pgto-opt ${E.pgto===o.id?'sel':''}" onclick="selecionarPgto('${o.id}')">
+      <div class="pgto-icon">${o.icon}</div>
+      <div class="pgto-lbl">${o.lbl}</div>
+      <div class="pgto-desc ${o.neutral?'neutral':''}">${o.desc}</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Parcelamento cartão
+  if (E.pgto === 'Cartão' && !E.parcelas) {
+    html += `<div class="parc-wrap"><div class="parc-title">Parcelamento — Cartão (sem juros)</div>`;
+    [1,2,3].forEach(n => {
+      html += `
+      <div class="parc-opt ${E.parcelas===n?'sel':''}" onclick="selecionarParc(${n},'')">
+        <div><div class="parc-opt-lbl">${n===1?'À vista':`${n}x sem juros`}</div></div>
+        <div class="parc-opt-val">R$ ${brl(sub/n)}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Parcelamento cheque — regra: até R$1.000 → 2x (30/45); acima → 3x (30/45/60)
+  if (E.pgto === 'Cheque' && !E.parcelas) {
+    html += `<div class="parc-wrap"><div class="parc-title">Parcelamento — Cheque</div>`;
+    if (sub <= 1000) {
+      html += `
+      <div class="parc-opt" onclick="selecionarParc(2,'30/45 dias')">
+        <div><div class="parc-opt-lbl">2x</div><div class="parc-opt-sub">30/45 dias</div></div>
+        <div class="parc-opt-val">R$ ${brl(sub/2)}</div>
+      </div>`;
+    } else {
+      html += `
+      <div class="parc-opt" onclick="selecionarParc(3,'30/45/60 dias')">
+        <div><div class="parc-opt-lbl">3x</div><div class="parc-opt-sub">30/45/60 dias</div></div>
+        <div class="parc-opt-val">R$ ${brl(sub/3)}</div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+
+  // Resumo final (quando pgto selecionado + parcelas resolvidas)
+  const pronto = E.pgto && (
+    E.pgto === 'Pix' || E.pgto === 'Espécie' ||
+    ((E.pgto === 'Cartão' || E.pgto === 'Cheque') && E.parcelas)
+  );
+
+  if (pronto) {
+    const total = calcTotal();
+    const desconto = E.pgto === 'Pix' || E.pgto === 'Espécie';
+    html += `
+    <div class="resumo-box">
+      <div class="resumo-row"><span>Subtotal</span><span>R$ ${brl(sub)}</span></div>
+      ${desconto ? `<div class="resumo-row"><span>Desconto (3%)</span><span>- R$ ${brl(sub*0.03)}</span></div>` : ''}
+      <div class="resumo-row final"><span>Total final</span><span>R$ ${brl(total)}</span></div>
+    </div>
+    <div class="action-grid">
+      <button class="btn-whats" onclick="enviarWhats()">📲 WhatsApp</button>
+      <button class="btn-pdf"   onclick="gerarPDF()">🖨️ PDF</button>
+    </div>`;
+  }
+
+  body.innerHTML = html;
+}
+
+function selecionarPgto(tipo) {
+  E.pgto = tipo; E.parcelas = null; E.diasCheque = '';
+  renderPgto();
+}
+
+function selecionarParc(n, dias) {
+  E.parcelas = n; E.diasCheque = dias;
+  renderPgto();
+}
+
+function formatarPgto() {
+  const sub = calcSubtotal();
+  if (E.pgto === 'Pix')     return 'Pix (-3%)';
+  if (E.pgto === 'Espécie') return 'Dinheiro (-3%)';
+  if (E.pgto === 'Cartão' && E.parcelas)
+    return `${E.parcelas}x no Cartão (R$ ${brl(sub/E.parcelas)})`;
+  if (E.pgto === 'Cheque' && E.parcelas)
+    return `${E.parcelas}x no Cheque ${E.diasCheque} (R$ ${brl(sub/E.parcelas)})`;
+  return E.pgto || '—';
+}
+
+// ── WHATSAPP ──────────────────────────────────────────────────────────────────
+function enviarWhats() {
+  const itens = Object.entries(E.carrinho).filter(([,q]) => q > 0);
+  const dataFmt = E.data ? E.data.split('-').reverse().join('/') : new Date().toLocaleDateString('pt-BR');
+  const total = calcTotal();
+
+  let m = `*QUALY QUIMY — PEDIDO DE VENDA*\n`;
+  m += `📅 ${dataFmt}\n`;
+  m += `👤 Vendedor: ${E.vendedor}\n`;
+  m += `🏪 Cliente: ${E.cliente}\n\n`;
+  m += `*Itens:*\n`;
+  itens.forEach(([id, qty]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    m += `• ${qty}x ${p.nome} — R$ ${brl(p.preco * qty)}\n`;
+  });
+  m += `\n💳 Pagamento: ${formatarPgto()}`;
+  m += `\n✅ *TOTAL: R$ ${brl(total)}*`;
+
+  window.open(`https://api.whatsapp.com/send?phone=5511954950044&text=${encodeURIComponent(m)}`);
+}
+
+// ── PDF ───────────────────────────────────────────────────────────────────────
+function gerarPDF() {
+  const itens = Object.entries(E.carrinho).filter(([,q]) => q > 0);
+  const dataFmt = E.data ? E.data.split('-').reverse().join('/') : new Date().toLocaleDateString('pt-BR');
+  const sub = calcSubtotal();
+  const total = calcTotal();
+  const desconto = E.pgto === 'Pix' || E.pgto === 'Espécie';
+
+  const rows = itens.map(([id,qty]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    return `<tr>
+      <td style="padding:8px 10px;border:1px solid #e2e8f0">${qty}</td>
+      <td style="padding:8px 10px;border:1px solid #e2e8f0">${p.nome}</td>
+      <td style="padding:8px 10px;border:1px solid #e2e8f0;text-align:right">R$ ${brl(p.preco * qty)}</td>
+    </tr>`;
+  }).join('');
+
+  const el = document.getElementById('print-area');
+  el.innerHTML = `
+  <div style="font-family:sans-serif;padding:28px;max-width:700px;margin:0 auto;background:#fff;color:#1a1a2e">
+    <div style="border-bottom:3px solid #1e3a8a;padding-bottom:18px;margin-bottom:18px">
+      <h1 style="font-size:28px;color:#1e3a8a;margin:0">Qualy Quimy</h1>
+      <p style="font-size:12px;font-weight:bold;margin:4px 0">PEDIDO DE VENDA</p>
+      <p style="font-size:12px;color:#666">Data: ${dataFmt}</p>
+    </div>
+    <p style="font-size:13px;margin-bottom:18px">
+      <strong>Vendedor:</strong> ${E.vendedor} &nbsp;|&nbsp; <strong>Cliente:</strong> ${E.cliente}
+    </p>
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="background:#1e3a8a;color:#fff">
+          <th style="padding:8px 10px;text-align:left;border:1px solid #1e3a8a">Qtd</th>
+          <th style="padding:8px 10px;text-align:left;border:1px solid #1e3a8a">Produto</th>
+          <th style="padding:8px 10px;text-align:right;border:1px solid #1e3a8a">Total</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div style="margin-top:24px;padding:18px;background:#f8fafc;border-radius:10px;text-align:right;font-size:13px">
+      <p>Subtotal: R$ ${brl(sub)}</p>
+      ${desconto ? `<p>Desconto (3%): - R$ ${brl(sub*0.03)}</p>` : ''}
+      <p style="font-size:18px;font-weight:bold;color:#1e3a8a;margin-top:8px">Total Final: R$ ${brl(total)}</p>
+    </div>
+    <p style="font-size:12px;color:#666;margin-top:14px">Pagamento: ${formatarPgto()}</p>
+    <p style="font-size:10px;color:#aaa;margin-top:24px;text-align:center">Desenvolvido por ImpulsoWeb10</p>
+  </div>`;
+
+  el.style.display = 'block';
+  html2pdf().from(el).set({
+    margin: 10,
+    filename: `Pedido_QualyQuimy_${E.cliente.replace(/\s+/g,'_')}.pdf`,
+    html2canvas: { scale: 2, windowWidth: 800 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).save().then(() => { el.style.display = 'none'; });
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function brl(v) { return v.toFixed(2).replace('.', ','); }
+
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2000);
+}
+</script>
+</body>
+</html>
