@@ -5,509 +5,596 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Qualy Quimy — Pedidos</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,700&display=swap" rel="stylesheet">
+<!-- TIPOGRAFIA: Inter (corpo) + Poppins (títulos) -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d0d11;
-    --surface: #18181f;
-    --surface2: #20202a;
-    --border: #2a2a38;
-    --accent: #f5c542;
-    --green: #2ecc71;
-    --red: #ff4d6d;
-    --blue: #4f8ef7;
-    --text: #f0f0f5;
-    --muted: #6b6b88;
-    --radius: 18px;
-    --radius-sm: 11px;
-  }
+/* ════════════════════════════════════════════════
+   VARIÁVEIS GLOBAIS
+════════════════════════════════════════════════ */
+:root {
+  --bg: #0d0d11;
+  --surface: #18181f;
+  --surface2: #20202a;
+  --border: #2a2a38;
+  --accent: #f5c542;
+  --green: #2ecc71;
+  --red: #ff4d6d;
+  --blue: #4f8ef7;
+  --text: #f0f0f5;
+  --muted: #6b6b88;
+  --radius: 18px;
+  --radius-sm: 11px;
+  /* Tipografia */
+  --font-title: 'Poppins', sans-serif;
+  --font-body:  'Inter', sans-serif;
+  --font-mono:  'JetBrains Mono', monospace;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100dvh;
-  }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+}
 
-  /* ── TELA INÍCIO ── */
-  #tela-inicio {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    min-height: 100dvh; padding: 32px 22px;
-    background:
-      radial-gradient(ellipse at 20% 10%, #2a1f5e55 0%, transparent 55%),
-      radial-gradient(ellipse at 85% 85%, #5c2a0e44 0%, transparent 55%),
-      var(--bg);
-  }
+/* ════════════════════════════════════════════════
+   TELA INÍCIO
+════════════════════════════════════════════════ */
+#tela-inicio {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100dvh; padding: 32px 22px;
+  background:
+    radial-gradient(ellipse at 20% 10%, #2a1f5e55 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 85%, #5c2a0e44 0%, transparent 55%),
+    var(--bg);
+}
 
-  .logo-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
-  .logo-box {
-    width: 60px; height: 60px; background: var(--accent);
-    border-radius: 16px; display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 24px; color: #0d0d11;
-    box-shadow: 0 0 36px #f5c54244;
-  }
-  .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: -0.5px; }
-  .logo-text span { color: var(--accent); }
+.logo-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+.logo-box {
+  width: 60px; height: 60px; background: var(--accent);
+  border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-title); font-weight: 800; font-size: 24px; color: #0d0d11;
+  box-shadow: 0 0 36px #f5c54244;
+}
+.logo-text { font-family: var(--font-title); font-weight: 800; font-size: 28px; letter-spacing: -0.5px; }
+.logo-text span { color: var(--accent); }
 
-  .app-sub { color: var(--muted); font-size: 13px; margin-bottom: 36px; }
+.app-sub { color: var(--muted); font-size: 13px; margin-bottom: 36px; }
 
-  .form-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 26px 24px;
-    width: 100%; max-width: 420px;
-  }
+.form-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 26px 24px;
+  width: 100%; max-width: 420px;
+}
 
-  .field-label {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1.2px; color: var(--muted); margin-bottom: 7px;
-  }
+.field-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.2px; color: var(--muted); margin-bottom: 7px;
+}
 
-  .field-input {
-    width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px 15px;
-    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px;
-    outline: none; transition: border-color .2s; margin-bottom: 16px;
-  }
-  .field-input:focus { border-color: var(--accent); }
-  .field-input::placeholder { color: var(--muted); }
+.field-input {
+  width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 15px;
+  color: var(--text); font-family: var(--font-body); font-size: 15px;
+  outline: none; transition: border-color .2s; margin-bottom: 16px;
+}
+.field-input:focus { border-color: var(--accent); }
+.field-input::placeholder { color: var(--muted); }
 
-  .btn-start {
-    width: 100%; background: var(--accent); color: #0d0d11;
-    border: none; border-radius: var(--radius-sm); padding: 15px;
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px;
-    cursor: pointer; letter-spacing: 0.3px; transition: opacity .2s, transform .1s;
-  }
-  .btn-start:active { transform: scale(.98); }
+.btn-start {
+  width: 100%; background: var(--accent); color: #0d0d11;
+  border: none; border-radius: var(--radius-sm); padding: 15px;
+  font-family: var(--font-title); font-weight: 700; font-size: 15px;
+  cursor: pointer; letter-spacing: 0.3px; transition: opacity .2s, transform .1s;
+}
+.btn-start:active { transform: scale(.98); }
 
-  /* ── APP ── */
-  #app { display: none; flex-direction: column; min-height: 100dvh; }
+/* ════════════════════════════════════════════════
+   APP PRINCIPAL
+════════════════════════════════════════════════ */
+#app { display: none; flex-direction: column; min-height: 100dvh; }
 
-  /* Header */
-  .header {
-    background: var(--surface); border-bottom: 1px solid var(--border);
-    padding: 13px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 100;
-  }
-  .hdr-left {}
-  .hdr-vendedor { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; }
-  .hdr-cliente { font-size: 11px; color: var(--muted); margin-top: 1px; }
+/* Header */
+.header {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 13px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.hdr-vendedor { font-family: var(--font-title); font-weight: 700; font-size: 14px; }
+.hdr-cliente { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.hdr-right { display: flex; gap: 8px; align-items: center; }
 
-  .hdr-right { display: flex; gap: 8px; align-items: center; }
+.total-pill {
+  background: var(--accent); color: #0d0d11; border-radius: 8px;
+  padding: 6px 11px; font-family: var(--font-title); font-weight: 700; font-size: 13px;
+  cursor: pointer; display: none;
+}
+.cart-btn {
+  position: relative; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 18px;
+}
+.cart-badge {
+  position: absolute; top: -6px; right: -6px;
+  background: var(--accent); color: #0d0d11; border-radius: 50%;
+  width: 19px; height: 19px; font-size: 10px; font-weight: 700;
+  display: none; align-items: center; justify-content: center;
+  font-family: var(--font-title);
+}
+.cart-badge.show { display: flex; }
 
-  .total-pill {
-    background: var(--accent); color: #0d0d11; border-radius: 8px;
-    padding: 6px 11px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
-    cursor: pointer; display: none;
-  }
+/* Search */
+.search-wrap {
+  padding: 12px 16px 4px;
+  position: sticky; top: 69px; z-index: 90; background: var(--bg);
+}
+.search-row { position: relative; }
+.search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--muted); font-size: 15px; pointer-events: none;
+}
+.search-input {
+  width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 50px; padding: 10px 16px 10px 40px;
+  color: var(--text); font-family: var(--font-body); font-size: 14px; outline: none;
+  transition: border-color .2s;
+}
+.search-input:focus { border-color: var(--accent); }
 
-  .cart-btn {
-    position: relative; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); width: 42px; height: 42px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; font-size: 18px;
-  }
-  .cart-badge {
-    position: absolute; top: -6px; right: -6px;
-    background: var(--accent); color: #0d0d11; border-radius: 50%;
-    width: 19px; height: 19px; font-size: 10px; font-weight: 700;
-    display: none; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif;
-  }
-  .cart-badge.show { display: flex; }
+/* Chips categoria */
+.cats-scroll {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding: 10px 16px 6px; scrollbar-width: none;
+}
+.cats-scroll::-webkit-scrollbar { display: none; }
+.cat-chip {
+  flex-shrink: 0; display: flex; align-items: center; gap: 6px;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 50px; padding: 7px 14px;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; white-space: nowrap;
+}
+.cat-chip.active { background: var(--accent); border-color: var(--accent); color: #0d0d11; }
+.cat-chip .chip-icon { font-size: 14px; }
 
-  /* Search */
-  .search-wrap {
-    padding: 12px 16px 4px;
-    position: sticky; top: 69px; z-index: 90; background: var(--bg);
-  }
-  .search-row { position: relative; }
-  .search-icon {
-    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-    color: var(--muted); font-size: 15px; pointer-events: none;
-  }
-  .search-input {
-    width: 100%; background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 50px; padding: 10px 16px 10px 40px;
-    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
-    transition: border-color .2s;
-  }
-  .search-input:focus { border-color: var(--accent); }
+/* Lista de produtos */
+.products-list {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 6px 16px 160px;
+}
+.prod-row {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 13px 15px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer; transition: all .18s; position: relative; overflow: hidden;
+}
+.prod-row::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--accent);
+  transform: scaleY(0); transform-origin: center; transition: transform .2s;
+}
+.prod-row.in-cart { border-color: #f5c54233; }
+.prod-row.in-cart::before { transform: scaleY(1); }
+.prod-row:active { transform: scale(.99); background: var(--surface2); }
 
-  /* Chips categoria */
-  .cats-scroll {
-    display: flex; gap: 8px; overflow-x: auto;
-    padding: 10px 16px 6px; scrollbar-width: none;
-  }
-  .cats-scroll::-webkit-scrollbar { display: none; }
+.prod-cat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.prod-info { flex: 1; min-width: 0; }
+.prod-nome {
+  font-size: 13px; font-weight: 600;
+  white-space: normal; overflow: visible; text-overflow: unset;
+  line-height: 1.4; word-break: break-word;
+}
+.prod-cat-tag { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.prod-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+.prod-preco { font-family: var(--font-title); font-weight: 700; font-size: 14px; color: var(--accent); }
+.qty-mini {
+  background: var(--accent); color: #0d0d11; border-radius: 6px;
+  padding: 2px 8px; font-family: var(--font-title); font-weight: 700; font-size: 11px; display: none;
+}
+.qty-mini.show { display: block; }
 
-  .cat-chip {
-    flex-shrink: 0; display: flex; align-items: center; gap: 6px;
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 50px; padding: 7px 14px;
-    font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; white-space: nowrap;
-  }
-  .cat-chip.active { background: var(--accent); border-color: var(--accent); color: #0d0d11; }
-  .cat-chip .chip-icon { font-size: 14px; }
+/* ════════════════════════════════════════════════
+   BOTÃO FECHAR PEDIDO (NOVO — fixo na base)
+════════════════════════════════════════════════ */
+.btn-fechar-pedido {
+  position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, #f5c542, #f0a500);
+  color: #0d0d11; border: none; border-radius: 50px;
+  padding: 16px 40px;
+  font-family: var(--font-title); font-weight: 700; font-size: 15px;
+  letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer; display: none; align-items: center; gap: 10px;
+  box-shadow: 0 8px 32px rgba(245, 197, 66, 0.45);
+  z-index: 150; transition: all .25s; white-space: nowrap;
+  min-width: 220px; justify-content: center;
+}
+.btn-fechar-pedido.show { display: flex; }
+.btn-fechar-pedido:active { transform: translateX(-50%) scale(.97); }
+.btn-fechar-pedido .bfp-icon { font-size: 18px; }
 
-  /* Grid produtos */
-  .products-list {
-    display: flex; flex-direction: column; gap: 6px;
-    padding: 6px 16px 120px;
-  }
+/* FAB carrinho (fica acima do btn fechar) */
+.fab {
+  position: fixed; bottom: 88px; right: 18px;
+  background: var(--surface); color: var(--text); border: 1.5px solid var(--border);
+  border-radius: 50px; padding: 10px 16px;
+  font-family: var(--font-title); font-weight: 700; font-size: 13px;
+  cursor: pointer; display: none; align-items: center; gap: 7px;
+  z-index: 150; transition: all .2s;
+}
+.fab.show { display: flex; }
+.fab:active { transform: scale(.97); }
 
-  .prod-row {
-    background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm); padding: 13px 15px;
-    display: flex; align-items: center; gap: 12px;
-    cursor: pointer; transition: all .18s; position: relative; overflow: hidden;
-  }
-  .prod-row::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 3px; background: var(--accent);
-    transform: scaleY(0); transform-origin: center; transition: transform .2s;
-  }
-  .prod-row.in-cart { border-color: #f5c54233; }
-  .prod-row.in-cart::before { transform: scaleY(1); }
-  .prod-row:active { transform: scale(.99); background: var(--surface2); }
+/* ════════════════════════════════════════════════
+   OVERLAYS E DRAWERS
+════════════════════════════════════════════════ */
+.overlay {
+  position: fixed; inset: 0; background: #000a;
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.overlay.open { opacity: 1; pointer-events: all; }
 
-  .prod-cat-dot {
-    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-  }
+.drawer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--surface); border-radius: 22px 22px 0 0;
+  z-index: 201; transform: translateY(100%);
+  transition: transform .35s cubic-bezier(.32,.72,0,1);
+  max-height: 88dvh; display: flex; flex-direction: column;
+}
+.drawer.open { transform: translateY(0); }
+.drawer-handle {
+  width: 38px; height: 4px; background: var(--border);
+  border-radius: 2px; margin: 12px auto 0; flex-shrink: 0;
+}
+.drawer-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.drawer-title { font-family: var(--font-title); font-weight: 700; font-size: 16px; }
+.btn-zerar {
+  background: none; border: 1px solid var(--red); border-radius: 8px;
+  color: var(--red); font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer;
+}
+.btn-back {
+  background: none; border: 1px solid var(--muted); border-radius: 8px;
+  color: var(--muted); font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer;
+}
+.drawer-body { overflow-y: auto; flex: 1; }
 
-  .prod-info { flex: 1; min-width: 0; }
+/* Itens carrinho */
+.cart-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px; border-bottom: 1px solid #ffffff0a;
+}
+.ci-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ci-info { flex: 1; min-width: 0; }
+.ci-nome { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ci-unit { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.qty-ctrl {
+  display: flex; align-items: center;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 9px; overflow: hidden;
+}
+.qty-btn {
+  background: none; border: none; color: var(--text);
+  font-size: 17px; width: 34px; height: 34px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.qty-btn:active { background: var(--border); }
+.qty-num { font-family: var(--font-title); font-weight: 700; font-size: 14px; min-width: 28px; text-align: center; }
+.ci-total { font-family: var(--font-title); font-weight: 700; font-size: 13px; color: var(--accent); min-width: 62px; text-align: right; }
 
-  /* ── FIX 1: Nome quebra linha, sem ellipsis ── */
-  .prod-nome {
-    font-size: 13px;
-    font-weight: 600;
-    white-space: normal;       /* quebra linha */
-    overflow: visible;
-    text-overflow: unset;
-    line-height: 1.4;
-    word-break: break-word;
-  }
-  .prod-cat-tag { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.cart-empty { text-align: center; padding: 48px 24px; color: var(--muted); }
+.cart-empty-icon { font-size: 44px; margin-bottom: 10px; }
 
-  .prod-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
-  .prod-preco { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent); }
+.drawer-foot { border-top: 1px solid var(--border); padding: 14px 18px; flex-shrink: 0; }
+.total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.total-lbl { font-size: 13px; color: var(--muted); }
+.total-val { font-family: var(--font-title); font-weight: 800; font-size: 22px; color: var(--accent); }
 
-  .qty-mini {
-    background: var(--accent); color: #0d0d11; border-radius: 6px;
-    padding: 2px 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 11px;
-    display: none;
-  }
-  .qty-mini.show { display: block; }
+.btn-pagar {
+  width: 100%; background: var(--green); color: #0d0d11; border: none;
+  border-radius: var(--radius-sm); padding: 14px;
+  font-family: var(--font-title); font-weight: 700; font-size: 14px;
+  cursor: pointer; transition: opacity .2s;
+}
+.btn-pagar:active { opacity: .85; }
 
-  /* FAB */
-  .fab {
-    position: fixed; bottom: 22px; right: 18px;
-    background: var(--accent); color: #0d0d11; border: none;
-    border-radius: 50px; padding: 13px 20px;
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
-    cursor: pointer; display: none; align-items: center; gap: 8px;
-    box-shadow: 0 4px 24px #f5c54255; z-index: 150; transition: all .2s;
-  }
-  .fab.show { display: flex; }
-  .fab:active { transform: scale(.97); }
+/* ════════════════════════════════════════════════
+   PAGAMENTO
+════════════════════════════════════════════════ */
+.pgto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 18px; }
+.pgto-opt {
+  background: var(--surface2); border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px 10px; text-align: center; cursor: pointer; transition: all .2s;
+}
+.pgto-opt.sel { border-color: var(--accent); background: #f5c54210; }
+.pgto-opt:active { transform: scale(.97); }
+.pgto-icon { font-size: 22px; margin-bottom: 5px; }
+.pgto-lbl { font-size: 12px; font-weight: 700; }
+.pgto-desc { font-size: 10px; color: var(--green); margin-top: 3px; }
+.pgto-desc.neutral { color: var(--muted); }
 
-  /* ── OVERLAYS / DRAWERS ── */
-  .overlay {
-    position: fixed; inset: 0; background: #000a;
-    z-index: 200; opacity: 0; pointer-events: none; transition: opacity .3s;
-  }
-  .overlay.open { opacity: 1; pointer-events: all; }
+.parc-wrap { padding: 0 18px 14px; }
+.parc-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 9px; }
+.parc-opt {
+  background: var(--surface2); border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 15px;
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; transition: all .2s; margin-bottom: 8px;
+}
+.parc-opt.sel { border-color: var(--accent); background: #f5c54210; }
+.parc-opt-lbl { font-size: 13px; font-weight: 600; }
+.parc-opt-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.parc-opt-val { font-family: var(--font-title); font-weight: 700; font-size: 14px; color: var(--accent); }
 
-  .drawer {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: var(--surface); border-radius: 22px 22px 0 0;
-    z-index: 201; transform: translateY(100%);
-    transition: transform .35s cubic-bezier(.32,.72,0,1);
-    max-height: 88dvh; display: flex; flex-direction: column;
-  }
-  .drawer.open { transform: translateY(0); }
+.resumo-box {
+  margin: 0 18px 14px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px 16px;
+}
+.resumo-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 7px; color: var(--muted); }
+.resumo-row.final {
+  margin-bottom: 0; padding-top: 10px; border-top: 1px solid var(--border);
+  font-size: 15px; font-weight: 700; color: var(--text);
+}
+.resumo-row span:last-child { font-family: var(--font-title); font-weight: 700; }
 
-  .drawer-handle {
-    width: 38px; height: 4px; background: var(--border);
-    border-radius: 2px; margin: 12px auto 0; flex-shrink: 0;
-  }
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 18px 20px; }
+.btn-whats {
+  background: #25d366; color: #fff; border: none; border-radius: var(--radius-sm);
+  padding: 14px; font-family: var(--font-title); font-weight: 700; font-size: 13px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-pdf {
+  background: var(--surface2); color: var(--text); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px;
+  font-family: var(--font-title); font-weight: 700; font-size: 13px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
 
-  .drawer-head {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 18px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0;
-  }
-  .drawer-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; }
-  .btn-zerar {
-    background: none; border: 1px solid var(--red); border-radius: 8px;
-    color: var(--red); font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer;
-  }
-  .btn-back {
-    background: none; border: 1px solid var(--muted); border-radius: 8px;
-    color: var(--muted); font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer;
-  }
+/* Toast */
+.toast {
+  position: fixed; bottom: 22px; left: 50%;
+  transform: translateX(-50%) translateY(70px);
+  background: var(--text); color: var(--bg);
+  border-radius: 50px; padding: 9px 18px; font-size: 12px; font-weight: 600;
+  z-index: 999; transition: transform .3s; white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
 
-  .drawer-body { overflow-y: auto; flex: 1; }
+#print-area { display: none; }
+@media print { body > *:not(#print-area) { display: none !important; } #print-area { display: block !important; } }
 
-  /* Itens carrinho */
-  .cart-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 18px; border-bottom: 1px solid #ffffff0a;
-  }
-  .ci-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .ci-info { flex: 1; min-width: 0; }
-  .ci-nome { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ci-unit { font-size: 10px; color: var(--muted); margin-top: 2px; }
+/* Cat colors */
+.c-tintas   { background: #4f8ef7; }
+.c-massas   { background: #2ecc71; }
+.c-texturas { background: #f39c12; }
+.c-selantes { background: #9b59b6; }
+.c-compl    { background: #e74c3c; }
 
-  .qty-ctrl {
-    display: flex; align-items: center;
-    background: var(--surface2); border: 1px solid var(--border); border-radius: 9px; overflow: hidden;
-  }
-  .qty-btn {
-    background: none; border: none; color: var(--text);
-    font-size: 17px; width: 34px; height: 34px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-  }
-  .qty-btn:active { background: var(--border); }
-  .qty-num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; min-width: 28px; text-align: center; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.prod-row { animation: fadeUp .25s ease both; }
 
-  .ci-total { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--accent); min-width: 62px; text-align: right; }
+/* ════════════════════════════════════════════════
+   MODAL PRODUTO (com input numérico)
+════════════════════════════════════════════════ */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  z-index: 300; display: flex; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; pointer-events: none; transition: opacity .3s ease;
+}
+.modal-backdrop.open { opacity: 1; pointer-events: all; }
 
-  .cart-empty { text-align: center; padding: 48px 24px; color: var(--muted); }
-  .cart-empty-icon { font-size: 44px; margin-bottom: 10px; }
+.modal-card {
+  background: #ffffff; border-radius: 24px;
+  width: 100%; max-width: 380px; padding: 28px 24px 24px;
+  position: relative;
+  transform: scale(.88) translateY(20px); opacity: 0;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.3);
+}
+.modal-backdrop.open .modal-card { transform: scale(1) translateY(0); opacity: 1; }
 
-  .drawer-foot {
-    border-top: 1px solid var(--border); padding: 14px 18px; flex-shrink: 0;
-  }
-  .total-row {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-  }
-  .total-lbl { font-size: 13px; color: var(--muted); }
-  .total-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: var(--accent); }
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #f0f0f5; border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; color: #555; transition: background .2s, transform .15s;
+}
+.modal-close:active { transform: scale(.9); background: #e0e0ec; }
 
-  .btn-pagar {
-    width: 100%; background: var(--green); color: #0d0d11; border: none;
-    border-radius: var(--radius-sm); padding: 14px;
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
-    cursor: pointer; transition: opacity .2s;
-  }
-  .btn-pagar:active { opacity: .85; }
+.modal-nome {
+  font-family: var(--font-title); font-weight: 700; font-size: 16px;
+  color: #0d0d1f; text-align: center; line-height: 1.4;
+  margin-top: 4px; margin-bottom: 20px; padding: 0 10px;
+  word-break: break-word; white-space: normal;
+}
 
-  /* ── PAGAMENTO ── */
-  .pgto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 18px; }
-  .pgto-opt {
-    background: var(--surface2); border: 2px solid var(--border);
-    border-radius: var(--radius-sm); padding: 16px 10px; text-align: center; cursor: pointer; transition: all .2s;
-  }
-  .pgto-opt.sel { border-color: var(--accent); background: #f5c54210; }
-  .pgto-opt:active { transform: scale(.97); }
-  .pgto-icon { font-size: 22px; margin-bottom: 5px; }
-  .pgto-lbl { font-size: 12px; font-weight: 700; }
-  .pgto-desc { font-size: 10px; color: var(--green); margin-top: 3px; }
-  .pgto-desc.neutral { color: var(--muted); }
+/* Controle qty com input */
+.modal-qty-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 18px; }
 
-  .parc-wrap { padding: 0 18px 14px; }
-  .parc-title {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; color: var(--muted); margin-bottom: 9px;
-  }
-  .parc-opt {
-    background: var(--surface2); border: 2px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px 15px;
-    display: flex; justify-content: space-between; align-items: center;
-    cursor: pointer; transition: all .2s; margin-bottom: 8px;
-  }
-  .parc-opt.sel { border-color: var(--accent); background: #f5c54210; }
-  .parc-opt-lbl { font-size: 13px; font-weight: 600; }
-  .parc-opt-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
-  .parc-opt-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent); }
+.modal-qty-btn {
+  width: 52px; height: 52px; border-radius: 14px; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 300; transition: transform .15s, box-shadow .15s; flex-shrink: 0;
+}
+.modal-qty-btn:active { transform: scale(.92); }
+.modal-qty-btn.minus { background: #eef1f8; color: #333; }
+.modal-qty-btn.minus:active { background: #e0e4f0; }
+.modal-qty-btn.plus { background: #4f8ef7; color: #fff; box-shadow: 0 6px 20px #4f8ef755; }
+.modal-qty-btn.plus:active { background: #3a7be0; box-shadow: none; }
 
-  .resumo-box {
-    margin: 0 18px 14px; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 14px 16px;
-  }
-  .resumo-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 7px; color: var(--muted); }
-  .resumo-row.final {
-    margin-bottom: 0; padding-top: 10px; border-top: 1px solid var(--border);
-    font-size: 15px; font-weight: 700; color: var(--text);
-  }
-  .resumo-row span:last-child { font-family: 'Syne', sans-serif; font-weight: 700; }
+/* INPUT numérico editável */
+.modal-qty-input {
+  font-family: var(--font-title); font-weight: 800; font-size: 28px;
+  color: #0d0d1f; text-align: center;
+  width: 72px; border: 2px solid #e0e4f0; border-radius: 12px;
+  padding: 8px 6px; outline: none; background: #f8faff;
+  transition: border-color .2s;
+  -moz-appearance: textfield;
+}
+.modal-qty-input::-webkit-outer-spin-button,
+.modal-qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.modal-qty-input:focus { border-color: #4f8ef7; }
 
-  .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 18px 20px; }
-  .btn-whats {
-    background: #25d366; color: #fff; border: none; border-radius: var(--radius-sm);
-    padding: 14px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
-  }
-  .btn-pdf {
-    background: var(--surface2); color: var(--text); border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm); padding: 14px;
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
-  }
+.modal-preco-box {
+  background: #f0f4ff; border-radius: 14px;
+  padding: 14px 20px; text-align: center; margin-bottom: 18px;
+}
+.modal-preco {
+  font-family: var(--font-title); font-weight: 800; font-size: 28px;
+  color: #4f8ef7; font-style: italic; letter-spacing: -0.5px;
+}
 
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 22px; left: 50%;
-    transform: translateX(-50%) translateY(70px);
-    background: var(--text); color: var(--bg);
-    border-radius: 50px; padding: 9px 18px; font-size: 12px; font-weight: 600;
-    z-index: 999; transition: transform .3s; white-space: nowrap;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+.modal-btn-adicionar {
+  width: 100%; background: #0d0d1f; color: #fff; border: none;
+  border-radius: 50px; padding: 16px;
+  font-family: var(--font-title); font-weight: 700; font-size: 14px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  cursor: pointer; transition: opacity .2s, transform .15s; margin-bottom: 10px;
+}
+.modal-btn-adicionar:active { transform: scale(.98); opacity: .9; }
 
-  /* Print */
-  @media print { body > *:not(#print-area) { display: none !important; } #print-area { display: block !important; } }
-  #print-area { display: none; }
+.modal-btn-voltar {
+  width: 100%; background: transparent; color: #999; border: none;
+  border-radius: 50px; padding: 10px;
+  font-family: var(--font-body); font-weight: 600; font-size: 13px;
+  letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: color .2s;
+}
+.modal-btn-voltar:active { color: #555; }
 
-  /* Cat colors */
-  .c-tintas   { background: #4f8ef7; }
-  .c-massas   { background: #2ecc71; }
-  .c-texturas { background: #f39c12; }
-  .c-selantes { background: #9b59b6; }
-  .c-compl    { background: #e74c3c; }
+/* ════════════════════════════════════════════════
+   TELA DE RESUMO / COMPROVANTE (NOVO)
+════════════════════════════════════════════════ */
+.resumo-screen {
+  position: fixed; inset: 0;
+  background: #f5f5f0;
+  z-index: 400;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transform: translateY(30px);
+  transition: opacity .35s ease, transform .35s cubic-bezier(.32,.72,0,1);
+  overflow-y: auto;
+}
+.resumo-screen.open { opacity: 1; pointer-events: all; transform: translateY(0); }
 
-  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-  .prod-row { animation: fadeUp .25s ease both; }
+.resumo-topbar {
+  background: #fff; border-bottom: 1px solid #e0e0e0;
+  padding: 14px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 10;
+}
+.resumo-topbar-title {
+  font-family: var(--font-title); font-weight: 700; font-size: 15px; color: #1a1a2e;
+}
+.resumo-topbar-close {
+  width: 34px; height: 34px; background: #f0f0f5; border: none;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; color: #555; transition: background .2s;
+}
+.resumo-topbar-close:active { background: #e0e0e0; }
 
-  /* ════════════════════════════════════════════════
-     ── MODAL PRODUTO (NOVO) ──
-  ════════════════════════════════════════════════ */
+/* Comprovante estilo maquininha */
+.comprovante-wrap {
+  padding: 20px 18px 100px;
+  display: flex; flex-direction: column; align-items: center;
+}
 
-  /* Backdrop com blur */
-  .modal-backdrop {
-    position: fixed; inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    z-index: 300;
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-    opacity: 0; pointer-events: none;
-    transition: opacity .3s ease;
-  }
-  .modal-backdrop.open {
-    opacity: 1; pointer-events: all;
-  }
+.comprovante {
+  background: #fff;
+  width: 100%; max-width: 360px;
+  border-radius: 4px;
+  padding: 24px 20px;
+  font-family: var(--font-mono); font-size: 13px; color: #1a1a2e;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.06);
+  line-height: 1.7;
+  /* Efeito papel recibo */
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(0,0,0,0.025) 27px, rgba(0,0,0,0.025) 28px);
+}
 
-  /* Card do modal */
-  .modal-card {
-    background: #ffffff;
-    border-radius: 24px;
-    width: 100%; max-width: 380px;
-    padding: 28px 24px 24px;
-    position: relative;
-    transform: scale(.88) translateY(20px);
-    opacity: 0;
-    transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
-    box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.3);
-  }
-  .modal-backdrop.open .modal-card {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-  }
+/* Bordas dentadas do recibo */
+.comprovante::before, .comprovante::after {
+  content: '';
+  display: block;
+  height: 12px;
+  background-image: radial-gradient(circle at 6px -3px, transparent 6px, #fff 6px);
+  background-size: 12px 12px;
+  background-repeat: repeat-x;
+  margin: 0 -20px;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.05));
+}
+.comprovante::before { margin-bottom: 16px; transform: rotate(180deg); }
+.comprovante::after  { margin-top: 16px; }
 
-  /* Botão X fechar */
-  .modal-close {
-    position: absolute; top: 14px; right: 14px;
-    width: 32px; height: 32px; border-radius: 50%;
-    background: #f0f0f5; border: none;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; font-size: 16px; color: #555;
-    transition: background .2s, transform .15s;
-    line-height: 1;
-  }
-  .modal-close:active { transform: scale(.9); background: #e0e0ec; }
+.cv-center { text-align: center; }
+.cv-empresa { font-size: 16px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.cv-vendedor { font-size: 12px; margin-top: 2px; color: #444; }
+.cv-data { font-size: 11px; color: #666; margin-top: 2px; }
+.cv-pedido { font-size: 13px; font-weight: 600; margin-top: 4px; }
 
-  /* Nome do produto */
-  .modal-nome {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700; font-size: 16px;
-    color: #0d0d1f;
-    text-align: center;
-    line-height: 1.4;
-    margin-top: 4px;
-    margin-bottom: 20px;
-    padding: 0 10px;
-    word-break: break-word;
-    white-space: normal;
-  }
+.cv-sep { border: none; border-top: 1px dashed #bbb; margin: 12px 0; }
+.cv-sep-solid { border: none; border-top: 1px solid #888; margin: 10px 0; }
 
-  /* Controle de quantidade */
-  .modal-qty-wrap {
-    display: flex; align-items: center; justify-content: center; gap: 18px;
-    margin-bottom: 18px;
-  }
+.cv-row { display: flex; justify-content: space-between; font-size: 12px; }
+.cv-row .cv-label { color: #444; }
+.cv-row .cv-val { font-weight: 600; color: #1a1a2e; text-align: right; max-width: 55%; word-break: break-word; }
 
-  .modal-qty-btn {
-    width: 52px; height: 52px; border-radius: 14px;
-    border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 26px; font-weight: 300;
-    transition: transform .15s, box-shadow .15s;
-  }
-  .modal-qty-btn:active { transform: scale(.92); }
+.cv-item-row {
+  display: flex; justify-content: space-between;
+  font-size: 12px; padding: 2px 0;
+}
+.cv-item-nome { flex: 1; color: #222; }
+.cv-item-total { font-weight: 600; text-align: right; color: #1a1a2e; white-space: nowrap; padding-left: 8px; }
 
-  .modal-qty-btn.minus {
-    background: #eef1f8; color: #333;
-  }
-  .modal-qty-btn.minus:active { background: #e0e4f0; }
+.cv-subtotal-blk { margin-top: 2px; }
+.cv-sub-row { display: flex; justify-content: space-between; font-size: 12px; color: #555; padding: 1px 0; }
+.cv-sub-row.desconto { color: #c0392b; }
 
-  .modal-qty-btn.plus {
-    background: #4f8ef7; color: #fff;
-    box-shadow: 0 6px 20px #4f8ef755;
-  }
-  .modal-qty-btn.plus:active { background: #3a7be0; box-shadow: none; }
+.cv-total-blk {
+  background: #1a1a2e; color: #fff;
+  border-radius: 4px; padding: 10px 12px; margin: 10px 0;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.cv-total-lbl { font-size: 13px; font-weight: 600; letter-spacing: 0.5px; }
+.cv-total-val { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
 
-  .modal-qty-num {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800; font-size: 32px;
-    color: #0d0d1f;
-    min-width: 48px; text-align: center;
-  }
+.cv-pgto { font-size: 12px; text-align: center; color: #444; padding: 4px 0; }
+.cv-pgto strong { color: #1a1a2e; text-transform: uppercase; }
 
-  /* Preço */
-  .modal-preco-box {
-    background: #f0f4ff;
-    border-radius: 14px;
-    padding: 14px 20px;
-    text-align: center;
-    margin-bottom: 18px;
-  }
-  .modal-preco {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800; font-size: 28px;
-    color: #4f8ef7;
-    font-style: italic;
-    letter-spacing: -0.5px;
-  }
+.cv-msg { text-align: center; font-size: 12px; color: #666; padding: 4px 0; }
+.cv-eq { text-align: center; letter-spacing: 2px; color: #aaa; font-size: 11px; }
 
-  /* Botões de ação */
-  .modal-btn-adicionar {
-    width: 100%; background: #0d0d1f; color: #fff;
-    border: none; border-radius: 50px; padding: 16px;
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
-    letter-spacing: 1.5px; text-transform: uppercase;
-    cursor: pointer; transition: opacity .2s, transform .15s;
-    margin-bottom: 10px;
-  }
-  .modal-btn-adicionar:active { transform: scale(.98); opacity: .9; }
-
-  .modal-btn-voltar {
-    width: 100%; background: transparent; color: #999;
-    border: none; border-radius: 50px; padding: 10px;
-    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 13px;
-    letter-spacing: 0.5px; text-transform: uppercase;
-    cursor: pointer; transition: color .2s;
-  }
-  .modal-btn-voltar:active { color: #555; }
+/* Botões de ação do resumo */
+.resumo-actions {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(245,245,240,0.95); backdrop-filter: blur(8px);
+  padding: 14px 18px 28px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  border-top: 1px solid #e0e0e0;
+}
+.btn-resumo-whats {
+  background: #25d366; color: #fff; border: none;
+  border-radius: var(--radius-sm); padding: 14px 10px;
+  font-family: var(--font-title); font-weight: 700; font-size: 13px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-resumo-pdf {
+  background: #1a1a2e; color: #fff; border: none;
+  border-radius: var(--radius-sm); padding: 14px 10px;
+  font-family: var(--font-title); font-weight: 700; font-size: 13px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
 </style>
 </head>
 <body>
 
-<!-- ── TELA INÍCIO ── -->
+<!-- ══ TELA INÍCIO ══ -->
 <div id="tela-inicio">
   <div class="logo-wrap">
     <div class="logo-box">Q</div>
@@ -529,7 +616,7 @@
   </div>
 </div>
 
-<!-- ── APP ── -->
+<!-- ══ APP ══ -->
 <div id="app">
   <div class="header">
     <div class="hdr-left">
@@ -555,12 +642,18 @@
   <div class="cats-scroll" id="cats"></div>
   <div class="products-list" id="prod-list"></div>
 
+  <!-- FAB carrinho (compacto) -->
   <button class="fab" id="fab" onclick="abrirCarrinho()">
     🛒 <span id="fab-val">R$ 0,00</span>
   </button>
+
+  <!-- BOTÃO FECHAR PEDIDO (novo) -->
+  <button class="btn-fechar-pedido" id="btn-fechar-pedido" onclick="abrirResumoPedido()">
+    <span class="bfp-icon">🧾</span> FECHAR PEDIDO
+  </button>
 </div>
 
-<!-- OVERLAY (drawers) -->
+<!-- OVERLAY drawers -->
 <div class="overlay" id="overlay" onclick="fecharTudo()"></div>
 
 <!-- DRAWER CARRINHO -->
@@ -590,43 +683,58 @@
   <div class="drawer-body" id="pgto-body"></div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     MODAL PRODUTO (NOVO)
-════════════════════════════════════════════ -->
+<!-- ══ MODAL PRODUTO ══ -->
 <div class="modal-backdrop" id="modal-produto" onclick="fecharModalFora(event)">
   <div class="modal-card" id="modal-card">
-    <!-- Botão X -->
     <button class="modal-close" onclick="fecharModal()">✕</button>
-
-    <!-- Nome completo do produto -->
     <div class="modal-nome" id="modal-nome">—</div>
-
-    <!-- Controle de quantidade -->
     <div class="modal-qty-wrap">
       <button class="modal-qty-btn minus" onclick="modalAlterarQty(-1)">−</button>
-      <div class="modal-qty-num" id="modal-qty">1</div>
+      <input
+        class="modal-qty-input"
+        id="modal-qty-input"
+        type="number" min="1" value="1"
+        oninput="modalInputChange(this)"
+        onblur="modalInputBlur(this)"
+      />
       <button class="modal-qty-btn plus" onclick="modalAlterarQty(1)">+</button>
     </div>
-
-    <!-- Preço total dinâmico -->
     <div class="modal-preco-box">
       <div class="modal-preco" id="modal-preco">R$ 0,00</div>
     </div>
-
-    <!-- Botões -->
     <button class="modal-btn-adicionar" onclick="adicionarProdutoModal()">ADICIONAR</button>
     <button class="modal-btn-voltar" onclick="fecharModal()">VOLTAR</button>
   </div>
 </div>
 
+<!-- ══ TELA RESUMO PEDIDO ══ -->
+<div class="resumo-screen" id="resumo-screen">
+  <div class="resumo-topbar">
+    <div class="resumo-topbar-title">🧾 Resumo do Pedido</div>
+    <button class="resumo-topbar-close" onclick="fecharResumoPedido()">✕</button>
+  </div>
+
+  <div class="comprovante-wrap">
+    <div class="comprovante" id="comprovante-body">
+      <!-- gerado via JS -->
+    </div>
+  </div>
+
+  <div class="resumo-actions">
+    <button class="btn-resumo-whats" onclick="enviarWhats()">📲 WhatsApp</button>
+    <button class="btn-resumo-pdf"   onclick="gerarPDF()">🖨️ PDF</button>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
-
 <!-- PRINT -->
 <div id="print-area"></div>
 
 <script>
-// ── DADOS ─────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// DADOS
+// ══════════════════════════════════════════════
 const CATS = [
   { nome: 'Tintas',        emoji: '🎨', cls: 'c-tintas'   },
   { nome: 'Massas',        emoji: '🖌️', cls: 'c-massas'   },
@@ -638,7 +746,6 @@ const CATS = [
 const catCls = { Tintas:'c-tintas', Massas:'c-massas', Texturas:'c-texturas', Selantes:'c-selantes', Complementos:'c-compl' };
 
 const PRODUTOS = [
-  // TINTAS
   {id:1,  cat:'Tintas', nome:'Qualy Color Econômica - Pote 1L Branca',        preco:8.90},
   {id:2,  cat:'Tintas', nome:'Qualy Color Econômica - Galão 3.6L Branca',     preco:26.90},
   {id:3,  cat:'Tintas', nome:'Qualy Color Econômica - Galão 3.6L Na Cor',     preco:30.00},
@@ -663,7 +770,6 @@ const PRODUTOS = [
   {id:22, cat:'Tintas', nome:'Piso Premium - Lata 18L Branca',                preco:219.90},
   {id:23, cat:'Tintas', nome:'Emborrachada Standart - Lata 18L',              preco:272.90},
   {id:24, cat:'Tintas', nome:'Emborrachada Premium - Lata 18L',               preco:392.00},
-  // MASSAS
   {id:25, cat:'Massas', nome:'Massa Corrida PVA - Pote 1L',                   preco:6.90},
   {id:26, cat:'Massas', nome:'Massa Corrida PVA - Galão 3.6L',                preco:14.99},
   {id:27, cat:'Massas', nome:'Massa Corrida PVA - Lata 28kg',                 preco:58.90},
@@ -672,7 +778,6 @@ const PRODUTOS = [
   {id:30, cat:'Massas', nome:'Massa Acrílica - Galão 3.6L',                   preco:18.99},
   {id:31, cat:'Massas', nome:'Massa Acrílica - Lata 28kg',                    preco:72.90},
   {id:32, cat:'Massas', nome:'Massa Acrílica - Barrica 25kg',                 preco:43.90},
-  // TEXTURAS
   {id:33, cat:'Texturas', nome:'Grafiato Malha 10 - Pote 1L',                 preco:8.50},
   {id:34, cat:'Texturas', nome:'Grafiato Malha 10 - Galão 3.6L',              preco:18.99},
   {id:35, cat:'Texturas', nome:'Grafiato Malha 10 - Barrica 25kg',            preco:43.90},
@@ -683,13 +788,11 @@ const PRODUTOS = [
   {id:40, cat:'Texturas', nome:'Textura Lisa - Barrica 25kg',                 preco:43.90},
   {id:41, cat:'Texturas', nome:'Textura Lisa - Barrica 50kg',                 preco:83.99},
   {id:42, cat:'Texturas', nome:'Textura Lisa - Lata 28kg',                    preco:72.90},
-  // SELANTES
   {id:43, cat:'Selantes', nome:'Selador Acrílico - Pote 1L',                  preco:9.50},
   {id:44, cat:'Selantes', nome:'Selador Acrílico - Galão 3.6L',               preco:19.90},
   {id:45, cat:'Selantes', nome:'Selador Acrílico - Balde 16L',                preco:52.90},
   {id:46, cat:'Selantes', nome:'Selador Acrílico - Lata 18L',                 preco:79.90},
   {id:47, cat:'Selantes', nome:'Selador Gesso - Lata 18L',                    preco:110.00},
-  // COMPLEMENTOS
   {id:48, cat:'Complementos', nome:'Primer - Galão 3.6L',                     preco:49.90},
   {id:49, cat:'Complementos', nome:'Primer - Balde 16L',                      preco:138.00},
   {id:50, cat:'Complementos', nome:'Primer - Lata 18L',                       preco:158.00},
@@ -700,21 +803,24 @@ const PRODUTOS = [
   {id:55, cat:'Complementos', nome:'Cimento Queimado - Balde 25kg',           preco:188.00},
 ];
 
-// ── ESTADO ────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// ESTADO
+// ══════════════════════════════════════════════
 const E = {
   vendedor: '', cliente: '', data: '',
-  carrinho: {}, // id → qty
+  carrinho: {},
   catAtiva: 'Todos',
-  pgto: null,
-  parcelas: null,
-  diasCheque: '',
+  pgto: null, parcelas: null, diasCheque: '',
+  numeroPedido: 1,
 };
 
 // Estado do modal
 let modalProdId = null;
 let modalQty = 1;
 
-// ── INÍCIO ────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// INÍCIO
+// ══════════════════════════════════════════════
 document.getElementById('inp-data').value = new Date().toISOString().split('T')[0];
 
 function iniciar() {
@@ -731,7 +837,9 @@ function iniciar() {
   renderProdutos();
 }
 
-// ── CATEGORIAS ────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// CATEGORIAS
+// ══════════════════════════════════════════════
 function renderCats() {
   const wrap = document.getElementById('cats');
   const chips = [{ nome:'Todos', emoji:'⚡', cls:'' }, ...CATS];
@@ -747,7 +855,9 @@ function selecionarCat(cat) {
   renderProdutos();
 }
 
-// ── PRODUTOS ──────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// PRODUTOS
+// ══════════════════════════════════════════════
 function renderProdutos() {
   const busca = document.getElementById('search').value.toLowerCase();
   let prods = PRODUTOS;
@@ -772,72 +882,77 @@ function renderProdutos() {
   }).join('');
 }
 
-// ── MODAL PRODUTO ─────────────────────────────────────────────────────────────
-
-/**
- * Abre o modal para o produto com id informado.
- * Inicializa quantidade = 1 (ou qty atual já no carrinho).
- */
+// ══════════════════════════════════════════════
+// MODAL PRODUTO
+// ══════════════════════════════════════════════
 function abrirModalProduto(id) {
   const p = PRODUTOS.find(x => x.id === id);
   if (!p) return;
-
   modalProdId = id;
-  modalQty = E.carrinho[id] || 1; // começa com a qty atual ou 1
-
-  // Preenche o modal
+  modalQty = E.carrinho[id] || 1;
   document.getElementById('modal-nome').textContent = p.nome;
+  document.getElementById('modal-qty-input').value = modalQty;
   atualizarModalPreco(p);
-
-  // Abre com animação
   document.getElementById('modal-produto').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-/** Fecha o modal com animação reversa */
 function fecharModal() {
   document.getElementById('modal-produto').classList.remove('open');
   document.body.style.overflow = '';
-  // Limpa estado após animação
   setTimeout(() => { modalProdId = null; }, 350);
 }
 
-/** Fecha ao clicar fora do card */
 function fecharModalFora(event) {
-  if (event.target === document.getElementById('modal-produto')) {
-    fecharModal();
-  }
+  if (event.target === document.getElementById('modal-produto')) fecharModal();
 }
 
-/** Altera a quantidade no modal (mínimo 1) */
 function modalAlterarQty(delta) {
-  const novoQty = modalQty + delta;
-  if (novoQty < 1) return;
-  modalQty = novoQty;
+  const novo = modalQty + delta;
+  if (novo < 1) return;
+  modalQty = novo;
+  document.getElementById('modal-qty-input').value = modalQty;
   const p = PRODUTOS.find(x => x.id === modalProdId);
   atualizarModalPreco(p);
 }
 
-/** Atualiza display de qty e preço total no modal */
+// Input manual de quantidade
+function modalInputChange(input) {
+  const val = parseInt(input.value, 10);
+  if (!isNaN(val) && val >= 1) {
+    modalQty = val;
+    const p = PRODUTOS.find(x => x.id === modalProdId);
+    atualizarModalPreco(p);
+  }
+}
+
+// Validação ao perder foco: garante mínimo 1
+function modalInputBlur(input) {
+  const val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 1) {
+    modalQty = 1;
+    input.value = 1;
+    const p = PRODUTOS.find(x => x.id === modalProdId);
+    atualizarModalPreco(p);
+  }
+}
+
 function atualizarModalPreco(p) {
-  document.getElementById('modal-qty').textContent = modalQty;
   document.getElementById('modal-preco').textContent = 'R$ ' + brl(p.preco * modalQty);
 }
 
-/** Confirma e adiciona/atualiza produto no carrinho */
 function adicionarProdutoModal() {
   if (!modalProdId) return;
   const p = PRODUTOS.find(x => x.id === modalProdId);
-
-  // Soma ao existente (ou define direto a qty escolhida no modal)
   E.carrinho[modalProdId] = (E.carrinho[modalProdId] || 0) + modalQty;
-
   showToast(`✔ ${p.nome.split(' - ')[0]} ×${E.carrinho[modalProdId]}`);
   atualizarUI();
   fecharModal();
 }
 
-// ── CARRINHO ──────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// CARRINHO
+// ══════════════════════════════════════════════
 function calcSubtotal() {
   return Object.entries(E.carrinho).reduce((s, [id, q]) => {
     const p = PRODUTOS.find(x => x.id == id);
@@ -859,22 +974,21 @@ function atualizarUI() {
   const sub = calcSubtotal();
   const qty = qtdTotal();
 
-  // badge
   const badge = document.getElementById('cart-badge');
   badge.textContent = qty;
   badge.classList.toggle('show', qty > 0);
 
-  // pill
   const pill = document.getElementById('total-pill');
   pill.style.display = qty > 0 ? 'block' : 'none';
   pill.textContent = 'R$ ' + brl(sub);
 
-  // fab
   const fab = document.getElementById('fab');
   fab.classList.toggle('show', qty > 0);
   document.getElementById('fab-val').textContent = 'R$ ' + brl(sub);
 
-  // cart total
+  const btnFechar = document.getElementById('btn-fechar-pedido');
+  btnFechar.classList.toggle('show', qty > 0);
+
   document.getElementById('cart-total').textContent = 'R$ ' + brl(sub);
 
   renderProdutos();
@@ -923,7 +1037,9 @@ function zerarCarrinho() {
   atualizarUI(); fecharTudo();
 }
 
-// ── DRAWERS ───────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// DRAWERS
+// ══════════════════════════════════════════════
 function abrirCarrinho() {
   renderCartBody();
   document.getElementById('overlay').classList.add('open');
@@ -949,7 +1065,143 @@ function fecharTudo() {
   document.getElementById('drawer-pgto').classList.remove('open');
 }
 
-// ── PAGAMENTO ─────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// TELA RESUMO / COMPROVANTE
+// ══════════════════════════════════════════════
+
+/** Abre a tela de resumo estilo maquininha */
+function abrirResumoPedido() {
+  if (qtdTotal() === 0) { showToast('⚠️ Adicione produtos primeiro!'); return; }
+  document.getElementById('comprovante-body').innerHTML = gerarResumoHTML();
+  document.getElementById('resumo-screen').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+/** Fecha a tela de resumo */
+function fecharResumoPedido() {
+  document.getElementById('resumo-screen').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/** Gera o HTML do comprovante estilo maquininha */
+function gerarResumoHTML() {
+  const itens = Object.entries(E.carrinho).filter(([,q]) => q > 0);
+  const sub    = calcSubtotal();
+  const total  = calcTotal();
+  const temDesconto = E.pgto === 'Pix' || E.pgto === 'Espécie';
+  const dataFmt = E.data
+    ? E.data.split('-').reverse().join('/')
+    : new Date().toLocaleDateString('pt-BR');
+  const hora = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  const numPedido = String(E.numeroPedido).padStart(6, '0');
+
+  const linhaItens = itens.map(([id, qty]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    return `
+    <div class="cv-item-row">
+      <span class="cv-item-nome">${p.nome.split(' - ')[0]} x${qty}</span>
+      <span class="cv-item-total">R$${brl(p.preco * qty)}</span>
+    </div>`;
+  }).join('');
+
+  const descontoHTML = temDesconto ? `
+    <div class="cv-sub-row desconto">
+      <span>Desconto (3%)</span><span>-R$${brl(sub * 0.03)}</span>
+    </div>` : '';
+
+  const pgtoLabel = E.pgto ? formatarPgto() : '—';
+
+  return `
+    <div class="cv-eq">================================</div>
+
+    <div class="cv-center" style="margin:10px 0 4px">
+      <div class="cv-empresa">QUALY QUIMY</div>
+      <div class="cv-vendedor">Vendedor: ${E.vendedor}</div>
+      <div class="cv-data">${dataFmt} &nbsp; ${hora}</div>
+      <div class="cv-pedido">Nº <strong>${numPedido}</strong></div>
+    </div>
+
+    <hr class="cv-sep">
+
+    <div class="cv-row"><span class="cv-label">Cliente:</span><span class="cv-val">${E.cliente}</span></div>
+
+    <hr class="cv-sep">
+
+    ${linhaItens}
+
+    <hr class="cv-sep-solid">
+
+    <div class="cv-subtotal-blk">
+      <div class="cv-sub-row"><span>Subtotal</span><span>R$${brl(sub)}</span></div>
+      ${descontoHTML}
+    </div>
+
+    <div class="cv-total-blk">
+      <span class="cv-total-lbl">*TOTAL*</span>
+      <span class="cv-total-val">R$${brl(total)}</span>
+    </div>
+
+    <hr class="cv-sep">
+    <div class="cv-pgto">💳 Pgto: <strong>${pgtoLabel}</strong></div>
+    <hr class="cv-sep">
+
+    <div class="cv-msg">Obrigado! Volte sempre 😊</div>
+    <div class="cv-eq" style="margin-top:10px">================================</div>
+  `;
+}
+
+/** Gera o texto formatado estilo comprovante para o WhatsApp */
+function gerarTextoWhatsAppFormatado() {
+  const itens = Object.entries(E.carrinho).filter(([,q]) => q > 0);
+  const sub    = calcSubtotal();
+  const total  = calcTotal();
+  const temDesconto = E.pgto === 'Pix' || E.pgto === 'Espécie';
+  const dataFmt = E.data
+    ? E.data.split('-').reverse().join('/')
+    : new Date().toLocaleDateString('pt-BR');
+  const hora = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  const numPedido = String(E.numeroPedido).padStart(6, '0');
+
+  const sep = '============================';
+  const lin = '----------------------------';
+
+  let m = `${sep}\n`;
+  m += `        *QUALY QUIMY*\n`;
+  m += `    Pedido nº ${numPedido}\n`;
+  m += `   ${dataFmt}  ${hora}\n`;
+  m += `${lin}\n`;
+  m += `Cliente:       *${E.cliente}*\n`;
+  m += `Vendedor:      ${E.vendedor}\n`;
+  m += `${lin}\n`;
+
+  itens.forEach(([id, qty]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    const nome = p.nome.split(' - ')[0];
+    const total_item = `R$${brl(p.preco * qty)}`;
+    const linha = `${nome} x${qty}`;
+    // alinha à direita
+    const espacos = Math.max(1, 28 - linha.length - total_item.length);
+    m += `${linha}${' '.repeat(espacos)}${total_item}\n`;
+  });
+
+  m += `${lin}\n`;
+  m += `Subtotal        R$${brl(sub)}\n`;
+  if (temDesconto) {
+    m += `Desconto (3%)  -R$${brl(sub * 0.03)}\n`;
+  }
+  m += `${lin}\n`;
+  m += `*TOTAL*         *R$${brl(total)}*\n`;
+  m += `${lin}\n`;
+  m += `💳 Pgto: ${formatarPgto()}\n`;
+  m += `${sep}\n`;
+  m += `Obrigado! Volte sempre 😊`;
+
+  return m;
+}
+
+// ══════════════════════════════════════════════
+// PAGAMENTO
+// ══════════════════════════════════════════════
 function renderPgto() {
   const sub = calcSubtotal();
   const body = document.getElementById('pgto-body');
@@ -1017,7 +1269,7 @@ function renderPgto() {
       <div class="resumo-row final"><span>Total final</span><span>R$ ${brl(total)}</span></div>
     </div>
     <div class="action-grid">
-      <button class="btn-whats" onclick="enviarWhats()">📲 WhatsApp</button>
+      <button class="btn-whats" onclick="fecharTudo(); abrirResumoPedido()">🧾 Ver Resumo</button>
       <button class="btn-pdf"   onclick="gerarPDF()">🖨️ PDF</button>
     </div>`;
   }
@@ -1037,93 +1289,127 @@ function selecionarParc(n, dias) {
 
 function formatarPgto() {
   const sub = calcSubtotal();
-  if (E.pgto === 'Pix')     return 'Pix (-3%)';
-  if (E.pgto === 'Espécie') return 'Dinheiro (-3%)';
+  if (E.pgto === 'Pix')     return 'PIX (-3%)';
+  if (E.pgto === 'Espécie') return 'DINHEIRO EM ESPECIE (-3%)';
   if (E.pgto === 'Cartão' && E.parcelas)
-    return `${E.parcelas}x no Cartão (R$ ${brl(sub/E.parcelas)})`;
+    return `${E.parcelas}x CARTÃO (R$ ${brl(sub/E.parcelas)})`;
   if (E.pgto === 'Cheque' && E.parcelas)
-    return `${E.parcelas}x no Cheque ${E.diasCheque} (R$ ${brl(sub/E.parcelas)})`;
+    return `${E.parcelas}x CHEQUE ${E.diasCheque} (R$ ${brl(sub/E.parcelas)})`;
   return E.pgto || '—';
 }
 
-// ── WHATSAPP ──────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// WHATSAPP — usa formato comprovante
+// ══════════════════════════════════════════════
 function enviarWhats() {
-  const itens = Object.entries(E.carrinho).filter(([,q]) => q > 0);
-  const dataFmt = E.data ? E.data.split('-').reverse().join('/') : new Date().toLocaleDateString('pt-BR');
-  const total = calcTotal();
-
-  let m = `*QUALY QUIMY — PEDIDO DE VENDA*\n`;
-  m += `📅 ${dataFmt}\n`;
-  m += `👤 Vendedor: ${E.vendedor}\n`;
-  m += `🏪 Cliente: ${E.cliente}\n\n`;
-  m += `*Itens:*\n`;
-  itens.forEach(([id, qty]) => {
-    const p = PRODUTOS.find(x => x.id == id);
-    m += `• ${qty}x ${p.nome} — R$ ${brl(p.preco * qty)}\n`;
-  });
-  m += `\n💳 Pagamento: ${formatarPgto()}`;
-  m += `\n✅ *TOTAL: R$ ${brl(total)}*`;
-
+  const m = gerarTextoWhatsAppFormatado();
+  E.numeroPedido++;
   window.open(`https://api.whatsapp.com/send?phone=5511954950044&text=${encodeURIComponent(m)}`);
 }
 
-// ── PDF ───────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// PDF PROFISSIONAL
+// ══════════════════════════════════════════════
 function gerarPDF() {
   const itens = Object.entries(E.carrinho).filter(([,q]) => q > 0);
   const dataFmt = E.data ? E.data.split('-').reverse().join('/') : new Date().toLocaleDateString('pt-BR');
+  const hora = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
   const sub = calcSubtotal();
   const total = calcTotal();
-  const desconto = E.pgto === 'Pix' || E.pgto === 'Espécie';
+  const temDesconto = E.pgto === 'Pix' || E.pgto === 'Espécie';
+  const numPedido = String(E.numeroPedido).padStart(6, '0');
 
   const rows = itens.map(([id,qty]) => {
     const p = PRODUTOS.find(x => x.id == id);
     return `<tr>
-      <td style="padding:8px 10px;border:1px solid #e2e8f0">${qty}</td>
-      <td style="padding:8px 10px;border:1px solid #e2e8f0">${p.nome}</td>
-      <td style="padding:8px 10px;border:1px solid #e2e8f0;text-align:right">R$ ${brl(p.preco * qty)}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:12px">${qty}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:12px">${p.nome}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:12px;text-align:right">R$ ${brl(p.preco)}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:12px;text-align:right;font-weight:600">R$ ${brl(p.preco * qty)}</td>
     </tr>`;
   }).join('');
 
   const el = document.getElementById('print-area');
   el.innerHTML = `
-  <div style="font-family:sans-serif;padding:28px;max-width:700px;margin:0 auto;background:#fff;color:#1a1a2e">
-    <div style="border-bottom:3px solid #1e3a8a;padding-bottom:18px;margin-bottom:18px">
-      <h1 style="font-size:28px;color:#1e3a8a;margin:0">Qualy Quimy</h1>
-      <p style="font-size:12px;font-weight:bold;margin:4px 0">PEDIDO DE VENDA</p>
-      <p style="font-size:12px;color:#666">Data: ${dataFmt}</p>
+  <div style="font-family:'Inter',sans-serif;padding:36px 40px;max-width:700px;margin:0 auto;background:#fff;color:#1a1a2e">
+
+    <!-- Cabeçalho -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;border-bottom:2px solid #1a1a2e;margin-bottom:22px">
+      <div>
+        <h1 style="font-size:26px;font-weight:800;color:#1a1a2e;margin:0;letter-spacing:-0.5px">QUALY QUIMY</h1>
+        <p style="font-size:11px;color:#666;margin:4px 0 0;letter-spacing:2px;text-transform:uppercase">Pedido de Venda</p>
+      </div>
+      <div style="text-align:right">
+        <p style="font-size:20px;font-weight:700;color:#1a1a2e;margin:0">Nº ${numPedido}</p>
+        <p style="font-size:11px;color:#666;margin:3px 0 0">${dataFmt} — ${hora}</p>
+      </div>
     </div>
-    <p style="font-size:13px;margin-bottom:18px">
-      <strong>Vendedor:</strong> ${E.vendedor} &nbsp;|&nbsp; <strong>Cliente:</strong> ${E.cliente}
-    </p>
-    <table style="width:100%;border-collapse:collapse;font-size:13px">
+
+    <!-- Dados -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px">
+      <div style="background:#f8f8f8;border-radius:8px;padding:14px 16px">
+        <p style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin:0 0 4px">Vendedor</p>
+        <p style="font-size:14px;font-weight:600;color:#1a1a2e;margin:0">${E.vendedor}</p>
+      </div>
+      <div style="background:#f8f8f8;border-radius:8px;padding:14px 16px">
+        <p style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin:0 0 4px">Cliente</p>
+        <p style="font-size:14px;font-weight:600;color:#1a1a2e;margin:0">${E.cliente}</p>
+      </div>
+    </div>
+
+    <!-- Tabela de itens -->
+    <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
       <thead>
-        <tr style="background:#1e3a8a;color:#fff">
-          <th style="padding:8px 10px;text-align:left;border:1px solid #1e3a8a">Qtd</th>
-          <th style="padding:8px 10px;text-align:left;border:1px solid #1e3a8a">Produto</th>
-          <th style="padding:8px 10px;text-align:right;border:1px solid #1e3a8a">Total</th>
+        <tr style="background:#1a1a2e;color:#fff">
+          <th style="padding:10px 12px;text-align:left;font-size:11px;letter-spacing:0.5px;font-weight:600">QTD</th>
+          <th style="padding:10px 12px;text-align:left;font-size:11px;letter-spacing:0.5px;font-weight:600">PRODUTO</th>
+          <th style="padding:10px 12px;text-align:right;font-size:11px;letter-spacing:0.5px;font-weight:600">UNIT.</th>
+          <th style="padding:10px 12px;text-align:right;font-size:11px;letter-spacing:0.5px;font-weight:600">TOTAL</th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>
-    <div style="margin-top:24px;padding:18px;background:#f8fafc;border-radius:10px;text-align:right;font-size:13px">
-      <p>Subtotal: R$ ${brl(sub)}</p>
-      ${desconto ? `<p>Desconto (3%): - R$ ${brl(sub*0.03)}</p>` : ''}
-      <p style="font-size:18px;font-weight:bold;color:#1e3a8a;margin-top:8px">Total Final: R$ ${brl(total)}</p>
+
+    <!-- Totais -->
+    <div style="display:flex;justify-content:flex-end;margin-bottom:20px">
+      <div style="min-width:260px">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:#555;border-top:1px solid #eee">
+          <span>Subtotal</span><span>R$ ${brl(sub)}</span>
+        </div>
+        ${temDesconto ? `<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:#c0392b;border-top:1px solid #eee">
+          <span>Desconto (3%)</span><span>- R$ ${brl(sub*0.03)}</span>
+        </div>` : ''}
+        <div style="display:flex;justify-content:space-between;padding:12px 16px;margin-top:6px;background:#1a1a2e;color:#fff;border-radius:8px">
+          <span style="font-size:13px;font-weight:600">TOTAL FINAL</span>
+          <span style="font-size:18px;font-weight:800">R$ ${brl(total)}</span>
+        </div>
+      </div>
     </div>
-    <p style="font-size:12px;color:#666;margin-top:14px">Pagamento: ${formatarPgto()}</p>
-    <p style="font-size:10px;color:#aaa;margin-top:24px;text-align:center">Desenvolvido por ImpulsoWeb10</p>
+
+    <!-- Pagamento -->
+    <div style="background:#f8f8f8;border-radius:8px;padding:12px 16px;margin-bottom:24px;font-size:12px">
+      <span style="color:#888;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Forma de Pagamento: </span>
+      <span style="color:#1a1a2e;font-weight:700">${formatarPgto()}</span>
+    </div>
+
+    <!-- Rodapé -->
+    <p style="font-size:10px;color:#aaa;text-align:center;border-top:1px solid #eee;padding-top:14px">
+      Desenvolvido por ImpulsoWeb10 &nbsp;·&nbsp; Qualy Quimy — Pedido ${numPedido}
+    </p>
   </div>`;
 
   el.style.display = 'block';
   html2pdf().from(el).set({
-    margin: 10,
-    filename: `Pedido_QualyQuimy_${E.cliente.replace(/\s+/g,'_')}.pdf`,
+    margin: 8,
+    filename: `Pedido_QualyQuimy_${numPedido}_${E.cliente.replace(/\s+/g,'_')}.pdf`,
     html2canvas: { scale: 2, windowWidth: 800 },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   }).save().then(() => { el.style.display = 'none'; });
 }
 
-// ── UTILS ─────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════
 function brl(v) { return v.toFixed(2).replace('.', ','); }
 
 let toastT;
