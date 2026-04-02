@@ -179,10 +179,20 @@
   }
 
   .prod-info { flex: 1; min-width: 0; }
-  .prod-nome { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── FIX 1: Nome quebra linha, sem ellipsis ── */
+  .prod-nome {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: normal;       /* quebra linha */
+    overflow: visible;
+    text-overflow: unset;
+    line-height: 1.4;
+    word-break: break-word;
+  }
   .prod-cat-tag { font-size: 10px; color: var(--muted); margin-top: 2px; }
 
-  .prod-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .prod-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
   .prod-preco { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent); }
 
   .qty-mini {
@@ -361,6 +371,138 @@
 
   @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
   .prod-row { animation: fadeUp .25s ease both; }
+
+  /* ════════════════════════════════════════════════
+     ── MODAL PRODUTO (NOVO) ──
+  ════════════════════════════════════════════════ */
+
+  /* Backdrop com blur */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 300;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s ease;
+  }
+  .modal-backdrop.open {
+    opacity: 1; pointer-events: all;
+  }
+
+  /* Card do modal */
+  .modal-card {
+    background: #ffffff;
+    border-radius: 24px;
+    width: 100%; max-width: 380px;
+    padding: 28px 24px 24px;
+    position: relative;
+    transform: scale(.88) translateY(20px);
+    opacity: 0;
+    transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .modal-backdrop.open .modal-card {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  /* Botão X fechar */
+  .modal-close {
+    position: absolute; top: 14px; right: 14px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #f0f0f5; border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; color: #555;
+    transition: background .2s, transform .15s;
+    line-height: 1;
+  }
+  .modal-close:active { transform: scale(.9); background: #e0e0ec; }
+
+  /* Nome do produto */
+  .modal-nome {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 16px;
+    color: #0d0d1f;
+    text-align: center;
+    line-height: 1.4;
+    margin-top: 4px;
+    margin-bottom: 20px;
+    padding: 0 10px;
+    word-break: break-word;
+    white-space: normal;
+  }
+
+  /* Controle de quantidade */
+  .modal-qty-wrap {
+    display: flex; align-items: center; justify-content: center; gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .modal-qty-btn {
+    width: 52px; height: 52px; border-radius: 14px;
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 300;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .modal-qty-btn:active { transform: scale(.92); }
+
+  .modal-qty-btn.minus {
+    background: #eef1f8; color: #333;
+  }
+  .modal-qty-btn.minus:active { background: #e0e4f0; }
+
+  .modal-qty-btn.plus {
+    background: #4f8ef7; color: #fff;
+    box-shadow: 0 6px 20px #4f8ef755;
+  }
+  .modal-qty-btn.plus:active { background: #3a7be0; box-shadow: none; }
+
+  .modal-qty-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 32px;
+    color: #0d0d1f;
+    min-width: 48px; text-align: center;
+  }
+
+  /* Preço */
+  .modal-preco-box {
+    background: #f0f4ff;
+    border-radius: 14px;
+    padding: 14px 20px;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .modal-preco {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 28px;
+    color: #4f8ef7;
+    font-style: italic;
+    letter-spacing: -0.5px;
+  }
+
+  /* Botões de ação */
+  .modal-btn-adicionar {
+    width: 100%; background: #0d0d1f; color: #fff;
+    border: none; border-radius: 50px; padding: 16px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    cursor: pointer; transition: opacity .2s, transform .15s;
+    margin-bottom: 10px;
+  }
+  .modal-btn-adicionar:active { transform: scale(.98); opacity: .9; }
+
+  .modal-btn-voltar {
+    width: 100%; background: transparent; color: #999;
+    border: none; border-radius: 50px; padding: 10px;
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 13px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    cursor: pointer; transition: color .2s;
+  }
+  .modal-btn-voltar:active { color: #555; }
 </style>
 </head>
 <body>
@@ -418,7 +560,7 @@
   </button>
 </div>
 
-<!-- OVERLAY -->
+<!-- OVERLAY (drawers) -->
 <div class="overlay" id="overlay" onclick="fecharTudo()"></div>
 
 <!-- DRAWER CARRINHO -->
@@ -446,6 +588,35 @@
     <button class="btn-back" onclick="voltarCart()">← Voltar</button>
   </div>
   <div class="drawer-body" id="pgto-body"></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     MODAL PRODUTO (NOVO)
+════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="modal-produto" onclick="fecharModalFora(event)">
+  <div class="modal-card" id="modal-card">
+    <!-- Botão X -->
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+
+    <!-- Nome completo do produto -->
+    <div class="modal-nome" id="modal-nome">—</div>
+
+    <!-- Controle de quantidade -->
+    <div class="modal-qty-wrap">
+      <button class="modal-qty-btn minus" onclick="modalAlterarQty(-1)">−</button>
+      <div class="modal-qty-num" id="modal-qty">1</div>
+      <button class="modal-qty-btn plus" onclick="modalAlterarQty(1)">+</button>
+    </div>
+
+    <!-- Preço total dinâmico -->
+    <div class="modal-preco-box">
+      <div class="modal-preco" id="modal-preco">R$ 0,00</div>
+    </div>
+
+    <!-- Botões -->
+    <button class="modal-btn-adicionar" onclick="adicionarProdutoModal()">ADICIONAR</button>
+    <button class="modal-btn-voltar" onclick="fecharModal()">VOLTAR</button>
+  </div>
 </div>
 
 <!-- TOAST -->
@@ -539,6 +710,10 @@ const E = {
   diasCheque: '',
 };
 
+// Estado do modal
+let modalProdId = null;
+let modalQty = 1;
+
 // ── INÍCIO ────────────────────────────────────────────────────────────────────
 document.getElementById('inp-data').value = new Date().toISOString().split('T')[0];
 
@@ -583,7 +758,7 @@ function renderProdutos() {
     const qty = E.carrinho[p.id] || 0;
     const cls = catCls[p.cat] || '';
     return `
-    <div class="prod-row ${qty > 0 ? 'in-cart' : ''}" onclick="tocarProd(${p.id})" style="animation-delay:${i*18}ms">
+    <div class="prod-row ${qty > 0 ? 'in-cart' : ''}" onclick="abrirModalProduto(${p.id})" style="animation-delay:${i*18}ms">
       <div class="prod-cat-dot ${cls}"></div>
       <div class="prod-info">
         <div class="prod-nome">${p.nome}</div>
@@ -597,12 +772,69 @@ function renderProdutos() {
   }).join('');
 }
 
-function tocarProd(id) {
+// ── MODAL PRODUTO ─────────────────────────────────────────────────────────────
+
+/**
+ * Abre o modal para o produto com id informado.
+ * Inicializa quantidade = 1 (ou qty atual já no carrinho).
+ */
+function abrirModalProduto(id) {
   const p = PRODUTOS.find(x => x.id === id);
-  const atual = E.carrinho[id] || 0;
-  E.carrinho[id] = atual + 1;
-  showToast(`✔ ${p.nome.split(' - ')[0]} ×${E.carrinho[id]}`);
+  if (!p) return;
+
+  modalProdId = id;
+  modalQty = E.carrinho[id] || 1; // começa com a qty atual ou 1
+
+  // Preenche o modal
+  document.getElementById('modal-nome').textContent = p.nome;
+  atualizarModalPreco(p);
+
+  // Abre com animação
+  document.getElementById('modal-produto').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+/** Fecha o modal com animação reversa */
+function fecharModal() {
+  document.getElementById('modal-produto').classList.remove('open');
+  document.body.style.overflow = '';
+  // Limpa estado após animação
+  setTimeout(() => { modalProdId = null; }, 350);
+}
+
+/** Fecha ao clicar fora do card */
+function fecharModalFora(event) {
+  if (event.target === document.getElementById('modal-produto')) {
+    fecharModal();
+  }
+}
+
+/** Altera a quantidade no modal (mínimo 1) */
+function modalAlterarQty(delta) {
+  const novoQty = modalQty + delta;
+  if (novoQty < 1) return;
+  modalQty = novoQty;
+  const p = PRODUTOS.find(x => x.id === modalProdId);
+  atualizarModalPreco(p);
+}
+
+/** Atualiza display de qty e preço total no modal */
+function atualizarModalPreco(p) {
+  document.getElementById('modal-qty').textContent = modalQty;
+  document.getElementById('modal-preco').textContent = 'R$ ' + brl(p.preco * modalQty);
+}
+
+/** Confirma e adiciona/atualiza produto no carrinho */
+function adicionarProdutoModal() {
+  if (!modalProdId) return;
+  const p = PRODUTOS.find(x => x.id === modalProdId);
+
+  // Soma ao existente (ou define direto a qty escolhida no modal)
+  E.carrinho[modalProdId] = (E.carrinho[modalProdId] || 0) + modalQty;
+
+  showToast(`✔ ${p.nome.split(' - ')[0]} ×${E.carrinho[modalProdId]}`);
   atualizarUI();
+  fecharModal();
 }
 
 // ── CARRINHO ──────────────────────────────────────────────────────────────────
@@ -740,7 +972,6 @@ function renderPgto() {
   });
   html += `</div>`;
 
-  // Parcelamento cartão
   if (E.pgto === 'Cartão' && !E.parcelas) {
     html += `<div class="parc-wrap"><div class="parc-title">Parcelamento — Cartão (sem juros)</div>`;
     [1,2,3].forEach(n => {
@@ -753,7 +984,6 @@ function renderPgto() {
     html += `</div>`;
   }
 
-  // Parcelamento cheque — regra: até R$1.000 → 2x (30/45); acima → 3x (30/45/60)
   if (E.pgto === 'Cheque' && !E.parcelas) {
     html += `<div class="parc-wrap"><div class="parc-title">Parcelamento — Cheque</div>`;
     if (sub <= 1000) {
@@ -772,7 +1002,6 @@ function renderPgto() {
     html += `</div>`;
   }
 
-  // Resumo final (quando pgto selecionado + parcelas resolvidas)
   const pronto = E.pgto && (
     E.pgto === 'Pix' || E.pgto === 'Espécie' ||
     ((E.pgto === 'Cartão' || E.pgto === 'Cheque') && E.parcelas)
