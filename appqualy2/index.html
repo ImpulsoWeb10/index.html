@@ -468,6 +468,23 @@ body {
 }
 .modal-btn-voltar:active { color: #555; }
 
+/* Campo de cor */
+.modal-cor-wrap {
+  margin-bottom: 18px;
+}
+.modal-cor-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: #999; margin-bottom: 7px; display: block;
+}
+.modal-cor-input {
+  width: 100%; background: #f8faff; border: 2px solid #e0e4f0;
+  border-radius: 12px; padding: 13px 15px;
+  font-family: var(--font-body); font-size: 15px; color: #0d0d1f;
+  outline: none; transition: border-color .2s;
+}
+.modal-cor-input:focus { border-color: #4f8ef7; }
+.modal-cor-input::placeholder { color: #bbb; }
+
 /* ════════════════════════════════════════════════
    TELA DE RESUMO / COMPROVANTE (NOVO)
 ════════════════════════════════════════════════ */
@@ -702,6 +719,10 @@ body {
     <div class="modal-preco-box">
       <div class="modal-preco" id="modal-preco">R$ 0,00</div>
     </div>
+    <div class="modal-cor-wrap" id="modal-cor-wrap" style="display:none">
+      <label class="modal-cor-label">🎨 Cor desejada</label>
+      <input class="modal-cor-input" id="modal-cor-input" type="text" placeholder="Ex: Branco Gelo, Azul Royal..." maxlength="80" />
+    </div>
     <button class="modal-btn-adicionar" onclick="adicionarProdutoModal()">ADICIONAR</button>
     <button class="modal-btn-voltar" onclick="fecharModal()">VOLTAR</button>
   </div>
@@ -893,6 +914,14 @@ function abrirModalProduto(id) {
   document.getElementById('modal-nome').textContent = p.nome;
   document.getElementById('modal-qty-input').value = modalQty;
   atualizarModalPreco(p);
+
+  // Exibe campo de cor apenas se o nome do produto contém "cor"
+  const temCor = /cor/i.test(p.nome);
+  const corWrap = document.getElementById('modal-cor-wrap');
+  const corInput = document.getElementById('modal-cor-input');
+  corWrap.style.display = temCor ? 'block' : 'none';
+  corInput.value = E.cores && E.cores[id] ? E.cores[id] : '';
+
   document.getElementById('modal-produto').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -945,6 +974,14 @@ function adicionarProdutoModal() {
   if (!modalProdId) return;
   const p = PRODUTOS.find(x => x.id === modalProdId);
   E.carrinho[modalProdId] = (E.carrinho[modalProdId] || 0) + modalQty;
+
+  // Salva cor se o campo estiver visível
+  const corWrap = document.getElementById('modal-cor-wrap');
+  if (corWrap.style.display !== 'none') {
+    if (!E.cores) E.cores = {};
+    E.cores[modalProdId] = document.getElementById('modal-cor-input').value.trim();
+  }
+
   showToast(`✔ ${p.nome.split(' - ')[0]} ×${E.carrinho[modalProdId]}`);
   atualizarUI();
   fecharModal();
@@ -1007,12 +1044,15 @@ function renderCartBody() {
   body.innerHTML = itens.map(([id, qty]) => {
     const p = PRODUTOS.find(x => x.id == id);
     const cls = catCls[p.cat] || '';
+    const cor = E.cores && E.cores[id] ? E.cores[id] : '';
+    const corTag = cor ? `<div class="ci-unit" style="color:#f5c542">🎨 ${cor}</div>` : '';
     return `
     <div class="cart-item">
       <div class="ci-dot ${cls}"></div>
       <div class="ci-info">
         <div class="ci-nome">${p.nome}</div>
         <div class="ci-unit">R$ ${brl(p.preco)} / un</div>
+        ${corTag}
       </div>
       <div class="qty-ctrl">
         <button class="qty-btn" onclick="alterarQty(${id},-1)">−</button>
@@ -1097,10 +1137,15 @@ function gerarResumoHTML() {
 
   const linhaItens = itens.map(([id, qty]) => {
     const p = PRODUTOS.find(x => x.id == id);
+    const cor = E.cores && E.cores[id] ? E.cores[id] : '';
+    const corLinha = cor ? `<div style="font-size:11px;color:#f5a500;margin-top:1px">🎨 Cor: ${cor}</div>` : '';
     return `
-    <div class="cv-item-row">
-      <span class="cv-item-nome">${p.nome.split(' - ')[0]} x${qty}</span>
-      <span class="cv-item-total">R$${brl(p.preco * qty)}</span>
+    <div class="cv-item-row" style="flex-direction:column;align-items:flex-start">
+      <div style="display:flex;justify-content:space-between;width:100%">
+        <span class="cv-item-nome">${p.nome.split(' - ')[0]} x${qty}</span>
+        <span class="cv-item-total">R$${brl(p.preco * qty)}</span>
+      </div>
+      ${corLinha}
     </div>`;
   }).join('');
 
@@ -1182,6 +1227,8 @@ function gerarTextoWhatsAppFormatado() {
     // alinha à direita
     const espacos = Math.max(1, 28 - linha.length - total_item.length);
     m += `${linha}${' '.repeat(espacos)}${total_item}\n`;
+    const cor = E.cores && E.cores[id] ? E.cores[id] : '';
+    if (cor) m += `  🎨 Cor: ${cor}\n`;
   });
 
   m += `${lin}\n`;
@@ -1321,9 +1368,11 @@ function gerarPDF() {
 
   const rows = itens.map(([id,qty]) => {
     const p = PRODUTOS.find(x => x.id == id);
+    const cor = E.cores && E.cores[id] ? E.cores[id] : '';
+    const corCell = cor ? `<br><span style="font-size:10px;color:#c07800">🎨 Cor: ${cor}</span>` : '';
     return `<tr>
       <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:12px">${qty}</td>
-      <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:12px">${p.nome}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:12px">${p.nome}${corCell}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:12px;text-align:right">R$ ${brl(p.preco)}</td>
       <td style="padding:8px 12px;border-bottom:1px solid #eee;font-size:12px;text-align:right;font-weight:600">R$ ${brl(p.preco * qty)}</td>
     </tr>`;
