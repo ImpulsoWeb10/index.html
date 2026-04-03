@@ -1,1 +1,1249 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Qualy Quimy — Pedidos v2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --surface2: #1c1c26;
+  --surface3: #252532;
+  --border: #2e2e40;
+  --border2: #3a3a50;
+  --accent: #f5c542;
+  --accent2: #f0a500;
+  --green: #00d084;
+  --red: #ff4757;
+  --blue: #5c7cfa;
+  --purple: #845ef7;
+  --text: #eeeef5;
+  --text2: #9898b0;
+  --text3: #5e5e78;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100dvh; overflow-x: hidden; }
+
+/* ══ TELA LOGIN ══ */
+#tela-inicio {
+  min-height: 100dvh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 28px 20px;
+  position: relative; overflow: hidden;
+}
+#tela-inicio::before {
+  content: '';
+  position: absolute; top: -30%; left: -20%;
+  width: 70vw; height: 70vw; max-width: 500px; max-height: 500px;
+  background: radial-gradient(circle, #f5c54218 0%, transparent 70%);
+  pointer-events: none;
+}
+#tela-inicio::after {
+  content: '';
+  position: absolute; bottom: -20%; right: -10%;
+  width: 50vw; height: 50vw; max-width: 400px; max-height: 400px;
+  background: radial-gradient(circle, #845ef712 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.brand {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 10px; margin-bottom: 40px;
+}
+.brand-icon {
+  width: 68px; height: 68px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 800; font-size: 28px;
+  color: #0a0a0f;
+  box-shadow: 0 0 40px #f5c54230, 0 8px 24px #0005;
+  position: relative;
+}
+.brand-icon::after {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: 21px;
+  background: linear-gradient(135deg, #fff3, transparent 60%);
+  pointer-events: none;
+}
+.brand-name {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 30px; letter-spacing: -0.5px;
+}
+.brand-name span { color: var(--accent); }
+.brand-sub { font-size: 12px; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
+
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px; padding: 28px 24px;
+  width: 100%; max-width: 400px;
+  position: relative;
+  box-shadow: 0 20px 60px #0007;
+}
+.login-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, #f5c54240, transparent);
+  border-radius: 20px 20px 0 0;
+}
+
+.lbl {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--text3); margin-bottom: 6px; display: block;
+}
+.inp {
+  width: 100%; background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 13px 15px;
+  color: var(--text); font-family: var(--font-body); font-size: 15px;
+  outline: none; transition: border-color .2s, box-shadow .2s; margin-bottom: 18px;
+}
+.inp:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #f5c54215; }
+.inp::placeholder { color: var(--text3); }
+
+.btn-main {
+  width: 100%; background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #0a0a0f; border: none; border-radius: var(--radius-sm);
+  padding: 15px; font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  cursor: pointer; letter-spacing: 0.5px; transition: opacity .2s, transform .1s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-main:active { transform: scale(.98); opacity: .9; }
+
+/* ══ APP PRINCIPAL ══ */
+#app { display: none; flex-direction: column; min-height: 100dvh; }
+
+/* HEADER */
+.hdr {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 12px 16px; display: flex; align-items: center;
+  justify-content: space-between; position: sticky; top: 0; z-index: 100;
+}
+.hdr-brand { font-family: var(--font-display); font-weight: 800; font-size: 17px; }
+.hdr-brand span { color: var(--accent); }
+.hdr-info { text-align: right; }
+.hdr-vend { font-size: 12px; font-weight: 600; color: var(--text); }
+.hdr-cli { font-size: 11px; color: var(--text3); margin-top: 1px; }
+
+/* ══ PROGRESS BAR ══ */
+.progress-wrap {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 16px 16px 14px; position: sticky; top: 57px; z-index: 90;
+}
+.steps-row {
+  display: flex; align-items: center; gap: 0;
+  max-width: 500px; margin: 0 auto;
+}
+.step-item {
+  display: flex; flex-direction: column; align-items: center;
+  flex: 1; position: relative; cursor: pointer;
+}
+.step-circle {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--surface2); border: 2px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: var(--text3);
+  font-family: var(--font-display);
+  transition: all .35s ease; position: relative; z-index: 2;
+}
+.step-item.done .step-circle {
+  background: var(--accent); border-color: var(--accent);
+  color: #0a0a0f; box-shadow: 0 0 14px #f5c54255;
+}
+.step-item.active .step-circle {
+  background: var(--surface); border-color: var(--accent);
+  color: var(--accent); box-shadow: 0 0 0 4px #f5c54218;
+  animation: pulse-step .8s ease infinite alternate;
+}
+@keyframes pulse-step {
+  from { box-shadow: 0 0 0 4px #f5c54218; }
+  to   { box-shadow: 0 0 0 7px #f5c54208; }
+}
+.step-label {
+  font-size: 9px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.8px; margin-top: 5px; color: var(--text3);
+  transition: color .3s; white-space: nowrap;
+}
+.step-item.done .step-label, .step-item.active .step-label { color: var(--accent); }
+
+.step-line {
+  flex: 1; height: 2px; background: var(--border2);
+  position: relative; margin: 0 -2px; margin-bottom: 22px;
+  transition: background .4s;
+}
+.step-line.done { background: var(--accent); }
+.step-line::after {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+  width: 0; background: var(--accent); transition: width .5s ease;
+}
+.step-line.done::after { width: 100%; }
+
+/* PROGRESSO INFO */
+.prog-info {
+  text-align: center; margin-top: 8px;
+  font-size: 11px; color: var(--text3);
+  font-family: var(--font-mono);
+}
+.prog-info strong { color: var(--accent); }
+
+/* ══ CONTEÚDO DAS ETAPAS ══ */
+.etapa-content {
+  flex: 1; padding: 16px 16px 120px;
+  max-width: 600px; margin: 0 auto; width: 100%;
+}
+.etapa-titulo {
+  font-family: var(--font-display); font-weight: 700; font-size: 18px;
+  margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
+}
+.etapa-sub { font-size: 12px; color: var(--text3); margin-bottom: 16px; }
+
+/* ETAPA 1 — PRODUTOS */
+.search-box {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 50px; padding: 10px 16px 10px 42px;
+  color: var(--text); font-family: var(--font-body); font-size: 14px;
+  outline: none; transition: border-color .2s; width: 100%; margin-bottom: 10px;
+}
+.search-box:focus { border-color: var(--accent); }
+.search-wrap { position: relative; }
+.search-ico { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; }
+
+.cats-row { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; margin-bottom: 12px; }
+.cats-row::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0; background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 50px; padding: 6px 13px; font-size: 11px; font-weight: 600;
+  cursor: pointer; transition: all .2s; white-space: nowrap; display: flex; align-items: center; gap: 5px;
+}
+.chip.active { background: var(--accent); border-color: var(--accent); color: #0a0a0f; }
+
+.prod-grid { display: flex; flex-direction: column; gap: 5px; }
+.prod-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  display: flex; align-items: center; gap: 11px;
+  cursor: pointer; transition: all .18s; position: relative; overflow: hidden;
+}
+.prod-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  transform: scaleY(0); transition: transform .2s; transform-origin: center;
+}
+.prod-card.in-cart { border-color: #f5c54228; background: #f5c54206; }
+.prod-card.in-cart::before { transform: scaleY(1); }
+.prod-card:active { transform: scale(.99); }
+
+.pd-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.pd-info { flex: 1; min-width: 0; }
+.pd-nome { font-size: 13px; font-weight: 600; line-height: 1.4; word-break: break-word; }
+.pd-cat { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.pd-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+.pd-preco { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--accent); }
+.pd-qty { background: var(--accent); color: #0a0a0f; border-radius: 5px; padding: 1px 7px; font-family: var(--font-display); font-weight: 700; font-size: 11px; display: none; }
+.pd-qty.show { display: block; }
+
+/* cores dot */
+.c-tintas   { background: #5c7cfa; }
+.c-massas   { background: #00d084; }
+.c-texturas { background: #f7a94a; }
+.c-selantes { background: #845ef7; }
+.c-compl    { background: #ff4757; }
+
+.c-tintas-bar::before   { background: #5c7cfa; }
+.c-massas-bar::before   { background: #00d084; }
+.c-texturas-bar::before { background: #f7a94a; }
+.c-selantes-bar::before { background: #845ef7; }
+.c-compl-bar::before    { background: #ff4757; }
+
+/* ══ ETAPA 2 — CARRINHO ══ */
+.cart-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.cart-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.cc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.cc-info { flex: 1; min-width: 0; }
+.cc-nome { font-size: 12px; font-weight: 600; line-height: 1.3; word-break: break-word; }
+.cc-unit { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.cc-ctrl {
+  display: flex; align-items: center;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.cc-btn { background: none; border: none; color: var(--text); font-size: 16px; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.cc-btn:active { background: var(--border); }
+.cc-num { font-family: var(--font-display); font-weight: 700; font-size: 13px; min-width: 26px; text-align: center; }
+.cc-total { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--accent); min-width: 58px; text-align: right; }
+
+.subtotal-box {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px;
+}
+.sub-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text2); margin-bottom: 8px; }
+.sub-row:last-child { margin-bottom: 0; }
+.sub-row.total { font-size: 16px; font-weight: 700; color: var(--text); padding-top: 10px; border-top: 1px solid var(--border); margin-top: 4px; }
+.sub-row.total span:last-child { color: var(--accent); font-family: var(--font-display); font-size: 20px; }
+.sub-row.desconto { color: var(--green); }
+
+.cart-vazio { text-align: center; padding: 48px 20px; color: var(--text3); }
+.cart-vazio-icon { font-size: 48px; margin-bottom: 12px; }
+.cart-vazio p { font-size: 14px; }
+
+/* ══ ETAPA 3 — PAGAMENTO ══ */
+.pgto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.pgto-opt {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: 18px 12px; text-align: center;
+  cursor: pointer; transition: all .2s;
+}
+.pgto-opt:active { transform: scale(.97); }
+.pgto-opt.sel { border-color: var(--accent); background: #f5c54210; }
+.pgto-ico { font-size: 24px; margin-bottom: 6px; }
+.pgto-lbl { font-size: 13px; font-weight: 700; font-family: var(--font-display); }
+.pgto-desc { font-size: 10px; color: var(--green); margin-top: 3px; font-weight: 600; }
+.pgto-desc.neu { color: var(--text3); }
+
+.parc-section { margin-bottom: 16px; }
+.parc-titulo { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text3); margin-bottom: 9px; }
+.parc-opt {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: 13px 15px;
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; transition: all .2s; margin-bottom: 8px;
+}
+.parc-opt.sel { border-color: var(--accent); background: #f5c54210; }
+.parc-opt-lbl { font-size: 13px; font-weight: 600; }
+.parc-opt-sub { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.parc-opt-val { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--accent); }
+
+/* ══ ETAPA 4 — RESUMO ══ */
+.resumo-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; margin-bottom: 16px;
+}
+.resumo-header {
+  background: linear-gradient(135deg, #f5c54218, #f5c54205);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 18px; display: flex; justify-content: space-between; align-items: center;
+}
+.resumo-num { font-family: var(--font-display); font-weight: 800; font-size: 22px; }
+.resumo-num span { color: var(--accent); }
+.resumo-meta { text-align: right; font-size: 11px; color: var(--text3); line-height: 1.7; }
+
+.resumo-section { padding: 14px 18px; border-bottom: 1px solid var(--border); }
+.resumo-section:last-child { border-bottom: none; }
+.resumo-sec-title { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text3); margin-bottom: 10px; }
+
+.resumo-pessoas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.resumo-pessoa { background: var(--surface2); border-radius: var(--radius-xs); padding: 10px 12px; }
+.resumo-pessoa .rp-role { font-size: 9px; color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+.resumo-pessoa .rp-nome { font-size: 13px; font-weight: 600; }
+
+.resumo-item-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed #ffffff08; }
+.resumo-item-row:last-child { border-bottom: none; }
+.ri-info { flex: 1; }
+.ri-nome { font-size: 12px; font-weight: 500; }
+.ri-qty { font-size: 10px; color: var(--text3); }
+.ri-val { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--accent); }
+
+.resumo-totais { }
+.rt-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); padding: 4px 0; }
+.rt-row.desconto { color: var(--green); }
+.rt-final {
+  display: flex; justify-content: space-between; align-items: center;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: var(--radius-xs); padding: 13px 16px; margin-top: 8px;
+}
+.rt-final-lbl { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: #0a0a0f; }
+.rt-final-val { font-family: var(--font-display); font-weight: 800; font-size: 22px; color: #0a0a0f; }
+
+.resumo-pgto-tag {
+  background: var(--surface2); border-radius: var(--radius-xs);
+  padding: 10px 14px; font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+}
+.resumo-pgto-tag span { color: var(--text3); font-size: 11px; font-weight: 400; }
+
+.resumo-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-whats {
+  background: #25d366; color: #fff; border: none; border-radius: var(--radius-sm);
+  padding: 14px; font-family: var(--font-display); font-weight: 700; font-size: 13px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-pdf {
+  background: var(--surface2); color: var(--text); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px;
+  font-family: var(--font-display); font-weight: 700; font-size: 13px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-novo {
+  width: 100%; background: none; border: 1.5px solid var(--border);
+  color: var(--text2); border-radius: var(--radius-sm); padding: 13px;
+  font-family: var(--font-display); font-weight: 700; font-size: 13px;
+  cursor: pointer; margin-top: 10px; transition: all .2s;
+}
+.btn-novo:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ══ BOTÃO PRÓXIMO (FIXO) ══ */
+.bottom-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--surface); border-top: 1px solid var(--border);
+  padding: 14px 16px 22px;
+  display: none; gap: 10px;
+  z-index: 200;
+}
+.bottom-bar.show { display: flex; }
+
+.btn-prev {
+  background: var(--surface2); border: 1.5px solid var(--border);
+  color: var(--text2); border-radius: var(--radius-sm); padding: 14px 20px;
+  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  cursor: pointer; flex-shrink: 0; transition: all .2s;
+}
+.btn-prev:active { transform: scale(.97); }
+.btn-next {
+  flex: 1; background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #0a0a0f; border: none; border-radius: var(--radius-sm); padding: 14px;
+  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity .2s, transform .1s;
+}
+.btn-next:active { transform: scale(.98); opacity: .9; }
+.btn-next:disabled { opacity: .4; cursor: not-allowed; }
+.btn-next-count {
+  background: #0a0a0f40; border-radius: 20px; padding: 2px 8px;
+  font-size: 12px; font-weight: 700;
+}
+
+/* MODAL PRODUTO */
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(0,0,0,.8);
+  backdrop-filter: blur(10px); z-index: 500;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.modal-bg.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 20px; width: 100%; max-width: 340px;
+  padding: 24px; position: relative;
+  transform: scale(.9) translateY(20px); transition: transform .3s;
+  box-shadow: 0 30px 80px #0009;
+}
+.modal-bg.open .modal-box { transform: scale(1) translateY(0); }
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  background: var(--surface2); border: none; color: var(--text3);
+  width: 30px; height: 30px; border-radius: 8px; cursor: pointer;
+  font-size: 14px; display: flex; align-items: center; justify-content: center;
+}
+.modal-nome { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 6px; line-height: 1.3; padding-right: 30px; }
+.modal-cat { font-size: 11px; color: var(--text3); margin-bottom: 20px; }
+.modal-qty-row { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 16px; }
+.modal-qty-btn {
+  background: var(--surface2); border: 1.5px solid var(--border);
+  color: var(--text); font-size: 20px; width: 46px; height: 46px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.modal-qty-btn.minus { border-radius: 10px 0 0 10px; }
+.modal-qty-btn.plus { border-radius: 0 10px 10px 0; }
+.modal-qty-btn:active { background: var(--border); }
+.modal-qty-inp {
+  width: 70px; height: 46px; background: var(--surface2);
+  border: 1.5px solid var(--border); border-left: none; border-right: none;
+  color: var(--text); text-align: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 18px;
+  outline: none;
+}
+.modal-preco { text-align: center; font-family: var(--font-display); font-weight: 800; font-size: 24px; color: var(--accent); margin-bottom: 18px; }
+.modal-add {
+  width: 100%; background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #0a0a0f; border: none; border-radius: var(--radius-sm); padding: 14px;
+  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  cursor: pointer; transition: opacity .2s;
+}
+.modal-add:active { opacity: .85; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 90px; left: 50%;
+  transform: translateX(-50%) translateY(40px);
+  background: var(--text); color: var(--bg);
+  border-radius: 50px; padding: 9px 18px; font-size: 12px; font-weight: 600;
+  z-index: 999; transition: transform .3s, opacity .3s;
+  white-space: nowrap; opacity: 0;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+#print-area { display: none; }
+@media print { body > *:not(#print-area) { display: none !important; } #print-area { display: block !important; } }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.prod-card { animation: fadeUp .2s ease both; }
+
+/* Badge flutuante de itens */
+.items-badge {
+  position: fixed; top: 68px; right: 16px;
+  background: var(--accent); color: #0a0a0f;
+  border-radius: 50px; padding: 5px 12px; font-family: var(--font-display);
+  font-weight: 700; font-size: 12px; z-index: 99;
+  display: none; align-items: center; gap: 5px;
+  box-shadow: 0 4px 16px #f5c54240;
+  cursor: pointer;
+}
+.items-badge.show { display: flex; }
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="tela-inicio">
+  <div class="brand">
+    <div class="brand-icon">Q</div>
+    <div class="brand-name">Qualy <span>Quimy</span></div>
+    <div class="brand-sub">Pedidos de Venda</div>
+  </div>
+  <div class="login-card">
+    <label class="lbl">Seu nome (vendedor)</label>
+    <input class="inp" id="inp-vend" placeholder="Ex: João Silva" />
+    <label class="lbl">Nome do cliente / loja</label>
+    <input class="inp" id="inp-cli" placeholder="Ex: Loja das Tintas" />
+    <label class="lbl">Data do pedido</label>
+    <input class="inp" id="inp-data" type="date" />
+    <button class="btn-main" onclick="iniciar()">
+      <span>Iniciar Pedido</span><span>→</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app">
+
+  <!-- Header -->
+  <div class="hdr">
+    <div class="hdr-brand">Qualy <span>Quimy</span></div>
+    <div class="hdr-info">
+      <div class="hdr-vend" id="hdr-vend">—</div>
+      <div class="hdr-cli" id="hdr-cli">—</div>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-wrap">
+    <div class="steps-row" id="steps-row">
+      <!-- gerado por JS -->
+    </div>
+    <div class="prog-info" id="prog-info"></div>
+  </div>
+
+  <!-- Conteúdo -->
+  <div class="etapa-content" id="etapa-content"></div>
+
+  <!-- Badge flutuante -->
+  <div class="items-badge" id="items-badge" onclick="irParaEtapa(1)">
+    🛒 <span id="badge-count">0</span> itens
+  </div>
+
+  <!-- Barra inferior -->
+  <div class="bottom-bar" id="bottom-bar">
+    <button class="btn-prev" id="btn-prev" onclick="etapaAnterior()">← Voltar</button>
+    <button class="btn-next" id="btn-next" onclick="proximaEtapa()">
+      <span id="btn-next-txt">Próximo</span>
+      <span class="btn-next-count" id="btn-next-count" style="display:none"></span>
+    </button>
+  </div>
+</div>
+
+<!-- Modal produto -->
+<div class="modal-bg" id="modal" onclick="fecharModalFora(event)">
+  <div class="modal-box" id="modal-box">
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+    <div class="modal-nome" id="modal-nome">—</div>
+    <div class="modal-cat" id="modal-cat">—</div>
+    <div class="modal-qty-row">
+      <button class="modal-qty-btn minus" onclick="mqAlter(-1)">−</button>
+      <input class="modal-qty-inp" id="mq-inp" type="number" min="1" value="1" oninput="mqInput(this)" onblur="mqBlur(this)" />
+      <button class="modal-qty-btn plus" onclick="mqAlter(1)">+</button>
+    </div>
+    <div class="modal-preco" id="modal-preco">R$ 0,00</div>
+    <button class="modal-add" onclick="modalAdicionar()">+ Adicionar ao Pedido</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="print-area"></div>
+
+<script>
+// ══ DADOS ══
+const CATS = [
+  { nome:'Tintas',       emoji:'🎨', cls:'c-tintas'   },
+  { nome:'Massas',       emoji:'🖌️', cls:'c-massas'   },
+  { nome:'Texturas',     emoji:'🪨', cls:'c-texturas' },
+  { nome:'Selantes',     emoji:'💧', cls:'c-selantes' },
+  { nome:'Complementos', emoji:'🔧', cls:'c-compl'    },
+];
+const catCls = { Tintas:'c-tintas', Massas:'c-massas', Texturas:'c-texturas', Selantes:'c-selantes', Complementos:'c-compl' };
+const catBar = { Tintas:'c-tintas-bar', Massas:'c-massas-bar', Texturas:'c-texturas-bar', Selantes:'c-selantes-bar', Complementos:'c-compl-bar' };
+
+const PRODUTOS = [
+  {id:1,  cat:'Tintas', nome:'Qualy Color Econômica - Pote 1L Branca',        preco:8.90},
+  {id:2,  cat:'Tintas', nome:'Qualy Color Econômica - Galão 3.6L Branca',     preco:26.90},
+  {id:3,  cat:'Tintas', nome:'Qualy Color Econômica - Galão 3.6L Na Cor',     preco:30.00},
+  {id:4,  cat:'Tintas', nome:'Qualy Color Econômica - Balde 18L Branca',      preco:76.90},
+  {id:5,  cat:'Tintas', nome:'Qualy Color Econômica - Balde 18L Na Cor',      preco:76.90},
+  {id:6,  cat:'Tintas', nome:'Qualy Color Econômica - Lata 18L Branca',       preco:79.90},
+  {id:7,  cat:'Tintas', nome:'Qualy Color Econômica - Lata 18L Na Cor',       preco:79.90},
+  {id:8,  cat:'Tintas', nome:'Latex Uso Interno - Lata 18L Branca',           preco:64.90},
+  {id:9,  cat:'Tintas', nome:'Latex Uso Interno - Balde 16L Branca',          preco:51.90},
+  {id:10, cat:'Tintas', nome:'Standard - Pote 1L Branca',                     preco:15.90},
+  {id:11, cat:'Tintas', nome:'Standard - Galão 3.6L',                         preco:34.90},
+  {id:12, cat:'Tintas', nome:'Standard - Galão 3.6L Na Cor',                  preco:37.90},
+  {id:13, cat:'Tintas', nome:'Standard - Lata 18L Branca',                    preco:124.90},
+  {id:14, cat:'Tintas', nome:'Premium - Galão 3.6L',                          preco:75.90},
+  {id:15, cat:'Tintas', nome:'Premium - Balde 16L Branca',                    preco:190.00},
+  {id:16, cat:'Tintas', nome:'Premium - Lata 18L Branca',                     preco:219.90},
+  {id:17, cat:'Tintas', nome:'Piso Standard - Galão 3.6L',                    preco:46.90},
+  {id:18, cat:'Tintas', nome:'Piso Standard - Balde 16L Branca',              preco:129.00},
+  {id:19, cat:'Tintas', nome:'Piso Standard - Lata 18L Branca',               preco:144.90},
+  {id:20, cat:'Tintas', nome:'Piso Premium - Galão 3.6L',                     preco:75.90},
+  {id:21, cat:'Tintas', nome:'Piso Premium - Balde 16L Branca',               preco:189.90},
+  {id:22, cat:'Tintas', nome:'Piso Premium - Lata 18L Branca',                preco:219.90},
+  {id:23, cat:'Tintas', nome:'Emborrachada Standart - Lata 18L',              preco:272.90},
+  {id:24, cat:'Tintas', nome:'Emborrachada Premium - Lata 18L',               preco:392.00},
+  {id:25, cat:'Massas', nome:'Massa Corrida PVA - Pote 1L',                   preco:6.90},
+  {id:26, cat:'Massas', nome:'Massa Corrida PVA - Galão 3.6L',                preco:14.99},
+  {id:27, cat:'Massas', nome:'Massa Corrida PVA - Lata 28kg',                 preco:58.90},
+  {id:28, cat:'Massas', nome:'Massa Corrida PVA - Barrica 25kg',              preco:33.90},
+  {id:29, cat:'Massas', nome:'Massa Acrílica - Pote 1L',                      preco:8.50},
+  {id:30, cat:'Massas', nome:'Massa Acrílica - Galão 3.6L',                   preco:18.99},
+  {id:31, cat:'Massas', nome:'Massa Acrílica - Lata 28kg',                    preco:72.90},
+  {id:32, cat:'Massas', nome:'Massa Acrílica - Barrica 25kg',                 preco:43.90},
+  {id:33, cat:'Texturas', nome:'Grafiato Malha 10 - Pote 1L',                 preco:8.50},
+  {id:34, cat:'Texturas', nome:'Grafiato Malha 10 - Galão 3.6L',              preco:18.99},
+  {id:35, cat:'Texturas', nome:'Grafiato Malha 10 - Barrica 25kg',            preco:43.90},
+  {id:36, cat:'Texturas', nome:'Grafiato Malha 10 - Barrica 50kg',            preco:83.99},
+  {id:37, cat:'Texturas', nome:'Grafiato Malha 10 - Lata 28kg',               preco:72.90},
+  {id:38, cat:'Texturas', nome:'Textura Lisa - Pote 1L',                      preco:8.50},
+  {id:39, cat:'Texturas', nome:'Textura Lisa - Galão 3.6L',                   preco:18.99},
+  {id:40, cat:'Texturas', nome:'Textura Lisa - Barrica 25kg',                 preco:43.90},
+  {id:41, cat:'Texturas', nome:'Textura Lisa - Barrica 50kg',                 preco:83.99},
+  {id:42, cat:'Texturas', nome:'Textura Lisa - Lata 28kg',                    preco:72.90},
+  {id:43, cat:'Selantes', nome:'Selador Acrílico - Pote 1L',                  preco:9.50},
+  {id:44, cat:'Selantes', nome:'Selador Acrílico - Galão 3.6L',               preco:19.90},
+  {id:45, cat:'Selantes', nome:'Selador Acrílico - Balde 16L',                preco:52.90},
+  {id:46, cat:'Selantes', nome:'Selador Acrílico - Lata 18L',                 preco:79.90},
+  {id:47, cat:'Selantes', nome:'Selador Gesso - Lata 18L',                    preco:110.00},
+  {id:48, cat:'Complementos', nome:'Primer - Galão 3.6L',                     preco:49.90},
+  {id:49, cat:'Complementos', nome:'Primer - Balde 16L',                      preco:138.00},
+  {id:50, cat:'Complementos', nome:'Primer - Lata 18L',                       preco:158.00},
+  {id:51, cat:'Complementos', nome:'Impermeabilizante - Galão 3.6L',          preco:49.90},
+  {id:52, cat:'Complementos', nome:'Impermeabilizante - Balde 16L',           preco:138.90},
+  {id:53, cat:'Complementos', nome:'Impermeabilizante - Lata 18L',            preco:149.90},
+  {id:54, cat:'Complementos', nome:'Liquibrilho - Lata 18L',                  preco:280.00},
+  {id:55, cat:'Complementos', nome:'Cimento Queimado - Balde 25kg',           preco:188.00},
+];
+
+// ══ ESTADO ══
+const S = {
+  vendedor:'', cliente:'', data:'',
+  carrinho:{},
+  catAtiva:'Todos',
+  pgto:null, parcelas:null, diasCheque:'',
+  etapa: 0,
+  numeroPedido: 1,
+};
+
+const ETAPAS = [
+  { id:0, label:'Produtos', icon:'🎨' },
+  { id:1, label:'Carrinho', icon:'🛒' },
+  { id:2, label:'Pagamento', icon:'💳' },
+  { id:3, label:'Resumo',   icon:'🧾' },
+];
+
+let mqProdId = null, mqQty = 1;
+
+// ══ INIT ══
+document.getElementById('inp-data').value = new Date().toISOString().split('T')[0];
+
+function iniciar() {
+  const v = document.getElementById('inp-vend').value.trim();
+  const c = document.getElementById('inp-cli').value.trim();
+  const d = document.getElementById('inp-data').value;
+  if (!v || !c) { toast('⚠️ Preencha vendedor e cliente!'); return; }
+  S.vendedor = v; S.cliente = c; S.data = d;
+  document.getElementById('hdr-vend').textContent = v;
+  document.getElementById('hdr-cli').textContent = '📍 ' + c;
+  document.getElementById('tela-inicio').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  irParaEtapa(0);
+}
+
+// ══ NAVEGAÇÃO ══
+function irParaEtapa(n) {
+  S.etapa = n;
+  renderProgress();
+  renderEtapa();
+  renderBottomBar();
+  window.scrollTo(0,0);
+}
+
+function proximaEtapa() {
+  if (S.etapa === 0) {
+    const itens = qtdItens();
+    if (itens === 0) { toast('⚠️ Adicione pelo menos 1 produto!'); return; }
+    irParaEtapa(1);
+  } else if (S.etapa === 1) {
+    irParaEtapa(2);
+  } else if (S.etapa === 2) {
+    const ok = S.pgto && (S.pgto==='Pix'||S.pgto==='Espécie'||((S.pgto==='Cartão'||S.pgto==='Cheque')&&S.parcelas));
+    if (!ok) { toast('⚠️ Selecione a forma de pagamento!'); return; }
+    irParaEtapa(3);
+  }
+}
+
+function etapaAnterior() {
+  if (S.etapa > 0) irParaEtapa(S.etapa - 1);
+}
+
+// ══ PROGRESS ══
+function renderProgress() {
+  const row = document.getElementById('steps-row');
+  let html = '';
+  ETAPAS.forEach((e, i) => {
+    const done = i < S.etapa;
+    const active = i === S.etapa;
+    const cls = done ? 'done' : active ? 'active' : '';
+    html += `<div class="step-item ${cls}" onclick="irParaEtapa(${i < S.etapa ? i : ''})">
+      <div class="step-circle">${done ? '✓' : e.icon}</div>
+      <div class="step-label">${e.label}</div>
+    </div>`;
+    if (i < ETAPAS.length - 1) {
+      html += `<div class="step-line ${done ? 'done' : ''}"></div>`;
+    }
+  });
+  row.innerHTML = html;
+
+  const info = document.getElementById('prog-info');
+  const itens = qtdItens();
+  const sub = calcSubtotal();
+  if (itens > 0) {
+    info.innerHTML = `<strong>${itens}</strong> ${itens===1?'item':'itens'} · <strong>R$ ${brl(sub)}</strong>`;
+  } else {
+    info.innerHTML = `Etapa <strong>${S.etapa+1}</strong> de <strong>${ETAPAS.length}</strong>`;
+  }
+}
+
+// ══ RENDERIZA ETAPA ══
+function renderEtapa() {
+  const c = document.getElementById('etapa-content');
+  const badge = document.getElementById('items-badge');
+  const count = qtdItens();
+  document.getElementById('badge-count').textContent = count;
+  if (count > 0 && S.etapa === 0) {
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+  }
+
+  if (S.etapa === 0) renderEtapa0(c);
+  if (S.etapa === 1) renderEtapa1(c);
+  if (S.etapa === 2) renderEtapa2(c);
+  if (S.etapa === 3) renderEtapa3(c);
+}
+
+function renderBottomBar() {
+  const bar = document.getElementById('bottom-bar');
+  const prev = document.getElementById('btn-prev');
+  const next = document.getElementById('btn-next');
+  const nextTxt = document.getElementById('btn-next-txt');
+  const nextCount = document.getElementById('btn-next-count');
+
+  if (S.etapa === 3) { bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  prev.style.display = S.etapa === 0 ? 'none' : 'block';
+
+  const itens = qtdItens();
+  if (S.etapa === 0) {
+    nextTxt.textContent = 'Ver Carrinho';
+    if (itens > 0) { nextCount.style.display='inline'; nextCount.textContent = itens + ' itens'; }
+    else { nextCount.style.display = 'none'; }
+  } else if (S.etapa === 1) {
+    nextTxt.textContent = 'Ir para Pagamento';
+    nextCount.style.display = 'none';
+  } else if (S.etapa === 2) {
+    nextTxt.textContent = 'Ver Resumo';
+    nextCount.style.display = 'none';
+  }
+}
+
+// ══ ETAPA 0 — PRODUTOS ══
+function renderEtapa0(c) {
+  const busca = document.querySelector('.search-box')?.value.toLowerCase() || '';
+  let prods = PRODUTOS;
+  if (S.catAtiva !== 'Todos') prods = prods.filter(p => p.cat === S.catAtiva);
+  if (busca) prods = prods.filter(p => p.nome.toLowerCase().includes(busca));
+
+  const chips = [{ nome:'Todos', emoji:'⚡' }, ...CATS];
+  const chipsHtml = chips.map(c => `
+    <div class="chip ${c.nome===S.catAtiva?'active':''}" onclick="setCat('${c.nome}')">
+      ${c.emoji} ${c.nome}
+    </div>`).join('');
+
+  const prodsHtml = prods.map((p, i) => {
+    const qty = S.carrinho[p.id] || 0;
+    const dotCls = catCls[p.cat] || '';
+    const barCls = catBar[p.cat] || '';
+    return `<div class="prod-card ${qty>0?'in-cart':''} ${barCls}" onclick="abrirModal(${p.id})" style="animation-delay:${i*15}ms">
+      <div class="pd-dot ${dotCls}"></div>
+      <div class="pd-info">
+        <div class="pd-nome">${p.nome}</div>
+        <div class="pd-cat">${p.cat}</div>
+      </div>
+      <div class="pd-right">
+        <div class="pd-preco">R$ ${brl(p.preco)}</div>
+        <div class="pd-qty ${qty>0?'show':''}">×${qty}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  c.innerHTML = `
+    <div class="etapa-titulo">🎨 Selecione os Produtos</div>
+    <div class="etapa-sub">Toque no produto para definir a quantidade</div>
+    <div class="search-wrap" style="margin-bottom:10px">
+      <span class="search-ico">🔍</span>
+      <input class="search-box" placeholder="Buscar produto..." oninput="renderEtapa0(document.getElementById('etapa-content'))" />
+    </div>
+    <div class="cats-row">${chipsHtml}</div>
+    <div class="prod-grid">${prodsHtml || '<div style="text-align:center;padding:32px;color:var(--text3)">Nenhum produto encontrado</div>'}</div>
+  `;
+}
+
+function setCat(cat) {
+  S.catAtiva = cat;
+  renderEtapa(0);
+  renderEtapa0(document.getElementById('etapa-content'));
+  renderBottomBar();
+  renderProgress();
+}
+
+// ══ ETAPA 1 — CARRINHO ══
+function renderEtapa1(c) {
+  const itens = Object.entries(S.carrinho).filter(([,q]) => q > 0);
+  if (itens.length === 0) {
+    c.innerHTML = `
+      <div class="etapa-titulo">🛒 Carrinho</div>
+      <div class="cart-vazio">
+        <div class="cart-vazio-icon">🛒</div>
+        <p>Nenhum produto adicionado ainda.</p>
+      </div>`;
+    return;
+  }
+  const sub = calcSubtotal();
+  const rows = itens.map(([id, qty]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    const dotCls = catCls[p.cat] || '';
+    return `<div class="cart-card">
+      <div class="cc-dot ${dotCls}"></div>
+      <div class="cc-info">
+        <div class="cc-nome">${p.nome}</div>
+        <div class="cc-unit">R$ ${brl(p.preco)} / un</div>
+      </div>
+      <div class="cc-ctrl">
+        <button class="cc-btn" onclick="alterarQty(${id},-1)">−</button>
+        <div class="cc-num">${qty}</div>
+        <button class="cc-btn" onclick="alterarQty(${id},1)">+</button>
+      </div>
+      <div class="cc-total">R$ ${brl(p.preco*qty)}</div>
+    </div>`;
+  }).join('');
+
+  c.innerHTML = `
+    <div class="etapa-titulo">🛒 Revise o Carrinho</div>
+    <div class="etapa-sub">${itens.length} produto${itens.length>1?'s':''} selecionado${itens.length>1?'s':''}</div>
+    <div class="cart-list">${rows}</div>
+    <div class="subtotal-box">
+      <div class="sub-row"><span>Subtotal</span><span>R$ ${brl(sub)}</span></div>
+      <div class="sub-row" style="color:var(--text3);font-size:11px"><span>Desconto de 3% disponível no Pix ou Espécie</span></div>
+      <div class="sub-row total"><span>Total</span><span>R$ ${brl(sub)}</span></div>
+    </div>
+  `;
+}
+
+function alterarQty(id, delta) {
+  const novo = (S.carrinho[id] || 0) + delta;
+  if (novo <= 0) { delete S.carrinho[id]; }
+  else { S.carrinho[id] = novo; }
+  renderEtapa1(document.getElementById('etapa-content'));
+  renderBottomBar();
+  renderProgress();
+  const badge = document.getElementById('items-badge');
+  document.getElementById('badge-count').textContent = qtdItens();
+}
+
+// ══ ETAPA 2 — PAGAMENTO ══
+function renderEtapa2(c) {
+  const sub = calcSubtotal();
+  const pgtos = [
+    { id:'Pix',     ico:'📲', lbl:'PIX',     desc:'-3% desconto', neu:false },
+    { id:'Espécie', ico:'💵', lbl:'Espécie', desc:'-3% desconto', neu:false },
+    { id:'Cartão',  ico:'💳', lbl:'Cartão',  desc:'Sem desconto', neu:true  },
+    { id:'Cheque',  ico:'📋', lbl:'Cheque',  desc:'Sem desconto', neu:true  },
+  ];
+
+  const pgtoHtml = pgtos.map(p => `
+    <div class="pgto-opt ${S.pgto===p.id?'sel':''}" onclick="selecionarPgto('${p.id}')">
+      <div class="pgto-ico">${p.ico}</div>
+      <div class="pgto-lbl">${p.lbl}</div>
+      <div class="pgto-desc ${p.neu?'neu':''}">${p.desc}</div>
+    </div>`).join('');
+
+  let parcHtml = '';
+  if (S.pgto === 'Cartão') {
+    const opts = sub <= 500 ? [1,2] : sub <= 1000 ? [1,2,3] : [1,2,3,4,5,6];
+    parcHtml = `<div class="parc-section">
+      <div class="parc-titulo">Parcelamento — Cartão</div>
+      ${opts.map(n => `
+        <div class="parc-opt ${S.parcelas===n?'sel':''}" onclick="selecionarParc(${n},'')">
+          <div>
+            <div class="parc-opt-lbl">${n===1?'À vista':`${n}x sem juros`}</div>
+          </div>
+          <div class="parc-opt-val">R$ ${brl(sub/n)}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+  if (S.pgto === 'Cheque') {
+    parcHtml = `<div class="parc-section">
+      <div class="parc-titulo">Parcelamento — Cheque</div>
+      ${sub <= 1000
+        ? `<div class="parc-opt ${S.parcelas===2?'sel':''}" onclick="selecionarParc(2,'30/45 dias')">
+            <div><div class="parc-opt-lbl">2x</div><div class="parc-opt-sub">30/45 dias</div></div>
+            <div class="parc-opt-val">R$ ${brl(sub/2)}</div>
+           </div>`
+        : `<div class="parc-opt ${S.parcelas===3?'sel':''}" onclick="selecionarParc(3,'30/45/60 dias')">
+            <div><div class="parc-opt-lbl">3x</div><div class="parc-opt-sub">30/45/60 dias</div></div>
+            <div class="parc-opt-val">R$ ${brl(sub/3)}</div>
+           </div>`}
+    </div>`;
+  }
+
+  c.innerHTML = `
+    <div class="etapa-titulo">💳 Forma de Pagamento</div>
+    <div class="etapa-sub">Selecione como o cliente vai pagar</div>
+    <div class="pgto-grid">${pgtoHtml}</div>
+    ${parcHtml}
+  `;
+}
+
+function selecionarPgto(tipo) {
+  S.pgto = tipo; S.parcelas = null; S.diasCheque = '';
+  renderEtapa2(document.getElementById('etapa-content'));
+}
+function selecionarParc(n, dias) {
+  S.parcelas = n; S.diasCheque = dias;
+  renderEtapa2(document.getElementById('etapa-content'));
+}
+
+// ══ ETAPA 3 — RESUMO ══
+function renderEtapa3(c) {
+  const itens = Object.entries(S.carrinho).filter(([,q]) => q > 0);
+  const sub = calcSubtotal();
+  const total = calcTotal();
+  const temDesc = S.pgto === 'Pix' || S.pgto === 'Espécie';
+  const dataFmt = S.data ? S.data.split('-').reverse().join('/') : new Date().toLocaleDateString('pt-BR');
+  const hora = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  const num = String(S.numeroPedido).padStart(6,'0');
+
+  const itensHtml = itens.map(([id,qty]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    return `<div class="resumo-item-row">
+      <div class="ri-info">
+        <div class="ri-nome">${p.nome}</div>
+        <div class="ri-qty">Qtd: ${qty} × R$ ${brl(p.preco)}</div>
+      </div>
+      <div class="ri-val">R$ ${brl(p.preco*qty)}</div>
+    </div>`;
+  }).join('');
+
+  c.innerHTML = `
+    <div class="etapa-titulo" style="margin-bottom:14px">🧾 Resumo do Pedido</div>
+
+    <div class="resumo-card">
+      <div class="resumo-header">
+        <div class="resumo-num">Pedido <span>#${num}</span></div>
+        <div class="resumo-meta">${dataFmt} · ${hora}<br>Qualy Quimy</div>
+      </div>
+
+      <div class="resumo-section">
+        <div class="resumo-sec-title">Partes</div>
+        <div class="resumo-pessoas">
+          <div class="resumo-pessoa">
+            <div class="rp-role">Vendedor</div>
+            <div class="rp-nome">${S.vendedor}</div>
+          </div>
+          <div class="resumo-pessoa">
+            <div class="rp-role">Cliente</div>
+            <div class="rp-nome">${S.cliente}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resumo-section">
+        <div class="resumo-sec-title">${itens.length} Produto${itens.length>1?'s':''}</div>
+        ${itensHtml}
+      </div>
+
+      <div class="resumo-section">
+        <div class="resumo-sec-title">Valores</div>
+        <div class="resumo-totais">
+          <div class="rt-row"><span>Subtotal</span><span>R$ ${brl(sub)}</span></div>
+          ${temDesc ? `<div class="rt-row desconto"><span>Desconto (3%)</span><span>− R$ ${brl(sub*0.03)}</span></div>` : ''}
+          <div class="rt-final">
+            <div class="rt-final-lbl">TOTAL FINAL</div>
+            <div class="rt-final-val">R$ ${brl(total)}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resumo-section">
+        <div class="resumo-sec-title">Pagamento</div>
+        <div class="resumo-pgto-tag">${pgtoIcon()} <span>Forma:</span> ${formatarPgto()}</div>
+      </div>
+    </div>
+
+    <div class="resumo-actions">
+      <button class="btn-whats" onclick="enviarWhats()">📲 WhatsApp</button>
+      <button class="btn-pdf" onclick="gerarPDF()">🖨️ PDF</button>
+    </div>
+    <button class="btn-novo" onclick="novoPedido()">+ Novo Pedido</button>
+  `;
+}
+
+function pgtoIcon() {
+  if (S.pgto==='Pix') return '📲';
+  if (S.pgto==='Espécie') return '💵';
+  if (S.pgto==='Cartão') return '💳';
+  if (S.pgto==='Cheque') return '📋';
+  return '';
+}
+
+function novoPedido() {
+  if (!confirm('Iniciar novo pedido? O pedido atual será encerrado.')) return;
+  S.numeroPedido++;
+  S.carrinho = {}; S.pgto = null; S.parcelas = null; S.diasCheque = '';
+  S.catAtiva = 'Todos';
+  document.getElementById('inp-vend').value = '';
+  document.getElementById('inp-cli').value = '';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('tela-inicio').style.display = 'flex';
+}
+
+// ══ MODAL ══
+function abrirModal(id) {
+  const p = PRODUTOS.find(x => x.id === id);
+  mqProdId = id;
+  mqQty = S.carrinho[id] || 1;
+  document.getElementById('modal-nome').textContent = p.nome;
+  document.getElementById('modal-cat').textContent = p.cat;
+  document.getElementById('mq-inp').value = mqQty;
+  atualizarModalPreco(p);
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function fecharModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => { mqProdId = null; }, 350);
+}
+function fecharModalFora(e) { if (e.target === document.getElementById('modal')) fecharModal(); }
+function mqAlter(d) {
+  const n = mqQty + d;
+  if (n < 1) return;
+  mqQty = n;
+  document.getElementById('mq-inp').value = mqQty;
+  atualizarModalPreco(PRODUTOS.find(x => x.id === mqProdId));
+}
+function mqInput(inp) {
+  const v = parseInt(inp.value, 10);
+  if (!isNaN(v) && v >= 1) { mqQty = v; atualizarModalPreco(PRODUTOS.find(x => x.id === mqProdId)); }
+}
+function mqBlur(inp) {
+  const v = parseInt(inp.value, 10);
+  if (isNaN(v) || v < 1) { mqQty = 1; inp.value = 1; atualizarModalPreco(PRODUTOS.find(x => x.id === mqProdId)); }
+}
+function atualizarModalPreco(p) {
+  document.getElementById('modal-preco').textContent = 'R$ ' + brl(p.preco * mqQty);
+}
+function modalAdicionar() {
+  if (!mqProdId) return;
+  const p = PRODUTOS.find(x => x.id === mqProdId);
+  S.carrinho[mqProdId] = (S.carrinho[mqProdId] || 0) + mqQty;
+  toast(`✔ ${p.nome.split(' - ')[0]} ×${S.carrinho[mqProdId]}`);
+  fecharModal();
+  renderEtapa0(document.getElementById('etapa-content'));
+  renderBottomBar();
+  renderProgress();
+}
+
+// ══ CÁLCULOS ══
+function calcSubtotal() {
+  return Object.entries(S.carrinho).reduce((acc, [id,qty]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    return acc + (p ? p.preco * qty : 0);
+  }, 0);
+}
+function calcTotal() {
+  const sub = calcSubtotal();
+  if (S.pgto === 'Pix' || S.pgto === 'Espécie') return sub * 0.97;
+  return sub;
+}
+function qtdItens() {
+  return Object.values(S.carrinho).reduce((a,b) => a+b, 0);
+}
+function formatarPgto() {
+  const sub = calcSubtotal();
+  if (S.pgto==='Pix')     return 'PIX (−3%)';
+  if (S.pgto==='Espécie') return 'DINHEIRO EM ESPÉCIE (−3%)';
+  if (S.pgto==='Cartão' && S.parcelas) return `${S.parcelas}× CARTÃO (R$ ${brl(sub/S.parcelas)}/parc.)`;
+  if (S.pgto==='Cheque' && S.parcelas) return `${S.parcelas}× CHEQUE ${S.diasCheque} (R$ ${brl(sub/S.parcelas)}/parc.)`;
+  return S.pgto || '—';
+}
+
+// ══ WHATSAPP ══
+function enviarWhats() {
+  const itens = Object.entries(S.carrinho).filter(([,q]) => q > 0);
+  const sub = calcSubtotal();
+  const total = calcTotal();
+  const temDesc = S.pgto==='Pix'||S.pgto==='Espécie';
+  const dataFmt = S.data ? S.data.split('-').reverse().join('/') : new Date().toLocaleDateString('pt-BR');
+  const num = String(S.numeroPedido).padStart(6,'0');
+
+  let txt = `🟡 *QUALY QUIMY — PEDIDO #${num}*\n`;
+  txt += `📅 ${dataFmt}\n`;
+  txt += `👤 Vendedor: ${S.vendedor}\n`;
+  txt += `🏪 Cliente: ${S.cliente}\n\n`;
+  txt += `━━━━━━━━━━━━━━━━━━\n`;
+  itens.forEach(([id,qty]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    txt += `• ${qty}x ${p.nome}\n  R$ ${brl(p.preco*qty)}\n`;
+  });
+  txt += `━━━━━━━━━━━━━━━━━━\n`;
+  txt += `Subtotal: R$ ${brl(sub)}\n`;
+  if (temDesc) txt += `Desconto (3%): −R$ ${brl(sub*0.03)}\n`;
+  txt += `*TOTAL: R$ ${brl(total)}*\n\n`;
+  txt += `💳 Pagamento: ${formatarPgto()}\n`;
+  txt += `\n_Pedido gerado pelo app Qualy Quimy_`;
+
+  window.open(`https://api.whatsapp.com/send?phone=5511954950044&text=${encodeURIComponent(txt)}`);
+}
+
+// ══ PDF ══
+function gerarPDF() {
+  const itens = Object.entries(S.carrinho).filter(([,q]) => q > 0);
+  const sub = calcSubtotal();
+  const total = calcTotal();
+  const temDesc = S.pgto==='Pix'||S.pgto==='Espécie';
+  const dataFmt = S.data ? S.data.split('-').reverse().join('/') : new Date().toLocaleDateString('pt-BR');
+  const hora = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  const num = String(S.numeroPedido).padStart(6,'0');
+
+  const rows = itens.map(([id,qty]) => {
+    const p = PRODUTOS.find(x => x.id == id);
+    return `<tr>
+      <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:12px">${qty}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:12px">${p.nome}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:12px;text-align:right">R$ ${brl(p.preco)}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:12px;text-align:right;font-weight:700">R$ ${brl(p.preco*qty)}</td>
+    </tr>`;
+  }).join('');
+
+  const el = document.getElementById('print-area');
+  el.innerHTML = `
+  <div style="font-family:sans-serif;padding:36px 40px;max-width:700px;margin:0 auto;background:#fff;color:#111">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;border-bottom:3px solid #111;margin-bottom:24px">
+      <div>
+        <h1 style="font-size:26px;font-weight:900;margin:0;letter-spacing:-0.5px">QUALY QUIMY</h1>
+        <p style="font-size:11px;color:#888;margin:4px 0 0;letter-spacing:2px;text-transform:uppercase">Pedido de Venda</p>
+      </div>
+      <div style="text-align:right">
+        <p style="font-size:22px;font-weight:800;margin:0">Nº ${num}</p>
+        <p style="font-size:11px;color:#888;margin:3px 0 0">${dataFmt} — ${hora}</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
+      <div style="background:#f8f8f8;border-radius:8px;padding:14px 16px">
+        <p style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#aaa;margin:0 0 4px">Vendedor</p>
+        <p style="font-size:14px;font-weight:700;margin:0">${S.vendedor}</p>
+      </div>
+      <div style="background:#f8f8f8;border-radius:8px;padding:14px 16px">
+        <p style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#aaa;margin:0 0 4px">Cliente</p>
+        <p style="font-size:14px;font-weight:700;margin:0">${S.cliente}</p>
+      </div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
+      <thead>
+        <tr style="background:#111;color:#fff">
+          <th style="padding:10px 12px;text-align:left;font-size:11px;letter-spacing:0.5px">QTD</th>
+          <th style="padding:10px 12px;text-align:left;font-size:11px;letter-spacing:0.5px">PRODUTO</th>
+          <th style="padding:10px 12px;text-align:right;font-size:11px;letter-spacing:0.5px">UNIT.</th>
+          <th style="padding:10px 12px;text-align:right;font-size:11px;letter-spacing:0.5px">TOTAL</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:20px">
+      <div style="min-width:260px">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:#666;border-top:1px solid #eee">
+          <span>Subtotal</span><span>R$ ${brl(sub)}</span>
+        </div>
+        ${temDesc ? `<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;color:#c0392b;border-top:1px solid #eee">
+          <span>Desconto (3%)</span><span>- R$ ${brl(sub*0.03)}</span>
+        </div>` : ''}
+        <div style="display:flex;justify-content:space-between;padding:12px 16px;margin-top:6px;background:#111;color:#fff;border-radius:8px">
+          <span style="font-size:13px;font-weight:700">TOTAL FINAL</span>
+          <span style="font-size:18px;font-weight:900">R$ ${brl(total)}</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:#f8f8f8;border-radius:8px;padding:12px 16px;margin-bottom:24px;font-size:12px">
+      <span style="color:#aaa;font-weight:700;text-transform:uppercase;letter-spacing:0.5px">Forma de Pagamento: </span>
+      <span style="font-weight:700">${formatarPgto()}</span>
+    </div>
+    <p style="font-size:10px;color:#ccc;text-align:center;border-top:1px solid #eee;padding-top:14px">
+      Qualy Quimy — Pedido ${num} · Gerado em ${dataFmt}
+    </p>
+  </div>`;
+
+  el.style.display = 'block';
+  html2pdf().from(el).set({
+    margin: 8,
+    filename: `Pedido_QualyQuimy_${num}_${S.cliente.replace(/\s+/g,'_')}.pdf`,
+    html2canvas: { scale: 2, windowWidth: 800 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).save().then(() => { el.style.display = 'none'; });
+}
+
+// ══ UTILS ══
+function brl(v) { return v.toFixed(2).replace('.', ','); }
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
