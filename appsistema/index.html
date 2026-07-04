@@ -2,830 +2,175 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Painel Administrativo V2 - Tintas Qualy Quimy</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias de Pintura e Acabamento</title>
     <style>
-        /* ==========================================================================
-           DESIGN SYSTEM (Stripe / Vercel Premium Light Mode)
-           ========================================================================== */
         :root {
-            --bg: #FAFAFA;
-            --surface: #FFFFFF;
-            --border: #EEEEEE;
-            --border-focus: #0F52BA;
-            --text: #111111;
-            --text-muted: #666666;
-            --primary: #0F52BA;
-            --primary-light: #F0F6FF;
-            --success: #00B159;
-            --success-light: #E6F7ED;
-            --danger: #DF1414;
-            --danger-light: #FCE8E8;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.02);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
-            --shadow-lg: 0 20px 40px rgba(0,0,0,0.06);
-            --radius: 12px;
-            --radius-sm: 8px;
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary-color: #2563eb;
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; }
-        body { background-color: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
 
-        .admin-container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
-        
-        .header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-        .brand h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-        .brand p { font-size: 13px; color: var(--text-muted); font-weight: 500; }
-        
-        /* Navigation Tabs */
-        .nav-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
-        .tab-btn { background: none; border: none; padding: 12px 16px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: var(--transition); }
-        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .menu-container {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
 
-        /* KPI Dashboard Grid */
-        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; }
-        @media(min-width: 768px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
-        
-        .kpi-card { background: var(--surface); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
-        .kpi-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-        .kpi-value { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
 
-        /* Controls Row */
-        .controls-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-        @media(min-width: 768px) { .controls-row { flex-direction: row; align-items: center; justify-content: space-between; } }
-        
-        .search-wrapper { position: relative; flex: 1; }
-        .search-wrapper .material-symbols-rounded { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 20px; }
-        .search-input { width: 100%; padding: 12px 12px 12px 44px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); font-size: 14px; outline: none; transition: var(--transition); }
-        .search-input:focus { border-color: var(--border-focus); }
-        
-        .filter-group { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; white-space: nowrap; }
-        .select-custom { padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); font-size: 14px; font-weight: 500; outline: none; cursor: pointer; color: var(--text-muted); }
+        /* Estrutura das Categorias */
+        .categoria-lista {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-        /* Items Container Grid */
-        .items-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-        @media(min-width: 768px) { .items-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media(min-width: 1024px) { .items-grid { grid-template-columns: repeat(3, 1fr); } }
+        .categoria-item {
+            margin-bottom: 8px;
+        }
 
-        /* Product Card Rendering */
-        .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-sm); transition: var(--transition); }
-        .product-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-        
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 6px; flex-wrap: wrap; }
-        .tag-group { display: flex; gap: 6px; flex-wrap: wrap; }
-        .category-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; background: var(--primary-light); color: var(--primary); padding: 4px 8px; border-radius: 4px; }
-        .subcategory-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; background: #EEEEEE; color: #444444; padding: 4px 8px; border-radius: 4px; }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; }
-        .status-dot.active { background: var(--success); }
-        .status-dot.inactive { background: var(--danger); }
-        
-        .product-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
-        .product-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; display: flex; gap: 12px; }
-        
-        .price-structure { background: var(--bg); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .price-block { display: flex; flex-direction: column; }
-        .price-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
-        .price-value { font-size: 15px; font-weight: 700; }
-        
-        .card-actions { display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--border); padding-top: 14px; }
-        .btn-icon { background: none; border: none; width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: var(--transition); border: 1px solid var(--border); }
-        .btn-icon:hover { background: var(--bg); color: var(--text); }
-        .btn-icon.delete:hover { background: var(--danger-light); color: var(--danger); }
+        /* Estilo dos botões/links principais */
+        details {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
 
-        /* Category System Layout styling */
-        .category-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 16px; box-shadow: var(--shadow-sm); }
-        .category-main { display: flex; align-items: center; justify-content: space-between; width: 100%; }
-        .category-info { display: flex; align-items: center; gap: 14px; }
-        .category-avatar { width: 44px; height: 44px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; }
-        
-        .subcategories-preview-wrapper { background: var(--bg); border-radius: var(--radius-sm); padding: 12px; border: 1px solid var(--border); }
-        .subcategories-title-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; display: block; }
-        .subcategories-pill-list { display: flex; flex-wrap: wrap; gap: 6px; }
-        .subcat-pill { font-size: 12px; background: var(--surface); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+        details[open] {
+            border-color: var(--primary-color);
+        }
 
-        /* Footer IO Dock */
-        .data-hub-bar { background: var(--surface); border-top: 1px solid var(--border); padding: 16px; position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: center; gap: 8px; overflow-x: auto; z-index: 900; }
-        .btn-secondary { background: var(--surface); border: 1px solid var(--border); padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: var(--transition); }
-        .btn-secondary:hover { background: var(--bg); }
+        summary {
+            padding: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-        /* Modals Structure Layout layers */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        
-        .modal-wrapper { background: var(--surface); width: 100%; max-width: 540px; border-radius: var(--radius) var(--radius) 0 0; padding: 24px; max-height: 85vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.2s ease; }
-        .modal-overlay.active .modal-wrapper { transform: translateY(0); }
-        @media(min-width: 768px) { .modal-overlay { align-items: center; } .modal-wrapper { border-radius: var(--radius); transform: scale(0.95); } .modal-overlay.active .modal-wrapper { transform: scale(1); } }
-        
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .modal-header h3 { font-size: 18px; font-weight: 700; }
-        
-        .form-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        
-        .form-label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
-        .form-input, .form-select, .form-textarea { width: 100%; padding: 11px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); font-size: 14px; outline: none; transition: var(--transition); }
-        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--border-focus); background: var(--surface); }
-        .form-textarea { resize: vertical; min-height: 60px; }
-        
-        .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px; }
-        
-        /* Floating Action Buttons System (FAB) */
-        .fab-btn { position: fixed; bottom: 84px; right: 20px; background: var(--primary); color: white; border: none; padding: 14px 24px; border-radius: 30px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: var(--shadow-lg); z-index: 850; transition: var(--transition); }
-        .fab-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        
-        .btn-submit { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; border: none; }
-        .btn-inline-add { display: inline-flex; align-items: center; background: var(--primary-light); color: var(--primary); border: none; padding: 8px 12px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; gap: 4px; margin-top: 4px; width: fit-content; }
+        summary::-webkit-details-marker {
+            display: none;
+        }
 
-        @media print {
-            body * { visibility: hidden; }
-            #print-area, #print-area * { visibility: visible; }
-            #print-area { position: absolute; left: 0; top: 0; width: 100%; }
-            .no-print { display: none !important; }
+        summary::after {
+            content: "➔";
+            font-size: 0.8rem;
+            transition: transform 0.2s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(90deg);
+        }
+
+        /* Estilo para item único direto (sem subcategoria) */
+        .item-direto {
+            display: block;
+            padding: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+
+        .item-direto:hover, summary:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Subcategorias interna */
+        .subcategoria-lista {
+            list-style: none;
+            padding: 0 12px 12px 24px;
+            margin: 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .subcategoria-lista li {
+            padding: 8px 0;
+        }
+
+        .subcategoria-lista a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .subcategoria-lista a:hover {
+            color: var(--primary-color);
         }
     </style>
 </head>
 <body>
 
-    <div class="admin-container">
-        <!-- Header Panel -->
-        <header class="header-panel">
-            <div class="brand">
-                <h1>Painel Administrativo V2</h1>
-                <p>Tintas Qualy Quimy — Controle Global com Mapeamento de Subcategorias</p>
-            </div>
-        </header>
+<div class="menu-container">
+    <h2>Categorias</h2>
+    
+    <ul class="categoria-lista">
+        
+        <!-- Categoria 1: Tintas (Com Subcategorias) -->
+        <li class="categoria-item">
+            <details>
+                <summary>Tintas</summary>
+                <ul class="subcategoria-lista">
+                    <li><a href="#tintas-acrilicas">Tintas Acrílicas</a></li>
+                    <li><a href="#tintas-latex">Tintas Látex / PVA</a></li>
+                    <li><a href="#tintas-esmalte">Tintas Esmalte</a></li>
+                    <li><a href="#tintas-epoxi">Tintas Epóxi</a></li>
+                </ul>
+            </details>
+        </li>
 
-        <!-- Navigation Tabs Container Switcher -->
-        <nav class="nav-tabs">
-            <button class="tab-btn active" id="tab-products" onclick="AdminHub.switchTab('products')">Produtos</button>
-            <button class="tab-btn" id="tab-categories" onclick="AdminHub.switchTab('categories')">Categorias & Subcategorias</button>
-        </nav>
+        <!-- Categoria 2: Massa PVA ou Acrílica (Com Subcategorias) -->
+        <li class="categoria-item">
+            <details>
+                <summary>Massa PVA ou Acrílica</summary>
+                <ul class="subcategoria-lista">
+                    <li><a href="#massa-pva">Massa Corrida PVA (Interior)</a></li>
+                    <li><a href="#massa-acrilica">Massa Acrílica (Exterior/Interior)</a></li>
+                </ul>
+            </details>
+        </li>
 
-        <!-- Metrics Dashboard Summary Control Deck -->
-        <section class="kpi-grid">
-            <div class="kpi-card"><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpi-cats">0</div></div>
-            <div class="kpi-card"><div class="kpi-label">Total Produtos</div><div class="kpi-value" id="kpi-prods">0</div></div>
-            <div class="kpi-card"><div class="kpi-label">Ativos</div><div class="kpi-value" id="kpi-active" style="color:var(--success);">0</div></div>
-            <div class="kpi-card"><div class="kpi-label">Preço Médio</div><div class="kpi-value" id="kpi-avg">R$ 0,00</div></div>
-        </section>
+        <!-- Categoria 3: Texturas (Item Direto - Exemplo se só tiver uma coisa) -->
+        <li class="categoria-item">
+            <a href="#texturas" class="item-direto">Texturas</a>
+        </li>
 
-        <!-- Main View Context Module: Products Workspace Matrix -->
-        <div id="view-products">
-            <div class="controls-row">
-                <div class="search-wrapper">
-                    <span class="material-symbols-rounded">search</span>
-                    <input type="text" class="search-input" id="searchBar" placeholder="Pesquisar por nome, marca, código, categoria ou subcategoria..." oninput="AdminHub.render()">
-                </div>
-                <div class="filter-group">
-                    <select class="select-custom" id="filterCat" onchange="AdminHub.onFilterCategoryChange()"><option value="">Todas Categorias</option></select>
-                    <select class="select-custom" id="filterSubcat" onchange="AdminHub.render()"><option value="">Todas Subcategorias</option></select>
-                    <select class="select-custom" id="filterStatus" onchange="AdminHub.render()">
-                        <option value="">Todos Status</option>
-                        <option value="Ativo">Ativos</option>
-                        <option value="Inativo">Inativos</option>
-                    </select>
-                    <select class="select-custom" id="sortBy" onchange="AdminHub.render()">
-                        <option value="recent">Mais Recentes</option>
-                        <option value="name">Nome (A-Z)</option>
-                        <option value="price-asc">Menor Preço</option>
-                        <option value="price-desc">Maior Preço</option>
-                    </select>
-                </div>
-            </div>
-            <div class="items-grid" id="productsContainer"></div>
-        </div>
+        <!-- Categoria 4: Selantes (Com Subcategorias) -->
+        <li class="categoria-item">
+            <details>
+                <summary>Selantes</summary>
+                <ul class="subcategoria-lista">
+                    <li><a href="#selador-acrilico">Selador Acrílico</a></li>
+                    <li><a href="#fundo-preparador">Fundo Preparador</a></li>
+                </ul>
+            </details>
+        </li>
 
-        <!-- Secondary View Context Module: Categories & Subcategories Workspace Matrix -->
-        <div id="view-categories" style="display: none;">
-            <div style="margin-bottom: 16px; display: flex; justify-content: flex-end;">
-                <button class="btn-secondary" style="background:var(--primary); color:white;" onclick="AdminHub.openCategoryModal()">
-                    <span class="material-symbols-rounded">add</span> Nova Categoria
-                </button>
-            </div>
-            <div class="items-grid" id="categoriesContainer"></div>
-        </div>
-    </div>
+    </ul>
+</div>
 
-    <!-- Global Operations IO Floating Deck Footer -->
-    <footer class="data-hub-bar no-print">
-        <button class="btn-secondary" onclick="DataBridge.exportJSON()"><span class="material-symbols-rounded">download</span> Exportar JSON</button>
-        <button class="btn-secondary" onclick="document.getElementById('importFile').click()"><span class="material-symbols-rounded">upload</span> Importar JSON</button>
-        <button class="btn-secondary" onclick="DataBridge.printReport()"><span class="material-symbols-rounded">print</span> Gerar PDF da Tabela</button>
-        <input type="file" id="importFile" style="display:none" accept=".json" onchange="DataBridge.importJSON(event)">
-    </footer>
-
-    <!-- FAB Action Trigger Container Button -->
-    <button class="fab-btn no-print" onclick="AdminHub.openProductModal()">
-        <span class="material-symbols-rounded">add</span>
-        <span>Novo Produto</span>
-    </button>
-
-    <!-- ==========================================================================
-       MODAL HUB: PRODUCT DATA MODULATION MATRIX
-       ========================================================================== -->
-    <div class="modal-overlay" id="productModal">
-        <div class="modal-wrapper">
-            <div class="modal-header">
-                <h3 id="prodModalTitle">Novo Produto</h3>
-                <button class="btn-icon" onclick="AdminHub.closeModal('productModal')"><span class="material-symbols-rounded">close</span></button>
-            </div>
-            <form id="productForm" onsubmit="AdminHub.saveProduct(event)">
-                <input type="hidden" id="prod-id">
-                <div class="form-grid">
-                    <div class="form-row-2">
-                        <div class="form-group">
-                            <label class="form-label">Categoria *</label>
-                            <select class="form-select" id="prod-category" onchange="AdminHub.onModalCategoryChange()" required></select>
-                            <button type="button" class="btn-inline-add" onclick="AdminHub.openCategoryModal()"><span class="material-symbols-rounded">add</span> Nova Cat</button>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Subcategoria *</label>
-                            <select class="form-select" id="prod-subcategory" required>
-                                <option value="" disabled selected>Selecione a categoria antes</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Nome do Produto *</label>
-                        <input type="text" class="form-input" id="prod-name" placeholder="Ex: Tinta Acrílica Premium Branco 18L" required>
-                    </div>
-                    <div class="form-row-2">
-                        <div class="form-group">
-                            <label class="form-label">Marca *</label>
-                            <input type="text" class="form-input" id="prod-brand" placeholder="Ex: Qualy Quimy" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Código Interno</label>
-                            <input type="text" class="form-input" id="prod-code" placeholder="Ex: TQP-100">
-                        </div>
-                    </div>
-                    <div class="form-row-2">
-                        <div class="form-group">
-                            <label class="form-label">Unidade *</label>
-                            <select class="form-select" id="prod-unit" required>
-                                <option value="Litros">Litros</option>
-                                <option value="Quilos">Quilos</option>
-                                <option value="Unidade">Unidade</option>
-                                <option value="Caixa">Caixa</option>
-                                <option value="Galão">Galão</option>
-                                <option value="Pacote">Pacote</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Rendimento</label>
-                            <input type="text" class="form-input" id="prod-yield" placeholder="Ex: Até 320 m²">
-                        </div>
-                    </div>
-                    <div class="form-row-3">
-                        <div class="form-group">
-                            <label class="form-label">Preço Venda (R$) *</label>
-                            <input type="number" step="0.01" class="form-input" id="prod-price" placeholder="0.00" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Preço Atacado (R$)</label>
-                            <input type="number" step="0.01" class="form-input" id="prod-wholesale" placeholder="0.00">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Mín. Atacado (Un)</label>
-                            <input type="number" class="form-input" id="prod-min-wholesale" placeholder="3">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Situação</label>
-                        <select class="form-select" id="prod-status">
-                            <option value="Ativo">Ativo</option>
-                            <option value="Inativo">Inativo</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Descrição</label>
-                        <textarea class="form-textarea" id="prod-desc" placeholder="Especificações ou detalhes extras sobre aplicação do produto..."></textarea>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="AdminHub.closeModal('productModal')">Cancelar</button>
-                    <button type="submit" class="btn-submit">Salvar Produto</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ==========================================================================
-       MODAL HUB: CATEGORIES & NESTED SUBCATEGORIES MANAGEMENT SYSTEM
-       ========================================================================== -->
-    <div class="modal-overlay" id="categoryModal">
-        <div class="modal-wrapper">
-            <div class="modal-header">
-                <h3 id="catModalTitle">Nova Categoria</h3>
-                <button class="btn-icon" onclick="AdminHub.closeModal('categoryModal')"><span class="material-symbols-rounded">close</span></button>
-            </div>
-            <form id="categoryForm" onsubmit="AdminHub.saveCategory(event)">
-                <input type="hidden" id="cat-id">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Nome da Categoria Principal *</label>
-                        <input type="text" class="form-input" id="cat-name" placeholder="Ex: Tintas, Massas, Ferramentas" required>
-                    </div>
-                    <div class="form-row-2">
-                        <div class="form-group">
-                            <label class="form-label">Ícone (Emoji/Símbolo) *</label>
-                            <input type="text" class="form-input" id="cat-icon" placeholder="Ex: 🎨" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Cor Relacional (Hex) *</label>
-                            <input type="color" class="form-input" id="cat-color" value="#0F52BA" style="height:43px; padding:4px;">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Subcategorias Vínculo (Separadas por vírgula) *</label>
-                        <input type="text" class="form-input" id="cat-subcategories" placeholder="Ex: Econômica, Standard, Premium, Super Premium" required>
-                        <small style="color:var(--text-muted); font-size:11px;">Insira as subdivisões separadas por vírgulas conforme sua necessidade operacional.</small>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Descrição Breve</label>
-                        <textarea class="form-textarea" id="cat-desc" placeholder="Propósito geral desta categoria na árvore de recomendação..."></textarea>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="AdminHub.closeModal('categoryModal')">Cancelar</button>
-                    <button type="submit" class="btn-submit">Salvar Estrutura</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Hidden Printable Area Workspace Element Canvas Target Node -->
-    <div id="print-area"></div>
-
-    <!-- ==========================================================================
-       JAVASCRIPT CORE PIPELINE SCRIPT
-       ========================================================================== -->
-    <script>
-        /**
-         * DEFAULT SEED BLUEPRINT SCHEMATICS 
-         */
-        const DefaultCategoriesSeed = [
-            { id: "cat-1", name: "Tintas", icon: "🎨", color: "#0F52BA", subcategories: ["Econômica", "Standard", "Premium", "Super Premium"], desc: "Tintas imobiliárias estruturadas por nível de qualidade e acabamento." },
-            { id: "cat-2", name: "Massas", icon: "🧱", color: "#FF6B00", subcategories: ["PVA Interior", "Acrílica Exterior", "Massa Gesso"], desc: "Compostos de nivelamento e preenchimento de imperfeições." },
-            { id: "cat-3", name: "Texturas", icon: "🏠", color: "#00B159", subcategories: ["Rústico", "Efeito Cristal", "Grafiato"], desc: "Revestimentos texturizados decorativos de alta espessura." },
-            { id: "cat-4", name: "Selantes", icon: "🛡️", color: "#7928CA", subcategories: ["Acrílico", "Poliuretano PU40", "Silicone Neutro"], desc: "Vedações elásticas e isolamentos térmicos/impermeáveis." }
-        ];
-
-        const DefaultProductsSeed = [
-            { id: "prod-1", categoryId: "cat-1", subcategory: "Premium", name: "Tinta Premium Branca Rende Muito 18L", brand: "Qualy Quimy", code: "TQP-WM", unit: "Litros", yield: "Até 320 m²", price: 319.90, wholesale: 295.00, minWholesale: 4, status: "Ativo", desc: "Altíssima cobertura e lavabilidade." },
-            { id: "prod-2", categoryId: "cat-1", subcategory: "Econômica", name: "Tinta Acrílica Econômica Interior Gelo 15L", brand: "Qualy Quimy", code: "TQE-ICE", unit: "Litros", yield: "Até 150 m²", price: 145.00, wholesale: null, minWholesale: null, status: "Ativo", desc: "Ideal para tetos e demãos internas secas." },
-            { id: "prod-3", categoryId: "cat-2", subcategory: "Acrílica Exterior", name: "Massa Acrílica Balde Hidrorepelente 25kg", brand: "Qualy Quimy", code: "MAC-EXT", unit: "Quilos", yield: "Até 45 m²", price: 89.00, wholesale: 79.90, minWholesale: 8, status: "Ativo", desc: "Super resistente a intempéries e umidade externa." }
-        ];
-
-        /**
-         * STORAGE DATA MANAGER INTERFACE PIPELINE
-         */
-        const StorageController = {
-            init() {
-                if (!localStorage.getItem("qq_v2_categories")) localStorage.setItem("qq_v2_categories", JSON.stringify(DefaultCategoriesSeed));
-                if (!localStorage.getItem("qq_v2_products")) localStorage.setItem("qq_v2_products", JSON.stringify(DefaultProductsSeed));
-            },
-            get(key) { return JSON.parse(localStorage.getItem(`qq_v2_${key}`)); },
-            set(key, data) { localStorage.setItem(`qq_v2_${key}`, JSON.stringify(data)); AdminHub.calculateKPIs(); }
-        };
-
-        /**
-         * DOM NODE COMPONENT GRAPHIC RENDER STRUCTURALS
-         */
-        const ComponentFactory = {
-            createProductCard(prod, catName) {
-                return `
-                    <div class="product-card">
-                        <div>
-                            <div class="card-header">
-                                <div class="tag-group">
-                                    <span class="category-tag">${catName}</span>
-                                    <span class="subcategory-tag">${prod.subcategory || 'Padrão'}</span>
-                                </div>
-                                <div class="status-dot ${prod.status === 'Ativo' ? 'active' : 'inactive'}" title="${prod.status}"></div>
-                            </div>
-                            <h4 class="product-name">${prod.name}</h4>
-                            <div class="product-meta">
-                                <span><b>Marca:</b> ${prod.brand}</span>
-                                ${prod.code ? `<span><b>Cód:</b> ${prod.code}</span>` : ''}
-                            </div>
-                            <div class="price-structure">
-                                <div class="price-block">
-                                    <span class="price-label">Venda Varejo</span>
-                                    <span class="price-value" style="color:var(--primary)">R$ ${parseFloat(prod.price).toFixed(2)}</span>
-                                </div>
-                                <div class="price-block">
-                                    <span class="price-label">Atacado (Mín. ${prod.minWholesale || 3} un)</span>
-                                    <span class="price-value" style="color:var(--success)">${prod.wholesale ? `R$ ${parseFloat(prod.wholesale).toFixed(2)}` : '—'}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-actions no-print">
-                            <button class="btn-icon" onclick="AdminHub.editProduct('${prod.id}')" title="Editar"><span class="material-symbols-rounded">edit</span></button>
-                            <button class="btn-icon" onclick="AdminHub.duplicateProduct('${prod.id}')" title="Duplicar"><span class="material-symbols-rounded">content_copy</span></button>
-                            <button class="btn-icon delete" onclick="AdminHub.deleteProduct('${prod.id}')" title="Excluir"><span class="material-symbols-rounded">delete</span></button>
-                        </div>
-                    </div>
-                `;
-            },
-            createCategoryCard(cat, count) {
-                const pills = cat.subcategories.map(sub => `<span class="subcat-pill"><span class="material-symbols-rounded" style="font-size:12px; color:var(--primary);">subdirectory_arrow_right</span>${sub}</span>`).join('');
-                return `
-                    <div class="category-card">
-                        <div class="category-main">
-                            <div class="category-info">
-                                <div class="category-avatar" style="background-color:${cat.color}">${cat.icon}</div>
-                                <div>
-                                    <h4 class="product-name">${cat.name}</h4>
-                                    <span class="price-label" style="font-weight:600; color:var(--primary);">${count} Produtos Cadastrados</span>
-                                </div>
-                            </div>
-                            <div class="card-actions no-print" style="border:none; padding:0;">
-                                <button class="btn-icon" onclick="AdminHub.editCategory('${cat.id}')" title="Editar Estrutura"><span class="material-symbols-rounded">edit</span></button>
-                                <button class="btn-icon delete" onclick="AdminHub.deleteCategory('${cat.id}')" title="Excluir Categoria"><span class="material-symbols-rounded">delete</span></button>
-                            </div>
-                        </div>
-                        <div class="subcategories-preview-wrapper">
-                            <span class="subcategories-title-label">Subcategorias Ativas</span>
-                            <div class="subcategories-pill-list">${pills || '<span style="font-size:12px; color:var(--text-muted)">Nenhuma cadastrada.</span>'}</div>
-                        </div>
-                    </div>
-                `;
-            }
-        };
-
-        /**
-         * GLOBAL CONTROLLER APP RUNTIME MODULE WORKSPACE
-         */
-        const AdminHub = {
-            activeTab: 'products',
-
-            init() {
-                StorageController.init();
-                this.populateFiltersAndSelectors();
-                this.calculateKPIs();
-                this.render();
-            },
-
-            switchTab(tab) {
-                this.activeTab = tab;
-                document.getElementById('tab-products').classList.toggle('active', tab === 'products');
-                document.getElementById('tab-categories').classList.toggle('active', tab === 'categories');
-                document.getElementById('view-products').style.display = tab === 'products' ? 'block' : 'none';
-                document.getElementById('view-categories').style.display = tab === 'categories' ? 'block' : 'none';
-                this.render();
-            },
-
-            calculateKPIs() {
-                const prods = StorageController.get('products');
-                const cats = StorageController.get('categories');
-                
-                document.getElementById('kpi-cats').innerText = cats.length;
-                document.getElementById('kpi-prods').innerText = prods.length;
-                document.getElementById('kpi-active').innerText = prods.filter(p => p.status === 'Ativo').length;
-                
-                const avg = prods.length ? prods.reduce((acc, p) => acc + parseFloat(p.price), 0) / prods.length : 0;
-                document.getElementById('kpi-avg').innerText = `R$ ${avg.toFixed(2)}`;
-            },
-
-            populateFiltersAndSelectors() {
-                const cats = StorageController.get('categories');
-                const filterCat = document.getElementById('filterCat');
-                const prodCat = document.getElementById('prod-category');
-                
-                let filterOptions = `<option value="">Todas Categorias</option>`;
-                let formOptions = `<option value="" disabled selected>Selecione a Categoria</option>`;
-                
-                cats.forEach(c => {
-                    filterOptions += `<option value="${c.id}">${c.name}</option>`;
-                    formOptions += `<option value="${c.id}">${c.name}</option>`;
-                });
-                
-                filterCat.innerHTML = filterOptions;
-                prodCat.innerHTML = formOptions;
-            },
-
-            /* Cascading Filter Selection Events */
-            onFilterCategoryChange() {
-                const catId = document.getElementById('filterCat').value;
-                const filterSubcat = document.getElementById('filterSubcat');
-                
-                if(!catId) {
-                    filterSubcat.innerHTML = `<option value="">Todas Subcategorias</option>`;
-                    this.render();
-                    return;
-                }
-
-                const cat = StorageController.get('categories').find(c => c.id === catId);
-                let options = `<option value="">Todas Subcategorias</option>`;
-                if(cat && cat.subcategories) {
-                    cat.subcategories.forEach(s => { options += `<option value="${s}">${s}</option>`; });
-                }
-                filterSubcat.innerHTML = options;
-                this.render();
-            },
-
-            /* Cascading Modal Creation Selection Events */
-            onModalCategoryChange(selectedSubcat = null) {
-                const catId = document.getElementById('prod-category').value;
-                const prodSubcat = document.getElementById('prod-subcategory');
-                
-                if(!catId) {
-                    prodSubcat.innerHTML = `<option value="" disabled selected>Selecione a categoria antes</option>`;
-                    return;
-                }
-
-                const cat = StorageController.get('categories').find(c => c.id === catId);
-                let options = `<option value="" disabled ${!selectedSubcat ? 'selected' : ''}>Selecione a Subcategoria</option>`;
-                
-                if(cat && cat.subcategories) {
-                    cat.subcategories.forEach(s => {
-                        options += `<option value="${s}" ${selectedSubcat === s ? 'selected' : ''}>${s}</option>`;
-                    });
-                }
-                prodSubcat.innerHTML = options;
-            },
-
-            render() {
-                if (this.activeTab === 'products') this.renderProducts();
-                else this.renderCategories();
-            },
-
-            renderProducts() {
-                const prods = StorageController.get('products');
-                const cats = StorageController.get('categories');
-                const container = document.getElementById('productsContainer');
-                
-                const search = document.getElementById('searchBar').value.toLowerCase();
-                const fCat = document.getElementById('filterCat').value;
-                const fSub = document.getElementById('filterSubcat').value;
-                const fStatus = document.getElementById('filterStatus').value;
-                const sortBy = document.getElementById('sortBy').value;
-
-                let filtered = prods.filter(p => {
-                    const catObj = cats.find(c => c.id === p.categoryId);
-                    const catName = catObj ? catObj.name.toLowerCase() : '';
-                    const subcatName = p.subcategory ? p.subcategory.toLowerCase() : '';
-                    
-                    const matchesSearch = p.name.toLowerCase().includes(search) || 
-                                          p.brand.toLowerCase().includes(search) || 
-                                          (p.code && p.code.toLowerCase().includes(search)) || 
-                                          catName.includes(search) || 
-                                          subcatName.includes(search);
-                    
-                    const matchesCat = fCat === "" || p.categoryId === fCat;
-                    const matchesSub = fSub === "" || p.subcategory === fSub;
-                    const matchesStatus = fStatus === "" || p.status === fStatus;
-                    
-                    return matchesSearch && matchesCat && matchesSub && matchesStatus;
-                });
-
-                if(sortBy === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
-                else if(sortBy === 'price-asc') filtered.sort((a,b) => a.price - b.price);
-                else if(sortBy === 'price-desc') filtered.sort((a,b) => b.price - a.price);
-                else filtered.sort((a,b) => b.id.localeCompare(a.id));
-
-                container.innerHTML = filtered.length ? filtered.map(p => {
-                    const cat = cats.find(c => c.id === p.categoryId);
-                    return ComponentFactory.createProductCard(p, cat ? cat.name : 'Geral');
-                }).join('') : `<p style="grid-column:1/-1; text-align:center; color:var(--text-muted); padding:40px;">Nenhum produto atende a este critério de filtragem.</p>`;
-            },
-
-            renderCategories() {
-                const prods = StorageController.get('products');
-                const cats = StorageController.get('categories');
-                const container = document.getElementById('categoriesContainer');
-
-                container.innerHTML = cats.map(c => {
-                    const count = prods.filter(p => p.categoryId === c.id).length;
-                    return ComponentFactory.createCategoryCard(c, count);
-                }).join('');
-            },
-
-            openProductModal(id = null) {
-                document.getElementById('productForm').reset();
-                document.getElementById('prod-id').value = '';
-                document.getElementById('prodModalTitle').innerText = 'Novo Produto';
-                document.getElementById('prod-subcategory').innerHTML = `<option value="" disabled selected>Selecione a categoria antes</option>`;
-                
-                if(id) {
-                    const p = StorageController.get('products').find(prod => prod.id === id);
-                    if(p) {
-                        document.getElementById('prod-id').value = p.id;
-                        document.getElementById('prod-category').value = p.categoryId;
-                        this.onModalCategoryChange(p.subcategory);
-                        document.getElementById('prod-name').value = p.name;
-                        document.getElementById('prod-brand').value = p.brand;
-                        document.getElementById('prod-code').value = p.code || '';
-                        document.getElementById('prod-unit').value = p.unit;
-                        document.getElementById('prod-yield').value = p.yield || '';
-                        document.getElementById('prod-price').value = p.price;
-                        document.getElementById('prod-wholesale').value = p.wholesale || '';
-                        document.getElementById('prod-min-wholesale').value = p.minWholesale || '';
-                        document.getElementById('prod-status').value = p.status;
-                        document.getElementById('prod-desc').value = p.desc || '';
-                        document.getElementById('prodModalTitle').innerText = 'Editar Produto';
-                    }
-                }
-                document.getElementById('productModal').classList.add('active');
-            },
-
-            openCategoryModal(id = null) {
-                document.getElementById('categoryForm').reset();
-                document.getElementById('cat-id').value = '';
-                document.getElementById('catModalTitle').innerText = 'Nova Categoria';
-                
-                if(id) {
-                    const c = StorageController.get('categories').find(cat => cat.id === id);
-                    if(c) {
-                        document.getElementById('cat-id').value = c.id;
-                        document.getElementById('cat-name').value = c.name;
-                        document.getElementById('cat-icon').value = c.icon;
-                        document.getElementById('cat-color').value = c.color;
-                        document.getElementById('cat-subcategories').value = c.subcategories.join(', ');
-                        document.getElementById('cat-desc').value = c.desc || '';
-                        document.getElementById('catModalTitle').innerText = 'Editar Categoria';
-                    }
-                }
-                document.getElementById('categoryModal').classList.add('active');
-            },
-
-            closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); },
-
-            saveProduct(e) {
-                e.preventDefault();
-                const products = StorageController.get('products');
-                const id = document.getElementById('prod-id').value || `prod-${Date.now()}`;
-                
-                const data = {
-                    id,
-                    categoryId: document.getElementById('prod-category').value,
-                    subcategory: document.getElementById('prod-subcategory').value,
-                    name: document.getElementById('prod-name').value,
-                    brand: document.getElementById('prod-brand').value,
-                    code: document.getElementById('prod-code').value,
-                    unit: document.getElementById('prod-unit').value,
-                    yield: document.getElementById('prod-yield').value,
-                    price: parseFloat(document.getElementById('prod-price').value),
-                    wholesale: document.getElementById('prod-wholesale').value ? parseFloat(document.getElementById('prod-wholesale').value) : null,
-                    minWholesale: document.getElementById('prod-min-wholesale').value ? parseInt(document.getElementById('prod-min-wholesale').value) : null,
-                    status: document.getElementById('prod-status').value,
-                    desc: document.getElementById('prod-desc').value
-                };
-
-                const index = products.findIndex(p => p.id === id);
-                if(index > -1) products[index] = data; else products.unshift(data);
-
-                StorageController.set('products', products);
-                this.closeModal('productModal');
-                this.render();
-            },
-
-            saveCategory(e) {
-                e.preventDefault();
-                const categories = StorageController.get('categories');
-                const id = document.getElementById('cat-id').value || `cat-${Date.now()}`;
-                
-                // Mapeia as subcategorias removendo espaços desnecessários dos elementos informados
-                const subcatsRaw = document.getElementById('cat-subcategories').value;
-                const subcategoriesMapped = subcatsRaw.split(',').map(item => item.trim()).filter(item => item !== "");
-
-                const data = {
-                    id,
-                    name: document.getElementById('cat-name').value,
-                    icon: document.getElementById('cat-icon').value,
-                    color: document.getElementById('cat-color').value,
-                    subcategories: subcategoriesMapped,
-                    desc: document.getElementById('cat-desc').value
-                };
-
-                const index = categories.findIndex(c => c.id === id);
-                if(index > -1) categories[index] = data; else categories.push(data);
-
-                StorageController.set('categories', categories);
-                this.populateFiltersAndSelectors();
-                this.closeModal('categoryModal');
-                this.render();
-            },
-
-            editProduct(id) { this.openProductModal(id); },
-            editCategory(id) { this.openCategoryModal(id); },
-
-            duplicateProduct(id) {
-                const products = StorageController.get('products');
-                const source = products.find(p => p.id === id);
-                if(source) {
-                    const clone = { ...source, id: `prod-${Date.now()}`, name: `${source.name} (Cópia)` };
-                    products.unshift(clone);
-                    StorageController.set('products', products);
-                    this.render();
-                }
-            },
-
-            deleteProduct(id) {
-                if(confirm("Deseja realmente remover este produto?")) {
-                    const products = StorageController.get('products').filter(p => p.id !== id);
-                    StorageController.set('products', products);
-                    this.render();
-                }
-            },
-
-            deleteCategory(id) {
-                const prods = StorageController.get('products');
-                if(prods.some(p => p.categoryId === id)) {
-                    alert("Ação Bloqueada: Esta categoria possui produtos atrelados no sistema.");
-                    return;
-                }
-                if(confirm("Confirmar exclusão desta categoria e suas subcategorias relacionais?")) {
-                    const categories = StorageController.get('categories').filter(c => c.id !== id);
-                    StorageController.set('categories', categories);
-                    this.populateFiltersAndSelectors();
-                    this.render();
-                }
-            }
-        };
-
-        /**
-         * EXPORT / IMPORT FILE BRIDGE DECK PIPELINE
-         */
-        const DataBridge = {
-            exportJSON() {
-                const payload = { products: StorageController.get('products'), categories: StorageController.get('categories') };
-                const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-                const anchor = document.createElement('a');
-                anchor.href = URL.createObjectURL(blob);
-                anchor.download = `backup_qualyquimy_v2_${Date.now()}.json`;
-                anchor.click();
-            },
-
-            importJSON(e) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    try {
-                        const payload = JSON.parse(evt.target.result);
-                        if (payload.products && payload.categories) {
-                            localStorage.setItem("qq_v2_products", JSON.stringify(payload.products));
-                            localStorage.setItem("qq_v2_categories", JSON.stringify(payload.categories));
-                            alert("Base de Dados V2 Atualizada com Sucesso!");
-                            AdminHub.init();
-                        } else { alert("Formato estrutural inválido."); }
-                    } catch(err) { alert("Erro ao interpretar arquivo de dados."); }
-                };
-                reader.readAsText(e.target.files[0]);
-            },
-
-            printReport() {
-                const prods = StorageController.get('products');
-                const cats = StorageController.get('categories');
-                
-                let printHTML = `
-                    <div style="padding: 30px; font-family: sans-serif;">
-                        <h2 style="color:#0F52BA; margin-bottom: 5px;">Relatório Global de Estoque V2 — Tintas Qualy Quimy</h2>
-                        <p style="font-size:12px; color:#666; margin-bottom:25px;">Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
-                        <table style="width:100%; border-collapse:collapse; font-size:12px;">
-                            <thead>
-                                <tr style="background:#F0F6FF; text-align:left;">
-                                    <th style="padding:10px; border:1px solid #ddd;">Código</th>
-                                    <th style="padding:10px; border:1px solid #ddd;">Produto</th>
-                                    <th style="padding:10px; border:1px solid #ddd;">Categoria</th>
-                                    <th style="padding:10px; border:1px solid #ddd;">Subcategoria</th>
-                                    <th style="padding:10px; border:1px solid #ddd;">Preço Venda</th>
-                                    <th style="padding:10px; border:1px solid #ddd;">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                `;
-
-                prods.forEach(p => {
-                    const cat = cats.find(c => c.id === p.categoryId);
-                    printHTML += `
-                        <tr>
-                            <td style="padding:8px; border:1px solid #ddd;">${p.code || '—'}</td>
-                            <td style="padding:8px; border:1px solid #ddd;"><b>${p.name}</b></td>
-                            <td style="padding:8px; border:1px solid #ddd;">${cat ? cat.name : '—'}</td>
-                            <td style="padding:8px; border:1px solid #ddd;">${p.subcategory || '—'}</td>
-                            <td style="padding:8px; border:1px solid #ddd;">R$ ${parseFloat(p.price).toFixed(2)}</td>
-                            <td style="padding:8px; border:1px solid #ddd;">${p.status}</td>
-                        </tr>
-                    `;
-                });
-
-                printHTML += `</tbody></table></div>`;
-                
-                document.getElementById('print-area').innerHTML = printHTML;
-                window.print();
-            }
-        };
-
-        // DOM Initialization Listener Runtime Engine Entrypoint
-        window.addEventListener('DOMContentLoaded', () => AdminHub.init());
-    </script>
 </body>
 </html>
