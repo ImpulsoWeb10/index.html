@@ -15,7 +15,7 @@
             --accent: #0070f3;
             --accent-hover: #0025f7;
             --danger: #ff1a1a;
-            --success: #0070f3;
+            --success: #137333;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             --radius: 8px;
             --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -41,16 +41,15 @@
 
         /* FORM CONTROLS */
         .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group.full-width { grid-column: 1 / -1; }
         label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
         input, textarea, select { padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; background: #fff; outline: none; transition: border 0.2s; }
         input:focus, textarea:focus { border-color: var(--text-main); }
         
-        /* HIDDEN RELATIONAL FIELDS (Para Assistente Inteligente) */
+        /* HIDDEN RELATIONAL FIELDS (Prontos para Assistente Inteligente) */
         .relational-meta { display: none; }
 
         /* BUTTONS */
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 16px; font-size: 14px; font-weight: 500; border-radius: var(--radius); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; background: #fff; color: var(--text-main); text-decoration: none;}
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 16px; font-size: 14px; font-weight: 500; border-radius: var(--radius); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; background: #fff; color: var(--text-main); text-decoration: none; gap: 8px;}
         .btn-primary { background: var(--text-main); color: #fff; border: none; }
         .btn-primary:hover { background: #222; }
         .btn-accent { background: var(--accent); color: #fff; border: none; }
@@ -58,39 +57,53 @@
         .btn-danger { color: var(--danger); border-color: transparent; background: transparent; }
         .btn-danger:hover { background: #fff1f1; }
 
-        /* TABLES & LISTS */
+        /* TABLES */
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
         th { padding: 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); font-weight: 500; font-size: 12px; }
         td { padding: 16px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
         
-        /* CLIENT VIEW WITRINE */
-        .client-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-        .product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
-        .prod-tag { font-size: 11px; background: #f0f0f0; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 8px; color: var(--text-muted); }
-        .price-tag { margin: 12px 0; }
-        .price-main { font-size: 18px; font-weight: 600; }
-        .price-strike { font-size: 12px; color: var(--text-muted); text-decoration: line-through; display: none; }
-        .wholesale-info { font-size: 12px; color: var(--accent); margin-top: 4px; }
+        /* VISÃO DO CLIENTE - BOTÕES DE CATEGORIA */
+        .category-menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 16px; }
+        .category-card-btn { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: left; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; }
+        .category-card-btn:hover { border-color: var(--text-main); transform: translateY(-2px); }
+        .category-card-btn h4 { font-size: 16px; font-weight: 600; color: var(--text-main); }
+        .category-card-btn span { font-size: 12px; color: var(--text-muted); }
+
+        /* LISTA DE PRODUTOS NO MODAL */
+        .modal-products-list { display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
+        .modal-product-item { border-bottom: 1px solid var(--border); padding-bottom: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; }
+        .modal-product-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .price-main { font-size: 16px; font-weight: 600; }
+        .price-strike { font-size: 12px; color: var(--text-muted); text-decoration: line-through; margin-right: 6px; }
+        .wholesale-info { font-size: 11px; color: var(--accent); font-weight: 500; }
+
+        /* LISTA DE SUBCATEGORIAS NO MODAL */
+        .subcat-list { display: flex; flex-direction: column; gap: 10px; }
+        .subcat-btn { text-align: left; background: var(--bg-main); border: 1px solid var(--border); padding: 14px; border-radius: var(--radius); cursor: pointer; font-size: 14px; font-weight: 500; display: flex; justify-content: space-between; }
+        .subcat-btn:hover { border-color: var(--text-main); background: #fff; }
 
         /* FIXED FLOATING FOOTER BAR FOR CLIENT */
         .client-footer-bar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: #fff; padding: 14px 24px; border-radius: 30px; display: flex; align-items: center; gap: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 90; }
         .client-footer-bar span { font-size: 14px; font-weight: 500; }
 
-        /* MODAL DIÁTICO & LINDO */
+        /* MODAL ESTRUTURADO, DIÁTICO E SEGURO */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 100; }
-        .modal { background: var(--bg-card); width: 100%; max-width: 500px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); overflow: hidden; display: flex; flex-direction: column; animation: modalSlide 0.3s ease; }
-        @keyframes modalSlide { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h3 { font-size: 16px; font-weight: 600; }
-        .close-modal { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
-        .modal-body { padding: 24px; max-height: 400px; overflow-y: auto; }
+        .modal { background: var(--bg-card); width: 100%; max-width: 550px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); overflow: hidden; display: flex; flex-direction: column; animation: modalSlide 0.25s ease; max-height: 90vh; }
+        @keyframes modalSlide { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .modal-header h3 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .close-modal { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); line-height: 1; }
+        .close-modal:hover { color: var(--text-main); }
+        .modal-body { padding: 24px; overflow-y: auto; flex: 1; }
         .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 12px; background: #fafafa; }
         
+        /* AUXILIARES DOS PASSOS */
+        .back-step-btn { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 16px; }
+        .back-step-btn:hover { color: var(--accent-hover); }
+
         .order-item-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
         .summary-total-box { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
-        .discount-toast { background: #e6f4ea; color: #137333; padding: 8px 12px; border-radius: var(--radius); font-size: 12px; margin-bottom: 12px; display: none; font-weight: 500; }
-
-        /* LINK NOTIFICATION */
+        .discount-toast { background: #e6f4ea; color: #137333; padding: 8px 12px; border-radius: var(--radius); font-size: 12px; margin-bottom: 16px; display: none; font-weight: 500; }
         .link-alert { background: #e6f4ea; border: 1px solid #34a853; color: #137333; padding: 12px; border-radius: var(--radius); margin-bottom: 16px; display: none; font-size: 14px; }
     </style>
 </head>
@@ -100,32 +113,29 @@
     <header>
         <div>
             <h1>Tintas Qualy Quimy</h1>
-            <p style="font-size: 13px; color: var(--text-muted);">Painel Administrativo Premium v2.0</p>
+            <p style="font-size: 13px; color: var(--text-muted);">Painel Administrativo Premium v3.0</p>
         </div>
-        <div id="linkContainer" class="relational-meta"></div>
     </header>
 
-    <!-- ABAS -->
+    <!-- NAVEGAÇÃO DE ABAS -->
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('admin')">Painel Admin (Cadastro)</button>
         <button class="tab-btn" id="clientTabBtn" onclick="switchTab('client')">Visão do Cliente (Link Ativo)</button>
     </div>
 
-    <!-- PAINEL ADMINISTRATIVO -->
+    <!-- PAINEL ADMINISTRATIVO (CADASTRO) -->
     <div id="panel-admin" class="panel active">
         <div class="link-alert" id="linkAlert">
-            Link gerado com sucesso! Clique na aba <strong>"Visão do Cliente"</strong> para simular o acesso do seu cliente.
+            ✨ Link de vendas gerado com sucesso! Clique na aba <strong>"Visão do Cliente"</strong> para testar a experiência intuitiva de navegação.
         </div>
 
         <div class="card">
             <div class="card-title" id="formActionTitle">Cadastrar / Editar Produto</div>
             <form id="productForm" onsubmit="saveProduct(event)">
-                <!-- ID oculto para edição -->
                 <input type="hidden" id="prodId">
                 
-                <!-- Campos ocultos de controle relacional preparados para a IA -->
-                <input type="hidden" id="relational_checksum" class="relational-meta" value="qq_771_alpha">
-                <input type="hidden" id="ai_sync_node" class="relational-meta" value="disabled">
+                <!-- Campos ocultos de controle relacional do Assistente Inteligente -->
+                <input type="hidden" id="relational_checksum" class="relational-meta" value="qq_992_premium">
 
                 <div class="grid-form">
                     <div class="form-group">
@@ -145,18 +155,18 @@
                 <div class="grid-form">
                     <div class="form-group" style="grid-column: span 2;">
                         <label for="description">Descrição do Produto</label>
-                        <textarea id="description" rows="2" placeholder="Descreva os atributos e diferenciais técnicos do produto..."></textarea>
+                        <textarea id="description" rows="2" placeholder="Características da tinta, rendimento, aplicação..."></textarea>
                     </div>
                     <div class="form-group">
                         <label for="priceUnit">Valor Unidade (R$)</label>
                         <input type="number" id="priceUnit" step="0.01" required placeholder="0,00">
                     </div>
                     <div class="form-group">
-                        <label for="wholesaleQty">Quantidade Limite Atacado (X)</label>
-                        <input type="number" id="wholesaleQty" min="1" required placeholder="A partir de...">
+                        <label for="wholesaleQty">Valor Atacado acima de (X unidades)</label>
+                        <input type="number" id="wholesaleQty" min="1" required placeholder="Ex: 5">
                     </div>
                     <div class="form-group">
-                        <label for="priceWholesale">Valor Atacado (R$)</label>
+                        <label for="priceWholesale">Valor Atacado Unidade (R$)</label>
                         <input type="number" id="priceWholesale" step="0.01" required placeholder="0,00">
                     </div>
                 </div>
@@ -169,113 +179,140 @@
             </form>
         </div>
 
-        <!-- LISTA DE PRODUTOS CADASTRADOS -->
         <div class="card">
-            <div class="card-title">Produtos Cadastrados</div>
+            <div class="card-title">Produtos Cadastrados no Sistema</div>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Categoria / Subcat.</th>
+                            <th>Categoria / Subcategoria</th>
                             <th>Produto</th>
-                            <th>Valor Unitário</th>
-                            <th>Condição de Atacado</th>
+                            <th>Preço Unitário</th>
+                            <th>Regra de Atacado</th>
                             <th style="text-align: right;">Ações</th>
                         </tr>
                     </thead>
                     <tbody id="productTableBody">
-                        <!-- Gerado dinamicamente -->
+                        <!-- Conteúdo injetado dinamicamente -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- VISÃO DO CLIENTE -->
+    <!-- VISÃO DO CLIENTE (NAVEGAÇÃO POR CATEGORIAS EM MODAL) -->
     <div id="panel-client" class="panel">
         <div style="margin-bottom: 24px;">
-            <h2 style="font-size: 18px; font-weight: 500;">Vitrine de Pedidos Digital</h2>
-            <p style="font-size: 13px; color: var(--text-muted);">Selecione os itens e quantidades para estruturar seu pedido.</p>
+            <h2 style="font-size: 18px; font-weight: 500;">Selecione uma Categoria</h2>
+            <p style="font-size: 13px; color: var(--text-muted);">Clique na categoria desejada para navegar pelas subcategorias e produtos disponíveis.</p>
         </div>
-        <div class="client-grid" id="clientVitrine">
-            <!-- Gerado dinamicamente baseado no estoque cadastrado -->
+        
+        <!-- Menu Principal do Cliente: Apenas as Categorias Criadas -->
+        <div class="category-menu-grid" id="categoryMenuGrid">
+            <!-- Injetado dinamicamente via JS -->
         </div>
     </div>
 </div>
 
-<!-- BARRA FLUTUANTE DE RESUMO DO CLIENTE -->
+<!-- BARRA FIXA FLUTUANTE DO CLIENTE -->
 <div class="client-footer-bar" id="clientFooterBar" style="display: none;">
-    <span id="footerCartSummary">0 itens selecionados</span>
+    <span id="footerCartSummary">0 itens no pedido</span>
     <button class="btn btn-accent" style="padding: 6px 16px; font-size: 13px;" onclick="openOrderModal()">Ver Resumo do Pedido</button>
 </div>
 
-<!-- MODAL DIDÁTICO E ELEGANTE (Passo único com etapas/resumo unificado) -->
+
+<!-- MODAL DINÂMICO DE COMPRA (Categorias -> Subcategorias -> Produtos) -->
+<div class="modal-overlay" id="shopModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="shopModalTitle">Navegação</h3>
+            <button class="close-modal" onclick="closeShopModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="shopModalBody">
+            <!-- Renderização Dinâmica das Etapas -->
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL DE RESUMO DO PEDIDO E FECHAMENTO -->
 <div class="modal-overlay" id="orderModal">
     <div class="modal">
         <div class="modal-header">
-            <h3>Resumo do seu Pedido</h3>
+            <h3>Resumo do Pedido Atual</h3>
             <button class="close-modal" onclick="closeOrderModal()">&times;</button>
         </div>
         <div class="modal-body">
             <div class="discount-toast" id="discountToast">
-                ✨ Parabéns! Você atingiu o lote de atacado em itens do pedido e economizou!
+                ✨ Desconto de atacado aplicado com sucesso aos itens qualificados!
             </div>
             
             <div id="modalItemsContainer">
-                <!-- Itens inseridos dinamicamente -->
+                <!-- Itens selecionados -->
             </div>
 
             <div class="summary-total-box">
                 <div class="order-item-row" style="color: var(--text-muted); font-size: 13px;">
-                    <span>Subtotal Bruto:</span>
+                    <span>Subtotal Original:</span>
                     <span id="modalSubtotal">R$ 0,00</span>
                 </div>
-                <div class="order-item-row" id="modalDiscountRow" style="color: #137333; font-size: 13px; display: none;">
-                    <span>Economia Atacado:</span>
+                <div class="order-item-row" id="modalDiscountRow" style="color: var(--success); font-size: 13px; display: none;">
+                    <span>Desconto Aplicado:</span>
                     <span id="modalDiscount">R$ 0,00</span>
                 </div>
                 <div class="order-item-row" style="font-weight: 600; font-size: 16px; margin-top: 8px;">
-                    <span>Total do Pedido:</span>
+                    <span>Total a Pagar:</span>
                     <span id="modalTotal">R$ 0,00</span>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
             <button class="btn" style="flex: 1;" onclick="closeOrderModal()">Voltar</button>
-            <button class="btn btn-primary" style="flex: 2; background: #25D366; border: none; color: white;" onclick="checkoutAction('whatsapp')">Enviar via WhatsApp</button>
+            <button class="btn btn-primary" style="flex: 2; background: #25D366; border: none; color: white;" onclick="checkoutAction('whatsapp')">Fechar via WhatsApp</button>
             <button class="btn btn-primary" style="flex: 1;" onclick="checkoutAction('pdf')">Gerar PDF</button>
         </div>
     </div>
 </div>
 
 <script>
-    // ESTADO DA APLICAÇÃO (Dados Iniciais de Demonstração)
+    // BASE DE DADOS INICIAIS (Mock estruturado por Módulos)
     let products = [
         {
             id: "1",
             category: "Tintas Imobiliárias",
             subcategory: "Acrílicas",
             name: "Tinta Acrílica Premium Fosca 18L",
-            description: "Alta cobertura, finíssimo acabamento fosco e excelente resistência ao intemperismo.",
+            description: "Alta cobertura e altíssimo rendimento para ambientes internos e externos.",
             priceUnit: 289.00,
             wholesaleQty: 5,
             priceWholesale: 259.00
         },
         {
             id: "2",
-            category: "Industrial",
+            category: "Tintas Imobiliárias",
+            subcategory: "Esmaltes",
+            name: "Esmalte Sintético Premium Brilhante 3.6L",
+            description: "Excelente acabamento e proteção para superfícies de madeira e metal.",
+            priceUnit: 115.00,
+            wholesaleQty: 4,
+            priceWholesale: 98.00
+        },
+        {
+            id: "3",
+            category: "Linha Industrial",
             subcategory: "Epóxi",
-            name: "Esmalte Epóxi de Alta Performance 3.6L",
-            description: "Ideal para pisos industriais, alta resistência química e mecânica abrasiva.",
-            priceUnit: 198.00,
+            name: "Fundo Epóxi de Alta Performance 3.6L",
+            description: "Máxima resistência química e mecânica protetiva para pisos de alta rodagem.",
+            priceUnit: 210.00,
             wholesaleQty: 3,
-            priceWholesale: 175.00
+            priceWholesale: 185.00
         }
     ];
 
-    let cart = {}; // Controla qutd comprada: { productId: quantidade }
+    let cart = {}; // Controle de Estado: { produtoId: quantidade }
+    let currentSelectedCategory = "";
 
-    // RENDERIZAR TABELA ADMIN
+    // ATUALIZAR INTERFACE ADMIN
     function renderAdminTable() {
         const tbody = document.getElementById('productTableBody');
         tbody.innerHTML = '';
@@ -289,7 +326,7 @@
                 </td>
                 <td>
                     <div style="font-weight:500;">${p.name}</div>
-                    <div style="font-size:12px; color:var(--text-muted); max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.description}</div>
+                    <div style="font-size:12px; color:var(--text-muted); max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.description}</div>
                 </td>
                 <td>R$ ${p.priceUnit.toFixed(2)}</td>
                 <td>R$ ${p.priceWholesale.toFixed(2)} <span style="font-size:11px; color:var(--text-muted);">(acima de ${p.wholesaleQty} un)</span></td>
@@ -302,91 +339,237 @@
         });
     }
 
-    // RENDERIZAR VITRINE DO CLIENTE
-    function renderClientVitrine() {
-        const vitrine = document.getElementById('clientVitrine');
-        vitrine.innerHTML = '';
+    // CONSTRUIR MENU PRINCIPAL DE CATEGORIAS DO CLIENTE
+    function renderClientCategoryMenu() {
+        const grid = document.getElementById('categoryMenuGrid');
+        grid.innerHTML = '';
 
-        if (products.length === 0) {
-            vitrine.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">Nenhum produto disponível no catálogo no momento.</p>`;
+        // Agrupa categorias únicas cadastradas
+        const uniqueCategories = [...new Set(products.map(p => p.category))];
+
+        if (uniqueCategories.length === 0) {
+            grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">Nenhuma categoria cadastrada no painel.</p>`;
             return;
         }
 
-        products.forEach(p => {
-            const qty = cart[p.id] || 0;
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            
-            // Verifica se aplica regra de atacado para exibição visual imediata
-            const isWholesale = qty >= p.wholesaleQty;
-            const currentPrice = isWholesale ? p.priceWholesale : p.priceUnit;
-
-            card.innerHTML = `
+        uniqueCategories.forEach(cat => {
+            const count = products.filter(p => p.category === cat).length;
+            const btn = document.createElement('button');
+            btn.className = 'category-card-btn';
+            btn.onclick = () => openCategoryModal(cat);
+            btn.innerHTML = `
                 <div>
-                    <span class="prod-tag">${p.category} &middot; ${p.subcategory}</span>
-                    <h4 style="font-size:15px; margin-bottom:6px; font-weight:600;">${p.name}</h4>
-                    <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${p.description}</p>
+                    <h4>${cat}</h4>
+                    <span>${count} ${count === 1 ? 'produto encontrado' : 'produtos encontrados'}</span>
                 </div>
-                <div>
-                    <div class="price-tag">
-                        <span class="price-strike" id="strike-${p.id}" style="display: ${isWholesale ? 'inline' : 'none'}">R$ ${p.priceUnit.toFixed(2)}</span>
-                        <div class="price-main" id="price-view-${p.id}">R$ ${currentPrice.toFixed(2)} <span style="font-size:11px; font-weight:normal; color:var(--text-muted);">/un</span></div>
-                        <div class="wholesale-info">Lote Atacado: R$ ${p.priceWholesale.toFixed(2)} (acima de ${p.wholesaleQty} un)</div>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:10px; margin-top:12px;">
-                        <button class="btn" style="padding:4px 10px;" onclick="updateCartQty('${p.id}', -1)">-</button>
-                        <span style="font-weight:600; width:24px; text-align:center;" id="qty-count-${p.id}">${qty}</span>
-                        <button class="btn" style="padding:4px 10px;" onclick="updateCartQty('${p.id}', 1)">+</button>
-                    </div>
-                </div>
+                <span style="font-size: 18px; font-weight:bold;">&rarr;</span>
             `;
-            vitrine.appendChild(card);
+            grid.appendChild(btn);
         });
     }
 
-    // ALTERNAR ABAS
-    function switchTab(tab) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    // MODAL DE INTUITIVO DO COMPRADOR - ETAPA 1: SUBCATEGORIAS
+    function openCategoryModal(category) {
+        currentSelectedCategory = category;
+        const modal = document.getElementById('shopModal');
+        const title = document.getElementById('shopModalTitle');
+        const body = document.getElementById('shopModalBody');
 
-        if (tab === 'admin') {
-            document.querySelectorAll('.tab-btn')[0].classList.add('active');
-            document.getElementById('panel-admin').classList.add('active');
-            document.getElementById('clientFooterBar').style.display = 'none';
+        title.innerText = category;
+        
+        // Encontra subcategorias dessa categoria
+        const subcategories = [...new Set(products.filter(p => p.category === category).map(p => p.subcategory))];
+        
+        body.innerHTML = `<div class="subcat-list"></div>`;
+        const listContainer = body.querySelector('.subcat-list');
+
+        subcategories.forEach(sub => {
+            const prodCount = products.filter(p => p.category === category && p.subcategory === sub).length;
+            const subBtn = document.createElement('button');
+            subBtn.className = 'subcat-btn';
+            subBtn.onclick = () => openSubcategoryProducts(sub);
+            subBtn.innerHTML = `
+                <span>${sub}</span>
+                <span style="color: var(--text-muted); font-size:12px;">${prodCount} itens &rsaquo;</span>
+            `;
+            listContainer.appendChild(subBtn);
+        });
+
+        modal.style.display = 'flex';
+    }
+
+    // MODAL DE INTUITIVO DO COMPRADOR - ETAPA 2: PRODUTOS DA SUBCATEGORIA
+    function openSubcategoryProducts(subcategory) {
+        const title = document.getElementById('shopModalTitle');
+        const body = document.getElementById('shopModalBody');
+
+        title.innerText = `${currentSelectedCategory} › ${subcategory}`;
+
+        let html = `
+            <button class="back-step-btn" onclick="openCategoryModal('${currentSelectedCategory}')">&larr; Voltar para Subcategorias</button>
+            <div class="modal-products-list">
+        `;
+
+        const filteredProducts = products.filter(p => p.category === currentSelectedCategory && p.subcategory === subcategory);
+
+        filteredProducts.forEach(p => {
+            const qty = cart[p.id] || 0;
+            const isWholesale = qty >= p.wholesaleQty;
+            const currentPrice = isWholesale ? p.priceWholesale : p.priceUnit;
+
+            html += `
+                <div class="modal-product-item">
+                    <div>
+                        <h4 style="font-size: 14px; font-weight: 600;">${p.name}</h4>
+                        <p style="font-size: 12px; color: var(--text-muted); margin: 4px 0 8px 0;">${p.description}</p>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span class="price-strike" id="m-strike-${p.id}" style="display: ${isWholesale ? 'inline' : 'none'}">R$ ${p.priceUnit.toFixed(2)}</span>
+                            <span class="price-main" id="m-price-${p.id}">R$ ${currentPrice.toFixed(2)}</span>
+                            <div class="wholesale-info">Atacado: R$ ${p.priceWholesale.toFixed(2)} (acima de ${p.wholesaleQty} un)</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="btn" style="padding: 2px 8px;" onclick="updateModalCartQty('${p.id}', -1, '${subcategory}')">-</button>
+                            <span style="font-weight:600; width:20px; text-align:center; font-size:14px;" id="m-qty-${p.id}">${qty}</span>
+                            <button class="btn" style="padding: 2px 8px;" onclick="updateModalCartQty('${p.id}', 1, '${subcategory}')">+</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `</div>`;
+        body.innerHTML = html;
+    }
+
+    // ATUALIZAR QUANTIDADE DENTRO DO MODAL DO CLIENTE
+    function updateModalCartQty(productId, change, subcategory) {
+        const currentQty = cart[productId] || 0;
+        const newQty = Math.max(0, currentQty + change);
+
+        if (newQty === 0) {
+            delete cart[productId];
         } else {
-            document.getElementById('clientTabBtn').classList.add('active');
-            document.getElementById('panel-client').classList.add('active');
-            updateCartFooter();
+            cart[productId] = newQty;
+        }
+
+        // Atualização visual imediata do contador e preços no modal aberto
+        const p = products.find(prod => prod.id === productId);
+        if (p) {
+            const qtyEl = document.getElementById(`m-qty-${productId}`);
+            const priceEl = document.getElementById(`m-price-${productId}`);
+            const strikeEl = document.getElementById(`m-strike-${productId}`);
+
+            if (qtyEl) qtyEl.innerText = newQty;
+
+            if (newQty >= p.wholesaleQty) {
+                if (priceEl) priceEl.innerText = `R$ ${p.priceWholesale.toFixed(2)}`;
+                if (strikeEl) strikeEl.style.display = 'inline';
+            } else {
+                if (priceEl) priceEl.innerText = `R$ ${p.priceUnit.toFixed(2)}`;
+                if (strikeEl) strikeEl.style.display = 'none';
+            }
+        }
+
+        updateCartFooter();
+    }
+
+    function closeShopModal() {
+        document.getElementById('shopModal').style.display = 'none';
+    }
+
+    // ATUALIZAR BARRA FLUTUANTE DE RESUMO DO PEDIDO
+    function updateCartFooter() {
+        const footer = document.getElementById('clientFooterBar');
+        const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
+
+        if (totalItems > 0 && document.getElementById('panel-client').classList.contains('active')) {
+            footer.style.display = 'flex';
+            document.getElementById('footerCartSummary').innerText = `${totalItems} ${totalItems === 1 ? 'item selecionado' : 'itens selecionados'}`;
+        } else {
+            footer.style.display = 'none';
         }
     }
 
-    // GERENCIAR FORMULÁRIO (SALVAR / ATUALIZAR)
+    // MODAL DE RESUMO FINAL E FECHAMENTO DO PEDIDO
+    function openOrderModal() {
+        const container = document.getElementById('modalItemsContainer');
+        container.innerHTML = '';
+
+        let subtotalBruto = 0;
+        let totalLiquido = 0;
+        let teveDesconto = false;
+
+        Object.keys(cart).forEach(id => {
+            const p = products.find(prod => prod.id === id);
+            if (!p) return;
+
+            const qty = cart[id];
+            const isWholesale = qty >= p.wholesaleQty;
+            const precoUtilizado = isWholesale ? p.priceWholesale : p.priceUnit;
+            
+            subtotalBruto += p.priceUnit * qty;
+            totalLiquido += precoUtilizado * qty;
+            if (isWholesale) teveDesconto = true;
+
+            const itemRow = document.createElement('div');
+            itemRow.className = 'order-item-row';
+            itemRow.innerHTML = `
+                <div>
+                    <strong>${qty}x</strong> ${p.name}
+                    <div style="font-size: 11px; color: var(--text-muted);">${isWholesale ? 'Preço de Atacado Especial' : 'Preço de Tabela Unidade'}</div>
+                </div>
+                <span style="font-weight:500;">R$ ${(precoUtilizado * qty).toFixed(2)}</span>
+            `;
+            container.appendChild(itemRow);
+        });
+
+        const economia = subtotalBruto - totalLiquido;
+        document.getElementById('modalSubtotal').innerText = `R$ ${subtotalBruto.toFixed(2)}`;
+        document.getElementById('modalTotal').innerText = `R$ ${totalLiquido.toFixed(2)}`;
+
+        if (teveDesconto && economia > 0) {
+            document.getElementById('discountToast').style.display = 'block';
+            document.getElementById('modalDiscountRow').style.display = 'flex';
+            document.getElementById('modalDiscount').innerText = `- R$ ${economia.toFixed(2)}`;
+        } else {
+            document.getElementById('discountToast').style.display = 'none';
+            document.getElementById('modalDiscountRow').style.display = 'none';
+        }
+
+        document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function closeOrderModal() {
+        document.getElementById('orderModal').style.display = 'none';
+    }
+
+    // GERENCIAR PRODUTOS (ADMIN)
     function saveProduct(e) {
         e.preventDefault();
         const id = document.getElementById('prodId').value;
         const productData = {
             id: id || Date.now().toString(),
-            category: document.getElementById('category').value,
-            subcategory: document.getElementById('subcategory').value,
-            name: document.getElementById('prodName').value,
-            description: document.getElementById('description').value,
+            category: document.getElementById('category').value.trim(),
+            subcategory: document.getElementById('subcategory').value.trim(),
+            name: document.getElementById('prodName').value.trim(),
+            description: document.getElementById('description').value.trim(),
             priceUnit: parseFloat(document.getElementById('priceUnit').value),
             wholesaleQty: parseInt(document.getElementById('wholesaleQty').value),
             priceWholesale: parseFloat(document.getElementById('priceWholesale').value)
         };
 
         if (id) {
-            // Editar existente
             const index = products.findIndex(p => p.id === id);
             products[index] = productData;
         } else {
-            // Inserir novo
             products.push(productData);
         }
 
         clearForm();
         renderAdminTable();
-        renderClientVitrine();
+        renderClientCategoryMenu();
     }
 
     function editProduct(id) {
@@ -410,7 +593,8 @@
         products = products.filter(p => p.id !== id);
         delete cart[id];
         renderAdminTable();
-        renderClientVitrine();
+        renderClientCategoryMenu();
+        updateCartFooter();
     }
 
     function clearForm() {
@@ -419,7 +603,6 @@
         document.getElementById('formActionTitle').innerText = "Cadastrar / Editar Produto";
     }
 
-    // SIMULAÇÃO DE GERAÇÃO DE LINK DO CLIENTE
     function generateClientLink() {
         const alertBox = document.getElementById('linkAlert');
         alertBox.style.display = 'block';
@@ -427,120 +610,35 @@
         setTimeout(() => alertBox.style.display = 'none', 6000);
     }
 
-    // CONTROLE DE CARRINHO DO CLIENTE
-    function updateCartQty(productId, change) {
-        const currentQty = cart[productId] || 0;
-        const newQty = Math.max(0, currentQty + change);
-        
-        if (newQty === 0) {
-            delete cart[productId];
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+
+        if (tab === 'admin') {
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.getElementById('panel-admin').classList.add('active');
+            document.getElementById('clientFooterBar').style.display = 'none';
         } else {
-            cart[productId] = newQty;
-        }
-
-        // Atualiza dinamicamente o card de preço (Simulação Atacado em tempo real)
-        const p = products.find(prod => prod.id === productId);
-        if (p) {
-            const qtyCountEl = document.getElementById(`qty-count-${productId}`);
-            const priceViewEl = document.getElementById(`price-view-${productId}`);
-            const strikeEl = document.getElementById(`strike-${productId}`);
-            
-            if (qtyCountEl) qtyCountEl.innerText = newQty;
-            
-            if (newQty >= p.wholesaleQty) {
-                if (priceViewEl) priceViewEl.innerHTML = `R$ ${p.priceWholesale.toFixed(2)} <span style="font-size:11px; font-weight:normal; color:var(--text-muted);">/un</span>`;
-                if (strikeEl) strikeEl.style.display = 'inline';
-            } else {
-                if (priceViewEl) priceViewEl.innerHTML = `R$ ${p.priceUnit.toFixed(2)} <span style="font-size:11px; font-weight:normal; color:var(--text-muted);">/un</span>`;
-                if (strikeEl) strikeEl.style.display = 'none';
-            }
-        }
-
-        updateCartFooter();
-    }
-
-    function updateCartFooter() {
-        const footer = document.getElementById('clientFooterBar');
-        const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
-
-        if (totalItems > 0 && document.getElementById('panel-client').classList.contains('active')) {
-            footer.style.display = 'flex';
-            document.getElementById('footerCartSummary').innerText = `${totalItems} ${totalItems === 1 ? 'item selecionado' : 'itens selecionados'}`;
-        } else {
-            footer.style.display = 'none';
+            document.getElementById('clientTabBtn').classList.add('active');
+            document.getElementById('panel-client').classList.add('active');
+            renderClientCategoryMenu();
+            updateCartFooter();
         }
     }
 
-    // MODAL DE FECHAMENTO E RESUMO DO PEDIDO
-    function openOrderModal() {
-        const container = document.getElementById('modalItemsContainer');
-        container.innerHTML = '';
-
-        let subtotalBruto = 0;
-        let totalLiquido = 0;
-        let teveDesconto = false;
-
-        Object.keys(cart).forEach(id => {
-            const p = products.find(prod => prod.id === id);
-            if (!p) return;
-
-            const qty = cart[id];
-            const isWholesale = qty >= p.wholesaleQty;
-            const precoUtilizado = isWholesale ? p.priceWholesale : p.priceUnit;
-            
-            const valorItemBruto = p.priceUnit * qty;
-            const valorItemLiquido = precoUtilizado * qty;
-
-            subtotalBruto += valorItemBruto;
-            totalLiquido += valorItemLiquido;
-            if (isWholesale) teveDesconto = true;
-
-            const itemRow = document.createElement('div');
-            itemRow.className = 'order-item-row';
-            itemRow.innerHTML = `
-                <div>
-                    <strong>${qty}x</strong> ${p.name}
-                    <div style="font-size: 11px; color: var(--text-muted);">${isWholesale ? 'Preço de Atacado Aplicado' : 'Preço Unitário Normal'}</div>
-                </div>
-                <span>R$ ${valorItemLiquido.toFixed(2)}</span>
-            `;
-            container.appendChild(itemRow);
-        });
-
-        const economia = subtotalBruto - totalLiquido;
-
-        document.getElementById('modalSubtotal').innerText = `R$ ${subtotalBruto.toFixed(2)}`;
-        document.getElementById('modalTotal').innerText = `R$ ${totalLiquido.toFixed(2)}`;
-
-        if (teveDesconto && economia > 0) {
-            document.getElementById('discountToast').style.display = 'block';
-            document.getElementById('modalDiscountRow').style.display = 'flex';
-            document.getElementById('modalDiscount').innerText = `- R$ ${economia.toFixed(2)}`;
-        } else {
-            document.getElementById('discountToast').style.display = 'none';
-            document.getElementById('modalDiscountRow').style.display = 'none';
-        }
-
-        document.getElementById('orderModal').style.display = 'flex';
-    }
-
-    function closeOrderModal() {
-        document.getElementById('orderModal').style.display = 'none';
-    }
-
-    // AÇÕES DE FECHAMENTO (PDF / WhatsApp)
     function checkoutAction(type) {
         if (type === 'whatsapp') {
-            alert("🚀 Redirecionando para o WhatsApp...\nO Assistente receberá o resumo do pedido estruturado e formatado em texto para faturamento imediato!");
+            alert("🚀 Redirecionando para o WhatsApp...\nO Assistente Inteligente processará o resumo estruturado e enviará o lote de pedidos formatado!");
         } else if (type === 'pdf') {
-            alert("📄 Documento PDF Gerado com Sucesso!\nO espelho do pedido contendo descontos por volume e cabeçalho da Tintas Qualy Quimy foi salvo.");
+            alert("📄 Documento PDF Gerado com Sucesso!\nO relatório do pedido contendo descontos por volume e cabeçalho institucional foi emitido.");
         }
         closeOrderModal();
+        closeShopModal();
     }
 
-    // EXECUÇÃO INICIAL
+    // EXECUÇÃO DE INICIALIZAÇÃO CONTAMINADA COM DADOS EXEMPLO
     renderAdminTable();
-    renderClientVitrine();
+    renderClientCategoryMenu();
 </script>
 </body>
 </html>
