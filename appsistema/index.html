@@ -3,844 +3,783 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Consultor Inteligente - Tintas Qualy Quimy</title>
-    <!-- Google Fonts & Icons -->
+    <title>Painel Administrativo - Tintas Qualy Quimy</title>
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
     
     <style>
         /* ==========================================================================
-           VARIABLES & DESIGN SYSTEM (Premium Palette)
+           DESIGN SYSTEM (Stripe / Vercel Aesthetic)
            ========================================================================== */
         :root {
-            --primary: #0F52BA;        /* Azul Confiança Comercial */
-            --primary-light: #EBF3FF;
-            --accent: #FF6B00;         /* Laranja Energia/Pintura */
-            --text-main: #1A202C;
-            --text-muted: #718096;
-            --bg-app: #F7FAFC;
+            --bg: #FAFAFA;
             --surface: #FFFFFF;
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
-            --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border: #EEEEEE;
+            --border-focus: #0F52BA;
+            --text: #111111;
+            --text-muted: #666666;
+            --primary: #0F52BA;
+            --primary-light: #F0F6FF;
+            --success: #00B159;
+            --success-light: #E6F7ED;
+            --danger: #DF1414;
+            --danger-light: #FCE8E8;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.02);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.06);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-app);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+        body { background-color: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
 
         /* ==========================================================================
-           MAIN SCREEN LAYOUT
+           LAYOUT STRUCTURE
            ========================================================================== */
-        .app-container {
-            max-width: 480px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 24px 16px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+        .admin-container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+        
+        .header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .brand h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+        .brand p { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+        
+        /* Navigation Tabs */
+        .nav-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+        .tab-btn { background: none; border: none; padding: 12px 16px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: var(--transition); }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
 
-        .brand-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+        /* KPI Dashboard Grid */
+        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; }
+        @media(min-width: 768px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+        
+        .kpi-card { background: var(--surface); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+        .kpi-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .kpi-value { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
 
-        .brand-logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: var(--radius-lg);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 38px;
-            font-weight: bold;
-            box-shadow: 0 10px 25px rgba(15, 82, 186, 0.2);
-            margin-bottom: 20px;
-        }
-
-        .brand-name {
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--primary);
-            letter-spacing: -0.5px;
-        }
-
-        .brand-slogan {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            margin-top: 4px;
-            font-weight: 600;
-        }
-
-        .welcome-card {
-            background: var(--surface);
-            padding: 28px 24px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-premium);
-            text-align: center;
-            margin-bottom: 32px;
-            border: 1px solid rgba(0, 0, 0, 0.02);
-        }
-
-        .welcome-card h1 {
-            font-size: 20px;
-            font-weight: 700;
-            line-height: 1.4;
-            color: var(--text-main);
-            margin-bottom: 12px;
-        }
-
-        .welcome-card p {
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        /* Category Grid */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        .category-card {
-            background: var(--surface);
-            border: 2px solid transparent;
-            border-radius: var(--radius-md);
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: var(--shadow-premium);
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .category-card:active, .category-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary-light);
-            box-shadow: 0 15px 30px rgba(15, 82, 186, 0.08);
-        }
-
-        .category-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-            transition: var(--transition);
-        }
-
-        .category-card:hover .category-icon {
-            transform: scale(1.15);
-        }
-
-        .category-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
+        /* Utilities Controls (Search, Filters, Order) */
+        .controls-row { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+        @media(min-width: 768px) { .controls-row { flex-direction: row; align-items: center; justify-content: space-between; } }
+        
+        .search-wrapper { position: relative; flex: 1; }
+        .search-wrapper .material-symbols-rounded { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 20px; }
+        .search-input { width: 100%; padding: 12px 12px 12px 44px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); font-size: 14px; outline: none; transition: var(--transition); }
+        .search-input:focus { border-color: var(--border-focus); }
+        
+        .filter-group { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .select-custom { padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); font-size: 14px; font-weight: 500; outline: none; cursor: pointer; color: var(--text-muted); }
 
         /* ==========================================================================
-           MODAL SYSTEM (Fade + Scale Performance Layer)
+           PRODUCT & CATEGORY CARDS GRAPHICS
            ========================================================================== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 17, 40, 0.6);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: flex;
-            align-items: flex-end; /* Mobile bottom sheet look, morphs to center on desktop */
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
+        .items-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        @media(min-width: 768px) { .items-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media(min-width: 1024px) { .items-grid { grid-template-columns: repeat(3, 1fr); } }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; position: relative; box-shadow: var(--shadow-sm); transition: var(--transition); display: flex; flex-direction: column; justify-content: space-between; }
+        .product-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .category-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; tracking: 0.5px; background: var(--primary-light); color: var(--primary); padding: 4px 8px; border-radius: 4px; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .status-dot.active { background: var(--success); }
+        .status-dot.inactive { background: var(--danger); }
+        
+        .product-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+        .product-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; display: flex; gap: 12px; }
+        
+        .price-structure { background: var(--bg); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .price-block { display: flex; flex-direction: column; }
+        .price-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+        .price-value { font-size: 15px; font-weight: 700; }
+        
+        .card-actions { display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--border); padding-top: 14px; }
+        .btn-icon { background: none; border: none; width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: var(--transition); border: 1px solid var(--border); }
+        .btn-icon:hover { background: var(--bg); color: var(--text); }
+        .btn-icon.delete:hover { background: var(--danger-light); color: var(--danger); }
 
-        .modal-wrapper {
-            background: var(--surface);
-            width: 100%;
-            max-width: 480px;
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-            padding: 24px;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
-            transform: translateY(100%) scale(1);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            max-height: 92vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-overlay.active .modal-wrapper {
-            transform: translateY(0) scale(1);
-        }
-
-        /* Desktop Adjustment */
-        @media(min-width: 480px) {
-            .modal-overlay {
-                align-items: center;
-            }
-            .modal-wrapper {
-                border-radius: var(--radius-lg);
-                transform: translateY(20px) scale(0.95);
-            }
-            .modal-overlay.active .modal-wrapper {
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* Modal Top Header Elements */
-        .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .nav-btn {
-            background: var(--primary-light);
-            border: none;
-            color: var(--primary);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .nav-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .step-indicator {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--primary);
-            background: var(--primary-light);
-            padding: 6px 14px;
-            border-radius: 20px;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            height: 6px;
-            background: var(--primary-light);
-            border-radius: 3px;
-            margin-bottom: 24px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-
-        /* Dynamic Content Area */
-        .modal-body {
-            overflow-y: auto;
-            flex: 1;
-            padding-bottom: 16px;
-        }
-
-        .question-title {
-            font-size: 22px;
-            font-weight: 700;
-            line-height: 1.3;
-            margin-bottom: 24px;
-            color: var(--text-main);
-        }
-
-        /* Input Controls */
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .option-button {
-            background: var(--surface);
-            border: 2px solid #E2E8F0;
-            border-radius: var(--radius-md);
-            padding: 18px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-main);
-            text-align: left;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .option-button:hover, .option-button:active {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-
-        .option-button::after {
-            content: '\e5cc';
-            font-family: 'Material Symbols Rounded';
-            font-size: 20px;
-            color: var(--text-muted);
-            opacity: 0.5;
-        }
-
-        .input-numeric-wrapper {
-            position: relative;
-            margin-top: 10px;
-        }
-
-        .input-numeric {
-            width: 100%;
-            padding: 18px;
-            border: 2px solid #E2E8F0;
-            border-radius: var(--radius-md);
-            font-size: 18px;
-            font-weight: 600;
-            outline: none;
-            transition: var(--transition);
-        }
-
-        .input-numeric:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(15, 82, 186, 0.15);
-        }
-
-        .input-unit {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-weight: 700;
-            color: var(--text-muted);
-        }
-
-        .submit-btn {
-            width: 100%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: var(--radius-md);
-            font-size: 16px;
-            font-weight: 600;
-            margin-top: 20px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(15, 82, 186, 0.2);
-            transition: var(--transition);
-        }
-
-        .submit-btn:hover {
-            background: #0d46a0;
-        }
+        /* Category Card Layout */
+        .category-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; align-items: center; justify-content: space-between; }
+        .category-info { display: flex; align-items: center; gap: 16px; }
+        .category-avatar { width: 44px; height: 44px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; color: white; }
 
         /* ==========================================================================
-           SUMMARY / RESULT SCREEN
+           DATA HUB / EXPORT FOOTER BAR
            ========================================================================== */
-        .summary-card {
-            background: #FAFAFA;
-            border-radius: var(--radius-md);
-            padding: 20px;
-            border: 1px dashed #CBD5E0;
-            margin-bottom: 24px;
-        }
-
-        .summary-header-title {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #EDF2F7;
-            font-size: 15px;
-        }
-
-        .summary-item:last-child {
-            border-bottom: none;
-        }
-
-        .summary-label {
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .summary-value {
-            color: var(--text-main);
-            font-weight: 600;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .btn-action {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: var(--transition);
-        }
-
-        .btn-pdf { background: #E2E8F0; color: var(--text-main); }
-        .btn-pdf:hover { background: #CBD5E0; }
-        .btn-whatsapp { background: #25D366; color: white; }
-        .btn-whatsapp:hover { background: #20ba5a; }
-        .btn-restart { background: var(--primary-light); color: var(--primary); }
-        .btn-restart:hover { background: var(--primary); color: white; }
-        .btn-home { background: transparent; border: 1px solid #E2E8F0; color: var(--text-muted); }
-        .btn-home:hover { background: #F7FAFC; }
+        .data-hub-bar { background: var(--surface); border-top: 1px solid var(--border); padding: 16px; position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: center; gap: 8px; overflow-x: auto; z-index: 900; }
+        .btn-secondary { background: var(--surface); border: 1px solid var(--border); padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: var(--transition); }
+        .btn-secondary:hover { background: var(--bg); }
 
         /* ==========================================================================
-           PRINT ENGINE ARCHITECTURE (Native High Fidelity PDF Blueprint)
+           MODAL SYSTEM STRUCTURE (Micro-animations Layer)
+           ========================================================================== */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .modal-wrapper { background: var(--surface); width: 100%; max-width: 540px; border-radius: var(--radius) var(--radius) 0 0; padding: 24px; max-height: 85vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.2s ease; }
+        .modal-overlay.active .modal-wrapper { transform: translateY(0); }
+        @media(min-width: 768px) { .modal-overlay { align-items: center; } .modal-wrapper { border-radius: var(--radius); transform: scale(0.95); } .modal-overlay.active .modal-wrapper { transform: scale(1); } }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h3 { font-size: 18px; font-weight: 700; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        
+        .form-label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 11px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); font-size: 14px; outline: none; transition: var(--transition); }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--border-focus); background: var(--surface); }
+        .form-textarea { resize: vertical; min-height: 60px; }
+        
+        .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px; }
+        
+        /* Floating Action Button (FAB) */
+        .fab-btn { position: fixed; bottom: 84px; right: 20px; background: var(--primary); color: white; border: none; padding: 14px 24px; border-radius: 30px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: var(--shadow-lg); z-index: 850; transition: var(--transition); }
+        .fab-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; }
+        .btn-inline-add { display: flex; align-items: center; justify-content: center; background: var(--primary-light); color: var(--primary); border: none; padding: 8px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; gap: 4px; margin-top: 4px; }
+
+        /* ==========================================================================
+           PRINT ARCHITECTURE BLUEPRINT
            ========================================================================== */
         @media print {
-            body * {
-                visibility: hidden;
-            }
-            #print-zone, #print-zone * {
-                visibility: visible;
-            }
-            #print-zone {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                background: white;
-                color: black;
-                padding: 40px;
-            }
-            .no-print {
-                display: none !important;
-            }
-        }
-
-        /* Dynamic Hidden Print Zone Construction Container */
-        #print-zone {
-            display: none;
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none !important; }
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <!-- Header Principal -->
-        <header class="brand-header">
-            <div class="brand-logo">
-                <span class="material-symbols-rounded">palette</span>
+    <div class="admin-container">
+        <!-- Header Panel -->
+        <header class="header-panel">
+            <div class="brand">
+                <h1>Painel Administrativo</h1>
+                <p>Tintas Qualy Quimy — Gestão Estrutural e Arquitetura de Dados</p>
             </div>
-            <h2 class="brand-name">Tintas Qualy Quimy</h2>
-            <p class="brand-slogan">Há 18 anos com você.</p>
         </header>
 
-        <!-- Welcome Dashboard Segment -->
-        <main class="welcome-card">
-            <h1>Olá! Seja bem-vindo à Tintas Qualy Quimy.</h1>
-            <p>Há 18 anos ajudando clientes a encontrar a solução ideal para pintura e acabamento. Vamos descobrir o produto ideal para sua obra?</p>
-        </main>
+        <!-- Tabs Switcher Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" id="tab-products" onclick="AdminHub.switchTab('products')">Produtos</button>
+            <button class="tab-btn" id="tab-categories" onclick="AdminHub.switchTab('categories')">Categorias</button>
+        </nav>
 
-        <!-- Category Hub Selection Matrix -->
-        <section class="category-grid">
-            <div class="category-card" onclick="ConsultorEngine.initSession('tintas')">
-                <span class="category-icon">🎨</span>
-                <span class="category-title">Tintas</span>
-            </div>
-            <div class="category-card" onclick="ConsultorEngine.initSession('massas')">
-                <span class="category-icon">🧱</span>
-                <span class="category-title">Massas</span>
-            </div>
-            <div class="category-card" onclick="ConsultorEngine.initSession('texturas')">
-                <span class="category-icon">🏠</span>
-                <span class="category-title">Texturas</span>
-            </div>
-            <div class="category-card" onclick="ConsultorEngine.initSession('selantes')">
-                <span class="category-icon">🛡</span>
-                <span class="category-title">Selantes</span>
-            </div>
+        <!-- Analytics Dashboard Row -->
+        <section class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpi-cats">0</div></div>
+            <div class="kpi-card"><div class="kpi-label">Total Produtos</div><div class="kpi-value" id="kpi-prods">0</div></div>
+            <div class="kpi-card"><div class="kpi-label">Ativos</div><div class="kpi-value" id="kpi-active" style="color:var(--success);">0</div></div>
+            <div class="kpi-card"><div class="kpi-label">Preço Médio</div><div class="kpi-value" id="kpi-avg">R$ 0,00</div></div>
         </section>
-    </div>
 
-    <!-- ==========================================================================
-       MODAL CORE CONTAINER TEMPLATE
-       ========================================================================== -->
-    <div class="modal-overlay" id="consultorModal">
-        <div class="modal-wrapper">
-            <div class="modal-header">
-                <button class="nav-btn" id="modalBackBtn" onclick="ConsultorEngine.backStep()">
-                    <span class="material-symbols-rounded">arrow_back</span>
-                </button>
-                <div class="step-indicator" id="modalStepIndicator">Etapa 1 de 7</div>
-                <button class="nav-btn" onclick="ConsultorEngine.closeModal()">
-                    <span class="material-symbols-rounded">close</span>
-                </button>
+        <!-- View Segment: Products Main Studio -->
+        <div id="view-products">
+            <div class="controls-row">
+                <div class="search-wrapper">
+                    <span class="material-symbols-rounded">search</span>
+                    <input type="text" class="search-input" id="searchBar" placeholder="Pesquisar por nome, marca, código ou categoria..." oninput="AdminHub.render()">
+                </div>
+                <div class="filter-group">
+                    <select class="select-custom" id="filterCat" onchange="AdminHub.render()"><option value="">Todas Categorias</option></select>
+                    <select class="select-custom" id="filterStatus" onchange="AdminHub.render()">
+                        <option value="">Todos Status</option>
+                        <option value="Ativo">Ativos</option>
+                        <option value="Inativo">Inativos</option>
+                    </select>
+                    <select class="select-custom" id="filterAtacado" onchange="AdminHub.render()">
+                        <option value="">Atacado/Varejo</option>
+                        <option value="com">Com Atacado</option>
+                        <option value="sem">Sem Atacado</option>
+                    </select>
+                    <select class="select-custom" id="sortBy" onchange="AdminHub.render()">
+                        <option value="recent">Mais Recentes</option>
+                        <option value="name">Nome (A-Z)</option>
+                        <option value="price-asc">Menor Preço</option>
+                        <option value="price-desc">Maior Preço</option>
+                    </select>
+                </div>
             </div>
-            
-            <div class="progress-container">
-                <div class="progress-bar" id="modalProgressBar"></div>
-            </div>
+            <div class="items-grid" id="productsContainer"></div>
+        </div>
 
-            <div class="modal-body" id="modalDynamicContent">
-                <!-- Injected Form Fields / Controls Stream Generates Here -->
+        <!-- View Segment: Categories Management -->
+        <div id="view-categories" style="display: none;">
+            <div style="margin-bottom: 16px; display: flex; justify-content: flex-end;">
+                <button class="btn-secondary" style="background:var(--primary); color:white;" onclick="AdminHub.openCategoryModal()">
+                    <span class="material-symbols-rounded">add</span> Nova Categoria
+                </button>
             </div>
+            <div class="items-grid" id="categoriesContainer"></div>
         </div>
     </div>
 
-    <!-- Hidden Printable Structural Matrix Zone -->
-    <div id="print-zone"></div>
+    <!-- Data Hub / Export Control Deck Bar -->
+    <footer class="data-hub-bar no-print">
+        <button class="btn-secondary" onclick="DataBridge.exportJSON()"><span class="material-symbols-rounded">download</span> Exportar JSON</button>
+        <button class="btn-secondary" onclick="document.getElementById('importFile').click()"><span class="material-symbols-rounded">upload</span> Importar JSON</button>
+        <button class="btn-secondary" onclick="DataBridge.exportExcelStub()"><span class="material-symbols-rounded">table_chart</span> Excel (Prep)</button>
+        <button class="btn-secondary" onclick="DataBridge.printReport()"><span class="material-symbols-rounded">print</span> Gerar PDF</button>
+        <input type="file" id="importFile" style="display:none" accept=".json" onchange="DataBridge.importJSON(event)">
+    </footer>
+
+    <!-- Floating Action Button -->
+    <button class="fab-btn no-print" onclick="AdminHub.openProductModal()">
+        <span class="material-symbols-rounded">add</span>
+        <span>Novo Produto</span>
+    </button>
 
     <!-- ==========================================================================
-       JAVASCRIPT MODERN ARCHITECTURE CORE ENGINE (ES6+)
-       ========================================================================== */
+       MODAL: PRODUCT CADASTRE & MUTATION LAYER
+       ========================================================================== */ -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-wrapper">
+            <div class="modal-header">
+                <h3 id="prodModalTitle">Novo Produto</h3>
+                <button class="btn-icon" onclick="AdminHub.closeModal('productModal')"><span class="material-symbols-rounded">close</span></button>
+            </div>
+            <form id="productForm" onsubmit="AdminHub.saveProduct(event)">
+                <input type="hidden" id="prod-id">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Categoria *</label>
+                        <select class="form-select" id="prod-category" required></select>
+                        <button type="button" class="btn-inline-add" onclick="AdminHub.openCategoryModal()"><span class="material-symbols-rounded">add</span> Criar Nova Categoria</button>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nome do Produto *</label>
+                        <input type="text" class="form-input" id="prod-name" placeholder="Ex: Tinta Acrílica Premium Branco 18L" required>
+                    </div>
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Marca *</label>
+                            <input type="text" class="form-input" id="prod-brand" placeholder="Ex: Qualy Quimy" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Código Interno</label>
+                            <input type="text" class="form-input" id="prod-code" placeholder="Ex: TQP-01">
+                        </div>
+                    </div>
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Unidade *</label>
+                            <select class="form-select" id="prod-unit" required>
+                                <option value="Litros">Litros</option>
+                                <option value="Quilos">Quilos</option>
+                                <option value="Unidade">Unidade</option>
+                                <option value="Caixa">Caixa</option>
+                                <option value="Galão">Galão</option>
+                                <option value="Pacote">Pacote</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Rendimento</label>
+                            <input type="text" class="form-input" id="prod-yield" placeholder="Ex: Até 320 m²">
+                        </div>
+                    </div>
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label class="form-label">Preço Venda (R$) *</label>
+                            <input type="number" step="0.01" class="form-input" id="prod-price" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Preço Atacado (R$)</label>
+                            <input type="number" step="0.01" class="form-input" id="prod-wholesale" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mín. Atacado (Un)</label>
+                            <input type="number" class="form-input" id="prod-min-wholesale" placeholder="3">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Situação</label>
+                        <select class="form-select" id="prod-status">
+                            <option value="Ativo">Ativo</option>
+                            <option value="Inativo">Inativo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-textarea" id="prod-desc" placeholder="Detalhes adicionais do produto..."></textarea>
+                    </div>
+
+                    <!-- HIDDEN INTELLIGENT ROUTING STRUCTURE DIRECTIVES (Pronto para o Motor de Recomendação) -->
+                    <input type="hidden" id="ai-subcat" value="">
+                    <input type="hidden" id="ai-app-area" value="Ambas"> <!-- Interna, Externa, Ambas -->
+                    <input type="hidden" id="ai-env-type" value="Ambos">  <!-- Seco, Úmido, Ambos -->
+                    <input type="hidden" id="ai-color-type" value="Ambas"> <!-- Branca, Colorida, Ambas -->
+                    <input type="hidden" id="ai-surface" value="">
+                    <input type="hidden" id="ai-finish" value="">
+                    <input type="hidden" id="ai-priority" value="1">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="AdminHub.closeModal('productModal')">Cancelar</button>
+                    <button type="submit" class="btn-submit">Salvar Produto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+       MODAL: CATEGORY CREATION HUB
+       ========================================================================== */ -->
+    <div class="modal-overlay" id="categoryModal">
+        <div class="modal-wrapper">
+            <div class="modal-header">
+                <h3 id="catModalTitle">Nova Categoria</h3>
+                <button class="btn-icon" onclick="AdminHub.closeModal('categoryModal')"><span class="material-symbols-rounded">close</span></button>
+            </div>
+            <form id="categoryForm" onsubmit="AdminHub.saveCategory(event)">
+                <input type="hidden" id="cat-id">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Nome da Categoria *</label>
+                        <input type="text" class="form-input" id="cat-name" placeholder="Ex: Impermeabilizantes" required>
+                    </div>
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Ícone (Emoji/Texto) *</label>
+                            <input type="text" class="form-input" id="cat-icon" placeholder="Ex: 🛡️" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cor de Destaque (Hex) *</label>
+                            <input type="color" class="form-input" id="cat-color" value="#0F52BA" style="height:43px; padding:4px;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-textarea" id="cat-desc" placeholder="Finalidade desta categoria..."></textarea>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="AdminHub.closeModal('categoryModal')">Cancelar</button>
+                    <button type="submit" class="btn-submit">Salvar Categoria</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Clean Target Native Print Canvas Node Container -->
+    <div id="print-area"></div>
+
+    <!-- ==========================================================================
+       JAVASCRIPT ARCHITECTURAL SYSTEM ENGINE (ES6+ MODULES PATTERN)
+       ========================================================================== */ -->
     <script>
         /**
-         * CONFIGURAÇÃO DOS FLUXOS (Simulação Estrutural de Arquivos JSON de Categoria)
-         * Arquitetura preparada para acoplamento dinâmico e expansões assíncronas.
+         * INITIAL DATA BLUEPRINT MATRIX
          */
-        const ModulosPerguntas = {
-            tintas: {
-                titulo: "Tintas",
-                perguntas: [
-                    { id: "aplicacao", texto: "Onde será aplicada?", tipo: "select", opcoes: ["Área Interna", "Área Externa"] },
-                    { id: "acabamento", texto: "Qual acabamento deseja?", tipo: "select", opcoes: ["Branca", "Colorida"] },
-                    { id: "parede", texto: "A parede é:", tipo: "select", opcoes: ["Nova", "Já Pintada"] },
-                    { id: "umidade", texto: "Existe umidade?", tipo: "select", opcoes: ["Sim", "Não"] },
-                    { id: "cor_atual", texto: "Qual a cor atual da parede?", tipo: "select", opcoes: ["Clara", "Média", "Escura"] },
-                    { id: "metragem", texto: "Quantos metros quadrados serão pintados?", tipo: "number", sulfixo: "m²" },
-                    { id: "demaos", texto: "Quantas demãos pretende aplicar?", tipo: "select", opcoes: ["2", "3", "Ainda não sei"] }
-                ]
+        const DefaultCategories = [
+            { id: "cat-1", name: "Tintas", icon: "🎨", color: "#0F52BA", desc: "Tintas imobiliárias premium e padrão." },
+            { id: "cat-2", name: "Massas", icon: "🧱", color: "#FF6B00", desc: "Massas niveladoras para preparação de superfícies." },
+            { id: "cat-3", name: "Texturas", icon: "🏠", color: "#00B159", desc: "Texturas decorativas, rústicas e efeitos." },
+            { id: "cat-4", name: "Selantes", icon: "🛡️", color: "#7928CA", desc: "Selantes acrílicos, PU e vedação estrutural." }
+        ];
+
+        const DefaultProducts = [
+            { id: "prod-1", categoryId: "cat-1", name: "Tinta Acrílica Premium Branco 18L", brand: "Qualy Quimy", code: "TQP-01", unit: "Litros", yield: "Atje 320 m²", price: 289.90, wholesale: 265.00, minWholesale: 5, status: "Ativo", desc: "Alta cobertura e super lavável.", ai: { area: "Interna", environment: "Ambos", color: "Branca", priority: 1 } },
+            { id: "prod-2", categoryId: "cat-2", name: "Massa Corrida PVA Interior 25kg", brand: "Qualy Quimy", code: "MPVA-02", unit: "Quilos", yield: "Até 50 m²", price: 65.00, wholesale: 58.00, minWholesale: 10, status: "Ativo", desc: "Fácil de lixar, acabamento liso.", ai: { area: "Interna", environment: "Seco", color: "Branca", priority: 1 } }
+        ];
+
+        /**
+         * CORE STATE ENGINE MANAGEMENT (LocalStorage Controller Hub)
+         */
+        const StorageController = {
+            init() {
+                if (!localStorage.getItem("qq_categories")) localStorage.setItem("qq_categories", JSON.stringify(DefaultCategories));
+                if (!localStorage.getItem("qq_products")) localStorage.setItem("qq_products", JSON.stringify(DefaultProducts));
             },
-            massas: {
-                titulo: "Massas",
-                perguntas: [
-                    { id: "massa_tipo", texto: "Qual massa procura?", tipo: "select", opcoes: ["Massa PVA", "Massa Acrílica"] },
-                    { id: "umidade", texto: "Existe umidade?", tipo: "select", opcoes: ["Sim", "Não"] },
-                    { id: "aplicacao_local", texto: "Aplicação:", tipo: "select", opcoes: ["Parede", "Teto"] },
-                    { id: "ambiente", texto: "Área Interna ou Externa?", tipo: "select", opcoes: ["Interna", "Externa"] },
-                    { id: "metragem", texto: "Quantos metros quadrados?", tipo: "number", sulfixo: "m²" }
-                ]
+            get(key) { return JSON.parse(localStorage.getItem(`qq_${key}`)); },
+            set(key, data) { localStorage.setItem(`qq_${key}`, JSON.stringify(data)); AdminHub.calculateKPIs(); }
+        };
+
+        /**
+         * REUSABLE COMPONENT FACTORY INTERFACES
+         */
+        const ComponentFactory = {
+            createProductCard(prod, catName) {
+                return `
+                    <div class="product-card">
+                        <div>
+                            <div class="card-header">
+                                <span class="category-tag">${catName}</span>
+                                <div class="status-dot ${prod.status === 'Ativo' ? 'active' : 'inactive'}" title="${prod.status}"></div>
+                            </div>
+                            <h4 class="product-name">${prod.name}</h4>
+                            <div class="product-meta">
+                                <span><b>Marca:</b> ${prod.brand}</span>
+                                ${prod.code ? `<span><b>Cód:</b> ${prod.code}</span>` : ''}
+                            </div>
+                            <div class="price-structure">
+                                <div class="price-block">
+                                    <span class="price-label">Venda</span>
+                                    <span class="price-value" style="color:var(--primary)">R$ ${parseFloat(prod.price).toFixed(2)}</span>
+                                </div>
+                                <div class="price-block">
+                                    <span class="price-label">Atacado (${prod.minWholesale || 3} un)</span>
+                                    <span class="price-value" style="color:var(--success)">${prod.wholesale ? `R$ ${parseFloat(prod.wholesale).toFixed(2)}` : '—'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-actions no-print">
+                            <button class="btn-icon" onclick="AdminHub.editProduct('${prod.id}')" title="Editar"><span class="material-symbols-rounded">edit</span></button>
+                            <button class="btn-icon" onclick="AdminHub.duplicateProduct('${prod.id}')" title="Duplicar"><span class="material-symbols-rounded">content_copy</span></button>
+                            <button class="btn-icon delete" onclick="AdminHub.deleteProduct('${prod.id}')" title="Excluir"><span class="material-symbols-rounded">delete</span></button>
+                        </div>
+                    </div>
+                `;
             },
-            texturas: {
-                titulo: "Texturas",
-                perguntas: [
-                    { id: "ambiente", texto: "Área Interna ou Externa?", tipo: "select", opcoes: ["Interna", "Externa"] },
-                    { id: "metragem", texto: "Quantos metros quadrados?", tipo: "number", sulfixo: "m²" }
-                ]
-            },
-            selantes: {
-                titulo: "Selantes",
-                perguntas: [
-                    { id: "tipo_superficie", texto: "Qual a superfície de aplicação?", tipo: "select", opcoes: ["Calhas/Rufos", "Vidros/Alumínio", "Alvenaria", "Madeira"] },
-                    { id: "metragem", texto: "Quantos metros lineares ou m²?", tipo: "number", sulfixo: "un/m²" }
-                ]
+            createCategoryCard(cat, count) {
+                return `
+                    <div class="category-card">
+                        <div class="category-info">
+                            <div class="category-avatar" style="background-color:${cat.color}">${cat.icon}</div>
+                            <div>
+                                <h4 class="product-name">${cat.name}</h4>
+                                <span class="price-label" style="font-weight:600;">${count} produtos atrelados</span>
+                            </div>
+                        </div>
+                        <div class="card-actions no-print">
+                            <button class="btn-icon" onclick="AdminHub.editCategory('${cat.id}')"><span class="material-symbols-rounded">edit</span></button>
+                            <button class="btn-icon delete" onclick="AdminHub.deleteCategory('${cat.id}')"><span class="material-symbols-rounded">delete</span></button>
+                        </div>
+                    </div>
+                `;
             }
         };
 
         /**
-         * ENGINE DO CONSULTOR INTELIGENTE (Singleton Pattern Controller)
+         * ADMIN MAIN RUNTIME HUB CONTROL SYSTEM
          */
-        const ConsultorEngine = {
-            currentCategory: null,
-            currentStep: 0,
-            answers: {},
+        const AdminHub = {
+            activeTab: 'products',
 
-            initSession(categoria) {
-                this.currentCategory = categoria;
-                this.currentStep = 0;
-                this.answers = {};
+            init() {
+                StorageController.init();
+                this.populateCategorySelects();
+                this.calculateKPIs();
+                this.render();
+            },
+
+            switchTab(tab) {
+                this.activeTab = tab;
+                document.getElementById('tab-products').classList.toggle('active', tab === 'products');
+                document.getElementById('tab-categories').classList.toggle('active', tab === 'categories');
+                document.getElementById('view-products').style.display = tab === 'products' ? 'block' : 'none';
+                document.getElementById('view-categories').style.display = tab === 'categories' ? 'block' : 'none';
+                this.render();
+            },
+
+            calculateKPIs() {
+                const prods = StorageController.get('products');
+                const cats = StorageController.get('categories');
                 
-                document.getElementById('consultorModal').classList.add('active');
-                this.renderStep();
-            },
-
-            closeModal() {
-                document.getElementById('consultorModal').classList.remove('active');
-            },
-
-            getModule() {
-                return ModulosPerguntas[this.currentCategory];
-            },
-
-            renderStep() {
-                const modulo = this.getModule();
-                const totalPerguntas = modulo.perguntas.length;
-                const wrapper = document.getElementById('modalDynamicContent');
-                const backBtn = document.getElementById('modalBackBtn');
+                document.getElementById('kpi-cats').innerText = cats.length;
+                document.getElementById('kpi-prods').innerText = prods.length;
+                document.getElementById('kpi-active').innerText = prods.filter(p => p.status === 'Ativo').length;
                 
-                // Controle do Botão Voltar
-                backBtn.style.visibility = this.currentStep === 0 ? 'hidden' : 'visible';
+                const avgPrice = prods.length ? prods.reduce((acc, p) => acc + parseFloat(p.price), 0) / prods.length : 0;
+                document.getElementById('kpi-avg').innerText = `R$ ${avgPrice.toFixed(2)}`;
+            },
 
-                // Se superou o número de perguntas, renderiza tela final de resultados
-                if (this.currentStep >= totalPerguntas) {
-                    this.renderSummary();
+            populateCategorySelects() {
+                const cats = StorageController.get('categories');
+                const filterSelect = document.getElementById('filterCat');
+                const formSelect = document.getElementById('prod-category');
+                
+                let options = `<option value="">Todas Categorias</option>`;
+                let formOptions = `<option value="" disabled selected>Selecione a Categoria</option>`;
+                
+                cats.forEach(c => {
+                    options += `<option value="${c.id}">${c.name}</option>`;
+                    formOptions += `<option value="${c.id}">${c.name}</option>`;
+                });
+                
+                filterSelect.innerHTML = options;
+                formSelect.innerHTML = formOptions;
+            },
+
+            render() {
+                if (this.activeTab === 'products') this.renderProducts();
+                else this.renderCategories();
+            },
+
+            renderProducts() {
+                const prods = StorageController.get('products');
+                const cats = StorageController.get('categories');
+                const container = document.getElementById('productsContainer');
+                
+                // Fetch Filters Inputs
+                const query = document.getElementById('searchBar').value.toLowerCase();
+                const filterCat = document.getElementById('filterCat').value;
+                const filterStatus = document.getElementById('filterStatus').value;
+                const filterAtacado = document.getElementById('filterAtacado').value;
+                const sortBy = document.getElementById('sortBy').value;
+
+                let filtered = prods.filter(p => {
+                    const catObj = cats.find(c => c.id === p.categoryId);
+                    const catName = catObj ? catObj.name.toLowerCase() : '';
+                    const matchesSearch = p.name.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query) || (p.code && p.code.toLowerCase().includes(query)) || catName.includes(query);
+                    const matchesCat = filterCat === "" || p.categoryId === filterCat;
+                    const matchesStatus = filterStatus === "" || p.status === filterStatus;
+                    const matchesAtacado = filterAtacado === "" || (filterAtacado === "com" ? !!p.wholesale : !p.wholesale);
+                    
+                    return matchesSearch && matchesCat && matchesStatus && matchesAtacado;
+                });
+
+                // Ordering Matrix Architecture
+                if (sortBy === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+                else if (sortBy === 'price-asc') filtered.sort((a,b) => a.price - b.price);
+                else if (sortBy === 'price-desc') filtered.sort((a,b) => b.price - a.price);
+                else filtered.sort((a,b) => b.id.localeCompare(a.id)); // Default: Recentes
+
+                container.innerHTML = filtered.length ? filtered.map(p => {
+                    const cat = cats.find(c => c.id === p.categoryId);
+                    return ComponentFactory.createProductCard(p, cat ? cat.name : 'Sem Cat');
+                }).join('') : `<p style="grid-column: 1/-1; text-align:center; color:var(--text-muted); padding:40px;">Nenhum produto localizado com estes parâmetros.</p>`;
+            },
+
+            renderCategories() {
+                const prods = StorageController.get('products');
+                const cats = StorageController.get('categories');
+                const container = document.getElementById('categoriesContainer');
+
+                container.innerHTML = cats.map(c => {
+                    const count = prods.filter(p => p.categoryId === c.id).length;
+                    return ComponentFactory.createCategoryCard(c, count);
+                }).join('');
+            },
+
+            /* Modal Actions Controllers */
+            openProductModal(id = null) {
+                document.getElementById('productForm').reset();
+                document.getElementById('prod-id').value = '';
+                document.getElementById('prodModalTitle').innerText = 'Novo Produto';
+                
+                if (id) {
+                    const p = StorageController.get('products').find(prod => prod.id === id);
+                    if (p) {
+                        document.getElementById('prod-id').value = p.id;
+                        document.getElementById('prod-category').value = p.categoryId;
+                        document.getElementById('prod-name').value = p.name;
+                        document.getElementById('prod-brand').value = p.brand;
+                        document.getElementById('prod-code').value = p.code || '';
+                        document.getElementById('prod-unit').value = p.unit;
+                        document.getElementById('prod-yield').value = p.yield || '';
+                        document.getElementById('prod-price').value = p.price;
+                        document.getElementById('prod-wholesale').value = p.wholesale || '';
+                        document.getElementById('prod-min-wholesale').value = p.minWholesale || '';
+                        document.getElementById('prod-status').value = p.status;
+                        document.getElementById('prod-desc').value = p.desc || '';
+                        document.getElementById('prodModalTitle').innerText = 'Editar Produto';
+                    }
+                }
+                document.getElementById('productModal').classList.add('active');
+            },
+
+            openCategoryModal(id = null) {
+                document.getElementById('categoryForm').reset();
+                document.getElementById('cat-id').value = '';
+                document.getElementById('catModalTitle').innerText = 'Nova Categoria';
+                if (id) {
+                    const c = StorageController.get('categories').find(cat => cat.id === id);
+                    if (c) {
+                        document.getElementById('cat-id').value = c.id;
+                        document.getElementById('cat-name').value = c.name;
+                        document.getElementById('cat-icon').value = c.icon;
+                        document.getElementById('cat-color').value = c.color;
+                        document.getElementById('cat-desc').value = c.desc || '';
+                        document.getElementById('catModalTitle').innerText = 'Editar Categoria';
+                    }
+                }
+                document.getElementById('categoryModal').classList.add('active');
+            },
+
+            closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); },
+
+            saveProduct(e) {
+                e.preventDefault();
+                const products = StorageController.get('products');
+                const id = document.getElementById('prod-id').value || `prod-${Date.now()}`;
+                
+                const data = {
+                    id,
+                    categoryId: document.getElementById('prod-category').value,
+                    name: document.getElementById('prod-name').value,
+                    brand: document.getElementById('prod-brand').value,
+                    code: document.getElementById('prod-code').value,
+                    unit: document.getElementById('prod-unit').value,
+                    yield: document.getElementById('prod-yield').value,
+                    price: parseFloat(document.getElementById('prod-price').value),
+                    wholesale: document.getElementById('prod-wholesale').value ? parseFloat(document.getElementById('prod-wholesale').value) : null,
+                    minWholesale: document.getElementById('prod-min-wholesale').value ? parseInt(document.getElementById('prod-min-wholesale').value) : null,
+                    status: document.getElementById('prod-status').value,
+                    desc: document.getElementById('prod-desc').value,
+                    // Parâmetros Relacionais Estruturais Ocultos para Recomendação Inteligente Avançada
+                    ai: {
+                        subcat: document.getElementById('ai-subcat').value,
+                        area: document.getElementById('ai-app-area').value,
+                        environment: document.getElementById('ai-env-type').value,
+                        colorType: document.getElementById('ai-color-type').value,
+                        surface: document.getElementById('ai-surface').value,
+                        finish: document.getElementById('ai-finish').value,
+                        priority: parseInt(document.getElementById('ai-priority').value || 1)
+                    }
+                };
+
+                const index = products.findIndex(p => p.id === id);
+                if (index > -1) products[index] = data; else products.unshift(data);
+
+                StorageController.set('products', products);
+                this.closeModal('productModal');
+                this.render();
+            },
+
+            saveCategory(e) {
+                e.preventDefault();
+                const categories = StorageController.get('categories');
+                const id = document.getElementById('cat-id').value || `cat-${Date.now()}`;
+                
+                const data = {
+                    id,
+                    name: document.getElementById('cat-name').value,
+                    icon: document.getElementById('cat-icon').value,
+                    color: document.getElementById('cat-color').value,
+                    desc: document.getElementById('cat-desc').value
+                };
+
+                const index = categories.findIndex(c => c.id === id);
+                if (index > -1) categories[index] = data; else categories.push(data);
+
+                StorageController.set('categories', categories);
+                this.populateCategorySelects();
+                this.closeModal('categoryModal');
+                this.render();
+            },
+
+            editProduct(id) { this.openProductModal(id); },
+            editCategory(id) { this.openCategoryModal(id); },
+
+            duplicateProduct(id) {
+                const products = StorageController.get('products');
+                const target = products.find(p => p.id === id);
+                if (target) {
+                    const cloned = { ...target, id: `prod-${Date.now()}`, name: `${target.name} (Cópia)` };
+                    products.unshift(cloned);
+                    StorageController.set('products', products);
+                    this.render();
+                }
+            },
+
+            deleteProduct(id) {
+                if(confirm("Confirmar exclusão deste produto?")) {
+                    const products = StorageController.get('products').filter(p => p.id !== id);
+                    StorageController.set('products', products);
+                    this.render();
+                }
+            },
+
+            deleteCategory(id) {
+                const prods = StorageController.get('products');
+                if (prods.some(p => p.categoryId === id)) {
+                    alert("Aviso: Não é possível remover categorias vinculadas a produtos ativos.");
                     return;
                 }
-
-                const pergunta = modulo.perguntas[this.currentStep];
-                
-                // Atualização dos Indicadores de Estado de Progresso e Etapa
-                document.getElementById('modalStepIndicator').innerText = `Etapa ${this.currentStep + 1} de ${totalPerguntas}`;
-                const porcentagemProgresso = ((this.currentStep) / totalPerguntas) * 100;
-                document.getElementById('modalProgressBar').style.width = `${porcentagemProgresso}%`;
-
-                // Construção Dinâmica de Interface do Formulário
-                let html = `<h3 class="question-title">${pergunta.texto}</h3>`;
-
-                if (pergunta.tipo === 'select') {
-                    html += `<div class="options-list">`;
-                    pergunta.opcoes.forEach(opcao => {
-                        html += `
-                            <button class="option-button" onclick="ConsultorEngine.saveAnswer('${pergunta.id}', '${opcao}')">
-                                ${opcao}
-                            </button>
-                        `;
-                    });
-                    html += `</div>`;
-                } else if (pergunta.tipo === 'number') {
-                    html += `
-                        <div class="input-numeric-wrapper">
-                            <input type="number" inputmode="numeric" pattern="[0-9]*" id="numericField" class="input-numeric" placeholder="Digite o valor">
-                            <span class="input-unit">${pergunta.sulfixo || ''}</span>
-                        </div>
-                        <button class="submit-btn" onclick="ConsultorEngine.saveNumericAnswer('${pergunta.id}')">Continuar</button>
-                    `;
+                if(confirm("Deseja prosseguir com a remoção desta categoria?")) {
+                    const categories = StorageController.get('categories').filter(c => c.id !== id);
+                    StorageController.set('categories', categories);
+                    this.populateCategorySelects();
+                    this.render();
                 }
+            }
+        };
 
-                wrapper.innerHTML = html;
+        /**
+         * DATA BRIDGE PIPELINE INTERACTION (Export/Import IO Framework Core)
+         */
+        const DataBridge = {
+            exportJSON() {
+                const data = { products: StorageController.get('products'), categories: StorageController.get('categories') };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `backup_qualyquimy_${Date.now()}.json`;
+                a.click();
+            },
+
+            importJSON(e) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const parsed = JSON.parse(event.target.result);
+                        if (parsed.products && parsed.categories) {
+                            localStorage.setItem("qq_products", JSON.stringify(parsed.products));
+                            localStorage.setItem("qq_categories", JSON.stringify(parsed.categories));
+                            alert("Base de dados sincronizada com sucesso!");
+                            AdminHub.init();
+                        } else { alert("Formato estrutural inválido."); }
+                    } catch(err) { alert("Erro ao interpretar arquivo de dados."); }
+                };
+                reader.readAsText(e.target.files[0]);
+            },
+
+            exportExcelStub() {
+                alert("Arquitetura estruturada para download de planilha XLS: os dados seriam enviados ao endpoint corporativo formatados em CSV estruturado.");
+            },
+
+            printReport() {
+                const prods = StorageController.get('products');
+                const cats = StorageController.get('categories');
                 
-                // Auto-focus para melhorar UX no celular abrindo teclado direto se for numérico
-                const inputNum = document.getElementById('numericField');
-                if(inputNum) inputNum.focus();
-            },
-
-            saveAnswer(key, value) {
-                this.answers[key] = value;
-                this.currentStep++;
-                this.renderStep();
-            },
-
-            saveNumericAnswer(key) {
-                const input = document.getElementById('numericField');
-                if (!input || input.value.trim() === "") {
-                    alert("Por favor, insira um valor válido para prosseguir.");
-                    return;
-                }
-                this.saveAnswer(key, input.value + (this.getModule().perguntas[this.currentStep].sulfixo || ''));
-            },
-
-            backStep() {
-                if (this.currentStep > 0) {
-                    this.currentStep--;
-                    this.renderStep();
-                }
-            },
-
-            /**
-             * RENDERIZAÇÃO DA TELA DE RESUMO FINAL
-             */
-            renderSummary() {
-                // Atualiza barra para 100% no sucesso do encerramento do fluxo
-                document.getElementById('modalProgressBar').style.width = `100%`;
-                document.getElementById('modalStepIndicator').innerText = `Concluído`;
-                
-                // Persistência local segura em LocalStorage corporativo
-                localStorage.setItem(`qualyquimy_atendimento_${Date.now()}`, JSON.stringify({
-                    categoria: this.currentCategory,
-                    dados: this.answers,
-                    timestamp: new Date().toISOString()
-                }));
-
-                const modulo = this.getModule();
-                const wrapper = document.getElementById('modalDynamicContent');
-
                 let html = `
-                    <h3 class="question-title" style="text-align:center;">✨ Seu Diagnóstico Está Pronto!</h3>
-                    <div class="summary-card">
-                        <div class="summary-header-title">Resumo do Atendimento</div>
-                        <div class="summary-item">
-                            <span class="summary-label">Categoria:</span>
-                            <span class="summary-value">${modulo.titulo}</span>
-                        </div>
-                `;
-
-                // Mapeia chaves com rótulos amigáveis legíveis humanos
-                modulo.perguntas.forEach(p => {
-                    html += `
-                        <div class="summary-item">
-                            <span class="summary-label">${p.texto.replace('?','').replace(':','')}:</span>
-                            <span class="summary-value">${this.answers[p.id]}</span>
-                        </div>
-                    `;
-                });
-
-                html += `
-                    </div>
-                    <div class="action-grid">
-                        <button class="btn-action btn-pdf" onclick="ConsultorEngine.generatePDF()">
-                            <span class="material-symbols-rounded">picture_as_pdf</span> Gerar PDF
-                        </button>
-                        <button class="btn-action btn-whatsapp" onclick="ConsultorEngine.sendWhatsApp()">
-                            <span class="material-symbols-rounded">chat</span> WhatsApp
-                        </button>
-                    </div>
-                    <button class="btn-action btn-restart" style="width:100%; margin-bottom:8px;" onclick="ConsultorEngine.initSession('${this.currentCategory}')">
-                        <span class="material-symbols-rounded">refresh</span> Recomeçar
-                    </button>
-                    <button class="btn-action btn-home" style="width:100%;" onclick="ConsultorEngine.closeModal()">
-                        <span class="material-symbols-rounded">home</span> Voltar ao início
-                    </button>
-                `;
-
-                wrapper.innerHTML = html;
-            },
-
-            /**
-             * SISTEMA DE MONTAGEM E ENVIO VIA TELEFONIA WHATSAPP
-             */
-            sendWhatsApp() {
-                const modulo = this.getModule();
-                let textoZap = `Olá!\nGostaria de um orçamento.\nSegue meu atendimento.\n\n`;
-                textoZap += `*Categoria:* ${modulo.titulo}\n`;
-                
-                modulo.perguntas.forEach(p => {
-                    textoZap += `*${p.texto.replace('?','').replace(':','')}:* ${this.answers[p.id]}\n`;
-                });
-                
-                textoZap += `\nAguardar o vendedor indicar os produtos ideais.`;
-                
-                const urlCompleta = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoZap)}`;
-                window.open(urlCompleta, '_blank');
-            },
-
-            /**
-             * GENERATE PDF ARCHITECTURE (Engine de renderização nativa de alta fidelidade técnica)
-             */
-            generatePDF() {
-                const modulo = this.getModule();
-                const dataAtual = new Date();
-                const dataFormatada = dataAtual.toLocaleDateString('pt-BR');
-                const horaFormatada = dataAtual.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-                
-                let printHTML = `
-                    <div style="font-family:'Plus Jakarta Sans', sans-serif; padding:20px; color:#1A202C;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #0F52BA; padding-bottom:15px; margin-bottom:30px;">
-                            <div>
-                                <h1 style="margin:0; color:#0F52BA; font-size:28px; font-weight:700;">Tintas Qualy Quimy</h1>
-                                <p style="margin:4px 0 0 0; color:#718096; font-size:12px; letter-spacing:1px; text-transform:uppercase;">Há 18 anos com você.</p>
-                            </div>
-                            <div style="text-align:right; font-size:12px; color:#718096;">
-                                <p style="margin:0;"><strong>Data:</strong> ${dataFormatada}</p>
-                                <p style="margin:4px 0 0 0;"><strong>Hora:</strong> ${horaFormatada}</p>
-                            </div>
-                        </div>
-
-                        <h2 style="font-size:18px; color:#1A202C; margin-bottom:20px; text-transform:uppercase; letter-spacing:0.5px;">Relatório de Consultoria Técnica</h2>
-                        
-                        <table style="width:100%; border-collapse:collapse; margin-bottom:40px;">
+                    <div style="padding: 30px; font-family: sans-serif;">
+                        <h2 style="color:#0F52BA; margin-bottom: 5px;">Relatório Geral de Produtos — Tintas Qualy Quimy</h2>
+                        <p style="font-size:12px; color:#666; margin-bottom:25px;">Emitido em: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}</p>
+                        <table style="width:100%; border-collapse:collapse; font-size:12px;">
                             <thead>
-                                <tr style="background-color:#F7FAFC;">
-                                    <th style="text-align:left; padding:12px; border-bottom:2px solid #E2E8F0; font-size:13px; color:#718096; text-transform:uppercase;">Especificação Solicitada</th>
-                                    <th style="text-align:right; padding:12px; border-bottom:2px solid #E2E8F0; font-size:13px; color:#718096; text-transform:uppercase;">Resposta do Cliente</th>
+                                <tr style="background:#F0F6FF; text-align:left;">
+                                    <th style="padding:10px; border:1px solid #ddd;">Código</th>
+                                    <th style="padding:10px; border:1px solid #ddd;">Produto</th>
+                                    <th style="padding:10px; border:1px solid #ddd;">Categoria</th>
+                                    <th style="padding:10px; border:1px solid #ddd;">Marca</th>
+                                    <th style="padding:10px; border:1px solid #ddd;">Preço Venda</th>
+                                    <th style="padding:10px; border:1px solid #ddd;">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td style="padding:12px; border-bottom:1px solid #EDF2F7; font-weight:600; font-size:14px;">Categoria do Atendimento</td>
-                                    <td style="padding:12px; border-bottom:1px solid #EDF2F7; text-align:right; font-weight:700; color:#0F52BA; font-size:14px;">${modulo.titulo}</td>
-                                </tr>
                 `;
 
-                modulo.perguntas.forEach(p => {
-                    printHTML += `
+                prods.forEach(p => {
+                    const cat = cats.find(c => c.id === p.categoryId);
+                    html += `
                         <tr>
-                            <td style="padding:12px; border-bottom:1px solid #EDF2F7; font-size:14px; color:#4A5568;">${p.texto}</td>
-                            <td style="padding:12px; border-bottom:1px solid #EDF2F7; text-align:right; font-weight:600; font-size:14px; color:#1A202C;">${this.answers[p.id]}</td>
+                            <td style="padding:8px; border:1px solid #ddd;">${p.code || '—'}</td>
+                            <td style="padding:8px; border:1px solid #ddd;"><b>${p.name}</b></td>
+                            <td style="padding:8px; border:1px solid #ddd;">${cat ? cat.name : '—'}</td>
+                            <td style="padding:8px; border:1px solid #ddd;">${p.brand}</td>
+                            <td style="padding:8px; border:1px solid #ddd;">R$ ${parseFloat(p.price).toFixed(2)}</td>
+                            <td style="padding:8px; border:1px solid #ddd;">${p.status}</td>
                         </tr>
                     `;
                 });
 
-                printHTML += `
-                            </tbody>
-                        </table>
-
-                        <div style="background-color:#EBF3FF; border-left:4px solid #0F52BA; padding:20px; border-radius:8px; margin-bottom:40px;">
-                            <h3 style="margin:0 0 8px 0; color:#0F52BA; font-size:14px; text-transform:uppercase;">Área do Consultor Técnico / Vendedor</h3>
-                            <p style="margin:0; color:#4A5568; font-size:13px; line-height:1.5;">Espaço reservado para inserção manuscrita ou sistêmica das tintas, complementos, massas e códigos de cores ideais recomendados para esta especificação técnica de obra.</p>
-                            <div style="margin-top:25px; border-bottom:1px dashed #0F52BA; height:20px;"></div>
-                            <div style="margin-top:25px; border-bottom:1px dashed #0F52BA; height:20px;"></div>
-                            <div style="margin-top:25px; border-bottom:1px dashed #0F52BA; height:20px;"></div>
-                        </div>
-
-                        <div style="text-align:center; margin-top:60px; padding-top:20px; border-top:1px solid #E2E8F0; font-size:11px; color:#A0AEC0;">
-                            Documento gerado de forma automatizada pelo Assistente Qualy Quimy.
-                        </div>
-                    </div>
-                `;
-
-                const printZone = document.getElementById('print-zone');
-                printZone.innerHTML = printHTML;
+                html += `</tbody></table></div>`;
                 
-                // Dispara o subsistema de impressão nativo do dispositivo do cliente
+                const canvas = document.getElementById('print-area');
+                canvas.innerHTML = html;
                 window.print();
             }
         };
+
+        // Initialize Runtime Engine
+        window.addEventListener('DOMContentLoaded', () => AdminHub.init());
     </script>
 </body>
 </html>
