@@ -64,6 +64,7 @@
         .btn-success { background: #25D366; color: #fff; border: none; }
         .btn-pdf { background: #dc2626; color: #fff; border: none; }
         .btn-danger { color: var(--danger); border: none; background: transparent; }
+        .btn-trash { background: none; border: none; color: var(--danger); cursor: pointer; padding: 6px; display: flex; align-items: center; justify-content: center; }
 
         /* CATEGORIAS CLIENTE */
         .category-menu-grid { display: flex; flex-direction: column; gap: 10px; }
@@ -312,6 +313,12 @@
         updateFooterBar();
     }
 
+    function deleteCartItem(id) {
+        delete cart[id];
+        updateFooterBar();
+        openOrderModal();
+    }
+
     function updateFooterBar() {
         const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
         const bar = document.getElementById('clientFooterBar');
@@ -403,10 +410,15 @@
                     <div style="font-weight:600; font-size:13px;">${p.name}</div>
                     <div style="font-size:11px; color:var(--text-muted);">Valor Un: R$ ${price.toFixed(2)} ${isWholesale ? '(Atacado)' : ''}</div>
                 </div>
-                <div class="qty-control" style="padding:2px; gap:6px;">
-                    <button class="qty-btn" style="width:24px; height:24px;" onclick="updateQtyResumo('${p.id}', -1)">&minus;</button>
-                    <span style="font-weight:700; font-size:12px;">${qty}</span>
-                    <button class="qty-btn" style="width:24px; height:24px;" onclick="updateQtyResumo('${p.id}', 1)">&plus;</button>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="qty-control" style="padding:2px; gap:6px;">
+                        <button class="qty-btn" style="width:24px; height:24px;" onclick="updateQtyResumo('${p.id}', -1)">&minus;</button>
+                        <span style="font-weight:700; font-size:12px;">${qty}</span>
+                        <button class="qty-btn" style="width:24px; height:24px;" onclick="updateQtyResumo('${p.id}', 1)">&plus;</button>
+                    </div>
+                    <button class="btn-trash" onclick="deleteCartItem('${p.id}')">
+                        <svg width="18" height="18" fill="none" stroke="var(--danger)" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
                 </div>`;
             body.appendChild(div);
         });
@@ -447,24 +459,28 @@
             subtotalRegular += (p.priceUnit * qty);
             totalFinal += (priceFinal * qty);
 
+            // Se for atacado, aplica a cor vermelha na linha de preço do fechamento
+            const textStyle = isWholesale ? 'color: var(--danger); font-weight: bold;' : 'color: #444; font-weight: normal;';
+            const labelBadge = isWholesale ? '(ATACADO)' : '';
+
             html += `
                 <div class="receipt-row">
                     <span>${qty}x ${p.name.substring(0,22)}</span>
                 </div>
-                <div class="receipt-row" style="color:#444; font-weight:normal; padding-left:10px; margin-bottom:8px;">
-                    <span>-> VALOR:</span>
-                    <span>R$ ${(priceFinal * qty).toFixed(2)} ${isWholesale ? '(AT)' : ''}</span>
+                <div class="receipt-row" style="padding-left:10px; margin-bottom:8px; ${textStyle}">
+                    <span>-></span>
+                    <span>R$ ${(priceFinal * qty).toFixed(2)} ${labelBadge}</span>
                 </div>
             `;
         });
 
-        const economia = subtotalRegular - totalFinal;
+        const economy = subtotalRegular - totalFinal;
 
         html += `<div class="receipt-divider"></div>`;
         html += `<div class="receipt-row" style="font-weight:normal; color:#444;"><span>SUBTOTAL BRUTO:</span> <span>R$ ${subtotalRegular.toFixed(2)}</span></div>`;
         
-        if(economia > 0) {
-            html += `<div class="receipt-row" style="font-weight:normal; color:green;"><span>DESCONTO ATACADO:</span> <span>-R$ ${economia.toFixed(2)}</span></div>`;
+        if(economy > 0) {
+            html += `<div class="receipt-row" style="font-weight:bold; color:var(--danger);"><span>DESCONTO ATACADO:</span> <span>-R$ ${economy.toFixed(2)}</span></div>`;
         }
 
         html += `<div class="receipt-divider"></div>`;
