@@ -97,12 +97,30 @@
         .receipt-box::before { content: ""; position: absolute; top: -6px; left: 0; width: 100%; height: 6px; background: linear-gradient(-45deg, transparent 4px, #cbd5e1 4px), linear-gradient(45deg, transparent 4px, #cbd5e1 4px); background-size: 8px 12px; }
         .receipt-box::after { content: ""; position: absolute; bottom: -6px; left: 0; width: 100%; height: 6px; background: linear-gradient(-45deg, transparent 4px, #cbd5e1 4px), linear-gradient(45deg, transparent 4px, #cbd5e1 4px); background-size: 8px 12px; transform: rotate(180deg); }
         .receipt-header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 14px; margin-bottom: 14px; }
-        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; font-weight: bold; }
-        .receipt-divider { border-top: 1px dashed #000; margin: 10px 0; }
+        .receipt-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; font-size: 13px; font-weight: bold; gap: 10px; }
+        .receipt-row span:first-child { text-align: left; flex: 1; }
+        .receipt-row span:last-child { text-align: right; white-space: nowrap; }
+        .receipt-divider { border-top: 1px dashed #000; margin: 12px 0; }
         .receipt-total-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: 900; padding-top: 6px; }
 
         .hidden { display: none !important; }
         .link-alert { background: #edf7ed; border: 1px solid #cce8cd; color: #1e4620; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: none; }
+
+        /* CONFIGURAÇÃO DE IMPRESSÃO (PDF MAIOR E LIMPO) */
+        @media print {
+            body { background: #fff; color: #000; }
+            .container, .modal-overlay, .client-footer-bar { display: none !important; }
+            #checkoutModal { display: block !important; position: absolute; top: 0; left: 0; width: 100%; height: auto; background: #fff; }
+            .modal { width: 100% !important; max-width: 100% !important; border: none !important; box-shadow: none !important; background: #fff !important; }
+            .modal-header, .modal-footer { display: none !important; }
+            .modal-body { padding: 0 !important; background: #fff !important; }
+            .receipt-box { border: none !important; box-shadow: none !important; padding: 0 !important; width: 100% !important; max-width: 600px; margin: 0 auto; font-size: 16px !important; }
+            .receipt-box::before, .receipt-box::after { display: none !important; }
+            .receipt-row { font-size: 16px !important; margin-bottom: 12px !important; }
+            .receipt-total-row { font-size: 20px !important; }
+            .receipt-header h3 { font-size: 22px !important; }
+            .receipt-header p { font-size: 14px !important; }
+        }
     </style>
 </head>
 <body>
@@ -459,17 +477,14 @@
             subtotalRegular += (p.priceUnit * qty);
             totalFinal += (priceFinal * qty);
 
-            // Se for atacado, aplica a cor vermelha na linha de preço do fechamento
-            const textStyle = isWholesale ? 'color: var(--danger); font-weight: bold;' : 'color: #444; font-weight: normal;';
-            const labelBadge = isWholesale ? '(ATACADO)' : '';
+            // Altera o estilo da linha para vermelho se for atacado
+            const rowStyle = isWholesale ? 'color: var(--danger); font-weight: 900;' : 'color: #000;';
+            const labelBadge = isWholesale ? ' (ATACADO)' : '';
 
             html += `
-                <div class="receipt-row">
-                    <span>${qty}x ${p.name.substring(0,22)}</span>
-                </div>
-                <div class="receipt-row" style="padding-left:10px; margin-bottom:8px; ${textStyle}">
-                    <span>-></span>
-                    <span>R$ ${(priceFinal * qty).toFixed(2)} ${labelBadge}</span>
+                <div class="receipt-row" style="${rowStyle}">
+                    <span>${qty}x ${p.name.substring(0,25)}${labelBadge}</span>
+                    <span>R$ ${(priceFinal * qty).toFixed(2)}</span>
                 </div>
             `;
         });
@@ -486,8 +501,8 @@
         html += `<div class="receipt-divider"></div>`;
         html += `
             <div class="receipt-total-row">
-                <span>TOTAL A PAGAR:</span>
-                <span>R$ ${totalFinal.toFixed(2)}</span>
+                <span>TOTAL A PAGAR:
+                </span><span>R$ ${totalFinal.toFixed(2)}</span>
             </div>
             <div class="receipt-header" style="border:none; margin-top:15px; padding:0;">
                 <p style="font-size:10px;">OBRIGADO PELA PREFERENCIA</p>
@@ -505,20 +520,57 @@
             return;
         }
 
-        let msg = "*🛒 NOVO PEDIDO - TINTAS QUALY QUIMY*\n_A 18 anos com você!_\n\n";
-        let total = 0;
+        // Criando o fechamento perfeito alinhado por espaçamentos (monospace fixo de 30 caracteres)
+        let msg = "```\n";
+        msg += "==============================\n";
+        msg += "      TINTAS QUALY QUIMY      \n";
+        msg += "    A 18 ANOS COM VOCE!       \n";
+        msg += "==============================\n";
+        msg += "    COMPROVANTE DE PEDIDO     \n";
+        msg += "------------------------------\n";
+
+        let subtotalRegular = 0;
+        let totalFinal = 0;
 
         Object.keys(cart).forEach(id => {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
             const qty = cart[id];
-            const price = qty >= p.wholesaleQty ? p.priceWholesale : p.priceUnit;
-            total += (price * qty);
-            msg += `*${qty}x* ${p.name}\n   Total: R$ ${(price * qty).toFixed(2)} ${qty >= p.wholesaleQty ? '(Atacado Aplicado)' : ''}\n\n`;
+            const isWholesale = qty >= p.wholesaleQty;
+            const price = isWholesale ? p.priceWholesale : p.priceUnit;
+            
+            subtotalRegular += (p.priceUnit * qty);
+            totalFinal += (price * qty);
+
+            let label = `${qty}x ${p.name.substring(0,18)}`;
+            if(isWholesale) label += "(AT)";
+            let valorStr = `R$ ${(price * qty).toFixed(2)}`;
+            
+            // Calcula espaços para empurrar o valor para a direita
+            let espacosFaltando = 30 - (label.length + valorStr.length);
+            if(espacosFaltando < 1) espacosFaltando = 1;
+            
+            msg += label + " ".repeat(espacosFaltando) + valorStr + "\n";
         });
 
-        msg += `----------------------------\n`;
-        msg += `*VALOR TOTAL: R$ ${total.toFixed(2)}*`;
+        const economia = subtotalRegular - totalFinal;
+
+        msg += "------------------------------\n";
+        
+        let subtotalStr = `R$ ${subtotalRegular.toFixed(2)}`;
+        msg += "SUBTOTAL BRUTO:" + " ".repeat(30 - (15 + subtotalStr.length)) + subtotalStr + "\n";
+        
+        if(economia > 0) {
+            let descStr = `-R$ ${economia.toFixed(2)}`;
+            msg += "DESCONTO ATACADO:" + " ".repeat(30 - (17 + descStr.length)) + descStr + "\n";
+        }
+        
+        msg += "------------------------------\n";
+        let totalStr = `R$ ${totalFinal.toFixed(2)}`;
+        msg += "TOTAL A PAGAR:" + " ".repeat(30 - (14 + totalStr.length)) + totalStr + "\n";
+        msg += "==============================\n";
+        msg += "  OBRIGADO PELA PREFERENCIA   \n";
+        msg += "```";
 
         window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(msg)}`, '_blank');
     }
@@ -542,7 +594,7 @@
         const input = document.getElementById('generatedLinkInput');
         input.select();
         navigator.clipboard.writeText(input.value);
-        alert("Link copiado!");
+        alert("Link copied!");
     }
 
     function renderAdminList() {
