@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tintas Qualy Quimy - Pedido Online</title>
-    <!-- Importando uma fonte extremamente limpa, fina e elegante -->
+    <!-- Importando a fonte Inter para leveza e elegância -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,9 @@
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --accent: #2563eb;
+            --accent: #0f1e36; /* Lindo Azul Marinho */
+            --category-bg: #fefce8; /* Amarelo bem suave */
+            --summary-bg: #f0fdf4; /* Verde bem clarinho */
             --danger: #ef4444;
             --success: #10b981;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
@@ -32,18 +34,18 @@
         
         .container { width: 100%; max-width: 480px; margin: 0 auto; background: var(--bg-card); min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 110px; box-shadow: 0 0 40px rgba(0,0,0,0.02); position: relative; }
 
-        /* CABEÇALHO */
+        /* CABEÇALHO - QUADRADO AZUL MARINHO LINDO */
         header { 
-            background: #ffffff; 
-            color: var(--text-main); 
-            padding: 35px 20px 25px 20px; 
+            background: var(--accent); 
+            color: #ffffff; 
+            padding: 35px 20px; 
             text-align: center;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 3px solid #1e293b;
         }
-        header h1 { font-size: 24px; font-weight: 500; letter-spacing: -0.5px; margin-bottom: 4px; color: #000; }
-        header p { font-size: 13px; color: var(--text-muted); font-weight: 300; }
-        .tagline { display: inline-block; background: #f1f5f9; color: var(--text-main); padding: 5px 16px; border-radius: 20px; font-size: 11px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 10px; cursor: pointer; user-select: none; transition: background 0.2s; }
-        .tagline:hover { background: #e2e8f0; }
+        header h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 4px; color: #ffffff; }
+        header p { font-size: 13px; color: #cbd5e1; font-weight: 300; }
+        .tagline { display: inline-block; background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 5px 16px; border-radius: 20px; font-size: 11px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 10px; cursor: pointer; user-select: none; transition: background 0.2s; }
+        .tagline:hover { background: rgba(255, 255, 255, 0.25); }
 
         /* ABAS GESTÃO */
         .tabs { display: flex; gap: 4px; margin: 15px 20px 5px 20px; background: #f1f5f9; padding: 4px; border-radius: 30px; }
@@ -63,16 +65,30 @@
 
         /* BOTÕES */
         .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 18px; font-size: 13px; font-weight: 500; border-radius: var(--radius-sm); border: 1px solid #cbd5e1; cursor: pointer; transition: all 0.2s; background: #fff; color: var(--text-main); text-decoration: none; gap: 8px; }
-        .btn-primary { background: #0f172a; color: #fff; border: none; }
-        .btn-accent { background: var(--accent); color: #fff; border: none; }
+        .btn-primary { background: var(--accent); color: #fff; border: none; }
+        .btn-accent { background: #2563eb; color: #fff; border: none; }
         .btn-success { background: #16a34a; color: #fff; border: none; }
         .btn-pdf { background: #dc2626; color: #fff; border: none; }
         .btn-danger { color: var(--danger); border: none; background: transparent; }
         .btn-trash { background: none; border: none; color: var(--danger); cursor: pointer; padding: 6px; display: flex; align-items: center; justify-content: center; }
 
-        /* CATEGORIAS CLIENTE */
-        .category-menu-grid { display: flex; flex-direction: column; gap: 10px; }
-        .category-card-btn { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--accent); box-shadow: var(--shadow-sm); }
+        /* BOTÕES DAS CATEGORIAS - AMARELO SUAVE COM BORDA AZUL MARINHO */
+        .category-menu-grid { display: flex; flex-direction: column; gap: 12px; }
+        .category-card-btn { 
+            background: var(--category-bg); 
+            border: 1px solid var(--accent); 
+            border-radius: var(--radius-sm); 
+            padding: 18px; 
+            text-align: left; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-left: 5px solid var(--accent); 
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .category-card-btn:active { transform: scale(0.99); }
 
         /* CONTROLE DE QUANTIDADE */
         .qty-control { display: flex; align-items: center; background: #f1f5f9; border-radius: 30px; padding: 4px; gap: 12px; }
@@ -93,6 +109,18 @@
         /* PRODUTOS MODAL */
         .modal-product-item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 10px; box-shadow: var(--shadow-sm); }
 
+        /* ITEM RESUMO DA SACOLA - FUNDO VERDE BEM CLARINHO */
+        .summary-cart-item {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 14px; 
+            border: 1px solid #bbf7d0;
+            background: var(--summary-bg); 
+            border-radius: 8px; 
+            margin-bottom: 8px;
+        }
+
         /* RODA-PÉ FLUTUANTE DO CLIENTE */
         .client-footer-bar { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); max-width: 448px; background: #0f172a; color: #fff; padding: 14px 20px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.12); z-index: 900; }
         .client-footer-bar span { font-weight: 300; font-size: 13px; }
@@ -106,12 +134,17 @@
         .receipt-divider { border-top: 1px dashed #000; margin: 12px 0; }
         .receipt-total-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: 900; padding-top: 6px; }
 
-        /* DESIGN EXCEL EXCLUSIVO PARA IMPRESSÃO (PDF) */
+        /* PLANILHA ESTILO EXCEL - CORRIGIDA COM BORDAS INTERNAS COMPLETAS */
         .excel-print-table { display: none; width: 100%; border-collapse: collapse; font-family: var(--font); color: #000; margin-top: 20px; }
-        .excel-print-table th, .excel-print-table td { border: 1px solid #a1a1a1; padding: 10px 14px; font-size: 14px; text-align: left; }
-        .excel-print-table th { background-color: #f2f2f2; font-weight: 600; }
+        .excel-print-table th, .excel-print-table td { 
+            border: 1px solid #718096 !important; /* Linhas internas cinza escuro bem visíveis */
+            padding: 10px 14px; 
+            font-size: 14px; 
+            text-align: left; 
+        }
+        .excel-print-table th { background-color: #e2e8f0; font-weight: 600; }
         .excel-print-table .text-right { text-align: right; }
-        .excel-print-table .total-row { font-weight: 700; background-color: #f9f9f9; }
+        .excel-print-table .total-row td { font-weight: 700; background-color: #f1f5f9; }
 
         .hidden { display: none !important; }
         .link-alert { background: #edf7ed; border: 1px solid #cce8cd; color: #1e4620; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: none; }
@@ -121,10 +154,10 @@
             body { background: #fff; color: #000; padding: 0; margin: 0; }
             .container, .modal-overlay, .client-footer-bar, .receipt-box { display: none !important; }
             
-            /* Ativa e renderiza a tabela estilo Excel estruturada */
+            /* Ativa o Excel estruturado */
             .excel-print-table { display: table !important; }
             .print-header { display: block !important; text-align: center; margin-bottom: 25px; font-family: var(--font); }
-            .print-header h2 { font-size: 24px; font-weight: 600; margin-bottom: 4px; }
+            .print-header h2 { font-size: 24px; font-weight: 600; margin-bottom: 4px; color: #0f1e36; }
             .print-header p { font-size: 13px; color: #555; }
         }
         .print-header { display: none; }
@@ -138,7 +171,7 @@
     <p>A 18 anos com você! — Relatório de Comprovante de Pedido</p>
 </div>
 
-<!-- TABELA ESTILO EXCEL (SÓ APARECE NO PDF/IMPRESSÃO) -->
+<!-- TABELA ESTILO EXCEL COMPLETA COM LINHAS INTERNAS (SÓ APARECE NO PDF/IMPRESSÃO) -->
 <table class="excel-print-table" id="excelTableContent">
     <!-- Injetado dinamicamente via JS -->
 </table>
@@ -170,7 +203,7 @@
                 <label>Identificador do Cliente</label>
                 <input type="text" id="clientSlug" placeholder="ex: construtora-silva">
             </div>
-            <button class="btn btn-accent" style="width:100%;" onclick="generateClientLink()">Criar Link Seguro</button>
+            <button class="btn btn-primary" style="width:100%;" onclick="generateClientLink()">Criar Link Seguro</button>
         </div>
 
         <div class="card">
@@ -227,7 +260,7 @@
     </div>
 </div>
 
-<!-- MODAL DE RESUMO (SACOLA) -->
+<!-- MODAL DE RESUMO (SACOLA COM FUNDO VERDE CLARINHO NOS ITENS) -->
 <div class="modal-overlay" id="orderModal">
     <div class="modal">
         <div class="modal-header">
@@ -374,7 +407,7 @@
             const btn = document.createElement('button');
             btn.className = 'category-card-btn';
             btn.onclick = () => openCategoryModal(cat);
-            btn.innerHTML = `<div><h4 style="font-size:14px; font-weight:400;">${cat}</h4><span style="font-size:12px;color:var(--text-muted);font-weight:300;">${count} produtos</span></div><div style="font-weight:bold;color:var(--accent);">&rarr;</div>`;
+            btn.innerHTML = `<div><h4 style="font-size:14px; font-weight:500; color:var(--accent);">${cat}</h4><span style="font-size:12px;color:var(--text-muted);font-weight:300;">${count} produtos</span></div><div style="font-weight:bold;color:var(--accent);">&rarr;</div>`;
             grid.appendChild(btn);
         });
     }
@@ -388,7 +421,7 @@
         const subcategories = [...new Set(products.filter(p => p.category === category).map(p => p.subcategory))];
         subcategories.forEach(sub => {
             const heading = document.createElement('h5');
-            heading.style = 'font-size:11px; font-weight:500; color:var(--accent); text-transform:uppercase; margin:14px 0 8px 0; border-bottom:1px solid var(--border); padding-bottom:4px;';
+            heading.style = 'font-size:11px; font-weight:500; color:#2563eb; text-transform:uppercase; margin:14px 0 8px 0; border-bottom:1px solid var(--border); padding-bottom:4px;';
             heading.innerText = sub;
             body.appendChild(heading);
 
@@ -437,14 +470,14 @@
             const price = isWholesale ? p.priceWholesale : p.priceUnit;
 
             const div = document.createElement('div');
-            div.style = 'display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid var(--border); background:#f8fafc; border-radius:8px; margin-bottom:8px;';
+            div.className = 'summary-cart-item'; // Aplica o fundo verde clarinho configurado
             div.innerHTML = `
                 <div style="flex:1; padding-right:10px;">
-                    <div style="font-weight:500; font-size:13px;">${p.name}</div>
-                    <div style="font-size:11px; color:var(--text-muted); font-weight:300;">Valor Un: R$ ${price.toFixed(2)} ${isWholesale ? '(Atacado)' : ''}</div>
+                    <div style="font-weight:500; font-size:13px; color:#064e3b;">${p.name}</div>
+                    <div style="font-size:11px; color:#047857; font-weight:400;">Valor Un: R$ ${price.toFixed(2)} ${isWholesale ? '(Atacado)' : ''}</div>
                 </div>
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <div class="qty-control" style="padding:2px; gap:6px;">
+                    <div class="qty-control" style="padding:2px; gap:6px; background: rgba(255,255,255,0.6);">
                         <button class="qty-btn" style="width:24px; height:24px;" onclick="updateQtyResumo('${p.id}', -1)">&minus;</button>
                         <span style="font-weight:500; font-size:12px;">${qty}</span>
                         <button class="qty-btn" style="width:24px; height:24px;" onclick="updateQtyResumo('${p.id}', 1)">&plus;</button>
@@ -471,7 +504,7 @@
         const receipt = document.getElementById('receiptContent');
         const excelTable = document.getElementById('excelTableContent');
 
-        // GERAÇÃO DO PRODUTO PARA O CUPOM DA TELA (MAQUININHA)
+        // GERAÇÃO DO COMPROVANTE ESTILO CUPOM DE MÃO (NA TELA)
         let htmlReceipt = `
             <div class="receipt-header">
                 <h3 style="font-size:15px; font-weight:900; letter-spacing:0.5px;">TINTAS QUALY QUIMY</h3>
@@ -481,14 +514,14 @@
             </div>
         `;
 
-        // INÍCIO DA ESTRUTURAÇÃO DO EXCEL PARA O PDF
+        // INÍCIO DA TABELA ESTILO EXCEL (PDF) COM LINHAS TOTAIS BEM DEFINIDAS
         let htmlExcel = `
             <thead>
                 <tr>
-                    <th>Item / Produto</th>
-                    <th class="text-right">Qtd</th>
-                    <th class="text-right">Preço Un.</th>
-                    <th class="text-right">Total Item</th>
+                    <th>Item / Descrição do Produto</th>
+                    <th class="text-right" style="width: 60px;">Qtd</th>
+                    <th class="text-right" style="width: 110px;">Preço Un.</th>
+                    <th class="text-right" style="width: 120px;">Total Item</th>
                 </tr>
             </thead>
             <tbody>
@@ -510,7 +543,7 @@
             const rowStyle = isWholesale ? 'color: var(--danger); font-weight: 900;' : 'color: #000;';
             const labelBadge = isWholesale ? ' (ATACADO)' : '';
 
-            // Adiciona na Maquinina da tela
+            // Adiciona no cupom da tela
             htmlReceipt += `
                 <div class="receipt-row" style="${rowStyle}">
                     <span>${qty}x ${p.name.substring(0,25)}${labelBadge}</span>
@@ -518,7 +551,7 @@
                 </div>
             `;
 
-            // Adiciona na planilha do Excel (PDF)
+            // Adiciona na tabela estruturada do Excel (PDF)
             htmlExcel += `
                 <tr>
                     <td>${p.name}${labelBadge}</td>
@@ -531,14 +564,14 @@
 
         const economy = subtotalRegular - totalFinal;
 
-        // Fecha a maquininha
+        // Finaliza o Cupom da Tela
         htmlReceipt += `<div class="receipt-divider"></div>`;
         htmlReceipt += `<div class="receipt-row" style="font-weight:normal; color:#444;"><span>SUBTOTAL BRUTO:</span> <span>R$ ${subtotalRegular.toFixed(2)}</span></div>`;
         if(economy > 0) htmlReceipt += `<div class="receipt-row" style="font-weight:bold; color:var(--danger);"><span>DESCONTO ATACADO:</span> <span>-R$ ${economy.toFixed(2)}</span></div>`;
         htmlReceipt += `<div class="receipt-divider"></div>`;
         htmlReceipt += `<div class="receipt-total-row"><span>TOTAL A PAGAR:</span><span>R$ ${totalFinal.toFixed(2)}</span></div>`;
 
-        // Fecha a Planilha do Excel
+        // Finaliza as linhas e grades internas do Excel
         htmlExcel += `
             <tr class="total-row">
                 <td colspan="3" class="text-right">SUBTOTAL BRUTO:</td>
@@ -547,16 +580,16 @@
         `;
         if(economy > 0) {
             htmlExcel += `
-                <tr class="total-row" style="color:red;">
+                <tr class="total-row" style="color:#dc2626;">
                     <td colspan="3" class="text-right">DESCONTO ATACADO:</td>
                     <td class="text-right">-R$ ${economy.toFixed(2)}</td>
                 </tr>
             `;
         }
         htmlExcel += `
-            <tr class="total-row" style="font-size:16px;">
-                <td colspan="3" class="text-right">TOTAL A PAGAR:</td>
-                <td class="text-right">R$ ${totalFinal.toFixed(2)}</td>
+            <tr class="total-row" style="font-size:15px; background-color:#e2e8f0;">
+                <td colspan="3" class="text-right" style="font-weight:700;">TOTAL A PAGAR:</td>
+                <td class="text-right" style="font-weight:700;">R$ ${totalFinal.toFixed(2)}</td>
             </tr>
             </tbody>
         `;
