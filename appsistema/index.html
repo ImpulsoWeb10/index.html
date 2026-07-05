@@ -42,14 +42,18 @@
         }
         header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
         header p { font-size: 14px; opacity: 0.9; font-weight: 500; }
-        .tagline { display: inline-block; background: rgba(255, 255, 255, 0.15); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 8px; backdrop-filter: blur(4px); }
+        .tagline { display: inline-block; background: rgba(255, 255, 255, 0.15); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 8px; backdrop-filter: blur(4px); cursor: pointer; }
 
         /* PAINÉIS E ABAS EXCLUSIVAS DO CRIADOR */
         .panel { display: none; padding: 20px; }
         .panel.active { display: block; }
-        .tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin: 15px 20px 5px 20px; }
-        .tab-btn { background: none; border: none; padding: 12px 16px; font-size: 14px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; flex: 1; text-align: center; transition: all 0.2s; font-weight: 500; }
-        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+        
+        /* DESTAQUE DO PAINEL DO PROPRIETÁRIO */
+        #panel-admin { background: #fdfdfd; border: 2px dashed #0070f3; margin: 10px; border-radius: var(--radius-sm); padding: 15px; }
+
+        .tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin: 15px 20px 5px 20px; background: #e2e8f0; padding: 4px; border-radius: 30px; }
+        .tab-btn { background: none; border: none; padding: 10px 16px; font-size: 13px; color: var(--text-muted); cursor: pointer; flex: 1; text-align: center; transition: all 0.2s; font-weight: 600; border-radius: 20px; }
+        .tab-btn.active { background: var(--accent); color: white; box-shadow: var(--shadow-sm); }
 
         /* CARDS E FORMULÁRIOS (ADMIN) */
         .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
@@ -112,6 +116,9 @@
         .discount-toast { background: #e6f4ea; color: #137333; padding: 10px; border-radius: var(--radius-sm); font-size: 12px; margin-bottom: 12px; display: none; font-weight: 600; text-align: center; }
         .link-alert { background: #e6f4ea; border: 1px solid #34a853; color: #137333; padding: 16px; border-radius: var(--radius-sm); margin-bottom: 16px; display: none; }
 
+        /* BOTÃO SECRETO APENAS PARA VOCÊ */
+        .secret-trigger { text-align: center; padding: 15px; font-size: 11px; color: #e2e8f0; cursor: pointer; user-select: none; }
+
         @media print {
             .tabs, .client-footer-bar, .modal-footer, .qty-control, .btn-trash, .close-modal { display: none !important; }
             .modal-overlay { position: relative; display: flex !important; background: none; backdrop-filter: none; }
@@ -125,17 +132,20 @@
     <header>
         <h1>Tintas Qualy Quimy</h1>
         <p>Faça seu pedido com facilidade!</p>
-        <span class="tagline">A 18 anos com você!</span>
+        <!-- Dica: Clicar 3 vezes aqui reativa o painel se ele sumir -->
+        <span class="tagline" onclick="secretClickCount()">A 18 anos com você!</span>
     </header>
 
-    <!-- ABAS DO MANAGER (Apenas você vê aqui na edição) -->
+    <!-- ABAS DE NAVEGAÇÃO INTERNA (Onde você alterna entre as duas telas) -->
     <div class="tabs" id="navigationTabs">
-        <button class="tab-btn active" onclick="switchTab('admin')">Gerenciar Painel</button>
-        <button class="tab-btn" id="clientTabBtn" onclick="switchTab('client')">Área do Cliente</button>
+        <button class="tab-btn active" id="adminTabBtn" onclick="switchTab('admin')">⚙️ Gerenciar Painel</button>
+        <button class="tab-btn" id="clientTabBtn" onclick="switchTab('client')">🛒 Área do Cliente</button>
     </div>
 
-    <!-- TELA 1: GERENCIAR PAINEL -->
+    <!-- TELA 1: GERENCIAR PAINEL (Onde você edita tudo e cria os links) -->
     <div id="panel-admin" class="panel active">
+        <div style="margin-bottom:15px;"><b style="color:#0070f3;">PAINEL DO CRIADOR</b><p style="font-size:12px; color:var(--text-muted);">Aqui você configura os links e edita seus produtos.</p></div>
+
         <div class="link-alert" id="linkAlert">
             <span style="font-weight: 700; display:block; margin-bottom: 6px;">✨ Link do cliente pronto!</span>
             <input type="text" id="generatedLinkInput" readonly style="width:100%; margin-bottom: 8px; font-family:monospace; font-size:12px;">
@@ -186,6 +196,9 @@
         </div>
         <div class="category-menu-grid" id="categoryMenuGrid"></div>
     </div>
+
+    <!-- Trigger de emergência no rodapé invisível para ativar o admin -->
+    <div class="secret-trigger" onclick="forceAdminMode()">⚙️ Acesso do Administrador</div>
 </div>
 
 <!-- BARRA FIXA FLUTUANTE DO CLIENTE -->
@@ -208,7 +221,7 @@
     </div>
 </div>
 
-<!-- MODAL DO RESUMO DE COMPRAS COM EDICAO E EXCLUSAO -->
+<!-- MODAL DO RESUMO DE COMPRAS -->
 <div class="modal-overlay" id="orderModal">
     <div class="modal">
         <div class="modal-header">
@@ -222,7 +235,7 @@
                 <div class="order-item-row" style="background:none; border:none; padding:0; margin-bottom:4px; font-size:13px; color:var(--text-muted);">
                     <span>Subtotal:</span><span id="modalSubtotal">R$ 0,00</span>
                 </div>
-                <div class="order-item-row" id="modalDiscountRow" style="background:none; border:none; padding:0; margin-bottom:4px; font-size:13px; color:var(--success); display:none;">
+                <div class="order-item-row" id="modalDiscountRow" style="background:none; border:none; padding:0; font-size:13px; color:var(--success); display:none;">
                     <span>Economia:</span><span id="modalDiscount">- R$ 0,00</span>
                 </div>
                 <div class="order-item-row" style="background:none; border:none; padding:0; font-weight:700; font-size:16px;">
@@ -237,7 +250,7 @@
     </div>
 </div>
 
-<!-- MODAL DE SELEÇÃO FINAL: WHATSAPP OU PDF -->
+<!-- MODAL DE SELEÇÃO FINAL -->
 <div class="modal-overlay" id="checkoutOptionsModal">
     <div class="modal" style="align-self: center; width: 90%; border-radius: var(--radius-lg);">
         <div class="modal-header">
@@ -265,13 +278,12 @@
 
     let products = JSON.parse(localStorage.getItem('qualyquimy_db')) || defaultProducts;
     let cart = {}; 
+    let clickCount = 0;
 
     window.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
-        // PROTEÇÃO: Se conter '?cliente=', esconde o painel do criador imediatamente.
+        // Se a URL contiver explicitamente "?cliente=", inicia no modo cliente direto.
         if (urlParams.has('cliente')) {
-            document.getElementById('navigationTabs').remove();
-            document.getElementById('panel-admin').remove();
             switchTab('client');
         } else {
             renderAdminList();
@@ -279,10 +291,28 @@
         }
     });
 
+    // Função secreta: Força o aparecimento das abas e do gerenciador
+    function forceAdminMode() {
+        document.getElementById('navigationTabs').style.display = 'flex';
+        renderAdminList();
+        renderClientMenu();
+        switchTab('admin');
+        alert("Modo Gerenciador Ativado com sucesso!");
+    }
+
+    function secretClickCount() {
+        clickCount++;
+        if(clickCount >= 3) {
+            clickCount = 0;
+            forceAdminMode();
+        }
+    }
+
     function saveDB() { localStorage.setItem('qualyquimy_db', JSON.stringify(products)); }
 
     function renderAdminList() {
         const container = document.getElementById('adminProductsContainer');
+        if(!container) return;
         container.innerHTML = '';
         products.forEach(p => {
             const div = document.createElement('div');
@@ -456,7 +486,6 @@
         window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMERO}&text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    // AÇÕES DO GERENCIADOR (ADMIN)
     function saveProduct(e) {
         e.preventDefault();
         const id = document.getElementById('prodId').value;
@@ -523,8 +552,9 @@
     function switchTab(tab) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        
         if (tab === 'admin') {
-            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.getElementById('adminTabBtn').classList.add('active');
             document.getElementById('panel-admin').classList.add('active');
         } else {
             document.getElementById('clientTabBtn').classList.add('active');
