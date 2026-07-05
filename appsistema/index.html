@@ -45,7 +45,7 @@
         input, textarea, select { padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; background: #fff; outline: none; transition: border 0.2s; }
         input:focus, textarea:focus { border-color: var(--text-main); }
         
-        /* HIDDEN RELATIONAL FIELDS (Prontos para Assistente Inteligente) */
+        /* HIDDEN RELATIONAL FIELDS */
         .relational-meta { display: none; }
 
         /* BUTTONS */
@@ -86,7 +86,7 @@
         .client-footer-bar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--text-main); color: #fff; padding: 14px 24px; border-radius: 30px; display: flex; align-items: center; gap: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 90; }
         .client-footer-bar span { font-size: 14px; font-weight: 500; }
 
-        /* MODAL ESTRUTURADO, DIÁTICO E SEGURO */
+        /* MODAL */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 100; }
         .modal { background: var(--bg-card); width: 100%; max-width: 550px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); overflow: hidden; display: flex; flex-direction: column; animation: modalSlide 0.25s ease; max-height: 90vh; }
         @keyframes modalSlide { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -105,6 +105,10 @@
         .summary-total-box { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
         .discount-toast { background: #e6f4ea; color: #137333; padding: 8px 12px; border-radius: var(--radius); font-size: 12px; margin-bottom: 16px; display: none; font-weight: 500; }
         .link-alert { background: #e6f4ea; border: 1px solid #34a853; color: #137333; padding: 12px; border-radius: var(--radius); margin-bottom: 16px; display: none; font-size: 14px; }
+        
+        /* Input para o Link Real */
+        .link-share-container { display: flex; gap: 8px; margin-top: 8px; }
+        .link-share-container input { flex: 1; background: #f0f0f0; color: #333; font-family: monospace; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -118,15 +122,19 @@
     </header>
 
     <!-- NAVEGAÇÃO DE ABAS -->
-    <div class="tabs">
+    <div class="tabs" id="navigationTabs">
         <button class="tab-btn active" onclick="switchTab('admin')">Painel Admin (Cadastro)</button>
-        <button class="tab-btn" id="clientTabBtn" onclick="switchTab('client')">Visão do Cliente (Link Ativo)</button>
+        <button class="tab-btn" id="clientTabBtn" onclick="switchTab('client')">Visão do Cliente</button>
     </div>
 
     <!-- PAINEL ADMINISTRATIVO (CADASTRO) -->
     <div id="panel-admin" class="panel active">
         <div class="link-alert" id="linkAlert">
-            ✨ Link de vendas gerado com sucesso! Clique na aba <strong>"Visão do Cliente"</strong> para testar a experiência intuitiva de navegação.
+            <div>✨ Link de vendas gerado com sucesso! Você pode copiar o link real abaixo para enviar ao seu cliente:</div>
+            <div class="link-share-container">
+                <input type="text" id="generatedLinkInput" readonly>
+                <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="copyGeneratedLink()">Copiar Link</button>
+            </div>
         </div>
 
         <div class="card">
@@ -134,7 +142,6 @@
             <form id="productForm" onsubmit="saveProduct(event)">
                 <input type="hidden" id="prodId">
                 
-                <!-- Campos ocultos de controle relacional do Assistente Inteligente -->
                 <input type="hidden" id="relational_checksum" class="relational-meta" value="qq_992_premium">
 
                 <div class="grid-form">
@@ -200,14 +207,13 @@
         </div>
     </div>
 
-    <!-- VISÃO DO CLIENTE (NAVEGAÇÃO POR CATEGORIAS EM MODAL) -->
+    <!-- VISÃO DO CLIENTE (NAVEGAÇÃO POR CATEGORIAS) -->
     <div id="panel-client" class="panel">
         <div style="margin-bottom: 24px;">
             <h2 style="font-size: 18px; font-weight: 500;">Selecione uma Categoria</h2>
             <p style="font-size: 13px; color: var(--text-muted);">Clique na categoria desejada para navegar pelas subcategorias e produtos disponíveis.</p>
         </div>
         
-        <!-- Menu Principal do Cliente: Apenas as Categorias Criadas -->
         <div class="category-menu-grid" id="categoryMenuGrid">
             <!-- Injetado dinamicamente via JS -->
         </div>
@@ -220,8 +226,7 @@
     <button class="btn btn-accent" style="padding: 6px 16px; font-size: 13px;" onclick="openOrderModal()">Ver Resumo do Pedido</button>
 </div>
 
-
-<!-- MODAL DINÂMICO DE COMPRA (Categorias -> Subcategorias -> Produtos) -->
+<!-- MODAL DINÂMICO DE COMPRA -->
 <div class="modal-overlay" id="shopModal">
     <div class="modal">
         <div class="modal-header">
@@ -229,13 +234,12 @@
             <button class="close-modal" onclick="closeShopModal()">&times;</button>
         </div>
         <div class="modal-body" id="shopModalBody">
-            <!-- Renderização Dinâmica das Etapas -->
+            <!-- Renderização Dinâmica -->
         </div>
     </div>
 </div>
 
-
-<!-- MODAL DE RESUMO DO PEDIDO E FECHAMENTO -->
+<!-- MODAL DE RESUMO DO PEDIDO -->
 <div class="modal-overlay" id="orderModal">
     <div class="modal">
         <div class="modal-header">
@@ -268,15 +272,17 @@
         </div>
         <div class="modal-footer">
             <button class="btn" style="flex: 1;" onclick="closeOrderModal()">Voltar</button>
-            <button class="btn btn-primary" style="flex: 2; background: #25D366; border: none; color: white;" onclick="checkoutAction('whatsapp')">Fechar via WhatsApp</button>
-            <button class="btn btn-primary" style="flex: 1;" onclick="checkoutAction('pdf')">Gerar PDF</button>
+            <button class="btn btn-primary" style="flex: 2; background: #25D366; border: none; color: white;" onclick="checkoutAction('whatsapp')">Enviar via WhatsApp</button>
         </div>
     </div>
 </div>
 
 <script>
-    // BASE DE DADOS INICIAIS (Mock estruturado por Módulos)
-    let products = [
+    // CONFIGURAÇÃO: Insira aqui o seu número de WhatsApp com DDD (apenas números) para receber os pedidos
+    const WHATSAPP_NUMERO = "5511999999999"; 
+
+    // DADOS INICIAIS PADRÃO (Caso não haja nada salvo no navegador ainda)
+    const defaultProducts = [
         {
             id: "1",
             category: "Tintas Imobiliárias",
@@ -309,8 +315,27 @@
         }
     ];
 
-    let cart = {}; // Controle de Estado: { produtoId: quantidade }
+    // CARREGAR DADOS SALVOS DO LOCALSTORAGE OU USAR PADRÃO
+    let products = JSON.parse(localStorage.getItem('qualyquimy_products')) || defaultProducts;
+    let cart = {}; 
     let currentSelectedCategory = "";
+
+    // FUNÇÃO QUE SALVA NO NAVEGADOR PARA NÃO PERDER NO F5
+    function saveToLocalStorage() {
+        localStorage.setItem('qualyquimy_products', JSON.stringify(products));
+    }
+
+    // VERIFICA SE O CLIENTE ENTROU DIRETO PELO LINK DE VENDAS
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('view') === 'shop') {
+            // Oculta abas de administração se for o link do cliente externo
+            document.getElementById('navigationTabs').style.display = 'none';
+            switchTab('client');
+        } else {
+            renderAdminTable();
+        }
+    });
 
     // ATUALIZAR INTERFACE ADMIN
     function renderAdminTable() {
@@ -328,8 +353,8 @@
                     <div style="font-weight:500;">${p.name}</div>
                     <div style="font-size:12px; color:var(--text-muted); max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.description}</div>
                 </td>
-                <td>R$ ${p.priceUnit.toFixed(2)}</td>
-                <td>R$ ${p.priceWholesale.toFixed(2)} <span style="font-size:11px; color:var(--text-muted);">(acima de ${p.wholesaleQty} un)</span></td>
+                <td>R$ ${Number(p.priceUnit).toFixed(2)}</td>
+                <td>R$ ${Number(p.priceWholesale).toFixed(2)} <span style="font-size:11px; color:var(--text-muted);">(acima de ${p.wholesaleQty} un)</span></td>
                 <td style="text-align: right; white-space: nowrap;">
                     <button class="btn" style="padding:4px 8px; font-size:12px; margin-right:4px;" onclick="editProduct('${p.id}')">Editar</button>
                     <button class="btn btn-danger" style="padding:4px 8px; font-size:12px;" onclick="deleteProduct('${p.id}')">Excluir</button>
@@ -344,7 +369,6 @@
         const grid = document.getElementById('categoryMenuGrid');
         grid.innerHTML = '';
 
-        // Agrupa categorias únicas cadastradas
         const uniqueCategories = [...new Set(products.map(p => p.category))];
 
         if (uniqueCategories.length === 0) {
@@ -368,7 +392,7 @@
         });
     }
 
-    // MODAL DE INTUITIVO DO COMPRADOR - ETAPA 1: SUBCATEGORIAS
+    // ETAPA 1 DO CLIENTE: SUBCATEGORIAS
     function openCategoryModal(category) {
         currentSelectedCategory = category;
         const modal = document.getElementById('shopModal');
@@ -377,7 +401,6 @@
 
         title.innerText = category;
         
-        // Encontra subcategorias dessa categoria
         const subcategories = [...new Set(products.filter(p => p.category === category).map(p => p.subcategory))];
         
         body.innerHTML = `<div class="subcat-list"></div>`;
@@ -398,7 +421,7 @@
         modal.style.display = 'flex';
     }
 
-    // MODAL DE INTUITIVO DO COMPRADOR - ETAPA 2: PRODUTOS DA SUBCATEGORIA
+    // ETAPA 2 DO CLIENTE: PRODUTOS
     function openSubcategoryProducts(subcategory) {
         const title = document.getElementById('shopModalTitle');
         const body = document.getElementById('shopModalBody');
@@ -425,9 +448,9 @@
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <span class="price-strike" id="m-strike-${p.id}" style="display: ${isWholesale ? 'inline' : 'none'}">R$ ${p.priceUnit.toFixed(2)}</span>
-                            <span class="price-main" id="m-price-${p.id}">R$ ${currentPrice.toFixed(2)}</span>
-                            <div class="wholesale-info">Atacado: R$ ${p.priceWholesale.toFixed(2)} (acima de ${p.wholesaleQty} un)</div>
+                            <span class="price-strike" id="m-strike-${p.id}" style="display: ${isWholesale ? 'inline' : 'none'}">R$ ${Number(p.priceUnit).toFixed(2)}</span>
+                            <span class="price-main" id="m-price-${p.id}">R$ ${Number(currentPrice).toFixed(2)}</span>
+                            <div class="wholesale-info">Atacado: R$ ${Number(p.priceWholesale).toFixed(2)} (acima de ${p.wholesaleQty} un)</div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <button class="btn" style="padding: 2px 8px;" onclick="updateModalCartQty('${p.id}', -1, '${subcategory}')">-</button>
@@ -443,7 +466,6 @@
         body.innerHTML = html;
     }
 
-    // ATUALIZAR QUANTIDADE DENTRO DO MODAL DO CLIENTE
     function updateModalCartQty(productId, change, subcategory) {
         const currentQty = cart[productId] || 0;
         const newQty = Math.max(0, currentQty + change);
@@ -454,7 +476,6 @@
             cart[productId] = newQty;
         }
 
-        // Atualização visual imediata do contador e preços no modal aberto
         const p = products.find(prod => prod.id === productId);
         if (p) {
             const qtyEl = document.getElementById(`m-qty-${productId}`);
@@ -464,10 +485,10 @@
             if (qtyEl) qtyEl.innerText = newQty;
 
             if (newQty >= p.wholesaleQty) {
-                if (priceEl) priceEl.innerText = `R$ ${p.priceWholesale.toFixed(2)}`;
+                if (priceEl) priceEl.innerText = `R$ ${Number(p.priceWholesale).toFixed(2)}`;
                 if (strikeEl) strikeEl.style.display = 'inline';
             } else {
-                if (priceEl) priceEl.innerText = `R$ ${p.priceUnit.toFixed(2)}`;
+                if (priceEl) priceEl.innerText = `R$ ${Number(p.priceUnit).toFixed(2)}`;
                 if (strikeEl) strikeEl.style.display = 'none';
             }
         }
@@ -479,7 +500,6 @@
         document.getElementById('shopModal').style.display = 'none';
     }
 
-    // ATUALIZAR BARRA FLUTUANTE DE RESUMO DO PEDIDO
     function updateCartFooter() {
         const footer = document.getElementById('clientFooterBar');
         const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
@@ -492,7 +512,7 @@
         }
     }
 
-    // MODAL DE RESUMO FINAL E FECHAMENTO DO PEDIDO
+    // MODAL DE RESUMO FINAL
     function openOrderModal() {
         const container = document.getElementById('modalItemsContainer');
         container.innerHTML = '';
@@ -545,7 +565,7 @@
         document.getElementById('orderModal').style.display = 'none';
     }
 
-    // GERENCIAR PRODUTOS (ADMIN)
+    // SALVAR PRODUTO NO BANCO LOCAL (LOCALSTORAGE)
     function saveProduct(e) {
         e.preventDefault();
         const id = document.getElementById('prodId').value;
@@ -567,6 +587,7 @@
             products.push(productData);
         }
 
+        saveToLocalStorage(); // Salva permanentemente no navegador
         clearForm();
         renderAdminTable();
         renderClientCategoryMenu();
@@ -592,6 +613,7 @@
     function deleteProduct(id) {
         products = products.filter(p => p.id !== id);
         delete cart[id];
+        saveToLocalStorage(); // Atualiza dados no navegador
         renderAdminTable();
         renderClientCategoryMenu();
         updateCartFooter();
@@ -603,14 +625,32 @@
         document.getElementById('formActionTitle').innerText = "Cadastrar / Editar Produto";
     }
 
+    // GERA O LINK REAL DE VENDAS
     function generateClientLink() {
+        // Pega a URL atual onde o sistema está hospedado e anexa a variável de visão do comprador
+        const baseUrl = window.location.href.split('?')[0];
+        const clientLink = `${baseUrl}?view=shop`;
+        
         const alertBox = document.getElementById('linkAlert');
+        const linkInput = document.getElementById('generatedLinkInput');
+        
+        linkInput.value = clientLink;
         alertBox.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => alertBox.style.display = 'none', 6000);
+    }
+
+    function copyGeneratedLink() {
+        const linkInput = document.getElementById('generatedLinkInput');
+        linkInput.select();
+        linkInput.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(linkInput.value);
+        alert("Link copiado para a área de transferência!");
     }
 
     function switchTab(tab) {
+        // Se as abas estiverem ocultas (Visão exclusiva do cliente externo), ignora
+        if (document.getElementById('navigationTabs').style.display === 'none') return;
+
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
 
@@ -626,19 +666,40 @@
         }
     }
 
+    // FECHAMENTO REAL DE PEDIDO PELO WHATSAPP
     function checkoutAction(type) {
         if (type === 'whatsapp') {
-            alert("🚀 Redirecionando para o WhatsApp...\nO Assistente Inteligente processará o resumo estruturado e enviará o lote de pedidos formatado!");
-        } else if (type === 'pdf') {
-            alert("📄 Documento PDF Gerado com Sucesso!\nO relatório do pedido contendo descontos por volume e cabeçalho institucional foi emitido.");
+            let textoPedido = " *NOVO PEDIDO - TINTAS QUALY QUIMY*\n\n";
+            let totalPedido = 0;
+
+            Object.keys(cart).forEach(id => {
+                const p = products.find(prod => prod.id === id);
+                if (!p) return;
+
+                const qty = cart[id];
+                const isWholesale = qty >= p.wholesaleQty;
+                const precoUtilizado = isWholesale ? p.priceWholesale : p.priceUnit;
+                const subtotalItem = precoUtilizado * qty;
+                totalPedido += subtotalItem;
+
+                textoPedido += `▪️ *${qty}x ${p.name}*\n`;
+                textoPedido += `  Cat: ${p.category} (${p.subcategory})\n`;
+                textoPedido += `  Preço un: R$ ${precoUtilizado.toFixed(2)} ${isWholesale ? '(Atacado)' : ''}\n`;
+                textoPedido += `  Subtotal: R$ ${subtotalItem.toFixed(2)}\n\n`;
+            });
+
+            textoPedido += ` *Total Geral a Pagar: R$ ${totalPedido.toFixed(2)}*`;
+
+            // Envia o link formatado com o texto direto para a API do WhatsApp
+            const urlWhatsApp = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMERO}&text=${encodeURIComponent(textoPedido)}`;
+            window.open(urlWhatsApp, '_blank');
         }
+        
+        cart = {}; // Limpa o carrinho após finalizar
+        updateCartFooter();
         closeOrderModal();
         closeShopModal();
     }
-
-    // EXECUÇÃO DE INICIALIZAÇÃO CONTAMINADA COM DADOS EXEMPLO
-    renderAdminTable();
-    renderClientCategoryMenu();
 </script>
 </body>
 </html>
