@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tintas Qualy Quimy - Pedido Online</title>
     <style>
-        /* DESIGN SYSTEM PREMIUM - ESTILO APP MOBILE DE DELIVERY */
+        /* DESIGN SYSTEM PREMIUM - ESTILO APP MOBILE */
         :root {
             --bg-main: #f8f9fa;
             --bg-card: #ffffff;
@@ -26,10 +26,10 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-main); color: var(--text-main); padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
         
-        /* CONTAINER PRINCIPAL DO APLICATIVO */
-        .container { width: 100%; max-width: 480px; margin: 0 auto; background: var(--bg-card); min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 100px; position: relative; }
+        /* CONTAINER SMARTPHONE */
+        .container { width: 100%; max-width: 480px; margin: 0 auto; background: var(--bg-card); min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 100px; box-shadow: 0 0 20px rgba(0,0,0,0.02); }
 
-        /* CABEÇALHO DA MARCA - 18 ANOS */
+        /* CABEÇALHO 18 ANOS */
         header { 
             position: relative; 
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
@@ -44,18 +44,51 @@
         header p { font-size: 14px; opacity: 0.9; font-weight: 500; }
         .tagline { display: inline-block; background: rgba(255, 255, 255, 0.15); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 8px; backdrop-filter: blur(4px); }
 
-        /* PAINÉIS DA INTERFACE */
-        .panel { padding: 20px; }
+        /* PAINÉIS E ABAS EXCLUSIVAS DO CRIADOR */
+        .panel { display: none; padding: 20px; }
+        .panel.active { display: block; }
+        .tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin: 15px 20px 5px 20px; }
+        .tab-btn { background: none; border: none; padding: 12px 16px; font-size: 14px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; flex: 1; text-align: center; transition: all 0.2s; font-weight: 500; }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+        /* CARDS E FORMULÁRIOS (ADMIN) */
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-sm); }
+        .card-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 16px; font-weight: 700; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+        label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+        input, textarea { padding: 12px; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); font-size: 14px; outline: none; background: #fff; transition: all 0.2s; }
+        input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1); }
+
+        /* LINK CUSTOMIZÁVEL */
+        .slug-input-wrapper { display: flex; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding-left: 12px; overflow: hidden; }
+        .slug-prefix { font-size: 12px; color: var(--text-muted); font-family: monospace; }
+        .slug-input-wrapper input { border: none; background: transparent; padding: 12px 8px; flex: 1; font-weight: 600; color: var(--accent); }
+
+        /* BOTÕES */
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 18px; font-size: 14px; font-weight: 600; border-radius: var(--radius-sm); border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; background: #fff; color: var(--text-main); text-decoration: none; gap: 8px; }
+        .btn-primary { background: var(--text-main); color: #fff; border: none; }
+        .btn-accent { background: var(--accent); color: #fff; border: none; box-shadow: 0 4px 12px rgba(0, 112, 243, 0.2); }
+        .btn-success { background: #25D366; color: #fff; border: none; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2); }
+        .btn-pdf { background: #e11d48; color: #fff; border: none; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2); }
+        .btn-danger { color: var(--danger); border-color: transparent; background: transparent; }
+        .btn-trash { background: none; border: none; color: var(--danger); cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; }
 
         /* GRID DE CATEGORIAS */
         .category-menu-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
-        .category-card-btn { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px 20px; text-align: left; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-sm); display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent); }
-        .category-card-btn:active { transform: scale(0.98); background: #fafafa; }
-        .category-card-btn h4 { font-size: 16px; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
-        .category-card-btn span { font-size: 12px; color: var(--text-muted); }
+        .category-card-btn { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px 20px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent); box-shadow: var(--shadow-sm); }
         .category-icon-arrow { width: 32px; height: 32px; background: #f1f3f5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--accent); }
 
-        /* CONTROLES DE COMPRA E EDIÇÃO INTERNA */
+        /* MODAIS PREMIUM */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: flex-end; z-index: 100; }
+        .modal { background: var(--bg-card); width: 100%; max-width: 480px; border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg); box-shadow: var(--shadow-elevated); overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .modal-header h3 { font-size: 18px; font-weight: 700; }
+        .close-modal { background: #f1f3f5; border: none; font-size: 20px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+        .modal-footer { padding: 16px 20px; border-top: 1px solid var(--border); background: #fafafa; display: flex; flex-direction: column; gap: 8px; }
+
+        /* ITENS DENTRO DO MODAL */
         .subcat-title-divider { font-size: 13px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; margin: 15px 0 10px 0; display: flex; align-items: center; gap: 8px; }
         .subcat-title-divider::after { content:''; flex: 1; height: 1px; background: var(--border); }
         .modal-product-item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow-sm); }
@@ -63,309 +96,292 @@
         .price-strike { font-size: 12px; color: var(--text-muted); text-decoration: line-through; margin-right: 6px; }
         .wholesale-info { font-size: 11px; color: #0f172a; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; display: inline-block; font-weight: 600; margin-top: 4px; }
         
-        /* BOTÕES DE EDITAR QUANTIDADE (TOQUE FÁCIL) */
+        /* CONTROLE DE QUANTIDADES */
         .qty-control { display: flex; align-items: center; background: #f1f3f5; border-radius: 30px; padding: 4px; gap: 12px; }
-        .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: #fff; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); color: #0f172a; }
-        .qty-btn:active { background: #e2e8f0; }
+        .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: #fff; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-        /* COMPONENTES TRIDIMENSIONAIS DOS MODAIS */
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: flex-end; z-index: 100; }
-        .modal { background: var(--bg-card); width: 100%; max-width: 480px; border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg); box-shadow: var(--shadow-elevated); overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #fff; }
-        .modal-header h3 { font-size: 18px; font-weight: 700; color: #0f172a; }
-        .close-modal { background: #f1f3f5; border: none; font-size: 20px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; }
-        .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
-        .modal-footer { padding: 16px 20px; border-top: 1px solid var(--border); background: #fafafa; display: flex; flex-direction: column; }
+        /* LISTA ADMIN */
+        .admin-prod-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
 
-        /* BOTÕES GERAIS */
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 18px; font-size: 14px; font-weight: 600; border-radius: var(--radius-sm); border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; background: #fff; color: var(--text-main); text-decoration: none; gap: 8px; }
-        .btn-accent { background: var(--accent); color: #fff; border: none; box-shadow: 0 4px 12px rgba(0, 112, 243, 0.2); }
-        .btn-success { background: #25D366; color: #fff; border: none; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2); }
-        .btn-pdf { background: #e11d48; color: #fff; border: none; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2); }
-        .btn-trash { background: none; border: none; color: var(--danger); cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; }
-
-        /* BARRA INFERIOR DE FINALIZAÇÃO */
+        /* RENDERIZAÇÃO DO RODA-PÉ FLUTUANTE DO CLIENTE */
         .client-footer-bar { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); max-width: 448px; background: #0f172a; color: #fff; padding: 12px 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-elevated); z-index: 90; }
-        .client-footer-bar span { font-size: 14px; font-weight: 600; }
-
-        /* ESTRUTURAÇÃO DO RESUMO FINAL COM BOTÕES E LIXEIRA */
-        .order-item-row { display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 14px; align-items: center; background: #f8fafc; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+        
+        /* RESUMO DE ITENS COM BORDA */
+        .order-item-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; align-items: center; background: #f8fafc; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
         .summary-total-box { margin-top: 16px; padding-top: 16px; border-top: 1px dashed #cbd5e1; }
         .discount-toast { background: #e6f4ea; color: #137333; padding: 10px; border-radius: var(--radius-sm); font-size: 12px; margin-bottom: 12px; display: none; font-weight: 600; text-align: center; }
+        .link-alert { background: #e6f4ea; border: 1px solid #34a853; color: #137333; padding: 16px; border-radius: var(--radius-sm); margin-bottom: 16px; display: none; }
 
-        /* ESTILO EXCLUSIVO DE IMPRESSÃO / PDF COM CABEÇALHO HISTÓRICO */
         @media print {
-            body { background: #fff; color: #000; }
-            .container { max-width: 100%; box-shadow: none; padding-bottom: 0; }
+            .tabs, .client-footer-bar, .modal-footer, .qty-control, .btn-trash, .close-modal { display: none !important; }
             .modal-overlay { position: relative; display: flex !important; background: none; backdrop-filter: none; }
             .modal { max-height: none; box-shadow: none; width: 100%; }
-            .modal-header .close-modal, .modal-footer, .client-footer-bar, .qty-control, .btn-trash, header .tagline { display: none !important; }
-            .order-item-row { border: 1px solid #000; background: none; margin-bottom: 8px; page-break-inside: avoid; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- CABEÇALHO INSTITUCIONAL COMPLETO -->
     <header>
         <h1>Tintas Qualy Quimy</h1>
         <p>Faça seu pedido com facilidade!</p>
         <span class="tagline">A 18 anos com você!</span>
     </header>
 
-    <!-- ÁREA EXCLUSIVA DO CLIENTE (SEM BOTÕES DE EDIÇÃO DO PAINEL) -->
+    <!-- ABAS DO MANAGER (Apenas você vê aqui na edição) -->
+    <div class="tabs" id="navigationTabs">
+        <button class="tab-btn active" onclick="switchTab('admin')">Gerenciar Painel</button>
+        <button class="tab-btn" id="clientTabBtn" onclick="switchTab('client')">Área do Cliente</button>
+    </div>
+
+    <!-- TELA 1: GERENCIAR PAINEL -->
+    <div id="panel-admin" class="panel active">
+        <div class="link-alert" id="linkAlert">
+            <span style="font-weight: 700; display:block; margin-bottom: 6px;">✨ Link do cliente pronto!</span>
+            <input type="text" id="generatedLinkInput" readonly style="width:100%; margin-bottom: 8px; font-family:monospace; font-size:12px;">
+            <button class="btn btn-primary" style="padding: 8px; font-size:12px; width:100%;" onclick="copyGeneratedLink()">Copiar Link Customizado</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Configurar Link do Cliente</div>
+            <div class="form-group">
+                <label>Nome do Link Customizado</label>
+                <div class="slug-input-wrapper">
+                    <span class="slug-prefix">?cliente=</span>
+                    <input type="text" id="clientSlug" placeholder="ex: tintas-silva">
+                </div>
+            </div>
+            <button class="btn btn-accent" style="width:100%;" onclick="generateClientLink()">Criar Link Exclusivo</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title" id="formActionTitle">Cadastrar / Editar Produto</div>
+            <form id="productForm" onsubmit="saveProduct(event)">
+                <input type="hidden" id="prodId">
+                <div class="form-group"><label>Categoria</label><input type="text" id="category" required placeholder="Ex: Tintas"></div>
+                <div class="form-group"><label>Subcategoria</label><input type="text" id="subcategory" required placeholder="Ex: Acrílica"></div>
+                <div class="form-group"><label>Nome do Produto</label><input type="text" id="prodName" required placeholder="Ex: Galão 18L"></div>
+                <div class="form-group"><label>Descrição</label><textarea id="description" rows="2"></textarea></div>
+                <div class="form-group"><label>Preço Normal (R$)</label><input type="number" id="priceUnit" step="0.01" required></div>
+                <div class="form-group"><label>Atacado a partir de (Qtd)</label><input type="number" id="wholesaleQty" min="1" required></div>
+                <div class="form-group"><label>Preço Atacado (R$)</label><input type="number" id="priceWholesale" step="0.01" required></div>
+                <div style="display: flex; gap: 8px;">
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Salvar</button>
+                    <button type="button" class="btn" style="flex:1;" onclick="clearForm()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Produtos no Banco de Dados</div>
+            <div id="adminProductsContainer"></div>
+        </div>
+    </div>
+
+    <!-- TELA 2: ÁREA DO CLIENTE -->
     <div id="panel-client" class="panel">
         <div style="margin-bottom: 16px;">
-            <h2 style="font-size: 16px; font-weight: 700; color: #1e293b;">Cardápio de Categorias</h2>
-            <p style="font-size: 13px; color: var(--text-muted);">Selecione uma categoria abaixo para conferir os produtos.</p>
+            <h2 style="font-size: 16px; font-weight: 700;">Categorias de Tintas</h2>
+            <p style="font-size: 13px; color: var(--text-muted);">Escolha uma categoria para adicionar produtos.</p>
         </div>
-        <div class="category-menu-grid" id="categoryMenuGrid">
-            <!-- Injetado dinamicamente -->
-        </div>
+        <div class="category-menu-grid" id="categoryMenuGrid"></div>
     </div>
 </div>
 
-<!-- BARRA FIXA FLUTUANTE INFERIOR -->
+<!-- BARRA FIXA FLUTUANTE DO CLIENTE -->
 <div class="client-footer-bar" id="clientFooterBar" style="display: none;">
-    <span id="footerCartSummary">0 itens no pedido</span>
-    <button class="btn btn-accent" style="padding: 8px 16px; font-size: 13px; border-radius: 20px;" onclick="openOrderModal()">Ver Pedido &rarr;</button>
+    <span id="footerCartSummary">0 itens adicionados</span>
+    <button class="btn btn-accent" style="padding: 8px 16px; font-size: 13px; border-radius: 20px;" onclick="openOrderModal()">Resumo da Compra &rarr;</button>
 </div>
 
-<!-- MODAL DE PRODUTOS COM O BOTÃO AVANÇAR -->
+<!-- MODAL DE PRODUTOS -->
 <div class="modal-overlay" id="shopModal">
     <div class="modal">
         <div class="modal-header">
             <h3 id="shopModalTitle">Produtos</h3>
             <button class="close-modal" onclick="closeShopModal()">&times;</button>
         </div>
-        <div class="modal-body" id="shopModalBody">
-            <!-- Renderização Dinâmica por Subcategoria -->
-        </div>
+        <div class="modal-body" id="shopModalBody"></div>
         <div class="modal-footer">
-            <button class="btn btn-accent" style="width: 100%; font-size: 15px; padding: 14px;" onclick="closeShopModal(); openOrderModal();">
-                Avançar para o Resumo &rarr;
-            </button>
+            <button class="btn btn-accent" style="width: 100%;" onclick="closeShopModal(); openOrderModal();">Ver Resumo da Compra &rarr;</button>
         </div>
     </div>
 </div>
 
-<!-- MODAL DE FECHAMENTO COM EDICAO, REDUCAO, EXCLUSAO E DUPLO FEED (WHATSAPP OU PDF) -->
+<!-- MODAL DO RESUMO DE COMPRAS COM EDICAO E EXCLUSAO -->
 <div class="modal-overlay" id="orderModal">
     <div class="modal">
         <div class="modal-header">
-            <h3>Resumo do seu Pedido</h3>
+            <h3>Resumo da Compra</h3>
             <button class="close-modal" onclick="closeOrderModal()">&times;</button>
         </div>
         <div class="modal-body">
-            <div class="discount-toast" id="discountToast">✨ Economia de atacado aplicada com sucesso!</div>
-            
-            <div id="modalItemsContainer">
-                <!-- Itens selecionados com lixeira e seletores de mudança rápida de quantidade -->
-            </div>
-            
+            <div class="discount-toast" id="discountToast">✨ Desconto de atacado aplicado!</div>
+            <div id="modalItemsContainer"></div>
             <div class="summary-total-box">
-                <div class="order-item-row" style="color: var(--text-muted); font-size: 13px; background:none; border:none; margin-bottom:4px; padding:0;">
-                    <span>Subtotal Original:</span><span id="modalSubtotal">R$ 0,00</span>
+                <div class="order-item-row" style="background:none; border:none; padding:0; margin-bottom:4px; font-size:13px; color:var(--text-muted);">
+                    <span>Subtotal:</span><span id="modalSubtotal">R$ 0,00</span>
                 </div>
-                <div class="order-item-row" id="modalDiscountRow" style="color: var(--success); font-size: 13px; background:none; border:none; margin-bottom:4px; padding:0; display: none;">
-                    <span>Desconto Atacado:</span><span id="modalDiscount">- R$ 0,00</span>
+                <div class="order-item-row" id="modalDiscountRow" style="background:none; border:none; padding:0; margin-bottom:4px; font-size:13px; color:var(--success); display:none;">
+                    <span>Economia:</span><span id="modalDiscount">- R$ 0,00</span>
                 </div>
-                <div class="order-item-row" style="font-weight: 700; font-size: 16px; color: #0f172a; background:none; border:none; padding:0; margin-top: 8px;">
-                    <span>Total Final:</span><span id="modalTotal">R$ 0,00</span>
+                <div class="order-item-row" style="background:none; border:none; padding:0; font-weight:700; font-size:16px;">
+                    <span>Total:</span><span id="modalTotal">R$ 0,00</span>
                 </div>
             </div>
         </div>
-        <div class="modal-footer" style="gap: 10px;">
-            <button class="btn btn-success" style="padding: 14px; font-size: 15px;" onclick="checkoutAction('whatsapp')">
+        <div class="modal-footer">
+            <button class="btn btn-accent" style="background:#0f172a;" onclick="closeOrderModal()">Voltar a Comprar</button>
+            <button class="btn btn-accent" onclick="openCheckoutOptionsModal()">Fechar Pedido</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE SELEÇÃO FINAL: WHATSAPP OU PDF -->
+<div class="modal-overlay" id="checkoutOptionsModal">
+    <div class="modal" style="align-self: center; width: 90%; border-radius: var(--radius-lg);">
+        <div class="modal-header">
+            <h3>Como deseja enviar o pedido?</h3>
+            <button class="close-modal" onclick="closeCheckoutOptionsModal()">&times;</button>
+        </div>
+        <div class="modal-body" style="display:flex; flex-direction:column; gap:12px; padding:25px 20px;">
+            <button class="btn btn-success" style="padding:16px; font-size:15px;" onclick="finalizeOrder('whatsapp')">
                 Enviar para o WhatsApp
             </button>
-            <button class="btn btn-pdf" style="padding: 14px; font-size: 15px;" onclick="checkoutAction('pdf')">
+            <button class="btn btn-pdf" style="padding:16px; font-size:15px;" onclick="finalizeOrder('pdf')">
                 Gerar Pedido em PDF
-            </button>
-            <button class="btn" style="background:transparent; border:none; color:var(--text-muted); font-weight:500;" onclick="closeOrderModal()">
-                Voltar e Comprar Mais
             </button>
         </div>
     </div>
 </div>
 
 <script>
-    // NÚMERO DO WHATSAPP DE DESTINO JÁ CONFIGURADO VIA BACK-OFFICE
     const WHATSAPP_NUMERO = "5511954950044"; 
 
-    // BANCO DE DADOS LOCAL (Preenchido com base nos seus cadastros)
     const defaultProducts = [
-        { id: "1", category: "Tintas Imobiliárias", subcategory: "Acrílicas", name: "Tinta Acrílica Premium Fosca 18L", description: "Alta cobertura e rendimento para ambientes internos e externos.", priceUnit: 289.00, wholesaleQty: 5, priceWholesale: 259.00 },
-        { id: "2", category: "Tintas Imobiliárias", subcategory: "Esmaltes", name: "Esmalte Sintético Premium Brilhante 3.6L", description: "Excelente acabamento e proteção para madeiras e metais.", priceUnit: 115.00, wholesaleQty: 4, priceWholesale: 98.00 },
-        { id: "3", category: "Linha Industrial", subcategory: "Epóxi", name: "Fundo Epóxi de Alta Performance 3.6L", description: "Máxima resistência mecânica para pisos e estruturas.", priceUnit: 210.00, wholesaleQty: 3, priceWholesale: 185.00 }
+        { id: "1", category: "Tintas Imobiliárias", subcategory: "Acrílicas", name: "Tinta Acrílica Premium Fosca 18L", description: "Alta cobertura.", priceUnit: 289.00, wholesaleQty: 5, priceWholesale: 259.00 },
+        { id: "2", category: "Tintas Imobiliárias", subcategory: "Esmaltes", name: "Esmalte Sintético Brilhante 3.6L", description: "Metais e madeiras.", priceUnit: 115.00, wholesaleQty: 4, priceWholesale: 98.00 }
     ];
 
-    // Carrega dados salvos pelo administrador do sistema (Compartilhado via localStorage da mesma URL raiz)
     let products = JSON.parse(localStorage.getItem('qualyquimy_db')) || defaultProducts;
     let cart = {}; 
-    let currentSelectedCategory = "";
 
     window.addEventListener('DOMContentLoaded', () => {
-        renderClientMenu();
+        const urlParams = new URLSearchParams(window.location.search);
+        // PROTEÇÃO: Se conter '?cliente=', esconde o painel do criador imediatamente.
+        if (urlParams.has('cliente')) {
+            document.getElementById('navigationTabs').remove();
+            document.getElementById('panel-admin').remove();
+            switchTab('client');
+        } else {
+            renderAdminList();
+            renderClientMenu();
+        }
     });
 
-    // CONSTRUTOR DINÂMICO DE CATEGORIAS
+    function saveDB() { localStorage.setItem('qualyquimy_db', JSON.stringify(products)); }
+
+    function renderAdminList() {
+        const container = document.getElementById('adminProductsContainer');
+        container.innerHTML = '';
+        products.forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'admin-prod-item';
+            div.innerHTML = `
+                <div><strong>${p.name}</strong><br><small>${p.category}</small></div>
+                <div>
+                    <button class="btn" style="padding:4px 8px; font-size:11px;" onclick="editProduct('${p.id}')">Editar</button>
+                    <button class="btn btn-danger" style="padding:4px 8px; font-size:11px;" onclick="deleteProduct('${p.id}')">Excluir</button>
+                </div>`;
+            container.appendChild(div);
+        });
+    }
+
     function renderClientMenu() {
         const grid = document.getElementById('categoryMenuGrid');
         grid.innerHTML = '';
         const uniqueCategories = [...new Set(products.map(p => p.category))];
-
-        if (uniqueCategories.length === 0) {
-            grid.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:30px 0; font-size:14px;">Nenhum item cadastrado no painel.</p>`;
-            return;
-        }
-
         uniqueCategories.forEach(cat => {
             const count = products.filter(p => p.category === cat).length;
             const btn = document.createElement('button');
             btn.className = 'category-card-btn';
             btn.onclick = () => openCategoryModal(cat);
-            btn.innerHTML = `
-                <div>
-                    <h4>${cat}</h4>
-                    <span>${count} ${count === 1 ? 'produto listado' : 'produtos listados'}</span>
-                </div>
-                <div class="category-icon-arrow">&rarr;</div>
-            `;
+            btn.innerHTML = `<div><h4>${cat}</h4><span>${count} itens</span></div><div class="category-icon-arrow">&rarr;</div>`;
             grid.appendChild(btn);
         });
     }
 
-    // LISTAGEM DOS PRODUTOS DA CATEGORIA SELECIONADA
     function openCategoryModal(category) {
-        currentSelectedCategory = category;
         const modal = document.getElementById('shopModal');
-        const title = document.getElementById('shopModalTitle');
         const body = document.getElementById('shopModalBody');
-
-        title.innerText = category;
+        document.getElementById('shopModalTitle').innerText = category;
         body.innerHTML = '';
 
         const subcategories = [...new Set(products.filter(p => p.category === category).map(p => p.subcategory))];
-
         subcategories.forEach(sub => {
-            const subDivider = document.createElement('div');
-            subDivider.className = 'subcat-title-divider';
-            subDivider.innerText = sub;
-            body.appendChild(subDivider);
+            const div = document.createElement('div');
+            div.className = 'subcat-title-divider';
+            div.innerText = sub;
+            body.appendChild(div);
 
-            const filtered = products.filter(p => p.category === category && p.subcategory === sub);
-            filtered.forEach(p => {
+            products.filter(p => p.category === category && p.subcategory === sub).forEach(p => {
                 const qty = cart[p.id] || 0;
-                const isWholesale = qty >= p.wholesaleQty;
-                const currentPrice = isWholesale ? p.priceWholesale : p.priceUnit;
-
-                const prodCard = document.createElement('div');
-                prodCard.className = 'modal-product-item';
-                prodCard.innerHTML = `
-                    <div>
-                        <h4 style="font-size:15px; font-weight:600; color:#0f172a;">${p.name}</h4>
-                        <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">${p.description || 'Disponível para pedido'}</p>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                const card = document.createElement('div');
+                card.className = 'modal-product-item';
+                card.innerHTML = `
+                    <div><h4>${p.name}</h4><p style="font-size:12px;color:var(--text-muted);">${p.description}</p></div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
                         <div>
-                            <span class="price-strike" id="m-strike-${p.id}" style="display:${isWholesale ? 'inline' : 'none'}">R$ ${Number(p.priceUnit).toFixed(2)}</span>
-                            <span class="price-main" id="m-price-${p.id}">R$ ${Number(currentPrice).toFixed(2)}</span>
-                            <div><span class="wholesale-info">Atacado R$ ${Number(p.priceWholesale).toFixed(2)} (Mínimo: ${p.wholesaleQty})</span></div>
+                            <span class="price-main">R$ ${p.priceUnit.toFixed(2)}</span>
+                            <br><span class="wholesale-info">Atacado: R$ ${p.priceWholesale.toFixed(2)} (${p.wholesaleQty}+ un)</span>
                         </div>
                         <div class="qty-control">
-                            <button class="qty-btn" onclick="changeQty('${p.id}', -1)">&minus;</button>
-                            <span style="font-weight:700; font-size:14px; min-width:16px; text-align:center;" id="m-qty-${p.id}">${qty}</span>
-                            <button class="qty-btn" onclick="changeQty('${p.id}', 1)">&plus;</button>
+                            <button class="qty-btn" onclick="updateQty('${p.id}', -1)">&minus;</button>
+                            <span id="qty-${p.id}" style="font-weight:700;">${qty}</span>
+                            <button class="qty-btn" onclick="updateQty('${p.id}', 1)">&plus;</button>
                         </div>
-                    </div>
-                `;
-                body.appendChild(prodCard);
+                    </div>`;
+                body.appendChild(card);
             });
         });
-
         modal.style.display = 'flex';
     }
 
-    // ALTERAR QUANTIDADE COM SUPORTE A RE-CÁLCULO DE REGRAS DE ATACADO
-    function changeQty(productId, change) {
-        const currentQty = cart[productId] || 0;
-        const newQty = Math.max(0, currentQty + change);
+    function updateQty(id, change) {
+        let current = cart[id] || 0;
+        current += change;
+        if (current <= 0) delete cart[id];
+        else cart[id] = current;
 
-        if (newQty === 0) delete cart[productId];
-        else cart[productId] = newQty;
-
-        // Sincroniza dados visuais na tela aberta se aplicável
-        const p = products.find(prod => prod.id === productId);
-        if (p) {
-            const qtyEl = document.getElementById(`m-qty-${productId}`);
-            const priceEl = document.getElementById(`m-price-${productId}`);
-            const strikeEl = document.getElementById(`m-strike-${productId}`);
-
-            if (qtyEl) qtyEl.innerText = newQty;
-
-            if (newQty >= p.wholesaleQty) {
-                if (priceEl) priceEl.innerText = `R$ ${Number(p.priceWholesale).toFixed(2)}`;
-                if (strikeEl) strikeEl.style.display = 'inline';
-            } else {
-                if (priceEl) priceEl.innerText = `R$ ${Number(p.priceUnit).toFixed(2)}`;
-                if (strikeEl) strikeEl.style.display = 'none';
-            }
-        }
-        updateCartFooter();
+        const el = document.getElementById(`qty-${id}`);
+        if(el) el.innerText = cart[id] || 0;
+        updateFooterBar();
     }
 
-    function removeItemCompletamente(productId) {
-        delete cart[productId];
-        updateCartFooter();
-        openOrderModal(); // Recarrega o modal atualizado
-    }
-
-    function changeQtyNoResumo(productId, change) {
-        const currentQty = cart[productId] || 0;
-        const newQty = Math.max(0, currentQty + change);
-
-        if (newQty === 0) delete cart[productId];
-        else cart[productId] = newQty;
-
-        updateCartFooter();
-        openOrderModal(); // Recarrega o modal e recalcula totais e descontos na hora
-    }
-
-    function closeShopModal() { document.getElementById('shopModal').style.display = 'none'; }
-
-    function updateCartFooter() {
-        const footer = document.getElementById('clientFooterBar');
-        const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
-
-        if (totalItems > 0) {
-            footer.style.display = 'flex';
-            document.getElementById('footerCartSummary').innerText = `${totalItems} ${totalItems === 1 ? 'item selecionado' : 'itens no pedido'}`;
+    function updateFooterBar() {
+        const total = Object.values(cart).reduce((a, b) => a + b, 0);
+        const bar = document.getElementById('clientFooterBar');
+        if (total > 0) {
+            bar.style.display = 'flex';
+            document.getElementById('footerCartSummary').innerText = `${total} ${total === 1 ? 'item selecionado' : 'itens selecionados'}`;
         } else {
-            footer.style.display = 'none';
+            bar.style.display = 'none';
         }
     }
 
-    // CONSTRUTOR DO RESUMO COMPLETO COM CONTROLE DE LIXEIRA E ALTERAÇÃO DIRETA
     function openOrderModal() {
         const container = document.getElementById('modalItemsContainer');
         container.innerHTML = '';
-        let subtotal = 0, total = 0, descontoAtivo = false;
+        let subtotal = 0, totalGeral = 0, temAtacado = false;
 
-        const keys = Object.keys(cart);
-        if(keys.length === 0) { 
-            container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:35px 0; font-size:14px;">Sua sacola está vazia.</p>'; 
-            document.getElementById('modalSubtotal').innerText = "R$ 0,00";
-            document.getElementById('modalTotal').innerText = "R$ 0,00";
-            document.getElementById('discountToast').style.display = 'none';
-            document.getElementById('modalDiscountRow').style.display = 'none';
-            document.getElementById('orderModal').style.display = 'flex';
+        if (Object.keys(cart).length === 0) {
+            container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:20px 0;">Sua sacola está vazia.</p>';
+            updateFooterBar();
+            closeOrderModal();
             return;
         }
 
-        keys.forEach(id => {
+        Object.keys(cart).forEach(id => {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
             const qty = cart[id];
@@ -373,42 +389,34 @@
             const price = isWholesale ? p.priceWholesale : p.priceUnit;
             
             subtotal += p.priceUnit * qty;
-            total += price * qty;
-            if (isWholesale) descontoAtivo = true;
+            totalGeral += price * qty;
+            if(isWholesale) temAtacado = true;
 
-            const row = document.createElement('div');
-            row.className = 'order-item-row';
-            row.innerHTML = `
-                <div style="flex:1; padding-right:10px;">
-                    <span style="font-weight:700; color:#0f172a; display:block; font-size:14px;">${p.name}</span>
-                    <span style="font-size:12px; color:var(--text-muted);">Un: R$ ${price.toFixed(2)} ${isWholesale ? '(Atacado)' : ''}</span>
-                    <strong style="display:block; font-size:13px; margin-top:2px; color:var(--accent);">Sub: R$ ${(price * qty).toFixed(2)}</strong>
+            const div = document.createElement('div');
+            div.className = 'order-item-row';
+            div.innerHTML = `
+                <div style="flex:1;">
+                    <strong>${p.name}</strong>
+                    <div style="font-size:12px;color:var(--text-muted);">Preço un: R$ ${price.toFixed(2)}</div>
                 </div>
-                
-                <!-- SELETOR DE EDIÇÃO DIRETA NO RESUMO -->
-                <div style="display:flex; align-items:center; gap:10px;">
+                <div style="display:flex; align-items:center; gap:12px;">
                     <div class="qty-control" style="padding:2px; gap:8px;">
-                        <button class="qty-btn" style="width:26px; height:26px; font-size:13px;" onclick="changeQtyNoResumo('${p.id}', -1)">&minus;</button>
-                        <span style="font-weight:700; font-size:13px; min-width:14px; text-align:center;">${qty}</span>
-                        <button class="qty-btn" style="width:26px; height:26px; font-size:13px;" onclick="changeQtyNoResumo('${p.id}', 1)">&plus;</button>
+                        <button class="qty-btn" style="width:26px; height:26px;" onclick="updateQtyResumo('${p.id}', -1)">&minus;</button>
+                        <span style="font-weight:700; font-size:13px;">${qty}</span>
+                        <button class="qty-btn" style="width:26px; height:26px;" onclick="updateQtyResumo('${p.id}', 1)">&plus;</button>
                     </div>
-                    
-                    <!-- LIXEIRA EXCLUSIVA PARA ELIMINAR ITEM -->
-                    <button class="btn-trash" onclick="removeItemCompletamente('${p.id}')" title="Remover item">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                    <button class="btn-trash" onclick="deleteItemResumo('${p.id}')">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
-                </div>
-            `;
-            container.appendChild(row);
+                </div>`;
+            container.appendChild(div);
         });
 
-        const economia = subtotal - total;
         document.getElementById('modalSubtotal').innerText = `R$ ${subtotal.toFixed(2)}`;
-        document.getElementById('modalTotal').innerText = `R$ ${total.toFixed(2)}`;
-
-        if (descontoAtivo && economia > 0) {
+        document.getElementById('modalTotal').innerText = `R$ ${totalGeral.toFixed(2)}`;
+        
+        const economia = subtotal - totalGeral;
+        if(temAtacado && economia > 0) {
             document.getElementById('discountToast').style.display = 'block';
             document.getElementById('modalDiscountRow').style.display = 'flex';
             document.getElementById('modalDiscount').innerText = `- R$ ${economia.toFixed(2)}`;
@@ -420,41 +428,109 @@
         document.getElementById('orderModal').style.display = 'flex';
     }
 
+    function updateQtyResumo(id, change) { updateQty(id, change); openOrderModal(); }
+    function deleteItemResumo(id) { delete cart[id]; updateFooterBar(); openOrderModal(); }
+    
+    function openCheckoutOptionsModal() { document.getElementById('checkoutOptionsModal').style.display = 'flex'; }
+    function closeCheckoutOptionsModal() { document.getElementById('checkoutOptionsModal').style.display = 'none'; }
+    function closeShopModal() { document.getElementById('shopModal').style.display = 'none'; }
     function closeOrderModal() { document.getElementById('orderModal').style.display = 'none'; }
 
-    // FLUXO DE DISPARO DAS AÇÕES FINAIS (WHATSAPP E PDF REAL)
-    function checkoutAction(type) {
-        if (Object.keys(cart).length === 0) {
-            alert("Adicione pelo menos um item para fechar o pedido!");
+    function finalizeOrder(type) {
+        if(type === 'pdf') {
+            window.print();
             return;
         }
 
-        if (type === 'whatsapp') {
-            let msg = "*🛒 NOVO PEDIDO - TINTAS QUALY QUIMY*\n_A 18 anos com você!_\n\n";
-            let totalGeral = 0;
+        let msg = "*🛒 NOVO PEDIDO - TINTAS QUALY QUIMY*\n_A 18 anos com você!_\n\n";
+        let total = 0;
+        Object.keys(cart).forEach(id => {
+            const p = products.find(prod => prod.id === id);
+            if (!p) return;
+            const qty = cart[id];
+            const price = qty >= p.wholesaleQty ? p.priceWholesale : p.priceUnit;
+            total += price * qty;
+            msg += `🔹 *${qty}x* ${p.name}\n   Subtotal: R$ ${(price * qty).toFixed(2)}\n\n`;
+        });
+        msg += `*Total do Pedido: R$ ${total.toFixed(2)}*`;
+        window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMERO}&text=${encodeURIComponent(msg)}`, '_blank');
+    }
 
-            Object.keys(cart).forEach(id => {
-                const p = products.find(prod => prod.id === id);
-                if (!p) return;
-                const qty = cart[id];
-                const isWholesale = qty >= p.wholesaleQty;
-                const price = isWholesale ? p.priceWholesale : p.priceUnit;
-                const sub = price * qty;
-                totalGeral += sub;
+    // AÇÕES DO GERENCIADOR (ADMIN)
+    function saveProduct(e) {
+        e.preventDefault();
+        const id = document.getElementById('prodId').value;
+        const data = {
+            id: id || Date.now().toString(),
+            category: document.getElementById('category').value.trim(),
+            subcategory: document.getElementById('subcategory').value.trim(),
+            name: document.getElementById('prodName').value.trim(),
+            description: document.getElementById('description').value.trim(),
+            priceUnit: parseFloat(document.getElementById('priceUnit').value),
+            wholesaleQty: parseInt(document.getElementById('wholesaleQty').value),
+            priceWholesale: parseFloat(document.getElementById('priceWholesale').value)
+        };
 
-                msg += `🔹 *${qty}x* ${p.name}\n`;
-                msg += `   Preço un: R$ ${price.toFixed(2)} ${isWholesale ? '(Atacado)' : ''}\n`;
-                msg += `   Subtotal: R$ ${sub.toFixed(2)}\n\n`;
-            });
+        if (id) products[products.findIndex(p => p.id === id)] = data;
+        else products.push(data);
 
-            msg += `*Total Geral do Pedido: R$ ${totalGeral.toFixed(2)}*`;
+        saveDB(); clearForm(); renderAdminList(); renderClientMenu();
+    }
 
-            const linkWhatsapp = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMERO}&text=${encodeURIComponent(msg)}`;
-            window.open(linkWhatsapp, '_blank');
-        } 
-        else if (type === 'pdf') {
-            // Dispara as rotinas nativas de impressão otimizadas pela folha de estilo @media print
-            window.print();
+    function editProduct(id) {
+        const p = products.find(p => p.id === id);
+        if(!p) return;
+        document.getElementById('prodId').value = p.id;
+        document.getElementById('category').value = p.category;
+        document.getElementById('subcategory').value = p.subcategory;
+        document.getElementById('prodName').value = p.name;
+        document.getElementById('description').value = p.description;
+        document.getElementById('priceUnit').value = p.priceUnit;
+        document.getElementById('wholesaleQty').value = p.wholesaleQty;
+        document.getElementById('priceWholesale').value = p.priceWholesale;
+        document.getElementById('formActionTitle').innerText = "Editar Produto";
+    }
+
+    function deleteProduct(id) {
+        products = products.filter(p => p.id !== id);
+        delete cart[id];
+        saveDB(); renderAdminList(); renderClientMenu(); updateFooterBar();
+    }
+
+    function clearForm() {
+        document.getElementById('productForm').reset();
+        document.getElementById('prodId').value = '';
+        document.getElementById('formActionTitle').innerText = "Cadastrar / Editar Produto";
+    }
+
+    function generateClientLink() {
+        const baseUrl = window.location.href.split('?')[0];
+        let slug = document.getElementById('clientSlug').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        if(!slug) slug = "pedido";
+        
+        const finalUrl = `${baseUrl}?cliente=${slug}`;
+        document.getElementById('generatedLinkInput').value = finalUrl;
+        document.getElementById('linkAlert').style.display = 'block';
+    }
+
+    function copyGeneratedLink() {
+        const input = document.getElementById('generatedLinkInput');
+        input.select();
+        navigator.clipboard.writeText(input.value);
+        alert("Link copiado com sucesso!");
+    }
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        if (tab === 'admin') {
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.getElementById('panel-admin').classList.add('active');
+        } else {
+            document.getElementById('clientTabBtn').classList.add('active');
+            document.getElementById('panel-client').classList.add('active');
+            renderClientMenu();
+            updateFooterBar();
         }
     }
 </script>
