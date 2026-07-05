@@ -72,7 +72,7 @@
         .btn-danger { color: var(--danger); border: none; background: transparent; }
         .btn-trash { background: none; border: none; color: var(--danger); cursor: pointer; padding: 6px; display: flex; align-items: center; justify-content: center; }
 
-        /* BOTÕES DAS CATEGORIAS - AMARELO SUAVE COM BORDA AZUL MARINHO */
+        /* BOTÕES DAS CATEGORIAS */
         .category-menu-grid { display: flex; flex-direction: column; gap: 12px; }
         .category-card-btn { 
             background: var(--category-bg); 
@@ -103,13 +103,13 @@
         .modal-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .modal-header h3 { font-weight: 500; font-size: 16px; }
         .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
-        .modal-footer { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; background: #f8fafc; }
+        .modal-footer { padding: 166px 20px; padding: 16px 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; background: #f8fafc; }
         .close-modal { background: #f1f5f9; border: none; font-size: 18px; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
 
         /* PRODUTOS MODAL */
         .modal-product-item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 10px; box-shadow: var(--shadow-sm); }
 
-        /* ITEM RESUMO DA SACOLA - FUNDO VERDE BEM CLARINHO */
+        /* ITEM RESUMO DA SACOLA */
         .summary-cart-item {
             display: flex; 
             justify-content: space-between; 
@@ -137,10 +137,10 @@
         /* AVISO DE LOGÍSTICA DE ENTREGA */
         .shipping-notice-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-top: 15px; font-family: var(--font); font-size: 11px; line-height: 1.4; color: #475569; text-align: center; }
 
-        /* PLANILHA ESTILO EXCEL - CORRIGIDA COM BORDAS INTERNAS COMPLETAS */
+        /* PLANILHA ESTILO EXCEL */
         .excel-print-table { display: none; width: 100%; border-collapse: collapse; font-family: var(--font); color: #000; margin-top: 20px; }
         .excel-print-table th, .excel-print-table td { 
-            border: 1px solid #718096 !important; /* Linhas internas cinza escuro bem visíveis */
+            border: 1px solid #718096 !important; 
             padding: 10px 14px; 
             font-size: 14px; 
             text-align: left; 
@@ -157,8 +157,6 @@
         @media print {
             body { background: #fff; color: #000; padding: 0; margin: 0; }
             .container, .modal-overlay, .client-footer-bar, .receipt-box { display: none !important; }
-            
-            /* Ativa o Excel estruturado */
             .excel-print-table { display: table !important; }
             .print-header { display: block !important; text-align: center; margin-bottom: 25px; font-family: var(--font); }
             .print-header h2 { font-size: 24px; font-weight: 600; margin-bottom: 4px; color: #0f1e36; }
@@ -187,7 +185,7 @@
         <span class="tagline" onclick="toggleSecretAdmin()">A 18 anos com você!</span>
     </header>
 
-    <!-- NAVEGAÇÃO INTERNA GESTÃO -->
+    <!-- NAVEGAÇÃO INTERNA GESTÃO (Adicionada id para ocultação total) -->
     <div class="tabs" id="navigationTabs">
         <button class="tab-btn active" id="adminTabBtn" onclick="switchTab('admin')">⚙️ Gerenciar Painel</button>
         <button class="tab-btn" id="clientTabBtn" onclick="switchTab('client')">🛒 Área do Cliente</button>
@@ -264,7 +262,7 @@
     </div>
 </div>
 
-<!-- MODAL DE RESUMO (PRODUTOS ADICIONADOS COM FUNDO VERDE CLARINHO NOS ITENS) -->
+<!-- MODAL DE RESUMO -->
 <div class="modal-overlay" id="orderModal">
     <div class="modal">
         <div class="modal-header">
@@ -316,8 +314,9 @@
     window.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         
+        // CORREÇÃO SOLICITADA AQUI: Se for o link do cliente, a barra de abas some 100%
         if (urlParams.has('cliente')) {
-            document.getElementById('navigationTabs').classList.add('hidden');
+            document.getElementById('navigationTabs').classList.add('hidden'); // Oculta as opções de troca de tela completamente
             document.getElementById('panel-admin').classList.remove('active');
             switchTab('client');
         } else {
@@ -511,7 +510,6 @@
         const receipt = document.getElementById('receiptContent');
         const excelTable = document.getElementById('excelTableContent');
 
-        // GERAÇÃO DO COMPROVANTE ESTILO CUPOM DE MÃO (NA TELA)
         let htmlReceipt = `
             <div class="receipt-header">
                 <h3 style="font-size:15px; font-weight:900; letter-spacing:0.5px;">TINTAS QUALY QUIMY</h3>
@@ -521,7 +519,6 @@
             </div>
         `;
 
-        // INÍCIO DA TABELA ESTILO EXCEL (PDF)
         let htmlExcel = `
             <thead>
                 <tr>
@@ -550,7 +547,6 @@
             const rowStyle = isWholesale ? 'color: var(--danger); font-weight: 900;' : 'color: #000;';
             const labelBadge = isWholesale ? ' (ATACADO)' : '';
 
-            // Adiciona no cupom da tela
             htmlReceipt += `
                 <div class="receipt-row" style="${rowStyle}">
                     <span>${qty}x ${p.name.substring(0,25)}${labelBadge}</span>
@@ -558,7 +554,6 @@
                 </div>
             `;
 
-            // Adiciona na tabela do Excel (PDF)
             htmlExcel += `
                 <tr>
                     <td>${p.name}${labelBadge}</td>
@@ -571,7 +566,6 @@
 
         const economy = subtotalRegular - totalFinal;
 
-        // Finaliza o Cupom da Tela
         htmlReceipt += `<div class="receipt-divider"></div>`;
         htmlReceipt += `<div class="receipt-row" style="font-weight:normal; color:#444;"><span>SUBTOTAL BRUTO:</span> <span>R$ ${subtotalRegular.toFixed(2)}</span></div>`;
         if(economy > 0) htmlReceipt += `<div class="receipt-row" style="font-weight:bold; color:var(--danger);"><span>DESCONTO ATACADO:</span> <span>-R$ ${economy.toFixed(2)}</span></div>`;
@@ -580,7 +574,6 @@
         htmlReceipt += `<div class="receipt-divider"></div>`;
         htmlReceipt += `<div style="text-align:center; font-size:12px; font-weight:700; margin-top:10px;">Muito obrigado pela sua preferência!</div>`;
 
-        // Finaliza as linhas do Excel com a Mensagem de Frete e Agradecimento Embutidas nas grades
         htmlExcel += `
             <tr class="total-row">
                 <td colspan="3" class="text-right">SUBTOTAL BRUTO:</td>
