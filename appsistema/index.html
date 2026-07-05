@@ -7,7 +7,7 @@
     <!-- Importando a fonte Inter para leveza e elegância -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         /* DESIGN SYSTEM PREMIUM */
@@ -133,6 +133,9 @@
         .receipt-row span:last-child { text-align: right; white-space: nowrap; }
         .receipt-divider { border-top: 1px dashed #000; margin: 12px 0; }
         .receipt-total-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: 900; padding-top: 6px; }
+        
+        /* AVISO DE LOGÍSTICA DE ENTREGA */
+        .shipping-notice-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-top: 15px; font-family: var(--font); font-size: 11px; line-height: 1.4; color: #475569; text-align: center; }
 
         /* PLANILHA ESTILO EXCEL - CORRIGIDA COM BORDAS INTERNAS COMPLETAS */
         .excel-print-table { display: none; width: 100%; border-collapse: collapse; font-family: var(--font); color: #000; margin-top: 20px; }
@@ -145,6 +148,7 @@
         .excel-print-table th { background-color: #e2e8f0; font-weight: 600; }
         .excel-print-table .text-right { text-align: right; }
         .excel-print-table .total-row td { font-weight: 700; background-color: #f1f5f9; }
+        .excel-print-table .notice-row td { font-size: 11px; color: #4a5568; font-weight: 400; background-color: #fafafa; }
 
         .hidden { display: none !important; }
         .link-alert { background: #edf7ed; border: 1px solid #cce8cd; color: #1e4620; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: none; }
@@ -242,8 +246,8 @@
 
 <!-- BARRA FLUTUANTE INFERIOR -->
 <div class="client-footer-bar" id="clientFooterBar" style="display:none;">
-    <span id="footerCartSummary">0 itens na sacola</span>
-    <button class="btn btn-accent" style="padding:8px 16px; font-size:13px; border-radius:20px; font-weight:600;" onclick="openOrderModal()">Resumo da Compra &rarr;</button>
+    <span id="footerCartSummary">0 itens adicionados</span>
+    <button class="btn btn-accent" style="padding:8px 16px; font-size:13px; border-radius:20px; font-weight:600;" onclick="openOrderModal()">Ver Produtos &rarr;</button>
 </div>
 
 <!-- MODAL SELEÇÃO PRODUTOS -->
@@ -255,21 +259,21 @@
         </div>
         <div class="modal-body" id="shopModalBody"></div>
         <div class="modal-footer">
-            <button class="btn btn-accent" onclick="closeShopModal(); openOrderModal();">Ver Resumo da Compra &rarr;</button>
+            <button class="btn btn-accent" onclick="closeShopModal(); openOrderModal();">Ver Produtos adicionados &rarr;</button>
         </div>
     </div>
 </div>
 
-<!-- MODAL DE RESUMO (SACOLA COM FUNDO VERDE CLARINHO NOS ITENS) -->
+<!-- MODAL DE RESUMO (PRODUTOS ADICIONADOS COM FUNDO VERDE CLARINHO NOS ITENS) -->
 <div class="modal-overlay" id="orderModal">
     <div class="modal">
         <div class="modal-header">
-            <h3>Sua Sacola de Compras</h3>
+            <h3>Produtos adicionados</h3>
             <button class="close-modal" onclick="closeOrderModal()">&times;</button>
         </div>
         <div class="modal-body" id="orderModalBody"></div>
         <div class="modal-footer" style="flex-direction:row;">
-            <button class="btn" style="flex:1;" onclick="closeOrderModal()">Voltar a Comprar</button>
+            <button class="btn" style="flex:1;" onclick="closeOrderModal()">Voltar</button>
             <button class="btn btn-accent" style="flex:1;" onclick="openCheckoutModal()">Fechar Pedido</button>
         </div>
     </div>
@@ -284,6 +288,9 @@
         </div>
         <div class="modal-body" style="background:#f1f5f9; padding:12px;">
             <div class="receipt-box" id="receiptContent"></div>
+            <div class="shipping-notice-box">
+                ℹ️ <strong>Informações de Frete:</strong> Compras acima de 1.000 reais, entrega de até 7 dias úteis. Abaixo disso, dependerá da logística no local para envio!
+            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-success" onclick="finalizeOrder('whatsapp')">Enviar para o WhatsApp</button>
@@ -392,7 +399,7 @@
         const bar = document.getElementById('clientFooterBar');
         if (totalItems > 0) {
             bar.style.display = 'flex';
-            document.getElementById('footerCartSummary').innerText = `${totalItems} ${totalItems === 1 ? 'item selecionado' : 'itens selecionados'}`;
+            document.getElementById('footerCartSummary').innerText = `${totalItems} ${totalItems === 1 ? 'item adicionado' : 'itens adicionados'}`;
         } else {
             bar.style.display = 'none';
         }
@@ -457,7 +464,7 @@
         body.innerHTML = '';
 
         if(Object.keys(cart).length === 0) {
-            body.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:30px 0; font-weight:300;">Sua sacola está vazia.</p>';
+            body.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:30px 0; font-weight:300;">Nenhum produto adicionado ainda.</p>';
             document.getElementById('orderModal').style.display = 'flex';
             return;
         }
@@ -470,7 +477,7 @@
             const price = isWholesale ? p.priceWholesale : p.priceUnit;
 
             const div = document.createElement('div');
-            div.className = 'summary-cart-item'; // Aplica o fundo verde clarinho configurado
+            div.className = 'summary-cart-item';
             div.innerHTML = `
                 <div style="flex:1; padding-right:10px;">
                     <div style="font-weight:500; font-size:13px; color:#064e3b;">${p.name}</div>
@@ -510,11 +517,11 @@
                 <h3 style="font-size:15px; font-weight:900; letter-spacing:0.5px;">TINTAS QUALY QUIMY</h3>
                 <p style="font-size:11px; margin-top:2px;">A 18 ANOS COM VOCE!</p>
                 <p style="font-size:10px; color:#555;">----------------------------</p>
-                <p style="font-size:11px; font-weight:bold;">COMPROVANTE DE PEDIDO</p>
+                <p style="font-size:11px; font-weight:bold;">PRODUTOS ADICIONADOS</p>
             </div>
         `;
 
-        // INÍCIO DA TABELA ESTILO EXCEL (PDF) COM LINHAS TOTAIS BEM DEFINIDAS
+        // INÍCIO DA TABELA ESTILO EXCEL (PDF)
         let htmlExcel = `
             <thead>
                 <tr>
@@ -551,7 +558,7 @@
                 </div>
             `;
 
-            // Adiciona na tabela estruturada do Excel (PDF)
+            // Adiciona na tabela do Excel (PDF)
             htmlExcel += `
                 <tr>
                     <td>${p.name}${labelBadge}</td>
@@ -570,8 +577,10 @@
         if(economy > 0) htmlReceipt += `<div class="receipt-row" style="font-weight:bold; color:var(--danger);"><span>DESCONTO ATACADO:</span> <span>-R$ ${economy.toFixed(2)}</span></div>`;
         htmlReceipt += `<div class="receipt-divider"></div>`;
         htmlReceipt += `<div class="receipt-total-row"><span>TOTAL A PAGAR:</span><span>R$ ${totalFinal.toFixed(2)}</span></div>`;
+        htmlReceipt += `<div class="receipt-divider"></div>`;
+        htmlReceipt += `<div style="text-align:center; font-size:12px; font-weight:700; margin-top:10px;">Muito obrigado pela sua preferência!</div>`;
 
-        // Finaliza as linhas e grades internas do Excel
+        // Finaliza as linhas do Excel com a Mensagem de Frete e Agradecimento Embutidas nas grades
         htmlExcel += `
             <tr class="total-row">
                 <td colspan="3" class="text-right">SUBTOTAL BRUTO:</td>
@@ -590,6 +599,16 @@
             <tr class="total-row" style="font-size:15px; background-color:#e2e8f0;">
                 <td colspan="3" class="text-right" style="font-weight:700;">TOTAL A PAGAR:</td>
                 <td class="text-right" style="font-weight:700;">R$ ${totalFinal.toFixed(2)}</td>
+            </tr>
+            <tr class="notice-row">
+                <td colspan="4" style="text-align: center; font-style: italic; padding: 12px;">
+                    <strong>Regra de Envio:</strong> Compras acima de 1.000 reais, entrega até 7 dias úteis. Abaixo disso, dependerá da logística no local para envio!
+                </td>
+            </tr>
+            <tr class="total-row" style="background-color: #f8fafc;">
+                <td colspan="4" style="text-align: center; font-size: 14px; font-weight: 600; color: #0f1e36; padding: 14px;">
+                    ✨ Tintas Qualy Quimy agradece a sua preferência!
+                </td>
             </tr>
             </tbody>
         `;
@@ -610,7 +629,7 @@
         msg += "      TINTAS QUALY QUIMY      \n";
         msg += "    A 18 ANOS COM VOCE!       \n";
         msg += "==============================\n";
-        msg += "    COMPROVANTE DE PEDIDO     \n";
+        msg += "     PRODUTOS ADICIONADOS     \n";
         msg += "------------------------------\n";
 
         let subtotalRegular = 0;
@@ -650,6 +669,12 @@
         msg += "------------------------------\n";
         let totalStr = `R$ ${totalFinal.toFixed(2)}`;
         msg += "TOTAL A PAGAR:" + " ".repeat(30 - (14 + totalStr.length)) + totalStr + "\n";
+        msg += "==============================\n";
+        msg += "ℹ️ OBSERVAÇÃO DE FRETE:\n";
+        msg += "Compras acima de 1000 reais,\n";
+        msg += "entrega ate 7 dias uteis.\n";
+        msg += "Abaixo disso, dependera da\n";
+        msg += "logistica no local para envio!\n";
         msg += "==============================\n";
         msg += "  OBRIGADO PELA PREFERENCIA   \n";
         msg += "```";
