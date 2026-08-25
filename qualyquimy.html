@@ -162,8 +162,25 @@
         </div>
     </main>
 
-    <footer class="py-6 text-center text-xs text-slate-500 border-t border-slate-800">
-        Qualy Tintas • Soluções em Pintura e Construção Civil
+    <!-- RODAPÉ ATUALIZADO COM LINK DO GOOGLE MAPS E CRÉDITOS -->
+    <footer class="py-6 text-center text-xs text-slate-400 border-t border-slate-800 flex flex-col items-center gap-3 mt-8">
+        <div>
+            <p class="font-bold text-slate-300">Qualy Tintas • Soluções em Pintura e Construção Civil</p>
+            <address class="not-italic mt-1">
+                <a href="https://www.google.com/maps/search/?api=1&query=Rua+Leiria+45+Ch%C3%A1cara+Cui%C3%A1b%C3%A1+Itaquaquecetuba+SP" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="inline-flex items-center gap-1.5 text-amber-500 hover:text-amber-400 hover:underline transition-colors">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Rua Leiria, 45 - Chácara Cuiabá, Itaquaquecetuba - SP, CEP 08587-100</span>
+                </a>
+            </address>
+        </div>
+
+        <div class="flex flex-col items-center gap-1 pt-2 border-t border-slate-800/80 w-full max-w-xs">
+            <i class="fa-solid fa-lock text-slate-500 text-sm"></i>
+            <p class="text-slate-500">Feito por <strong class="text-slate-300">ImpulsoWeb10</strong></p>
+        </div>
     </footer>
 
 
@@ -445,219 +462,41 @@
             <div class="space-y-3">
                 <p class="text-xl font-bold text-amber-400">Embalagens: Galão 5,6kg ou Barrica 25kg</p>
                 <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-lg leading-relaxed">
-                    <p>Ideal para nivelar e corrigir imperfeições de superfícies em ambientes **internos sem umidade**. Fácil de lixar e excelente acabamento.</p>
+                    <p>Ideal para nivelar e corrigir imperfeições de superfícies em ambientes <strong>internos sem umidade</strong>. Fácil de lixar e excelente acabamento.</p>
                 </div>
             </div>
 
-            <button onclick="buy('Massa PVA uso interno sem umidade (Galão 5,6kg ou Barrica 25kg)')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xl font-black rounded-xl transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/30">
-                <i class="fa-brands fa-whatsapp text-3xl"></i> Comprar no WhatsApp
+            <button onclick="buy('Massa PVA (Uso Interno)')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xl font-black rounded-xl transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/30">
+                <i class="fa-brands fa-whatsapp text-3xl"></i> Consultar Preços no WhatsApp
             </button>
         </div>
     </div>
-
-    <!-- MASSAS: ACRÍLICA -->
-    <div id="detail-massas-acrilica" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border-2 border-amber-500/50 w-full max-w-lg rounded-2xl shadow-2xl z-10 p-6 md:p-8 relative space-y-6">
-            <button onclick="closeAllModals()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-2xl w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-massas')" class="text-base font-bold text-amber-500 inline-flex items-center gap-2 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
-            
-            <h3 class="text-2xl md:text-3xl font-black text-white border-b border-slate-800 pb-3">Massa Acrílica</h3>
-            
-            <div class="space-y-3">
-                <p class="text-xl font-bold text-amber-400">Embalagens: Galão 5,6kg ou Barrica 25kg</p>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-lg leading-relaxed">
-                    <p>Indicada para uso **interno e externo**. Alta resistência à água e à umidade, perfeita para ambientes molhados (cozinhas, banheiros) e fachadas.</p>
-                </div>
-            </div>
-
-            <button onclick="buy('Massa Acrílica uso interno/externo (Galão 5,6kg ou Barrica 25kg)')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xl font-black rounded-xl transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/30">
-                <i class="fa-brands fa-whatsapp text-3xl"></i> Comprar no WhatsApp
-            </button>
-        </div>
-    </div>
-
-    <!-- TEXTURA: GRAFIATO -->
-    <div id="detail-textura-grafiato" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border-2 border-amber-500/50 w-full max-w-lg rounded-2xl shadow-2xl z-10 p-6 md:p-8 relative space-y-6">
-            <button onclick="closeAllModals()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-2xl w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-texturas')" class="text-base font-bold text-amber-500 inline-flex items-center gap-2 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
-            
-            <h3 class="text-2xl md:text-3xl font-black text-white border-b border-slate-800 pb-3">Grafiato</h3>
-            
-            <div class="space-y-3">
-                <p class="text-xl font-bold text-amber-400">Rendimento: 4,5 kg / m²</p>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-lg leading-relaxed space-y-2">
-                    <p>• <strong>Uso:</strong> Interno / Externo.</p>
-                    <p>• Proteção garantida e beleza para sua casa.</p>
-                    <p class="text-base text-amber-300">💡 <em>Na cor acima de 10 Barricas de 50kg | Abaixo só branca.</em></p>
-                </div>
-            </div>
-
-            <button onclick="buy('Textura Grafiato (Rendimento 4,5kg/m²)')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xl font-black rounded-xl transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/30">
-                <i class="fa-brands fa-whatsapp text-3xl"></i> Comprar no WhatsApp
-            </button>
-        </div>
-    </div>
-
-    <!-- TEXTURA: LISA / ROLADA -->
-    <div id="detail-textura-lisa" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border-2 border-amber-500/50 w-full max-w-lg rounded-2xl shadow-2xl z-10 p-6 md:p-8 relative space-y-6">
-            <button onclick="closeAllModals()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-2xl w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-texturas')" class="text-base font-bold text-amber-500 inline-flex items-center gap-2 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
-            
-            <h3 class="text-2xl md:text-3xl font-black text-white border-b border-slate-800 pb-3">Textura Lisa / Rolada</h3>
-            
-            <div class="space-y-3">
-                <p class="text-xl font-bold text-amber-400">Rendimento: 3,33 kg / m²</p>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-lg leading-relaxed space-y-2">
-                    <p>• <strong>Uso:</strong> Interno / Externo.</p>
-                    <p>• Proteção garantida e beleza para sua casa.</p>
-                    <p class="text-base text-amber-300">💡 <em>Na cor acima de 10 Barricas de 50kg | Abaixo só branca.</em></p>
-                </div>
-            </div>
-
-            <button onclick="buy('Textura Lisa/Rolada (Rendimento 3,33kg/m²)')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xl font-black rounded-xl transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/30">
-                <i class="fa-brands fa-whatsapp text-3xl"></i> Comprar no WhatsApp
-            </button>
-        </div>
-    </div>
-
-    <!-- TEXTURA: PROJETADA -->
-    <div id="detail-textura-projetada" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border-2 border-amber-500/50 w-full max-w-lg rounded-2xl shadow-2xl z-10 p-6 md:p-8 relative space-y-6">
-            <button onclick="closeAllModals()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-2xl w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-texturas')" class="text-base font-bold text-amber-500 inline-flex items-center gap-2 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
-            
-            <h3 class="text-2xl md:text-3xl font-black text-white border-b border-slate-800 pb-3">Textura Projetada</h3>
-            
-            <div class="space-y-3">
-                <p class="text-xl font-bold text-amber-400">Rendimento: 3,35 kg / m²</p>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-lg leading-relaxed space-y-2">
-                    <p>• <strong>Uso:</strong> Interno / Externo.</p>
-                    <p>• Proteção garantida e beleza para sua casa.</p>
-                    <p class="text-base text-amber-300">💡 <em>Na cor acima de 10 Barricas de 50kg | Abaixo só branca.</em></p>
-                </div>
-            </div>
-
-            <button onclick="buy('Textura Projetada (Rendimento 3,35kg/m²)')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xl font-black rounded-xl transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/30">
-                <i class="fa-brands fa-whatsapp text-3xl"></i> Comprar no WhatsApp
-            </button>
-        </div>
-    </div>
-
-    <!-- TEXTURA: GRANLINE -->
-    <div id="detail-textura-granline" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border-2 border-amber-500/50 w-full max-w-lg rounded-2xl shadow-2xl z-10 p-6 md:p-8 relative space-y-6">
-            <button onclick="closeAllModals()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-2xl w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-texturas')" class="text-base font-bold text-amber-500 inline-flex items-center gap-2 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
-            
-            <h3 class="text-2xl md:text-3xl font-black text-white border-b border-slate-800 pb-3">Textura Granline</h3>
-            
-            <div class="space-y-3">
-                <p class="text-xl font-bold text-amber-400">Rendimento: 3,84 kg / m²</p>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-lg leading-relaxed space-y-2">
-                    <p>• <strong>Uso:</strong> Interno / Externo.</p>
-                    <p>• Revestimento sofisticado com altíssima durabilidade.</p>
-                    <p class="text-base text-amber-300">💡 <em>Na cor acima de 10 Barricas de 50kg | Abaixo só branca.</em></p>
-                </div>
-            </div>
-
-            <button onclick="buy('Textura Granline (Rendimento 3,84kg/m²)')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xl font-black rounded-xl transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/30">
-                <i class="fa-brands fa-whatsapp text-3xl"></i> Comprar no WhatsApp
-            </button>
-        </div>
-    </div>
-
-    <!-- SELANTES: SELADOR ACRÍLICO -->
-    <div id="detail-selantes-acrilico" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border-2 border-amber-500/50 w-full max-w-lg rounded-2xl shadow-2xl z-10 p-6 md:p-8 relative space-y-6">
-            <button onclick="closeAllModals()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-2xl w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-selantes')" class="text-base font-bold text-amber-500 inline-flex items-center gap-2 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
-            
-            <h3 class="text-2xl md:text-3xl font-black text-white border-b border-slate-800 pb-3">Selador Acrílico</h3>
-            
-            <div class="space-y-3">
-                <p class="text-xl font-bold text-amber-400">Embalagens: Galão 3,6L e Balde 16L</p>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-lg leading-relaxed">
-                    <p>• Indicado para paredes novas.</p>
-                    <p>• <strong>Rendimento:</strong> Faz até 6m² por litro. Uniformiza a absorção da superfície para receber a tinta.</p>
-                </div>
-            </div>
-
-            <button onclick="buy('Selador Acrílico (Galão 3,6L / Balde 16L)')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xl font-black rounded-xl transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/30">
-                <i class="fa-brands fa-whatsapp text-3xl"></i> Comprar no WhatsApp
-            </button>
-        </div>
-    </div>
-
-    <!-- SELANTES: FUNDO PREPARADOR -->
-    <div id="detail-selantes-preparador" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border-2 border-amber-500/50 w-full max-w-lg rounded-2xl shadow-2xl z-10 p-6 md:p-8 relative space-y-6">
-            <button onclick="closeAllModals()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-2xl w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center border border-slate-700"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-selantes')" class="text-base font-bold text-amber-500 inline-flex items-center gap-2 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
-            
-            <h3 class="text-2xl md:text-3xl font-black text-white border-b border-slate-800 pb-3">Prime / Fundo Preparador</h3>
-            
-            <div class="space-y-3">
-                <p class="text-xl font-bold text-amber-400">Embalagens: Galão 3,6L e Balde 16L</p>
-                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-slate-200 text-lg leading-relaxed">
-                    <p>• Indicado para paredes novas e repinturas.</p>
-                    <p>• <strong>Rendimento:</strong> Faz até 6m² por litro. Consolida partículas soltas e aumenta a aderência da tinta.</p>
-                </div>
-            </div>
-
-            <button onclick="buy('Prime / Fundo Preparador (Galão 3,6L / Balde 16L)')" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xl font-black rounded-xl transition-colors flex items-center justify-center gap-3 shadow-lg shadow-emerald-900/30">
-                <i class="fa-brands fa-whatsapp text-3xl"></i> Comprar no WhatsApp
-            </button>
-        </div>
-    </div>
-
 
     <!-- SCRIPT DE NAVEGAÇÃO DOS MODAIS -->
     <script>
-        const WHATSAPP_NUMBER = "5511954950044";
+        function openModal(id) {
+            closeAllModals();
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+            }
+        }
 
         function closeAllModals() {
-            document.querySelectorAll('.modal').forEach(m => {
-                m.classList.remove('opacity-100');
-                m.classList.add('opacity-0', 'pointer-events-none');
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
             });
         }
 
-        function openModal(id) {
-            closeAllModals();
-            const m = document.getElementById(id);
-            if (m) {
-                m.classList.remove('opacity-0', 'pointer-events-none');
-                m.classList.add('opacity-100');
-            }
-        }
-
-        function openDetail(detailId) {
-            closeAllModals();
-            const m = document.getElementById(detailId);
-            if (m) {
-                m.classList.remove('opacity-0', 'pointer-events-none');
-                m.classList.add('opacity-100');
-            }
-        }
-
-        function backToCategory(categoryId) {
-            openModal(categoryId);
-        }
-
-        function showTintasSub(tipo) {
+        function showTintasSub(sub) {
             document.getElementById('tintas-step-1').classList.add('hidden');
-            if (tipo === 'interno') {
+            document.getElementById('tintas-interno').classList.add('hidden');
+            document.getElementById('tintas-externo').classList.add('hidden');
+
+            if (sub === 'interno') {
                 document.getElementById('tintas-interno').classList.remove('hidden');
-            } else if (tipo === 'externo') {
+            } else if (sub === 'externo') {
                 document.getElementById('tintas-externo').classList.remove('hidden');
             }
         }
@@ -668,9 +507,19 @@
             document.getElementById('tintas-step-1').classList.remove('hidden');
         }
 
-        function buy(produto) {
-            const msg = encodeURIComponent("Olá! Gostaria de consultar / comprar: " + produto);
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
+        function openDetail(detailId) {
+            closeAllModals();
+            openModal(detailId);
+        }
+
+        function backToCategory(categoryId) {
+            closeAllModals();
+            openModal(categoryId);
+        }
+
+        function buy(product) {
+            const text = encodeURIComponent(`Olá! Gostaria de mais informações sobre: ${product}`);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
         }
     </script>
 </body>
