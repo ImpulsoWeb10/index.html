@@ -96,8 +96,8 @@
             );
             transform: skewX(-25deg);
             animation: ccbShimmer 3s infinite;
-            -webkit-mask-image: url('https://upload.wikimedia.org/wikipedia/commons/2/23/Congrega%C3%A7%C3%A3o_Crist%C3%A3_no_Brasil_logo.svg');
-            mask-image: url('https://upload.wikimedia.org/wikipedia/commons/2/23/Congrega%C3%A7%C3%A3o_Crist%C3%A3_no_Brasil_logo.svg');
+            -webkit-mask-image: url('logo-ccb.png');
+            mask-image: url('logo-ccb.png');
             -webkit-mask-size: contain;
             mask-size: contain;
             -webkit-mask-repeat: no-repeat;
@@ -476,7 +476,7 @@
     <div class="container">
         <div class="card-welcome">
             <div class="logo-ccb-container">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Congrega%C3%A7%C3%A3o_Crist%C3%A3_no_Brasil_logo.svg" alt="Logo CCB" class="logo-ccb">
+                <img src="logo-ccb.png" alt="Logo CCB" class="logo-ccb">
             </div>
 
             <h1>Pré-Avaliação de Organistas</h1>
@@ -744,7 +744,6 @@
     </div>
 
     <script>
-        // Lista de instrutoras atualizada com nomes e bairros formatados em Capital Case
         const listaInstrutoras = [
             { nome: "Andreia Tiburcio S. Rodrigues", comum: "B. Pedreira" },
             { nome: "Antonia Sara de Souza Xisto", comum: "Estancia Guatambú" },
@@ -779,7 +778,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             const select = document.getElementById('selectInstrutora');
             
-            // Preenche a data de hoje por padrão
             const hoje = new Date().toISOString().split('T')[0];
             document.getElementById('dataPreenchimento').value = hoje;
 
