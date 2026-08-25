@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pré-Avaliação de Organistas - CCB</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js para geração do PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #1e40af;
+            --accent: #2563eb;
+            --bg-body: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --pdf-color: #dc2626;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        /* Card Entrada */
+        .card-welcome {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        /* LOGO CCB ANIMADA */
+        .logo-ccb-container {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 16px auto;
+            animation: ccbPulse 2.5s infinite ease-in-out;
+        }
+
+        .logo-ccb {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 4px 8px rgba(30, 58, 138, 0.2));
+        }
+
+        .logo-ccb-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 70%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.8) 50%,
+                transparent 100%
+            );
+            transform: skewX(-25deg);
+            animation: ccbShimmer 3s infinite;
+            -webkit-mask-image: url('https://upload.wikimedia.org/wikipedia/commons/2/23/Congrega%C3%A7%C3%A3o_Crist%C3%A3_no_Brasil_logo.svg');
+            mask-image: url('https://upload.wikimedia.org/wikipedia/commons/2/23/Congrega%C3%A7%C3%A3o_Crist%C3%A3_no_Brasil_logo.svg');
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+            pointer-events: none;
+        }
+
+        @keyframes ccbPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes ccbShimmer {
+            0% { left: -100%; }
+            30% { left: 150%; }
+            100% { left: 150%; }
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+            background: var(--primary-hover);
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: var(--surface);
+            width: 100%;
+            max-width: 500px;
+            max-height: 92vh;
+            border-radius: 24px 24px 0 0;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        @media (min-width: 600px) {
+            .modal-overlay {
+                align-items: center;
+                padding: 20px;
+            }
+            .modal-card {
+                border-radius: var(--radius-lg);
+                max-height: 85vh;
+            }
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            flex-shrink: 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-body {
+            padding: 16px 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* FORM ELEMENTS */
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin: 16px 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 13px;
+            font-size: 0.95rem;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            background: #fdfdfd;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            background: #ffffff;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2064748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 36px;
+        }
+
+        /* MODAL FOOTER BOTÕES FIXOS */
+        .modal-footer {
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        .btn-pdf {
+            width: 100%;
+            background: var(--pdf-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(220, 38, 38, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-pdf:active {
+            transform: scale(0.98);
+            background: #b91c1c;
+        }
+
+        .btn-whatsapp {
+            width: 100%;
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(37, 211, 102, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-whatsapp:active {
+            transform: scale(0.98);
+            background: #20bd5a;
+        }
+
+        /* TEMPLATE OCULTO PARA IMPRESSÃO EM PDF */
+        #pdfTemplate {
+            display: none;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            color: #111827;
+            background: #ffffff;
+        }
+
+        .pdf-header {
+            text-align: center;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pdf-header h2 {
+            font-size: 16pt;
+            color: #1e3a8a;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .pdf-header h3 {
+            font-size: 12pt;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .pdf-section-title {
+            font-size: 11pt;
+            font-weight: bold;
+            color: #1e3a8a;
+            background: #f1f5f9;
+            padding: 6px 10px;
+            margin-top: 16px;
+            margin-bottom: 10px;
+            border-left: 4px solid #2563eb;
+            text-transform: uppercase;
+        }
+
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .pdf-item {
+            font-size: 10pt;
+            line-height: 1.4;
+        }
+
+        .pdf-item label {
+            font-weight: bold;
+            color: #374151;
+            display: block;
+            font-size: 9pt;
+            text-transform: uppercase;
+        }
+
+        .pdf-item span {
+            color: #000;
+            font-size: 10.5pt;
+        }
+
+        .pdf-box {
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 10pt;
+            background: #fafafa;
+            white-space: pre-line;
+        }
+
+        .pdf-footer-note {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed #cbd5e1;
+            font-size: 9pt;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .pdf-footer-blessing {
+            margin-top: 10px;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #1e3a8a;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Principal Hero Screen -->
+    <div class="container">
+        <div class="card-welcome">
+            <div class="logo-ccb-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Congrega%C3%A7%C3%A3o_Crist%C3%A3_no_Brasil_logo.svg" alt="Logo CCB" class="logo-ccb">
+            </div>
+
+            <h1>Pré-Avaliação de Organistas</h1>
+            <p class="subtitle">Congregação Cristã no Brasil<br>Preencha a ficha para gerar o PDF oficial e enviar ao Secretário Musical responsável.</p>
+            
+            <button class="btn-primary" onclick="openModal()">
+                <i class="fa-solid fa-pen-to-square"></i> Preencher Formulário
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Form -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-card">
+            
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-clipboard-list" style="margin-right:8px; color:var(--accent);"></i> Ficha de Cadastro</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="organistaForm">
+                    
+                    <!-- DATA DO PREENCHIMENTO NO TOPO -->
+                    <div class="section-title"><i class="fa-solid fa-calendar-days"></i> Data do Registro</div>
+                    
+                    <div class="form-group">
+                        <label for="dataPreenchimento">Data do Preenchimento *</label>
+                        <input type="date" id="dataPreenchimento" class="form-control" required>
+                    </div>
+
+                    <!-- DADOS DA CANDIDATA -->
+                    <div class="section-title"><i class="fa-solid fa-user"></i> Candidata</div>
+                    
+                    <div class="form-group">
+                        <label for="nomeCandidata">1. Nome da Candidata *</label>
+                        <input type="text" id="nomeCandidata" class="form-control" placeholder="Nome completo" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="comumCandidata">Comum Congregação *</label>
+                            <input type="text" id="comumCandidata" class="form-control" placeholder="Bairro / Cidade" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dataNasc">2. Data Nasc. *</label>
+                            <input type="date" id="dataNasc" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="testePara">3. Teste Para: *</label>
+                        <select id="testePara" class="form-control" required>
+                            <option value="">Selecione...</option>
+                            <option value="Reunião de Jovens">Reunião de Jovens e Menores</option>
+                            <option value="Culto Oficial">Culto Oficial</option>
+                            <option value="Oficialização">Oficialização</option>
+                        </select>
+                    </div>
+
+                    <!-- DADOS DA INSTRUTORA -->
+                    <div class="section-title"><i class="fa-solid fa-chalkboard-user"></i> Instrutora</div>
+
+                    <div class="form-group">
+                        <label for="selectInstrutora">4. Nome da Instrutora *</label>
+                        <select id="selectInstrutora" class="form-control" onchange="selecionarInstrutora()" required>
+                            <option value="">Selecione a Instrutora...</option>
+                            <option value="OUTRA">Outra / Não listada (Digitar)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="groupInstrutoraManual" style="display: none;">
+                        <label for="nomeInstrutoraManual">Nome da Instrutora (Digitar) *</label>
+                        <input type="text" id="nomeInstrutoraManual" class="form-control" placeholder="Digite o nome completo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comumInstrutora">5. Comum da Instrutora *</label>
+                        <input type="text" id="comumInstrutora" class="form-control" placeholder="Bairro / Cidade" required>
+                    </div>
+
+                    <!-- INFORMAÇÕES DA LOCALIDADE -->
+                    <div class="section-title"><i class="fa-solid fa-church"></i> Informações da Localidade</div>
+
+                    <div class="form-group">
+                        <label for="cultosSemana">6. Cultos por Semana *</label>
+                        <input type="number" id="cultosSemana" class="form-control" placeholder="Ex: 3" min="1" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="qtdOrganistasCulto">7. Organistas Culto *</label>
+                            <input type="number" id="qtdOrganistasCulto" class="form-control" placeholder="Qtd. atual" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="qtdOrganistasReuniao">Organistas Reunião *</label>
+                            <input type="number" id="qtdOrganistasReuniao" class="form-control" placeholder="Qtd. atual" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="temNecessidadeEspecial">8. Tem necessidade especial? *</label>
+                        <select id="temNecessidadeEspecial" class="form-control" onchange="toggleNecessidadeEspecial()" required>
+                            <option value="">Selecione...</option>
+                            <option value="Sim">Sim</option>
+                            <option value="Não">Não</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="groupQualNecessidade" style="display: none;">
+                        <label for="qualNecessidadeEspecial">Se sim, qual? *</label>
+                        <textarea id="qualNecessidadeEspecial" class="form-control" placeholder="Descreva aqui qual a necessidade especial..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="metodos">9. Métodos Utilizados (Descreva) *</label>
+                        <textarea id="metodos" class="form-control" placeholder="Ex: Método de Órgão Eletrônico Vol. 1 e 2, Hinário..." required></textarea>
+                    </div>
+
+                    <!-- MINISTÉRIO LOCAL -->
+                    <div class="section-title"><i class="fa-solid fa-users"></i> Ministério Local</div>
+
+                    <div class="form-group">
+                        <label for="anciao">Ancião *</label>
+                        <input type="text" id="anciao" class="form-control" placeholder="Nome do Ancião" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cooperador">Cooperador Oficial *</label>
+                        <input type="text" id="cooperador" class="form-control" placeholder="Nome do Cooperador" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="encarregado">Encarregado Local *</label>
+                        <input type="text" id="encarregado" class="form-control" placeholder="Nome do Encarregado" required>
+                    </div>
+
+                    <!-- SECRETÁRIO MUSICAL RESPONSÁVEL -->
+                    <div class="section-title"><i class="fa-solid fa-user-gear"></i> Secretário Musical Responsável</div>
+
+                    <div class="form-group">
+                        <label for="selectSecretario">Selecione o Secretário Musical *</label>
+                        <select id="selectSecretario" class="form-control" required>
+                            <option value="">Selecione o Secretário...</option>
+                            <option value="11971561722">Alessandro - (11) 97156-1722</option>
+                            <option value="11981194108">Danilo - (11) 98119-4108</option>
+                            <option value="11967703073">Gleidson - (11) 96770-3073</option>
+                            <option value="11961744658">Douglas - (11) 96174-4658</option>
+                            <option value="11947951258">Alex - (11) 94795-1258</option>
+                            <option value="11978313225">Isaque - (11) 97831-3225</option>
+                            <option value="11940893448">Richard Bruno - (11) 94089-3448</option>
+                            <option value="11954950044">Rafael - (11) 95495-0044</option>
+                        </select>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- BOTÕES DE AÇÃO FIXOS -->
+            <div class="modal-footer">
+                <button type="button" class="btn-pdf" onclick="gerarPDF()">
+                    <i class="fa-solid fa-file-pdf" style="font-size: 1.1rem;"></i> 1. Gerar e Baixar PDF
+                </button>
+                <button type="button" class="btn-whatsapp" onclick="enviarSecretario()">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> 2. Enviar p/ Secretário Musical
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TEMPLATE OCULTO DENTRO DO HTML PARA IMPRESSÃO EM PDF -->
+    <div id="pdfTemplate">
+        <div class="pdf-header">
+            <h2>CONGREGAÇÃO CRISTÃ NO BRASIL</h2>
+            <h3>PEDIDO DE PRÉ-AVALIAÇÃO DE ORGANISTAS</h3>
+            <div style="margin-top: 6px; font-size: 9.5pt; color: #4b5563;">
+                Data do Preenchimento: <strong id="pdf_dataPreenchimento" style="color: #000;"></strong>
+            </div>
+        </div>
+
+        <div class="pdf-section-title">1. Identificação da Candidata</div>
+        <div class="pdf-grid">
+            <div class="pdf-item">
+                <label>Nome da Candidata:</label>
+                <span id="pdf_nomeCandidata"></span>
+            </div>
+            <div class="pdf-item">
+                <label>Comum Congregação:</label>
+                <span id="pdf_comumCandidata"></span>
+            </div>
+        </div>
+        <div class="pdf-grid" style="margin-top: 8px;">
+            <div class="pdf-item">
+                <label>Data de Nascimento:</label>
+                <span id="pdf_dataNasc"></span>
+            </div>
+            <div class="pdf-item">
+                <label>Solicitado Para Teste de:</label>
+                <span id="pdf_testePara" style="font-weight: bold; color: #1e3a8a;"></span>
+            </div>
+        </div>
+
+        <div class="pdf-section-title">2. Identificação da Instrutora</div>
+        <div class="pdf-grid">
+            <div class="pdf-item">
+                <label>Nome da Instrutora:</label>
+                <span id="pdf_nomeInstrutora"></span>
+            </div>
+            <div class="pdf-item">
+                <label>Comum Congregação da Instrutora:</label>
+                <span id="pdf_comumInstrutora"></span>
+            </div>
+        </div>
+
+        <div class="pdf-section-title">3. Informações da Localidade</div>
+        <div class="pdf-grid">
+            <div class="pdf-item">
+                <label>Cultos por Semana:</label>
+                <span id="pdf_cultosSemana"></span>
+            </div>
+            <div class="pdf-item">
+                <label>Quantidade Atual de Organistas:</label>
+                <span>Culto: <strong id="pdf_qtdCulto"></strong> | RJM: <strong id="pdf_qtdReuniao"></strong></span>
+            </div>
+        </div>
+        <div class="pdf-grid" style="margin-top: 8px;">
+            <div class="pdf-item">
+                <label>Possui Necessidade Especial?</label>
+                <span id="pdf_temNecessidadeEspecial" style="font-weight: bold;"></span>
+            </div>
+        </div>
+        <div class="pdf-item" id="pdf_containerQualNecessidade" style="margin-top: 8px;">
+            <label>Qual Necessidade Especial?</label>
+            <div class="pdf-box" id="pdf_qualNecessidadeEspecial" style="margin-top: 4px;"></div>
+        </div>
+
+        <div class="pdf-section-title">4. Métodos Utilizados nos Estudos</div>
+        <div class="pdf-box" id="pdf_metodos"></div>
+
+        <div class="pdf-section-title">5. Ministério Local</div>
+        <div class="pdf-grid">
+            <div class="pdf-item">
+                <label>Ancião:</label>
+                <span id="pdf_anciao"></span>
+            </div>
+            <div class="pdf-item">
+                <label>Cooperador Oficial:</label>
+                <span id="pdf_cooperador"></span>
+            </div>
+        </div>
+        <div class="pdf-grid" style="margin-top: 8px;">
+            <div class="pdf-item">
+                <label>Encarregado Local:</label>
+                <span id="pdf_encarregado"></span>
+            </div>
+        </div>
+
+        <div class="pdf-footer-note">
+            Documento gerado para encaminhamento à Secretaria Musical da Congregação Cristã no Brasil.
+        </div>
+        <div class="pdf-footer-blessing">
+            Deus abençoe!
+        </div>
+    </div>
+
+    <script>
+        // Lista de instrutoras atualizada com nomes e bairros formatados em Capital Case
+        const listaInstrutoras = [
+            { nome: "Andreia Tiburcio S. Rodrigues", comum: "B. Pedreira" },
+            { nome: "Antonia Sara de Souza Xisto", comum: "Estancia Guatambú" },
+            { nome: "Bárbara Kimberly Gizzi da Costa", comum: "Água das Pedras" },
+            { nome: "Bianca Rodrigues Vieira", comum: "Residencial Fortuna" },
+            { nome: "Camila Santos de C. R. Soares", comum: "Jd. Maria Rosa" },
+            { nome: "Cassia de França Morais", comum: "Jd. Pinheirinho" },
+            { nome: "Cilzer Cilene Souza Marques", comum: "Rancho Grande" },
+            { nome: "Clarianica de Amorim Silva", comum: "Pq. Novo Horizonte" },
+            { nome: "Elaine Freitas Resende", comum: "Jd. Canãa" },
+            { nome: "Elza Geane dos Santos", comum: "Pedreira" },
+            { nome: "Érica da Silva de Lima", comum: "Jd. Mônica" },
+            { nome: "Érica Gonçalves de Carvalho", comum: "Pq. Macedo" },
+            { nome: "Ester Ananias Botelho da Silva", comum: "Jd. Itaquá" },
+            { nome: "Gimima Souza Gomes", comum: "Aracaré" },
+            { nome: "Helena Raquel Mendes de Resende", comum: "Jd. Pinheirinho" },
+            { nome: "Kátia Dulcelina Matheus", comum: "Jd. Itaquá" },
+            { nome: "Laudicéia T. S. Freitas", comum: "Residencial Marengo" },
+            { nome: "Lilian Crimber de Oliveira", comum: "Residencial Marengo" },
+            { nome: "Miriam Santos Aparecido de Oliveira", comum: "Morro Branco" },
+            { nome: "Regiane Dias Mesquita", comum: "Jd. Tropical" },
+            { nome: "Rosana Felipe Martins", comum: "Jd. Karine" },
+            { nome: "Ruth Figueiredo Moura", comum: "Jd. Carolina" },
+            { nome: "Sara Dias Mesquita", comum: "Jd. Tropical" },
+            { nome: "Sidneia Moura Feitoza", comum: "Águas das Pedras" },
+            { nome: "Simone Moura de Souza", comum: "Jd. Marcelo" },
+            { nome: "Solange Aparecida dos Santos", comum: "Pq. Res. Marengo" },
+            { nome: "Venina de Fátima Santana", comum: "Vl. Monte Belo" },
+            { nome: "Vivian", comum: "Vila Arizona" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const select = document.getElementById('selectInstrutora');
+            
+            // Preenche a data de hoje por padrão
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('dataPreenchimento').value = hoje;
+
+            listaInstrutoras.forEach((instrutora, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = `${instrutora.nome} (${instrutora.comum})`;
+                select.insertBefore(opt, select.lastElementChild);
+            });
+        });
+
+        function toggleNecessidadeEspecial() {
+            const selectVal = document.getElementById('temNecessidadeEspecial').value;
+            const groupQual = document.getElementById('groupQualNecessidade');
+            const textareaQual = document.getElementById('qualNecessidadeEspecial');
+
+            if (selectVal === "Sim") {
+                groupQual.style.display = 'block';
+                textareaQual.setAttribute('required', 'required');
+            } else {
+                groupQual.style.display = 'none';
+                textareaQual.removeAttribute('required');
+                textareaQual.value = '';
+            }
+        }
+
+        function selecionarInstrutora() {
+            const selectVal = document.getElementById('selectInstrutora').value;
+            const inputComum = document.getElementById('comumInstrutora');
+            const groupManual = document.getElementById('groupInstrutoraManual');
+            const inputManual = document.getElementById('nomeInstrutoraManual');
+
+            if (selectVal === "OUTRA") {
+                groupManual.style.display = 'block';
+                inputManual.setAttribute('required', 'required');
+                inputComum.value = '';
+                inputComum.readOnly = false;
+            } else if (selectVal !== "") {
+                groupManual.style.display = 'none';
+                inputManual.removeAttribute('required');
+                inputManual.value = '';
+                
+                const instrutora = listaInstrutoras[parseInt(selectVal)];
+                if (instrutora) {
+                    inputComum.value = instrutora.comum;
+                    inputComum.readOnly = true;
+                }
+            } else {
+                groupManual.style.display = 'none';
+                inputManual.removeAttribute('required');
+                inputManual.value = '';
+                inputComum.value = '';
+                inputComum.readOnly = false;
+            }
+        }
+
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOnOverlay(e) {
+            if (e.target.id === 'modalOverlay') {
+                closeModal();
+            }
+        }
+
+        function formatDate(dateString) {
+            if(!dateString) return '';
+            const parts = dateString.split('-');
+            if(parts.length === 3) {
+                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
+            return dateString;
+        }
+
+        function obterNomeInstrutora() {
+            const selectVal = document.getElementById('selectInstrutora').value;
+            if (selectVal === "OUTRA") {
+                return document.getElementById('nomeInstrutoraManual').value.trim();
+            } else if (selectVal !== "") {
+                return listaInstrutoras[parseInt(selectVal)].nome;
+            }
+            return "";
+        }
+
+        function validarEObterDados() {
+            const form = document.getElementById('organistaForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return null;
+            }
+
+            const selectSec = document.getElementById('selectSecretario');
+            const phoneNum = selectSec.value;
+            const textoSecretario = selectSec.options[selectSec.selectedIndex].text;
+            const nomeSecretario = textoSecretario.split('-')[0].trim();
+
+            const temNecessidade = document.getElementById('temNecessidadeEspecial').value;
+            const qualNecessidade = document.getElementById('qualNecessidadeEspecial').value.trim();
+
+            return {
+                dataPreenchimento: formatDate(document.getElementById('dataPreenchimento').value),
+                nomeCandidata: document.getElementById('nomeCandidata').value.trim(),
+                comumCandidata: document.getElementById('comumCandidata').value.trim(),
+                dataNasc: formatDate(document.getElementById('dataNasc').value),
+                testePara: document.getElementById('testePara').value,
+                nomeInstrutora: obterNomeInstrutora(),
+                comumInstrutora: document.getElementById('comumInstrutora').value.trim(),
+                cultosSemana: document.getElementById('cultosSemana').value.trim(),
+                qtdCulto: document.getElementById('qtdOrganistasCulto').value.trim(),
+                qtdReuniao: document.getElementById('qtdOrganistasReuniao').value.trim(),
+                temNecessidadeEspecial: temNecessidade,
+                qualNecessidadeEspecial: temNecessidade === 'Sim' ? (qualNecessidade || 'Não informada.') : 'Não.',
+                metodos: document.getElementById('metodos').value.trim(),
+                anciao: document.getElementById('anciao').value.trim(),
+                cooperador: document.getElementById('cooperador').value.trim(),
+                encarregado: document.getElementById('encarregado').value.trim(),
+                phoneNum: phoneNum,
+                nomeSecretario: nomeSecretario
+            };
+        }
+
+        function gerarPDF() {
+            const dados = validarEObterDados();
+            if (!dados) return;
+
+            document.getElementById('pdf_dataPreenchimento').innerText = dados.dataPreenchimento;
+            document.getElementById('pdf_nomeCandidata').innerText = dados.nomeCandidata;
+            document.getElementById('pdf_comumCandidata').innerText = dados.comumCandidata;
+            document.getElementById('pdf_dataNasc').innerText = dados.dataNasc;
+            document.getElementById('pdf_testePara').innerText = dados.testePara;
+            document.getElementById('pdf_nomeInstrutora').innerText = dados.nomeInstrutora;
+            document.getElementById('pdf_comumInstrutora').innerText = dados.comumInstrutora;
+            document.getElementById('pdf_cultosSemana').innerText = dados.cultosSemana;
+            document.getElementById('pdf_qtdCulto').innerText = dados.qtdCulto;
+            document.getElementById('pdf_qtdReuniao').innerText = dados.qtdReuniao;
+            document.getElementById('pdf_temNecessidadeEspecial').innerText = dados.temNecessidadeEspecial;
+
+            const boxQual = document.getElementById('pdf_containerQualNecessidade');
+            if (dados.temNecessidadeEspecial === 'Sim') {
+                boxQual.style.display = 'block';
+                document.getElementById('pdf_qualNecessidadeEspecial').innerText = dados.qualNecessidadeEspecial;
+            } else {
+                boxQual.style.display = 'none';
+            }
+
+            document.getElementById('pdf_metodos').innerText = dados.metodos;
+            document.getElementById('pdf_anciao').innerText = dados.anciao;
+            document.getElementById('pdf_cooperador').innerText = dados.cooperador;
+            document.getElementById('pdf_encarregado').innerText = dados.encarregado;
+
+            const element = document.getElementById('pdfTemplate');
+            element.style.display = 'block';
+
+            const opt = {
+                margin:       10,
+                filename:     `Pre_Avaliacao_${dados.nomeCandidata.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none';
+            });
+        }
+
+        function enviarSecretario() {
+            const dados = validarEObterDados();
+            if (!dados) return;
+
+            let phoneNum = dados.phoneNum;
+
+            if (!phoneNum) {
+                alert("Por favor, selecione um Secretário Musical.");
+                return;
+            }
+
+            if (!phoneNum.startsWith('55')) {
+                phoneNum = '55' + phoneNum;
+            }
+
+            let mensagem = `*À SECRETARIA MUSICAL - FICHA DE PRÉ-AVALIAÇÃO*\n`;
+            mensagem += `_Destinatário: Irmão ${dados.nomeSecretario}_\n`;
+            mensagem += `_Data do Preenchimento: ${dados.dataPreenchimento}_\n\n`;
+            mensagem += `*1. CANDIDATA:* ${dados.nomeCandidata}\n`;
+            mensagem += `*   Comum Congregação:* ${dados.comumCandidata}\n`;
+            mensagem += `*2. DATA DE NASCIMENTO:* ${dados.dataNasc}\n`;
+            mensagem += `*3. SOLICITAÇÃO DE TESTE PARA:* ${dados.testePara}\n\n`;
+            mensagem += `*4. INSTRUTORA:* ${dados.nomeInstrutora}\n`;
+            mensagem += `*5. COMUM DA INSTRUTORA:* ${dados.comumInstrutora}\n\n`;
+            mensagem += `*6. CULTOS POR SEMANA:* ${dados.cultosSemana}\n`;
+            mensagem += `*7. QUANTIDADE DE ORGANISTAS:*\n`;
+            mensagem += `   - Culto Oficial: ${dados.qtdCulto}\n`;
+            mensagem += `   - Reunião de Jovens: ${dados.qtdReuniao}\n`;
+            mensagem += `*8. NECESSIDADE ESPECIAL:* ${dados.temNecessidadeEspecial}\n`;
+            
+            if (dados.temNecessidadeEspecial === 'Sim') {
+                mensagem += `   - Qual: ${dados.qualNecessidadeEspecial}\n`;
+            }
+
+            mensagem += `\n*9. MÉTODOS UTILIZADOS:*\n${dados.metodos}\n\n`;
+            mensagem += `*10. MINISTÉRIO LOCAL:*\n`;
+            mensagem += `   - Ancião: ${dados.anciao}\n`;
+            mensagem += `   - Cooperador Oficial: ${dados.cooperador}\n`;
+            mensagem += `   - Encarregado Local: ${dados.encarregado}\n\n`;
+            mensagem += `📌 _Anexar o PDF da ficha gerado pelo formulário._\n\n`;
+            mensagem += `Deus abençoe!`;
+
+            const url = `https://api.whatsapp.com/send?phone=${phoneNum}&text=${encodeURIComponent(mensagem)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
