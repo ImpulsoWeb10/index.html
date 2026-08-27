@@ -19,7 +19,7 @@
 
         .modal { transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
 
-        /* Estilo 1: 4 Primeiros Botões (Destaque Principal / Produtos) */
+        /* Estilo 1: 4 Primeiros Botões (Menores, em grade 2x2 quadrada) */
         .btn-featured {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(30, 41, 59, 0.7) 100%);
             border: 1px solid rgba(245, 158, 11, 0.3);
@@ -34,7 +34,7 @@
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(30, 41, 59, 0.9) 100%);
         }
 
-        /* Estilo 2: 2 Últimos Botões (Secundários / Links Úteis) */
+        /* Estilo 2: 2 Últimos Botões (Diferentes / Estilo Retangular Discreto) */
         .btn-secondary {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -71,95 +71,76 @@
 
     <!-- Categorias Principais -->
     <main class="max-w-2xl mx-auto w-full mb-auto my-2">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-
-            <!-- OS 4 PRIMEIROS BOTÕES (Estilo Destaque em Ouro/Âmbar) -->
+        <!-- Grade 2x2 para os 4 primeiros botões menores/quadrados -->
+        <div class="grid grid-cols-2 gap-2.5 mb-3">
 
             <!-- 1. Tintas -->
-            <button onclick="openModal('modal-tintas')" class="btn-featured p-4 rounded-xl text-left flex items-center justify-between group">
-                <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
-                        <i class="fa-solid fa-paint-roller text-base"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-extrabold text-white tracking-wide group-hover:text-amber-400 transition-colors">TINTAS</h2>
-                        <span class="text-[11px] text-amber-200/70 block -mt-0.5">Interno, Externo, Piso e Laje</span>
-                    </div>
+            <button onclick="openModal('modal-tintas')" class="btn-featured p-2.5 rounded-xl text-center flex flex-col items-center justify-center aspect-square group">
+                <div class="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all mb-1.5">
+                    <i class="fa-solid fa-paint-roller text-base"></i>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-amber-400/60 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                <h2 class="text-xs font-extrabold text-white tracking-wide group-hover:text-amber-400 transition-colors uppercase">TINTAS</h2>
+                <span class="text-[10px] text-amber-200/70 block mt-0.5 leading-tight">Interno, Externo...</span>
             </button>
 
             <!-- 2. Massas -->
-            <button onclick="openModal('modal-massas')" class="btn-featured p-4 rounded-xl text-left flex items-center justify-between group">
-                <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
-                        <i class="fa-solid fa-trowel text-base"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-extrabold text-white tracking-wide group-hover:text-amber-400 transition-colors">MASSAS</h2>
-                        <span class="text-[11px] text-amber-200/70 block -mt-0.5">PVA e Acrílica</span>
-                    </div>
+            <button onclick="openModal('modal-massas')" class="btn-featured p-2.5 rounded-xl text-center flex flex-col items-center justify-center aspect-square group">
+                <div class="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all mb-1.5">
+                    <i class="fa-solid fa-trowel text-base"></i>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-amber-400/60 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                <h2 class="text-xs font-extrabold text-white tracking-wide group-hover:text-amber-400 transition-colors uppercase">MASSAS</h2>
+                <span class="text-[10px] text-amber-200/70 block mt-0.5 leading-tight">PVA e Acrílica</span>
             </button>
 
             <!-- 3. Texturas -->
-            <button onclick="openModal('modal-texturas')" class="btn-featured p-4 rounded-xl text-left flex items-center justify-between group">
-                <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
-                        <i class="fa-solid fa-brush text-base"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-extrabold text-white tracking-wide group-hover:text-amber-400 transition-colors">TEXTURAS</h2>
-                        <span class="text-[11px] text-amber-200/70 block -mt-0.5">Grafiato, Lisa, Projetada...</span>
-                    </div>
+            <button onclick="openModal('modal-texturas')" class="btn-featured p-2.5 rounded-xl text-center flex flex-col items-center justify-center aspect-square group">
+                <div class="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all mb-1.5">
+                    <i class="fa-solid fa-brush text-base"></i>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-amber-400/60 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                <h2 class="text-xs font-extrabold text-white tracking-wide group-hover:text-amber-400 transition-colors uppercase">TEXTURAS</h2>
+                <span class="text-[10px] text-amber-200/70 block mt-0.5 leading-tight">Grafiato, Lisa...</span>
             </button>
 
             <!-- 4. Selantes e Fundos -->
-            <button onclick="openModal('modal-selantes')" class="btn-featured p-4 rounded-xl text-left flex items-center justify-between group">
-                <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
-                        <i class="fa-solid fa-fill-drip text-base"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-extrabold text-white tracking-wide group-hover:text-amber-400 transition-colors">SELANTES & FUNDOS</h2>
-                        <span class="text-[11px] text-amber-200/70 block -mt-0.5">Selador Acrílico e Preparador</span>
-                    </div>
+            <button onclick="openModal('modal-selantes')" class="btn-featured p-2.5 rounded-xl text-center flex flex-col items-center justify-center aspect-square group">
+                <div class="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all mb-1.5">
+                    <i class="fa-solid fa-fill-drip text-base"></i>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-amber-400/60 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                <h2 class="text-xs font-extrabold text-white tracking-wide group-hover:text-amber-400 transition-colors uppercase">SELANTES & FUNDOS</h2>
+                <span class="text-[10px] text-amber-200/70 block mt-0.5 leading-tight">Selador e Preparador</span>
             </button>
 
+        </div>
 
-            <!-- OS 2 ÚLTIMOS BOTÕES (Estilo Secundário Discreto) -->
+        <!-- Os 2 últimos botões com layout horizontal diferente -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
 
             <!-- 5. Rede Social -->
-            <a href="https://www.instagram.com/pintuastiqualyquamy" target="_blank" class="btn-secondary p-4 rounded-xl text-left flex items-center justify-between group">
-                <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:bg-pink-500 group-hover:text-white transition-all">
+            <a href="https://www.instagram.com/pintuastiqualyquamy" target="_blank" class="btn-secondary p-3.5 rounded-xl text-left flex items-center justify-between group">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:bg-pink-500 group-hover:text-white transition-all shrink-0">
                         <i class="fa-brands fa-instagram text-base"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-semibold text-slate-200 group-hover:text-pink-400 transition-colors">INSTAGRAM</h2>
-                        <span class="text-[11px] text-slate-400 block -mt-0.5">Confira nossas fotos</span>
+                        <h2 class="text-xs font-semibold text-slate-200 group-hover:text-pink-400 transition-colors">INSTAGRAM</h2>
+                        <span class="text-[10px] text-slate-400 block -mt-0.5">Confira nossas fotos</span>
                     </div>
                 </div>
-                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-500 group-hover:text-pink-400 transition-all"></i>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-500 group-hover:text-pink-400 transition-all"></i>
             </a>
 
             <!-- 6. Avaliações de Clientes -->
-            <button onclick="openModal('modal-avaliacoes')" class="btn-secondary p-4 rounded-xl text-left flex items-center justify-between group">
-                <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 group-hover:border-amber-500/50 transition-all">
+            <button onclick="openModal('modal-avaliacoes')" class="btn-secondary p-3.5 rounded-xl text-left flex items-center justify-between group">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 group-hover:border-amber-500/50 transition-all shrink-0">
                         <i class="fa-solid fa-star text-base"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-semibold text-slate-200 group-hover:text-amber-400 transition-colors">AVALIAÇÕES</h2>
-                        <span class="text-[11px] text-slate-400 block -mt-0.5">Opiniões no Google</span>
+                        <h2 class="text-xs font-semibold text-slate-200 group-hover:text-amber-400 transition-colors">AVALIAÇÕES</h2>
+                        <span class="text-[10px] text-slate-400 block -mt-0.5">Opiniões no Google</span>
                     </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                <i class="fa-solid fa-chevron-right text-[10px] text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
             </button>
 
         </div>
