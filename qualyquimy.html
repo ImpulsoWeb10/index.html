@@ -13,25 +13,25 @@
         
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0b0f19;
-            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0b0f19 75%);
+            background-color: #061412;
+            background-image: radial-gradient(circle at 50% 0%, #062c26 0%, #061412 75%);
         }
 
         .modal { transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
 
         /* Botões Elegantes e Compactos */
         .btn-elegant {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, rgba(6, 44, 38, 0.7) 0%, rgba(4, 24, 21, 0.8) 100%);
+            border: 1px solid rgba(20, 184, 166, 0.15);
             backdrop-filter: blur(12px);
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .btn-elegant:hover {
             transform: translateY(-2px);
-            border-color: rgba(245, 158, 11, 0.4);
-            box-shadow: 0 8px 20px -6px rgba(245, 158, 11, 0.15);
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border-color: rgba(20, 184, 166, 0.5);
+            box-shadow: 0 8px 20px -6px rgba(20, 184, 166, 0.25);
+            background: linear-gradient(135deg, rgba(6, 44, 38, 0.9) 0%, rgba(4, 24, 21, 0.95) 100%);
         }
 
         .btn-elegant:active {
@@ -39,18 +39,18 @@
         }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col justify-between p-4 md:p-6">
+<body class="text-teal-50 min-h-screen flex flex-col justify-between p-4 md:p-6">
 
     <!-- Header com Logo -->
     <header class="pt-6 pb-4 text-center max-w-xl mx-auto flex flex-col items-center">
         <div class="mb-3 p-2">
-            <img src="logo-qualy.png" alt="Qualy Tintas" class="h-20 md:h-24 object-contain filter drop-shadow-lg" id="main-logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/200x80/1e293b/f59e0b?text=QUALY+TINTAS';">
+            <img src="logo-qualy.png" alt="Qualy Tintas" class="h-20 md:h-24 object-contain filter drop-shadow-lg" id="main-logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/200x80/062c26/10b981?text=QUALY+TINTAS';">
         </div>
         
         <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
             Guia de Materiais
         </h1>
-        <p class="text-slate-400 text-sm mt-1 font-medium">
+        <p class="text-teal-300/70 text-sm mt-1 font-medium">
             Selecione uma categoria para começar:
         </p>
     </header>
@@ -62,132 +62,132 @@
             <!-- 1. Tintas -->
             <button onclick="openModal('modal-tintas')" class="btn-elegant p-4 rounded-xl text-left flex items-center justify-between group">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
+                    <div class="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 group-hover:bg-teal-400 group-hover:text-teal-950 transition-all">
                         <i class="fa-solid fa-paint-roller text-base"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-slate-100 group-hover:text-amber-400 transition-colors">TINTAS</h2>
-                        <span class="text-[11px] text-slate-400 block -mt-0.5">Interno, Externo, Piso e Laje</span>
+                        <h2 class="text-sm font-bold text-teal-50 group-hover:text-teal-300 transition-colors">TINTAS</h2>
+                        <span class="text-[11px] text-teal-300/60 block -mt-0.5">Interno, Externo, Piso e Laje</span>
                     </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                <i class="fa-solid fa-chevron-right text-xs text-teal-600 group-hover:text-teal-300 group-hover:translate-x-0.5 transition-all"></i>
             </button>
 
             <!-- 2. Massas -->
             <button onclick="openModal('modal-massas')" class="btn-elegant p-4 rounded-xl text-left flex items-center justify-between group">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
+                    <div class="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 group-hover:bg-teal-400 group-hover:text-teal-950 transition-all">
                         <i class="fa-solid fa-trowel text-base"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-slate-100 group-hover:text-amber-400 transition-colors">MASSAS</h2>
-                        <span class="text-[11px] text-slate-400 block -mt-0.5">PVA e Acrílica</span>
+                        <h2 class="text-sm font-bold text-teal-50 group-hover:text-teal-300 transition-colors">MASSAS</h2>
+                        <span class="text-[11px] text-teal-300/60 block -mt-0.5">PVA e Acrílica</span>
                     </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                <i class="fa-solid fa-chevron-right text-xs text-teal-600 group-hover:text-teal-300 group-hover:translate-x-0.5 transition-all"></i>
             </button>
 
             <!-- 3. Texturas -->
             <button onclick="openModal('modal-texturas')" class="btn-elegant p-4 rounded-xl text-left flex items-center justify-between group">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
+                    <div class="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 group-hover:bg-teal-400 group-hover:text-teal-950 transition-all">
                         <i class="fa-solid fa-brush text-base"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-slate-100 group-hover:text-amber-400 transition-colors">TEXTURAS</h2>
-                        <span class="text-[11px] text-slate-400 block -mt-0.5">Grafiato, Lisa, Projetada...</span>
+                        <h2 class="text-sm font-bold text-teal-50 group-hover:text-teal-300 transition-colors">TEXTURAS</h2>
+                        <span class="text-[11px] text-teal-300/60 block -mt-0.5">Grafiato, Lisa, Projetada...</span>
                     </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                <i class="fa-solid fa-chevron-right text-xs text-teal-600 group-hover:text-teal-300 group-hover:translate-x-0.5 transition-all"></i>
             </button>
 
             <!-- 4. Selantes e Fundos -->
             <button onclick="openModal('modal-selantes')" class="btn-elegant p-4 rounded-xl text-left flex items-center justify-between group">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
+                    <div class="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 group-hover:bg-teal-400 group-hover:text-teal-950 transition-all">
                         <i class="fa-solid fa-fill-drip text-base"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-slate-100 group-hover:text-amber-400 transition-colors">SELANTES & FUNDOS</h2>
-                        <span class="text-[11px] text-slate-400 block -mt-0.5">Selador Acrílico e Preparador</span>
+                        <h2 class="text-sm font-bold text-teal-50 group-hover:text-teal-300 transition-colors">SELANTES & FUNDOS</h2>
+                        <span class="text-[11px] text-teal-300/60 block -mt-0.5">Selador Acrílico e Preparador</span>
                     </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                <i class="fa-solid fa-chevron-right text-xs text-teal-600 group-hover:text-teal-300 group-hover:translate-x-0.5 transition-all"></i>
             </button>
 
             <!-- 5. Rede Social -->
-            <a href="https://www.instagram.com/tintasqualyquimy/" target="_blank" class="btn-elegant p-4 rounded-xl text-left flex items-center justify-between group">
+            <a href="https://www.instagram.com/tintasqualyquimy" target="_blank" class="btn-elegant p-4 rounded-xl text-left flex items-center justify-between group">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:bg-pink-500 group-hover:text-white transition-all">
+                    <div class="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
                         <i class="fa-brands fa-instagram text-base"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-slate-100 group-hover:text-pink-400 transition-colors">INSTAGRAM</h2>
-                        <span class="text-[11px] text-slate-400 block -mt-0.5">Confira nossas fotos</span>
+                        <h2 class="text-sm font-bold text-teal-50 group-hover:text-purple-300 transition-colors">INSTAGRAM</h2>
+                        <span class="text-[11px] text-teal-300/60 block -mt-0.5">Confira nossas fotos</span>
                     </div>
                 </div>
-                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-500 group-hover:text-pink-400 transition-all"></i>
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-teal-600 group-hover:text-purple-400 transition-all"></i>
             </a>
 
             <!-- 6. Avaliações de Clientes -->
             <button onclick="openModal('modal-avaliacoes')" class="btn-elegant p-4 rounded-xl text-left flex items-center justify-between group">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
+                    <div class="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 group-hover:bg-teal-400 group-hover:text-teal-950 transition-all">
                         <i class="fa-solid fa-star text-base"></i>
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-slate-100 group-hover:text-amber-400 transition-colors">AVALIAÇÕES</h2>
-                        <span class="text-[11px] text-slate-400 block -mt-0.5">Opiniões no Google</span>
+                        <h2 class="text-sm font-bold text-teal-50 group-hover:text-teal-300 transition-colors">AVALIAÇÕES</h2>
+                        <span class="text-[11px] text-teal-300/60 block -mt-0.5">Opiniões no Google</span>
                     </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"></i>
+                <i class="fa-solid fa-chevron-right text-xs text-teal-600 group-hover:text-teal-300 group-hover:translate-x-0.5 transition-all"></i>
             </button>
 
         </div>
     </main>
 
     <!-- Rodapé -->
-    <footer class="py-4 text-center text-xs text-slate-400 border-t border-slate-800/80 flex flex-col items-center gap-2 mt-6">
+    <footer class="py-4 text-center text-xs text-teal-300/50 border-t border-teal-900/40 flex flex-col items-center gap-2 mt-6">
         <div>
-            <p class="font-semibold text-slate-300">Qualy Tintas • Soluções em Pintura</p>
+            <p class="font-semibold text-teal-200/80">Qualy Tintas • Soluções em Pintura</p>
             <address class="not-italic mt-0.5">
                 <a href="https://www.google.com/maps/search/?api=1&query=Rua+Leiria+45+Ch%C3%A1cara+Cui%C3%A1b%C3%A1+Itaquaquecetuba+SP" 
                    target="_blank" 
                    rel="noopener noreferrer" 
-                   class="inline-flex items-center gap-1 text-amber-400 hover:underline transition-colors text-[11px]">
+                   class="inline-flex items-center gap-1 text-teal-400 hover:underline transition-colors text-[11px]">
                     <i class="fa-solid fa-location-dot"></i>
                     <span>Rua Leiria, 45 - Itaquaquecetuba - SP</span>
                 </a>
             </address>
         </div>
 
-        <div class="flex items-center gap-1.5 pt-2 text-slate-500 text-[11px]">
+        <div class="flex items-center gap-1.5 pt-2 text-teal-500/70 text-[11px]">
             <i class="fa-solid fa-lock text-[10px]"></i>
-            <span>Desenvolvido por <strong class="text-slate-400 font-medium">ImpulsoWeb10</strong></span>
+            <span>Desenvolvido por <strong class="text-teal-300/80 font-medium">ImpulsoWeb10</strong></span>
         </div>
     </footer>
 
 
     <!-- ==================== MODAL CATEGORIA: TINTAS ==================== -->
     <div id="modal-tintas" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative max-h-[85vh] overflow-y-auto">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50">
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative max-h-[85vh] overflow-y-auto">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             
-            <h3 class="text-lg font-bold text-amber-400 border-b border-slate-800 pb-2.5 mb-4">TINTAS</h3>
+            <h3 class="text-lg font-bold text-teal-400 border-b border-teal-800/60 pb-2.5 mb-4">TINTAS</h3>
             
             <!-- Etapa 1: Interno x Externo -->
             <div id="tintas-step-1" class="space-y-3">
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Selecione o Ambiente:</p>
+                <p class="text-xs font-semibold text-teal-300/60 uppercase tracking-wider">Selecione o Ambiente:</p>
                 <div class="grid grid-cols-2 gap-2.5">
-                    <button onclick="showTintasSub('interno')" class="p-3.5 rounded-xl border border-slate-700/80 bg-slate-800/50 hover:bg-slate-800 hover:border-amber-500/50 font-bold text-white transition-all text-center flex flex-col items-center gap-1.5 text-xs">
-                        <i class="fa-solid fa-house text-amber-400 text-lg"></i>
+                    <button onclick="showTintasSub('interno')" class="p-3.5 rounded-xl border border-teal-800/80 bg-teal-900/40 hover:bg-teal-900/80 hover:border-teal-500/50 font-bold text-white transition-all text-center flex flex-col items-center gap-1.5 text-xs">
+                        <i class="fa-solid fa-house text-teal-400 text-lg"></i>
                         INTERNO
                     </button>
-                    <button onclick="showTintasSub('externo')" class="p-3.5 rounded-xl border border-slate-700/80 bg-slate-800/50 hover:bg-slate-800 hover:border-amber-500/50 font-bold text-white transition-all text-center flex flex-col items-center gap-1.5 text-xs">
-                        <i class="fa-solid fa-tree text-amber-400 text-lg"></i>
+                    <button onclick="showTintasSub('externo')" class="p-3.5 rounded-xl border border-teal-800/80 bg-teal-900/40 hover:bg-teal-900/80 hover:border-teal-500/50 font-bold text-white transition-all text-center flex flex-col items-center gap-1.5 text-xs">
+                        <i class="fa-solid fa-tree text-teal-400 text-lg"></i>
                         EXTERNO
                     </button>
                 </div>
@@ -195,55 +195,55 @@
 
             <!-- Opções Internas -->
             <div id="tintas-interno" class="hidden space-y-2">
-                <button onclick="showTintasStep1()" class="text-xs font-semibold text-amber-400 mb-2 inline-flex items-center gap-1 hover:underline">
+                <button onclick="showTintasStep1()" class="text-xs font-semibold text-teal-400 mb-2 inline-flex items-center gap-1 hover:underline">
                     <i class="fa-solid fa-arrow-left"></i> Voltar
                 </button>
                 <h4 class="text-sm font-bold text-white mb-2">Ambiente Interno</h4>
                 
-                <button onclick="openDetail('detail-tintas-int-1')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-tintas-int-1')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Parede nova emassada</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
-                <button onclick="openDetail('detail-tintas-int-reboco')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-tintas-int-reboco')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Parede no reboco</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
-                <button onclick="openDetail('detail-tintas-int-2')" class="w-full p-3 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 font-medium text-left text-amber-300 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-tintas-int-2')" class="w-full p-3 rounded-xl border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 font-medium text-left text-cyan-200 transition-all flex justify-between items-center text-xs">
                     <span>Parede tem umidade</span>
-                    <i class="fa-solid fa-triangle-exclamation text-xs text-amber-400"></i>
+                    <i class="fa-solid fa-triangle-exclamation text-xs text-cyan-400"></i>
                 </button>
-                <button onclick="openDetail('detail-tintas-int-3')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-tintas-int-3')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Parede Repintura preparada</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
             </div>
 
             <!-- Opções Externas -->
             <div id="tintas-externo" class="hidden space-y-2">
-                <button onclick="showTintasStep1()" class="text-xs font-semibold text-amber-400 mb-2 inline-flex items-center gap-1 hover:underline">
+                <button onclick="showTintasStep1()" class="text-xs font-semibold text-teal-400 mb-2 inline-flex items-center gap-1 hover:underline">
                     <i class="fa-solid fa-arrow-left"></i> Voltar
                 </button>
                 <h4 class="text-sm font-bold text-white mb-2">Ambiente Externo</h4>
                 
-                <button onclick="openDetail('detail-tintas-ext-1')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-tintas-ext-1')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Parede nova emassada</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
-                <button onclick="openDetail('detail-tintas-ext-2')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-tintas-ext-2')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Parede repintura</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
-                <button onclick="openDetail('detail-tintas-ext-3')" class="w-full p-3 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 font-medium text-left text-amber-300 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-tintas-ext-3')" class="w-full p-3 rounded-xl border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 font-medium text-left text-cyan-200 transition-all flex justify-between items-center text-xs">
                     <span>Parede tem umidade</span>
-                    <i class="fa-solid fa-triangle-exclamation text-xs text-amber-400"></i>
+                    <i class="fa-solid fa-triangle-exclamation text-xs text-cyan-400"></i>
                 </button>
-                <button onclick="openDetail('detail-tintas-ext-piso')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-tintas-ext-piso')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Piso ou Frente da casa</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
-                <button onclick="openDetail('detail-tintas-ext-laje')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-tintas-ext-laje')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Laje</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
             </div>
         </div>
@@ -252,18 +252,18 @@
 
     <!-- ==================== MODAL CATEGORIA: MASSAS ==================== -->
     <div id="modal-massas" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold text-amber-400 border-b border-slate-800 pb-2.5 mb-4">MASSAS</h3>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-teal-400 border-b border-teal-800/60 pb-2.5 mb-4">MASSAS</h3>
             <div class="space-y-2">
-                <button onclick="openDetail('detail-massas-pva')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-massas-pva')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>PVA uso interno (sem umidade)</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
-                <button onclick="openDetail('detail-massas-acrilica')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-massas-acrilica')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Acrílica (interno / externo)</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
             </div>
         </div>
@@ -272,26 +272,26 @@
 
     <!-- ==================== MODAL CATEGORIA: TEXTURAS ==================== -->
     <div id="modal-texturas" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold text-amber-400 border-b border-slate-800 pb-2.5 mb-4">TEXTURAS</h3>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-teal-400 border-b border-teal-800/60 pb-2.5 mb-4">TEXTURAS</h3>
             <div class="space-y-2">
-                <button onclick="openDetail('detail-textura-grafiato')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-textura-grafiato')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Grafiato</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
-                <button onclick="openDetail('detail-textura-lisa')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-textura-lisa')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Textura Lisa / Rolada</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
-                <button onclick="openDetail('detail-textura-projetada')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-textura-projetada')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Projetada</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
-                <button onclick="openDetail('detail-textura-granline')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-textura-granline')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Granline</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
             </div>
         </div>
@@ -300,18 +300,18 @@
 
     <!-- ==================== MODAL CATEGORIA: SELANTES & FUNDOS ==================== -->
     <div id="modal-selantes" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold text-amber-400 border-b border-slate-800 pb-2.5 mb-4">SELANTES & FUNDOS</h3>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-teal-400 border-b border-teal-800/60 pb-2.5 mb-4">SELANTES & FUNDOS</h3>
             <div class="space-y-2">
-                <button onclick="openDetail('detail-selantes-acrilico')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-selantes-acrilico')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Selador Acrílico</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
-                <button onclick="openDetail('detail-selantes-preparador')" class="w-full p-3 rounded-xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 font-medium text-left text-slate-200 transition-all flex justify-between items-center text-xs">
+                <button onclick="openDetail('detail-selantes-preparador')" class="w-full p-3 rounded-xl border border-teal-900 bg-teal-900/30 hover:bg-teal-900/60 font-medium text-left text-teal-100 transition-all flex justify-between items-center text-xs">
                     <span>Prime ou Fundo Preparador</span>
-                    <i class="fa-solid fa-chevron-right text-[10px] text-amber-400"></i>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-teal-400"></i>
                 </button>
             </div>
         </div>
@@ -320,22 +320,22 @@
 
     <!-- ==================== MODAL CATEGORIA: AVALIAÇÕES ==================== -->
     <div id="modal-avaliacoes" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold text-amber-400 border-b border-slate-800 pb-1 mb-1">Google Avaliações</h3>
-            <p class="text-slate-400 text-xs mb-4">Veja a opinião dos nossos clientes</p>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative max-h-[85vh] overflow-y-auto">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-teal-400 border-b border-teal-800/60 pb-1 mb-1">Google Avaliações</h3>
+            <p class="text-teal-300/60 text-xs mb-4">Veja a opinião dos nossos clientes</p>
             
             <div class="space-y-3">
-                <a href="https://www.google.com/maps/search/?api=1&query=Qualy+Quimy+Itaquaquecetuba" target="_blank" class="block p-3.5 rounded-xl bg-slate-800/50 border border-slate-800 hover:border-amber-500/40 transition-all">
-                    <div class="flex items-center gap-1 text-amber-400 text-xs mb-1">
+                <a href="https://www.google.com/maps/search/?api=1&query=Qualy+Quimy+Itaquaquecetuba" target="_blank" class="block p-3.5 rounded-xl bg-teal-900/30 border border-teal-900 hover:border-teal-500/40 transition-all">
+                    <div class="flex items-center gap-1 text-teal-400 text-xs mb-1">
                         <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
                     </div>
-                    <p class="text-slate-300 text-xs italic">"Produtos de altíssima qualidade e excelente atendimento. Recomendo para todas as reformas!"</p>
+                    <p class="text-teal-100 text-xs italic">"Produtos de altíssima qualidade e excelente atendimento. Recomendo para todas as reformas!"</p>
                 </a>
             </div>
 
-            <a href="https://www.google.com/maps/search/?api=1&query=Qualy+Quimy+Itaquaquecetuba" target="_blank" class="w-full mt-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-center text-xs font-bold rounded-xl transition-all block">
+            <a href="https://www.google.com/maps/search/?api=1&query=Qualy+Quimy+Itaquaquecetuba" target="_blank" class="w-full mt-4 py-2.5 bg-teal-500 hover:bg-teal-400 text-teal-950 text-center text-xs font-bold rounded-xl transition-all block">
                 Ver no Google Maps
             </a>
         </div>
@@ -346,18 +346,18 @@
 
     <!-- TINTAS INTERNO 1 -->
     <div id="detail-tintas-int-1" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Parede nova emassada (Interno)</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Parede nova emassada (Interno)</h3>
             
             <div class="space-y-2">
-                <p class="text-sm font-bold text-amber-400">Qualy Color Econômica (3,6L e 18L)</p>
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs leading-relaxed">
+                <p class="text-sm font-bold text-teal-400">Qualy Color Econômica (3,6L e 18L)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
                     <p>• <strong>Rendimento:</strong> Rende de 30 a 150m² (2 a 3 demãos).</p>
-                    <p class="text-amber-400/90 text-[11px] mt-1.5">⚠️ Não indicada para repintura ou paredes com umidade.</p>
+                    <p class="text-cyan-300/90 text-[11px] mt-1.5">⚠️ Não indicada para repintura ou paredes com umidade.</p>
                 </div>
             </div>
 
@@ -369,32 +369,32 @@
 
     <!-- TINTAS INTERNO: REBOCO -->
     <div id="detail-tintas-int-reboco" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Parede no Reboco</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Parede no Reboco</h3>
             
-            <p class="text-slate-400 text-xs">Aplicar Selador Acrílico e escolher uma opção:</p>
+            <p class="text-teal-300/60 text-xs">Aplicar Selador Acrílico e escolher uma opção:</p>
 
             <div class="space-y-2.5">
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300">
-                    <p class="font-semibold text-xs text-amber-400 mb-1.5">1 - Aplicar Tinta após seladora</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100">
+                    <p class="font-semibold text-xs text-teal-400 mb-1.5">1 - Aplicar Tinta após seladora</p>
                     <button onclick="buy('Opção 1 - Aplicar Tinta Depois da seladora (Parede no Reboco)', '11954950044')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 text-xs">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Comprar
                     </button>
                 </div>
 
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300">
-                    <p class="font-semibold text-xs text-amber-400 mb-1.5">2 - Massa PVA + lixar + tinta</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100">
+                    <p class="font-semibold text-xs text-teal-400 mb-1.5">2 - Massa PVA + lixar + tinta</p>
                     <button onclick="buy('Opção 2 - Aplicar massa pva/lixar e passar tinta por ultimo (Parede no Reboco)', '11954950044')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 text-xs">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Comprar
                     </button>
                 </div>
 
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300">
-                    <p class="font-semibold text-xs text-amber-400 mb-1.5">3 - Textura / Grafiato / Projetada</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100">
+                    <p class="font-semibold text-xs text-teal-400 mb-1.5">3 - Textura / Grafiato / Projetada</p>
                     <button onclick="buy('Opção 3 - Passar Textura Lisa / Grafiato, Projetada ou Granline depois da seladora', '11954850044')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 text-xs">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Comprar
                     </button>
@@ -405,18 +405,18 @@
 
     <!-- TINTAS INTERNO 2 -->
     <div id="detail-tintas-int-2" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-amber-400 border-b border-slate-800 pb-2">Parede com umidade</h3>
+            <h3 class="text-lg font-bold text-teal-400 border-b border-teal-800/60 pb-2">Parede com umidade</h3>
             
-            <div class="bg-amber-500/10 border border-amber-500/20 p-3.5 rounded-xl text-slate-300 text-xs leading-relaxed">
+            <div class="bg-cyan-500/10 border border-cyan-500/20 p-3.5 rounded-xl text-teal-100 text-xs leading-relaxed">
                 <p>A tinta não elimina a umidade existente. Recomendamos tratar o problema antes da pintura para garantir durabilidade.</p>
             </div>
 
-            <button onclick="buy('Consultar tratamento de umidade na parede (Interno)', '11954850044')" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+            <button onclick="buy('Consultar tratamento de umidade na parede (Interno)', '11954850044')" class="w-full py-2.5 bg-teal-500 hover:bg-teal-400 text-teal-950 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
                 <i class="fa-solid fa-circle-info text-sm"></i> Falar com Especialista
             </button>
         </div>
@@ -424,50 +424,45 @@
 
     <!-- TINTAS INTERNO 3 -->
     <div id="detail-tintas-int-3" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Parede Repintura preparada</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Parede Repintura Preparada</h3>
             
-            <div class="space-y-2.5">
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300">
-                    <p class="font-semibold text-xs text-amber-400 mb-0.5">• Linha Standard</p>
-                    <p class="text-[11px] text-slate-400 mb-2">Ótima cobertura e rendimento.</p>
-                    <button onclick="buy('Tinta Indicado Standard (Parede Repintura já preparada)', '11954950044')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 text-xs">
-                        <i class="fa-brands fa-whatsapp text-sm"></i> Comprar
-                    </button>
-                </div>
-
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300">
-                    <p class="font-semibold text-xs text-amber-400 mb-0.5">• Linha Premium</p>
-                    <p class="text-[11px] text-slate-400 mb-2">Alta cobertura, lavável e máxima durabilidade.</p>
-                    <button onclick="buy('Tinta Indicado Premium (Parede Repintura já preparada)', '11954850044')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 text-xs">
-                        <i class="fa-brands fa-whatsapp text-sm"></i> Comprar
-                    </button>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Qualy Color Standard (3,6L e 18L)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• <strong>Rendimento:</strong> Rende de 40 a 200m² (2 a 3 demãos).</p>
+                    <p>• Acabamento fosco, alta cobertura e resistente.</p>
                 </div>
             </div>
+
+            <button onclick="buy('Qualy Color Standard 3,6L e 18L (Parede Repintura preparada)', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+                <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
+            </button>
         </div>
     </div>
 
     <!-- TINTAS EXTERNO 1 -->
     <div id="detail-tintas-ext-1" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Parede nova emassada (Externo)</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Parede nova emassada (Externo)</h3>
             
             <div class="space-y-2">
-                <p class="text-sm font-bold text-amber-400">Standard ou Premium</p>
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs">
-                    <p>Tintas externas com alta resistência ao sol e chuva.</p>
+                <p class="text-sm font-bold text-teal-400">Qualy Color Premium Emborrachada (3,6L e 18L)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• <strong>Rendimento:</strong> Rende de 45 a 220m² (2 a 3 demãos).</p>
+                    <p>• Hidrorepelente, protege contra microfisuras e intempéries.</p>
                 </div>
             </div>
 
-            <button onclick="buy('Standard ou Premium (Parede nova já emassada - Externo)', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+            <button onclick="buy('Qualy Color Premium Emborrachada (Parede nova emassada - Externo)', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
                 <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
             </button>
         </div>
@@ -475,21 +470,22 @@
 
     <!-- TINTAS EXTERNO 2 -->
     <div id="detail-tintas-ext-2" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Parede Repintura (Externo)</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Parede Repintura (Externo)</h3>
             
             <div class="space-y-2">
-                <p class="text-sm font-bold text-amber-400">Standard ou Premium</p>
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs">
-                    <p>Excelente cobertura para renovar fachadas.</p>
+                <p class="text-sm font-bold text-teal-400">Qualy Color Standard (3,6L e 18L)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• <strong>Rendimento:</strong> Rende de 40 a 200m² (2 a 3 demãos).</p>
+                    <p>• Alta resistência a sol e chuva, excelente cobertura.</p>
                 </div>
             </div>
 
-            <button onclick="buy('Standard ou Premium (Parede pintura - Externo)', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+            <button onclick="buy('Qualy Color Standard (Parede repintura - Externo)', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
                 <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
             </button>
         </div>
@@ -497,292 +493,308 @@
 
     <!-- TINTAS EXTERNO 3 -->
     <div id="detail-tintas-ext-3" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-amber-400 border-b border-slate-800 pb-2">Parede com umidade</h3>
+            <h3 class="text-lg font-bold text-teal-400 border-b border-teal-800/60 pb-2">Parede com Umidade (Externo)</h3>
             
-            <div class="bg-amber-500/10 border border-amber-500/20 p-3.5 rounded-xl text-slate-300 text-xs leading-relaxed">
-                <p>Trate a infiltração antes da aplicação para evitar descascamento futuro.</p>
+            <div class="bg-cyan-500/10 border border-cyan-500/20 p-3.5 rounded-xl text-teal-100 text-xs leading-relaxed">
+                <p>Para áreas externas expostas à umidade, recomendamos avaliação prévia do substrato e impermeabilização antes da aplicação final.</p>
             </div>
 
-            <button onclick="buy('Consultar solução para Parede tem umidade (Externo)', '11954950044')" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
-                <i class="fa-solid fa-circle-info text-sm"></i> Consultar Solução
+            <button onclick="buy('Consultar impermeabilização para parede externa com umidade', '11954850044')" class="w-full py-2.5 bg-teal-500 hover:bg-teal-400 text-teal-950 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-info text-sm"></i> Falar com Especialista
             </button>
         </div>
     </div>
 
-    <!-- TINTAS EXTERNO: PISO OU FRENTE DA CASA -->
+    <!-- TINTAS EXTERNO PISO -->
     <div id="detail-tintas-ext-piso" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Piso ou Frente da casa</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Piso ou Frente da Casa</h3>
             
-            <div class="space-y-2.5">
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300">
-                    <p class="font-semibold text-xs text-amber-400 mb-0.5">• Tinta Piso Premium</p>
-                    <p class="text-[11px] text-slate-400 mb-2">Resistente ao tráfego e intempéries.</p>
-                    <button onclick="buy('Piso Premium (Piso ou Frente da casa)', '11954950044')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 text-xs">
-                        <i class="fa-brands fa-whatsapp text-sm"></i> Comprar
-                    </button>
-                </div>
-
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300">
-                    <p class="font-semibold text-xs text-amber-400 mb-0.5">• Emborrachada Premium</p>
-                    <p class="text-[11px] text-slate-400 mb-2">Máxima proteção flexível e impermeável.</p>
-                    <button onclick="buy('Emborrachada Premium (Piso ou Frente da casa)', '11954950044')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 text-xs">
-                        <i class="fa-brands fa-whatsapp text-sm"></i> Comprar
-                    </button>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Tinta Piso Qualy (3,6L e 18L)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• Alta resistência ao tráfego de pessoas e veículos.</p>
+                    <p>• Ótima aderência em calçadas, quadras e garagens.</p>
                 </div>
             </div>
+
+            <button onclick="buy('Tinta Piso Qualy 3,6L e 18L', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+                <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
+            </button>
         </div>
     </div>
 
-    <!-- TINTAS EXTERNO: LAJE -->
+    <!-- TINTAS EXTERNO LAJE -->
     <div id="detail-tintas-ext-laje" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-tintas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Proteção para Laje</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Proteção para Laje</h3>
             
-            <div class="space-y-2.5">
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300">
-                    <p class="font-semibold text-xs text-amber-400 mb-0.5">• Tinta Piso Premium</p>
-                    <p class="text-[11px] text-slate-400 mb-2">Proteção básica e boa durabilidade.</p>
-                    <button onclick="buy('Piso Premium (Laje)', '11954850044')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 text-xs">
-                        <i class="fa-brands fa-whatsapp text-sm"></i> Comprar
-                    </button>
-                </div>
-
-                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300">
-                    <p class="font-semibold text-xs text-amber-400 mb-0.5">• Emborrachada Premium</p>
-                    <p class="text-[11px] text-slate-400 mb-2">Selamento elástico impermeabilizante.</p>
-                    <button onclick="buy('Emborrachada Premium (Laje)', '11954850044')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 text-xs">
-                        <i class="fa-brands fa-whatsapp text-sm"></i> Comprar
-                    </button>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Impermeabilizante / Tinta Emborrachada</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• Previne infiltrações, vazamentos e trincas em lajes expostas.</p>
                 </div>
             </div>
+
+            <button onclick="buy('Impermeabilizante / Tinta Emborrachada para Laje', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+                <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
+            </button>
         </div>
     </div>
 
-    <!-- MASSAS: PVA -->
+    <!-- MASSAS PVA -->
     <div id="detail-massas-pva" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-massas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-massas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Massa PVA (Interno)</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Massa Corrida PVA</h3>
             
-            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs space-y-1">
-                <p class="font-semibold text-amber-400">Embalagens:</p>
-                <p>• Galão 5.6kg ou Barrica 25kg</p>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Massa PVA Qualy (1,5kg, 5kg, 25kg, 27kg)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• Indicada para nivelar e corrigir superfícies internas secas.</p>
+                    <p>• Fácil de lixar e excelente acabamento liso.</p>
+                </div>
             </div>
 
-            <button onclick="buy('Pva uso Interno sem umidade (Galão 5.6kg ou Barrica 25kg)', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+            <button onclick="buy('Massa Corrida PVA Qualy', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
                 <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- MASSAS: ACRÍLICA -->
+    <!-- MASSAS ACRÍLICA -->
     <div id="detail-massas-acrilica" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-massas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-massas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Massa Acrílica</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Massa Acrílica</h3>
             
-            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs space-y-1">
-                <p class="font-semibold text-amber-400">Embalagens:</p>
-                <p>• Galão 5.0kg ou Barrica 25kg</p>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Massa Acrílica Qualy (1,5kg, 5kg, 25kg, 27kg)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• Indicada para áreas internas e externas (resistente à umidade).</p>
+                    <p>• Alta durabilidade, aderência e resistência ao intemperismo.</p>
+                </div>
             </div>
 
-            <button onclick="buy('Acrilica uso interno exte (Galão 5.0kg ou Barrica 25kg)', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+            <button onclick="buy('Massa Acrílica Qualy', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
                 <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- TEXTURA: GRAFIATO -->
+    <!-- TEXTURA GRAFIATO -->
     <div id="detail-textura-grafiato" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-texturas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-texturas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Grafiato</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Textura Grafiato</h3>
             
-            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs space-y-1.5">
-                <p>• Consumo: aprox. 4.5kg por m²</p>
-                <p class="text-[11px] text-slate-400">(Opção colorida disponível para pedidos acima de 10 barricas de 50kg)</p>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Grafiato Qualy (25kg e 50kg)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• Efeito ranhurado moderno e elegante para fachada e paredes.</p>
+                    <p>• Hydrorepelente e altamente durável.</p>
+                </div>
             </div>
 
-            <button onclick="buy('Grafiato - Uso interno/Externo', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+            <button onclick="buy('Textura Grafiato Qualy', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
                 <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- TEXTURA: LISA / ROLADA -->
+    <!-- TEXTURA LISA -->
     <div id="detail-textura-lisa" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-texturas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-texturas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Textura Lisa / Rolada</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Textura Lisa / Rolada</h3>
             
-            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs space-y-1.5">
-                <p>• Consumo: aprox. 3.33kg por m²</p>
-                <p class="text-[11px] text-slate-400">(Opção colorida disponível para pedidos acima de 10 barricas de 50kg)</p>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Textura Rolo Qualy (25kg)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• Aplicação prática com rolo de textura, disfarça imperfeições.</p>
+                </div>
             </div>
 
-            <button onclick="buy('Testura Lisa / Rolada', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+            <button onclick="buy('Textura Lisa / Rolada Qualy', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
                 <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- TEXTURA: PROJETADA -->
+    <!-- TEXTURA PROJETADA -->
     <div id="detail-textura-projetada" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-texturas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-texturas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Textura Projetada</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Textura Projetada</h3>
             
-            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs space-y-1.5">
-                <p>• Consumo: aprox. 3.33kg por m²</p>
-                <p class="text-[11px] text-slate-400">(Opção colorida disponível para pedidos acima de 10 barricas de 50kg)</p>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Textura Projetada Qualy (25kg)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• Acabamento sofisticado para grandes áreas com aplicação por pistola.</p>
+                </div>
             </div>
 
-            <button onclick="buy('Textura Projetada', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+            <button onclick="buy('Textura Projetada Qualy', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
                 <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- TEXTURA: GRANLINE -->
+    <!-- TEXTURA GRANLINE -->
     <div id="detail-textura-granline" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-texturas')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-texturas')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Textura Granline</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Granline</h3>
             
-            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs space-y-1.5">
-                <p>• Consumo: aprox. 3.84kg por m²</p>
-                <p class="text-[11px] text-slate-400">(Opção colorida disponível para pedidos acima de 10 barricas de 50kg)</p>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Granline Qualy (25kg)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• Revestimento mineral de alta resistência e beleza estética para fachadas.</p>
+                </div>
             </div>
 
-            <button onclick="buy('Granline', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+            <button onclick="buy('Textura Granline Qualy', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
                 <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- SELANTES: SELADOR ACRÍLICO -->
+    <!-- SELADOR ACRÍLICO -->
     <div id="detail-selantes-acrilico" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-selantes')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-selantes')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Selador Acrílico</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Selador Acrílico</h3>
             
-            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs space-y-1">
-                <p>• Rendimento: até 6m² por litro</p>
-                <p>• Embalagens: Galão 3.6L | Balde 16L</p>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Selador Acrílico Qualy (3,6L e 18L)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• Uniformiza a absorção da parede, reduzindo o consumo de tinta final.</p>
+                </div>
             </div>
 
-            <button onclick="buy('Selador Acrílico (Galão 3.6 | Balde 16)', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+            <button onclick="buy('Selador Acrílico Qualy', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
                 <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- SELANTES: PRIME OU FUNDO PREPARADOR -->
+    <!-- PREPARADOR / PRIMER -->
     <div id="detail-selantes-preparador" class="modal fixed inset-0 z-50 opacity-0 pointer-events-none flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
-            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center border border-slate-700/50"><i class="fa-solid fa-xmark"></i></button>
-            <button onclick="backToCategory('modal-selantes')" class="text-xs font-semibold text-amber-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
+        <div class="absolute inset-0 bg-teal-950/80 backdrop-blur-sm" onclick="closeAllModals()"></div>
+        <div class="bg-teal-950 border border-teal-800/60 w-full max-w-md rounded-2xl shadow-2xl z-10 p-5 relative space-y-4">
+            <button onclick="closeAllModals()" class="absolute top-3.5 right-3.5 text-teal-300/70 hover:text-white text-lg w-8 h-8 rounded-lg bg-teal-900/60 flex items-center justify-center border border-teal-800/50"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="backToCategory('modal-selantes')" class="text-xs font-semibold text-teal-400 inline-flex items-center gap-1 hover:underline"><i class="fa-solid fa-arrow-left"></i> Voltar</button>
             
-            <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-2">Fundo Preparador / Prime</h3>
+            <h3 class="text-lg font-bold text-white border-b border-teal-800/60 pb-2">Fundo Preparador</h3>
             
-            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-800 text-slate-300 text-xs space-y-1">
-                <p>• Rendimento: até 6m² por litro</p>
-                <p>• Embalagens: Galão 3.6L | Balde 16L</p>
+            <div class="space-y-2">
+                <p class="text-sm font-bold text-teal-400">Fundo Preparador Qualy (3,6L e 18L)</p>
+                <div class="bg-teal-900/30 p-3 rounded-xl border border-teal-900 text-teal-100 text-xs leading-relaxed">
+                    <p>• Aglomera partículas soltas em paredes esfarelando, calcadas ou gesso.</p>
+                </div>
             </div>
 
-            <button onclick="buy('Prime ou Fundo Preparador (Galão 3.6 | Balde 16)', '11954850044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
+            <button onclick="buy('Fundo Preparador Qualy', '11954950044')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50">
                 <i class="fa-brands fa-whatsapp text-base"></i> Comprar via WhatsApp
             </button>
         </div>
     </div>
 
 
-    <!-- ==================== CONTROLE DOS MODAIS ==================== -->
+    <!-- SCRIPTS -->
     <script>
+        let lastCategoryModal = null;
+
         function openModal(id) {
             closeAllModals();
             const modal = document.getElementById(id);
-            if (modal) {
+            if(modal) {
                 modal.classList.remove('opacity-0', 'pointer-events-none');
+                
+                // Se for um modal principal de categoria, salva como histórico
+                if(['modal-tintas', 'modal-massas', 'modal-texturas', 'modal-selantes', 'modal-avaliacoes'].includes(id)) {
+                    lastCategoryModal = id;
+                }
             }
         }
 
         function closeAllModals() {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                modal.classList.add('opacity-0', 'pointer-events-none');
+            document.querySelectorAll('.modal').forEach(m => {
+                m.classList.add('opacity-0', 'pointer-events-none');
             });
         }
 
-        function showTintasSub(sub) {
-            document.getElementById('tintas-step-1').classList.add('hidden');
-            document.getElementById('tintas-interno').classList.add('hidden');
-            document.getElementById('tintas-externo').classList.add('hidden');
-
-            if (sub === 'interno') {
-                document.getElementById('tintas-interno').classList.remove('hidden');
-            } else if (sub === 'externo') {
-                document.getElementById('tintas-externo').classList.remove('hidden');
+        function backToCategory(modalId) {
+            closeAllModals();
+            if(modalId) {
+                openModal(modalId);
+            } else if(lastCategoryModal) {
+                openModal(lastCategoryModal);
             }
-        }
-
-        function showTintasStep1() {
-            document.getElementById('tintas-interno').classList.add('hidden');
-            document.getElementById('tintas-externo').classList.add('hidden');
-            document.getElementById('tintas-step-1').classList.remove('hidden');
         }
 
         function openDetail(detailId) {
             closeAllModals();
-            openModal(detailId);
+            const modal = document.getElementById(detailId);
+            if(modal) {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+            }
         }
 
-        function backToCategory(categoryId) {
-            closeAllModals();
-            openModal(categoryId);
+        function showTintasSub(tipo) {
+            document.getElementById('tintas-step-1').classList.add('hidden');
+            if(tipo === 'interno') {
+                document.getElementById('tintas-interno').classList.remove('hidden');
+                document.getElementById('tintas-externo').classList.add('hidden');
+            } else {
+                document.getElementById('tintas-externo').classList.remove('hidden');
+                document.getElementById('tintas-interno').classList.add('hidden');
+            }
         }
 
-        function buy(product, phone = '11954950044') {
-            const cleanPhone = phone.replace(/\D/g, '');
-            const fullPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
-            const text = encodeURIComponent(`Olá! Gostaria de comprar / tirar dúvidas sobre: ${product}`);
-            window.open(`https://wa.me/${fullPhone}?text=${text}`, '_blank');
+        function showTintasStep1() {
+            document.getElementById('tintas-step-1').classList.remove('hidden');
+            document.getElementById('tintas-interno').classList.add('hidden');
+            document.getElementById('tintas-externo').classList.add('hidden');
+        }
+
+        function buy(productName, phone) {
+            const message = encodeURIComponent(`Olá! Gostaria de mais informações e fazer um orçamento do produto: ${productName}`);
+            window.open(`https://wa.me/55${phone}?text=${message}`, '_blank');
         }
     </script>
 </body>
