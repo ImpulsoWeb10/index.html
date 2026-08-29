@@ -662,15 +662,22 @@
                         <input type="text" id="nomeCandidato" class="form-control" placeholder="Nome completo">
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="comumCandidato">Comum congregação</label>
-                            <input type="text" id="comumCandidato" class="form-control" placeholder="Bairro / Cidade">
-                        </div>
-                        <div class="form-group">
-                            <label for="dataNasc">Data de Nascimento</label>
-                            <input type="date" id="dataNasc" class="form-control">
-                        </div>
+                    <div class="form-group">
+                        <label for="selectComum">Comum congregação</label>
+                        <select id="selectComum" class="form-control" onchange="selecionarComum()">
+                            <option value="">Selecione a Comum...</option>
+                            <!-- Opções geradas via JavaScript -->
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="groupComumOutro" style="display: none;">
+                        <label for="comumOutro">Especifique a Comum (Editável)</label>
+                        <input type="text" id="comumOutro" class="form-control" placeholder="Digite o nome da congregação">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dataNasc">Data de Nascimento</label>
+                        <input type="date" id="dataNasc" class="form-control">
                     </div>
 
                     <div class="form-group">
@@ -885,7 +892,7 @@
         <div class="modal-dialog-card" style="text-align: center;">
             <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: var(--success); margin-bottom: 12px;"></i>
             <h2>Deus abençoe!</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Selecione abaixo como deseja enviar o formulário de Pré-Teste do músico:</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Selecione abaixo como deseja enviar o Pré-Teste do músico:</p>
 
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button type="button" class="btn-whatsapp" onclick="enviarWhatsApp()">
@@ -1024,13 +1031,118 @@
     </div>
 
     <script>
+        const listaComuns = [
+            { bairro: "Aracaré", encarregado: "Helves Olardi Neto" },
+            { bairro: "Central (Jorge Miguel)", encarregado: "Jorge Miguel da Silva Trindade" },
+            { bairro: "Jardim do Carmo", encarregado: "Herminio Fernandes de Souza" },
+            { bairro: "Jardim Miray", encarregado: "Carlos Eduardo De Alkmim Cunha" },
+            { bairro: "Jardim Odete", encarregado: "Marco Aurélio Paes Landim" },
+            { bairro: "Monte belo", encarregado: "Elton De Melo Godoi" },
+            { bairro: "Morro Branco", encarregado: "José Carlos dos Santos" },
+            { bairro: "Pedreira", encarregado: "Antônio Muniz Sobral" },
+            { bairro: "Rancho Grande", encarregado: "" },
+            { bairro: "Vila Arizona", encarregado: "Elói Pereira de Souza Neto" },
+            { bairro: "Vila Sônia", encarregado: "Carlos Filomeno de Oliveira" },
+            { bairro: "Vila Virginia", encarregado: "Marcos Paulo da Silva Alves" },
+            { bairro: "Cambirí", encarregado: "Nivaldo Apolinário da Costa" },
+            { bairro: "Central (Francisco Zeller)", encarregado: "Francisco Antonio Zeller Junior" },
+            { bairro: "Jardim Alexandre", encarregado: "Jose Edvan Nunes Barbosa" },
+            { bairro: "Jardim Bandeirantes", encarregado: "Paulo Henrique dos Santos" },
+            { bairro: "Jardim Bela Vista", encarregado: "Wagner Pereira Marques Sobrinho" },
+            { bairro: "Jardim Débora", encarregado: "Durval José Lopes" },
+            { bairro: "Jardim Helena", encarregado: "Diogo Heleno da Silva" },
+            { bairro: "Jardim São João", encarregado: "Jose Santiago" },
+            { bairro: "Jardim Yone", encarregado: "Gabriel Amaral Figueiredo Rodrigues" },
+            { bairro: "Parque São Francisco", encarregado: "Pedro Pereira da Mata" },
+            { bairro: "Sítio Paiolzinho", encarregado: "João Gomes da Silva" },
+            { bairro: "Vila Cristina", encarregado: "Isaías Miguel dos Santos" },
+            { bairro: "Vila Jamil", encarregado: "Leandro Ananias Botelho" },
+            { bairro: "Vila Margarida", encarregado: "Geraldo Martins de Souza" },
+            { bairro: "Vila Santo Antonio", encarregado: "Raul Pereira Marques Filho" },
+            { bairro: "Água das Pedras", encarregado: "Luiz Santos de Melo" },
+            { bairro: "Jardim Marcelo", encarregado: "Adenes Nascimento Froes" },
+            { bairro: "Jardim Moraes", encarregado: "Mauricio Quaresma dos Santos" },
+            { bairro: "Jardim São Paulo", encarregado: "Daniel Nogueira" },
+            { bairro: "Parque Macedo", encarregado: "Marcos Silva de Carvalho" },
+            { bairro: "Parque Marengo", encarregado: "Eduardo de Medeiros Nóia" },
+            { bairro: "Parque Novo Horizonte", encarregado: "Samuel Barbosa de Souza" },
+            { bairro: "Parque Residencial Furtuna", encarregado: "Ladislau Santana Rodrigues" },
+            { bairro: "Parque Residencial Marengo", encarregado: "Benicio da Silva Lima" },
+            { bairro: "Pium", encarregado: "Genivaldo de Oliveira" },
+            { bairro: "Sitio José de Moraes", encarregado: "Fabiano Emanuel Crisostomo" },
+            { bairro: "Terra Prometida", encarregado: "Lázaro Basilio da Silva" },
+            { bairro: "Cidade Nova Louzada", encarregado: "Gideão Lucas De Carvalho" },
+            { bairro: "Estancia Guatambú", encarregado: "Benedito Fernandes De Lima" },
+            { bairro: "Jardim Adriane", encarregado: "Gerson Manoel dos Santos" },
+            { bairro: "Jardim Amazonas", encarregado: "José Palácio Vieira" },
+            { bairro: "Jardim Caiuby", encarregado: "Eliel Albino Do Nascimento" },
+            { bairro: "Jardim Canaã", encarregado: "Marcelo Rodrigues Piris" },
+            { bairro: "Jardim Carolina", encarregado: "Agenor Ferreira Dias" },
+            { bairro: "Jardim Josely", encarregado: "Jorge Chagas" },
+            { bairro: "Jardim Monica", encarregado: "Paulo Moises Dos Santos" },
+            { bairro: "Jardim Patricia", encarregado: "Fábio Ramos Niza" },
+            { bairro: "Jardim Pinheirinho", encarregado: "Fabio Colin De Moraes" },
+            { bairro: "Jardim Silvestre", encarregado: "Itamar Gonçalves Dos Santos" },
+            { bairro: "Parque Village", encarregado: "José Elifas Ferreira Dias" },
+            { bairro: "Vila São Paulo", encarregado: "João Batista Pereira de Jesus" },
+            { bairro: "Jardim Itapuã", encarregado: "Valdeir Felix da Silva" },
+            { bairro: "Jardim Itaquá", encarregado: "Juvercilio Reis" },
+            { bairro: "Jardim Karine", encarregado: "Elson Martins" },
+            { bairro: "Jardim Maria Eliza", encarregado: "Eliel Rocha saturno" },
+            { bairro: "Jardim Maria Rosa", encarregado: "Alison Adbeel da Silva" },
+            { bairro: "Jardim Paineira", encarregado: "Natanael dos Santos Wolpe" },
+            { bairro: "Jardim Tropical", encarregado: "Rogério Carrasco Pianeli" },
+            { bairro: "Parque Piratininga", encarregado: "Samuel Mangarotti Saraiva" },
+            { bairro: "Parque Piratininga II", encarregado: "André Aparecido Dos Santos" },
+            { bairro: "Parque São Pedro", encarregado: "Joel Rodrigues de Moraes" },
+            { bairro: "Vila Japão", encarregado: "Elias Bueno de Farias" },
+            { bairro: "Vila Nely", encarregado: "Nilson Nogueira de Menezes" },
+            { bairro: "Vila São Carlos", encarregado: "Rogério Dionizio de Lima" }
+        ];
+
         let listaMetodos = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             const dataInput = document.getElementById('dataPreenchimento');
             if (dataInput) dataInput.valueAsDate = new Date();
+            popularComuns();
             renderizarListaMetodos();
         });
+
+        function popularComuns() {
+            const select = document.getElementById('selectComum');
+            if (!select) return;
+            listaComuns.forEach((item, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = item.bairro;
+                select.appendChild(opt);
+            });
+            const optOutro = document.createElement('option');
+            optOutro.value = "OUTRO";
+            optOutro.textContent = "Outra (Editar/Especificar)";
+            select.appendChild(optOutro);
+        }
+
+        function selecionarComum() {
+            const select = document.getElementById('selectComum');
+            const groupOutro = document.getElementById('groupComumOutro');
+            const encarregadoInput = document.getElementById('encarregado');
+
+            if (select.value === 'OUTRO') {
+                groupOutro.style.display = 'block';
+                encarregadoInput.value = '';
+            } else if (select.value !== '') {
+                groupOutro.style.display = 'none';
+                const item = listaComuns[parseInt(select.value)];
+                if (item) {
+                    encarregadoInput.value = item.encarregado || '';
+                }
+            } else {
+                groupOutro.style.display = 'none';
+                encarregadoInput.value = '';
+            }
+        }
 
         function openModal() {
             document.getElementById('modalOverlay').classList.add('active');
@@ -1155,11 +1267,19 @@
                 statusBatismo += ` (${formatarDataBR(dataBatismoVal)})`;
             }
 
+            let comumNome = '-';
+            const selectComumVal = document.getElementById('selectComum').value;
+            if (selectComumVal === 'OUTRO') {
+                comumNome = document.getElementById('comumOutro').value || '-';
+            } else if (selectComumVal !== '') {
+                comumNome = listaComuns[parseInt(selectComumVal)].bairro;
+            }
+
             return {
                 dataPreenchimento: formatarDataBR(document.getElementById('dataPreenchimento').value),
                 solicitacaoPara: document.getElementById('solicitacaoPara').value || '-',
                 nomeCandidato: document.getElementById('nomeCandidato').value || '-',
-                comumCandidato: document.getElementById('comumCandidato').value || '-',
+                comumCandidato: comumNome,
                 dataNasc: formatarDataBR(document.getElementById('dataNasc').value),
                 instrumentoTonalidade: document.getElementById('instrumentoTonalidade').value || '-',
                 batizado: statusBatismo,
@@ -1200,7 +1320,7 @@
 
         function processarEnvio() {
             const camposPrincipais = [
-                'solicitacaoPara', 'nomeCandidato', 'comumCandidato', 
+                'solicitacaoPara', 'nomeCandidato', 'selectComum', 
                 'dataNasc', 'instrumentoTonalidade', 'batizado', 'tipoMSA', 
                 'anciao', 'cooperador', 'encarregado', 'selectSecretario'
             ];
@@ -1243,6 +1363,9 @@
                 ? d.metodos.map(m => `  • ${m.nome} (Vol: ${m.vol}, Pág: ${m.pagina})`).join('\n')
                 : '  • Nenhum informado';
 
+            const selectSecretarioEl = document.getElementById('selectSecretario');
+            const nomeSecretario = selectSecretarioEl.options[selectSecretarioEl.selectedIndex]?.text.split(' - ')[0] || '';
+
             const mensagem = 
 `*PEDIDO DE PRÉ-AVALIAÇÃO DE MÚSICOS - CCB*
 _Data do Registro: ${d.dataPreenchimento}_
@@ -1273,7 +1396,7 @@ ${metodosTexto}
 • *Cooperador:* ${d.cooperador}
 • *Encarregado:* ${d.encarregado}
 
-Deus abençoe!`;
+Deus abençoe caro irmão ${d.encarregado}, Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026. Grato Att,, ${nomeSecretario}`;
 
             const url = `https://api.whatsapp.com/send?phone=55${d.telefoneSecretario}&text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
