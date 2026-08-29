@@ -377,6 +377,30 @@
             background: #20bd5a;
         }
 
+        /* MODAL DEUS ABENÇOE */
+        .modal-confirmation-card {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: var(--shadow-lg);
+            margin: auto;
+        }
+
+        .modal-confirmation-card h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .modal-confirmation-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
         /* TEMPLATE OCULTO PARA IMPRESSÃO EM PDF */
         #pdfTemplate {
             display: none;
@@ -635,16 +659,34 @@
                 </form>
             </div>
 
-            <!-- BOTÕES DE AÇÃO FIXOS -->
+            <!-- BOTÃO DE SUBMISSÃO -->
             <div class="modal-footer">
-                <button type="button" class="btn-pdf" onclick="gerarPDF()">
-                    <i class="fa-solid fa-file-pdf" style="font-size: 1.1rem;"></i> 1. Gerar e Baixar PDF
-                </button>
-                <button type="button" class="btn-whatsapp" onclick="enviarSecretario()">
-                    <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> 2. Enviar p/ Secretário Musical
+                <button type="button" class="btn-primary" onclick="processarEnvio()">
+                    <i class="fa-solid fa-paper-plane"></i> Finalizar e Enviar
                 </button>
             </div>
 
+        </div>
+    </div>
+
+    <!-- MODAL DEUS ABENÇOE (CONFIRMAÇÃO E ENVIO) -->
+    <div class="modal-overlay" id="modalConfirmacaoOverlay">
+        <div class="modal-confirmation-card">
+            <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: var(--success); margin-bottom: 12px;"></i>
+            <h2>Deus abençoe!</h2>
+            <p>Selecione abaixo o formato para enviar os dados ao Secretário Musical Responsável:</p>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button type="button" class="btn-whatsapp" onclick="enviarWhatsApp()">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> Enviar via WhatsApp (Texto)
+                </button>
+                <button type="button" class="btn-pdf" onclick="gerarPDF()">
+                    <i class="fa-solid fa-file-pdf" style="font-size: 1.1rem;"></i> Baixar Ficha Completa (PDF)
+                </button>
+                <button type="button" onclick="fecharModalConfirmacao()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 8px; font-weight: 600;">
+                    Fechar
+                </button>
+            </div>
         </div>
     </div>
 
@@ -745,442 +787,212 @@
 
     <script>
         const listaInstrutoras = [
-            {
-                        "nome": "Barbara Kimberly Gizzi da Costa",
-                        "comum": "Agua das Pedras"
-            },
-            {
-                        "nome": "Sidneia Moura Feitosa",
-                        "comum": "Agua das Pedras"
-            },
-            {
-                        "nome": "Eunice Rocha Ferreira",
-                        "comum": "Aracaré"
-            },
-            {
-                        "nome": "Gemima de Souza Gomes",
-                        "comum": "Aracaré"
-            },
-            {
-                        "nome": "Helida de Castro",
-                        "comum": "Aracaré"
-            },
-            {
-                        "nome": "Nayara da Silva Figueiredo",
-                        "comum": "Cambiri"
-            },
-            {
-                        "nome": "Antonia Sara de Sousa Xisto",
-                        "comum": "Estancia Guatambu"
-            },
-            {
-                        "nome": "Valéria de Jesus Pagnan",
-                        "comum": "Itaquaquecetuba - Central"
-            },
-            {
-                        "nome": "Clarianica de Amorim Silva Santos",
-                        "comum": "Jardim Adriane"
-            },
-            {
-                        "nome": "Evodia Cirino Pereira dos Santos",
-                        "comum": "Jardim Adriane"
-            },
-            {
-                        "nome": "Liliane Martinelli Bueno de Souza",
-                        "comum": "Jardim Alexandre"
-            },
-            {
-                        "nome": "Marcia Lúcia Martins Almeida",
-                        "comum": "Jardim Alexandre"
-            },
-            {
-                        "nome": "Evelyn Ruziska da Silva",
-                        "comum": "Jardim Bela Vista"
-            },
-            {
-                        "nome": "Raquel Lino Rodrigues",
-                        "comum": "Jardim Bela Vista"
-            },
-            {
-                        "nome": "Ivete Nunes de Santana",
-                        "comum": "Jardim Caiuby"
-            },
-            {
-                        "nome": "Ester Ananias Botelho da Silva",
-                        "comum": "Jardim Itapuã"
-            },
-            {
-                        "nome": "Mikaele Daniel Lima Alves",
-                        "comum": "Jardim Itaqua"
-            },
-            {
-                        "nome": "Rosana Felipe Martins",
-                        "comum": "Jardim Karine"
-            },
-            {
-                        "nome": "Claudete Felipelli Froes",
-                        "comum": "Jardim Marcelo"
-            },
-            {
-                        "nome": "Camila Santos de Carvalho Rodrigues Soares",
-                        "comum": "Jardim Maria Rosa"
-            },
-            {
-                        "nome": "Cicera Fernandes da Silva",
-                        "comum": "Jardim Mônica"
-            },
-            {
-                        "nome": "Erica da Silva Oliveira de Lima",
-                        "comum": "Jardim Mônica"
-            },
-            {
-                        "nome": "Maria Amelia Ricardo de Lima",
-                        "comum": "Jardim Odete"
-            },
-            {
-                        "nome": "Tania Silvia Luciano",
-                        "comum": "Jardim Paineira"
-            },
-            {
-                        "nome": "Alliny Santos Palomo",
-                        "comum": "Jardim Pinheirinho"
-            },
-            {
-                        "nome": "Cássia de França Morais",
-                        "comum": "Jardim Pinheirinho"
-            },
-            {
-                        "nome": "Helena Raquel Mendes Valério",
-                        "comum": "Jardim Pinheirinho"
-            },
-            {
-                        "nome": "Thalia Junqueira de Oliveira",
-                        "comum": "Jardim Tropical"
-            },
-            {
-                        "nome": "Vanessa dos Santos Souza",
-                        "comum": "Jardim Tropical"
-            },
-            {
-                        "nome": "Cassia Jesus dos Santos",
-                        "comum": "Jardim Yone"
-            },
-            {
-                        "nome": "Érica Gonçalves de Carvalho",
-                        "comum": "Parque Macedo"
-            },
-            {
-                        "nome": "Gislene Ferreira da Silva Nóia",
-                        "comum": "Parque Marengo"
-            },
-            {
-                        "nome": "Solange Aparecida dos Santos Alavarse Iglesias",
-                        "comum": "Parque Marengo"
-            },
-            {
-                        "nome": "Camila Silva Romano",
-                        "comum": "Parque Novo Horizonte"
-            },
-            {
-                        "nome": "Magna Santos Amorim de Jesus",
-                        "comum": "Parque Residencial Fortuna"
-            },
-            {
-                        "nome": "Laudicéia Teófilo Santos de Freitas",
-                        "comum": "Parque Residencial Marengo"
-            },
-            {
-                        "nome": "Solange Aparecida dos Santos Alavarse Iglesias",
-                        "comum": "Parque Residencial Marengo"
-            },
-            {
-                        "nome": "Simone Dias da Silva",
-                        "comum": "Parque São Francisco"
-            },
-            {
-                        "nome": "Ivani Lucia Silva de Oliveira",
-                        "comum": "Pium"
-            },
-            {
-                        "nome": "Cilzer Cilene de Souza Marques",
-                        "comum": "Rancho Grande"
-            },
-            {
-                        "nome": "Jacqueline Guimarães Perpetua",
-                        "comum": "Rancho Grande"
-            },
-            {
-                        "nome": "Ana Carolina Moreira de Passos",
-                        "comum": "Vila Arizona"
-            },
-            {
-                        "nome": "Margarida de Oliveira Souza Silva",
-                        "comum": "Vila Arizona"
-            },
-            {
-                        "nome": "Simone Thais Silva Santos",
-                        "comum": "Vila Cristina"
-            },
-            {
-                        "nome": "Damaris dos Santos Marques Manoel",
-                        "comum": "Vila Jamil"
-            },
-            {
-                        "nome": "Tatiane Fonseca Simão Garcia",
-                        "comum": "Vila Monte Belo"
-            },
-            {
-                        "nome": "Venina de Fátima Santana",
-                        "comum": "Vila Monte Belo"
-            },
-            {
-                        "nome": "Sabrina Pinheiro Saltorato",
-                        "comum": "Vila Nely"
-            },
-            {
-                        "nome": "Cassiana dos Santos Lima",
-                        "comum": "Vila São Carlos"
-            },
-            {
-                        "nome": "Ivone de Avila Yamada",
-                        "comum": "Vila São Carlos"
-            },
-            {
-                        "nome": "Mara Rúbia Carvalho Lima Santos",
-                        "comum": "Vila São Paulo"
-            },
-            {
-                        "nome": "Alessandra Pinheiro Santos",
-                        "comum": "Vila Virgínia"
-            },
-            {
-                        "nome": "Fátima Cristina Lopes de Oliveira",
-                        "comum": "Ferraz de Vasconcelos - Central"
-            },
-            {
-                        "nome": "Hosana André de Souza Matos",
-                        "comum": "Ferraz de Vasconcelos - Central"
-            },
-            {
-                        "nome": "Sara Augusto Barbosa Moura",
-                        "comum": "Ferraz de Vasconcelos - Central"
-            },
-            {
-                        "nome": "Simone Moura de Souza",
-                        "comum": "Piatã - Mogi"
-            }
-];
+            { "nome": "Barbara Kimberly Gizzi da Costa", "comum": "Agua das Pedras" },
+            { "nome": "Sidneia Moura Feitosa", "comum": "Agua das Pedras" },
+            { "nome": "Eunice Rocha Ferreira", "comum": "Aracaré" },
+            { "nome": "Gemima de Souza Gomes", "comum": "Aracaré" },
+            { "nome": "Helida de Castro", "comum": "Aracaré" },
+            { "nome": "Nayara da Silva Figueiredo", "comum": "Cambiri" },
+            { "nome": "Antonia Sara de Sousa Xisto", "comum": "Estancia Guatambu" },
+            { "nome": "Valéria de Jesus Pagnan", "comum": "Itaquaquecetuba - Central" },
+            { "nome": "Clarianica de Amorim Silva Santos", "comum": "Jardim Adriane" },
+            { "nome": "Evodia Cirino Pereira dos Santos", "comum": "Jardim Adriane" },
+            { "nome": "Liliane Martinelli Bueno de Souza", "comum": "Jardim Alexandre" },
+            { "nome": "Marcia Lúcia Martins Almeida", "comum": "Jardim Alexandre" },
+            { "nome": "Evelyn Ruziska da Silva", "comum": "Jardim Bela Vista" },
+            { "nome": "Raquel Lino Rodrigues", "comum": "Jardim Bela Vista" },
+            { "nome": "Ivete Nunes de Santana", "comum": "Jardim Caiuby" },
+            { "nome": "Ester Ananias Botelho da Silva", "comum": "Jardim Itapuã" },
+            { "nome": "Mikaele Daniel Lima Alves", "comum": "Jardim Itaqua" },
+            { "nome": "Rosana Felipe Martins", "comum": "Jardim Karine" },
+            { "nome": "Claudete Felipelli Froes", "comum": "Jardim Marcelo" },
+            { "nome": "Camila Santos de Carvalho Rodrigues Soares", "comum": "Jardim Maria Rosa" },
+            { "nome": "Cicera Fernandes da Silva", "comum": "Jardim Mônica" },
+            { "nome": "Erica da Silva Oliveira de Lima", "comum": "Jardim Mônica" },
+            { "nome": "Maria Amelia Ricardo de Lima", "comum": "Jardim Odete" },
+            { "nome": "Tania Silvia Luciano", "comum": "Jardim Paineira" },
+            { "nome": "Alliny Santos Palomo", "comum": "Jardim Pinheirinho" },
+            { "nome": "Cássia de França Morais", "comum": "Jardim Pinheirinho" },
+            { "nome": "Helena Raquel Mendes Valério", "comum": "Jardim Pinheirinho" },
+            { "nome": "Thalia Junqueira de Oliveira", "comum": "Jardim Tropical" },
+            { "nome": "Vanessa dos Santos Souza", "comum": "Jardim Tropical" },
+            { "nome": "Cassia Jesus dos Santos", "comum": "Jardim Yone" },
+            { "nome": "Érica Gonçalves de Carvalho", "comum": "Parque Macedo" },
+            { "nome": "Gislene Ferreira da Silva Nóia", "comum": "Parque Marengo" },
+            { "nome": "Solange Aparecida dos Santos Alavarse Iglesias", "comum": "Parque Marengo" },
+            { "nome": "Camila Silva Romano", "comum": "Vila Virginia" }
+        ];
 
         document.addEventListener('DOMContentLoaded', () => {
             const select = document.getElementById('selectInstrutora');
-            
-            const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('dataPreenchimento').value = hoje;
+            const dataInput = document.getElementById('dataPreenchimento');
+            if (dataInput) dataInput.valueAsDate = new Date();
 
-            listaInstrutoras.forEach((instrutora, index) => {
+            listaInstrutoras.forEach(inst => {
                 const opt = document.createElement('option');
-                opt.value = index;
-                opt.textContent = `${instrutora.nome} (${instrutora.comum})`;
+                opt.value = inst.nome;
+                opt.textContent = `${inst.nome} (${inst.comum})`;
+                opt.dataset.comum = inst.comum;
                 select.insertBefore(opt, select.lastElementChild);
             });
         });
 
-        function toggleNecessidadeEspecial() {
-            const selectVal = document.getElementById('temNecessidadeEspecial').value;
-            const groupQual = document.getElementById('groupQualNecessidade');
-            const textareaQual = document.getElementById('qualNecessidadeEspecial');
-
-            if (selectVal === "Sim") {
-                groupQual.style.display = 'block';
-                textareaQual.setAttribute('required', 'required');
-            } else {
-                groupQual.style.display = 'none';
-                textareaQual.removeAttribute('required');
-                textareaQual.value = '';
-            }
-        }
-
-        function selecionarInstrutora() {
-            const selectVal = document.getElementById('selectInstrutora').value;
-            const inputComum = document.getElementById('comumInstrutora');
-            const groupManual = document.getElementById('groupInstrutoraManual');
-            const inputManual = document.getElementById('nomeInstrutoraManual');
-
-            if (selectVal === "OUTRA") {
-                groupManual.style.display = 'block';
-                inputManual.setAttribute('required', 'required');
-                inputComum.value = '';
-                inputComum.readOnly = false;
-            } else if (selectVal !== "") {
-                groupManual.style.display = 'none';
-                inputManual.removeAttribute('required');
-                inputManual.value = '';
-                
-                const instrutora = listaInstrutoras[parseInt(selectVal)];
-                if (instrutora) {
-                    inputComum.value = instrutora.comum;
-                    inputComum.readOnly = true;
-                }
-            } else {
-                groupManual.style.display = 'none';
-                inputManual.removeAttribute('required');
-                inputManual.value = '';
-                inputComum.value = '';
-                inputComum.readOnly = false;
-            }
-        }
-
         function openModal() {
             document.getElementById('modalOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             document.getElementById('modalOverlay').classList.remove('active');
-            document.body.style.overflow = '';
         }
 
-        function closeModalOnOverlay(event) {
-            if (event.target === document.getElementById('modalOverlay')) {
-                closeModal();
+        function closeModalOnOverlay(e) {
+            if (e.target.id === 'modalOverlay') closeModal();
+        }
+
+        function selecionarInstrutora() {
+            const select = document.getElementById('selectInstrutora');
+            const groupManual = document.getElementById('groupInstrutoraManual');
+            const inputComum = document.getElementById('comumInstrutora');
+
+            if (select.value === 'OUTRA') {
+                groupManual.style.display = 'block';
+                inputComum.value = '';
+                inputComum.readOnly = false;
+            } else if (select.value !== '') {
+                groupManual.style.display = 'none';
+                const selectedOpt = select.options[select.selectedIndex];
+                inputComum.value = selectedOpt.dataset.comum || '';
+                inputComum.readOnly = true;
+            } else {
+                groupManual.style.display = 'none';
+                inputComum.value = '';
+                inputComum.readOnly = false;
             }
+        }
+
+        function toggleNecessidadeEspecial() {
+            const val = document.getElementById('temNecessidadeEspecial').value;
+            const groupQual = document.getElementById('groupQualNecessidade');
+            groupQual.style.display = (val === 'Sim') ? 'block' : 'none';
         }
 
         function formatarDataBR(dataIso) {
             if (!dataIso) return '';
             const partes = dataIso.split('-');
-            if (partes.length === 3) {
-                return `${partes[2]}/${partes[1]}/${partes[0]}`;
-            }
-            return dataIso;
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
         }
 
-        function preencherTemplatePDF() {
-            const dataPreenchimento = document.getElementById('dataPreenchimento').value;
-            const nomeCandidata = document.getElementById('nomeCandidata').value;
-            const comumCandidata = document.getElementById('comumCandidata').value;
-            const dataNasc = document.getElementById('dataNasc').value;
-            const testePara = document.getElementById('testePara').value;
-
-            const selectInstrutora = document.getElementById('selectInstrutora');
-            let nomeInstrutora = '';
-            let comumInstrutora = document.getElementById('comumInstrutora').value;
-
-            if (selectInstrutora.value === "OUTRA") {
-                nomeInstrutora = document.getElementById('nomeInstrutoraManual').value;
-            } else if (selectInstrutora.value !== "") {
-                const instObj = listaInstrutoras[parseInt(selectInstrutora.value)];
-                if (instObj) {
-                    nomeInstrutora = instObj.nome;
-                }
-            }
-
-            const cultosSemana = document.getElementById('cultosSemana').value;
-            const qtdCulto = document.getElementById('qtdOrganistasCulto').value;
-            const qtdReuniao = document.getElementById('qtdOrganistasReuniao').value;
-            const temNecessidade = document.getElementById('temNecessidadeEspecial').value;
-            const qualNecessidade = document.getElementById('qualNecessidadeEspecial').value;
-            const metodos = document.getElementById('metodos').value;
-            const anciao = document.getElementById('anciao').value;
-            const cooperador = document.getElementById('cooperador').value;
-            const encarregado = document.getElementById('encarregado').value;
-
-            document.getElementById('pdf_dataPreenchimento').textContent = formatarDataBR(dataPreenchimento);
-            document.getElementById('pdf_nomeCandidata').textContent = nomeCandidata;
-            document.getElementById('pdf_comumCandidata').textContent = comumCandidata;
-            document.getElementById('pdf_dataNasc').textContent = formatarDataBR(dataNasc);
-            document.getElementById('pdf_testePara').textContent = testePara;
-            document.getElementById('pdf_nomeInstrutora').textContent = nomeInstrutora;
-            document.getElementById('pdf_comumInstrutora').textContent = comumInstrutora;
-            document.getElementById('pdf_cultosSemana').textContent = cultosSemana;
-            document.getElementById('pdf_qtdCulto').textContent = qtdCulto;
-            document.getElementById('pdf_qtdReuniao').textContent = qtdReuniao;
-            document.getElementById('pdf_temNecessidadeEspecial').textContent = temNecessidade;
-            document.getElementById('pdf_metodos').textContent = metodos;
-            document.getElementById('pdf_anciao').textContent = anciao;
-            document.getElementById('pdf_cooperador').textContent = cooperador;
-            document.getElementById('pdf_encarregado').textContent = encarregado;
-
-            const containerQual = document.getElementById('pdf_containerQualNecessidade');
-            if (temNecessidade === 'Sim' && qualNecessidade.trim() !== '') {
-                containerQual.style.display = 'block';
-                document.getElementById('pdf_qualNecessidadeEspecial').textContent = qualNecessidade;
-            } else {
-                containerQual.style.display = 'none';
-            }
-        }
-
-        function validarFormulario() {
+        function processarEnvio() {
             const form = document.getElementById('organistaForm');
             if (!form.checkValidity()) {
                 form.reportValidity();
-                return false;
-            }
-            return true;
-        }
-
-        function gerarPDF() {
-            if (!validarFormulario()) return;
-
-            preencherTemplatePDF();
-
-            const element = document.getElementById('pdfTemplate');
-            element.style.display = 'block';
-
-            const nomeCandidata = document.getElementById('nomeCandidata').value || 'Candidata';
-            const filename = `Pre_Avaliacao_${nomeCandidata.replace(/\s+/g, '_')}.pdf`;
-
-            const opt = {
-                margin:       10,
-                filename:     filename,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                element.style.display = 'none';
-            }).catch(err => {
-                console.error("Erro ao gerar PDF:", err);
-                element.style.display = 'none';
-            });
-        }
-
-        function enviarSecretario() {
-            if (!validarFormulario()) return;
-
-            const selectSecretario = document.getElementById('selectSecretario');
-            const foneSecretario = selectSecretario.value;
-
-            if (!foneSecretario) {
-                alert("Por favor, selecione o Secretário Musical antes de enviar.");
-                selectSecretario.focus();
                 return;
             }
 
-            const nomeCandidata = document.getElementById('nomeCandidata').value;
-            const comumCandidata = document.getElementById('comumCandidata').value;
-            const testePara = document.getElementById('testePara').value;
+            preencherTemplatePDF();
+            closeModal();
+            document.getElementById('modalConfirmacaoOverlay').classList.add('active');
+        }
 
-            const selectInstrutora = document.getElementById('selectInstrutora');
-            let nomeInstrutora = '';
-            if (selectInstrutora.value === "OUTRA") {
-                nomeInstrutora = document.getElementById('nomeInstrutoraManual').value;
-            } else if (selectInstrutora.value !== "") {
-                const instObj = listaInstrutoras[parseInt(selectInstrutora.value)];
-                if (instObj) nomeInstrutora = instObj.nome;
+        function fecharModalConfirmacao() {
+            document.getElementById('modalConfirmacaoOverlay').classList.remove('active');
+        }
+
+        function preencherTemplatePDF() {
+            document.getElementById('pdf_dataPreenchimento').textContent = formatarDataBR(document.getElementById('dataPreenchimento').value);
+            document.getElementById('pdf_nomeCandidata').textContent = document.getElementById('nomeCandidata').value;
+            document.getElementById('pdf_comumCandidata').textContent = document.getElementById('comumCandidata').value;
+            document.getElementById('pdf_dataNasc').textContent = formatarDataBR(document.getElementById('dataNasc').value);
+            document.getElementById('pdf_testePara').textContent = document.getElementById('testePara').value;
+
+            const selectInst = document.getElementById('selectInstrutora');
+            const nomeInst = (selectInst.value === 'OUTRA') 
+                ? document.getElementById('nomeInstrutoraManual').value 
+                : selectInst.value;
+
+            document.getElementById('pdf_nomeInstrutora').textContent = nomeInst;
+            document.getElementById('pdf_comumInstrutora').textContent = document.getElementById('comumInstrutora').value;
+
+            document.getElementById('pdf_cultosSemana').textContent = document.getElementById('cultosSemana').value;
+            document.getElementById('pdf_qtdCulto').textContent = document.getElementById('qtdOrganistasCulto').value;
+            document.getElementById('pdf_qtdReuniao').textContent = document.getElementById('qtdOrganistasReuniao').value;
+
+            const temNec = document.getElementById('temNecessidadeEspecial').value;
+            document.getElementById('pdf_temNecessidadeEspecial').textContent = temNec;
+            
+            const containerQual = document.getElementById('pdf_containerQualNecessidade');
+            if (temNec === 'Sim') {
+                containerQual.style.display = 'block';
+                document.getElementById('pdf_qualNecessidadeEspecial').textContent = document.getElementById('qualNecessidadeEspecial').value;
+            } else {
+                containerQual.style.display = 'none';
             }
 
-            let msg = `*A Paz de Deus!*%0A%0A`;
-            msg += `Segue a ficha de *Pré-Avaliação de Organista* preenchida:%0A%0A`;
-            msg += `👤 *Candidata:* ${nomeCandidata}%0A`;
-            msg += `🏛️ *Comum:* ${comumCandidata}%0A`;
-            msg += `🎯 *Teste Solicitado Para:* ${testePara}%0A`;
-            msg += `👩‍🏫 *Instrutora:* ${nomeInstrutora}%0A%0A`;
-            msg += `📄 *O PDF detalhado foi gerado e será enviado em anexo.*`;
+            document.getElementById('pdf_metodos').textContent = document.getElementById('metodos').value;
+            document.getElementById('pdf_anciao').textContent = document.getElementById('anciao').value;
+            document.getElementById('pdf_cooperador').textContent = document.getElementById('cooperador').value;
+            document.getElementById('pdf_encarregado').textContent = document.getElementById('encarregado').value;
+        }
 
-            const url = `https://api.whatsapp.com/send?phone=55${foneSecretario}&text=${msg}`;
+        function enviarWhatsApp() {
+            const selectSec = document.getElementById('selectSecretario');
+            const telefone = selectSec.value;
+            const nomeSecretario = selectSec.options[selectSec.selectedIndex].text;
+
+            const selectInst = document.getElementById('selectInstrutora');
+            const nomeInst = (selectInst.value === 'OUTRA') 
+                ? document.getElementById('nomeInstrutoraManual').value 
+                : selectInst.value;
+
+            const mensagem = 
+`*Paz do Senhor!*
+*Ficha de Pré-Avaliação de Organista*
+
+*Data:* ${formatarDataBR(document.getElementById('dataPreenchimento').value)}
+
+👤 *Candidata:* ${document.getElementById('nomeCandidata').value}
+⛪ *Comum:* ${document.getElementById('comumCandidata').value}
+🎂 *Data Nasc:* ${formatarDataBR(document.getElementById('dataNasc').value)}
+🎯 *Teste Para:* ${document.getElementById('testePara').value}
+
+👩‍🏫 *Instrutora:* ${nomeInst} (${document.getElementById('comumInstrutora').value})
+
+📊 *Informações:*
+- Cultos na Semana: ${document.getElementById('cultosSemana').value}
+- Organistas Atual: Culto (${document.getElementById('qtdOrganistasCulto').value}) | RJM (${document.getElementById('qtdOrganistasReuniao').value})
+- Necessidade Especial: ${document.getElementById('temNecessidadeEspecial').value} ${document.getElementById('temNecessidadeEspecial').value === 'Sim' ? '(' + document.getElementById('qualNecessidadeEspecial').value + ')' : ''}
+
+📚 *Métodos:* 
+${document.getElementById('metodos').value}
+
+🤝 *Ministério Local:*
+- Ancião: ${document.getElementById('anciao').value}
+- Cooperador: ${document.getElementById('cooperador').value}
+- Encarregado: ${document.getElementById('encarregado').value}
+
+Deus abençoe!`;
+
+            const url = `https://api.whatsapp.com/send?phone=55${telefone}&text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
+        }
+
+        function gerarPDF() {
+            const elemento = document.getElementById('pdfTemplate');
+            elemento.style.display = 'block';
+
+            const nomeCandidata = document.getElementById('nomeCandidata').value || 'Candidata';
+
+            const opt = {
+                margin: 10,
+                filename: `Pre_Avaliacao_${nomeCandidata.replace(/\s+/g, '_')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(elemento).save().then(() => {
+                elemento.style.display = 'none';
+            });
         }
     </script>
 </body>
