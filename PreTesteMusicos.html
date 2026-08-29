@@ -312,24 +312,78 @@
             padding-right: 36px;
         }
 
-        .btn-link-pdf {
+        /* BOTÃO CONSULTAR PROGRAMA MÍNIMO (EM AMARELO) */
+        .btn-link-pdf-yellow {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: #eff6ff;
-            color: var(--accent);
-            border: 1px solid #bfdbfe;
-            padding: 6px 10px;
+            background: #facc15;
+            color: #713f12;
+            border: 1px solid #eab308;
+            padding: 6px 12px;
             border-radius: 6px;
             font-size: 0.78rem;
-            font-weight: 600;
+            font-weight: 700;
             text-decoration: none;
+            box-shadow: 0 2px 5px rgba(234, 179, 8, 0.25);
             transition: all 0.2s ease;
         }
 
-        .btn-link-pdf:hover {
-            background: #dbeafe;
+        .btn-link-pdf-yellow:hover {
+            background: #eab308;
+            color: #422006;
+        }
+
+        /* BOTÃO ADICIONAR MÉTODOS */
+        .btn-add-metodo {
+            width: 100%;
+            background: #f1f5f9;
             color: var(--primary);
+            border: 1.5px dashed var(--accent);
+            padding: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-add-metodo:hover {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
+        /* LISTA DE MÉTODOS ADICIONADOS */
+        .lista-metodos-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .metodo-card-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+        }
+
+        .metodo-card-item .btn-remove-metodo {
+            color: #ef4444;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 4px;
         }
 
         /* GRID NOTAS MSA */
@@ -432,53 +486,22 @@
             background: #20bd5a;
         }
 
-        /* MODAL DE CONFIRMAÇÃO */
-        .modal-confirmation-card {
+        /* MODAIS DE DIÁLOGO */
+        .modal-dialog-card {
             background: var(--surface);
             padding: 24px;
             border-radius: var(--radius-lg);
-            text-align: center;
-            max-width: 400px;
             width: 90%;
-            box-shadow: var(--shadow-lg);
-            margin: auto;
-        }
-
-        .modal-confirmation-card h2 {
-            color: var(--primary);
-            font-size: 1.4rem;
-            margin-bottom: 8px;
-        }
-
-        .modal-confirmation-card p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-
-        /* MODAL ELEGANTE TROCA INSTRUMENTO */
-        .modal-troca-card {
-            background: var(--surface);
-            padding: 28px 24px;
-            border-radius: var(--radius-lg);
-            text-align: center;
             max-width: 420px;
-            width: 90%;
             box-shadow: var(--shadow-lg);
             margin: auto;
         }
 
-        .modal-troca-card .icon-box {
-            width: 64px;
-            height: 64px;
-            background: #eff6ff;
-            color: var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            margin: 0 auto 16px auto;
+        .modal-dialog-card h2 {
+            color: var(--primary);
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            text-align: center;
         }
 
         /* TEMPLATE OCULTO PARA PDF */
@@ -700,8 +723,9 @@
                     
                     <div class="form-group">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <label for="tipoMSA" style="margin-bottom:0;">Módulo MSA</label>
-                            <a href="programaminimo.pdf" target="_blank" class="btn-link-pdf">
+                            <label for="tipoMSA" style="margin-bottom:0;">Módulo MSA Concluído</label>
+                            <!-- BOTÃO EM AMARELO -->
+                            <a href="programaminimo.pdf" target="_blank" class="btn-link-pdf-yellow">
                                 <i class="fa-solid fa-file-pdf"></i> Consultar Programa Mínimo
                             </a>
                         </div>
@@ -737,21 +761,13 @@
                     <!-- MÉTODOS DE PRÁTICA -->
                     <div class="section-title"><i class="fa-solid fa-sliders"></i> Métodos de Prática de Instrumento</div>
                     
-                    <div class="form-group">
-                        <label for="metodoNome">Nome do Método</label>
-                        <input type="text" id="metodoNome" class="form-control" placeholder="Ex: Amabile, Bona, etc.">
+                    <div id="listaMetodosContainer" class="lista-metodos-container">
+                        <!-- Lista de métodos inserida dinamicamente -->
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="metodoVol">Volume</label>
-                            <input type="text" id="metodoVol" class="form-control" placeholder="Vol.">
-                        </div>
-                        <div class="form-group">
-                            <label for="metodoPagina">Página</label>
-                            <input type="text" id="metodoPagina" class="form-control" placeholder="Pág.">
-                        </div>
-                    </div>
+
+                    <button type="button" class="btn-add-metodo" onclick="abrirModalMetodo()">
+                        <i class="fa-solid fa-plus"></i> Adicionar Métodos
+                    </button>
 
                     <!-- HINÁRIO E EXECUÇÃO -->
                     <div class="section-title"><i class="fa-solid fa-book-bible"></i> Execução dos Hinos</div>
@@ -832,12 +848,44 @@
         </div>
     </div>
 
+    <!-- MODAL PARA ADICIONAR MÉTODO -->
+    <div class="modal-overlay" id="modalMetodoOverlay">
+        <div class="modal-dialog-card">
+            <h2><i class="fa-solid fa-book-bookmark" style="color:var(--accent);"></i> Adicionar Método</h2>
+            
+            <div class="form-group">
+                <label for="metodoNomeModal">Nome do Método</label>
+                <input type="text" id="metodoNomeModal" class="form-control" placeholder="Ex: Amabile, Bona, Schmoll...">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="metodoVolModal">Volume</label>
+                    <input type="text" id="metodoVolModal" class="form-control" placeholder="Ex: Vol. 1">
+                </div>
+                <div class="form-group">
+                    <label for="metodoPaginaModal">Página</label>
+                    <input type="text" id="metodoPaginaModal" class="form-control" placeholder="Ex: Pág. 15">
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+                <button type="button" class="btn-primary" onclick="salvarMetodoModal()">
+                    <i class="fa-solid fa-check"></i> Salvar Método
+                </button>
+                <button type="button" onclick="fecharModalMetodo()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 8px; font-weight: 600;">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL CONFIRMAÇÃO DE ENVIO -->
     <div class="modal-overlay" id="modalConfirmacaoOverlay">
-        <div class="modal-confirmation-card">
+        <div class="modal-dialog-card" style="text-align: center;">
             <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: var(--success); margin-bottom: 12px;"></i>
             <h2>Deus abençoe!</h2>
-            <p>Selecione abaixo como deseja enviar o Pré-Teste do músico:</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Selecione abaixo como deseja enviar o formulário de Pré-Teste do músico:</p>
 
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button type="button" class="btn-whatsapp" onclick="enviarWhatsApp()">
@@ -853,15 +901,15 @@
         </div>
     </div>
 
-    <!-- MODAL ELEGANTE TROCA DE INSTRUMENTO -->
+    <!-- MODAL TROCA DE INSTRUMENTO -->
     <div class="modal-overlay" id="modalTrocaOverlay">
-        <div class="modal-troca-card">
-            <div class="icon-box">
+        <div class="modal-dialog-card" style="text-align: center;">
+            <div style="width: 64px; height: 64px; background: #eff6ff; color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 16px auto;">
                 <i class="fa-solid fa-right-left"></i>
             </div>
-            <h2 style="color: var(--primary); font-size: 1.3rem; margin-bottom: 8px;">Troca de Instrumento</h2>
+            <h2>Troca de Instrumento</h2>
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; line-height: 1.5;">
-                Você será redirecionado para o formulário específico de solicitação e avaliação de **Troca de Instrumento**.
+                Você será redirecionado para o formulário específico de solicitação e avaliação de <strong>Troca de Instrumento</strong>.
             </p>
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button type="button" class="btn-primary" onclick="redirecionarTroca()">
@@ -946,12 +994,10 @@
         </div>
 
         <div class="pdf-section-title">4. Métodos de Prática e Execução Hinos</div>
-        <div class="pdf-grid-3">
-            <div class="pdf-item"><label>Método:</label><span id="pdf_metodoNome"></span></div>
-            <div class="pdf-item"><label>Volume:</label><span id="pdf_metodoVol"></span></div>
-            <div class="pdf-item"><label>Página:</label><span id="pdf_metodoPagina"></span></div>
+        <div id="pdf_listaMetodos">
+            <!-- Métodos gerados no PDF -->
         </div>
-        <div class="pdf-item" style="margin-top: 4px;">
+        <div class="pdf-item" style="margin-top: 6px;">
             <label>Execução no Hinário:</label>
             <span id="pdf_hinarioExec"></span>
         </div>
@@ -978,9 +1024,12 @@
     </div>
 
     <script>
+        let listaMetodos = [];
+
         document.addEventListener('DOMContentLoaded', () => {
             const dataInput = document.getElementById('dataPreenchimento');
             if (dataInput) dataInput.valueAsDate = new Date();
+            renderizarListaMetodos();
         });
 
         function openModal() {
@@ -1030,6 +1079,68 @@
             }
         }
 
+        /* GERENCIAMENTO DE MÉTODOS */
+        function abrirModalMetodo() {
+            document.getElementById('metodoNomeModal').value = '';
+            document.getElementById('metodoVolModal').value = '';
+            document.getElementById('metodoPaginaModal').value = '';
+            document.getElementById('modalMetodoOverlay').classList.add('active');
+        }
+
+        function fecharModalMetodo() {
+            document.getElementById('modalMetodoOverlay').classList.remove('active');
+        }
+
+        function salvarMetodoModal() {
+            const nome = document.getElementById('metodoNomeModal').value.trim();
+            const vol = document.getElementById('metodoVolModal').value.trim();
+            const pag = document.getElementById('metodoPaginaModal').value.trim();
+
+            if (!nome) {
+                alert("Por favor, digite o nome do método.");
+                return;
+            }
+
+            listaMetodos.push({
+                nome: nome,
+                vol: vol || '-',
+                pagina: pag || '-'
+            });
+
+            renderizarListaMetodos();
+            fecharModalMetodo();
+        }
+
+        function removerMetodo(index) {
+            listaMetodos.splice(index, 1);
+            renderizarListaMetodos();
+        }
+
+        function renderizarListaMetodos() {
+            const container = document.getElementById('listaMetodosContainer');
+            container.innerHTML = '';
+
+            if (listaMetodos.length === 0) {
+                container.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">Nenhum método adicionado.</p>';
+                return;
+            }
+
+            listaMetodos.forEach((m, idx) => {
+                const item = document.createElement('div');
+                item.className = 'metodo-card-item';
+                item.innerHTML = `
+                    <div>
+                        <strong>${m.nome}</strong> 
+                        <span style="color: var(--text-muted); font-size: 0.8rem;">(Vol: ${m.vol} | Pág: ${m.pagina})</span>
+                    </div>
+                    <button type="button" class="btn-remove-metodo" onclick="removerMetodo(${idx})" title="Remover">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
         function formatarDataBR(dataIso) {
             if (!dataIso) return '-';
             const partes = dataIso.split('-');
@@ -1075,9 +1186,7 @@
                     m15: document.getElementById('msa15').value || '-',
                     m16: document.getElementById('msa16').value || '-'
                 },
-                metodoNome: document.getElementById('metodoNome').value || '-',
-                metodoVol: document.getElementById('metodoVol').value || '-',
-                metodoPagina: document.getElementById('metodoPagina').value || '-',
+                metodos: listaMetodos,
                 execVozPrincipal: document.getElementById('execVozPrincipal').checked,
                 execVozAlternativa: document.getElementById('execVozAlternativa').checked,
                 temNecessidadeEspecial: document.getElementById('temNecessidadeEspecial').value || '-',
@@ -1090,11 +1199,10 @@
         }
 
         function processarEnvio() {
-            // Verifica se existem campos visíveis sem preenchimento
             const camposPrincipais = [
                 'solicitacaoPara', 'nomeCandidato', 'comumCandidato', 
                 'dataNasc', 'instrumentoTonalidade', 'batizado', 'tipoMSA', 
-                'metodoNome', 'anciao', 'cooperador', 'encarregado', 'selectSecretario'
+                'anciao', 'cooperador', 'encarregado', 'selectSecretario'
             ];
             
             let temCampoVazio = false;
@@ -1131,6 +1239,10 @@
                 textoNecessidade += ` (${d.qualNecessidadeEspecial})`;
             }
 
+            let metodosTexto = d.metodos.length > 0 
+                ? d.metodos.map(m => `  • ${m.nome} (Vol: ${m.vol}, Pág: ${m.pagina})`).join('\n')
+                : '  • Nenhum informado';
+
             const mensagem = 
 `*PEDIDO DE PRÉ-AVALIAÇÃO DE MÚSICOS - CCB*
 _Data do Registro: ${d.dataPreenchimento}_
@@ -1149,7 +1261,8 @@ _Solicitação para: ${d.solicitacaoPara}_
 
 *3. MSA & MÉTODOS*
 • *Programa:* ${d.tipoMSA}
-• *Método:* ${d.metodoNome} (Vol: ${d.metodoVol}, Pág: ${d.metodoPagina})
+• *Métodos de Prática:*
+${metodosTexto}
 • *Execução Hinos:* ${execHinarioStr.join(', ') || '-'}
 
 *4. ACESSIBILIDADE*
@@ -1189,9 +1302,24 @@ Deus abençoe!`;
                 document.getElementById('pdf_' + key).textContent = d.msaNotas[key];
             }
 
-            document.getElementById('pdf_metodoNome').textContent = d.metodoNome;
-            document.getElementById('pdf_metodoVol').textContent = d.metodoVol;
-            document.getElementById('pdf_metodoPagina').textContent = d.metodoPagina;
+            // Gerar métodos no PDF
+            const containerPdfMetodos = document.getElementById('pdf_listaMetodos');
+            containerPdfMetodos.innerHTML = '';
+            if (d.metodos.length > 0) {
+                d.metodos.forEach(m => {
+                    const div = document.createElement('div');
+                    div.className = 'pdf-grid-3';
+                    div.style.marginBottom = '4px';
+                    div.innerHTML = `
+                        <div class="pdf-item"><label>Método:</label><span>${m.nome}</span></div>
+                        <div class="pdf-item"><label>Volume:</label><span>${m.vol}</span></div>
+                        <div class="pdf-item"><label>Página:</label><span>${m.pagina}</span></div>
+                    `;
+                    containerPdfMetodos.appendChild(div);
+                });
+            } else {
+                containerPdfMetodos.innerHTML = '<div class="pdf-item"><span>Nenhum método adicionado</span></div>';
+            }
 
             let hinosArr = [];
             if (d.execVozPrincipal) hinosArr.push("Voz Principal Completo");
