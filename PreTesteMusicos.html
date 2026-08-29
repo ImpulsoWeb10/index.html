@@ -312,6 +312,26 @@
             padding-right: 36px;
         }
 
+        .btn-link-pdf {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #eff6ff;
+            color: var(--accent);
+            border: 1px solid #bfdbfe;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-link-pdf:hover {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
         /* GRID NOTAS MSA */
         .msa-grid {
             display: grid;
@@ -541,15 +561,6 @@
             font-size: 10pt;
         }
 
-        .pdf-box {
-            border: 1px solid #cbd5e1;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 9.5pt;
-            background: #fafafa;
-            white-space: pre-line;
-        }
-
         .pdf-footer-note {
             margin-top: 24px;
             padding-top: 12px;
@@ -607,12 +618,12 @@
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="dataPreenchimento">Data do Registro *</label>
-                            <input type="date" id="dataPreenchimento" class="form-control" required>
+                            <label for="dataPreenchimento">Data do Registro</label>
+                            <input type="date" id="dataPreenchimento" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="solicitacaoPara">Avaliação para: *</label>
-                            <select id="solicitacaoPara" class="form-control" required>
+                            <label for="solicitacaoPara">Avaliação para:</label>
+                            <select id="solicitacaoPara" class="form-control">
                                 <option value="">Selecione...</option>
                                 <option value="Culto Oficial">Culto Oficial</option>
                                 <option value="Oficialização">Oficialização</option>
@@ -624,33 +635,38 @@
                     <div class="section-title"><i class="fa-solid fa-user"></i> Identificação do Candidato</div>
                     
                     <div class="form-group">
-                        <label for="nomeCandidato">Nome completo (sem abreviações) *</label>
-                        <input type="text" id="nomeCandidato" class="form-control" placeholder="Nome completo" required>
+                        <label for="nomeCandidato">Nome completo (sem abreviações)</label>
+                        <input type="text" id="nomeCandidato" class="form-control" placeholder="Nome completo">
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="comumCandidato">Comum congregação *</label>
-                            <input type="text" id="comumCandidato" class="form-control" placeholder="Bairro / Cidade" required>
+                            <label for="comumCandidato">Comum congregação</label>
+                            <input type="text" id="comumCandidato" class="form-control" placeholder="Bairro / Cidade">
                         </div>
                         <div class="form-group">
-                            <label for="dataNasc">Data de Nascimento *</label>
-                            <input type="date" id="dataNasc" class="form-control" required>
+                            <label for="dataNasc">Data de Nascimento</label>
+                            <input type="date" id="dataNasc" class="form-control">
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="instrumentoTonalidade">Instrumento e Tonalidade</label>
+                        <input type="text" id="instrumentoTonalidade" class="form-control" placeholder="Ex: Trompete em Sib">
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="instrumentoTonalidade">Instrumento e Tonalidade *</label>
-                            <input type="text" id="instrumentoTonalidade" class="form-control" placeholder="Ex: Trompete em Sib" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="batizado">Batizado? *</label>
-                            <select id="batizado" class="form-control" required>
+                            <label for="batizado">Batizado?</label>
+                            <select id="batizado" class="form-control" onchange="toggleDataBatismo()">
                                 <option value="">Selecione...</option>
                                 <option value="Sim">Sim</option>
                                 <option value="Não">Não</option>
                             </select>
+                        </div>
+                        <div class="form-group" id="groupDataBatismo" style="display: none;">
+                            <label for="dataBatismo">Data do Batismo</label>
+                            <input type="date" id="dataBatismo" class="form-control">
                         </div>
                     </div>
 
@@ -683,8 +699,13 @@
                     <div class="section-title"><i class="fa-solid fa-book-open"></i> MSA (Aprendizagem Musical)</div>
                     
                     <div class="form-group">
-                        <label for="tipoMSA">Módulo MSA Concluído *</label>
-                        <select id="tipoMSA" class="form-control" required>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <label for="tipoMSA" style="margin-bottom:0;">Módulo MSA Concluído</label>
+                            <a href="programaminimo.pdf" target="_blank" class="btn-link-pdf">
+                                <i class="fa-solid fa-file-pdf"></i> Consultar Programa Mínimo
+                            </a>
+                        </div>
+                        <select id="tipoMSA" class="form-control">
                             <option value="">Selecione...</option>
                             <option value="MSA completo">MSA Completo</option>
                             <option value="MSA até módulo 16 para culto oficial">MSA até módulo 16 (Culto Oficial)</option>
@@ -716,20 +737,19 @@
                     <!-- MÉTODOS DE PRÁTICA -->
                     <div class="section-title"><i class="fa-solid fa-sliders"></i> Métodos de Prática de Instrumento</div>
                     
+                    <div class="form-group">
+                        <label for="metodoNome">Nome do Método</label>
+                        <input type="text" id="metodoNome" class="form-control" placeholder="Ex: Amabile, Bona, etc.">
+                    </div>
+                    
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="metodoNome">Nome do Método *</label>
-                            <input type="text" id="metodoNome" class="form-control" placeholder="Ex: Amabile, Bona, etc." required>
+                            <label for="metodoVol">Volume</label>
+                            <input type="text" id="metodoVol" class="form-control" placeholder="Vol.">
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="metodoVol">Volume</label>
-                                <input type="text" id="metodoVol" class="form-control" placeholder="Vol.">
-                            </div>
-                            <div class="form-group">
-                                <label for="metodoPagina">Página</label>
-                                <input type="text" id="metodoPagina" class="form-control" placeholder="Pág.">
-                            </div>
+                        <div class="form-group">
+                            <label for="metodoPagina">Página</label>
+                            <input type="text" id="metodoPagina" class="form-control" placeholder="Pág.">
                         </div>
                     </div>
 
@@ -751,8 +771,8 @@
                     <div class="section-title"><i class="fa-solid fa-universal-access"></i> Acessibilidade</div>
 
                     <div class="form-group">
-                        <label for="temNecessidadeEspecial">Pessoa com necessidade especial? *</label>
-                        <select id="temNecessidadeEspecial" class="form-control" onchange="toggleNecessidadeEspecial()" required>
+                        <label for="temNecessidadeEspecial">Pessoa com necessidade especial?</label>
+                        <select id="temNecessidadeEspecial" class="form-control" onchange="toggleNecessidadeEspecial()">
                             <option value="">Selecione...</option>
                             <option value="Não">Não</option>
                             <option value="Sim">Sim</option>
@@ -760,7 +780,7 @@
                     </div>
 
                     <div class="form-group" id="groupQualNecessidade" style="display: none;">
-                        <label for="qualNecessidadeEspecial">Caso sim, especifique: *</label>
+                        <label for="qualNecessidadeEspecial">Caso sim, especifique:</label>
                         <textarea id="qualNecessidadeEspecial" class="form-control" placeholder="Descreva aqui a necessidade especial..."></textarea>
                     </div>
 
@@ -768,26 +788,26 @@
                     <div class="section-title"><i class="fa-solid fa-users"></i> Ministério Local</div>
 
                     <div class="form-group">
-                        <label for="anciao">Ancião *</label>
-                        <input type="text" id="anciao" class="form-control" placeholder="Nome do Ancião" required>
+                        <label for="anciao">Ancião</label>
+                        <input type="text" id="anciao" class="form-control" placeholder="Nome do Ancião">
                     </div>
 
                     <div class="form-group">
-                        <label for="cooperador">Cooperador Oficial *</label>
-                        <input type="text" id="cooperador" class="form-control" placeholder="Nome do Cooperador" required>
+                        <label for="cooperador">Cooperador Oficial</label>
+                        <input type="text" id="cooperador" class="form-control" placeholder="Nome do Cooperador">
                     </div>
 
                     <div class="form-group">
-                        <label for="encarregado">Encarregado Local *</label>
-                        <input type="text" id="encarregado" class="form-control" placeholder="Nome do Encarregado" required>
+                        <label for="encarregado">Encarregado Local</label>
+                        <input type="text" id="encarregado" class="form-control" placeholder="Nome do Encarregado">
                     </div>
 
                     <!-- SECRETÁRIO MUSICAL RESPONSÁVEL -->
                     <div class="section-title"><i class="fa-solid fa-user-gear"></i> Secretário Musical Responsável</div>
 
                     <div class="form-group">
-                        <label for="selectSecretario">Selecione o Secretário Musical *</label>
-                        <select id="selectSecretario" class="form-control" required>
+                        <label for="selectSecretario">Selecione o Secretário Musical</label>
+                        <select id="selectSecretario" class="form-control">
                             <option value="">Selecione o Secretário...</option>
                             <option value="11971561722">Alessandro - (11) 97156-1722</option>
                             <option value="11981194108">Danilo - (11) 98119-4108</option>
@@ -984,8 +1004,18 @@
         }
 
         function redirecionarTroca() {
-            // Insira aqui o link ou nome da página para onde deseja redirecionar
             window.location.href = "troca_instrumento.html";
+        }
+
+        function toggleDataBatismo() {
+            const batizadoVal = document.getElementById('batizado').value;
+            const groupDataBatismo = document.getElementById('groupDataBatismo');
+            if (batizadoVal === 'Sim') {
+                groupDataBatismo.style.display = 'block';
+            } else {
+                groupDataBatismo.style.display = 'none';
+                document.getElementById('dataBatismo').value = '';
+            }
         }
 
         function toggleNecessidadeEspecial() {
@@ -994,10 +1024,8 @@
             const textarea = document.getElementById('qualNecessidadeEspecial');
             if (val === 'Sim') {
                 group.style.display = 'block';
-                textarea.required = true;
             } else {
                 group.style.display = 'none';
-                textarea.required = false;
                 textarea.value = '';
             }
         }
@@ -1010,19 +1038,25 @@
         }
 
         function obterDadosFormulario() {
+            let statusBatismo = document.getElementById('batizado').value || '-';
+            const dataBatismoVal = document.getElementById('dataBatismo').value;
+            if (statusBatismo === 'Sim' && dataBatismoVal) {
+                statusBatismo += ` (${formatarDataBR(dataBatismoVal)})`;
+            }
+
             return {
                 dataPreenchimento: formatarDataBR(document.getElementById('dataPreenchimento').value),
-                solicitacaoPara: document.getElementById('solicitacaoPara').value,
-                nomeCandidato: document.getElementById('nomeCandidato').value,
-                comumCandidato: document.getElementById('comumCandidato').value,
+                solicitacaoPara: document.getElementById('solicitacaoPara').value || '-',
+                nomeCandidato: document.getElementById('nomeCandidato').value || '-',
+                comumCandidato: document.getElementById('comumCandidato').value || '-',
                 dataNasc: formatarDataBR(document.getElementById('dataNasc').value),
-                instrumentoTonalidade: document.getElementById('instrumentoTonalidade').value,
-                batizado: document.getElementById('batizado').value,
+                instrumentoTonalidade: document.getElementById('instrumentoTonalidade').value || '-',
+                batizado: statusBatismo,
                 inicioGEM: formatarDataBR(document.getElementById('inicioGEM').value),
                 inicioEnsaio: formatarDataBR(document.getElementById('inicioEnsaio').value),
                 inicioRJM: formatarDataBR(document.getElementById('inicioRJM').value),
                 inicioCulto: formatarDataBR(document.getElementById('inicioCulto').value),
-                tipoMSA: document.getElementById('tipoMSA').value,
+                tipoMSA: document.getElementById('tipoMSA').value || '-',
                 msaNotas: {
                     m1: document.getElementById('msa01').value || '-',
                     m2: document.getElementById('msa02').value || '-',
@@ -1041,26 +1075,42 @@
                     m15: document.getElementById('msa15').value || '-',
                     m16: document.getElementById('msa16').value || '-'
                 },
-                metodoNome: document.getElementById('metodoNome').value,
+                metodoNome: document.getElementById('metodoNome').value || '-',
                 metodoVol: document.getElementById('metodoVol').value || '-',
                 metodoPagina: document.getElementById('metodoPagina').value || '-',
                 execVozPrincipal: document.getElementById('execVozPrincipal').checked,
                 execVozAlternativa: document.getElementById('execVozAlternativa').checked,
-                temNecessidadeEspecial: document.getElementById('temNecessidadeEspecial').value,
+                temNecessidadeEspecial: document.getElementById('temNecessidadeEspecial').value || '-',
                 qualNecessidadeEspecial: document.getElementById('qualNecessidadeEspecial').value,
-                anciao: document.getElementById('anciao').value,
-                cooperador: document.getElementById('cooperador').value,
-                encarregado: document.getElementById('encarregado').value,
+                anciao: document.getElementById('anciao').value || '-',
+                cooperador: document.getElementById('cooperador').value || '-',
+                encarregado: document.getElementById('encarregado').value || '-',
                 telefoneSecretario: document.getElementById('selectSecretario').value
             };
         }
 
         function processarEnvio() {
-            const form = document.getElementById('musicoForm');
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
+            // Verifica se existem campos visíveis sem preenchimento
+            const camposPrincipais = [
+                'solicitacaoPara', 'nomeCandidato', 'comumCandidato', 
+                'dataNasc', 'instrumentoTonalidade', 'batizado', 'tipoMSA', 
+                'metodoNome', 'anciao', 'cooperador', 'encarregado', 'selectSecretario'
+            ];
+            
+            let temCampoVazio = false;
+
+            for (let id of camposPrincipais) {
+                const el = document.getElementById(id);
+                if (el && (!el.value || el.value.trim() === '')) {
+                    temCampoVazio = true;
+                    break;
+                }
             }
+
+            if (temCampoVazio) {
+                alert("Caso tenha a informação, por favor preencha todos os campos.");
+            }
+
             closeModal();
             document.getElementById('modalConfirmacaoOverlay').classList.add('active');
         }
@@ -1077,7 +1127,7 @@
             if (d.execVozAlternativa) execHinarioStr.push("Voz Alternativa");
 
             let textoNecessidade = d.temNecessidadeEspecial;
-            if (d.temNecessidadeEspecial === 'Sim') {
+            if (d.temNecessidadeEspecial === 'Sim' && d.qualNecessidadeEspecial) {
                 textoNecessidade += ` (${d.qualNecessidadeEspecial})`;
             }
 
@@ -1100,7 +1150,7 @@ _Solicitação para: ${d.solicitacaoPara}_
 *3. MSA & MÉTODOS*
 • *Programa:* ${d.tipoMSA}
 • *Método:* ${d.metodoNome} (Vol: ${d.metodoVol}, Pág: ${d.metodoPagina})
-• *Execução Hinos:* ${execHinarioStr.join(', ')}
+• *Execução Hinos:* ${execHinarioStr.join(', ') || '-'}
 
 *4. ACESSIBILIDADE*
 • *Necessidade Especial:* ${textoNecessidade}
@@ -1146,10 +1196,10 @@ Deus abençoe!`;
             let hinosArr = [];
             if (d.execVozPrincipal) hinosArr.push("Voz Principal Completo");
             if (d.execVozAlternativa) hinosArr.push("Voz Alternativa");
-            document.getElementById('pdf_hinarioExec').textContent = hinosArr.join(" / ");
+            document.getElementById('pdf_hinarioExec').textContent = hinosArr.join(" / ") || '-';
 
             document.getElementById('pdf_temNecessidadeEspecial').textContent = 
-                d.temNecessidadeEspecial === 'Sim' ? `Sim (${d.qualNecessidadeEspecial})` : 'Não';
+                d.temNecessidadeEspecial.includes('Sim') ? `Sim (${d.qualNecessidadeEspecial})` : d.temNecessidadeEspecial;
 
             document.getElementById('pdf_anciao').textContent = d.anciao;
             document.getElementById('pdf_cooperador').textContent = d.cooperador;
