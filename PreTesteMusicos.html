@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pré-Avaliação de Músicos - CCB</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js para geração do PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #1e40af;
+            --accent: #2563eb;
+            --bg-body: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --pdf-color: #dc2626;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        /* Card Entrada */
+        .card-welcome {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .logo-ccb-container {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 16px auto;
+            animation: ccbPulse 2.5s infinite ease-in-out;
+        }
+
+        .logo-ccb {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 4px 8px rgba(30, 58, 138, 0.2));
+        }
+
+        @keyframes ccbPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .welcome-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            background: #ffffff;
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+            padding: 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.98);
+            background: #f1f5f9;
+        }
+
+        /* MODAIS GENERALIZADOS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: var(--surface);
+            width: 100%;
+            max-width: 500px;
+            max-height: 88vh;
+            border-radius: 24px 24px 0 0;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        @media (min-width: 600px) {
+            .modal-overlay {
+                align-items: center;
+                padding: 20px;
+            }
+            .modal-card {
+                border-radius: var(--radius-lg);
+                max-height: 85vh;
+            }
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            flex-shrink: 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-body {
+            padding: 16px 20px;
+            overflow-y: auto;
+            flex: 1;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* FORM ELEMENTS */
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin: 18px 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 13px;
+            font-size: 0.95rem;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            background: #fdfdfd;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            background: #ffffff;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2064748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 36px;
+        }
+
+        /* GRID NOTAS MSA */
+        .msa-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .msa-item label {
+            font-size: 0.75rem;
+            text-align: center;
+            margin-bottom: 2px;
+        }
+
+        .msa-item input {
+            text-align: center;
+            padding: 8px 4px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        /* MODAL FOOTER */
+        .modal-footer {
+            padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 10px)) 20px;
+            border-top: 1px solid var(--border);
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        .btn-pdf {
+            width: 100%;
+            background: var(--pdf-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(220, 38, 38, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-pdf:active {
+            transform: scale(0.98);
+            background: #b91c1c;
+        }
+
+        .btn-whatsapp {
+            width: 100%;
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(37, 211, 102, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-whatsapp:active {
+            transform: scale(0.98);
+            background: #20bd5a;
+        }
+
+        /* MODAL DE CONFIRMAÇÃO */
+        .modal-confirmation-card {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: var(--shadow-lg);
+            margin: auto;
+        }
+
+        .modal-confirmation-card h2 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .modal-confirmation-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        /* MODAL ELEGANTE TROCA INSTRUMENTO */
+        .modal-troca-card {
+            background: var(--surface);
+            padding: 28px 24px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: var(--shadow-lg);
+            margin: auto;
+        }
+
+        .modal-troca-card .icon-box {
+            width: 64px;
+            height: 64px;
+            background: #eff6ff;
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 16px auto;
+        }
+
+        /* TEMPLATE OCULTO PARA PDF */
+        #pdfTemplate {
+            display: none;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            color: #111827;
+            background: #ffffff;
+        }
+
+        .pdf-header {
+            text-align: center;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .pdf-header h2 {
+            font-size: 15pt;
+            color: #1e3a8a;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .pdf-header h3 {
+            font-size: 11pt;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .pdf-section-title {
+            font-size: 10.5pt;
+            font-weight: bold;
+            color: #1e3a8a;
+            background: #f1f5f9;
+            padding: 5px 8px;
+            margin-top: 14px;
+            margin-bottom: 8px;
+            border-left: 4px solid #2563eb;
+            text-transform: uppercase;
+        }
+
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .pdf-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .pdf-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .pdf-item {
+            font-size: 9.5pt;
+            line-height: 1.3;
+        }
+
+        .pdf-item label {
+            font-weight: bold;
+            color: #374151;
+            display: block;
+            font-size: 8.5pt;
+            text-transform: uppercase;
+        }
+
+        .pdf-item span {
+            color: #000;
+            font-size: 10pt;
+        }
+
+        .pdf-box {
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 9.5pt;
+            background: #fafafa;
+            white-space: pre-line;
+        }
+
+        .pdf-footer-note {
+            margin-top: 24px;
+            padding-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+            font-size: 8.5pt;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .pdf-footer-blessing {
+            margin-top: 8px;
+            font-size: 9.5pt;
+            font-weight: bold;
+            color: #1e3a8a;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Principal Hero Screen -->
+    <div class="container">
+        <div class="card-welcome">
+            <div class="logo-ccb-container">
+                <img src="logo-ccb.png" alt="Logo CCB" class="logo-ccb">
+            </div>
+
+            <h1>Pré-Avaliação de Músicos</h1>
+            <p class="subtitle">Congregação Cristã no Brasil<br>Culto Oficial, Oficialização e Solicitantes de Troca de Instrumento.</p>
+            
+            <div class="welcome-actions">
+                <button class="btn-primary" onclick="openModal()">
+                    <i class="fa-solid fa-file-signature"></i> Preencher Pré-Teste (Músicos)
+                </button>
+                <button class="btn-secondary" onclick="abrirModalTroca()">
+                    <i class="fa-solid fa-right-left"></i> Troca de Instrumento
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORMULÁRIO PRÉ-TESTE MÚSICOS -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-card">
+            
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-music" style="margin-right:8px; color:var(--accent);"></i> Ficha do Candidato</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="musicoForm">
+                    
+                    <div class="section-title"><i class="fa-solid fa-calendar-days"></i> Registro e Solicitação</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dataPreenchimento">Data do Registro *</label>
+                            <input type="date" id="dataPreenchimento" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="solicitacaoPara">Avaliação para: *</label>
+                            <select id="solicitacaoPara" class="form-control" required>
+                                <option value="">Selecione...</option>
+                                <option value="Culto Oficial">Culto Oficial</option>
+                                <option value="Oficialização">Oficialização</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- DADOS DO CANDIDATO -->
+                    <div class="section-title"><i class="fa-solid fa-user"></i> Identificação do Candidato</div>
+                    
+                    <div class="form-group">
+                        <label for="nomeCandidato">Nome completo (sem abreviações) *</label>
+                        <input type="text" id="nomeCandidato" class="form-control" placeholder="Nome completo" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="comumCandidato">Comum congregação *</label>
+                            <input type="text" id="comumCandidato" class="form-control" placeholder="Bairro / Cidade" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dataNasc">Data de Nascimento *</label>
+                            <input type="date" id="dataNasc" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="instrumentoTonalidade">Instrumento e Tonalidade *</label>
+                            <input type="text" id="instrumentoTonalidade" class="form-control" placeholder="Ex: Trompete em Sib" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="batizado">Batizado? *</label>
+                            <select id="batizado" class="form-control" required>
+                                <option value="">Selecione...</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- HISTÓRICO DE DATAS DE INÍCIO -->
+                    <div class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Histórico de Início</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="inicioGEM">Início no GEM</label>
+                            <input type="date" id="inicioGEM" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="inicioEnsaio">Início no Ensaio</label>
+                            <input type="date" id="inicioEnsaio" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="inicioRJM">Início na RJM</label>
+                            <input type="date" id="inicioRJM" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="inicioCulto">Início no Culto</label>
+                            <input type="date" id="inicioCulto" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- MSA -->
+                    <div class="section-title"><i class="fa-solid fa-book-open"></i> MSA (Aprendizagem Musical)</div>
+                    
+                    <div class="form-group">
+                        <label for="tipoMSA">Módulo MSA Concluído *</label>
+                        <select id="tipoMSA" class="form-control" required>
+                            <option value="">Selecione...</option>
+                            <option value="MSA completo">MSA Completo</option>
+                            <option value="MSA até módulo 16 para culto oficial">MSA até módulo 16 (Culto Oficial)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nota nos Módulos (01 a 16):</label>
+                        <div class="msa-grid">
+                            <div class="msa-item"><label>01</label><input type="text" id="msa01" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>02</label><input type="text" id="msa02" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>03</label><input type="text" id="msa03" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>04</label><input type="text" id="msa04" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>05</label><input type="text" id="msa05" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>06</label><input type="text" id="msa06" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>07</label><input type="text" id="msa07" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>08</label><input type="text" id="msa08" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>09</label><input type="text" id="msa09" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>10</label><input type="text" id="msa10" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>11</label><input type="text" id="msa11" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>12</label><input type="text" id="msa12" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>13</label><input type="text" id="msa13" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>14</label><input type="text" id="msa14" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>15</label><input type="text" id="msa15" class="form-control" maxlength="4"></div>
+                            <div class="msa-item"><label>16</label><input type="text" id="msa16" class="form-control" maxlength="4"></div>
+                        </div>
+                    </div>
+
+                    <!-- MÉTODOS DE PRÁTICA -->
+                    <div class="section-title"><i class="fa-solid fa-sliders"></i> Métodos de Prática de Instrumento</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="metodoNome">Nome do Método *</label>
+                            <input type="text" id="metodoNome" class="form-control" placeholder="Ex: Amabile, Bona, etc." required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="metodoVol">Volume</label>
+                                <input type="text" id="metodoVol" class="form-control" placeholder="Vol.">
+                            </div>
+                            <div class="form-group">
+                                <label for="metodoPagina">Página</label>
+                                <input type="text" id="metodoPagina" class="form-control" placeholder="Pág.">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HINÁRIO E EXECUÇÃO -->
+                    <div class="section-title"><i class="fa-solid fa-book-bible"></i> Execução dos Hinos</div>
+                    
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="execVozPrincipal" checked>
+                            Voz Principal Completo
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="execVozAlternativa">
+                            Voz Alternativa
+                        </label>
+                    </div>
+
+                    <!-- ACESSIBILIDADE -->
+                    <div class="section-title"><i class="fa-solid fa-universal-access"></i> Acessibilidade</div>
+
+                    <div class="form-group">
+                        <label for="temNecessidadeEspecial">Pessoa com necessidade especial? *</label>
+                        <select id="temNecessidadeEspecial" class="form-control" onchange="toggleNecessidadeEspecial()" required>
+                            <option value="">Selecione...</option>
+                            <option value="Não">Não</option>
+                            <option value="Sim">Sim</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="groupQualNecessidade" style="display: none;">
+                        <label for="qualNecessidadeEspecial">Caso sim, especifique: *</label>
+                        <textarea id="qualNecessidadeEspecial" class="form-control" placeholder="Descreva aqui a necessidade especial..."></textarea>
+                    </div>
+
+                    <!-- MINISTÉRIO LOCAL -->
+                    <div class="section-title"><i class="fa-solid fa-users"></i> Ministério Local</div>
+
+                    <div class="form-group">
+                        <label for="anciao">Ancião *</label>
+                        <input type="text" id="anciao" class="form-control" placeholder="Nome do Ancião" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cooperador">Cooperador Oficial *</label>
+                        <input type="text" id="cooperador" class="form-control" placeholder="Nome do Cooperador" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="encarregado">Encarregado Local *</label>
+                        <input type="text" id="encarregado" class="form-control" placeholder="Nome do Encarregado" required>
+                    </div>
+
+                    <!-- SECRETÁRIO MUSICAL RESPONSÁVEL -->
+                    <div class="section-title"><i class="fa-solid fa-user-gear"></i> Secretário Musical Responsável</div>
+
+                    <div class="form-group">
+                        <label for="selectSecretario">Selecione o Secretário Musical *</label>
+                        <select id="selectSecretario" class="form-control" required>
+                            <option value="">Selecione o Secretário...</option>
+                            <option value="11971561722">Alessandro - (11) 97156-1722</option>
+                            <option value="11981194108">Danilo - (11) 98119-4108</option>
+                            <option value="11967703073">Gleidson - (11) 96770-3073</option>
+                            <option value="11961744658">Douglas - (11) 96174-4658</option>
+                            <option value="11947951258">Alex - (11) 94795-1258</option>
+                            <option value="11978313225">Isaque - (11) 97831-3225</option>
+                            <option value="11940893448">Richard Bruno - (11) 94089-3448</option>
+                            <option value="11954950044">Rafael - (11) 95495-0044</option>
+                        </select>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" onclick="processarEnvio()">
+                    <i class="fa-solid fa-paper-plane"></i> Finalizar e Enviar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMAÇÃO DE ENVIO -->
+    <div class="modal-overlay" id="modalConfirmacaoOverlay">
+        <div class="modal-confirmation-card">
+            <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: var(--success); margin-bottom: 12px;"></i>
+            <h2>Deus abençoe!</h2>
+            <p>Selecione abaixo como deseja enviar o Pré-Teste do músico:</p>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button type="button" class="btn-whatsapp" onclick="enviarWhatsApp()">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> Enviar via WhatsApp (Texto)
+                </button>
+                <button type="button" class="btn-pdf" onclick="gerarPDF()">
+                    <i class="fa-solid fa-file-pdf" style="font-size: 1.1rem;"></i> Baixar Ficha Completa (PDF)
+                </button>
+                <button type="button" onclick="fecharModalConfirmacao()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 8px; font-weight: 600;">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ELEGANTE TROCA DE INSTRUMENTO -->
+    <div class="modal-overlay" id="modalTrocaOverlay">
+        <div class="modal-troca-card">
+            <div class="icon-box">
+                <i class="fa-solid fa-right-left"></i>
+            </div>
+            <h2 style="color: var(--primary); font-size: 1.3rem; margin-bottom: 8px;">Troca de Instrumento</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; line-height: 1.5;">
+                Você será redirecionado para o formulário específico de solicitação e avaliação de **Troca de Instrumento**.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button type="button" class="btn-primary" onclick="redirecionarTroca()">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Continuar para Troca
+                </button>
+                <button type="button" onclick="fecharModalTroca()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 8px; font-weight: 600;">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEMPLATE OCULTO PARA GERAR O PDF -->
+    <div id="pdfTemplate">
+        <div class="pdf-header">
+            <h2>CONGREGAÇÃO CRISTÃ NO BRASIL</h2>
+            <h3>PEDIDO DE PRÉ-AVALIAÇÃO DE MÚSICOS</h3>
+            <div style="margin-top: 6px; font-size: 9.5pt; color: #4b5563;">
+                Data do Registro: <strong id="pdf_dataPreenchimento" style="color: #000;"></strong> | Avaliação para: <strong id="pdf_solicitacaoPara" style="color: #1e3a8a;"></strong>
+            </div>
+        </div>
+
+        <div class="pdf-section-title">1. Identificação do Candidato</div>
+        <div class="pdf-grid">
+            <div class="pdf-item" style="grid-column: span 2;">
+                <label>Nome Completo:</label>
+                <span id="pdf_nomeCandidato"></span>
+            </div>
+        </div>
+        <div class="pdf-grid-3">
+            <div class="pdf-item">
+                <label>Comum Congregação:</label>
+                <span id="pdf_comumCandidato"></span>
+            </div>
+            <div class="pdf-item">
+                <label>Data Nasc.:</label>
+                <span id="pdf_dataNasc"></span>
+            </div>
+            <div class="pdf-item">
+                <label>Batizado:</label>
+                <span id="pdf_batizado"></span>
+            </div>
+        </div>
+        <div class="pdf-grid">
+            <div class="pdf-item" style="grid-column: span 2;">
+                <label>Instrumento e Tonalidade:</label>
+                <span id="pdf_instrumentoTonalidade" style="font-weight: bold; color: #1e3a8a;"></span>
+            </div>
+        </div>
+
+        <div class="pdf-section-title">2. Histórico de Início</div>
+        <div class="pdf-grid-4">
+            <div class="pdf-item"><label>GEM:</label><span id="pdf_inicioGEM"></span></div>
+            <div class="pdf-item"><label>Ensaio:</label><span id="pdf_inicioEnsaio"></span></div>
+            <div class="pdf-item"><label>RJM:</label><span id="pdf_inicioRJM"></span></div>
+            <div class="pdf-item"><label>Culto:</label><span id="pdf_inicioCulto"></span></div>
+        </div>
+
+        <div class="pdf-section-title">3. Método Simplificado de Aprendizagem Musical - MSA</div>
+        <div class="pdf-item" style="margin-bottom: 6px;">
+            <label>Programa Concluído:</label>
+            <span id="pdf_tipoMSA" style="font-weight: bold;"></span>
+        </div>
+        <div class="pdf-item"><label>Notas nos Módulos:</label></div>
+        <div class="pdf-grid-4" style="text-align: center; background: #f8fafc; padding: 6px; border: 1px solid #e2e8f0; border-radius: 4px;">
+            <div><strong>01:</strong> <span id="pdf_m1"></span></div>
+            <div><strong>02:</strong> <span id="pdf_m2"></span></div>
+            <div><strong>03:</strong> <span id="pdf_m3"></span></div>
+            <div><strong>04:</strong> <span id="pdf_m4"></span></div>
+            <div><strong>05:</strong> <span id="pdf_m5"></span></div>
+            <div><strong>06:</strong> <span id="pdf_m6"></span></div>
+            <div><strong>07:</strong> <span id="pdf_m7"></span></div>
+            <div><strong>08:</strong> <span id="pdf_m8"></span></div>
+            <div><strong>09:</strong> <span id="pdf_m9"></span></div>
+            <div><strong>10:</strong> <span id="pdf_m10"></span></div>
+            <div><strong>11:</strong> <span id="pdf_m11"></span></div>
+            <div><strong>12:</strong> <span id="pdf_m12"></span></div>
+            <div><strong>13:</strong> <span id="pdf_m13"></span></div>
+            <div><strong>14:</strong> <span id="pdf_m14"></span></div>
+            <div><strong>15:</strong> <span id="pdf_m15"></span></div>
+            <div><strong>16:</strong> <span id="pdf_m16"></span></div>
+        </div>
+
+        <div class="pdf-section-title">4. Métodos de Prática e Execução Hinos</div>
+        <div class="pdf-grid-3">
+            <div class="pdf-item"><label>Método:</label><span id="pdf_metodoNome"></span></div>
+            <div class="pdf-item"><label>Volume:</label><span id="pdf_metodoVol"></span></div>
+            <div class="pdf-item"><label>Página:</label><span id="pdf_metodoPagina"></span></div>
+        </div>
+        <div class="pdf-item" style="margin-top: 4px;">
+            <label>Execução no Hinário:</label>
+            <span id="pdf_hinarioExec"></span>
+        </div>
+
+        <div class="pdf-section-title">5. Acessibilidade</div>
+        <div class="pdf-item">
+            <label>Necessidade Especial:</label>
+            <span id="pdf_temNecessidadeEspecial"></span>
+        </div>
+
+        <div class="pdf-section-title">6. Ministério Local</div>
+        <div class="pdf-grid-3">
+            <div class="pdf-item"><label>Ancião:</label><span id="pdf_anciao"></span></div>
+            <div class="pdf-item"><label>Cooperador:</label><span id="pdf_cooperador"></span></div>
+            <div class="pdf-item"><label>Encarregado:</label><span id="pdf_encarregado"></span></div>
+        </div>
+
+        <div class="pdf-footer-note">
+            CCBSM.03-REV.01 - Pedido de Pré-Avaliação de Músicos
+        </div>
+        <div class="pdf-footer-blessing">
+            Deus abençoe!
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dataInput = document.getElementById('dataPreenchimento');
+            if (dataInput) dataInput.valueAsDate = new Date();
+        });
+
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function closeModalOnOverlay(e) {
+            if (e.target.id === 'modalOverlay') closeModal();
+        }
+
+        function abrirModalTroca() {
+            document.getElementById('modalTrocaOverlay').classList.add('active');
+        }
+
+        function fecharModalTroca() {
+            document.getElementById('modalTrocaOverlay').classList.remove('active');
+        }
+
+        function redirecionarTroca() {
+            // Insira aqui o link ou nome da página para onde deseja redirecionar
+            window.location.href = "troca_instrumento.html";
+        }
+
+        function toggleNecessidadeEspecial() {
+            const val = document.getElementById('temNecessidadeEspecial').value;
+            const group = document.getElementById('groupQualNecessidade');
+            const textarea = document.getElementById('qualNecessidadeEspecial');
+            if (val === 'Sim') {
+                group.style.display = 'block';
+                textarea.required = true;
+            } else {
+                group.style.display = 'none';
+                textarea.required = false;
+                textarea.value = '';
+            }
+        }
+
+        function formatarDataBR(dataIso) {
+            if (!dataIso) return '-';
+            const partes = dataIso.split('-');
+            if (partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0]}`;
+            return dataIso;
+        }
+
+        function obterDadosFormulario() {
+            return {
+                dataPreenchimento: formatarDataBR(document.getElementById('dataPreenchimento').value),
+                solicitacaoPara: document.getElementById('solicitacaoPara').value,
+                nomeCandidato: document.getElementById('nomeCandidato').value,
+                comumCandidato: document.getElementById('comumCandidato').value,
+                dataNasc: formatarDataBR(document.getElementById('dataNasc').value),
+                instrumentoTonalidade: document.getElementById('instrumentoTonalidade').value,
+                batizado: document.getElementById('batizado').value,
+                inicioGEM: formatarDataBR(document.getElementById('inicioGEM').value),
+                inicioEnsaio: formatarDataBR(document.getElementById('inicioEnsaio').value),
+                inicioRJM: formatarDataBR(document.getElementById('inicioRJM').value),
+                inicioCulto: formatarDataBR(document.getElementById('inicioCulto').value),
+                tipoMSA: document.getElementById('tipoMSA').value,
+                msaNotas: {
+                    m1: document.getElementById('msa01').value || '-',
+                    m2: document.getElementById('msa02').value || '-',
+                    m3: document.getElementById('msa03').value || '-',
+                    m4: document.getElementById('msa04').value || '-',
+                    m5: document.getElementById('msa05').value || '-',
+                    m6: document.getElementById('msa06').value || '-',
+                    m7: document.getElementById('msa07').value || '-',
+                    m8: document.getElementById('msa08').value || '-',
+                    m9: document.getElementById('msa09').value || '-',
+                    m10: document.getElementById('msa10').value || '-',
+                    m11: document.getElementById('msa11').value || '-',
+                    m12: document.getElementById('msa12').value || '-',
+                    m13: document.getElementById('msa13').value || '-',
+                    m14: document.getElementById('msa14').value || '-',
+                    m15: document.getElementById('msa15').value || '-',
+                    m16: document.getElementById('msa16').value || '-'
+                },
+                metodoNome: document.getElementById('metodoNome').value,
+                metodoVol: document.getElementById('metodoVol').value || '-',
+                metodoPagina: document.getElementById('metodoPagina').value || '-',
+                execVozPrincipal: document.getElementById('execVozPrincipal').checked,
+                execVozAlternativa: document.getElementById('execVozAlternativa').checked,
+                temNecessidadeEspecial: document.getElementById('temNecessidadeEspecial').value,
+                qualNecessidadeEspecial: document.getElementById('qualNecessidadeEspecial').value,
+                anciao: document.getElementById('anciao').value,
+                cooperador: document.getElementById('cooperador').value,
+                encarregado: document.getElementById('encarregado').value,
+                telefoneSecretario: document.getElementById('selectSecretario').value
+            };
+        }
+
+        function processarEnvio() {
+            const form = document.getElementById('musicoForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            closeModal();
+            document.getElementById('modalConfirmacaoOverlay').classList.add('active');
+        }
+
+        function fecharModalConfirmacao() {
+            document.getElementById('modalConfirmacaoOverlay').classList.remove('active');
+        }
+
+        function enviarWhatsApp() {
+            const d = obterDadosFormulario();
+            
+            let execHinarioStr = [];
+            if (d.execVozPrincipal) execHinarioStr.push("Voz Principal Completo");
+            if (d.execVozAlternativa) execHinarioStr.push("Voz Alternativa");
+
+            let textoNecessidade = d.temNecessidadeEspecial;
+            if (d.temNecessidadeEspecial === 'Sim') {
+                textoNecessidade += ` (${d.qualNecessidadeEspecial})`;
+            }
+
+            const mensagem = 
+`*PEDIDO DE PRÉ-AVALIAÇÃO DE MÚSICOS - CCB*
+_Data do Registro: ${d.dataPreenchimento}_
+_Solicitação para: ${d.solicitacaoPara}_
+
+*1. IDENTIFICAÇÃO*
+• *Nome:* ${d.nomeCandidato}
+• *Comum:* ${d.comumCandidato}
+• *Data Nasc.:* ${d.dataNasc}
+• *Batizado:* ${d.batizado}
+• *Instrumento/Tonalidade:* ${d.instrumentoTonalidade}
+
+*2. HISTÓRICO DE INÍCIO*
+• *GEM:* ${d.inicioGEM} | *Ensaio:* ${d.inicioEnsaio}
+• *RJM:* ${d.inicioRJM} | *Culto:* ${d.inicioCulto}
+
+*3. MSA & MÉTODOS*
+• *Programa:* ${d.tipoMSA}
+• *Método:* ${d.metodoNome} (Vol: ${d.metodoVol}, Pág: ${d.metodoPagina})
+• *Execução Hinos:* ${execHinarioStr.join(', ')}
+
+*4. ACESSIBILIDADE*
+• *Necessidade Especial:* ${textoNecessidade}
+
+*5. MINISTÉRIO LOCAL*
+• *Ancião:* ${d.anciao}
+• *Cooperador:* ${d.cooperador}
+• *Encarregado:* ${d.encarregado}
+
+Deus abençoe!`;
+
+            const url = `https://api.whatsapp.com/send?phone=55${d.telefoneSecretario}&text=${encodeURIComponent(mensagem)}`;
+            window.open(url, '_blank');
+        }
+
+        function gerarPDF() {
+            const d = obterDadosFormulario();
+
+            document.getElementById('pdf_dataPreenchimento').textContent = d.dataPreenchimento;
+            document.getElementById('pdf_solicitacaoPara').textContent = d.solicitacaoPara;
+            document.getElementById('pdf_nomeCandidato').textContent = d.nomeCandidato;
+            document.getElementById('pdf_comumCandidato').textContent = d.comumCandidato;
+            document.getElementById('pdf_dataNasc').textContent = d.dataNasc;
+            document.getElementById('pdf_batizado').textContent = d.batizado;
+            document.getElementById('pdf_instrumentoTonalidade').textContent = d.instrumentoTonalidade;
+
+            document.getElementById('pdf_inicioGEM').textContent = d.inicioGEM;
+            document.getElementById('pdf_inicioEnsaio').textContent = d.inicioEnsaio;
+            document.getElementById('pdf_inicioRJM').textContent = d.inicioRJM;
+            document.getElementById('pdf_inicioCulto').textContent = d.inicioCulto;
+
+            document.getElementById('pdf_tipoMSA').textContent = d.tipoMSA;
+
+            for (let i = 1; i <= 16; i++) {
+                const key = 'm' + i;
+                document.getElementById('pdf_' + key).textContent = d.msaNotas[key];
+            }
+
+            document.getElementById('pdf_metodoNome').textContent = d.metodoNome;
+            document.getElementById('pdf_metodoVol').textContent = d.metodoVol;
+            document.getElementById('pdf_metodoPagina').textContent = d.metodoPagina;
+
+            let hinosArr = [];
+            if (d.execVozPrincipal) hinosArr.push("Voz Principal Completo");
+            if (d.execVozAlternativa) hinosArr.push("Voz Alternativa");
+            document.getElementById('pdf_hinarioExec').textContent = hinosArr.join(" / ");
+
+            document.getElementById('pdf_temNecessidadeEspecial').textContent = 
+                d.temNecessidadeEspecial === 'Sim' ? `Sim (${d.qualNecessidadeEspecial})` : 'Não';
+
+            document.getElementById('pdf_anciao').textContent = d.anciao;
+            document.getElementById('pdf_cooperador').textContent = d.cooperador;
+            document.getElementById('pdf_encarregado').textContent = d.encarregado;
+
+            const template = document.getElementById('pdfTemplate');
+            template.style.display = 'block';
+
+            const opt = {
+                margin:       8,
+                filename:     `Pre-Avaliacao_Musico_${d.nomeCandidato.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(template).save().then(() => {
+                template.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
