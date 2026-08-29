@@ -312,7 +312,7 @@
             padding-right: 36px;
         }
 
-        /* BOTÃO CONSULTAR PROGRAMA MÍNIMO (EM AMARELO) */
+        /* BOTÃO CONSULTAR PROGRAMA MÍNIMO */
         .btn-link-pdf-yellow {
             display: inline-flex;
             align-items: center;
@@ -492,16 +492,30 @@
             padding: 24px;
             border-radius: var(--radius-lg);
             width: 90%;
-            max-width: 420px;
+            max-width: 440px;
             box-shadow: var(--shadow-lg);
             margin: auto;
         }
 
         .modal-dialog-card h2 {
             color: var(--primary);
-            font-size: 1.25rem;
-            margin-bottom: 12px;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
             text-align: center;
+        }
+
+        .msg-box-agradecimento {
+            background: #eff6ff;
+            border: 1.5px solid #bfdbfe;
+            border-left: 4px solid var(--accent);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #1e293b;
+            text-align: left;
+            line-height: 1.5;
+            margin: 14px 0 18px 0;
+            white-space: pre-line;
         }
 
         /* TEMPLATE OCULTO PARA PDF */
@@ -731,7 +745,6 @@
                     <div class="form-group">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                             <label for="tipoMSA" style="margin-bottom:0;">Módulo MSA Concluído</label>
-                            <!-- BOTÃO EM AMARELO -->
                             <a href="programaminimo.pdf" target="_blank" class="btn-link-pdf-yellow">
                                 <i class="fa-solid fa-file-pdf"></i> Consultar Programa Mínimo
                             </a>
@@ -887,12 +900,18 @@
         </div>
     </div>
 
-    <!-- MODAL CONFIRMAÇÃO DE ENVIO -->
+    <!-- MODAL CONFIRMAÇÃO DE ENVIO E MENSAGEM FINAL -->
     <div class="modal-overlay" id="modalConfirmacaoOverlay">
         <div class="modal-dialog-card" style="text-align: center;">
-            <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: var(--success); margin-bottom: 12px;"></i>
-            <h2>Deus abençoe!</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Selecione abaixo como deseja enviar o Pré-Teste do músico:</p>
+            <i class="fa-solid fa-circle-check" style="font-size: 2.8rem; color: var(--success); margin-bottom: 8px;"></i>
+            <h2>Resumo da Solicitação</h2>
+            
+            <!-- Mensagem dinâmica de agradecimento completa exibida na tela -->
+            <div class="msg-box-agradecimento" id="msgBoxFinalAgradecimento">
+                <!-- Inserido dinamicamente via JS -->
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Escolha como prefere transmitir estes dados:</p>
 
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button type="button" class="btn-whatsapp" onclick="enviarWhatsApp()">
@@ -1339,6 +1358,15 @@
                 alert("Caso tenha a informação, por favor preencha todos os campos.");
             }
 
+            // Gerar a mensagem dinâmica completa de agradecimento no modal
+            const d = obterDadosFormulario();
+            const selectSecretarioEl = document.getElementById('selectSecretario');
+            const nomeSecretario = selectSecretarioEl.options[selectSecretarioEl.selectedIndex]?.text.split(' - ')[0] || '';
+
+            const textoAgradecimento = `Deus abençoe caro irmão "${d.encarregado}", Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026. Grato Att,, "${nomeSecretario}"`;
+
+            document.getElementById('msgBoxFinalAgradecimento').innerText = textoAgradecimento;
+
             closeModal();
             document.getElementById('modalConfirmacaoOverlay').classList.add('active');
         }
@@ -1396,7 +1424,7 @@ ${metodosTexto}
 • *Cooperador:* ${d.cooperador}
 • *Encarregado:* ${d.encarregado}
 
-Deus abençoe caro irmão ${d.encarregado}, Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026. Grato Att,, ${nomeSecretario}`;
+Deus abençoe caro irmão "${d.encarregado}", Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026. Grato Att,, "${nomeSecretario}"`;
 
             const url = `https://api.whatsapp.com/send?phone=55${d.telefoneSecretario}&text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
