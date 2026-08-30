@@ -1,1 +1,1108 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>será
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pedido para Troca de Instrumento - CCB</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js para geração do PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #1e40af;
+            --accent: #2563eb;
+            --bg-body: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --pdf-color: #dc2626;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        /* Card Entrada */
+        .card-welcome {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .logo-ccb-container {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 16px auto;
+            animation: ccbPulse 2.5s infinite ease-in-out;
+        }
+
+        .logo-ccb {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 4px 8px rgba(30, 58, 138, 0.2));
+        }
+
+        @keyframes ccbPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .welcome-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+            background: var(--primary-hover);
+        }
+
+        /* MODAIS GENERALIZADOS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: var(--surface);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 24px 24px 0 0;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        @media (min-width: 600px) {
+            .modal-overlay {
+                align-items: center;
+                padding: 20px;
+            }
+            .modal-card {
+                border-radius: var(--radius-lg);
+                max-height: 85vh;
+            }
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            flex-shrink: 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-body {
+            padding: 16px 20px;
+            overflow-y: auto;
+            flex: 1;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* FORM ELEMENTS */
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin: 18px 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 13px;
+            font-size: 0.95rem;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            background: #fdfdfd;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            background: #ffffff;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2064748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 36px;
+        }
+
+        .info-box-rules {
+            background: #fffbe0;
+            border: 1px solid #fef08a;
+            border-left: 4px solid #eab308;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            color: #713f12;
+            line-height: 1.4;
+            margin-bottom: 14px;
+        }
+
+        /* MODAL FOOTER */
+        .modal-footer {
+            padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 10px)) 20px;
+            border-top: 1px solid var(--border);
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        .btn-pdf {
+            width: 100%;
+            background: var(--pdf-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(220, 38, 38, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-pdf:active {
+            transform: scale(0.98);
+            background: #b91c1c;
+        }
+
+        .btn-whatsapp {
+            width: 100%;
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(37, 211, 102, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-whatsapp:active {
+            transform: scale(0.98);
+            background: #20bd5a;
+        }
+
+        /* MODAIS DE DIÁLOGO */
+        .modal-dialog-card {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 440px;
+            box-shadow: var(--shadow-lg);
+            margin: auto;
+        }
+
+        .modal-dialog-card h2 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .msg-box-agradecimento {
+            background: #eff6ff;
+            border: 1.5px solid #bfdbfe;
+            border-left: 4px solid var(--accent);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #1e293b;
+            text-align: left;
+            line-height: 1.5;
+            margin: 14px 0 18px 0;
+            white-space: pre-line;
+        }
+
+        /* TEMPLATE OCULTO PARA PDF */
+        #pdfTemplate {
+            display: none;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            color: #111827;
+            background: #ffffff;
+        }
+
+        .pdf-header {
+            text-align: center;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 8px;
+            margin-bottom: 14px;
+        }
+
+        .pdf-header h2 {
+            font-size: 14pt;
+            color: #1e3a8a;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+        }
+
+        .pdf-header h3 {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .pdf-greeting {
+            font-size: 9.5pt;
+            font-style: italic;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .pdf-section-title {
+            font-size: 10pt;
+            font-weight: bold;
+            color: #1e3a8a;
+            background: #f1f5f9;
+            padding: 4px 8px;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            border-left: 4px solid #2563eb;
+            text-transform: uppercase;
+        }
+
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .pdf-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .pdf-item {
+            font-size: 9pt;
+            line-height: 1.3;
+        }
+
+        .pdf-item label {
+            font-weight: bold;
+            color: #374151;
+            display: block;
+            font-size: 8pt;
+            text-transform: uppercase;
+        }
+
+        .pdf-item span {
+            color: #000;
+            font-size: 9.5pt;
+        }
+
+        .pdf-box-rules {
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 7.5pt;
+            color: #334155;
+            line-height: 1.35;
+            margin-top: 10px;
+            text-align: justify;
+        }
+
+        .pdf-signatures-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .pdf-sig-box {
+            border-top: 1px solid #000;
+            text-align: center;
+            padding-top: 4px;
+            font-size: 8pt;
+            color: #374151;
+        }
+
+        .pdf-footer-code {
+            margin-top: 20px;
+            padding-top: 8px;
+            border-top: 1px dashed #cbd5e1;
+            font-size: 8pt;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Principal Hero Screen -->
+    <div class="container">
+        <div class="card-welcome">
+            <div class="logo-ccb-container">
+                <img src="logo-ccb.png" alt="Logo CCB" class="logo-ccb">
+            </div>
+
+            <h1>Pedido para Troca de Instrumento</h1>
+            <p class="subtitle">Congregação Cristã no Brasil<br>Formulário Oficial de Solicitação de Troca de Instrumento (CCBSM.04)</p>
+            
+            <div class="welcome-actions">
+                <button class="btn-primary" onclick="openModal()">
+                    <i class="fa-solid fa-right-left"></i> Preencher Pedido de Troca
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORMULÁRIO TROCA DE INSTRUMENTO -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-card">
+            
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-right-left" style="margin-right:8px; color:var(--accent);"></i> Troca de Instrumento</h2>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="trocaForm">
+                    
+                    <div class="section-title"><i class="fa-solid fa-location-dot"></i> Local e Data</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="localidade">Cidade/Localidade</label>
+                            <input type="text" id="localidade" class="form-control" value="Itaquaquecetuba">
+                        </div>
+                        <div class="form-group">
+                            <label for="dataPreenchimento">Data do Pedido</label>
+                            <input type="date" id="dataPreenchimento" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- IDENTIFICAÇÃO DO CANDIDATO -->
+                    <div class="section-title"><i class="fa-solid fa-user"></i> Identificação</div>
+                    
+                    <div class="form-group">
+                        <label for="nomeCandidato">Nome completo (sem abreviações)</label>
+                        <input type="text" id="nomeCandidato" class="form-control" placeholder="Nome completo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="selectComum">Comum congregação</label>
+                        <select id="selectComum" class="form-control" onchange="selecionarComum()">
+                            <option value="">Selecione a Comum...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="groupComumOutro" style="display: none;">
+                        <label for="comumOutro">Especifique a Comum (Editável)</label>
+                        <input type="text" id="comumOutro" class="form-control" placeholder="Digite o nome da congregação">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dataOficializacao">Data da Oficialização</label>
+                            <input type="date" id="dataOficializacao" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="instrumentoAtual">Instrumento e Tonalidade Atual</label>
+                            <input type="text" id="instrumentoAtual" class="form-control" placeholder="Ex: Saxofone Tenor em Sib">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="temNecessidadeEspecial">Pessoa com necessidade especial?</label>
+                        <select id="temNecessidadeEspecial" class="form-control" onchange="toggleNecessidadeEspecial()">
+                            <option value="Não">Não</option>
+                            <option value="Sim">Sim</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="groupQualNecessidade" style="display: none;">
+                        <label for="qualNecessidadeEspecial">Caso sim, especifique:</label>
+                        <textarea id="qualNecessidadeEspecial" class="form-control" placeholder="Descreva a necessidade especial..."></textarea>
+                    </div>
+
+                    <!-- INFORMAÇÕES DA TROCA -->
+                    <div class="section-title"><i class="fa-solid fa-arrow-rotate-right"></i> Informações da Troca</div>
+
+                    <div class="form-group">
+                        <label for="instrumentoDesejado">Instrumento e tonalidade que deseja tocar (conforme pág. 9 do M.O.O.)</label>
+                        <input type="text" id="instrumentoDesejado" class="form-control" placeholder="Ex: Tuba em Mib">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="motivoTroca">Motivo da Troca</label>
+                        <select id="motivoTroca" class="form-control" onchange="toggleMotivoSaude()">
+                            <option value="">Selecione...</option>
+                            <option value="Necessidade da orquestra">Necessidade da orquestra</option>
+                            <option value="Saúde ou orientação médica">Saúde ou orientação médica</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="groupMotivoSaude" style="display: none;">
+                        <label for="especifiqueSaude">Especifique motivo de saúde / orientação médica:</label>
+                        <textarea id="especifiqueSaude" class="form-control" placeholder="Detalhe a orientação médica ou de saúde..."></textarea>
+                    </div>
+
+                    <div class="info-box-rules">
+                        <strong>Considerações do Encarregado Regional:</strong> Conforme tópico 02 da reunião anual de encarregados regionais de outubro de 2015, a mudança de categoria de instrumento só poderá ser realizada em casos de enfermidade do irmão ou necessidade da orquestra, e após a aprovação do Ministério Espiritual, em comunhão com o encarregado regional e local. Lembramos também que a compra do instrumento, para tocar nos cultos, só poderá ser realizada após essa aprovação e só iniciará a tocar após o teste com o novo instrumento, realizado com o encarregado regional. Não se trata de nova oficialização.
+                    </div>
+
+                    <!-- MINISTÉRIO LOCAL -->
+                    <div class="section-title"><i class="fa-solid fa-users"></i> Ministério Local</div>
+
+                    <div class="form-group">
+                        <label for="anciao">Ancião</label>
+                        <input type="text" id="anciao" class="form-control" placeholder="Nome do Ancião">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cooperador">Cooperador Oficial</label>
+                        <input type="text" id="cooperador" class="form-control" placeholder="Nome do Cooperador Oficial">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="encarregadoRegional">Encarregado Regional</label>
+                        <input type="text" id="encarregadoRegional" class="form-control" placeholder="Nome do Encarregado Regional">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="encarregadoLocal">Encarregado Local</label>
+                        <input type="text" id="encarregadoLocal" class="form-control" placeholder="Nome do Encarregado Local">
+                    </div>
+
+                    <!-- SECRETÁRIO MUSICAL RESPONSÁVEL -->
+                    <div class="section-title"><i class="fa-solid fa-user-gear"></i> Secretário Musical Responsável</div>
+
+                    <div class="form-group">
+                        <label for="selectSecretario">Selecione o Secretário Musical</label>
+                        <select id="selectSecretario" class="form-control">
+                            <option value="">Selecione o Secretário...</option>
+                            <option value="11971561722">Alessandro - (11) 97156-1722</option>
+                            <option value="11981194108">Danilo - (11) 98119-4108</option>
+                            <option value="11967703073">Gleidson - (11) 96770-3073</option>
+                            <option value="11961744658">Douglas - (11) 96174-4658</option>
+                            <option value="11947951258">Alex - (11) 94795-1258</option>
+                            <option value="11978313225">Isaque - (11) 97831-3225</option>
+                            <option value="11940893448">Richard Bruno - (11) 94089-3448</option>
+                            <option value="11954950044">Rafael - (11) 95495-0044</option>
+                        </select>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" onclick="processarEnvio()">
+                    <i class="fa-solid fa-paper-plane"></i> Finalizar e Enviar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMAÇÃO DE ENVIO E MENSAGEM FINAL -->
+    <div class="modal-overlay" id="modalConfirmacaoOverlay">
+        <div class="modal-dialog-card" style="text-align: center;">
+            <i class="fa-solid fa-circle-check" style="font-size: 2.8rem; color: var(--success); margin-bottom: 8px;"></i>
+            <h2>Obrigado por preencher.</h2>
+            
+            <!-- Mensagem dinâmica de agradecimento completa exibida na tela -->
+            <div class="msg-box-agradecimento" id="msgBoxFinalAgradecimento">
+                <!-- Inserido dinamicamente via JS -->
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Escolha como prefere transmitir estes dados:</p>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button type="button" class="btn-whatsapp" onclick="enviarWhatsApp()">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> Enviar via WhatsApp (Texto)
+                </button>
+                <button type="button" class="btn-pdf" onclick="gerarPDF()">
+                    <i class="fa-solid fa-file-pdf" style="font-size: 1.1rem;"></i> Baixar Pedido Completo (PDF)
+                </button>
+                <button type="button" onclick="fecharModalConfirmacao()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 8px; font-weight: 600;">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEMPLATE OCULTO PARA GERAR O PDF -->
+    <div id="pdfTemplate">
+        <div class="pdf-header">
+            <h2>CONGREGAÇÃO CRISTÃ NO BRASIL</h2>
+            <h3>PEDIDO PARA TROCA DE INSTRUMENTO</h3>
+        </div>
+
+        <div class="pdf-greeting">
+            Ao ministério, a paz de Deus.<br>
+            <span id="pdf_localData" style="font-style: normal; font-weight: bold; color: #1e3a8a;"></span>
+        </div>
+
+        <div class="pdf-section-title">Identificação</div>
+        <div class="pdf-grid">
+            <div class="pdf-item" style="grid-column: span 2;">
+                <label>Nome completo (sem abreviações):</label>
+                <span id="pdf_nomeCandidato"></span>
+            </div>
+        </div>
+        <div class="pdf-grid-3">
+            <div class="pdf-item">
+                <label>Comum congregação:</label>
+                <span id="pdf_comumCandidato"></span>
+            </div>
+            <div class="pdf-item">
+                <label>Data da oficialização:</label>
+                <span id="pdf_dataOficializacao"></span>
+            </div>
+            <div class="pdf-item">
+                <label>Necessidade especial:</label>
+                <span id="pdf_temNecessidadeEspecial"></span>
+            </div>
+        </div>
+        <div class="pdf-grid">
+            <div class="pdf-item" style="grid-column: span 2;">
+                <label>Instrumento e tonalidade atual:</label>
+                <span id="pdf_instrumentoAtual" style="font-weight: bold;"></span>
+            </div>
+        </div>
+
+        <div class="pdf-section-title">Informações da Troca</div>
+        <div class="pdf-grid">
+            <div class="pdf-item" style="grid-column: span 2;">
+                <label>Instrumento e tonalidade que deseja tocar (conforme pág. 9 do M.O.O.):</label>
+                <span id="pdf_instrumentoDesejado" style="font-weight: bold; color: #1e3a8a;"></span>
+            </div>
+        </div>
+        <div class="pdf-grid">
+            <div class="pdf-item" style="grid-column: span 2;">
+                <label>Motivo da troca:</label>
+                <span id="pdf_motivoTroca"></span>
+            </div>
+        </div>
+
+        <div class="pdf-box-rules">
+            <strong>Considerações do encarregado regional:</strong><br>
+            Conforme tópico 02 da reunião anual de encarregados regionais de outubro de 2015, a mudança de categoria de instrumento só poderá ser realizada em casos de enfermidade do irmão ou necessidade da orquestra, e após a aprovação do Ministério Espiritual, em comunhão com o encarregado regional e local. Lembramos também que a compra do instrumento, para tocar nos cultos, só poderá ser realizada após essa aprovação e só iniciará a tocar após o teste com o novo instrumento, realizado com o encarregado regional. Não se trata de nova oficialização.
+        </div>
+
+        <div class="pdf-section-title">Ministério Local</div>
+        <div class="pdf-signatures-grid">
+            <div class="pdf-sig-box">
+                <span id="pdf_anciao"></span><br>
+                <strong>Ancião</strong> (Assinatura)
+            </div>
+            <div class="pdf-sig-box">
+                <span id="pdf_cooperador"></span><br>
+                <strong>Cooperador oficial</strong> (Assinatura)
+            </div>
+            <div class="pdf-sig-box">
+                <span id="pdf_encarregadoRegional"></span><br>
+                <strong>Encarregado regional</strong> (Assinatura)
+            </div>
+            <div class="pdf-sig-box">
+                <span id="pdf_encarregadoLocal"></span><br>
+                <strong>Encarregado local</strong> (Assinatura)
+            </div>
+        </div>
+
+        <div class="pdf-section-title">Secretaria Musical / Reunião Ministerial</div>
+        <div class="pdf-grid-3" style="margin-top: 8px;">
+            <div class="pdf-item"><label>Data:</label> ____/____/________</div>
+            <div class="pdf-item"><label>Localidade:</label> __________________</div>
+            <div class="pdf-item"><label>Aprovado:</label> [ ] Sim  [ ] Não</div>
+        </div>
+        <div class="pdf-signatures-grid" style="grid-template-columns: 1fr; width: 60%; margin: 12px auto 0 auto;">
+            <div class="pdf-sig-box">
+                <strong>Ancião / Secretaria Musical</strong> (Assinatura)
+            </div>
+        </div>
+
+        <div class="pdf-footer-code">
+            <span>CCBSM.04-REV.01</span>
+            <span>Deus abençoe!</span>
+        </div>
+    </div>
+
+    <script>
+        const listaComuns = [
+            { bairro: "Aracaré", encarregado: "Helves Olardi Neto" },
+            { bairro: "Central (Jorge Miguel)", encarregado: "Jorge Miguel da Silva Trindade" },
+            { bairro: "Jardim do Carmo", encarregado: "Herminio Fernandes de Souza" },
+            { bairro: "Jardim Miray", encarregado: "Carlos Eduardo De Alkmim Cunha" },
+            { bairro: "Jardim Odete", encarregado: "Marco Aurélio Paes Landim" },
+            { bairro: "Monte belo", encarregado: "Elton De Melo Godoi" },
+            { bairro: "Morro Branco", encarregado: "José Carlos dos Santos" },
+            { bairro: "Pedreira", encarregado: "Antônio Muniz Sobral" },
+            { bairro: "Rancho Grande", encarregado: "" },
+            { bairro: "Vila Arizona", encarregado: "Elói Pereira de Souza Neto" },
+            { bairro: "Vila Sônia", encarregado: "Carlos Filomeno de Oliveira" },
+            { bairro: "Vila Virginia", encarregado: "Marcos Paulo da Silva Alves" },
+            { bairro: "Cambirí", encarregado: "Nivaldo Apolinário da Costa" },
+            { bairro: "Central (Francisco Zeller)", encarregado: "Francisco Antonio Zeller Junior" },
+            { bairro: "Jardim Alexandre", encarregado: "Jose Edvan Nunes Barbosa" },
+            { bairro: "Jardim Bandeirantes", encarregado: "Paulo Henrique dos Santos" },
+            { bairro: "Jardim Débora", encarregado: "Durval José Lopes" },
+            { bairro: "Jardim Helena", encarregado: "Diogo Heleno da Silva" },
+            { bairro: "Jardim São João", encarregado: "Jose Santiago" },
+            { bairro: "Jardim Yone", encarregado: "Gabriel Amaral Figueiredo Rodrigues" },
+            { bairro: "Parque São Francisco", encarregado: "Pedro Pereira da Mata" },
+            { bairro: "Sítio Paiolzinho", encarregado: "João Gomes da Silva" },
+            { bairro: "Vila Cristina", encarregado: "Isaías Miguel dos Santos" },
+            { bairro: "Vila Jamil", encarregado: "Leandro Ananias Botelho" },
+            { bairro: "Vila Margarida", encarregado: "Geraldo Martins de Souza" },
+            { bairro: "Vila Santo Antonio", encarregado: "Raul Pereira Marques Filho" },
+            { bairro: "Água das Pedras", encarregado: "Luiz Santos de Melo" },
+            { bairro: "Jardim Marcelo", encarregado: "Adenes Nascimento Froes" },
+            { bairro: "Jardim Moraes", encarregado: "Mauricio Quaresma dos Santos" },
+            { bairro: "Jardim São Paulo", encarregado: "Daniel Nogueira" },
+            { bairro: "Parque Macedo", encarregado: "Marcos Silva de Carvalho" },
+            { bairro: "Parque Marengo", encarregado: "Eduardo de Medeiros Nóia" },
+            { bairro: "Parque Novo Horizonte", encarregado: "Samuel Barbosa de Souza" },
+            { bairro: "Parque Residencial Furtuna", encarregado: "Ladislau Santana Rodrigues" },
+            { bairro: "Parque Residencial Marengo", encarregado: "Benicio da Silva Lima" },
+            { bairro: "Pium", encarregado: "Genivaldo de Oliveira" },
+            { bairro: "Sitio José de Moraes", encarregado: "Fabiano Emanuel Crisostomo" },
+            { bairro: "Terra Prometida", encarregado: "Lázaro Basilio da Silva" },
+            { bairro: "Cidade Nova Louzada", encarregado: "Gideão Lucas De Carvalho" },
+            { bairro: "Estancia Guatambú", encarregado: "Benedito Fernandes De Lima" },
+            { bairro: "Jardim Adriane", encarregado: "Gerson Manoel dos Santos" },
+            { bairro: "Jardim Amazonas", encarregado: "José Palácio Vieira" },
+            { bairro: "Jardim Caiuby", encarregado: "Eliel Albino Do Nascimento" },
+            { bairro: "Jardim Canaã", encarregado: "Marcelo Rodrigues Piris" },
+            { bairro: "Jardim Carolina", encarregado: "Agenor Ferreira Dias" },
+            { bairro: "Jardim Josely", encarregado: "Jorge Chagas" },
+            { bairro: "Jardim Monica", encarregado: "Paulo Moises Dos Santos" },
+            { bairro: "Jardim Patricia", encarregado: "Fábio Ramos Niza" },
+            { bairro: "Jardim Pinheirinho", encarregado: "Fabio Colin De Moraes" },
+            { bairro: "Jardim Silvestre", encarregado: "Itamar Gonçalves Dos Santos" },
+            { bairro: "Parque Village", encarregado: "José Elifas Ferreira Dias" },
+            { bairro: "Vila São Paulo", encarregado: "João Batista Pereira de Jesus" },
+            { bairro: "Jardim Itapuã", encarregado: "Valdeir Felix da Silva" },
+            { bairro: "Jardim Itaquá", encarregado: "Juvercilio Reis" },
+            { bairro: "Jardim Karine", encarregado: "Elson Martins" },
+            { bairro: "Jardim Maria Eliza", encarregado: "Eliel Rocha saturno" },
+            { bairro: "Jardim Maria Rosa", encarregado: "Alison Adbeel da Silva" },
+            { bairro: "Jardim Paineira", encarregado: "Natanael dos Santos Wolpe" },
+            { bairro: "Jardim Tropical", encarregado: "Rogério Carrasco Pianeli" },
+            { bairro: "Parque Piratininga", encarregado: "Samuel Mangarotti Saraiva" },
+            { bairro: "Parque Piratininga II", encarregado: "André Aparecido Dos Santos" },
+            { bairro: "Parque São Pedro", encarregado: "Joel Rodrigues de Moraes" },
+            { bairro: "Vila Japão", encarregado: "Elias Bueno de Farias" },
+            { bairro: "Vila Nely", encarregado: "Nilson Nogueira de Menezes" },
+            { bairro: "Vila São Carlos", encarregado: "Rogério Dionizio de Lima" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const dataInput = document.getElementById('dataPreenchimento');
+            if (dataInput) dataInput.valueAsDate = new Date();
+            popularComuns();
+        });
+
+        function popularComuns() {
+            const select = document.getElementById('selectComum');
+            if (!select) return;
+            listaComuns.forEach((item, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = item.bairro;
+                select.appendChild(opt);
+            });
+            const optOutro = document.createElement('option');
+            optOutro.value = "OUTRO";
+            optOutro.textContent = "Outra (Editar/Especificar)";
+            select.appendChild(optOutro);
+        }
+
+        function selecionarComum() {
+            const select = document.getElementById('selectComum');
+            const groupOutro = document.getElementById('groupComumOutro');
+            const encarregadoInput = document.getElementById('encarregadoLocal');
+
+            if (select.value === 'OUTRO') {
+                groupOutro.style.display = 'block';
+                encarregadoInput.value = '';
+            } else if (select.value !== '') {
+                groupOutro.style.display = 'none';
+                const item = listaComuns[parseInt(select.value)];
+                if (item) {
+                    encarregadoInput.value = item.encarregado || '';
+                }
+            } else {
+                groupOutro.style.display = 'none';
+                encarregadoInput.value = '';
+            }
+        }
+
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function closeModalOnOverlay(e) {
+            if (e.target.id === 'modalOverlay') closeModal();
+        }
+
+        function toggleNecessidadeEspecial() {
+            const val = document.getElementById('temNecessidadeEspecial').value;
+            const group = document.getElementById('groupQualNecessidade');
+            const textarea = document.getElementById('qualNecessidadeEspecial');
+            if (val === 'Sim') {
+                group.style.display = 'block';
+            } else {
+                group.style.display = 'none';
+                textarea.value = '';
+            }
+        }
+
+        function toggleMotivoSaude() {
+            const val = document.getElementById('motivoTroca').value;
+            const group = document.getElementById('groupMotivoSaude');
+            const textarea = document.getElementById('especifiqueSaude');
+            if (val === 'Saúde ou orientação médica') {
+                group.style.display = 'block';
+            } else {
+                group.style.display = 'none';
+                textarea.value = '';
+            }
+        }
+
+        function formatarDataBR(dataIso) {
+            if (!dataIso) return '-';
+            const partes = dataIso.split('-');
+            if (partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0]}`;
+            return dataIso;
+        }
+
+        function obterDadosFormulario() {
+            let comumNome = '-';
+            const selectComumVal = document.getElementById('selectComum').value;
+            if (selectComumVal === 'OUTRO') {
+                comumNome = document.getElementById('comumOutro').value || '-';
+            } else if (selectComumVal !== '') {
+                comumNome = listaComuns[parseInt(selectComumVal)].bairro;
+            }
+
+            let motivoFinal = document.getElementById('motivoTroca').value || '-';
+            if (motivoFinal === 'Saúde ou orientação médica') {
+                const espec = document.getElementById('especifiqueSaude').value;
+                if (espec) motivoFinal += ` (${espec})`;
+            }
+
+            return {
+                localidade: document.getElementById('localidade').value || 'Itaquaquecetuba',
+                dataPreenchimento: formatarDataBR(document.getElementById('dataPreenchimento').value),
+                nomeCandidato: document.getElementById('nomeCandidato').value || '-',
+                comumCandidato: comumNome,
+                dataOficializacao: formatarDataBR(document.getElementById('dataOficializacao').value),
+                instrumentoAtual: document.getElementById('instrumentoAtual').value || '-',
+                temNecessidadeEspecial: document.getElementById('temNecessidadeEspecial').value || 'Não',
+                qualNecessidadeEspecial: document.getElementById('qualNecessidadeEspecial').value,
+                instrumentoDesejado: document.getElementById('instrumentoDesejado').value || '-',
+                motivoTroca: motivoFinal,
+                anciao: document.getElementById('anciao').value || '-',
+                cooperador: document.getElementById('cooperador').value || '-',
+                encarregadoRegional: document.getElementById('encarregadoRegional').value || '-',
+                encarregadoLocal: document.getElementById('encarregadoLocal').value || '-',
+                telefoneSecretario: document.getElementById('selectSecretario').value
+            };
+        }
+
+        function processarEnvio() {
+            const camposPrincipais = [
+                'nomeCandidato', 'selectComum', 'dataOficializacao', 
+                'instrumentoAtual', 'instrumentoDesejado', 'motivoTroca', 
+                'anciao', 'cooperador', 'encarregadoLocal', 'selectSecretario'
+            ];
+            
+            let temCampoVazio = false;
+            for (let id of camposPrincipais) {
+                const el = document.getElementById(id);
+                if (el && (!el.value || el.value.trim() === '')) {
+                    temCampoVazio = true;
+                    break;
+                }
+            }
+
+            if (temCampoVazio) {
+                alert("Caso tenha a informação, por favor preencha todos os campos.");
+            }
+
+            const d = obterDadosFormulario();
+            const selectSecretarioEl = document.getElementById('selectSecretario');
+            const nomeSecretario = selectSecretarioEl.options[selectSecretarioEl.selectedIndex]?.text.split(' - ')[0] || '';
+
+            const textoAgradecimento = `Deus abençoe caro irmão "${d.encarregadoLocal}", Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026. Grato Att,, "${nomeSecretario}"`;
+
+            document.getElementById('msgBoxFinalAgradecimento').innerText = textoAgradecimento;
+
+            closeModal();
+            document.getElementById('modalConfirmacaoOverlay').classList.add('active');
+        }
+
+        function fecharModalConfirmacao() {
+            document.getElementById('modalConfirmacaoOverlay').classList.remove('active');
+        }
+
+        function enviarWhatsApp() {
+            const d = obterDadosFormulario();
+            
+            let textoNecessidade = d.temNecessidadeEspecial;
+            if (d.temNecessidadeEspecial === 'Sim' && d.qualNecessidadeEspecial) {
+                textoNecessidade += ` (${d.qualNecessidadeEspecial})`;
+            }
+
+            const selectSecretarioEl = document.getElementById('selectSecretario');
+            const nomeSecretario = selectSecretarioEl.options[selectSecretarioEl.selectedIndex]?.text.split(' - ')[0] || '';
+
+            const mensagem = 
+`*PEDIDO PARA TROCA DE INSTRUMENTO - CCB*
+_Ao ministério, a paz de Deus._
+_${d.localidade}, ${d.dataPreenchimento}_
+
+*1. IDENTIFICAÇÃO*
+• *Nome:* ${d.nomeCandidato}
+• *Comum:* ${d.comumCandidato}
+• *Data Oficialização:* ${d.dataOficializacao}
+• *Instrumento Atual:* ${d.instrumentoAtual}
+• *Necessidade Especial:* ${textoNecessidade}
+
+*2. INFORMAÇÕES DA TROCA*
+• *Novo Instrumento Desejado:* ${d.instrumentoDesejado}
+• *Motivo da Troca:* ${d.motivoTroca}
+
+*3. MINISTÉRIO LOCAL*
+• *Ancião:* ${d.anciao}
+• *Cooperador:* ${d.cooperador}
+• *Encarregado Regional:* ${d.encarregadoRegional}
+• *Encarregado Local:* ${d.encarregadoLocal}
+
+Deus abençoe caro irmão "${d.encarregadoLocal}", Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026. Grato Att,, "${nomeSecretario}"`;
+
+            const url = `https://api.whatsapp.com/send?phone=55${d.telefoneSecretario}&text=${encodeURIComponent(mensagem)}`;
+            window.open(url, '_blank');
+        }
+
+        function gerarPDF() {
+            const d = obterDadosFormulario();
+
+            document.getElementById('pdf_localData').textContent = `${d.localidade}, ${d.dataPreenchimento}`;
+            document.getElementById('pdf_nomeCandidato').textContent = d.nomeCandidato;
+            document.getElementById('pdf_comumCandidato').textContent = d.comumCandidato;
+            document.getElementById('pdf_dataOficializacao').textContent = d.dataOficializacao;
+            document.getElementById('pdf_instrumentoAtual').textContent = d.instrumentoAtual;
+            
+            document.getElementById('pdf_temNecessidadeEspecial').textContent = 
+                d.temNecessidadeEspecial === 'Sim' && d.qualNecessidadeEspecial ? `Sim (${d.qualNecessidadeEspecial})` : d.temNecessidadeEspecial;
+
+            document.getElementById('pdf_instrumentoDesejado').textContent = d.instrumentoDesejado;
+            document.getElementById('pdf_motivoTroca').textContent = d.motivoTroca;
+
+            document.getElementById('pdf_anciao').textContent = d.anciao;
+            document.getElementById('pdf_cooperador').textContent = d.cooperador;
+            document.getElementById('pdf_encarregadoRegional').textContent = d.encarregadoRegional;
+            document.getElementById('pdf_encarregadoLocal').textContent = d.encarregadoLocal;
+
+            const template = document.getElementById('pdfTemplate');
+            template.style.display = 'block';
+
+            const opt = {
+                margin:       10,
+                filename:     `Pedido_Troca_Instrumento_${d.nomeCandidato.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(template).save().then(() => {
+                template.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
