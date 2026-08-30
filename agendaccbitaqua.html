@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Agenda de Congregações · Itaquaquecetuba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ========================================================================
+   TOKENS
+   ======================================================================== */
+:root{
+  --bg:#EDEFE7;
+  --surface:#FFFFFF;
+  --surface-alt:#F5F3EA;
+  --ink:#1B241F;
+  --ink-soft:#5B6B60;
+  --ink-faint:#8B9690;
+  --primary:#1F4B44;
+  --primary-dark:#123430;
+  --primary-tint:#E4ECE9;
+  --accent:#B8823D;
+  --accent-dark:#8F6529;
+  --accent-soft:#EFDFB8;
+  --line:#DCDECF;
+  --line-strong:#C6C9B7;
+  --danger:#A8482F;
+  --shadow: 0 1px 2px rgba(20,30,25,0.04), 0 6px 20px -8px rgba(20,30,25,0.18);
+  --shadow-lg: 0 8px 30px -10px rgba(18,52,48,0.35);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', monospace;
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:78px;
+}
+::selection{ background:var(--accent-soft); color:var(--primary-dark); }
+:focus-visible{ outline:2.5px solid var(--accent); outline-offset:2px; border-radius:4px; }
+button{ font-family:inherit; }
+h1,h2,h3{ font-family:var(--font-display); margin:0; }
+p{ margin:0; }
+a{ color:inherit; }
+
+/* ========================================================================
+   LAYOUT SHELL
+   ======================================================================== */
+.wrap{ max-width:1180px; margin:0 auto; padding:0 16px; }
+
+.topbar{
+  background:var(--primary);
+  background-image: radial-gradient(1200px 260px at 15% -40%, rgba(255,255,255,0.06), transparent 60%);
+  color:#F4F1E4;
+  padding:22px 0 26px;
+  position:relative;
+}
+.topbar::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:0; height:6px;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 18px, transparent 18px 26px);
+  opacity:.55;
+}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:11.5px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--accent-soft);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+.eyebrow .dot{ width:6px;height:6px;border-radius:50%;background:var(--accent); }
+.topbar h1{
+  font-size:clamp(28px,6vw,42px);
+  font-weight:600;
+  line-height:1.05;
+  letter-spacing:-.01em;
+}
+.topbar h1 em{ font-style:italic; color:var(--accent-soft); font-weight:500; }
+.topbar .sub{
+  margin-top:8px;
+  font-size:14.5px;
+  color:rgba(244,241,228,.72);
+  max-width:520px;
+  line-height:1.5;
+}
+
+/* stat strip */
+.stats{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+  overflow-x:auto;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+.stats::-webkit-scrollbar{ display:none; }
+.stat{
+  flex:0 0 auto;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(244,241,228,0.16);
+  border-radius:var(--radius-md);
+  padding:10px 16px;
+  min-width:108px;
+}
+.stat .num{
+  font-family:var(--font-display);
+  font-size:24px;
+  font-weight:600;
+  color:#fff;
+  line-height:1;
+}
+.stat .lbl{
+  font-size:10.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:rgba(244,241,228,.62);
+  margin-top:4px;
+}
+
+/* search */
+.search-zone{ margin-top:-18px; position:relative; z-index:5; }
+.search-box{
+  background:var(--surface);
+  border-radius:999px;
+  box-shadow:var(--shadow-lg);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px;
+  border:1px solid rgba(18,52,48,0.06);
+}
+.search-box svg{ flex:0 0 auto; color:var(--ink-faint); }
+.search-box input{
+  flex:1;
+  border:none;
+  outline:none;
+  font-size:15.5px;
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:transparent;
+  min-width:0;
+}
+.search-box input::placeholder{ color:var(--ink-faint); }
+.search-clear{
+  border:none; background:var(--surface-alt); color:var(--ink-soft);
+  width:26px;height:26px;border-radius:50%; cursor:pointer;
+  display:none; align-items:center; justify-content:center; flex:0 0 auto;
+}
+.search-clear.show{ display:flex; }
+
+/* nav tabs (desktop inline / mobile bottom) */
+.nav-tabs{
+  display:flex;
+  gap:6px;
+  margin-top:16px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.nav-tabs::-webkit-scrollbar{ display:none; }
+.nav-tab{
+  flex:0 0 auto;
+  border:1px solid var(--line-strong);
+  background:var(--surface);
+  color:var(--ink-soft);
+  font-weight:600;
+  font-size:13.5px;
+  padding:9px 15px;
+  border-radius:999px;
+  cursor:pointer;
+  display:flex; align-items:center; gap:6px;
+  transition:background .15s, color .15s, border-color .15s;
+}
+.nav-tab .n{
+  font-family:var(--font-mono);
+  font-size:11px;
+  background:var(--surface-alt);
+  border-radius:999px;
+  padding:1px 6px;
+  color:var(--ink-faint);
+}
+.nav-tab.active{ background:var(--primary); border-color:var(--primary); color:#fff; }
+.nav-tab.active .n{ background:rgba(255,255,255,0.18); color:#fff; }
+.nav-tab:hover:not(.active){ border-color:var(--primary); color:var(--primary); }
+
+main{ padding-top:18px; }
+
+/* ========================================================================
+   FILTERS
+   ======================================================================== */
+.filters-toggle{
+  display:flex; align-items:center; justify-content:space-between;
+  cursor:pointer; user-select:none;
+  padding:2px 0 10px;
+}
+.filters-toggle .lbl{ font-weight:600; font-size:14px; display:flex; align-items:center; gap:8px; }
+.filters-toggle .lbl .count{
+  font-family:var(--font-mono); font-size:11px; background:var(--accent-soft); color:var(--accent-dark);
+  border-radius:999px; padding:1px 7px;
+}
+.filters-toggle .chev{ transition:transform .2s; color:var(--ink-soft); }
+.filters-toggle.open .chev{ transform:rotate(180deg); }
+.filters-panel{
+  display:none;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius-md);
+  padding:16px;
+  margin-bottom:14px;
+}
+.filters-panel.open{ display:block; }
+.filter-group{ margin-bottom:14px; }
+.filter-group:last-child{ margin-bottom:0; }
+.filter-group .fg-label{
+  font-size:11px; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--ink-soft); font-weight:600; margin-bottom:8px; display:block;
+}
+.chip-row{ display:flex; flex-wrap:wrap; gap:7px; }
+.chip{
+  border:1px solid var(--line-strong);
+  background:var(--surface-alt);
+  color:var(--ink);
+  font-size:12.5px; font-weight:500;
+  padding:6px 12px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:all .15s;
+}
+.chip.on{ background:var(--primary); border-color:var(--primary); color:#fff; }
+.filter-select{
+  width:100%;
+  border:1px solid var(--line-strong);
+  background:var(--surface-alt);
+  color:var(--ink);
+  font-size:13.5px;
+  padding:9px 11px;
+  border-radius:var(--radius-sm);
+  font-family:inherit;
+}
+.filters-actions{
+  display:flex; justify-content:flex-end; margin-top:14px;
+}
+.btn-clear-filters{
+  border:none; background:none; color:var(--danger); font-size:12.5px; font-weight:600;
+  cursor:pointer; padding:4px 6px;
+}
+.results-line{
+  font-size:12.5px; color:var(--ink-soft); margin:2px 0 14px;
+  display:flex; align-items:center; gap:6px;
+}
+
+/* ========================================================================
+   CARDS
+   ======================================================================== */
+.card-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius-md);
+  padding:16px 16px 14px;
+  cursor:pointer;
+  transition:border-color .15s, transform .15s, box-shadow .15s;
+  position:relative;
+}
+.card:hover{ border-color:var(--primary); box-shadow:var(--shadow); transform:translateY(-1px); }
+.card-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+.card-id{
+  font-family:var(--font-mono); font-size:10.5px; color:var(--accent-dark);
+  background:var(--accent-soft); border-radius:5px; padding:2px 6px; flex:0 0 auto;
+}
+.card h3{ font-size:18px; font-weight:600; line-height:1.25; margin:8px 0 3px; }
+.card .loc{ font-size:12.5px; color:var(--ink-soft); display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.badge-setor{
+  font-family:var(--font-mono); font-size:10.5px; font-weight:600;
+  background:var(--primary-tint); color:var(--primary-dark);
+  border-radius:5px; padding:1px 6px;
+}
+.card .schedule-row{
+  display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;
+}
+.time-chip{
+  font-family:var(--font-mono); font-size:11.5px; font-weight:600;
+  background:var(--surface-alt); border:1px solid var(--line);
+  border-radius:7px; padding:4px 8px; color:var(--ink);
+  display:flex; gap:5px; align-items:baseline;
+}
+.time-chip .d{ text-transform:uppercase; color:var(--ink-soft); font-size:9.5px; letter-spacing:.03em; }
+.card .resp{
+  margin-top:12px; padding-top:11px; border-top:1px dashed var(--line);
+  font-size:12.5px; color:var(--ink-soft); display:flex; align-items:center; gap:7px;
+}
+.card .resp strong{ color:var(--ink); font-weight:600; }
+.empty-state{
+  text-align:center; padding:60px 20px; color:var(--ink-soft);
+}
+.empty-state h3{ font-size:18px; color:var(--ink); margin-bottom:6px; }
+.empty-state svg{ margin-bottom:14px; opacity:.5; }
+
+/* ========================================================================
+   MODAL
+   ======================================================================== */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(18,30,26,0.55);
+  backdrop-filter:blur(2px);
+  display:none; align-items:flex-end; justify-content:center; z-index:100;
+}
+.modal-overlay.open{ display:flex; }
+.modal{
+  background:var(--surface);
+  width:100%; max-width:640px;
+  max-height:92vh;
+  border-radius:20px 20px 0 0;
+  overflow-y:auto;
+  animation: slideUp .25s ease;
+}
+@keyframes slideUp{ from{ transform:translateY(30px); opacity:0;} to{ transform:translateY(0); opacity:1;} }
+@media(min-width:720px){
+  .modal-overlay{ align-items:center; }
+  .modal{ border-radius:20px; max-height:86vh; }
+}
+.modal-head{
+  background:var(--primary); color:#fff; padding:22px 22px 20px; position:sticky; top:0;
+  border-radius:20px 20px 0 0;
+}
+.modal-head .m-eyebrow{
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--accent-soft); margin-bottom:6px;
+}
+.modal-head h2{ font-size:23px; font-weight:600; }
+.modal-head .m-loc{ margin-top:6px; font-size:13px; color:rgba(244,241,228,.78); }
+.modal-close{
+  position:absolute; top:16px; right:16px; width:32px; height:32px; border-radius:50%;
+  background:rgba(255,255,255,0.15); border:none; color:#fff; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.modal-body{ padding:6px 22px 26px; }
+.m-section{ padding:18px 0; border-bottom:1px solid var(--line); }
+.m-section:last-child{ border-bottom:none; }
+.m-section-title{
+  font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; font-weight:700;
+  color:var(--accent-dark); display:flex; align-items:center; gap:7px; margin-bottom:12px;
+}
+.m-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.m-field .k{ font-size:11px; color:var(--ink-soft); margin-bottom:2px; }
+.m-field .v{ font-size:14.5px; font-weight:600; }
+.event-list{ display:flex; flex-direction:column; gap:8px; }
+.event-row{
+  display:flex; justify-content:space-between; align-items:center;
+  background:var(--surface-alt); border-radius:9px; padding:9px 12px;
+}
+.event-row .ek{ font-size:13px; font-weight:600; }
+.event-row .ev{ font-family:var(--font-mono); font-size:12.5px; color:var(--primary-dark); text-align:right; }
+.day-list{ display:flex; flex-direction:column; gap:6px; }
+.day-row{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 12px; border-radius:8px;
+}
+.day-row.has{ background:var(--primary-tint); }
+.day-row .dn{ font-size:13.5px; font-weight:600; }
+.day-row.has .dn{ color:var(--primary-dark); }
+.day-row .dt{ font-family:var(--font-mono); font-size:13px; font-weight:600; }
+.day-row.has .dt{ color:var(--primary-dark); }
+.day-row.empty .dn, .day-row.empty .dt{ color:var(--ink-faint); }
+.people-list{ display:flex; flex-direction:column; gap:10px; }
+.person-row{
+  background:var(--surface-alt); border-radius:10px; padding:11px 13px;
+}
+.person-row .role{ font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); font-weight:600; margin-bottom:3px; }
+.person-row .name{ font-size:14.5px; font-weight:600; }
+.person-row .name.empty{ color:var(--ink-faint); font-weight:500; font-style:italic; }
+.person-actions{ display:flex; gap:8px; margin-top:9px; flex-wrap:wrap; }
+.pbtn{
+  display:flex; align-items:center; gap:5px;
+  border:none; border-radius:8px; padding:7px 11px; font-size:12px; font-weight:600;
+  cursor:pointer;
+}
+.pbtn.call{ background:var(--primary); color:#fff; }
+.pbtn.wa{ background:#25D366; color:#fff; }
+.pbtn.copy{ background:var(--surface); border:1px solid var(--line-strong); color:var(--ink); }
+.toast{
+  position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--ink); color:#fff; font-size:13px; font-weight:500;
+  padding:10px 18px; border-radius:999px; opacity:0; pointer-events:none; transition:all .25s; z-index:200;
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ========================================================================
+   AGENDA VIEW
+   ======================================================================== */
+.day-ribbon{ display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
+.day-ribbon::-webkit-scrollbar{ display:none; }
+.ribbon-tab{
+  flex:0 0 auto; position:relative;
+  background:var(--surface); border:1px solid var(--line-strong);
+  color:var(--ink-soft); font-weight:600; font-size:13px;
+  padding:10px 16px 14px; border-radius:10px 10px 0 0; cursor:pointer;
+}
+.ribbon-tab .full{ display:none; }
+.ribbon-tab.active{
+  background:var(--primary); border-color:var(--primary); color:#fff;
+}
+.ribbon-tab.active::after{
+  content:""; position:absolute; left:0; right:0; bottom:-7px; height:0; width:0;
+  border-left:19px solid transparent; border-right:19px solid transparent;
+  border-top:7px solid var(--accent);
+  margin:0 auto;
+}
+.agenda-panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:0 12px 12px 12px;
+  padding:18px; margin-top:0;
+}
+.agenda-events-btn{ margin-left:auto; }
+.time-block{ margin-bottom:20px; }
+.time-block:last-child{ margin-bottom:0; }
+.time-block .th{
+  font-family:var(--font-mono); font-size:17px; font-weight:600; color:var(--primary-dark);
+  display:flex; align-items:center; gap:9px; margin-bottom:9px;
+}
+.time-block .th::before{ content:""; width:8px; height:8px; border-radius:50%; background:var(--accent); }
+.time-block .congs{ display:flex; flex-wrap:wrap; gap:8px; margin-left:17px; }
+.cong-pill{
+  background:var(--surface-alt); border:1px solid var(--line); border-radius:8px;
+  padding:8px 12px; font-size:13px; font-weight:500; cursor:pointer;
+  display:flex; align-items:center; gap:7px;
+}
+.cong-pill:hover{ border-color:var(--primary); color:var(--primary); }
+.cong-pill .s{ font-family:var(--font-mono); font-size:10.5px; color:var(--ink-faint); }
+
+.events-table{ display:flex; flex-direction:column; gap:8px; }
+.ev-row{
+  display:grid; grid-template-columns:1fr; gap:6px;
+  background:var(--surface-alt); border-radius:10px; padding:12px 14px; cursor:pointer;
+}
+.ev-row:hover{ outline:1.5px solid var(--primary); }
+.ev-row .evh{ display:flex; justify-content:space-between; align-items:baseline; }
+.ev-row .evh b{ font-size:14px; }
+.ev-row .evh .s{ font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); }
+.ev-tags{ display:flex; flex-wrap:wrap; gap:6px; }
+.ev-tag{
+  font-size:11.5px; background:#fff; border:1px solid var(--line); border-radius:6px; padding:3px 8px;
+}
+.ev-tag b{ font-weight:600; color:var(--accent-dark); }
+
+/* ========================================================================
+   GROUP VIEWS (setor / cidade)
+   ======================================================================== */
+.group-block{ margin-bottom:22px; }
+.group-head{
+  display:flex; align-items:center; gap:10px; margin-bottom:10px;
+}
+.group-head .gnum{
+  font-family:var(--font-display); font-size:22px; font-weight:600; color:var(--primary);
+  background:var(--primary-tint); width:38px; height:38px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+}
+.group-head h3{ font-size:16px; font-weight:700; }
+.group-head .gcount{ font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); margin-left:auto; }
+.group-cards{ display:grid; grid-template-columns:1fr; gap:8px; }
+.mini-card{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:11px 13px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.mini-card:hover{ border-color:var(--primary); }
+.mini-card .mn{ font-weight:600; font-size:14px; }
+.mini-card .ms{ font-size:12px; color:var(--ink-soft); }
+.mini-card .arrow{ color:var(--ink-faint); flex:0 0 auto; }
+
+/* ========================================================================
+   BOTTOM NAV (mobile)
+   ======================================================================== */
+.bottom-nav{
+  display:none;
+  position:fixed; bottom:0; left:0; right:0; z-index:80;
+  background:var(--surface); border-top:1px solid var(--line);
+  padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+  box-shadow: 0 -4px 16px rgba(20,30,25,0.06);
+}
+.bn-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:4px; max-width:520px; margin:0 auto; }
+.bn-item{
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  background:none; border:none; color:var(--ink-faint); font-size:10.5px; font-weight:600;
+  padding:5px 0; border-radius:10px; cursor:pointer;
+}
+.bn-item.active{ color:var(--primary); }
+.bn-item svg{ width:20px; height:20px; }
+
+@media(max-width:719px){
+  .bottom-nav{ display:block; }
+  .nav-tabs{ display:none; }
+  .m-grid{ grid-template-columns:1fr; }
+}
+@media(min-width:720px){
+  .card-grid{ grid-template-columns:repeat(2,1fr); }
+  .group-cards{ grid-template-columns:repeat(2,1fr); }
+}
+@media(min-width:980px){
+  .card-grid{ grid-template-columns:repeat(3,1fr); }
+}
+.hidden{ display:none !important; }
+
+footer.credit{
+  text-align:center; padding:26px 16px 10px; font-size:11.5px; color:var(--ink-faint);
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== DATA (isolado da interface — para atualizar, troque só este bloco JSON) ==================== -->
+<script type="application/json" id="congregacoes-data">[{"id": 1, "setor": 2, "cidade": "Itaqua", "bairro": "Pium", "eventosMusicais": {"ensaio": "3° S - 17h", "gem": "Sab - 15hs", "ensaioGem": "3° Sab 15hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": null, "qui": "19:30", "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Genivaldo de Oliveira", "celular": "11979603225"}, "cooperadorOficial": {"nome": "Antonio Francisco de Oliveira", "celular": "4645-4358"}, "cooperadorJovens": "Rogério Alves Barbosa", "anciao": "Edvaldo Neves Anunciação", "diacono": "David", "encRegional": "Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 2, "setor": 2, "cidade": "Itaqua", "bairro": "Sitio José de Moraes", "eventosMusicais": {"ensaio": "4° S - 17h", "gem": "Sab - 16hs", "ensaioGem": "1° Sab 18hs"}, "diasCulto": {"dom": null, "seg": "19:30", "ter": null, "qua": null, "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Fabiano Emanuel Crisostomo", "celular": "11949499402"}, "cooperadorOficial": {"nome": "Manoel Rodrigues Cordeiro", "celular": "987163048"}, "cooperadorJovens": "Geraldo Lourenço", "anciao": "Daniel Barbosa da Silva", "diacono": "Francisco", "encRegional": "Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 3, "setor": 2, "cidade": "Itaqua", "bairro": "Jardim São Paulo", "eventosMusicais": {"ensaio": "U° D - 16h", "gem": "Sab - 15hs", "ensaioGem": "U° S  - 15h"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": null, "qui": "20:00", "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Daniel Nogueira", "celular": "11981398162"}, "cooperadorOficial": {"nome": "Gonçalo Martins de Brito", "celular": "963310389"}, "cooperadorJovens": null, "anciao": "Nilson Porto", "diacono": "Sidnei", "encRegional": "Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 4, "setor": 2, "cidade": "Itaqua", "bairro": "Água das Pedras", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": "Sab - 15hs", "ensaioGem": "4° Sab 17hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Luiz Santos de Melo", "celular": "11984394606"}, "cooperadorOficial": {"nome": "Claudinei José da Fonseca", "celular": "962582064"}, "cooperadorJovens": "Rubens Joel Mendes", "anciao": "Gilberto de Oliveira Matos", "diacono": "Francisco", "encRegional": "Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 5, "setor": 2, "cidade": "Itaqua", "bairro": "Parque Marengo", "eventosMusicais": {"ensaio": "4° Sab - 17h", "gem": "Sab - 10hs", "ensaioGem": "1° Sab 10hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": "20:00", "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Eduardo de Medeiros Nóia", "celular": "11945656193"}, "cooperadorOficial": {"nome": "Oséias Ladeira", "celular": null}, "cooperadorJovens": "Natanael Martins da Silva", "anciao": "Claudinei Valério da Silva", "diacono": "João | David", "encRegional": "Moisés Mendes", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 6, "setor": 2, "cidade": "Itaqua", "bairro": "Parque Macedo", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": "Sab - 15hs", "ensaioGem": "2° Sab 17hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Marcos Silva de Carvalho", "celular": "11946921305"}, "cooperadorOficial": {"nome": "Dagomir Figueira da Silva", "celular": null}, "cooperadorJovens": "Wladimir Cesar dos Santos Goiano", "anciao": "Oséias Tomé da Silva", "diacono": "David", "encRegional": "Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 7, "setor": 3, "cidade": "Itaqua", "bairro": "Jardim Amazonas", "eventosMusicais": {"ensaio": "Úº D - 16h", "gem": "6° - 19hs", "ensaioGem": "2° Sab 17hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "José Palácio Vieira", "celular": "11982191333"}, "cooperadorOficial": {"nome": "João Marques de Oliveira", "celular": null}, "cooperadorJovens": "Adriano Saubo do Nascimento", "anciao": "Edvaldo Neves Anunciação", "diacono": "Moisés", "encRegional": "Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 8, "setor": 2, "cidade": "Itaqua", "bairro": "Parque Residencial Marengo", "eventosMusicais": {"ensaio": "2° S - 19:00", "gem": "Sab - 14:30hs", "ensaioGem": "U° Sab - 15h"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": "20:00", "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Benicio da Silva Lima", "celular": "11986760957"}, "cooperadorOficial": {"nome": "Valdeni da Silva Lima", "celular": null}, "cooperadorJovens": "Lucas José de Oliveira", "anciao": "Paulo Felix da Silva", "diacono": "João Moura", "encRegional": "Moisés Mendes", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 9, "setor": 2, "cidade": "Itaqua", "bairro": "Parque Residencial Furtuna", "eventosMusicais": {"ensaio": "4° D - 16h", "gem": "Sab - 14hs", "ensaioGem": "2° Sab 16hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Ladislau Santana Rodrigues", "celular": "11951547525"}, "cooperadorOficial": {"nome": "Luiz Carlos Santana", "celular": null}, "cooperadorJovens": "Isaias Sanches", "anciao": "Paulo Felix da Silva", "diacono": "David", "encRegional": "Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 10, "setor": 2, "cidade": "Itaqua", "bairro": "Jardim Moraes", "eventosMusicais": {"ensaio": "4° D - 16h", "gem": "2° - 19;30hs", "ensaioGem": "2° Q - 19:30hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": null, "qui": null, "sex": "19:30", "sab": null, "rjm": "14:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Mauricio Quaresma dos Santos", "celular": "11945503290"}, "cooperadorOficial": {"nome": "Francisco Correia Lima", "celular": null}, "cooperadorJovens": "Bruno Araújo de Novais", "anciao": "Nilson Porto", "diacono": "João Batista", "encRegional": "Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 11, "setor": 2, "cidade": "Itaqua", "bairro": "Parque Novo Horizonte", "eventosMusicais": {"ensaio": "3° 6° - 19:30h", "gem": "Sab - 13:00hs", "ensaioGem": "3° Dom - 16hs"}, "diasCulto": {"dom": null, "seg": "19:30", "ter": null, "qua": null, "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Samuel Barbosa de Souza", "celular": "11966040299"}, "cooperadorOficial": {"nome": "William Marcilio da Silva", "celular": null}, "cooperadorJovens": "Jacó Heliton Santos", "anciao": "Rogério Dias Mesquita", "diacono": "João Moura", "encRegional": "Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 12, "setor": 2, "cidade": "Itaqua", "bairro": "Terra Prometida", "eventosMusicais": {"ensaio": "U° D - 16h", "gem": "Sab - 14hs", "ensaioGem": "2° 5 - 19;30hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Lázaro Basilio da Silva", "celular": "11967756339"}, "cooperadorOficial": {"nome": "Rubens Ferreira dos santos", "celular": null}, "cooperadorJovens": "Fernando Mendes Cordeiro", "anciao": "Oséias Tomé da Silva", "diacono": null, "encRegional": "Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 13, "setor": 2, "cidade": "Itaqua", "bairro": "Jardim Marcelo", "eventosMusicais": {"ensaio": "4° S - 17h", "gem": "Sab - 14:30hs", "ensaioGem": "2° Sab 16hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": "19:30", "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Adenes Nascimento Froes", "celular": "11957132406"}, "cooperadorOficial": {"nome": "Alexandre Matias dos Anjos", "celular": null}, "cooperadorJovens": "Tiago Sá de Souza", "anciao": "Edvaldo Neves Anunciação", "diacono": "Francisco", "encRegional": "Moisés Mendes", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 14, "setor": 1, "cidade": "Itaqua", "bairro": "Jardim Miray", "eventosMusicais": {"ensaio": "2° S - 16:30h", "gem": "6 - 19:30hs", "ensaioGem": "2º 6 - 19:30hs"}, "diasCulto": {"dom": null, "seg": "19:30", "ter": null, "qua": "19:30", "qui": null, "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Carlos Eduardo de Alkmim Cunha", "celular": "1193146-8670"}, "cooperadorOficial": {"nome": "Rodrigo Fagundes dos Santos", "celular": null}, "cooperadorJovens": "Jefferson de Souza Lopes", "anciao": "Edvaldo Neves Anunciação", "diacono": "Gerson", "encRegional": "Temistocles de Castrro | Devanir Barbosa Lima", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 15, "setor": 1, "cidade": "Itaqua", "bairro": "Pedreira", "eventosMusicais": {"ensaio": "2° S - 19:30", "gem": "Dom - 08hs", "ensaioGem": "4° Dom - 08hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": "19:30", "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Antonio Muniz Sobral", "celular": "1198118-4529"}, "cooperadorOficial": {"nome": "Manoel Pereira Borges", "celular": null}, "cooperadorJovens": "Josué Ribeiro dos Santos", "anciao": "Paulo Melhado Navas Junior", "diacono": null, "encRegional": "Temistocles de Castro | Moisés Mendes", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 16, "setor": 1, "cidade": "Itaqua", "bairro": "Central", "eventosMusicais": {"ensaio": "1° S - 19:30", "gem": "Sab - 17hs", "ensaioGem": "2° Sab 18hs"}, "diasCulto": {"dom": "18:30", "seg": "20:00", "ter": null, "qua": "19:30", "qui": "14:30", "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Jorge Miguel da Silva Trindade", "celular": "1196428-0454"}, "cooperadorOficial": {"nome": "João Mariano", "celular": null}, "cooperadorJovens": "Tiago de Oliveira", "anciao": "Paulo Melhado Navas Junior", "diacono": "Genesio", "encRegional": "Moisés Mendes", "examinadora": "Regina Débora Martins Melhado | Eliade de Siqueira Gonçalves"}}, {"id": 17, "setor": 1, "cidade": "Itaqua", "bairro": "Aracaré", "eventosMusicais": {"ensaio": "Úº D - 16h", "gem": "4 - 19:30hs", "ensaioGem": "3º 6 - 19:30hs"}, "diasCulto": {"dom": "18:30", "seg": "20:00", "ter": null, "qua": "09:30", "qui": "19:30", "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Helves Olardi Neto", "celular": "1195045-1160"}, "cooperadorOficial": {"nome": "Jair Francisco", "celular": null}, "cooperadorJovens": "Joel Francisco", "anciao": "Edvaldo Neves Anunciação", "diacono": "Gerson", "encRegional": "Temistocles de Castrro | Devanir Barbosa Lima", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 18, "setor": 1, "cidade": "Itaqua", "bairro": "Jardim do Carmo", "eventosMusicais": {"ensaio": "4° D - 16h", "gem": "Sab - 16hs", "ensaioGem": "4° Sab 17hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Herminio Fernandes de Souza", "celular": "1199205-8734"}, "cooperadorOficial": {"nome": "Anderson Pascoal de Oliveira", "celular": null}, "cooperadorJovens": "Paulo Mattos Filho", "anciao": "Oséias Tomé da Silva", "diacono": null, "encRegional": "Temistocles de Castrro | Devanir Barbosa Lima", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 19, "setor": 1, "cidade": "Itaqua", "bairro": "Jardim Odete", "eventosMusicais": {"ensaio": "3° S - 19:30", "gem": "4 - 19:30hs", "ensaioGem": "1° Sab 10hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": "20:00", "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Marco Aurélio Paes Landim", "celular": "1194776-3960"}, "cooperadorOficial": {"nome": null, "celular": null}, "cooperadorJovens": "Carlos Alex Rodrigues", "anciao": "Alexandre Rocha Vaz | Claudniei Valério da Silva", "diacono": null, "encRegional": "Ednei Batista de Souza", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 20, "setor": 1, "cidade": "Itaqua", "bairro": "Morro Branco", "eventosMusicais": {"ensaio": "4° D - 16h", "gem": "5 - 19:30hs", "ensaioGem": "4° Sab 17hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": "19:30", "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "José Carlos dos Santos", "celular": "1196407-1048"}, "cooperadorOficial": {"nome": "Valdir do Carmo Souza", "celular": null}, "cooperadorJovens": "Carlos Eduardo Bressiani Silva", "anciao": "Paulo Melhado Navas Junior", "diacono": "Genivaldo", "encRegional": "Temistocles de Castro | Moisés Mendes", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 21, "setor": 1, "cidade": "Itaqua", "bairro": "Rancho Grande", "eventosMusicais": {"ensaio": "Ú° S - 17h", "gem": "6 - 19:30hs", "ensaioGem": "2º 6 - 19:30hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": null, "celular": "1194652-1591"}, "cooperadorOficial": {"nome": "Rodrigo Fagundes Dos Santos", "celular": null}, "cooperadorJovens": null, "anciao": "Abimael Almeida Barreto", "diacono": null, "encRegional": "Temistocles de Castro | Ednei Batisita de Souza", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 22, "setor": 1, "cidade": "Itaqua", "bairro": "Vila Arizona", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": "Sab - 16hs", "ensaioGem": "4° Sab 17hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": null, "qui": "19:30", "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Elói Pereira de Souza Neto", "celular": "1197760-2556"}, "cooperadorOficial": {"nome": "Roberto Antonio Andrade Silva", "celular": null}, "cooperadorJovens": "Edenilson Lima do Rosário", "anciao": "Paulo Melhado Navas Junior", "diacono": null, "encRegional": "Temistocles de Castro | Ednei Batisita de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 23, "setor": 1, "cidade": "Itaqua", "bairro": "Vila Sônia", "eventosMusicais": {"ensaio": "2° S - 17h", "gem": "Sab - 10hs", "ensaioGem": "2° Sab 10hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Carlos Filomeno de Oliveira", "celular": "1199585-5235"}, "cooperadorOficial": {"nome": "Fabio Santos Garcia", "celular": null}, "cooperadorJovens": "Tiago Amorim de Carvalho", "anciao": "Salomão Pinto de Sousa", "diacono": null, "encRegional": "Temistocles de Castro | Ednei Batisita de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 24, "setor": 1, "cidade": "Itaqua", "bairro": "Monte belo", "eventosMusicais": {"ensaio": "Ú° D - 16h", "gem": "Sab - 17hs", "ensaioGem": "4° 5 - 19:30hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Elton de Melo Godoi", "celular": "1197688-9985"}, "cooperadorOficial": {"nome": "Marcos da Silva", "celular": null}, "cooperadorJovens": "André de Aquino Almeida", "anciao": "Oséias Tomé da Silva", "diacono": null, "encRegional": "Temistocles de Castro | Moisés Mendes", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 25, "setor": 1, "cidade": "Itaqua", "bairro": "Vila Virginia", "eventosMusicais": {"ensaio": "4° D - 16h", "gem": "6 - 19:00hs", "ensaioGem": "4º 6 - 19:00hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Marcos Paulo da Silva Alves", "celular": "1193778-4560"}, "cooperadorOficial": {"nome": "Antonio Bento Lira", "celular": null}, "cooperadorJovens": "Marcos Vieira da Silva  Lima", "anciao": "Salomão Pinto de Sousa", "diacono": "Antonio", "encRegional": "Temistocles de Castrro | Devanir Barbosa de Lima", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 26, "setor": 4, "cidade": "Itaqua", "bairro": "Jardim Itapuã", "eventosMusicais": {"ensaio": "Ú° D - 16h", "gem": "S - 15h", "ensaioGem": "Ú° S - 15h"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": null, "qui": "19:30", "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Valdeir Felix da Silva", "celular": "11967423061"}, "cooperadorOficial": {"nome": "Givanildo Araujo Ferreira", "celular": "983241604"}, "cooperadorJovens": "Altemar dos Santos", "anciao": "Adalberto Ferreira dos Santos | Marcos Silva Roberto", "diacono": null, "encRegional": "Ednei Batista de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 27, "setor": 4, "cidade": "Itaqua", "bairro": "Jardim Itaquá", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": "2°- 19:30hs", "ensaioGem": "Dom - 7:50h"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": "19:30", "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Juvercilio Reis", "celular": null}, "cooperadorOficial": {"nome": "Cicero Francisco", "celular": null}, "cooperadorJovens": "Ademilson Lopes dos santos", "anciao": "Anderson Valério da Silva", "diacono": null, "encRegional": "Ednei Batista de Souza", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 28, "setor": 4, "cidade": "Itaqua", "bairro": "Jardim Karine", "eventosMusicais": {"ensaio": "3° S - 17h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": null, "qui": "19:30", "sex": null, "sab": "19:30", "rjm": "14:30"}, "responsaveis": {"encarregadoLocal": {"nome": "Elson Martins", "celular": "11987553834"}, "cooperadorOficial": {"nome": "Claudionor Martins", "celular": null}, "cooperadorJovens": "José Nilson Souza Cesar", "anciao": "Alexandre Rocha Vaz", "diacono": null, "encRegional": "Ednei Batista de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 29, "setor": 4, "cidade": "Itaqua", "bairro": "Jardim Maria Eliza", "eventosMusicais": {"ensaio": "Ú° S - 17h", "gem": "Seg - 19:30hs", "ensaioGem": "Não tem"}, "diasCulto": {"dom": null, "seg": null, "ter": null, "qua": null, "qui": "19:30", "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Eliel Rocha saturno", "celular": "11984288325"}, "cooperadorOficial": {"nome": "Gezi Pereira dos Reis", "celular": null}, "cooperadorJovens": "Daniel Soares Barbalho", "anciao": "Daniel Barbosa da Silva", "diacono": null, "encRegional": "Ednei Batista de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 30, "setor": 4, "cidade": "Itaqua", "bairro": "Jardim Maria Rosa", "eventosMusicais": {"ensaio": "2° S - 17h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": null, "seg": null, "ter": null, "qua": null, "qui": "19:30", "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Alison Adbeel da Silva", "celular": "11989658967"}, "cooperadorOficial": {"nome": "Edson Alves Cardoso", "celular": null}, "cooperadorJovens": "Abner de Castro Silva", "anciao": "Adalberto Ferreira dos Santos", "diacono": null, "encRegional": "Ednei Batista de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 31, "setor": 4, "cidade": "Itaqua", "bairro": "Jardim Paineira", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": "Sab - 16:00hs", "ensaioGem": "4° Sab - 16:00hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Natanael dos Santos Wolpe", "celular": "11976124023"}, "cooperadorOficial": {"nome": "Deivid Crvalho Barbosa", "celular": null}, "cooperadorJovens": "Deivid Carvalho Barbosa", "anciao": "Moisés Alves", "diacono": "João Pereira", "encRegional": "Ednei Batista de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 32, "setor": 4, "cidade": "Itaqua", "bairro": "Jardim Tropical", "eventosMusicais": {"ensaio": "4° D - 16h", "gem": "Sab - 15:00hs", "ensaioGem": "3° Sab - 15:00hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": "19:30", "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Rogério Carrasco Pianeli", "celular": "1163055265"}, "cooperadorOficial": {"nome": "Alexandre Ferreira da Silva", "celular": null}, "cooperadorJovens": "Vilson Oliveira Pinto", "anciao": "Adalberto Ferreira dos Santos", "diacono": "Ezequias", "encRegional": "Ednei Batista de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 33, "setor": 4, "cidade": "Itaqua", "bairro": "Parque Piratininga I", "eventosMusicais": {"ensaio": "Ú° S - 19:30h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": "20:00", "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Samuel  Mangarotti Saraiva", "celular": "11967081992"}, "cooperadorOficial": {"nome": "Jovane Fernandes Coelho", "celular": null}, "cooperadorJovens": "João do Nascimento Silva", "anciao": "Claudinei Valério da Silva", "diacono": null, "encRegional": "Ednei Batista de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 34, "setor": 4, "cidade": "Itaqua", "bairro": "Parque Piratininga II", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": null, "qui": "19:30", "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "André", "celular": "11962506583"}, "cooperadorOficial": {"nome": "Adonias Ribas", "celular": null}, "cooperadorJovens": "Fernando dos Santos Lima", "anciao": "Adalberto Ferreira dos Santos", "diacono": null, "encRegional": "Ednei Batista de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 35, "setor": 4, "cidade": "Itaqua", "bairro": "Parque São Pedro", "eventosMusicais": {"ensaio": "Ú° D - 16h", "gem": "6° - 19:30hs", "ensaioGem": "3° Sab - 19:30hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "20:00", "qua": null, "qui": null, "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Joel Rodrigues de Moraes", "celular": "11958912418"}, "cooperadorOficial": {"nome": "Enoch Pereira de Moraes", "celular": null}, "cooperadorJovens": "Aaron barbeta Lage", "anciao": "Nilson Porto", "diacono": "Sidnei", "encRegional": "Ednei Batista de Souza", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 36, "setor": 4, "cidade": "Itaqua", "bairro": "Vila Japão", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": null, "ensaioGem": "1° Sab 19;30hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": "19:30", "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Alexsandro de Souza", "celular": "11951416245"}, "cooperadorOficial": {"nome": "Fernando Marcondes dos Santos", "celular": null}, "cooperadorJovens": "Felipe Pereira", "anciao": "Daniel Barbosa da Silva", "diacono": "Marcio", "encRegional": "Ednei Batista de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 37, "setor": 4, "cidade": "Itaqua", "bairro": "Vila Nely", "eventosMusicais": {"ensaio": "1° S - 17h", "gem": "2°- 19:30hs", "ensaioGem": "3° Seg - 19:30hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": null, "qui": "19:30", "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Nilson Nogueira de Menezes", "celular": "961626330"}, "cooperadorOficial": {"nome": "Roni Ribeiro da Silva", "celular": null}, "cooperadorJovens": "Fernando Nogueira", "anciao": "Daniel Barbosa da Silva", "diacono": null, "encRegional": "Ednei Batista de Souza", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 38, "setor": 4, "cidade": "Itaqua", "bairro": "Vila São Carlos", "eventosMusicais": {"ensaio": "1° S - 17h", "gem": "Sab - 9hs Cordas", "ensaioGem": "3° Sab 10hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Rogério Dionizio de Lima", "celular": "959909490"}, "cooperadorOficial": {"nome": "Alexandre Pires da Silva", "celular": null}, "cooperadorJovens": "Wladimir Porcino Silva", "anciao": "Anderson Valério da Silva", "diacono": null, "encRegional": "Ednei Batista de Souza", "examinadora": "Regina Débora Martins Melhado"}}, {"id": 39, "setor": 3, "cidade": "Itaqua", "bairro": "Cidade Nova Louzada", "eventosMusicais": {"ensaio": "4° D - 16h", "gem": "Sab - 15hs", "ensaioGem": "2° Sab 17hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": "20:00", "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Gideão Lucas Carvalho", "celular": null}, "cooperadorOficial": {"nome": "Paulo Coelho de Oliveira", "celular": null}, "cooperadorJovens": "Roberto Bartholomeu Ferreira", "anciao": "Claudinei Valério da Silva", "diacono": null, "encRegional": "Devanir Barbosa de Lima", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 40, "setor": 3, "cidade": "Itaqua", "bairro": "Estancia Guatambú", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Benedito Fernandes De Lima", "celular": null}, "cooperadorOficial": {"nome": "Ismael Odair  Saturno", "celular": null}, "cooperadorJovens": "Douglas de Amorim Bezerra", "anciao": "Salomão Pinto de Sousa", "diacono": null, "encRegional": "Devanir Barbosa de Lima", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 41, "setor": 3, "cidade": "Itaqua", "bairro": "Jardim Adriane", "eventosMusicais": {"ensaio": "U° S - 17h", "gem": "2° - 19:30hs", "ensaioGem": "U° 2 - 19:30HS"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": null, "qui": "19:30", "sex": null, "sab": "19:30", "rjm": "14:30"}, "responsaveis": {"encarregadoLocal": {"nome": "Gerson Manoel dos Santos", "celular": null}, "cooperadorOficial": {"nome": "Benedito Ferreira do Nascimento | Valter Feliciano dos Santos", "celular": null}, "cooperadorJovens": "Carlos Antonio Carvalho dos Santos", "anciao": "Alexandre Rocha Vaz", "diacono": null, "encRegional": "Devanir Barbosa de Lima", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 42, "setor": 3, "cidade": "Itaqua", "bairro": "Jardim Caiuby", "eventosMusicais": {"ensaio": "1° S - 17h", "gem": "Sab - 16hs", "ensaioGem": "3° Sab 10hs"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": null, "qui": "20:00", "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Eliel Albino Do Nascimento", "celular": null}, "cooperadorOficial": {"nome": "Jadir Amorim da Silva", "celular": null}, "cooperadorJovens": "Luiz Carlos Santana", "anciao": "Anderson Valério da Silva", "diacono": "Abel", "encRegional": "Devanir Barbosa de Lima", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 43, "setor": 3, "cidade": "Itaqua", "bairro": "Jardim Canaã", "eventosMusicais": {"ensaio": "Ú° D - 16h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Marcelo Rodrigues Piris", "celular": null}, "cooperadorOficial": {"nome": "Paulo Henrique Justino", "celular": null}, "cooperadorJovens": "Yan Pereira da Silva", "anciao": "Nilson Porto", "diacono": null, "encRegional": "Devanir Barbosa de Lima", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 44, "setor": 3, "cidade": "Itaqua", "bairro": "Jardim Carolina", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": "Sab - 14hs", "ensaioGem": null}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": null, "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Agenor Ferreira Dias/Lucas Santos Gomes", "celular": null}, "cooperadorOficial": {"nome": "Wanderley Garcia Duarte", "celular": null}, "cooperadorJovens": "Aroldo Alves de Amorim", "anciao": "Paulo Felix da Silva", "diacono": "Mauro", "encRegional": "Devanir Barbosa de Lima", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 45, "setor": 3, "cidade": "Itaqua", "bairro": "Jardim Josely", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": "18:30", "seg": null, "ter": "19:30", "qua": null, "qui": "19:30", "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Jorge Chagas", "celular": null}, "cooperadorOficial": {"nome": "Tertuliano de Oliveira", "celular": null}, "cooperadorJovens": "Rogério Simões molina", "anciao": "Gilberto de Oliveira Matos", "diacono": null, "encRegional": "Devanir Barbosa de Lima", "examinadora": "Eliade de Siqueira Gonçalves"}}, {"id": 46, "setor": 3, "cidade": "Itaqua", "bairro": "Jardim Monica", "eventosMusicais": {"ensaio": "4° D - 16h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": "18:30", "seg": "19:30", "ter": null, "qua": null, "qui": "19:30", "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Paulo Moises Dos Santos", "celular": null}, "cooperadorOficial": {"nome": "Ruy de Andrade Gaspar", "celular": null}, "cooperadorJovens": "Luiz Carlos Martins", "anciao": "José Valdenir Almeida", "diacono": null, "encRegional": "Devanir Barbosa de Lima", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 47, "setor": 3, "cidade": "Itaqua", "bairro": "Jardim Patricia", "eventosMusicais": {"ensaio": "1° D - 16h", "gem": "5° - 19:30", "ensaioGem": "U° 5 - 19:30"}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "20:00", "qui": null, "sex": "19:30", "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Fabio Ramos Niza", "celular": null}, "cooperadorOficial": {"nome": "Cleber Lucas Eustáquio", "celular": null}, "cooperadorJovens": "Everton Figueiredo Silva", "anciao": "Rogério Dias Mesquita", "diacono": null, "encRegional": "Devanir Barbosa de Lima", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 48, "setor": 3, "cidade": "Itaqua", "bairro": "Jardim Pinheirinho", "eventosMusicais": {"ensaio": "3° S - 17h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": null, "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": null, "sab": "19:30", "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Fabio Colin De Moraes", "celular": null}, "cooperadorOficial": {"nome": "Anselmo Valério", "celular": null}, "cooperadorJovens": null, "anciao": "Gilberto de Oliveira Matos", "diacono": null, "encRegional": "Devanir Barbosa de Lima", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 49, "setor": 3, "cidade": "Itaqua", "bairro": "Jardim Silvestre", "eventosMusicais": {"ensaio": "3° S - 16:30h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": "18:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": null, "sab": null, "rjm": "10:00"}, "responsaveis": {"encarregadoLocal": {"nome": "Itamar Gonçalves Dos Santos", "celular": null}, "cooperadorOficial": {"nome": "Ageu Pereira da Silva | Jonas Pereira Martins", "celular": null}, "cooperadorJovens": "Paulo Rogério de França  Souza", "anciao": "Anderson Valério da Silva", "diacono": null, "encRegional": "Devanir Barbosa de Lima", "examinadora": "Valéria Maria dos Santos Dias"}}, {"id": 50, "setor": 3, "cidade": "Itaqua", "bairro": "Parque Village", "eventosMusicais": {"ensaio": "Ú° S - 17h", "gem": null, "ensaioGem": null}, "diasCulto": {"dom": "09:30", "seg": null, "ter": null, "qua": "19:30", "qui": null, "sex": null, "sab": "19:30", "rjm": "14:30"}, "responsaveis": {"encarregadoLocal": {"nome": "José Elifas Ferreira Dias", "celular": null}, "cooperadorOficial": {"nome": "Waldomiro José da Silva", "celular": null}, "cooperadorJovens": "Edicarlos Ferreira Dias", "anciao": "Rogério Dias Mesquita", "diacono": "Everton Vital", "encRegional": "Devanir Barbosa de Lima", "examinadora": "Valéria Maria dos Santos Dias"}}]</script>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span>Itaquaquecetuba · Alto Tietê</div>
+    <h1>Agenda de <em>Congregações</em></h1>
+    <p class="sub">Consulte horários de culto, ensaios e responsáveis de cada congregação em segundos.</p>
+    <div class="stats" id="statsRow"></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="search-zone">
+    <div class="search-box">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="searchInput" type="text" placeholder="Pesquisar bairro, cidade, responsável, telefone, horário..." autocomplete="off">
+      <button class="search-clear" id="searchClear" aria-label="Limpar busca">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <nav class="nav-tabs" id="navTabs"></nav>
+
+  <main>
+    <div id="viewInicio">
+      <div class="filters-toggle" id="filtersToggle">
+        <span class="lbl">Filtros <span class="count hidden" id="filterCount">0</span></span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="filters-panel" id="filtersPanel">
+        <div class="filter-group">
+          <span class="fg-label">Setor</span>
+          <div class="chip-row" id="fSetor"></div>
+        </div>
+        <div class="filter-group">
+          <span class="fg-label">Cidade</span>
+          <div class="chip-row" id="fCidade"></div>
+        </div>
+        <div class="filter-group">
+          <span class="fg-label">Dia de culto</span>
+          <div class="chip-row" id="fDia"></div>
+        </div>
+        <div class="filter-group">
+          <span class="fg-label">Evento musical</span>
+          <div class="chip-row" id="fEvento"></div>
+        </div>
+        <div class="filter-group">
+          <span class="fg-label">Bairro</span>
+          <select class="filter-select" id="fBairro"><option value="">Todos os bairros</option></select>
+        </div>
+        <div class="filter-group">
+          <span class="fg-label">Horário</span>
+          <select class="filter-select" id="fHorario"><option value="">Todos os horários</option></select>
+        </div>
+        <div class="filter-group" style="margin-bottom:0">
+          <span class="fg-label">Responsável</span>
+          <select class="filter-select" id="fResponsavel"><option value="">Todos os responsáveis</option></select>
+        </div>
+        <div class="filters-actions">
+          <button class="btn-clear-filters" id="clearFilters">Limpar filtros</button>
+        </div>
+      </div>
+
+      <div class="results-line" id="resultsLine"></div>
+      <div class="card-grid" id="cardGrid"></div>
+    </div>
+
+    <div id="viewAgenda" class="hidden">
+      <div class="day-ribbon" id="dayRibbon"></div>
+      <div class="agenda-panel" id="agendaPanel"></div>
+    </div>
+
+    <div id="viewSetor" class="hidden"></div>
+    <div id="viewCidade" class="hidden"></div>
+  </main>
+
+  <footer class="credit">Fonte de dados: planilha oficial da congregação · atualizado manualmente</footer>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<nav class="bottom-nav">
+  <div class="bn-grid" id="bottomNav"></div>
+</nav>
+
+<script>
+(function(){
+"use strict";
+
+var ALL = JSON.parse(document.getElementById('congregacoes-data').textContent);
+
+var DAY_KEYS = ['dom','seg','ter','qua','qui','sex','sab'];
+var DAY_LABELS = {dom:'Domingo', seg:'Segunda', ter:'Terça', qua:'Quarta', qui:'Quinta', sex:'Sexta', sab:'Sábado'};
+var DAY_SHORT = {dom:'DOM', seg:'SEG', ter:'TER', qua:'QUA', qui:'QUI', sex:'SEX', sab:'SÁB'};
+var EVT_KEYS = ['ensaio','gem','ensaioGem'];
+var EVT_LABELS = {ensaio:'Ensaio', gem:'GEM', ensaioGem:'Ensaio GEM'};
+var ROLE_LABELS = {
+  encarregadoLocal:'Encarregado local',
+  cooperadorOficial:'Cooperador oficial',
+  cooperadorJovens:'Cooperador de jovens',
+  anciao:'Ancião',
+  diacono:'Diácono',
+  encRegional:'Enc. regional',
+  examinadora:'Examinadora'
+};
+
+// ---------- build search index ----------
+ALL.forEach(function(r){
+  var parts = [];
+  parts.push(r.bairro, r.cidade, 'setor ' + r.setor, r.id);
+  EVT_KEYS.forEach(function(k){ if(r.eventosMusicais[k]) parts.push(r.eventosMusicais[k]); });
+  DAY_KEYS.forEach(function(k){
+    if(r.diasCulto[k]){ parts.push(DAY_LABELS[k], k, r.diasCulto[k]); }
+  });
+  if(r.diasCulto.rjm) parts.push('rjm', r.diasCulto.rjm);
+  var resp = r.responsaveis;
+  [resp.encarregadoLocal, resp.cooperadorOficial].forEach(function(p){
+    if(p && p.nome) parts.push(p.nome);
+    if(p && p.celular) parts.push(p.celular, p.celular.replace(/\D/g,''));
+  });
+  ['cooperadorJovens','anciao','diacono','encRegional','examinadora'].forEach(function(k){
+    if(resp[k]) parts.push(resp[k]);
+  });
+  r.__idx = parts.filter(Boolean).join(' ').toLowerCase();
+});
+
+// ---------- state ----------
+var state = {
+  view: 'inicio',
+  search: '',
+  filtersOpen: false,
+  setores: new Set(),
+  cidades: new Set(),
+  dias: new Set(),
+  eventos: new Set(),
+  bairro: '',
+  horario: '',
+  responsavel: '',
+  agendaDay: 'dom'
+};
+
+// ---------- helpers ----------
+function uniqueSorted(arr){
+  return Array.from(new Set(arr.filter(function(v){ return v !== null && v !== undefined && v !== ''; })))
+    .sort(function(a,b){ return String(a).localeCompare(String(b),'pt-BR',{numeric:true}); });
+}
+function esc(s){
+  if(s === null || s === undefined) return '';
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+function digitsOnly(s){ return (s||'').replace(/\D/g,''); }
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t.__timer);
+  t.__timer = setTimeout(function(){ t.classList.remove('show'); }, 1800);
+}
+function copyText(txt){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ showToast('Número copiado'); })
+      .catch(function(){ fallbackCopy(txt); });
+  } else { fallbackCopy(txt); }
+}
+function fallbackCopy(txt){
+  var ta = document.createElement('textarea');
+  ta.value = txt; document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); showToast('Número copiado'); }catch(e){ showToast('Não foi possível copiar'); }
+  document.body.removeChild(ta);
+}
+
+// ---------- dashboard stats ----------
+function renderStats(){
+  var congs = ALL.length;
+  var cidades = uniqueSorted(ALL.map(function(r){ return r.cidade; })).length;
+  var setores = uniqueSorted(ALL.map(function(r){ return r.setor; })).length;
+  var comEvento = ALL.filter(function(r){
+    return EVT_KEYS.some(function(k){ return r.eventosMusicais[k]; }) || r.diasCulto.rjm;
+  }).length;
+  var data = [
+    [congs, 'Congregações'],
+    [cidades, 'Cidades'],
+    [setores, 'Setores'],
+    [comEvento, 'C/ Evento Musical']
+  ];
+  document.getElementById('statsRow').innerHTML = data.map(function(d){
+    return '<div class="stat"><div class="num">'+d[0]+'</div><div class="lbl">'+d[1]+'</div></div>';
+  }).join('');
+}
+
+// ---------- nav ----------
+var VIEWS = [
+  {id:'inicio', label:'Início', icon:'home'},
+  {id:'agenda', label:'Agenda', icon:'calendar'},
+  {id:'setor', label:'Por Setor', icon:'grid'},
+  {id:'cidade', label:'Por Cidade', icon:'map'}
+];
+var ICONS = {
+  home:'<path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9a1 1 0 001 1h3v-6h4v6h3a1 1 0 001-1v-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  calendar:'<rect x="3.5" y="5" width="17" height="16" rx="2.4" stroke="currentColor" stroke-width="2"/><path d="M8 3v4M16 3v4M3.5 10h17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  grid:'<rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1.6" stroke="currentColor" stroke-width="2"/><rect x="13" y="3.5" width="7.5" height="7.5" rx="1.6" stroke="currentColor" stroke-width="2"/><rect x="3.5" y="13" width="7.5" height="7.5" rx="1.6" stroke="currentColor" stroke-width="2"/><rect x="13" y="13" width="7.5" height="7.5" rx="1.6" stroke="currentColor" stroke-width="2"/>',
+  map:'<path d="M9 4L3.5 6.5v14L9 18l6 2.5 5.5-2.5v-14L15 6.5l-6-2.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v14M15 6.5V20.5" stroke="currentColor" stroke-width="2"/>'
+};
+function renderNav(){
+  document.getElementById('navTabs').innerHTML = VIEWS.map(function(v){
+    var count = v.id === 'inicio' ? ALL.length : '';
+    return '<button class="nav-tab'+(state.view===v.id?' active':'')+'" data-view="'+v.id+'">'+v.label+(count?' <span class="n">'+count+'</span>':'')+'</button>';
+  }).join('');
+  document.getElementById('bottomNav').innerHTML = VIEWS.map(function(v){
+    return '<button class="bn-item'+(state.view===v.id?' active':'')+'" data-view="'+v.id+'">'+
+      '<svg viewBox="0 0 24 24" fill="none">'+ICONS[v.icon]+'</svg>'+
+      '<span>'+v.label+'</span></button>';
+  }).join('');
+  document.querySelectorAll('[data-view]').forEach(function(el){
+    el.addEventListener('click', function(){ switchView(el.getAttribute('data-view')); });
+  });
+}
+function switchView(v){
+  state.view = v;
+  ['inicio','agenda','setor','cidade'].forEach(function(id){
+    document.getElementById('view'+id.charAt(0).toUpperCase()+id.slice(1)).classList.toggle('hidden', id!==v);
+  });
+  renderNav();
+  if(v==='agenda') renderAgenda();
+  if(v==='setor') renderPorSetor();
+  if(v==='cidade') renderPorCidade();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ---------- filters panel population ----------
+function populateFilters(){
+  var setores = uniqueSorted(ALL.map(function(r){ return r.setor; }));
+  var cidades = uniqueSorted(ALL.map(function(r){ return r.cidade; }));
+  var bairros = uniqueSorted(ALL.map(function(r){ return r.bairro; }));
+  var horarios = uniqueSorted(
+    ALL.flatMap(function(r){ return DAY_KEYS.map(function(k){ return r.diasCulto[k]; }); })
+  );
+  var respSet = new Set();
+  ALL.forEach(function(r){
+    var resp = r.responsaveis;
+    if(resp.encarregadoLocal.nome) respSet.add(resp.encarregadoLocal.nome);
+    if(resp.cooperadorOficial.nome) respSet.add(resp.cooperadorOficial.nome);
+    ['cooperadorJovens','anciao','diacono','encRegional','examinadora'].forEach(function(k){
+      if(resp[k]) respSet.add(resp[k]);
+    });
+  });
+  var responsaveis = Array.from(respSet).sort(function(a,b){ return a.localeCompare(b,'pt-BR'); });
+
+  document.getElementById('fSetor').innerHTML = setores.map(function(s){
+    return '<button class="chip" data-kind="setores" data-val="'+esc(s)+'">Setor '+esc(s)+'</button>';
+  }).join('');
+  document.getElementById('fCidade').innerHTML = cidades.map(function(c){
+    return '<button class="chip" data-kind="cidades" data-val="'+esc(c)+'">'+esc(c)+'</button>';
+  }).join('');
+  document.getElementById('fDia').innerHTML = DAY_KEYS.map(function(k){
+    return '<button class="chip" data-kind="dias" data-val="'+k+'">'+DAY_SHORT[k]+'</button>';
+  }).join('');
+  document.getElementById('fEvento').innerHTML = EVT_KEYS.map(function(k){
+    return '<button class="chip" data-kind="eventos" data-val="'+k+'">'+EVT_LABELS[k]+'</button>';
+  }).join('');
+  var fBairro = document.getElementById('fBairro');
+  bairros.forEach(function(b){
+    var o = document.createElement('option'); o.value=b; o.textContent=b; fBairro.appendChild(o);
+  });
+  var fHorario = document.getElementById('fHorario');
+  horarios.forEach(function(h){
+    var o = document.createElement('option'); o.value=h; o.textContent=h; fHorario.appendChild(o);
+  });
+  var fResp = document.getElementById('fResponsavel');
+  responsaveis.forEach(function(n){
+    var o = document.createElement('option'); o.value=n; o.textContent=n; fResp.appendChild(o);
+  });
+
+  document.querySelectorAll('.chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      var kind = chip.getAttribute('data-kind'), val = chip.getAttribute('data-val');
+      if(state[kind].has(val)) state[kind].delete(val); else state[kind].add(val);
+      chip.classList.toggle('on');
+      renderInicio();
+    });
+  });
+  fBairro.addEventListener('change', function(){ state.bairro = fBairro.value; renderInicio(); });
+  fHorario.addEventListener('change', function(){ state.horario = fHorario.value; renderInicio(); });
+  fResp.addEventListener('change', function(){ state.responsavel = fResp.value; renderInicio(); });
+}
+
+function activeFilterCount(){
+  return state.setores.size + state.cidades.size + state.dias.size + state.eventos.size +
+    (state.bairro?1:0) + (state.horario?1:0) + (state.responsavel?1:0);
+}
+
+function clearAllFilters(){
+  state.setores.clear(); state.cidades.clear(); state.dias.clear(); state.eventos.clear();
+  state.bairro=''; state.horario=''; state.responsavel='';
+  document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
+  document.getElementById('fBairro').value='';
+  document.getElementById('fHorario').value='';
+  document.getElementById('fResponsavel').value='';
+  renderInicio();
+}
+
+// ---------- filtering + search ----------
+function passesFilters(r){
+  if(state.setores.size && !state.setores.has(String(r.setor))) return false;
+  if(state.cidades.size && !state.cidades.has(r.cidade)) return false;
+  if(state.dias.size){
+    var okDay = false;
+    state.dias.forEach(function(d){ if(r.diasCulto[d]) okDay = true; });
+    if(!okDay) return false;
+  }
+  if(state.eventos.size){
+    var okEvt = false;
+    state.eventos.forEach(function(e){ if(r.eventosMusicais[e]) okEvt = true; });
+    if(!okEvt) return false;
+  }
+  if(state.bairro && r.bairro !== state.bairro) return false;
+  if(state.horario){
+    var hasH = DAY_KEYS.some(function(k){ return r.diasCulto[k] === state.horario; });
+    if(!hasH) return false;
+  }
+  if(state.responsavel){
+    var resp = r.responsaveis;
+    var names = [resp.encarregadoLocal.nome, resp.cooperadorOficial.nome, resp.cooperadorJovens,
+      resp.anciao, resp.diacono, resp.encRegional, resp.examinadora];
+    if(names.indexOf(state.responsavel) === -1) return false;
+  }
+  return true;
+}
+function getFiltered(){
+  var term = state.search.trim().toLowerCase();
+  return ALL.filter(function(r){
+    if(term && r.__idx.indexOf(term) === -1) return false;
+    return passesFilters(r);
+  });
+}
+
+// ---------- card rendering ----------
+function scheduleChips(r){
+  var chips = [];
+  DAY_KEYS.forEach(function(k){
+    if(r.diasCulto[k]) chips.push('<span class="time-chip"><span class="d">'+DAY_SHORT[k]+'</span>'+r.diasCulto[k]+'</span>');
+  });
+  return chips.join('');
+}
+function cardHTML(r){
+  var respName = r.responsaveis.encarregadoLocal.nome;
+  return '<div class="card" data-id="'+r.id+'">'+
+    '<div class="card-top"><span class="card-id">Nº '+esc(r.id)+'</span></div>'+
+    '<h3>'+esc(r.bairro)+'</h3>'+
+    '<div class="loc"><span class="badge-setor">Setor '+esc(r.setor)+'</span><span>'+esc(r.cidade)+'</span></div>'+
+    '<div class="schedule-row">'+scheduleChips(r)+'</div>'+
+    (respName ? '<div class="resp"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="2"/><path d="M5 20c0-3.9 3.1-6.5 7-6.5s7 2.6 7 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Encarregado: <strong>'+esc(respName)+'</strong></div>' : '')+
+    '</div>';
+}
+function renderInicio(){
+  var list = getFiltered();
+  var count = activeFilterCount();
+  var fc = document.getElementById('filterCount');
+  fc.textContent = count; fc.classList.toggle('hidden', count===0);
+  document.getElementById('resultsLine').textContent = list.length + (list.length===1?' congregação encontrada':' congregações encontradas');
+  var grid = document.getElementById('cardGrid');
+  if(!list.length){
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">'+
+      '<svg width="46" height="46" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'+
+      '<h3>Nenhuma congregação encontrada</h3><p>Tente ajustar a busca ou os filtros.</p></div>';
+    return;
+  }
+  grid.innerHTML = list.map(cardHTML).join('');
+  grid.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('click', function(){ openModal(Number(el.getAttribute('data-id'))); });
+  });
+}
+
+// ---------- modal ----------
+function personActionsHTML(nome, celular){
+  if(!celular) return '';
+  var digits = digitsOnly(celular);
+  var html = '<div class="person-actions">';
+  html += '<a class="pbtn call" href="tel:+55'+digits+'">📞 Ligar</a>';
+  if(digits.length >= 10 && digits.length <= 11){
+    html += '<a class="pbtn wa" href="https://wa.me/55'+digits+'" target="_blank" rel="noopener">💬 WhatsApp</a>';
+  }
+  html += '<button class="pbtn copy" data-copy="'+esc(celular)+'">📋 Copiar</button>';
+  html += '</div>';
+  return html;
+}
+function openModal(id){
+  var r = ALL.find(function(x){ return x.id === id; });
+  if(!r) return;
+  var resp = r.responsaveis;
+
+  var eventItems = [
+    ['ensaio','Ensaio', r.eventosMusicais.ensaio],
+    ['gem','GEM', r.eventosMusicais.gem],
+    ['ensaioGem','Ensaio GEM', r.eventosMusicais.ensaioGem],
+    ['rjm','RJM', r.diasCulto.rjm]
+  ];
+  var eventsHTML = eventItems.map(function(it){
+    return '<div class="event-row"><span class="ek">'+it[1]+'</span><span class="ev">'+esc(it[2]||'—')+'</span></div>';
+  }).join('');
+
+  var daysHTML = DAY_KEYS.map(function(k){
+    var v = r.diasCulto[k];
+    return '<div class="day-row '+(v?'has':'empty')+'"><span class="dn">'+DAY_LABELS[k]+'</span><span class="dt">'+(v||'—')+'</span></div>';
+  }).join('');
+
+  var peopleHTML = '';
+  peopleHTML += personBlock(ROLE_LABELS.encarregadoLocal, resp.encarregadoLocal.nome, resp.encarregadoLocal.celular);
+  peopleHTML += personBlock(ROLE_LABELS.cooperadorOficial, resp.cooperadorOficial.nome, resp.cooperadorOficial.celular);
+  peopleHTML += personBlock(ROLE_LABELS.cooperadorJovens, resp.cooperadorJovens, null);
+  peopleHTML += personBlock(ROLE_LABELS.anciao, resp.anciao, null);
+  peopleHTML += personBlock(ROLE_LABELS.diacono, resp.diacono, null);
+  peopleHTML += personBlock(ROLE_LABELS.encRegional, resp.encRegional, null);
+  peopleHTML += personBlock(ROLE_LABELS.examinadora, resp.examinadora, null);
+
+  document.getElementById('modalBox').innerHTML =
+    '<div class="modal-head">'+
+      '<button class="modal-close" id="modalCloseBtn">✕</button>'+
+      '<div class="m-eyebrow">Congregação Nº '+esc(r.id)+' · Setor '+esc(r.setor)+'</div>'+
+      '<h2>'+esc(r.bairro)+'</h2>'+
+      '<div class="m-loc">📍 '+esc(r.cidade)+' — '+esc(r.bairro)+'</div>'+
+    '</div>'+
+    '<div class="modal-body">'+
+      '<div class="m-section">'+
+        '<div class="m-section-title">📍 Localização</div>'+
+        '<div class="m-grid">'+
+          '<div class="m-field"><div class="k">Setor</div><div class="v">'+esc(r.setor)+'</div></div>'+
+          '<div class="m-field"><div class="k">Cidade</div><div class="v">'+esc(r.cidade)+'</div></div>'+
+          '<div class="m-field" style="grid-column:1/-1"><div class="k">Bairro</div><div class="v">'+esc(r.bairro)+'</div></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="m-section">'+
+        '<div class="m-section-title">🎵 Eventos musicais</div>'+
+        '<div class="event-list">'+eventsHTML+'</div>'+
+      '</div>'+
+      '<div class="m-section">'+
+        '<div class="m-section-title">📅 Dias de culto</div>'+
+        '<div class="day-list">'+daysHTML+'</div>'+
+      '</div>'+
+      '<div class="m-section">'+
+        '<div class="m-section-title">👥 Responsáveis</div>'+
+        '<div class="people-list">'+peopleHTML+'</div>'+
+      '</div>'+
+    '</div>';
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click', function(){ copyText(btn.getAttribute('data-copy')); });
+  });
+}
+function personBlock(role, nome, celular){
+  return '<div class="person-row">'+
+    '<div class="role">'+role+'</div>'+
+    '<div class="name'+(nome?'':' empty')+'">'+(nome?esc(nome):'Não informado')+'</div>'+
+    personActionsHTML(nome, celular)+
+    '</div>';
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); }
+
+// ---------- agenda view ----------
+function renderAgenda(){
+  var ribbon = document.getElementById('dayRibbon');
+  var tabs = DAY_KEYS.map(function(k){
+    return '<button class="ribbon-tab'+(state.agendaDay===k?' active':'')+'" data-day="'+k+'">'+DAY_SHORT[k]+'</button>';
+  }).join('');
+  tabs += '<button class="ribbon-tab'+(state.agendaDay==='eventos'?' active':'')+'" data-day="eventos">EVENTOS</button>';
+  ribbon.innerHTML = tabs;
+  ribbon.querySelectorAll('.ribbon-tab').forEach(function(t){
+    t.addEventListener('click', function(){ state.agendaDay = t.getAttribute('data-day'); renderAgenda(); });
+  });
+
+  var panel = document.getElementById('agendaPanel');
+  if(state.agendaDay === 'eventos'){
+    var rows = ALL.filter(function(r){
+      return r.eventosMusicais.ensaio || r.eventosMusicais.gem || r.eventosMusicais.ensaioGem || r.diasCulto.rjm;
+    }).sort(function(a,b){ return a.bairro.localeCompare(b.bairro,'pt-BR'); });
+    panel.innerHTML = '<div class="events-table">' + rows.map(function(r){
+      var tags = [];
+      if(r.eventosMusicais.ensaio) tags.push('<span class="ev-tag"><b>Ensaio</b> '+esc(r.eventosMusicais.ensaio)+'</span>');
+      if(r.eventosMusicais.gem) tags.push('<span class="ev-tag"><b>GEM</b> '+esc(r.eventosMusicais.gem)+'</span>');
+      if(r.eventosMusicais.ensaioGem) tags.push('<span class="ev-tag"><b>Ensaio GEM</b> '+esc(r.eventosMusicais.ensaioGem)+'</span>');
+      if(r.diasCulto.rjm) tags.push('<span class="ev-tag"><b>RJM</b> '+esc(r.diasCulto.rjm)+'</span>');
+      return '<div class="ev-row" data-id="'+r.id+'"><div class="evh"><b>'+esc(r.bairro)+'</b><span class="s">Setor '+esc(r.setor)+'</span></div><div class="ev-tags">'+tags.join('')+'</div></div>';
+    }).join('') + '</div>';
+  } else {
+    var day = state.agendaDay;
+    var withTime = ALL.filter(function(r){ return r.diasCulto[day]; });
+    var byTime = {};
+    withTime.forEach(function(r){
+      var t = r.diasCulto[day];
+      (byTime[t] = byTime[t] || []).push(r);
+    });
+    var times = Object.keys(byTime).sort();
+    if(!times.length){
+      panel.innerHTML = '<div class="empty-state"><h3>Sem atividades neste dia</h3><p>Nenhuma congregação tem culto registrado em '+DAY_LABELS[day].toLowerCase()+'.</p></div>';
+    } else {
+      panel.innerHTML = times.map(function(t){
+        var congs = byTime[t].sort(function(a,b){ return a.bairro.localeCompare(b.bairro,'pt-BR'); });
+        return '<div class="time-block"><div class="th">'+t+'</div><div class="congs">'+
+          congs.map(function(r){ return '<button class="cong-pill" data-id="'+r.id+'">'+esc(r.bairro)+' <span class="s">S'+esc(r.setor)+'</span></button>'; }).join('') +
+          '</div></div>';
+      }).join('');
+    }
+  }
+  panel.querySelectorAll('[data-id]').forEach(function(el){
+    el.addEventListener('click', function(){ openModal(Number(el.getAttribute('data-id'))); });
+  });
+}
+
+// ---------- por setor ----------
+function miniCard(r){
+  return '<div class="mini-card" data-id="'+r.id+'"><div><div class="mn">'+esc(r.bairro)+'</div><div class="ms">'+esc(r.cidade)+'</div></div><svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
+}
+function attachMiniCardEvents(root){
+  root.querySelectorAll('.mini-card').forEach(function(el){
+    el.addEventListener('click', function(){ openModal(Number(el.getAttribute('data-id'))); });
+  });
+}
+function renderPorSetor(){
+  var setores = uniqueSorted(ALL.map(function(r){ return r.setor; }));
+  var html = setores.map(function(s){
+    var items = ALL.filter(function(r){ return String(r.setor) === String(s); })
+      .sort(function(a,b){ return a.bairro.localeCompare(b.bairro,'pt-BR'); });
+    return '<div class="group-block"><div class="group-head"><div class="gnum">'+esc(s)+'</div><h3>Setor '+esc(s)+'</h3><span class="gcount">'+items.length+' congregações</span></div>'+
+      '<div class="group-cards">'+items.map(miniCard).join('')+'</div></div>';
+  }).join('');
+  var el = document.getElementById('viewSetor');
+  el.innerHTML = html;
+  attachMiniCardEvents(el);
+}
+
+// ---------- por cidade ----------
+function renderPorCidade(){
+  var cidades = uniqueSorted(ALL.map(function(r){ return r.cidade; }));
+  var html = cidades.map(function(c){
+    var items = ALL.filter(function(r){ return r.cidade === c; })
+      .sort(function(a,b){ return a.bairro.localeCompare(b.bairro,'pt-BR'); });
+    return '<div class="group-block"><div class="group-head"><div class="gnum">🏙️</div><h3>'+esc(c)+'</h3><span class="gcount">'+items.length+' congregações</span></div>'+
+      '<div class="group-cards">'+items.map(miniCard).join('')+'</div></div>';
+  }).join('');
+  var el = document.getElementById('viewCidade');
+  el.innerHTML = html;
+  attachMiniCardEvents(el);
+}
+
+// ---------- wiring ----------
+function init(){
+  renderStats();
+  renderNav();
+  populateFilters();
+  renderInicio();
+
+  var searchInput = document.getElementById('searchInput');
+  var searchClear = document.getElementById('searchClear');
+  searchInput.addEventListener('input', function(){
+    state.search = searchInput.value;
+    searchClear.classList.toggle('show', !!state.search);
+    renderInicio();
+  });
+  searchClear.addEventListener('click', function(){
+    searchInput.value=''; state.search=''; searchClear.classList.remove('show'); renderInicio(); searchInput.focus();
+  });
+
+  var ftoggle = document.getElementById('filtersToggle');
+  var fpanel = document.getElementById('filtersPanel');
+  ftoggle.addEventListener('click', function(){
+    state.filtersOpen = !state.filtersOpen;
+    ftoggle.classList.toggle('open', state.filtersOpen);
+    fpanel.classList.toggle('open', state.filtersOpen);
+  });
+  document.getElementById('clearFilters').addEventListener('click', clearAllFilters);
+
+  document.getElementById('modalOverlay').addEventListener('click', function(e){
+    if(e.target === this) closeModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeModal();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+})();
+
+</script>
+</body>
+</html>
