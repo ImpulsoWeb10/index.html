@@ -11,42 +11,72 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        /* Animação de Brilho (Shimmer/Glow) para o Botão do Maps */
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .btn-maps-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-maps-shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+            animation: shine 2s infinite;
+        }
+
+        /* Pulso Suave no Botão */
+        @keyframes customPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); }
+            50% { transform: scale(1.02); box-shadow: 0 0 15px 4px rgba(251, 191, 36, 0.5); }
+        }
+        .animate-maps-pulse {
+            animation: customPulse 2s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
 
     <!-- Cabeçalho Estilo App CCB -->
     <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-lg border-b border-slate-800">
-        <div class="px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <!-- Imagem Logo CCB -->
-                <div class="w-12 h-12 bg-white rounded-2xl shadow-md flex items-center justify-center shrink-0 p-1.5 border border-slate-700/50">
-                    <img src="logo-ccb.png" alt="Logo CCB" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/4300/4300058.png';">
-                </div>
-                <div>
-                    <div class="flex items-center gap-1.5">
+        <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+            <!-- Logo Maior -->
+            <div class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center shrink-0 p-2 border border-slate-700/50">
+                <img src="logo ccb.png" alt="Logo CCB" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/4300/4300058.png';">
+            </div>
+
+            <!-- Título e Total de Igrejas Posicionados mais à direita -->
+            <div class="flex items-center justify-end gap-3 flex-1">
+                <div class="text-right">
+                    <div class="flex items-center justify-end gap-1.5">
                         <span class="text-[10px] bg-amber-400 text-slate-950 font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">CCB</span>
                         <h1 class="text-base font-extrabold tracking-tight">Ensaios Locais</h1>
                     </div>
                     <p class="text-slate-400 text-xs font-medium">Itaquaquecetuba • 2026</p>
                 </div>
-            </div>
-            
-            <div class="bg-slate-800/90 border border-slate-700/70 px-3.5 py-1.5 rounded-2xl text-center">
-                <span class="block text-[9px] text-slate-400 uppercase tracking-wider font-semibold">Total</span>
-                <span id="total-count" class="text-sm font-black text-amber-400">50</span>
+                
+                <div class="bg-slate-800/90 border border-slate-700/70 px-3.5 py-2 rounded-2xl text-center shrink-0">
+                    <span class="block text-[9px] text-slate-400 uppercase tracking-wider font-semibold">Total</span>
+                    <span id="total-count" class="text-sm font-black text-amber-400">50</span>
+                </div>
             </div>
         </div>
 
-        <!-- Grade de Filtros Fixa em 2 Colunas (2x2) Sem Rolagem Lateral -->
+        <!-- Grade de Filtros Fixa em 2 Colunas (2x2) -->
         <div class="bg-slate-950/90 border-t border-slate-800/80 px-4 py-3.5">
             <div class="grid grid-cols-2 gap-2.5">
-                <!-- Filtro Bairro / Comum -->
-                <div class="relative">
-                    <input type="text" id="search-input" placeholder="Bairro / Comum..." 
-                        class="w-full pl-8 pr-2.5 py-2.5 bg-slate-800 text-slate-100 text-xs font-bold rounded-xl border border-slate-700 focus:outline-none focus:border-amber-400 placeholder-slate-400 shadow-xs">
-                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-3.5 text-slate-400 text-xs"></i>
-                </div>
+                <!-- Filtro Bairro / Comum (Agora em Lista Suspensa) -->
+                <select id="filter-bairro" class="w-full bg-slate-800 text-slate-100 text-xs px-3 py-2.5 rounded-xl border border-slate-700 font-bold focus:outline-none focus:border-amber-400 cursor-pointer shadow-xs">
+                    <option value="">Bairro / Comum (Todos)</option>
+                    <!-- Opções geradas via JS -->
+                </select>
 
                 <!-- Filtro Setor -->
                 <select id="filter-setor" class="w-full bg-slate-800 text-slate-100 text-xs px-3 py-2.5 rounded-xl border border-slate-700 font-bold focus:outline-none focus:border-amber-400 cursor-pointer shadow-xs">
@@ -139,8 +169,8 @@
                 </div>
             </div>
 
-            <!-- Botão do Google Maps -->
-            <a id="modal-maps-link" href="#" target="_blank" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold py-3.5 rounded-xl text-xs transition shadow-md flex items-center justify-center gap-2 mb-2.5">
+            <!-- Botão do Google Maps Pulsando e com Brilho -->
+            <a id="modal-maps-link" href="#" target="_blank" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold py-3.5 rounded-xl text-xs transition flex items-center justify-center gap-2 mb-2.5 btn-maps-shimmer animate-maps-pulse z-10">
                 <i class="fa-solid fa-map-location-dot text-sm"></i>
                 Abrir no Google Maps
             </a>
@@ -207,12 +237,23 @@
         ];
 
         const container = document.getElementById('cards-container');
-        const searchInput = document.getElementById('search-input');
+        const filterBairro = document.getElementById('filter-bairro');
         const filterSetor = document.getElementById('filter-setor');
         const filterDia = document.getElementById('filter-dia');
         const filterHora = document.getElementById('filter-hora');
         const noResults = document.getElementById('no-results');
         const totalCount = document.getElementById('total-count');
+
+        // Preencher Lista Suspensa de Bairros em Ordem Alfabética
+        function populateBairroSelect() {
+            const bairros = [...new Set(agendaData.map(item => item.bairro))].sort((a, b) => a.localeCompare(b));
+            bairros.forEach(bairro => {
+                const opt = document.createElement('option');
+                opt.value = bairro;
+                opt.textContent = bairro;
+                filterBairro.appendChild(opt);
+            });
+        }
 
         function renderCards(data) {
             container.innerHTML = '';
@@ -250,37 +291,37 @@
         }
 
         function filterData() {
-            const searchTerm = searchInput.value.toLowerCase();
+            const bairroVal = filterBairro.value;
             const setorVal = filterSetor.value;
             const diaVal = filterDia.value;
             const horaVal = filterHora.value;
 
             const filtered = agendaData.filter(item => {
-                const matchSearch = item.bairro.toLowerCase().includes(searchTerm);
+                const matchBairro = bairroVal === "" || item.bairro === bairroVal;
                 const matchSetor = setorVal === "" || item.setor === setorVal;
                 const matchDia = diaVal === "" || item.ensaio.toUpperCase().includes(diaVal.toUpperCase());
                 const matchHora = horaVal === "" || item.ensaio.toLowerCase().includes(horaVal.toLowerCase());
                 
-                return matchSearch && matchSetor && matchDia && matchHora;
+                return matchBairro && matchSetor && matchDia && matchHora;
             });
 
             renderCards(filtered);
         }
 
         function resetFilters() {
-            searchInput.value = '';
+            filterBairro.value = '';
             filterSetor.value = '';
             filterDia.value = '';
             filterHora.value = '';
             renderCards(agendaData);
         }
 
-        searchInput.addEventListener('input', filterData);
+        filterBairro.addEventListener('change', filterData);
         filterSetor.addEventListener('change', filterData);
         filterDia.addEventListener('change', filterData);
         filterHora.addEventListener('change', filterData);
 
-        // Modal Controls
+        // Controles do Modal
         const modal = document.getElementById('detail-modal');
         const modalContainer = document.getElementById('modal-container');
 
@@ -315,7 +356,8 @@
             if(e.target === modal) closeModal();
         });
 
-        // Inicializar com todas as congregações
+        // Inicialização
+        populateBairroSelect();
         renderCards(agendaData);
     </script>
 </body>
