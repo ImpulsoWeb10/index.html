@@ -4,27 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Agenda de Ensaios 2026 - CCB Itaquaquecetuba</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome para Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        /* Esconder barra de rolagem horizontal nos filtros */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
 
-    <!-- Cabeçalho Estilo App CCB -->
     <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-lg border-b border-slate-800">
         <div class="px-4 py-3.5 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <!-- Logo CCB -->
                 <div class="w-11 h-11 bg-white rounded-2xl shadow-md flex items-center justify-center shrink-0 p-1">
-                    <!-- Ícone estilizado representando a CCB -->
                     <div class="w-full h-full bg-slate-900 rounded-xl flex items-center justify-center text-amber-400">
                         <i class="fa-solid fa-church text-lg"></i>
                     </div>
@@ -38,27 +32,21 @@
                 </div>
             </div>
             
-            <div class="bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-xl text-center">
+            <div class="bg-slate-800/80 border border-slate-700/60 px-3.5 py-1.5 rounded-xl text-center">
                 <span class="block text-[9px] text-slate-400 uppercase tracking-wider font-semibold">Total</span>
                 <span id="total-count" class="text-xs font-bold text-amber-400">50</span>
             </div>
         </div>
 
-        <!-- Barra de Busca Geral -->
-        <div class="px-4 pb-3">
-            <div class="relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-                <input type="text" id="search-input" placeholder="Buscar por bairro (ex: Pium, Miray...)" 
-                    class="w-full pl-9 pr-3 py-2 bg-slate-800 text-white placeholder-slate-400 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-amber-400 transition">
-            </div>
-        </div>
-
-        <!-- Botões de Filtros Separados (Abas Horizontais com Scroll) -->
-        <div class="bg-slate-950/70 border-t border-slate-800/80 px-4 py-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar">
-            <span class="text-[10px] font-bold uppercase text-slate-400 tracking-wider shrink-0 mr-1"><i class="fa-solid fa-filter text-amber-400 mr-1"></i> Filtros:</span>
+        <div class="bg-slate-950/80 border-t border-slate-800/80 px-4 py-3 flex items-center gap-2.5 overflow-x-auto no-scrollbar">
             
-            <!-- Filtro Setor -->
-            <select id="filter-setor" class="bg-slate-800 text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-700 font-medium focus:outline-none focus:border-amber-400 shrink-0">
+            <div class="relative shrink-0 min-w-[150px]">
+                <input type="text" id="search-input" placeholder="Bairro / Comum..." 
+                    class="w-full pl-8 pr-3 py-2 bg-slate-800 text-slate-100 text-xs font-semibold rounded-xl border border-slate-700 focus:outline-none focus:border-amber-400 placeholder-slate-400">
+                <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+            </div>
+
+            <select id="filter-setor" class="bg-slate-800 text-slate-100 text-xs px-3.5 py-2 rounded-xl border border-slate-700 font-semibold focus:outline-none focus:border-amber-400 shrink-0 cursor-pointer">
                 <option value="">Setores (Todos)</option>
                 <option value="1">Setor 1</option>
                 <option value="2">Setor 2</option>
@@ -66,16 +54,14 @@
                 <option value="4">Setor 4</option>
             </select>
 
-            <!-- Filtro Dia da Semana -->
-            <select id="filter-dia" class="bg-slate-800 text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-700 font-medium focus:outline-none focus:border-amber-400 shrink-0">
+            <select id="filter-dia" class="bg-slate-800 text-slate-100 text-xs px-3.5 py-2 rounded-xl border border-slate-700 font-semibold focus:outline-none focus:border-amber-400 shrink-0 cursor-pointer">
                 <option value="">Dia da Semana</option>
                 <option value="S">Sábado (S)</option>
                 <option value="D">Domingo (D)</option>
                 <option value="6°">Sexta (6°)</option>
             </select>
 
-            <!-- Filtro Horário -->
-            <select id="filter-hora" class="bg-slate-800 text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-700 font-medium focus:outline-none focus:border-amber-400 shrink-0">
+            <select id="filter-hora" class="bg-slate-800 text-slate-100 text-xs px-3.5 py-2 rounded-xl border border-slate-700 font-semibold focus:outline-none focus:border-amber-400 shrink-0 cursor-pointer">
                 <option value="">Horário</option>
                 <option value="16h">16:00</option>
                 <option value="16:30">16:30</option>
@@ -84,33 +70,31 @@
                 <option value="19:30">19:30</option>
             </select>
 
-            <button onclick="resetFilters()" class="text-xs text-amber-400 hover:underline px-2 py-1 shrink-0 font-medium">Limpar</button>
+            <button onclick="resetFilters()" class="text-xs text-amber-400 hover:text-amber-300 px-3 py-2 shrink-0 font-bold bg-slate-800/50 rounded-xl border border-slate-700">
+                Limpar
+            </button>
         </div>
     </header>
 
-    <!-- Lista Principal de Igrejas / Ensaios -->
     <main class="max-w-md mx-auto px-4 pt-4">
         <div id="cards-container" class="space-y-3">
-            <!-- Cards injetados via JavaScript -->
-        </div>
+            </div>
 
-        <!-- Estado Vazio -->
         <div id="no-results" class="hidden text-center py-20 px-4">
             <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-3 border border-amber-200">
                 <i class="fa-solid fa-church text-xl"></i>
             </div>
             <p class="text-slate-700 font-bold text-sm">Nenhum ensaio encontrado</p>
-            <p class="text-slate-400 text-xs mt-1">Tente ajustar os filtros ou pesquisar outro termo.</p>
+            <p class="text-slate-400 text-xs mt-1">Tente ajustar a busca ou os seletores.</p>
         </div>
     </main>
 
-    <!-- Modal Elegante de Detalhes -->
-    <div id="detail-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center sm:p-4 hidden opacity-0 transition-opacity duration-300">
-        <div id="modal-container" class="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300">
+    <div id="detail-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center sm:p-4 hidden opacity-0 transition-opacity duration-300">
+        <div id="modal-container" class="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl w-full sm:max-w-md p-6 transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300 max-h-[90vh] overflow-y-auto">
             <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-4 sm:hidden"></div>
             
             <div class="flex justify-between items-start mb-3">
-                <span id="modal-setor" class="bg-slate-100 text-slate-800 text-xs font-bold px-3 py-1 rounded-full border border-slate-200 uppercase tracking-wider"></span>
+                <span id="modal-setor" class="bg-amber-100 text-amber-900 text-xs font-extrabold px-3 py-1 rounded-full border border-amber-200 uppercase tracking-wider"></span>
                 <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition">
                     <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
@@ -118,79 +102,93 @@
             
             <div class="flex items-center gap-2 mb-1">
                 <i class="fa-solid fa-church text-amber-600 text-sm"></i>
-                <span class="text-xs font-bold text-amber-700 uppercase tracking-wide">Ensaio Local CCB</span>
+                <span class="text-xs font-bold text-amber-800 uppercase tracking-wide">CCB Itaquaquecetuba</span>
             </div>
-            <h3 id="modal-bairro" class="text-xl font-bold text-slate-900 mb-1 leading-snug"></h3>
-            <p class="text-xs text-slate-400 mb-5 flex items-center gap-1.5">
-                <i class="fa-solid fa-location-dot text-slate-500"></i> <span id="modal-cidade"></span>
-            </p>
+            <h3 id="modal-bairro" class="text-2xl font-extrabold text-slate-900 mb-4 leading-snug"></h3>
             
-            <div class="bg-gradient-to-br from-amber-50/60 to-slate-50 rounded-2xl p-4 border border-amber-200/50 mb-6">
-                <span class="text-[10px] font-bold text-amber-800 uppercase tracking-widest block mb-1">Programação do Ensaio</span>
-                <p class="text-base font-bold text-slate-900 flex items-center gap-2.5">
-                    <i class="fa-regular fa-calendar-days text-amber-600"></i> <span id="modal-ensaio"></span>
+            <div class="bg-gradient-to-br from-amber-500/10 to-amber-500/5 rounded-2xl p-4 border border-amber-200/60 mb-4">
+                <span class="text-[10px] font-extrabold text-amber-800 uppercase tracking-widest block mb-1">Programação do Ensaio</span>
+                <p class="text-lg font-bold text-slate-900 flex items-center gap-2.5">
+                    <i class="fa-regular fa-calendar-days text-amber-600 text-base"></i> <span id="modal-ensaio"></span>
                 </p>
             </div>
 
-            <button onclick="closeModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-slate-900/20">
+            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-6 space-y-3">
+                <div>
+                    <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1">Endereço Completo</span>
+                    <p id="modal-endereco" class="text-xs text-slate-700 font-semibold leading-relaxed"></p>
+                </div>
+                <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">CEP</span>
+                        <span id="modal-cep" class="text-xs font-bold text-slate-800"></span>
+                    </div>
+                </div>
+            </div>
+
+            <a id="modal-maps-link" href="#" target="_blank" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold py-3.5 rounded-xl text-xs transition shadow-md flex items-center justify-center gap-2 mb-2.5">
+                <i class="fa-solid fa-map-location-dot text-sm"></i>
+                Abrir no Google Maps
+            </a>
+
+            <button onclick="closeModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-xl text-xs transition">
                 Fechar
             </button>
         </div>
     </div>
 
-    <!-- Script com os dados exatos das 50 congregações -->
     <script>
         const agendaData = [
-            { id: 1, setor: "2", cidade: "Itaquaquecetuba", bairro: "Pium", ensaio: "3° S - 17h" },
-            { id: 2, setor: "2", cidade: "Itaquaquecetuba", bairro: "Sitio José de Moraes", ensaio: "4° S - 17h" },
-            { id: 3, setor: "2", cidade: "Itaquaquecetuba", bairro: "Jardim São Paulo", ensaio: "U° D - 16h" },
-            { id: 4, setor: "2", cidade: "Itaquaquecetuba", bairro: "Água das Pedras", ensaio: "1° D - 16h" },
-            { id: 5, setor: "2", cidade: "Itaquaquecetuba", bairro: "Parque Marengo", ensaio: "4° Sab - 17h" },
-            { id: 6, setor: "2", cidade: "Itaquaquecetuba", bairro: "Parque Macedo", ensaio: "1° D - 16h" },
-            { id: 7, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Amazonas", ensaio: "Úº D - 16h" },
-            { id: 8, setor: "2", cidade: "Itaquaquecetuba", bairro: "Parque Residencial Marengo", ensaio: "2° S - 19:00" },
-            { id: 9, setor: "2", cidade: "Itaquaquecetuba", bairro: "Parque Residencial Furtuna", ensaio: "4° D - 16h" },
-            { id: 10, setor: "2", cidade: "Itaquaquecetuba", bairro: "Jardim Moraes", ensaio: "4° D - 16h" },
-            { id: 11, setor: "2", cidade: "Itaquaquecetuba", bairro: "Parque Novo Horizonte", ensaio: "3° 6° - 19:30h" },
-            { id: 12, setor: "2", cidade: "Itaquaquecetuba", bairro: "Terra Prometida", ensaio: "U° D - 16h" },
-            { id: 13, setor: "2", cidade: "Itaquaquecetuba", bairro: "Jardim Marcelo", ensaio: "4° S - 17h" },
-            { id: 14, setor: "1", cidade: "Itaquaquecetuba", bairro: "Jardim Miray", ensaio: "2° S - 16:30h" },
-            { id: 15, setor: "1", cidade: "Itaquaquecetuba", bairro: "Pedreira", ensaio: "2° S - 19:30" },
-            { id: 16, setor: "1", cidade: "Itaquaquecetuba", bairro: "Central", ensaio: "1° S - 19:30" },
-            { id: 17, setor: "1", cidade: "Itaquaquecetuba", bairro: "Aracaré", ensaio: "Úº D - 16h" },
-            { id: 18, setor: "1", cidade: "Itaquaquecetuba", bairro: "Jardim do Carmo", ensaio: "4° D - 16h" },
-            { id: 19, setor: "1", cidade: "Itaquaquecetuba", bairro: "Jardim Odete", ensaio: "3° S - 19:30" },
-            { id: 20, setor: "1", cidade: "Itaquaquecetuba", bairro: "Morro Branco", ensaio: "4° D - 16h" },
-            { id: 21, setor: "1", cidade: "Itaquaquecetuba", bairro: "Rancho Grande", ensaio: "Úº S - 17h" },
-            { id: 22, setor: "1", cidade: "Itaquaquecetuba", bairro: "Vila Arizona", ensaio: "1° D - 16h" },
-            { id: 23, setor: "1", cidade: "Itaquaquecetuba", bairro: "Vila Sônia", ensaio: "2° S - 17h" },
-            { id: 24, setor: "1", cidade: "Itaquaquecetuba", bairro: "Monte belo", ensaio: "Ú° D - 16h" },
-            { id: 25, setor: "1", cidade: "Itaquaquecetuba", bairro: "Vila Virginia", ensaio: "4° D - 16h" },
-            { id: 26, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Itapuã", ensaio: "Ú° D - 16h" },
-            { id: 27, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Itaquá", ensaio: "1° D - 16h" },
-            { id: 28, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Karine", ensaio: "3° S - 17h" },
-            { id: 29, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Maria Eliza", ensaio: "Ú° S - 17h" },
-            { id: 30, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Maria Rosa", ensaio: "2° S - 17h" },
-            { id: 31, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Paineira", ensaio: "1° D - 16h" },
-            { id: 32, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Tropical", ensaio: "4° D - 16h" },
-            { id: 33, setor: "4", cidade: "Itaquaquecetuba", bairro: "Parque Piratininga I", ensaio: "Ú° S - 19:30h" },
-            { id: 34, setor: "4", cidade: "Itaquaquecetuba", bairro: "Parque Piratininga II", ensaio: "1° D - 16h" },
-            { id: 35, setor: "4", cidade: "Itaquaquecetuba", bairro: "Parque São Pedro", ensaio: "Ú° D - 16h" },
-            { id: 36, setor: "4", cidade: "Itaquaquecetuba", bairro: "Vila Japão", ensaio: "1° D - 16h" },
-            { id: 37, setor: "4", cidade: "Itaquaquecetuba", bairro: "Vila Nely", ensaio: "1° S - 17h" },
-            { id: 38, setor: "4", cidade: "Itaquaquecetuba", bairro: "Vila São Carlos", ensaio: "1° S - 17h" },
-            { id: 39, setor: "3", cidade: "Itaquaquecetuba", bairro: "Cidade Nova Louzada", ensaio: "4° D - 16h" },
-            { id: 40, setor: "3", cidade: "Itaquaquecetuba", bairro: "Estancia Guatambú", ensaio: "1° D - 16h" },
-            { id: 41, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Adriane", ensaio: "U° S - 17h" },
-            { id: 42, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Caiuby", ensaio: "1° S - 17h" },
-            { id: 43, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Canaã", ensaio: "Ú° D - 16h" },
-            { id: 44, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Carolina", ensaio: "1° D - 16h" },
-            { id: 45, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Josely", ensaio: "1° D - 16h" },
-            { id: 46, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Monica", ensaio: "4° D - 16h" },
-            { id: 47, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Patricia", ensaio: "1° D - 16h" },
-            { id: 48, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Pinheirinho", ensaio: "3° S - 17h" },
-            { id: 49, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Silvestre", ensaio: "3° S - 16:30h" },
-            { id: 50, setor: "3", cidade: "Itaquaquecetuba", bairro: "Parque Village", ensaio: "Ú° S - 17h" }
+            { id: 1, setor: "2", cidade: "Itaqua", bairro: "Pium", ensaio: "3° S - 17h", endereco: "Estrada do Merendá, 40 - Avenida das Monções - Altura do nº 1800, Itaquaquecetuba/SP", cep: "08592-390" },
+            { id: 2, setor: "2", cidade: "Itaqua", bairro: "Sitio José de Moraes", ensaio: "4° S - 17h", endereco: "Avenida Cacique Dobre, 298 - Parque Nossa Senhora das Graças, Itaquaquecetuba/SP", cep: "08591-520" },
+            { id: 3, setor: "2", cidade: "Itaqua", bairro: "Jardim São Paulo", ensaio: "U° D - 16h", endereco: "Rua Ferlópolis, 355, Itaquaquecetuba/SP", cep: "08597-005" },
+            { id: 4, setor: "2", cidade: "Itaqua", bairro: "Água das Pedras", ensaio: "1° D - 16h", endereco: "Rua Lages, 360, Itaquaquecetuba/SP", cep: "08593-430" },
+            { id: 5, setor: "2", cidade: "Itaqua", bairro: "Parque Marengo", ensaio: "4° Sab - 17h", endereco: "Rua Olavo Dantas, 325 - Residencial Marengo, Itaquaquecetuba/SP", cep: "08594-450" },
+            { id: 6, setor: "2", cidade: "Itaqua", bairro: "Parque Macedo", ensaio: "1° D - 16h", endereco: "Rua Jardim Alegre, 69 - Parque Dirce, Itaquaquecetuba/SP", cep: "08595-290" },
+            { id: 7, setor: "3", cidade: "Itaqua", bairro: "Jardim Amazonas", ensaio: "Úº D - 16h", endereco: "Estrada São Bento, 4082 - Jardim Novo Horizonte II, Itaquaquecetuba/SP", cep: "08591-840" },
+            { id: 8, setor: "2", cidade: "Itaqua", bairro: "Parque Residencial Marengo", ensaio: "2° S - 19:00", endereco: "Avenida Veridiano de Carvalho, 95, Itaquaquecetuba/SP", cep: "08594-100" },
+            { id: 9, setor: "2", cidade: "Itaqua", bairro: "Parque Residencial Furtuna", ensaio: "4° D - 16h", endereco: "Rua Boracéia, 153, Itaquaquecetuba/SP", cep: "08598-718" },
+            { id: 10, setor: "2", cidade: "Itaqua", bairro: "Jardim Moraes", ensaio: "4° D - 16h", endereco: "Rua Edgard Roquette Pinto, 434, Itaquaquecetuba/SP", cep: "08597-712" },
+            { id: 11, setor: "2", cidade: "Itaqua", bairro: "Parque Novo Horizonte", ensaio: "3° 6° - 19:30h", endereco: "Rua da Felicidade, 321 - Residencial Pamela, Itaquaquecetuba/SP", cep: "08596-350" },
+            { id: 12, setor: "2", cidade: "Itaqua", bairro: "Terra Prometida", ensaio: "U° D - 16h", endereco: "Rua Moisés, 590, Itaquaquecetuba/SP", cep: "08595-874" },
+            { id: 13, setor: "2", cidade: "Itaqua", bairro: "Jardim Marcelo", ensaio: "4° S - 17h", endereco: "Rua Crisópolis, 142, Itaquaquecetuba/SP", cep: "08592-609" },
+            { id: 14, setor: "1", cidade: "Itaqua", bairro: "Jardim Miray", ensaio: "2° S - 16:30h", endereco: "Rua da Tubulação, 73, Itaquaquecetuba/SP", cep: "08574-440" },
+            { id: 15, setor: "1", cidade: "Itaqua", bairro: "Pedreira", ensaio: "2° S - 19:30", endereco: "Avenida Brasil, 953, Itaquaquecetuba/SP", cep: "08572-010" },
+            { id: 16, setor: "1", cidade: "Itaqua", bairro: "Central", ensaio: "1° S - 19:30", endereco: "Rua MMDC, 35 - Centro, Itaquaquecetuba/SP", cep: "08570-007" },
+            { id: 17, setor: "1", cidade: "Itaqua", bairro: "Aracaré", ensaio: "Úº D - 16h", endereco: "Rua Piauí, 417, Itaquaquecetuba/SP", cep: "08572-510" },
+            { id: 18, setor: "1", cidade: "Itaqua", bairro: "Jardim do Carmo", ensaio: "4° D - 16h", endereco: "Rua Atibaia, 211, Itaquaquecetuba/SP", cep: "08577-660" },
+            { id: 19, setor: "1", cidade: "Itaqua", bairro: "Jardim Odete", ensaio: "3° S - 19:30", endereco: "Rua Rosa, 396, Itaquaquecetuba/SP", cep: "08598-220" },
+            { id: 20, setor: "1", cidade: "Itaqua", bairro: "Morro Branco", ensaio: "4° D - 16h", endereco: "Rua Curitiba, 60 - Jardim Anita, Itaquaquecetuba/SP", cep: "08573-370" },
+            { id: 21, setor: "1", cidade: "Itaqua", bairro: "Rancho Grande", ensaio: "Ú° S - 17h", endereco: "Rua Palmas, 99 - Jardim Aracaré, Itaquaquecetuba/SP", cep: "08574-110" },
+            { id: 22, setor: "1", cidade: "Itaqua", bairro: "Vila Arizona", ensaio: "1° D - 16h", endereco: "Rua Ariranha, 160, Itaquaquecetuba/SP", cep: "08575-540" },
+            { id: 23, setor: "1", cidade: "Itaqua", bairro: "Vila Sônia", ensaio: "2° S - 17h", endereco: "Estrada Walter da Silva, 1156, Itaquaquecetuba/SP", cep: "08570-330" },
+            { id: 24, setor: "1", cidade: "Itaqua", bairro: "Monte belo", ensaio: "Ú° D - 16h", endereco: "Rua Jundiaí, 140 - Estação Manoel Feio, Itaquaquecetuba/SP", cep: "08577-320" },
+            { id: 25, setor: "1", cidade: "Itaqua", bairro: "Vila Virginia", ensaio: "4° D - 16h", endereco: "Avenida Marginal I, 43 - Antiga Estrada São Paulo-Rio - Km 32, Itaquaquecetuba/SP", cep: "08576-275" },
+            { id: 26, setor: "4", cidade: "Itaqua", bairro: "Jardim Itapuã", ensaio: "Ú° D - 16h", endereco: "Rua Epitácio Pessoa, 390, Itaquaquecetuba/SP", cep: "08579-040" },
+            { id: 27, setor: "4", cidade: "Itaqua", bairro: "Jardim Itaquá", ensaio: "1° D - 16h", endereco: "Rua dos Economistas, 160, Itaquaquecetuba/SP", cep: "08580-100" },
+            { id: 28, setor: "4", cidade: "Itaqua", bairro: "Jardim Karine", ensaio: "3° S - 17h", endereco: "Rua Carlos Chagas, 30, Itaquaquecetuba/SP", cep: "08579-460" },
+            { id: 29, setor: "4", cidade: "Itaqua", bairro: "Jardim Maria Eliza", ensaio: "Ú° S - 17h", endereco: "Rua Pacaembu, 130, Itaquaquecetuba/SP", cep: "08580-440" },
+            { id: 30, setor: "4", cidade: "Itaqua", bairro: "Jardim Maria Rosa", ensaio: "2° S - 17h", endereco: "Rua Alvorada, 125, Itaquaquecetuba/SP", cep: "08582-785" },
+            { id: 31, setor: "4", cidade: "Itaqua", bairro: "Jardim Paineira", ensaio: "1° D - 16h", endereco: "Rua Serra da Mantiqueira, 715, Itaquaquecetuba/SP", cep: "08581-220" },
+            { id: 32, setor: "4", cidade: "Itaqua", bairro: "Jardim Tropical", ensaio: "4° D - 16h", endereco: "Rua Itápolis, 50, Itaquaquecetuba/SP", cep: "08582-640" },
+            { id: 33, setor: "4", cidade: "Itaqua", bairro: "Parque Piratininga I", ensaio: "Ú° S - 19:30h", endereco: "Rua Gomes Leal, 165, Itaquaquecetuba/SP", cep: "08583-430" },
+            { id: 34, setor: "4", cidade: "Itaqua", bairro: "Parque Piratininga II", ensaio: "1° D - 16h", endereco: "Rua Raul Pompéia, 71, Itaquaquecetuba/SP", cep: "08583-685" },
+            { id: 35, setor: "4", cidade: "Itaqua", bairro: "Parque São Pedro", ensaio: "Ú° D - 16h", endereco: "Avenida Cardeal, 319, Itaquaquecetuba/SP", cep: "08586-010" },
+            { id: 36, setor: "4", cidade: "Itaqua", bairro: "Vila Japão", ensaio: "1° D - 16h", endereco: "Rua São Judas Tadeu, 181, Itaquaquecetuba/SP", cep: "08599-170" },
+            { id: 37, setor: "4", cidade: "Itaqua", bairro: "Vila Nely", ensaio: "1° S - 17h", endereco: "Rua Rio Grande, 66 - Nova Itaquá, Itaquaquecetuba/SP", cep: "08599-340" },
+            { id: 38, setor: "4", cidade: "Itaqua", bairro: "Vila São Carlos", ensaio: "1° S - 17h", endereco: "Rua Tocantins, 136, Itaquaquecetuba/SP", cep: "08599-600" },
+            { id: 39, setor: "3", cidade: "Itaqua", bairro: "Cidade Nova Louzada", ensaio: "4° D - 16h", endereco: "Avenida Turmalinas, 1323, Itaquaquecetuba/SP", cep: "08589-000" },
+            { id: 40, setor: "3", cidade: "Itaqua", bairro: "Estancia Guatambú", ensaio: "1° D - 16h", endereco: "Rua Dirce, 54, Itaquaquecetuba/SP", cep: "08588-720" },
+            { id: 41, setor: "3", cidade: "Itaqua", bairro: "Jardim Adriane", ensaio: "U° S - 17h", endereco: "Rua Venezuela, 193 - Jardim Americano, Itaquaquecetuba/SP", cep: "08598-732" },
+            { id: 42, setor: "3", cidade: "Itaqua", bairro: "Jardim Caiuby", ensaio: "1° S - 17h", endereco: "Rua Alvilândia, 295, Itaquaquecetuba/SP", cep: "08588-550" },
+            { id: 43, setor: "3", cidade: "Itaqua", bairro: "Jardim Canaã", ensaio: "Ú° D - 16h", endereco: "Rua João Aranha, 18, Itaquaquecetuba/SP", cep: "08585-200" },
+            { id: 44, setor: "3", cidade: "Itaqua", bairro: "Jardim Carolina", ensaio: "1° D - 16h", endereco: "Rua Padre Azevedo, 18, Itaquaquecetuba/SP", cep: "08588-370" },
+            { id: 45, setor: "3", cidade: "Itaqua", bairro: "Jardim Josely", ensaio: "1° D - 16h", endereco: "Estrada de São Bento, 8215, Itaquaquecetuba/SP", cep: "08590-315" },
+            { id: 46, setor: "3", cidade: "Itaqua", bairro: "Jardim Monica", ensaio: "4° D - 16h", endereco: "Rua Guadalajara, 224, Itaquaquecetuba/SP", cep: "08584-400" },
+            { id: 47, setor: "3", cidade: "Itaqua", bairro: "Jardim Patricia", ensaio: "1° D - 16h", endereco: "Rua Paes de Barros, 88, Itaquaquecetuba/SP", cep: "08584-150" },
+            { id: 48, setor: "3", cidade: "Itaqua", bairro: "Jardim Pinheirinho", ensaio: "3° S - 17h", endereco: "Rua Itapetininga, 521 A, Itaquaquecetuba/SP", cep: "08589-180" },
+            { id: 49, setor: "3", cidade: "Itaqua", bairro: "Jardim Silvestre", ensaio: "3° S - 16:30h", endereco: "Rua Cascalho Rico, 385, Itaquaquecetuba/SP", cep: "08584-450" },
+            { id: 50, setor: "3", cidade: "Itaqua", bairro: "Parque Village", ensaio: "Ú° S - 17h", endereco: "Estrada do Cuiabá, 1625 - Bairro Amanda Caiubi, Itaquaquecetuba/SP", cep: "08587-190" }
         ];
 
         const container = document.getElementById('cards-container');
@@ -274,8 +272,12 @@
         function openModal(item) {
             document.getElementById('modal-setor').textContent = `Setor ${item.setor}`;
             document.getElementById('modal-bairro').textContent = item.bairro;
-            document.getElementById('modal-cidade').textContent = `${item.cidade} - SP`;
             document.getElementById('modal-ensaio').textContent = item.ensaio;
+            document.getElementById('modal-endereco').textContent = item.endereco;
+            document.getElementById('modal-cep').textContent = item.cep;
+
+            const mapsQuery = encodeURIComponent(`CCB ${item.bairro} ${item.endereco}`);
+            document.getElementById('modal-maps-link').href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
             
             modal.classList.remove('hidden');
             setTimeout(() => {
@@ -298,7 +300,7 @@
             if(e.target === modal) closeModal();
         });
 
-        // Inicializar com todas as 50 congregações
+        // Inicialização da lista
         renderCards(agendaData);
     </script>
 </body>
