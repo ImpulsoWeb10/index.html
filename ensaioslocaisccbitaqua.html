@@ -72,10 +72,9 @@
         <!-- Grade de Filtros Fixa em 2 Colunas (2x2) -->
         <div class="bg-slate-950/90 border-t border-slate-800/80 px-4 py-3.5">
             <div class="grid grid-cols-2 gap-2.5">
-                <!-- Filtro Bairro / Comum (Agora em Lista Suspensa) -->
+                <!-- Filtro Bairro / Comum (Lista Suspensa) -->
                 <select id="filter-bairro" class="w-full bg-slate-800 text-slate-100 text-xs px-3 py-2.5 rounded-xl border border-slate-700 font-bold focus:outline-none focus:border-amber-400 cursor-pointer shadow-xs">
                     <option value="">Bairro / Comum (Todos)</option>
-                    <!-- Opções geradas via JS -->
                 </select>
 
                 <!-- Filtro Setor -->
@@ -156,7 +155,7 @@
             </div>
 
             <!-- Card de Endereço -->
-            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-6 space-y-3">
+            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-5 space-y-3">
                 <div>
                     <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1">Endereço Completo</span>
                     <p id="modal-endereco" class="text-xs text-slate-700 font-semibold leading-relaxed"></p>
@@ -169,10 +168,16 @@
                 </div>
             </div>
 
-            <!-- Botão do Google Maps Pulsando e com Brilho -->
-            <a id="modal-maps-link" href="#" target="_blank" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold py-3.5 rounded-xl text-xs transition flex items-center justify-center gap-2 mb-2.5 btn-maps-shimmer animate-maps-pulse z-10">
+            <!-- Botão 1: Google Maps (Pulsando e com Brilho) -->
+            <a id="modal-maps-link" href="#" target="_blank" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold py-3.5 rounded-xl text-xs transition flex items-center justify-center gap-2 mb-2.5 btn-maps-shimmer animate-maps-pulse z-10 shadow-sm">
                 <i class="fa-solid fa-map-location-dot text-sm"></i>
                 Abrir no Google Maps
+            </a>
+
+            <!-- Botão 2: Foto / Fachada (Coluna E) -->
+            <a id="modal-foto-link" href="#" target="_blank" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3.5 rounded-xl text-xs transition flex items-center justify-center gap-2 mb-2.5 shadow-sm">
+                <i class="fa-solid fa-camera text-sm text-amber-400"></i>
+                Foto / Fachada
             </a>
 
             <button onclick="closeModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-xl text-xs transition">
@@ -181,59 +186,59 @@
         </div>
     </div>
 
-    <!-- Base de Dados Completa dos 50 Registros -->
+    <!-- Base de Dados Completa com Mapeamento da Coluna E (Fotos / Fachada) -->
     <script>
         const agendaData = [
-            { id: 1, setor: "2", cidade: "Itaqua", bairro: "Pium", ensaio: "3° S - 17h", endereco: "Estrada do Merendá, 40 - Avenida das Monções - Altura do nº 1800, Itaquaquecetuba/SP", cep: "08592-390" },
-            { id: 2, setor: "2", cidade: "Itaqua", bairro: "Sitio José de Moraes", ensaio: "4° S - 17h", endereco: "Avenida Cacique Dobre, 298 - Parque Nossa Senhora das Graças, Itaquaquecetuba/SP", cep: "08591-520" },
-            { id: 3, setor: "2", cidade: "Itaqua", bairro: "Jardim São Paulo", ensaio: "U° D - 16h", endereco: "Rua Ferlópolis, 355, Itaquaquecetuba/SP", cep: "08597-005" },
-            { id: 4, setor: "2", cidade: "Itaqua", bairro: "Água das Pedras", ensaio: "1° D - 16h", endereco: "Rua Lages, 360, Itaquaquecetuba/SP", cep: "08593-430" },
-            { id: 5, setor: "2", cidade: "Itaqua", bairro: "Parque Marengo", ensaio: "4° Sab - 17h", endereco: "Rua Olavo Dantas, 325 - Residencial Marengo, Itaquaquecetuba/SP", cep: "08594-450" },
-            { id: 6, setor: "2", cidade: "Itaqua", bairro: "Parque Macedo", ensaio: "1° D - 16h", endereco: "Rua Jardim Alegre, 69 - Parque Dirce, Itaquaquecetuba/SP", cep: "08595-290" },
-            { id: 7, setor: "3", cidade: "Itaqua", bairro: "Jardim Amazonas", ensaio: "Úº D - 16h", endereco: "Estrada São Bento, 4082 - Jardim Novo Horizonte II, Itaquaquecetuba/SP", cep: "08591-840" },
-            { id: 8, setor: "2", cidade: "Itaqua", bairro: "Parque Residencial Marengo", ensaio: "2° S - 19:00", endereco: "Avenida Veridiano de Carvalho, 95, Itaquaquecetuba/SP", cep: "08594-100" },
-            { id: 9, setor: "2", cidade: "Itaqua", bairro: "Parque Residencial Furtuna", ensaio: "4° D - 16h", endereco: "Rua Boracéia, 153, Itaquaquecetuba/SP", cep: "08598-718" },
-            { id: 10, setor: "2", cidade: "Itaqua", bairro: "Jardim Moraes", ensaio: "4° D - 16h", endereco: "Rua Edgard Roquette Pinto, 434, Itaquaquecetuba/SP", cep: "08597-712" },
-            { id: 11, setor: "2", cidade: "Itaqua", bairro: "Parque Novo Horizonte", ensaio: "3° 6° - 19:30h", endereco: "Rua da Felicidade, 321 - Residencial Pamela, Itaquaquecetuba/SP", cep: "08596-350" },
-            { id: 12, setor: "2", cidade: "Itaqua", bairro: "Terra Prometida", ensaio: "U° D - 16h", endereco: "Rua Moisés, 590, Itaquaquecetuba/SP", cep: "08595-874" },
-            { id: 13, setor: "2", cidade: "Itaqua", bairro: "Jardim Marcelo", ensaio: "4° S - 17h", endereco: "Rua Crisópolis, 142, Itaquaquecetuba/SP", cep: "08592-609" },
-            { id: 14, setor: "1", cidade: "Itaqua", bairro: "Jardim Miray", ensaio: "2° S - 16:30h", endereco: "Rua da Tubulação, 73, Itaquaquecetuba/SP", cep: "08574-440" },
-            { id: 15, setor: "1", cidade: "Itaqua", bairro: "Pedreira", ensaio: "2° S - 19:30", endereco: "Avenida Brasil, 953, Itaquaquecetuba/SP", cep: "08572-010" },
-            { id: 16, setor: "1", cidade: "Itaqua", bairro: "Central", ensaio: "1° S - 19:30", endereco: "Rua MMDC, 35 - Centro, Itaquaquecetuba/SP", cep: "08570-007" },
-            { id: 17, setor: "1", cidade: "Itaqua", bairro: "Aracaré", ensaio: "Úº D - 16h", endereco: "Rua Piauí, 417, Itaquaquecetuba/SP", cep: "08572-510" },
-            { id: 18, setor: "1", cidade: "Itaqua", bairro: "Jardim do Carmo", ensaio: "4° D - 16h", endereco: "Rua Atibaia, 211, Itaquaquecetuba/SP", cep: "08577-660" },
-            { id: 19, setor: "1", cidade: "Itaqua", bairro: "Jardim Odete", ensaio: "3° S - 19:30", endereco: "Rua Rosa, 396, Itaquaquecetuba/SP", cep: "08598-220" },
-            { id: 20, setor: "1", cidade: "Itaqua", bairro: "Morro Branco", ensaio: "4° D - 16h", endereco: "Rua Curitiba, 60 - Jardim Anita, Itaquaquecetuba/SP", cep: "08573-370" },
-            { id: 21, setor: "1", cidade: "Itaqua", bairro: "Rancho Grande", ensaio: "Ú° S - 17h", endereco: "Rua Palmas, 99 - Jardim Aracaré, Itaquaquecetuba/SP", cep: "08574-110" },
-            { id: 22, setor: "1", cidade: "Itaqua", bairro: "Vila Arizona", ensaio: "1° D - 16h", endereco: "Rua Ariranha, 160, Itaquaquecetuba/SP", cep: "08575-540" },
-            { id: 23, setor: "1", cidade: "Itaqua", bairro: "Vila Sônia", ensaio: "2° S - 17h", endereco: "Estrada Walter da Silva, 1156, Itaquaquecetuba/SP", cep: "08570-330" },
-            { id: 24, setor: "1", cidade: "Itaqua", bairro: "Monte belo", ensaio: "Ú° D - 16h", endereco: "Rua Jundiaí, 140 - Estação Manoel Feio, Itaquaquecetuba/SP", cep: "08577-320" },
-            { id: 25, setor: "1", cidade: "Itaqua", bairro: "Vila Virginia", ensaio: "4° D - 16h", endereco: "Avenida Marginal I, 43 - Antiga Estrada São Paulo-Rio - Km 32, Itaquaquecetuba/SP", cep: "08576-275" },
-            { id: 26, setor: "4", cidade: "Itaqua", bairro: "Jardim Itapuã", ensaio: "Ú° D - 16h", endereco: "Rua Epitácio Pessoa, 390, Itaquaquecetuba/SP", cep: "08579-040" },
-            { id: 27, setor: "4", cidade: "Itaqua", bairro: "Jardim Itaquá", ensaio: "1° D - 16h", endereco: "Rua dos Economistas, 160, Itaquaquecetuba/SP", cep: "08580-100" },
-            { id: 28, setor: "4", cidade: "Itaqua", bairro: "Jardim Karine", ensaio: "3° S - 17h", endereco: "Rua Carlos Chagas, 30, Itaquaquecetuba/SP", cep: "08579-460" },
-            { id: 29, setor: "4", cidade: "Itaqua", bairro: "Jardim Maria Eliza", ensaio: "Ú° S - 17h", endereco: "Rua Pacaembu, 130, Itaquaquecetuba/SP", cep: "08580-440" },
-            { id: 30, setor: "4", cidade: "Itaqua", bairro: "Jardim Maria Rosa", ensaio: "2° S - 17h", endereco: "Rua Alvorada, 125, Itaquaquecetuba/SP", cep: "08582-785" },
-            { id: 31, setor: "4", cidade: "Itaqua", bairro: "Jardim Paineira", ensaio: "1° D - 16h", endereco: "Rua Serra da Mantiqueira, 715, Itaquaquecetuba/SP", cep: "08581-220" },
-            { id: 32, setor: "4", cidade: "Itaqua", bairro: "Jardim Tropical", ensaio: "4° D - 16h", endereco: "Rua Itápolis, 50, Itaquaquecetuba/SP", cep: "08582-640" },
-            { id: 33, setor: "4", cidade: "Itaqua", bairro: "Parque Piratininga I", ensaio: "Ú° S - 19:30h", endereco: "Rua Gomes Leal, 165, Itaquaquecetuba/SP", cep: "08583-430" },
-            { id: 34, setor: "4", cidade: "Itaqua", bairro: "Parque Piratininga II", ensaio: "1° D - 16h", endereco: "Rua Raul Pompéia, 71, Itaquaquecetuba/SP", cep: "08583-685" },
-            { id: 35, setor: "4", cidade: "Itaqua", bairro: "Parque São Pedro", ensaio: "Ú° D - 16h", endereco: "Avenida Cardeal, 319, Itaquaquecetuba/SP", cep: "08586-010" },
-            { id: 36, setor: "4", cidade: "Itaqua", bairro: "Vila Japão", ensaio: "1° D - 16h", endereco: "Rua São Judas Tadeu, 181, Itaquaquecetuba/SP", cep: "08599-170" },
-            { id: 37, setor: "4", cidade: "Itaqua", bairro: "Vila Nely", ensaio: "1° S - 17h", endereco: "Rua Rio Grande, 66 - Nova Itaquá, Itaquaquecetuba/SP", cep: "08599-340" },
-            { id: 38, setor: "4", cidade: "Itaqua", bairro: "Vila São Carlos", ensaio: "1° S - 17h", endereco: "Rua Tocantins, 136, Itaquaquecetuba/SP", cep: "08599-600" },
-            { id: 39, setor: "3", cidade: "Itaqua", bairro: "Cidade Nova Louzada", ensaio: "4° D - 16h", endereco: "Avenida Turmalinas, 1323, Itaquaquecetuba/SP", cep: "08589-000" },
-            { id: 40, setor: "3", cidade: "Itaqua", bairro: "Estancia Guatambú", ensaio: "1° D - 16h", endereco: "Rua Dirce, 54, Itaquaquecetuba/SP", cep: "08588-720" },
-            { id: 41, setor: "3", cidade: "Itaqua", bairro: "Jardim Adriane", ensaio: "U° S - 17h", endereco: "Rua Venezuela, 193 - Jardim Americano, Itaquaquecetuba/SP", cep: "08598-732" },
-            { id: 42, setor: "3", cidade: "Itaqua", bairro: "Jardim Caiuby", ensaio: "1° S - 17h", endereco: "Rua Alvilândia, 295, Itaquaquecetuba/SP", cep: "08588-550" },
-            { id: 43, setor: "3", cidade: "Itaqua", bairro: "Jardim Canaã", ensaio: "Ú° D - 16h", endereco: "Rua João Aranha, 18, Itaquaquecetuba/SP", cep: "08585-200" },
-            { id: 44, setor: "3", cidade: "Itaqua", bairro: "Jardim Carolina", ensaio: "1° D - 16h", endereco: "Rua Padre Azevedo, 18, Itaquaquecetuba/SP", cep: "08588-370" },
-            { id: 45, setor: "3", cidade: "Itaqua", bairro: "Jardim Josely", ensaio: "1° D - 16h", endereco: "Estrada de São Bento, 8215, Itaquaquecetuba/SP", cep: "08590-315" },
-            { id: 46, setor: "3", cidade: "Itaqua", bairro: "Jardim Monica", ensaio: "4° D - 16h", endereco: "Rua Guadalajara, 224, Itaquaquecetuba/SP", cep: "08584-400" },
-            { id: 47, setor: "3", cidade: "Itaqua", bairro: "Jardim Patricia", ensaio: "1° D - 16h", endereco: "Rua Paes de Barros, 88, Itaquaquecetuba/SP", cep: "08584-150" },
-            { id: 48, setor: "3", cidade: "Itaqua", bairro: "Jardim Pinheirinho", ensaio: "3° S - 17h", endereco: "Rua Itapetininga, 521 A, Itaquaquecetuba/SP", cep: "08589-180" },
-            { id: 49, setor: "3", cidade: "Itaqua", bairro: "Jardim Silvestre", ensaio: "3° S - 16:30h", endereco: "Rua Cascalho Rico, 385, Itaquaquecetuba/SP", cep: "08584-450" },
-            { id: 50, setor: "3", cidade: "Itaqua", bairro: "Parque Village", ensaio: "Ú° S - 17h", endereco: "Estrada do Cuiabá, 1625 - Bairro Amanda Caiubi, Itaquaquecetuba/SP", cep: "08587-190" }
+            { id: 1, setor: "2", cidade: "Itaqua", bairro: "Pium", ensaio: "3° S - 17h", endereco: "Estrada do Merendá, 40 - Avenida das Monções - Altura do nº 1800, Itaquaquecetuba/SP", cep: "08592-390", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Pium+Itaquaquecetuba+SP+fachada" },
+            { id: 2, setor: "2", cidade: "Itaqua", bairro: "Sitio José de Moraes", ensaio: "4° S - 17h", endereco: "Avenida Cacique Dobre, 298 - Parque Nossa Senhora das Graças, Itaquaquecetuba/SP", cep: "08591-520", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Sitio+Jos%C3%A9+de+Moraes+Itaquaquecetuba+SP+fachada" },
+            { id: 3, setor: "2", cidade: "Itaqua", bairro: "Jardim São Paulo", ensaio: "U° D - 16h", endereco: "Rua Ferlópolis, 355, Itaquaquecetuba/SP", cep: "08597-005", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+S%C3%A3o+Paulo+Itaquaquecetuba+SP+fachada" },
+            { id: 4, setor: "2", cidade: "Itaqua", bairro: "Água das Pedras", ensaio: "1° D - 16h", endereco: "Rua Lages, 360, Itaquaquecetuba/SP", cep: "08593-430", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+%C3%81gua+das+Pedras+Itaquaquecetuba+SP+fachada" },
+            { id: 5, setor: "2", cidade: "Itaqua", bairro: "Parque Marengo", ensaio: "4° Sab - 17h", endereco: "Rua Olavo Dantas, 325 - Residencial Marengo, Itaquaquecetuba/SP", cep: "08594-450", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Marengo+Itaquaquecetuba+SP+fachada" },
+            { id: 6, setor: "2", cidade: "Itaqua", bairro: "Parque Macedo", ensaio: "1° D - 16h", endereco: "Rua Jardim Alegre, 69 - Parque Dirce, Itaquaquecetuba/SP", cep: "08595-290", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Macedo+Itaquaquecetuba+SP+fachada" },
+            { id: 7, setor: "3", cidade: "Itaqua", bairro: "Jardim Amazonas", ensaio: "Úº D - 16h", endereco: "Estrada São Bento, 4082 - Jardim Novo Horizonte II, Itaquaquecetuba/SP", cep: "08591-840", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Amazonas+Itaquaquecetuba+SP+fachada" },
+            { id: 8, setor: "2", cidade: "Itaqua", bairro: "Parque Residencial Marengo", ensaio: "2° S - 19:00", endereco: "Avenida Veridiano de Carvalho, 95, Itaquaquecetuba/SP", cep: "08594-100", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Residencial+Marengo+Itaquaquecetuba+SP+fachada" },
+            { id: 9, setor: "2", cidade: "Itaqua", bairro: "Parque Residencial Furtuna", ensaio: "4° D - 16h", endereco: "Rua Boracéia, 153, Itaquaquecetuba/SP", cep: "08598-718", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Residencial+Furtuna+Itaquaquecetuba+SP+fachada" },
+            { id: 10, setor: "2", cidade: "Itaqua", bairro: "Jardim Moraes", ensaio: "4° D - 16h", endereco: "Rua Edgard Roquette Pinto, 434, Itaquaquecetuba/SP", cep: "08597-712", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Moraes+Itaquaquecetuba+SP+fachada" },
+            { id: 11, setor: "2", cidade: "Itaqua", bairro: "Parque Novo Horizonte", ensaio: "3° 6° - 19:30h", endereco: "Rua da Felicidade, 321 - Residencial Pamela, Itaquaquecetuba/SP", cep: "08596-350", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Novo+Horizonte+Itaquaquecetuba+SP+fachada" },
+            { id: 12, setor: "2", cidade: "Itaqua", bairro: "Terra Prometida", ensaio: "U° D - 16h", endereco: "Rua Moisés, 590, Itaquaquecetuba/SP", cep: "08595-874", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Terra+Prometida+Itaquaquecetuba+SP+fachada" },
+            { id: 13, setor: "2", cidade: "Itaqua", bairro: "Jardim Marcelo", ensaio: "4° S - 17h", endereco: "Rua Crisópolis, 142, Itaquaquecetuba/SP", cep: "08592-609", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Marcelo+Itaquaquecetuba+SP+fachada" },
+            { id: 14, setor: "1", cidade: "Itaqua", bairro: "Jardim Miray", ensaio: "2° S - 16:30h", endereco: "Rua da Tubulação, 73, Itaquaquecetuba/SP", cep: "08574-440", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Miray+Itaquaquecetuba+SP+fachada" },
+            { id: 15, setor: "1", cidade: "Itaqua", bairro: "Pedreira", ensaio: "2° S - 19:30", endereco: "Avenida Brasil, 953, Itaquaquecetuba/SP", cep: "08572-010", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Pedreira+Itaquaquecetuba+SP+fachada" },
+            { id: 16, setor: "1", cidade: "Itaqua", bairro: "Central", ensaio: "1° S - 19:30", endereco: "Rua MMDC, 35 - Centro, Itaquaquecetuba/SP", cep: "08570-007", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Central+Itaquaquecetuba+SP+fachada" },
+            { id: 17, setor: "1", cidade: "Itaqua", bairro: "Aracaré", ensaio: "Úº D - 16h", endereco: "Rua Piauí, 417, Itaquaquecetuba/SP", cep: "08572-510", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Aracar%C3%A9+Itaquaquecetuba+SP+fachada" },
+            { id: 18, setor: "1", cidade: "Itaqua", bairro: "Jardim do Carmo", ensaio: "4° D - 16h", endereco: "Rua Atibaia, 211, Itaquaquecetuba/SP", cep: "08577-660", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+do+Carmo+Itaquaquecetuba+SP+fachada" },
+            { id: 19, setor: "1", cidade: "Itaqua", bairro: "Jardim Odete", ensaio: "3° S - 19:30", endereco: "Rua Rosa, 396, Itaquaquecetuba/SP", cep: "08598-220", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Odete+Itaquaquecetuba+SP+fachada" },
+            { id: 20, setor: "1", cidade: "Itaqua", bairro: "Morro Branco", ensaio: "4° D - 16h", endereco: "Rua Curitiba, 60 - Jardim Anita, Itaquaquecetuba/SP", cep: "08573-370", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Morro+Branco+Itaquaquecetuba+SP+fachada" },
+            { id: 21, setor: "1", cidade: "Itaqua", bairro: "Rancho Grande", ensaio: "Ú° S - 17h", endereco: "Rua Palmas, 99 - Jardim Aracaré, Itaquaquecetuba/SP", cep: "08574-110", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Rancho+Grande+Itaquaquecetuba+SP+fachada" },
+            { id: 22, setor: "1", cidade: "Itaqua", bairro: "Vila Arizona", ensaio: "1° D - 16h", endereco: "Rua Ariranha, 160, Itaquaquecetuba/SP", cep: "08575-540", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+Arizona+Itaquaquecetuba+SP+fachada" },
+            { id: 23, setor: "1", cidade: "Itaqua", bairro: "Vila Sônia", ensaio: "2° S - 17h", endereco: "Estrada Walter da Silva, 1156, Itaquaquecetuba/SP", cep: "08570-330", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+S%C3%B4nia+Itaquaquecetuba+SP+fachada" },
+            { id: 24, setor: "1", cidade: "Itaqua", bairro: "Monte belo", ensaio: "Ú° D - 16h", endereco: "Rua Jundiaí, 140 - Estação Manoel Feio, Itaquaquecetuba/SP", cep: "08577-320", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Monte+belo+Itaquaquecetuba+SP+fachada" },
+            { id: 25, setor: "1", cidade: "Itaqua", bairro: "Vila Virginia", ensaio: "4° D - 16h", endereco: "Avenida Marginal I, 43 - Antiga Estrada São Paulo-Rio - Km 32, Itaquaquecetuba/SP", cep: "08576-275", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+Virginia+Itaquaquecetuba+SP+fachada" },
+            { id: 26, setor: "4", cidade: "Itaqua", bairro: "Jardim Itapuã", ensaio: "Ú° D - 16h", endereco: "Rua Epitácio Pessoa, 390, Itaquaquecetuba/SP", cep: "08579-040", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Itapu%C3%A3+Itaquaquecetuba+SP+fachada" },
+            { id: 27, setor: "4", cidade: "Itaqua", bairro: "Jardim Itaquá", ensaio: "1° D - 16h", endereco: "Rua dos Economistas, 160, Itaquaquecetuba/SP", cep: "08580-100", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Itaqu%C3%A1+Itaquaquecetuba+SP+fachada" },
+            { id: 28, setor: "4", cidade: "Itaqua", bairro: "Jardim Karine", ensaio: "3° S - 17h", endereco: "Rua Carlos Chagas, 30, Itaquaquecetuba/SP", cep: "08579-460", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Karine+Itaquaquecetuba+SP+fachada" },
+            { id: 29, setor: "4", cidade: "Itaqua", bairro: "Jardim Maria Eliza", ensaio: "Ú° S - 17h", endereco: "Rua Pacaembu, 130, Itaquaquecetuba/SP", cep: "08580-440", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Maria+Eliza+Itaquaquecetuba+SP+fachada" },
+            { id: 30, setor: "4", cidade: "Itaqua", bairro: "Jardim Maria Rosa", ensaio: "2° S - 17h", endereco: "Rua Alvorada, 125, Itaquaquecetuba/SP", cep: "08582-785", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Maria+Rosa+Itaquaquecetuba+SP+fachada" },
+            { id: 31, setor: "4", cidade: "Itaqua", bairro: "Jardim Paineira", ensaio: "1° D - 16h", endereco: "Rua Serra da Mantiqueira, 715, Itaquaquecetuba/SP", cep: "08581-220", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Paineira+Itaquaquecetuba+SP+fachada" },
+            { id: 32, setor: "4", cidade: "Itaqua", bairro: "Jardim Tropical", ensaio: "4° D - 16h", endereco: "Rua Itápolis, 50, Itaquaquecetuba/SP", cep: "08582-640", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Tropical+Itaquaquecetuba+SP+fachada" },
+            { id: 33, setor: "4", cidade: "Itaqua", bairro: "Parque Piratininga I", ensaio: "Ú° S - 19:30h", endereco: "Rua Gomes Leal, 165, Itaquaquecetuba/SP", cep: "08583-430", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Piratininga+I+Itaquaquecetuba+SP+fachada" },
+            { id: 34, setor: "4", cidade: "Itaqua", bairro: "Parque Piratininga II", ensaio: "1° D - 16h", endereco: "Rua Raul Pompéia, 71, Itaquaquecetuba/SP", cep: "08583-685", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Piratininga+II+Itaquaquecetuba+SP+fachada" },
+            { id: 35, setor: "4", cidade: "Itaqua", bairro: "Parque São Pedro", ensaio: "Ú° D - 16h", endereco: "Avenida Cardeal, 319, Itaquaquecetuba/SP", cep: "08586-010", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+S%C3%A3o+Pedro+Itaquaquecetuba+SP+fachada" },
+            { id: 36, setor: "4", cidade: "Itaqua", bairro: "Vila Japão", ensaio: "1° D - 16h", endereco: "Rua São Judas Tadeu, 181, Itaquaquecetuba/SP", cep: "08599-170", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+Jap%C3%A3o+Itaquaquecetuba+SP+fachada" },
+            { id: 37, setor: "4", cidade: "Itaqua", bairro: "Vila Nely", ensaio: "1° S - 17h", endereco: "Rua Rio Grande, 66 - Nova Itaquá, Itaquaquecetuba/SP", cep: "08599-340", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+Nely+Itaquaquecetuba+SP+fachada" },
+            { id: 38, setor: "4", cidade: "Itaqua", bairro: "Vila São Carlos", ensaio: "1° S - 17h", endereco: "Rua Tocantins, 136, Itaquaquecetuba/SP", cep: "08599-600", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+S%C3%A3o+Carlos+Itaquaquecetuba+SP+fachada" },
+            { id: 39, setor: "3", cidade: "Itaqua", bairro: "Cidade Nova Louzada", ensaio: "4° D - 16h", endereco: "Avenida Turmalinas, 1323, Itaquaquecetuba/SP", cep: "08589-000", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Cidade+Nova+Louzada+Itaquaquecetuba+SP+fachada" },
+            { id: 40, setor: "3", cidade: "Itaqua", bairro: "Estancia Guatambú", ensaio: "1° D - 16h", endereco: "Rua Dirce, 54, Itaquaquecetuba/SP", cep: "08588-720", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Estancia+Guatamb%C3%BA+Itaquaquecetuba+SP+fachada" },
+            { id: 41, setor: "3", cidade: "Itaqua", bairro: "Jardim Adriane", ensaio: "U° S - 17h", endereco: "Rua Venezuela, 193 - Jardim Americano, Itaquaquecetuba/SP", cep: "08598-732", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Adriane+Itaquaquecetuba+SP+fachada" },
+            { id: 42, setor: "3", cidade: "Itaqua", bairro: "Jardim Caiuby", ensaio: "1° S - 17h", endereco: "Rua Alvilândia, 295, Itaquaquecetuba/SP", cep: "08588-550", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Caiuby+Itaquaquecetuba+SP+fachada" },
+            { id: 43, setor: "3", cidade: "Itaqua", bairro: "Jardim Canaã", ensaio: "Ú° D - 16h", endereco: "Rua João Aranha, 18, Itaquaquecetuba/SP", cep: "08585-200", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Cana%C3%A3+Itaquaquecetuba+SP+fachada" },
+            { id: 44, setor: "3", cidade: "Itaqua", bairro: "Jardim Carolina", ensaio: "1° D - 16h", endereco: "Rua Padre Azevedo, 18, Itaquaquecetuba/SP", cep: "08588-370", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Carolina+Itaquaquecetuba+SP+fachada" },
+            { id: 45, setor: "3", cidade: "Itaqua", bairro: "Jardim Josely", ensaio: "1° D - 16h", endereco: "Estrada de São Bento, 8215, Itaquaquecetuba/SP", cep: "08590-315", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Josely+Itaquaquecetuba+SP+fachada" },
+            { id: 46, setor: "3", cidade: "Itaqua", bairro: "Jardim Monica", ensaio: "4° D - 16h", endereco: "Rua Guadalajara, 224, Itaquaquecetuba/SP", cep: "08584-400", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Monica+Itaquaquecetuba+SP+fachada" },
+            { id: 47, setor: "3", cidade: "Itaqua", bairro: "Jardim Patricia", ensaio: "1° D - 16h", endereco: "Rua Paes de Barros, 88, Itaquaquecetuba/SP", cep: "08584-150", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Patricia+Itaquaquecetuba+SP+fachada" },
+            { id: 48, setor: "3", cidade: "Itaqua", bairro: "Jardim Pinheirinho", ensaio: "3° S - 17h", endereco: "Rua Itapetininga, 521 A, Itaquaquecetuba/SP", cep: "08589-180", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Pinheirinho+Itaquaquecetuba+SP+fachada" },
+            { id: 49, setor: "3", cidade: "Itaqua", bairro: "Jardim Silvestre", ensaio: "3° S - 16:30h", endereco: "Rua Cascalho Rico, 385, Itaquaquecetuba/SP", cep: "08584-450", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Silvestre+Itaquaquecetuba+SP+fachada" },
+            { id: 50, setor: "3", cidade: "Itaqua", bairro: "Parque Village", ensaio: "Ú° S - 17h", endereco: "Estrada do Cuiabá, 1625 - Bairro Amanda Caiubi, Itaquaquecetuba/SP", cep: "08587-190", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Village+Itaquaquecetuba+SP+fachada" }
         ];
 
         const container = document.getElementById('cards-container');
@@ -332,8 +337,12 @@
             document.getElementById('modal-endereco').textContent = item.endereco;
             document.getElementById('modal-cep').textContent = item.cep;
 
+            // Link do Google Maps
             const mapsQuery = encodeURIComponent(`CCB ${item.bairro} ${item.endereco}`);
             document.getElementById('modal-maps-link').href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+
+            // Link de Foto / Fachada (Coluna E)
+            document.getElementById('modal-foto-link').href = item.fotoUrl;
             
             modal.classList.remove('hidden');
             setTimeout(() => {
