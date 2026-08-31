@@ -317,6 +317,31 @@
             padding-right: 36px;
         }
 
+        /* BOTÃO AMARELO (PROGRAMA MÍNIMO) */
+        .btn-yellow {
+            background-color: #eab308;
+            color: #ffffff !important;
+            text-decoration: none;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 5px rgba(234, 179, 8, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-yellow:hover {
+            background-color: #ca8a04;
+            transform: translateY(-1px);
+        }
+
+        .btn-yellow:active {
+            transform: translateY(1px);
+        }
+
         /* MODAL FOOTER BOTÕES FIXOS */
         .modal-footer {
             padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 10px)) 20px;
@@ -617,7 +642,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="metodos">9. Métodos Utilizados (Descreva) *</label>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                            <label for="metodos" style="margin-bottom: 0;">9. Métodos Utilizados (Programa Mínimo) *</label>
+                            <a href="programa-minimo-organistas.pdf" target="_blank" class="btn-yellow">
+                                <i class="fa-solid fa-file-pdf"></i> Programa Mínimo
+                            </a>
+                        </div>
                         <textarea id="metodos" class="form-control" placeholder="Ex: Método de Órgão Eletrônico Vol. 1 e 2, Hinário..." required></textarea>
                     </div>
 
