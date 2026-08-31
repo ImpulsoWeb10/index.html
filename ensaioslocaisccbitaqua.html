@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-H0DBG2GS6F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-H0DBG2GS6F');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Agenda de Ensaios 2026 - CCB Itaquaquecetuba</title>
@@ -47,8 +57,8 @@
     <!-- Cabeçalho Estilo App CCB -->
     <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-lg border-b border-slate-800">
         <div class="px-4 py-3.5 flex items-center justify-between gap-3">
-            <!-- Logo Maior -->
-            <div class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center shrink-0 p-2 border border-slate-700/50">
+            <!-- Logo Aumentado (w-20 h-20) -->
+            <div class="w-20 h-20 bg-white rounded-2xl shadow-md flex items-center justify-center shrink-0 p-2 border border-slate-700/50">
                 <img src="logo-ccb.png" alt="Logo CCB" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/4300/4300058.png';">
             </div>
 
@@ -57,14 +67,14 @@
                 <div class="text-right">
                     <div class="flex items-center justify-end gap-1.5">
                         <span class="text-[10px] bg-amber-400 text-slate-950 font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">CCB</span>
-                        <h1 class="text-base font-extrabold tracking-tight">Ensaios Locais</h1>
+                        <h1 class="text-lg font-extrabold tracking-tight">Ensaios Locais</h1>
                     </div>
                     <p class="text-slate-400 text-xs font-medium">Itaquaquecetuba • 2026</p>
                 </div>
                 
-                <div class="bg-slate-800/90 border border-slate-700/70 px-3.5 py-2 rounded-2xl text-center shrink-0">
+                <div class="bg-slate-800/90 border border-slate-700/70 px-3.5 py-2.5 rounded-2xl text-center shrink-0">
                     <span class="block text-[9px] text-slate-400 uppercase tracking-wider font-semibold">Total</span>
-                    <span id="total-count" class="text-sm font-black text-amber-400">50</span>
+                    <span id="total-count" class="text-base font-black text-amber-400">50</span>
                 </div>
             </div>
         </div>
@@ -135,8 +145,8 @@
             
             <div class="flex justify-between items-start mb-3">
                 <span id="modal-setor" class="bg-amber-100 text-amber-900 text-xs font-extrabold px-3 py-1 rounded-full border border-amber-200 uppercase tracking-wider"></span>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition">
-                    <i class="fa-solid fa-xmark text-sm"></i>
+                <button onclick="closeModal()" class="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-xmark text-base"></i>
                 </button>
             </div>
             
@@ -168,25 +178,27 @@
                 </div>
             </div>
 
-            <!-- Botão 1: Google Maps (Pulsando e com Brilho) -->
-            <a id="modal-maps-link" href="#" target="_blank" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold py-3.5 rounded-xl text-xs transition flex items-center justify-center gap-2 mb-2.5 btn-maps-shimmer animate-maps-pulse z-10 shadow-sm">
-                <i class="fa-solid fa-map-location-dot text-sm"></i>
+            <!-- Botões do Modal -->
+            <!-- Botão 1: Google Maps -->
+            <a id="modal-maps-link" href="#" target="_blank" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold py-4 rounded-2xl text-sm transition flex items-center justify-center gap-2.5 mb-3 btn-maps-shimmer animate-maps-pulse z-10 shadow-md active:scale-[0.98]">
+                <i class="fa-solid fa-map-location-dot text-lg"></i>
                 Abrir no Google Maps
             </a>
 
-            <!-- Botão 2: Foto / Fachada (Coluna E) -->
-            <a id="modal-foto-link" href="#" target="_blank" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3.5 rounded-xl text-xs transition flex items-center justify-center gap-2 mb-2.5 shadow-sm">
-                <i class="fa-solid fa-camera text-sm text-amber-400"></i>
+            <!-- Botão 2: Foto / Fachada -->
+            <a id="modal-foto-link" href="#" target="_blank" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-4 rounded-2xl text-sm transition flex items-center justify-center gap-2.5 mb-3 shadow-md active:scale-[0.98]">
+                <i class="fa-solid fa-camera text-lg text-amber-400"></i>
                 Foto / Fachada
             </a>
 
-            <button onclick="closeModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-xl text-xs transition">
+            <!-- Botão Fechar -->
+            <button onclick="closeModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold py-3.5 rounded-2xl text-xs transition">
                 Fechar
             </button>
         </div>
     </div>
 
-    <!-- Base de Dados Completa com Mapeamento da Coluna E (Fotos / Fachada) -->
+    <!-- Base de Dados Completa -->
     <script>
         const agendaData = [
             { id: 1, setor: "2", cidade: "Itaqua", bairro: "Pium", ensaio: "3° S - 17h", endereco: "Estrada do Merendá, 40 - Avenida das Monções - Altura do nº 1800, Itaquaquecetuba/SP", cep: "08592-390", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Pium+Itaquaquecetuba+SP+fachada" },
@@ -341,7 +353,7 @@
             const mapsQuery = encodeURIComponent(`CCB ${item.bairro} ${item.endereco}`);
             document.getElementById('modal-maps-link').href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 
-            // Link de Foto / Fachada (Coluna E)
+            // Link de Foto / Fachada
             document.getElementById('modal-foto-link').href = item.fotoUrl;
             
             modal.classList.remove('hidden');
