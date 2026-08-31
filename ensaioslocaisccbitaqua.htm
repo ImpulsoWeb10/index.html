@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Agenda de Ensaios 2026 - CCB Itaquaquecetuba</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        /* Esconder barra de rolagem horizontal nos filtros */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 pb-16">
+
+    <!-- Cabeçalho Estilo App CCB -->
+    <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-lg border-b border-slate-800">
+        <div class="px-4 py-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <!-- Logo CCB -->
+                <div class="w-11 h-11 bg-white rounded-2xl shadow-md flex items-center justify-center shrink-0 p-1">
+                    <!-- Ícone estilizado representando a CCB -->
+                    <div class="w-full h-full bg-slate-900 rounded-xl flex items-center justify-center text-amber-400">
+                        <i class="fa-solid fa-church text-lg"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] bg-amber-400 text-slate-950 font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">CCB</span>
+                        <h1 class="text-sm font-bold tracking-tight">Ensaios Locais</h1>
+                    </div>
+                    <p class="text-slate-400 text-xs font-medium">Itaquaquecetuba • 2026</p>
+                </div>
+            </div>
+            
+            <div class="bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-xl text-center">
+                <span class="block text-[9px] text-slate-400 uppercase tracking-wider font-semibold">Total</span>
+                <span id="total-count" class="text-xs font-bold text-amber-400">50</span>
+            </div>
+        </div>
+
+        <!-- Barra de Busca Geral -->
+        <div class="px-4 pb-3">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                <input type="text" id="search-input" placeholder="Buscar por bairro (ex: Pium, Miray...)" 
+                    class="w-full pl-9 pr-3 py-2 bg-slate-800 text-white placeholder-slate-400 text-xs rounded-xl border border-slate-700 focus:outline-none focus:border-amber-400 transition">
+            </div>
+        </div>
+
+        <!-- Botões de Filtros Separados (Abas Horizontais com Scroll) -->
+        <div class="bg-slate-950/70 border-t border-slate-800/80 px-4 py-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar">
+            <span class="text-[10px] font-bold uppercase text-slate-400 tracking-wider shrink-0 mr-1"><i class="fa-solid fa-filter text-amber-400 mr-1"></i> Filtros:</span>
+            
+            <!-- Filtro Setor -->
+            <select id="filter-setor" class="bg-slate-800 text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-700 font-medium focus:outline-none focus:border-amber-400 shrink-0">
+                <option value="">Setores (Todos)</option>
+                <option value="1">Setor 1</option>
+                <option value="2">Setor 2</option>
+                <option value="3">Setor 3</option>
+                <option value="4">Setor 4</option>
+            </select>
+
+            <!-- Filtro Dia da Semana -->
+            <select id="filter-dia" class="bg-slate-800 text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-700 font-medium focus:outline-none focus:border-amber-400 shrink-0">
+                <option value="">Dia da Semana</option>
+                <option value="S">Sábado (S)</option>
+                <option value="D">Domingo (D)</option>
+                <option value="6°">Sexta (6°)</option>
+            </select>
+
+            <!-- Filtro Horário -->
+            <select id="filter-hora" class="bg-slate-800 text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-700 font-medium focus:outline-none focus:border-amber-400 shrink-0">
+                <option value="">Horário</option>
+                <option value="16h">16:00</option>
+                <option value="16:30">16:30</option>
+                <option value="17h">17:00</option>
+                <option value="19:00">19:00</option>
+                <option value="19:30">19:30</option>
+            </select>
+
+            <button onclick="resetFilters()" class="text-xs text-amber-400 hover:underline px-2 py-1 shrink-0 font-medium">Limpar</button>
+        </div>
+    </header>
+
+    <!-- Lista Principal de Igrejas / Ensaios -->
+    <main class="max-w-md mx-auto px-4 pt-4">
+        <div id="cards-container" class="space-y-3">
+            <!-- Cards injetados via JavaScript -->
+        </div>
+
+        <!-- Estado Vazio -->
+        <div id="no-results" class="hidden text-center py-20 px-4">
+            <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-3 border border-amber-200">
+                <i class="fa-solid fa-church text-xl"></i>
+            </div>
+            <p class="text-slate-700 font-bold text-sm">Nenhum ensaio encontrado</p>
+            <p class="text-slate-400 text-xs mt-1">Tente ajustar os filtros ou pesquisar outro termo.</p>
+        </div>
+    </main>
+
+    <!-- Modal Elegante de Detalhes -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center sm:p-4 hidden opacity-0 transition-opacity duration-300">
+        <div id="modal-container" class="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300">
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-4 sm:hidden"></div>
+            
+            <div class="flex justify-between items-start mb-3">
+                <span id="modal-setor" class="bg-slate-100 text-slate-800 text-xs font-bold px-3 py-1 rounded-full border border-slate-200 uppercase tracking-wider"></span>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-2 mb-1">
+                <i class="fa-solid fa-church text-amber-600 text-sm"></i>
+                <span class="text-xs font-bold text-amber-700 uppercase tracking-wide">Ensaio Local CCB</span>
+            </div>
+            <h3 id="modal-bairro" class="text-xl font-bold text-slate-900 mb-1 leading-snug"></h3>
+            <p class="text-xs text-slate-400 mb-5 flex items-center gap-1.5">
+                <i class="fa-solid fa-location-dot text-slate-500"></i> <span id="modal-cidade"></span>
+            </p>
+            
+            <div class="bg-gradient-to-br from-amber-50/60 to-slate-50 rounded-2xl p-4 border border-amber-200/50 mb-6">
+                <span class="text-[10px] font-bold text-amber-800 uppercase tracking-widest block mb-1">Programação do Ensaio</span>
+                <p class="text-base font-bold text-slate-900 flex items-center gap-2.5">
+                    <i class="fa-regular fa-calendar-days text-amber-600"></i> <span id="modal-ensaio"></span>
+                </p>
+            </div>
+
+            <button onclick="closeModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-slate-900/20">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+    <!-- Script com os dados exatos das 50 congregações -->
+    <script>
+        const agendaData = [
+            { id: 1, setor: "2", cidade: "Itaquaquecetuba", bairro: "Pium", ensaio: "3° S - 17h" },
+            { id: 2, setor: "2", cidade: "Itaquaquecetuba", bairro: "Sitio José de Moraes", ensaio: "4° S - 17h" },
+            { id: 3, setor: "2", cidade: "Itaquaquecetuba", bairro: "Jardim São Paulo", ensaio: "U° D - 16h" },
+            { id: 4, setor: "2", cidade: "Itaquaquecetuba", bairro: "Água das Pedras", ensaio: "1° D - 16h" },
+            { id: 5, setor: "2", cidade: "Itaquaquecetuba", bairro: "Parque Marengo", ensaio: "4° Sab - 17h" },
+            { id: 6, setor: "2", cidade: "Itaquaquecetuba", bairro: "Parque Macedo", ensaio: "1° D - 16h" },
+            { id: 7, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Amazonas", ensaio: "Úº D - 16h" },
+            { id: 8, setor: "2", cidade: "Itaquaquecetuba", bairro: "Parque Residencial Marengo", ensaio: "2° S - 19:00" },
+            { id: 9, setor: "2", cidade: "Itaquaquecetuba", bairro: "Parque Residencial Furtuna", ensaio: "4° D - 16h" },
+            { id: 10, setor: "2", cidade: "Itaquaquecetuba", bairro: "Jardim Moraes", ensaio: "4° D - 16h" },
+            { id: 11, setor: "2", cidade: "Itaquaquecetuba", bairro: "Parque Novo Horizonte", ensaio: "3° 6° - 19:30h" },
+            { id: 12, setor: "2", cidade: "Itaquaquecetuba", bairro: "Terra Prometida", ensaio: "U° D - 16h" },
+            { id: 13, setor: "2", cidade: "Itaquaquecetuba", bairro: "Jardim Marcelo", ensaio: "4° S - 17h" },
+            { id: 14, setor: "1", cidade: "Itaquaquecetuba", bairro: "Jardim Miray", ensaio: "2° S - 16:30h" },
+            { id: 15, setor: "1", cidade: "Itaquaquecetuba", bairro: "Pedreira", ensaio: "2° S - 19:30" },
+            { id: 16, setor: "1", cidade: "Itaquaquecetuba", bairro: "Central", ensaio: "1° S - 19:30" },
+            { id: 17, setor: "1", cidade: "Itaquaquecetuba", bairro: "Aracaré", ensaio: "Úº D - 16h" },
+            { id: 18, setor: "1", cidade: "Itaquaquecetuba", bairro: "Jardim do Carmo", ensaio: "4° D - 16h" },
+            { id: 19, setor: "1", cidade: "Itaquaquecetuba", bairro: "Jardim Odete", ensaio: "3° S - 19:30" },
+            { id: 20, setor: "1", cidade: "Itaquaquecetuba", bairro: "Morro Branco", ensaio: "4° D - 16h" },
+            { id: 21, setor: "1", cidade: "Itaquaquecetuba", bairro: "Rancho Grande", ensaio: "Úº S - 17h" },
+            { id: 22, setor: "1", cidade: "Itaquaquecetuba", bairro: "Vila Arizona", ensaio: "1° D - 16h" },
+            { id: 23, setor: "1", cidade: "Itaquaquecetuba", bairro: "Vila Sônia", ensaio: "2° S - 17h" },
+            { id: 24, setor: "1", cidade: "Itaquaquecetuba", bairro: "Monte belo", ensaio: "Ú° D - 16h" },
+            { id: 25, setor: "1", cidade: "Itaquaquecetuba", bairro: "Vila Virginia", ensaio: "4° D - 16h" },
+            { id: 26, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Itapuã", ensaio: "Ú° D - 16h" },
+            { id: 27, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Itaquá", ensaio: "1° D - 16h" },
+            { id: 28, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Karine", ensaio: "3° S - 17h" },
+            { id: 29, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Maria Eliza", ensaio: "Ú° S - 17h" },
+            { id: 30, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Maria Rosa", ensaio: "2° S - 17h" },
+            { id: 31, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Paineira", ensaio: "1° D - 16h" },
+            { id: 32, setor: "4", cidade: "Itaquaquecetuba", bairro: "Jardim Tropical", ensaio: "4° D - 16h" },
+            { id: 33, setor: "4", cidade: "Itaquaquecetuba", bairro: "Parque Piratininga I", ensaio: "Ú° S - 19:30h" },
+            { id: 34, setor: "4", cidade: "Itaquaquecetuba", bairro: "Parque Piratininga II", ensaio: "1° D - 16h" },
+            { id: 35, setor: "4", cidade: "Itaquaquecetuba", bairro: "Parque São Pedro", ensaio: "Ú° D - 16h" },
+            { id: 36, setor: "4", cidade: "Itaquaquecetuba", bairro: "Vila Japão", ensaio: "1° D - 16h" },
+            { id: 37, setor: "4", cidade: "Itaquaquecetuba", bairro: "Vila Nely", ensaio: "1° S - 17h" },
+            { id: 38, setor: "4", cidade: "Itaquaquecetuba", bairro: "Vila São Carlos", ensaio: "1° S - 17h" },
+            { id: 39, setor: "3", cidade: "Itaquaquecetuba", bairro: "Cidade Nova Louzada", ensaio: "4° D - 16h" },
+            { id: 40, setor: "3", cidade: "Itaquaquecetuba", bairro: "Estancia Guatambú", ensaio: "1° D - 16h" },
+            { id: 41, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Adriane", ensaio: "U° S - 17h" },
+            { id: 42, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Caiuby", ensaio: "1° S - 17h" },
+            { id: 43, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Canaã", ensaio: "Ú° D - 16h" },
+            { id: 44, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Carolina", ensaio: "1° D - 16h" },
+            { id: 45, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Josely", ensaio: "1° D - 16h" },
+            { id: 46, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Monica", ensaio: "4° D - 16h" },
+            { id: 47, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Patricia", ensaio: "1° D - 16h" },
+            { id: 48, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Pinheirinho", ensaio: "3° S - 17h" },
+            { id: 49, setor: "3", cidade: "Itaquaquecetuba", bairro: "Jardim Silvestre", ensaio: "3° S - 16:30h" },
+            { id: 50, setor: "3", cidade: "Itaquaquecetuba", bairro: "Parque Village", ensaio: "Ú° S - 17h" }
+        ];
+
+        const container = document.getElementById('cards-container');
+        const searchInput = document.getElementById('search-input');
+        const filterSetor = document.getElementById('filter-setor');
+        const filterDia = document.getElementById('filter-dia');
+        const filterHora = document.getElementById('filter-hora');
+        const noResults = document.getElementById('no-results');
+        const totalCount = document.getElementById('total-count');
+
+        function renderCards(data) {
+            container.innerHTML = '';
+            totalCount.textContent = data.length;
+            
+            if(data.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-4 shadow-xs border border-slate-100 hover:border-slate-300 active:scale-[0.99] transition-all flex items-center justify-between gap-3 cursor-pointer";
+                card.onclick = () => openModal(item);
+                
+                card.innerHTML = `
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-slate-100 text-slate-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-slate-200">Setor ${item.setor}</span>
+                            <span class="text-xs text-slate-400 truncate"><i class="fa-solid fa-church text-[10px] mr-1"></i> CCB</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-900 truncate">${item.bairro}</h4>
+                        <div class="mt-1.5 text-xs text-amber-800 font-semibold flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock text-[11px] text-amber-600"></i>
+                            <span>${item.ensaio}</span>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 shrink-0 border border-slate-100">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterData() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const setorVal = filterSetor.value;
+            const diaVal = filterDia.value;
+            const horaVal = filterHora.value;
+
+            const filtered = agendaData.filter(item => {
+                const matchSearch = item.bairro.toLowerCase().includes(searchTerm);
+                const matchSetor = setorVal === "" || item.setor === setorVal;
+                const matchDia = diaVal === "" || item.ensaio.toUpperCase().includes(diaVal.toUpperCase());
+                const matchHora = horaVal === "" || item.ensaio.toLowerCase().includes(horaVal.toLowerCase());
+                
+                return matchSearch && matchSetor && matchDia && matchHora;
+            });
+
+            renderCards(filtered);
+        }
+
+        function resetFilters() {
+            searchInput.value = '';
+            filterSetor.value = '';
+            filterDia.value = '';
+            filterHora.value = '';
+            renderCards(agendaData);
+        }
+
+        searchInput.addEventListener('input', filterData);
+        filterSetor.addEventListener('change', filterData);
+        filterDia.addEventListener('change', filterData);
+        filterHora.addEventListener('change', filterData);
+
+        // Modal Controls
+        const modal = document.getElementById('detail-modal');
+        const modalContainer = document.getElementById('modal-container');
+
+        function openModal(item) {
+            document.getElementById('modal-setor').textContent = `Setor ${item.setor}`;
+            document.getElementById('modal-bairro').textContent = item.bairro;
+            document.getElementById('modal-cidade').textContent = `${item.cidade} - SP`;
+            document.getElementById('modal-ensaio').textContent = item.ensaio;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContainer.classList.remove('translate-y-full', 'sm:scale-95');
+                modalContainer.classList.add('translate-y-0', 'sm:scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContainer.classList.remove('translate-y-0', 'sm:scale-100');
+            modalContainer.classList.add('translate-y-full', 'sm:scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) closeModal();
+        });
+
+        // Inicializar com todas as 50 congregações
+        renderCards(agendaData);
+    </script>
+</body>
+</html>
