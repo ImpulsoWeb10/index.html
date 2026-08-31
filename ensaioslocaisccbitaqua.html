@@ -22,7 +22,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
 
-        /* Animação de Brilho e Pulso para a Logo no Splash Screen */
+        /* Animação de Brilho e Pulso para o Logo Sem Contorno */
         @keyframes logoPulseGlow {
             0%, 100% {
                 transform: scale(1);
@@ -35,33 +35,6 @@
         }
         .animate-logo-splash {
             animation: logoPulseGlow 2s infinite ease-in-out;
-        }
-
-        /* Varredura de Brilho (Shimmer Effect) passando por cima da logo */
-        .logo-shimmer-container {
-            position: relative;
-            overflow: hidden;
-        }
-        .logo-shimmer-container::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -150%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                60deg,
-                rgba(255, 255, 255, 0) 20%,
-                rgba(255, 255, 255, 0.35) 50%,
-                rgba(255, 255, 255, 0) 80%
-            );
-            transform: rotate(25deg);
-            animation: shimmerPass 2.2s infinite;
-        }
-
-        @keyframes shimmerPass {
-            0% { left: -150%; }
-            100% { left: 150%; }
         }
 
         /* Animação de Brilho (Shimmer/Glow) para o Botão do Maps */
@@ -98,18 +71,26 @@
 
     <!-- Anti-página / Tela de Abertura (Splash Screen) -->
     <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col justify-between items-center p-8 text-center transition-opacity duration-700">
-        <!-- Espaçador Superior para centralização -->
+        <!-- Espaçador Superior -->
         <div></div>
 
-        <!-- Conteúdo Central: Logo + Mensagem -->
+        <!-- Conteúdo Central: Logo Solto (Sem Contorno) + Mensagem + Contador -->
         <div class="flex flex-col items-center gap-6 max-w-xs sm:max-w-md">
-            <div class="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center logo-shimmer-container rounded-3xl p-2">
+            <!-- Logo Solto Transparente -->
+            <div class="w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center">
                 <img src="logo-ccb.png" alt="Logo CCB" class="w-full h-full object-contain animate-logo-splash" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/4300/4300058.png';">
             </div>
             
+            <!-- Frase Principal -->
             <h2 class="text-white text-xl sm:text-2xl font-extrabold tracking-tight leading-snug">
                 Deus abençoe, e tenha um ótimo Ensaio
             </h2>
+
+            <!-- Contagem Regressiva Visual (3, 2, 1...) -->
+            <div class="flex items-center gap-2 mt-2 bg-slate-900/80 px-4 py-2 rounded-full border border-slate-800">
+                <span class="text-xs text-slate-400 font-semibold">Entrando em</span>
+                <span id="splash-timer" class="text-amber-400 font-black text-base w-4 text-center">3</span>
+            </div>
         </div>
 
         <!-- Rodapé do Splash Screen -->
@@ -123,12 +104,12 @@
     <!-- Cabeçalho Estilo App CCB -->
     <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-lg border-b border-slate-800">
         <div class="px-4 py-3.5 flex items-center justify-between gap-3">
-            <!-- Logo Transparente (Sem Fundo Branco nem Borda) -->
+            <!-- Logo Transparente -->
             <div class="w-20 h-20 flex items-center justify-center shrink-0">
-                <img src="logo ccb.png" alt="Logo CCB" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/4300/4300058.png';">
+                <img src="logo-ccb.png" alt="Logo CCB" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/4300/4300058.png';">
             </div>
 
-            <!-- Título e Total de Igrejas Posicionados mais à direita -->
+            <!-- Título e Total de Igrejas -->
             <div class="flex items-center justify-end gap-3 flex-1">
                 <div class="text-right">
                     <div class="flex items-center justify-end gap-1.5">
@@ -148,7 +129,7 @@
         <!-- Grade de Filtros Fixa em 2 Colunas (2x2) -->
         <div class="bg-slate-950/90 border-t border-slate-800/80 px-4 py-3.5">
             <div class="grid grid-cols-2 gap-2.5">
-                <!-- Filtro Bairro / Comum (Lista Suspensa) -->
+                <!-- Filtro Bairro / Comum -->
                 <select id="filter-bairro" class="w-full bg-slate-800 text-slate-100 text-xs px-3 py-2.5 rounded-xl border border-slate-700 font-bold focus:outline-none focus:border-amber-400 cursor-pointer shadow-xs">
                     <option value="">Bairro / Comum (Todos)</option>
                 </select>
@@ -245,38 +226,45 @@
             </div>
 
             <!-- Botões do Modal -->
-            <!-- Botão 1: Google Maps -->
             <a id="modal-maps-link" href="#" target="_blank" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold py-4 rounded-2xl text-sm transition flex items-center justify-center gap-2.5 mb-3 btn-maps-shimmer animate-maps-pulse z-10 shadow-md active:scale-[0.98]">
                 <i class="fa-solid fa-map-location-dot text-lg"></i>
                 Abrir no Google Maps
             </a>
 
-            <!-- Botão 2: Foto / Fachada -->
             <a id="modal-foto-link" href="#" target="_blank" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-4 rounded-2xl text-sm transition flex items-center justify-center gap-2.5 mb-3 shadow-md active:scale-[0.98]">
                 <i class="fa-solid fa-camera text-lg text-amber-400"></i>
                 Foto / Fachada
             </a>
 
-            <!-- Botão Fechar -->
             <button onclick="closeModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold py-3.5 rounded-2xl text-xs transition">
                 Fechar
             </button>
         </div>
     </div>
 
-    <!-- Script de Temporização do Splash Screen -->
+    <!-- Script de Contagem Regressiva e Transição -->
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             const splash = document.getElementById('splash-screen');
             const body = document.getElementById('main-body');
-
-            setTimeout(() => {
-                splash.classList.add('opacity-0');
-                body.classList.remove('overflow-hidden');
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                }, 700);
-            }, 3000);
+            const timerEl = document.getElementById('splash-timer');
+            
+            let count = 3;
+            
+            const interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    timerEl.textContent = count;
+                } else {
+                    clearInterval(interval);
+                    timerEl.textContent = "0";
+                    splash.classList.add('opacity-0');
+                    body.classList.remove('overflow-hidden');
+                    setTimeout(() => {
+                        splash.style.display = 'none';
+                    }, 700);
+                }
+            }, 1000);
         });
     </script>
 
@@ -343,7 +331,6 @@
         const noResults = document.getElementById('no-results');
         const totalCount = document.getElementById('total-count');
 
-        // Preencher Lista Suspensa de Bairros em Ordem Alfabética
         function populateBairroSelect() {
             const bairros = [...new Set(agendaData.map(item => item.bairro))].sort((a, b) => a.localeCompare(b));
             bairros.forEach(bairro => {
@@ -420,7 +407,6 @@
         filterDia.addEventListener('change', filterData);
         filterHora.addEventListener('change', filterData);
 
-        // Controles do Modal
         const modal = document.getElementById('detail-modal');
         const modalContainer = document.getElementById('modal-container');
 
@@ -431,11 +417,8 @@
             document.getElementById('modal-endereco').textContent = item.endereco;
             document.getElementById('modal-cep').textContent = item.cep;
 
-            // Link do Google Maps
             const mapsQuery = encodeURIComponent(`CCB ${item.bairro} ${item.endereco}`);
             document.getElementById('modal-maps-link').href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
-
-            // Link de Foto / Fachada
             document.getElementById('modal-foto-link').href = item.fotoUrl;
             
             modal.classList.remove('hidden');
@@ -459,7 +442,6 @@
             if(e.target === modal) closeModal();
         });
 
-        // Inicialização
         populateBairroSelect();
         renderCards(agendaData);
     </script>
