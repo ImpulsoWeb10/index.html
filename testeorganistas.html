@@ -637,14 +637,14 @@
                             <label for="selectSecretario">Selecione o Secretário Musical *</label>
                             <select id="selectSecretario" class="form-control">
                                 <option value="">Selecione o Secretário...</option>
-                                <option value="11971561722">Alessandro - (11) 97156-1722</option>
-                                <option value="11981194108">Danilo - (11) 98119-4108</option>
-                                <option value="11967703073">Gleidson - (11) 96770-3073</option>
-                                <option value="11961744658">Douglas - (11) 96174-4658</option>
-                                <option value="11947951258">Alex - (11) 94795-1258</option>
-                                <option value="11978313225">Isaque - (11) 97831-3225</option>
-                                <option value="11940893448">Richard Bruno - (11) 94089-3448</option>
-                                <option value="11954950044">Rafael - (11) 95495-0044</option>
+                                <option value="11971561722|Alessandro">Alessandro - (11) 97156-1722</option>
+                                <option value="11981194108|Danilo">Danilo - (11) 98119-4108</option>
+                                <option value="11967703073|Gleidson">Gleidson - (11) 96770-3073</option>
+                                <option value="11961744658|Douglas">Douglas - (11) 96174-4658</option>
+                                <option value="11947951258|Alex">Alex - (11) 94795-1258</option>
+                                <option value="11978313225|Isaque">Isaque - (11) 97831-3225</option>
+                                <option value="11940893448|Richard Bruno">Richard Bruno - (11) 94089-3448</option>
+                                <option value="11954950044|Rafael">Rafael - (11) 95495-0044</option>
                             </select>
                         </div>
                     </div>
@@ -1098,7 +1098,7 @@
             const comum = document.getElementById('comumCandidata').value;
             const nomeEncarregado = encarregadosPorComum[comum] ? encarregadosPorComum[comum] : "Encarregado Local";
 
-            const textoMsg = `A Paz de Deus, ${nomeEncarregado}.\n\nSegue o link com a Pré-Avaliação da candidata *${nomeCand}* (${comum}) preenchida para sua validação e complementação dos dados:\n\n${urlEncurtada}`;
+            const textoMsg = `A Paz de Deus, irmão ${nomeEncarregado}.\n\nSegue o link com a Pré-Avaliação da candidata *${nomeCand}* (${comum}) preenchida para sua validação e complementação dos dados:\n\n${urlEncurtada}`;
             
             window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(textoMsg)}`, '_blank');
         }
@@ -1168,7 +1168,9 @@
             const anciao = document.getElementById('anciao').value;
             const cooperador = document.getElementById('cooperador').value;
             const encarregado = document.getElementById('encarregado').value;
-            const telefoneSecretario = document.getElementById('selectSecretario').value;
+            
+            const rawSecretario = document.getElementById('selectSecretario').value;
+            const [telefoneSecretario, nomeSecretario] = rawSecretario.split('|');
 
             return {
                 dataPreenchimento,
@@ -1187,7 +1189,8 @@
                 anciao,
                 cooperador,
                 encarregado,
-                telefoneSecretario
+                telefoneSecretario: telefoneSecretario || '',
+                nomeSecretario: nomeSecretario || ''
             };
         }
 
@@ -1204,7 +1207,9 @@
             }
 
             const mensagem = 
-`*PEDIDO DE PRÉ-AVALIAÇÃO DE ORGANISTAS - CCB*
+`Deus abençoe irmão ${d.encarregado}.
+
+*PEDIDO DE PRÉ-AVALIAÇÃO DE ORGANISTAS - CCB*
 _Data do Registro: ${d.dataPreenchimento}_
 
 *1. CANDIDATA*
@@ -1231,7 +1236,10 @@ ${d.metodos}
 • *Cooperador:* ${d.cooperador}
 • *Encarregado:* ${d.encarregado}
 
-Deus abençoe!`;
+Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026.
+
+Grato,
+Att, ${d.nomeSecretario}`;
 
             const url = `https://api.whatsapp.com/send?phone=55${d.telefoneSecretario}&text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
