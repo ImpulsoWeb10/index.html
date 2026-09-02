@@ -351,7 +351,7 @@
             padding: 24px;
             border-radius: var(--radius-lg);
             text-align: center;
-            max-width: 400px;
+            max-width: 440px;
             width: 90%;
             box-shadow: var(--shadow-lg);
             margin: auto;
@@ -359,14 +359,28 @@
 
         .modal-confirmation-card h2 {
             color: var(--primary);
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin-bottom: 8px;
         }
 
         .modal-confirmation-card p {
             color: var(--text-muted);
             font-size: 0.95rem;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .modal-msg-preview {
+            background: #f1f5f9;
+            border: 1px dashed #cbd5e1;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            color: #1e293b;
+            text-align: left;
             margin-bottom: 20px;
+            white-space: pre-line;
+            line-height: 1.4;
         }
 
         .badge-encarregado {
@@ -680,12 +694,15 @@
         </div>
     </div>
 
-    <!-- MODAL DEUS ABENÇOE DO ENCARREGADO (PDF E WHATSAPP FINAL) -->
+    <!-- MODAL DEUS ABENÇOE DO ENCARREGADO (COM PRÉVIA DA MENSAGEM) -->
     <div class="modal-overlay" id="modalConfirmacaoOverlay">
         <div class="modal-confirmation-card">
             <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: var(--success); margin-bottom: 12px;"></i>
             <h2>Deus abençoe!</h2>
-            <p>Selecione abaixo o formato para enviar os dados ao Secretário Musical Responsável:</p>
+            
+            <div class="modal-msg-preview" id="previewMsgModal">
+                <!-- A mensagem formatada será inserida aqui dinamicamente -->
+            </div>
 
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button type="button" class="btn-whatsapp" onclick="enviarWhatsAppFinal()">
@@ -1041,6 +1058,7 @@
                 await gerarLinkEncarregado();
             } else {
                 // Etapa 2 - Encarregado Final
+                atualizarPreviewModal();
                 document.getElementById('modalConfirmacaoOverlay').classList.add('active');
             }
         }
@@ -1194,20 +1212,15 @@
             };
         }
 
-        function fecharModalConfirmacao() {
-            document.getElementById('modalConfirmacaoOverlay').classList.remove('active');
-        }
-
-        function enviarWhatsAppFinal() {
-            const d = obterDadosCompletos();
-            
+        function construirMensagemFinal(d) {
             let textoNecessidade = d.temNecessidadeEspecial;
             if (d.temNecessidadeEspecial === 'Sim') {
                 textoNecessidade += ` (${d.qualNecessidadeEspecial})`;
             }
 
-            const mensagem = 
-`Deus abençoe irmão ${d.encarregado}.
+            return `Deus abençoe irmão ${d.encarregado}.
+
+Por gentileza levar as cartas devidamente assinadas no day da Reunião de Conselho 09/10/2026.
 
 *PEDIDO DE PRÉ-AVALIAÇÃO DE ORGANISTAS - CCB*
 _Data do Registro: ${d.dataPreenchimento}_
@@ -1236,10 +1249,24 @@ ${d.metodos}
 • *Cooperador:* ${d.cooperador}
 • *Encarregado:* ${d.encarregado}
 
-Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026.
-
 Grato,
 Att, ${d.nomeSecretario}`;
+        }
+
+        function atualizarPreviewModal() {
+            const d = obterDadosCompletos();
+            const previewEl = document.getElementById('previewMsgModal');
+            
+            previewEl.innerHTML = `Deus abençoe irmão <strong>${d.encarregado || 'Encarregado'}</strong>.<br><br>Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026.<br><br>Grato , Att,<br><strong>${d.nomeSecretario || 'Secretário Musical'}</strong>`;
+        }
+
+        function fecharModalConfirmacao() {
+            document.getElementById('modalConfirmacaoOverlay').classList.remove('active');
+        }
+
+        function enviarWhatsAppFinal() {
+            const d = obterDadosCompletos();
+            const mensagem = construirMensagemFinal(d);
 
             const url = `https://api.whatsapp.com/send?phone=55${d.telefoneSecretario}&text=${encodeURIComponent(mensagem)}`;
             window.open(url, '_blank');
