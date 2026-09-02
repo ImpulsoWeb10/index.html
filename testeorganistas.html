@@ -525,8 +525,10 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="comumCandidata">Comum Congregação *</label>
-                            <input type="text" id="comumCandidata" class="form-control" placeholder="Bairro / Cidade" required>
+                            <label for="comumCandidata">Comum Congregação / Bairro *</label>
+                            <select id="comumCandidata" class="form-control" onchange="atualizarEncarregadoLocal()" required>
+                                <option value="">Selecione a Comum / Bairro...</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="dataNasc">2. Data Nasc. *</label>
@@ -668,7 +670,7 @@
             <p id="msgInstrutoraSucesso">Dados salvos com sucesso.</p>
 
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button type="button" class="btn-whatsapp" onclick="enviarParaEncarregadoWhatsApp()">
+                <button type="button" class="btn-whatsapp" id="btnEnviarEncarregadoWsp" onclick="enviarParaEncarregadoWhatsApp()">
                     <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> <span id="btnTxtEncarregado">Enviar para Encarregado</span>
                 </button>
                 <button type="button" onclick="fecharModalInstrutora()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 8px; font-weight: 600;">
@@ -792,28 +794,28 @@
 
     <script>
         const listaInstrutoras = [
-            { "nome": "Barbara Kimberly Gizzi da Costa", "comum": "Agua das Pedras" },
-            { "nome": "Sidneia Moura Feitosa", "comum": "Agua das Pedras" },
+            { "nome": "Barbara Kimberly Gizzi da Costa", "comum": "Água das Pedras" },
+            { "nome": "Sidneia Moura Feitosa", "comum": "Água das Pedras" },
             { "nome": "Eunice Rocha Ferreira", "comum": "Aracaré" },
             { "nome": "Gemima de Souza Gomes", "comum": "Aracaré" },
             { "nome": "Helida de Castro", "comum": "Aracaré" },
-            { "nome": "Nayara da Silva Figueiredo", "comum": "Cambiri" },
-            { "nome": "Antonia Sara de Sousa Xisto", "comum": "Estancia Guatambu" },
-            { "nome": "Valéria de Jesus Pagnan", "comum": "Itaquaquecetuba - Central" },
+            { "nome": "Nayara da Silva Figueiredo", "comum": "Central" },
+            { "nome": "Antonia Sara de Sousa Xisto", "comum": "Estancia Guatambú" },
+            { "nome": "Valéria de Jesus Pagnan", "comum": "Central" },
             { "nome": "Clarianica de Amorim Silva Santos", "comum": "Jardim Adriane" },
             { "nome": "Evodia Cirino Pereira dos Santos", "comum": "Jardim Adriane" },
             { "nome": "Liliane Martinelli Bueno de Souza", "comum": "Jardim Alexandre" },
             { "nome": "Marcia Lúcia Martins Almeida", "comum": "Jardim Alexandre" },
-            { "nome": "Evelyn Ruziska da Silva", "comum": "Jardim Bela Vista" },
-            { "nome": "Raquel Lino Rodrigues", "comum": "Jardim Bela Vista" },
+            { "nome": "Evelyn Ruziska da Silva", "comum": "Jardim São Paulo" },
+            { "nome": "Raquel Lino Rodrigues", "comum": "Jardim São Paulo" },
             { "nome": "Ivete Nunes de Santana", "comum": "Jardim Caiuby" },
             { "nome": "Ester Ananias Botelho da Silva", "comum": "Jardim Itapuã" },
-            { "nome": "Mikaele Daniel Lima Alves", "comum": "Jardim Itaqua" },
+            { "nome": "Mikaele Daniel Lima Alves", "comum": "Jardim Itaquá" },
             { "nome": "Rosana Felipe Martins", "comum": "Jardim Karine" },
             { "nome": "Claudete Felipelli Froes", "comum": "Jardim Marcelo" },
             { "nome": "Camila Santos de Carvalho Rodrigues Soares", "comum": "Jardim Maria Rosa" },
-            { "nome": "Cicera Fernandes da Silva", "comum": "Jardim Mônica" },
-            { "nome": "Erica da Silva Oliveira de Lima", "comum": "Jardim Mônica" },
+            { "nome": "Cicera Fernandes da Silva", "comum": "Jardim Monica" },
+            { "nome": "Erica da Silva Oliveira de Lima", "comum": "Jardim Monica" },
             { "nome": "Maria Amelia Ricardo de Lima", "comum": "Jardim Odete" },
             { "nome": "Tania Silvia Luciano", "comum": "Jardim Paineira" },
             { "nome": "Alliny Santos Palomo", "comum": "Jardim Pinheirinho" },
@@ -821,57 +823,107 @@
             { "nome": "Helena Raquel Mendes Valério", "comum": "Jardim Pinheirinho" },
             { "nome": "Thalia Junqueira de Oliveira", "comum": "Jardim Tropical" },
             { "nome": "Vanessa dos Santos Souza", "comum": "Jardim Tropical" },
-            { "nome": "Cassia Jesus dos Santos", "comum": "Jardim Yone" },
+            { "nome": "Cassia Jesus dos Santos", "comum": "Jardim Moraes" },
             { "nome": "Érica Gonçalves de Carvalho", "comum": "Parque Macedo" },
             { "nome": "Gislene Ferreira da Silva Nóia", "comum": "Parque Marengo" },
             { "nome": "Solange Aparecida dos Santos Alavarse Iglesias", "comum": "Parque Marengo" },
             { "nome": "Camila Silva Romano", "comum": "Vila Virginia" }
         ];
 
-        // Tabela de Encarregados por Comum
+        // Tabela completa de Encarregados Locais por Comum / Bairro
         const encarregadosPorComum = {
-            "Agua das Pedras": "Ir. João",
-            "Aracaré": "Ir. Marcos",
-            "Cambiri": "Ir. Pedro",
-            "Estancia Guatambu": "Ir. Carlos",
-            "Itaquaquecetuba - Central": "Ir. Samuel",
-            "Jardim Adriane": "Ir. Paulo",
-            "Jardim Alexandre": "Ir. Lucas",
-            "Jardim Bela Vista": "Ir. Roberto",
-            "Jardim Caiuby": "Ir. André",
-            "Jardim Itapuã": "Ir. Daniel",
-            "Jardim Itaqua": "Ir. David",
-            "Jardim Karine": "Ir. Mateus",
-            "Jardim Marcelo": "Ir. Tiago",
-            "Jardim Maria Rosa": "Ir. Filipe",
-            "Jardim Mônica": "Ir. Elias",
-            "Jardim Odete": "Ir. Samuel",
-            "Jardim Paineira": "Ir. Natan",
-            "Jardim Pinheirinho": "Ir. Josué",
-            "Jardim Tropical": "Ir. Caleb",
-            "Jardim Yone": "Ir. Silas",
-            "Parque Macedo": "Ir. Benjamin",
-            "Parque Marengo": "Ir. Isaac",
-            "Vila Virginia": "Ir. Levi"
+            "Água das Pedras": "Luiz Santos de Melo",
+            "Aracaré": "Helves Olardi Neto",
+            "Central": "Jorge Miguel da Silva Trindade",
+            "Cidade Nova Louzada": "Gideão Lucas Carvalho",
+            "Estancia Guatambú": "Benedito Fernandes De Lima",
+            "Jardim Adriane": "Gerson Manoel dos Santos",
+            "Jardim Amazonas": "José Palácio Vieira",
+            "Jardim Caiuby": "Eliel Albino Do Nascimento",
+            "Jardim Canaã": "Marcelo Rodrigues Piris",
+            "Jardim Carolina": "Agenor Ferreira Dias/Lucas Santos Gomes",
+            "Jardim do Carmo": "Herminio Fernandes de Souza",
+            "Jardim Itapuã": "Valdeir Felix da Silva",
+            "Jardim Itaquá": "Juvercilio Reis",
+            "Jardim Josely": "Jorge Chagas",
+            "Jardim Karine": "Elson Martins",
+            "Jardim Marcelo": "Adenes Nascimento Froes",
+            "Jardim Maria Eliza": "Eliel Rocha saturno",
+            "Jardim Maria Rosa": "Alison Adbeel da Silva",
+            "Jardim Miray": "Carlos Eduardo de Alkmim Cunha",
+            "Jardim Monica": "Paulo Moises Dos Santos",
+            "Jardim Moraes": "Mauricio Quaresma dos Santos",
+            "Jardim Odete": "Marco Aurélio Paes Landim",
+            "Jardim Paineira": "Natanael dos Santos Wolpe",
+            "Jardim Patricia": "Fabio Ramos Niza",
+            "Jardim Pinheirinho": "Fabio Colin De Moraes",
+            "Jardim São Paulo": "Daniel Nogueira",
+            "Jardim Silvestre": "Itamar Gonçalves Dos Santos",
+            "Jardim Tropical": "Rogério Carrasco Pianeli",
+            "Monte belo": "Elton de Melo Godoi",
+            "Morro Branco": "José Carlos dos Santos",
+            "Parque Macedo": "Marcos Silva de Carvalho",
+            "Parque Marengo": "Eduardo de Medeiros Nóia",
+            "Parque Novo Horizonte": "Samuel Barbosa de Souza",
+            "Parque Piratininga I": "Samuel  Mangarotti Saraiva",
+            "Parque Piratininga II": "André",
+            "Parque Residencial Furtuna": "Ladislau Santana Rodrigues",
+            "Parque Residencial Marengo": "Benicio da Silva Lima",
+            "Parque São Pedro": "Joel Rodrigues de Moraes",
+            "Parque Village": "José Elifas Ferreira Dias",
+            "Pedreira": "Antonio Muniz Sobral",
+            "Pium": "Genivaldo de Oliveira",
+            "Rancho Grande": "",
+            "Sitio José de Moraes": "Fabiano Emanuel Crisostomo",
+            "Terra Prometida": "Lázaro Basilio da Silva",
+            "Vila Arizona": "Elói Pereira de Souza Neto",
+            "Vila Japão": "Alexsandro de Souza",
+            "Vila Nely": "Nilson Nogueira de Menezes",
+            "Vila Sônia": "Carlos Filomeno de Oliveira",
+            "Vila São Carlos": "Rogério Dionizio de Lima",
+            "Vila Virginia": "Marcos Paulo da Silva Alves"
         };
 
         let modoEncarregado = false;
         let urlParaEncarregado = "";
+        let urlEncurtada = "";
 
         document.addEventListener('DOMContentLoaded', () => {
-            const select = document.getElementById('selectInstrutora');
+            const selectInstrutoraEl = document.getElementById('selectInstrutora');
+            const selectComumEl = document.getElementById('comumCandidata');
             const dataInput = document.getElementById('dataPreenchimento');
+            
             if (dataInput) dataInput.valueAsDate = new Date();
 
+            // Preenche as opções de Bairros / Comuns
+            const listaBairros = Object.keys(encarregadosPorComum).sort();
+            listaBairros.forEach(bairro => {
+                const opt = document.createElement('option');
+                opt.value = bairro;
+                opt.textContent = bairro;
+                selectComumEl.appendChild(opt);
+            });
+
+            // Preenche as opções de Instrutoras
             listaInstrutoras.forEach(inst => {
                 const opt = document.createElement('option');
                 opt.value = inst.nome;
                 opt.textContent = `${inst.nome} (${inst.comum})`;
-                select.appendChild(opt);
+                selectInstrutoraEl.appendChild(opt);
             });
 
             verificarModo();
         });
+
+        function atualizarEncarregadoLocal() {
+            const comumSelecionada = document.getElementById('comumCandidata').value;
+            const campoEncarregado = document.getElementById('encarregado');
+            if (comumSelecionada && encarregadosPorComum[comumSelecionada]) {
+                campoEncarregado.value = encarregadosPorComum[comumSelecionada];
+            } else if (comumSelecionada && encarregadosPorComum[comumSelecionada] === "") {
+                campoEncarregado.value = "";
+            }
+        }
 
         function verificarModo() {
             const params = new URLSearchParams(window.location.search);
@@ -891,7 +943,7 @@
             // Torna os campos da instrutora e da candidata em Leitura Apenas
             document.getElementById('dataPreenchimento').readOnly = true;
             document.getElementById('nomeCandidata').readOnly = true;
-            document.getElementById('comumCandidata').readOnly = true;
+            document.getElementById('comumCandidata').disabled = true;
             document.getElementById('dataNasc').readOnly = true;
             document.getElementById('testePara').disabled = true;
             document.getElementById('selectInstrutora').disabled = true;
@@ -975,7 +1027,7 @@
             return dataIso;
         }
 
-        function processarEnvio() {
+        async function processarEnvio() {
             const form = document.getElementById('organistaForm');
             if (!form.checkValidity()) {
                 form.reportValidity();
@@ -986,14 +1038,30 @@
 
             if (!modoEncarregado) {
                 // Etapa 1 - Instrutora
-                gerarLinkEncarregado();
+                await gerarLinkEncarregado();
             } else {
                 // Etapa 2 - Encarregado Final
                 document.getElementById('modalConfirmacaoOverlay').classList.add('active');
             }
         }
 
-        function gerarLinkEncarregado() {
+        // Função de encurtamento via API pública do TinyURL
+        async function encurtarLinkTinyURL(longUrl) {
+            try {
+                const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`);
+                if (response.ok) {
+                    const shortUrl = await response.text();
+                    if (shortUrl && shortUrl.startsWith('http')) {
+                        return shortUrl;
+                    }
+                }
+            } catch (err) {
+                console.warn('Erro ao encurtar link via TinyURL, usando link original:', err);
+            }
+            return longUrl;
+        }
+
+        async function gerarLinkEncarregado() {
             const dadosInstrutora = {
                 dataPreenchimento: document.getElementById('dataPreenchimento').value,
                 nomeCandidata: document.getElementById('nomeCandidata').value,
@@ -1014,8 +1082,11 @@
             const baseUrl = window.location.href.split('?')[0];
             urlParaEncarregado = `${baseUrl}?data=${encodedData}`;
 
+            // Encurta o link automaticamente
+            urlEncurtada = await encurtarLinkTinyURL(urlParaEncarregado);
+
             const comum = dadosInstrutora.comumCandidata || dadosInstrutora.comumInstrutora;
-            const nomeEncarregado = encarregadosPorComum[comum] || "Encarregado Local";
+            const nomeEncarregado = encarregadosPorComum[comum] ? encarregadosPorComum[comum] : "Encarregado Local";
 
             document.getElementById('msgInstrutoraSucesso').innerText = `As informações da candidata foram salvas com sucesso!`;
             document.getElementById('btnTxtEncarregado').innerText = `Enviar para Encarregado (${nomeEncarregado})`;
@@ -1025,9 +1096,9 @@
         function enviarParaEncarregadoWhatsApp() {
             const nomeCand = document.getElementById('nomeCandidata').value;
             const comum = document.getElementById('comumCandidata').value;
-            const nomeEncarregado = encarregadosPorComum[comum] || "Encarregado Local";
+            const nomeEncarregado = encarregadosPorComum[comum] ? encarregadosPorComum[comum] : "Encarregado Local";
 
-            const textoMsg = `A Paz de Deus, ${nomeEncarregado}.\n\nSegue o link com a Pré-Avaliação da candidata *${nomeCand}* (${comum}) preenchida para sua validação e complementação dos dados:\n\n${urlParaEncarregado}`;
+            const textoMsg = `A Paz de Deus, ${nomeEncarregado}.\n\nSegue o link com a Pré-Avaliação da candidata *${nomeCand}* (${comum}) preenchida para sua validação e complementação dos dados:\n\n${urlEncurtada}`;
             
             window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(textoMsg)}`, '_blank');
         }
@@ -1064,6 +1135,10 @@
                 }
 
                 document.getElementById('metodos').value = d.metodos || '';
+
+                // Atualiza o encarregado no final se a comum já estiver salva
+                atualizarEncarregadoLocal();
+
             } catch (e) {
                 console.error("Erro ao decodificar dados da URL", e);
             }
