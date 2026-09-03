@@ -7,10 +7,11 @@
     <!-- Google Fonts & Font Awesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- html2pdf.js para geração do PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- pdf-lib para manipulação direta do PDF original -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
     <style>
         :root {
@@ -24,10 +25,11 @@
             --border: #e2e8f0;
             --success: #16a34a;
             --pdf-color: #dc2626;
-            --radius-lg: 20px;
-            --radius-md: 10px;
+            --wsp-color: #25D366;
+            --radius-lg: 24px;
+            --radius-md: 12px;
             --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
         }
 
         * {
@@ -155,7 +157,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15, 23, 42, 0.65);
             backdrop-filter: blur(4px);
             z-index: 1000;
             display: flex;
@@ -308,7 +310,7 @@
             gap: 5px;
         }
 
-        /* RODAPÉ DO MODAL SEMPRE FIXO E NUNCA ESCONDIDO */
+        /* RODAPÉ DO MODAL FIXO NA MOLDURA */
         .modal-footer {
             padding: 12px 16px;
             border-top: 1px solid var(--border);
@@ -321,68 +323,46 @@
             z-index: 100;
         }
 
-        .btn-pdf {
-            width: 100%;
-            background: var(--pdf-color);
-            color: white;
-            border: none;
-            padding: 13px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-whatsapp {
-            width: 100%;
-            background: #25D366;
-            color: white;
-            border: none;
-            padding: 13px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
+        /* MODAL DE CONFIRMAÇÃO ELEGANTE */
         .modal-confirmation-card {
             background: var(--surface);
-            padding: 20px;
+            padding: 24px 20px;
             border-radius: var(--radius-lg);
             text-align: center;
             width: 90%;
-            max-height: 90%;
+            max-height: 85%;
             overflow-y: auto;
             box-shadow: var(--shadow-lg);
             margin: auto;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            animation: popUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes popUp {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .modal-confirmation-card h2 {
             color: var(--primary);
-            font-size: 1.3rem;
-            margin-bottom: 8px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 6px;
         }
 
         .modal-msg-preview {
-            background: #f1f5f9;
-            border: 1px dashed #cbd5e1;
-            padding: 12px;
-            border-radius: var(--radius-md);
-            font-size: 0.85rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent);
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 0.84rem;
             color: #1e293b;
             text-align: left;
-            margin: 12px 0 16px 0;
+            margin: 14px 0 18px 0;
             white-space: pre-line;
-            line-height: 1.4;
-            max-height: 200px;
+            line-height: 1.45;
+            max-height: 180px;
             overflow-y: auto;
         }
 
@@ -399,89 +379,48 @@
             gap: 8px;
         }
 
-        #pdfTemplate {
-            display: none;
-            padding: 30px;
-            font-family: Arial, sans-serif;
-            color: #111827;
-            background: #ffffff;
+        .btn-whatsapp {
+            width: 100%;
+            background: var(--wsp-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.28);
+            transition: all 0.2s ease;
         }
 
-        .pdf-header {
-            text-align: center;
-            border-bottom: 2px solid #1e3a8a;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+        .btn-whatsapp:active {
+            transform: scale(0.98);
         }
 
-        .pdf-header h2 {
-            font-size: 16pt;
-            color: #1e3a8a;
-            margin-bottom: 4px;
+        .btn-pdf {
+            width: 100%;
+            background: var(--pdf-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+            transition: all 0.2s ease;
         }
 
-        .pdf-header h3 {
-            font-size: 12pt;
-            font-weight: 600;
-            color: #4b5563;
-        }
-
-        .pdf-section-title {
-            font-size: 11pt;
-            font-weight: bold;
-            color: #1e3a8a;
-            background: #f1f5f9;
-            padding: 6px 10px;
-            margin-top: 16px;
-            margin-bottom: 10px;
-            border-left: 4px solid #2563eb;
-            text-transform: uppercase;
-        }
-
-        .pdf-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .pdf-item {
-            font-size: 10pt;
-            line-height: 1.4;
-        }
-
-        .pdf-item label {
-            font-weight: bold;
-            color: #374151;
-            display: block;
-            font-size: 9pt;
-            text-transform: uppercase;
-        }
-
-        .pdf-box {
-            border: 1px solid #cbd5e1;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 10pt;
-            background: #fafafa;
-            white-space: pre-line;
-        }
-
-        .pdf-footer-note {
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 1px dashed #cbd5e1;
-            font-size: 9pt;
-            color: #64748b;
-            text-align: center;
-        }
-
-        .pdf-footer-blessing {
-            margin-top: 10px;
-            font-size: 10pt;
-            font-weight: bold;
-            color: #1e3a8a;
-            text-align: center;
+        .btn-pdf:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
@@ -690,117 +629,27 @@
             </div>
         </div>
 
-        <!-- MODAL CONFIRMAÇÃO ENCARREGADO -->
+        <!-- MODAL CONFIRMAÇÃO ENCARREGADO (ETAPA FINAL COM BOTÃO ENVIAR PARA SECRETÁRIO) -->
         <div class="modal-overlay" id="modalConfirmacaoOverlay">
             <div class="modal-confirmation-card">
                 <i class="fa-solid fa-circle-check" style="font-size: 2.8rem; color: var(--success); margin-bottom: 10px;"></i>
                 <h2>Deus abençoe!</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Confira a mensagem antes de enviar:</p>
                 
                 <div class="modal-msg-preview" id="previewMsgModal"></div>
 
-                <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
                     <button type="button" class="btn-whatsapp" onclick="enviarWhatsAppFinal()">
-                        <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i> Enviar via WhatsApp (Texto)
+                        <i class="fa-brands fa-whatsapp" style="font-size: 1.15rem;"></i> Enviar para Secretário
                     </button>
                     <button type="button" class="btn-pdf" onclick="gerarPDF()">
-                        <i class="fa-solid fa-file-pdf" style="font-size: 1rem;"></i> Baixar Ficha Completa (PDF)
+                        <i class="fa-solid fa-file-pdf" style="font-size: 1rem;"></i> Baixar Ficha Preenchida (PDF)
                     </button>
-                    <button type="button" onclick="fecharModalConfirmacao()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 8px; font-weight: 600;">
+                    <button type="button" onclick="fecharModalConfirmacao()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 8px; font-weight: 600; margin-top: 4px;">
                         Fechar
                     </button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- TEMPLATE PDF -->
-    <div id="pdfTemplate">
-        <div class="pdf-header">
-            <h2>CONGREGAÇÃO CRISTÃ NO BRASIL</h2>
-            <h3>PEDIDO DE PRÉ-AVALIAÇÃO DE ORGANISTAS</h3>
-            <div style="margin-top: 6px; font-size: 9.5pt; color: #4b5563;">
-                Data do Preenchimento: <strong id="pdf_dataPreenchimento" style="color: #000;"></strong>
-            </div>
-        </div>
-
-        <div class="pdf-section-title">1. Identificação da Candidata</div>
-        <div class="pdf-grid">
-            <div class="pdf-item">
-                <label>Nome da Candidata:</label>
-                <span id="pdf_nomeCandidata"></span>
-            </div>
-            <div class="pdf-item">
-                <label>Comum Congregação:</label>
-                <span id="pdf_comumCandidata"></span>
-            </div>
-        </div>
-        <div class="pdf-grid" style="margin-top: 8px;">
-            <div class="pdf-item">
-                <label>Data de Nascimento:</label>
-                <span id="pdf_dataNasc"></span>
-            </div>
-            <div class="pdf-item">
-                <label>Solicitado Para Teste de:</label>
-                <span id="pdf_testePara" style="font-weight: bold; color: #1e3a8a;"></span>
-            </div>
-        </div>
-
-        <div class="pdf-section-title">2. Identificação da Instrutora</div>
-        <div class="pdf-grid">
-            <div class="pdf-item">
-                <label>Nome da Instrutora:</label>
-                <span id="pdf_nomeInstrutora"></span>
-            </div>
-            <div class="pdf-item">
-                <label>Comum Congregação da Instrutora:</label>
-                <span id="pdf_comumInstrutora"></span>
-            </div>
-        </div>
-
-        <div class="pdf-section-title">3. Informações da Localidade</div>
-        <div class="pdf-grid">
-            <div class="pdf-item">
-                <label>Cultos por Semana:</label>
-                <span id="pdf_cultosSemana"></span>
-            </div>
-            <div class="pdf-item">
-                <label>Quantidade Atual de Organistas:</label>
-                <span>Culto: <strong id="pdf_qtdCulto"></strong> | RJM: <strong id="pdf_qtdReuniao"></strong></span>
-            </div>
-        </div>
-        <div class="pdf-grid" style="margin-top: 8px;">
-            <div class="pdf-item" style="grid-column: span 2;">
-                <label>Necessidade Especial:</label>
-                <span id="pdf_temNecessidadeEspecial" style="font-weight: bold;"></span>
-            </div>
-        </div>
-
-        <div class="pdf-section-title">4. Métodos Utilizados nos Estudos</div>
-        <div class="pdf-box" id="pdf_metodos"></div>
-
-        <div class="pdf-section-title">5. Ministério Local</div>
-        <div class="pdf-grid">
-            <div class="pdf-item">
-                <label>Ancião:</label>
-                <span id="pdf_anciao"></span>
-            </div>
-            <div class="pdf-item">
-                <label>Cooperador Oficial:</label>
-                <span id="pdf_cooperador"></span>
-            </div>
-        </div>
-        <div class="pdf-grid" style="margin-top: 8px;">
-            <div class="pdf-item">
-                <label>Encarregado Local:</label>
-                <span id="pdf_encarregado"></span>
-            </div>
-        </div>
-
-        <div class="pdf-footer-note">
-            Documento gerado para encaminhamento à Secretaria Musical da Congregação Cristã no Brasil.
-        </div>
-        <div class="pdf-footer-blessing">
-            Deus abençoe!
         </div>
     </div>
 
@@ -1236,7 +1085,7 @@ Att, ${d.nomeSecretario}`;
             const d = obterDadosCompletos();
             const previewEl = document.getElementById('previewMsgModal');
             
-            previewEl.innerHTML = `Deus abençoe irmão <strong>${d.encarregado || 'Encarregado'}</strong>.<br><br>Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026.<br><br>Grato , Att,<br><strong>${d.nomeSecretario || 'Secretário Musical'}</strong>`;
+            previewEl.innerHTML = `Deus abençoe irmão <strong>${d.encarregado || 'Encarregado'}</strong>.<br><br>Por gentileza levar as cartas devidamente assinadas no dia da Reunião de Conselho 09/10/2026.<br><br>Grato, Att,<br><strong>${d.nomeSecretario || 'Secretário Musical'}</strong>`;
         }
 
         function fecharModalConfirmacao() {
@@ -1251,48 +1100,94 @@ Att, ${d.nomeSecretario}`;
             window.open(url, '_blank');
         }
 
-        function gerarPDF() {
-            const d = obterDadosCompletos();
+        /* PREENCHIMENTO DIRETO NO ARQUIVO PDF ORIGINAL (PreTesteOrganista.pdf) */
+        async function gerarPDF() {
+            try {
+                const d = obterDadosCompletos();
 
-            document.getElementById('pdf_dataPreenchimento').textContent = d.dataPreenchimento;
-            document.getElementById('pdf_nomeCandidata').textContent = d.nomeCandidata;
-            document.getElementById('pdf_comumCandidata').textContent = d.comumCandidata;
-            document.getElementById('pdf_dataNasc').textContent = d.dataNasc;
-            document.getElementById('pdf_testePara').textContent = d.testePara;
+                // 1. Carrega o modelo de PDF existente no mesmo repositório do GitHub
+                const urlModelo = 'PreTesteOrganista.pdf';
+                const existingPdfBytes = await fetch(urlModelo).then(res => {
+                    if (!res.ok) throw new Error("Arquivo PreTesteOrganista.pdf não encontrado.");
+                    return res.arrayBuffer();
+                });
 
-            document.getElementById('pdf_nomeInstrutora').textContent = d.nomeInstrutora;
-            document.getElementById('pdf_comumInstrutora').textContent = d.comumInstrutora;
+                // 2. Carrega o PDF com pdf-lib
+                const { PDFDocument, rgb, StandardFonts } = PDFLib;
+                const pdfDoc = await PDFDocument.load(existingPdfBytes);
+                const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-            document.getElementById('pdf_cultosSemana').textContent = d.cultosSemana;
-            document.getElementById('pdf_qtdCulto').textContent = d.qtdOrganistasCulto;
-            document.getElementById('pdf_qtdReuniao').textContent = d.qtdOrganistasReuniao;
+                const pages = pdfDoc.getPages();
+                const page = pages[0];
 
-            const elNec = document.getElementById('pdf_temNecessidadeEspecial');
-            if (d.temNecessidadeEspecial === 'Sim') {
-                elNec.textContent = `Sim - ${d.qualNecessidadeEspecial}`;
-            } else {
-                elNec.textContent = 'Não';
+                // Função utilitária para posicionar texto com precisão nas coordenadas (X, Y)
+                const escrever = (texto, x, y, size = 10) => {
+                    if (!texto) return;
+                    page.drawText(String(texto), {
+                        x: x,
+                        y: y,
+                        size: size,
+                        font: font,
+                        color: rgb(0, 0, 0)
+                    });
+                };
+
+                // Data de preenchimento na parte superior
+                escrever(d.dataPreenchimento, 270, 775, 10);
+
+                // Checkboxes do Tipo de Teste (Marca 'X')
+                if (d.testePara === 'Reunião de Jovens') {
+                    escrever('X', 45, 735, 12);
+                } else if (d.testePara === 'Culto Oficial') {
+                    escrever('X', 188, 735, 12);
+                } else if (d.testePara === 'Oficialização') {
+                    escrever('X', 315, 735, 12);
+                }
+
+                // Identificação da Candidata
+                escrever(d.nomeCandidata, 45, 680, 10);
+                escrever(d.dataNasc, 435, 680, 10);
+
+                // Identificação da Instrutora
+                escrever(d.nomeInstrutora, 45, 642, 10);
+                escrever(d.comumInstrutora, 435, 642, 10);
+
+                // Necessidade Especial
+                if (d.temNecessidadeEspecial === 'Sim') {
+                    escrever('X', 45, 608, 12);
+                    if (d.qualNecessidadeEspecial) {
+                        escrever(d.qualNecessidadeEspecial, 160, 608, 9);
+                    }
+                } else {
+                    escrever('X', 85, 608, 12);
+                }
+
+                // Informações da Localidade
+                escrever(d.comumCandidata, 45, 532, 10);
+                escrever(d.cultosSemana, 215, 532, 10);
+                escrever(d.qtdOrganistasCulto, 385, 532, 10);
+                escrever(d.qtdOrganistasReuniao, 480, 532, 10);
+
+                // Métodos Utilizados
+                escrever(d.metodos, 45, 470, 9);
+
+                // Ministério Local
+                escrever(d.anciao, 45, 335, 9);
+                escrever(d.cooperador, 215, 335, 9);
+                escrever(d.encarregado, 385, 335, 9);
+
+                // 3. Salva e dispara o download da ficha preenchida
+                const pdfBytes = await pdfDoc.save();
+                const blob = new Blob([pdfBytes], { type: "application/pdf" });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `Pre_Avaliacao_${d.nomeCandidata.replace(/\s+/g, '_')}.pdf`;
+                link.click();
+
+            } catch (err) {
+                alert("Erro ao gerar o PDF preenchido. Certifique-se de que o arquivo 'PreTesteOrganista.pdf' está na mesma pasta do projeto no GitHub.");
+                console.error(err);
             }
-
-            document.getElementById('pdf_metodos').textContent = d.metodos;
-            document.getElementById('pdf_anciao').textContent = d.anciao;
-            document.getElementById('pdf_cooperador').textContent = d.cooperador;
-            document.getElementById('pdf_encarregado').textContent = d.encarregado;
-
-            const template = document.getElementById('pdfTemplate');
-            template.style.display = 'block';
-
-            const opt = {
-                margin:       10,
-                filename:     `Pre-Avaliacao_${d.nomeCandidata.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(template).save().then(() => {
-                template.style.display = 'none';
-            });
         }
     </script>
 </body>
