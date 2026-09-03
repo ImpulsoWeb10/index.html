@@ -1121,7 +1121,7 @@ Att, ${d.nomeSecretario}`;
                 const page = pages[0];
 
                 // Função utilitária para posicionar texto com precisão nas coordenadas (X, Y)
-                const escrever = (texto, x, y, size = 10) => {
+                const escrever = (texto, x, y, size = 9) => {
                     if (!texto) return;
                     page.drawText(String(texto), {
                         x: x,
@@ -1132,49 +1132,56 @@ Att, ${d.nomeSecretario}`;
                     });
                 };
 
-                // Data de preenchimento na parte superior
-                escrever(d.dataPreenchimento, 270, 775, 10);
+                // Cidade e Data no cabeçalho
+                escrever(`Itaquaquecetuba, ${d.dataPreenchimento}`, 220, 782, 9);
 
-                // Checkboxes do Tipo de Teste (Marca 'X')
+                // Checkboxes do Tipo de Teste (Marcação de 'X')
                 if (d.testePara === 'Reunião de Jovens') {
-                    escrever('X', 45, 735, 12);
+                    escrever('X', 255, 760, 11);
                 } else if (d.testePara === 'Culto Oficial') {
-                    escrever('X', 188, 735, 12);
+                    escrever('X', 390, 760, 11);
                 } else if (d.testePara === 'Oficialização') {
-                    escrever('X', 315, 735, 12);
+                    escrever('X', 495, 760, 11);
                 }
 
-                // Identificação da Candidata
-                escrever(d.nomeCandidata, 45, 680, 10);
-                escrever(d.dataNasc, 435, 680, 10);
+                // 1. IDENTIFICAÇÃO DA CANDIDATA
+                escrever(d.nomeCandidata, 25, 715, 9);
+                escrever(d.dataNasc, 437, 715, 9);
 
                 // Identificação da Instrutora
-                escrever(d.nomeInstrutora, 45, 642, 10);
-                escrever(d.comumInstrutora, 435, 642, 10);
+                escrever(d.nomeInstrutora, 25, 687, 9);
+                escrever(d.comumInstrutora, 287, 687, 9);
 
-                // Necessidade Especial
+                // Pessoa com Necessidade Especial?
                 if (d.temNecessidadeEspecial === 'Sim') {
-                    escrever('X', 45, 608, 12);
+                    escrever('X', 62, 659, 10);
                     if (d.qualNecessidadeEspecial) {
-                        escrever(d.qualNecessidadeEspecial, 160, 608, 9);
+                        escrever(d.qualNecessidadeEspecial, 180, 659, 8);
                     }
                 } else {
-                    escrever('X', 85, 608, 12);
+                    escrever('X', 101, 659, 10);
                 }
 
-                // Informações da Localidade
-                escrever(d.comumCandidata, 45, 532, 10);
-                escrever(d.cultosSemana, 215, 532, 10);
-                escrever(d.qtdOrganistasCulto, 385, 532, 10);
-                escrever(d.qtdOrganistasReuniao, 480, 532, 10);
+                // 2. INFORMAÇÕES DA LOCALIDADE
+                escrever(d.comumCandidata, 25, 612, 9);
+                escrever(d.cultosSemana, 25, 584, 9);
+                escrever(d.qtdOrganistasCulto, 145, 584, 9);
+                escrever(d.qtdOrganistasReuniao, 230, 584, 9);
 
-                // Métodos Utilizados
-                escrever(d.metodos, 45, 470, 9);
+                // 3. MÉTODOS UTILIZADOS
+                const linhasMetodos = d.metodos.split('\n');
+                let yMetodo = 625;
+                linhasMetodos.forEach(linha => {
+                    if (yMetodo > 540) {
+                        escrever(linha.substring(0, 45), 288, yMetodo, 8);
+                        yMetodo -= 12;
+                    }
+                });
 
-                // Ministério Local
-                escrever(d.anciao, 45, 335, 9);
-                escrever(d.cooperador, 215, 335, 9);
-                escrever(d.encarregado, 385, 335, 9);
+                // 4. MINISTÉRIO LOCAL
+                escrever(d.anciao, 25, 400, 8);
+                escrever(d.cooperador, 210, 400, 8);
+                escrever(d.encarregado, 385, 400, 8);
 
                 // 3. Salva e dispara o download da ficha preenchida
                 const pdfBytes = await pdfDoc.save();
@@ -1185,7 +1192,7 @@ Att, ${d.nomeSecretario}`;
                 link.click();
 
             } catch (err) {
-                alert("Erro ao gerar o PDF preenchido. Certifique-se de que o arquivo 'PreTesteOrganista.pdf' está na mesma pasta do projeto no GitHub.");
+                alert("Erro ao gerar o PDF preenchido. Verifique se o arquivo 'PreTesteOrganista.pdf' está na pasta raiz do repositório.");
                 console.error(err);
             }
         }
