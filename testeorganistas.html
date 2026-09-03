@@ -1105,14 +1105,14 @@ Att, ${d.nomeSecretario}`;
             try {
                 const d = obterDadosCompletos();
 
-                // 1. Carrega o PDF original do repositório
+                // 1. Carrega o modelo de PDF existente no mesmo repositório do GitHub
                 const urlModelo = 'PreTesteOrganista.pdf';
                 const existingPdfBytes = await fetch(urlModelo).then(res => {
                     if (!res.ok) throw new Error("Arquivo PreTesteOrganista.pdf não encontrado.");
                     return res.arrayBuffer();
                 });
 
-                // 2. Inicializa o pdf-lib
+                // 2. Carrega o PDF com pdf-lib
                 const { PDFDocument, rgb, StandardFonts } = PDFLib;
                 const pdfDoc = await PDFDocument.load(existingPdfBytes);
                 const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
@@ -1120,7 +1120,7 @@ Att, ${d.nomeSecretario}`;
                 const pages = pdfDoc.getPages();
                 const page = pages[0];
 
-                // Função para desenhar textos nas coordenadas exatas do formulário
+                // Função utilitária para posicionar texto com precisão nas coordenadas (X, Y)
                 const escrever = (texto, x, y, size = 9) => {
                     if (!texto) return;
                     page.drawText(String(texto), {
