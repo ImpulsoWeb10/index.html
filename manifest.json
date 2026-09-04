@@ -1,0 +1,21 @@
+{
+  "name": "Pré-Organistas",
+  "short_name": "Pré-Organistas",
+  "description": "Sistema de preparação para organistas",
+  "start_url": "/testeorganistas/",
+  "display": "standalone",
+  "background_color": "#071629",
+  "theme_color": "#071629",
+  "icons": [
+    {
+      "src": "/testeorganistas/imagens/icone-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/testeorganistas/imagens/icone-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
