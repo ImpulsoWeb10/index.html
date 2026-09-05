@@ -65,6 +65,11 @@
         .animate-maps-pulse {
             animation: customPulse 2s infinite ease-in-out;
         }
+
+        /* Estilização Customizada de Inputs de Range */
+        input[type=range] {
+            accent-color: #f59e0b;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800 pb-16 overflow-hidden" id="main-body">
@@ -169,6 +174,40 @@
         </div>
     </header>
 
+    <!-- Player de Áudio Personalizado -->
+    <div class="max-w-md mx-auto px-4 pt-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 shadow-md text-white flex flex-col gap-2.5">
+            <audio id="audio-player" src="380ccb.mp3" preload="metadata"></audio>
+            
+            <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <button id="btn-play-pause" onclick="togglePlayPause()" class="w-10 h-10 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 hover:bg-amber-300 transition active:scale-95">
+                        <i id="play-icon" class="fa-solid fa-play text-sm ml-0.5"></i>
+                    </button>
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold truncate text-slate-100">Hino 380 - CCB</p>
+                        <p class="text-[10px] text-amber-400 font-medium">Áudio de Ensaio</p>
+                    </div>
+                </div>
+
+                <!-- Controle de Volume -->
+                <div class="flex items-center gap-1.5 bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-700/50">
+                    <i id="volume-icon" class="fa-solid fa-volume-high text-xs text-slate-400"></i>
+                    <input id="volume-control" type="range" min="0" max="1" step="0.05" value="1" oninput="changeVolume(this.value)" class="w-16 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                </div>
+            </div>
+
+            <!-- Progresso do Áudio -->
+            <div class="space-y-1">
+                <input id="progress-bar" type="range" value="0" min="0" max="100" oninput="seekAudio(this.value)" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-[10px] text-slate-400 font-mono font-semibold">
+                    <span id="current-time">0:00</span>
+                    <span id="total-duration">0:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Lista Principal de Igrejas / Ensaios -->
     <main class="max-w-md mx-auto px-4 pt-4">
         <div id="cards-container" class="space-y-3">
@@ -266,6 +305,71 @@
                 }
             }, 1000);
         });
+    </script>
+
+    <!-- Script do Player de Áudio -->
+    <script>
+        const audio = document.getElementById('audio-player');
+        const playIcon = document.getElementById('play-icon');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalDurationEl = document.getElementById('total-duration');
+        const volumeIcon = document.getElementById('volume-icon');
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function togglePlayPause() {
+            if (audio.paused) {
+                audio.play();
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+            } else {
+                audio.pause();
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play');
+            }
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            totalDurationEl.textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            if (!isNaN(audio.duration)) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = progress;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+            }
+        });
+
+        audio.addEventListener('ended', () => {
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play');
+            progressBar.value = 0;
+            currentTimeEl.textContent = "0:00";
+        });
+
+        function seekAudio(value) {
+            if (!isNaN(audio.duration)) {
+                audio.currentTime = (value / 100) * audio.duration;
+            }
+        }
+
+        function changeVolume(value) {
+            audio.volume = value;
+            if (value == 0) {
+                volumeIcon.className = "fa-solid fa-volume-xmark text-xs text-slate-500";
+            } else if (value < 0.5) {
+                volumeIcon.className = "fa-solid fa-volume-low text-xs text-slate-400";
+            } else {
+                volumeIcon.className = "fa-solid fa-volume-high text-xs text-slate-400";
+            }
+        }
     </script>
 
     <!-- Base de Dados Completa -->
