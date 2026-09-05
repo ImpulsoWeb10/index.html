@@ -132,7 +132,7 @@
             margin-bottom: 8px;
         }
 
-        p.subtitle {
+        .subtitle {
             font-size: 0.88rem;
             color: var(--text-muted);
             margin-bottom: 20px;
@@ -573,6 +573,22 @@
                             </select>
                         </div>
 
+                        <!-- INÍCIO DO BLOCO MOVIDO PARA CIMA -->
+                        <div class="form-group">
+                            <label for="temNecessidadeEspecial">8. Tem necessidade especial? *</label>
+                            <select id="temNecessidadeEspecial" class="form-control" onchange="toggleNecessidadeEspecial()" required>
+                                <option value="">Selecione...</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="groupQualNecessidade" style="display: none;">
+                            <label for="qualNecessidadeEspecial">Se sim, qual? *</label>
+                            <textarea id="qualNecessidadeEspecial" class="form-control" placeholder="Descreva aqui qual a necessidade..."></textarea>
+                        </div>
+                        <!-- FIM DO BLOCO MOVIDO -->
+
                         <!-- DADOS DA INSTRUTORA -->
                         <div class="section-title"><i class="fa-solid fa-chalkboard-user"></i> Instrutora</div>
 
@@ -592,20 +608,6 @@
                         <div class="form-group">
                             <label for="comumInstrutora">5. Comum da Instrutora *</label>
                             <input type="text" id="comumInstrutora" class="form-control" placeholder="Bairro / Cidade" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="temNecessidadeEspecial">8. Tem necessidade especial? *</label>
-                            <select id="temNecessidadeEspecial" class="form-control" onchange="toggleNecessidadeEspecial()" required>
-                                <option value="">Selecione...</option>
-                                <option value="Sim">Sim</option>
-                                <option value="Não">Não</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group" id="groupQualNecessidade" style="display: none;">
-                            <label for="qualNecessidadeEspecial">Se sim, qual? *</label>
-                            <textarea id="qualNecessidadeEspecial" class="form-control" placeholder="Descreva aqui qual a necessidade..."></textarea>
                         </div>
 
                         <div class="form-group">
@@ -1223,6 +1225,7 @@ _Data do Registro: ${d.dataPreenchimento}_
 • *Comum:* ${d.comumCandidata}
 • *Data Nasc.:* ${d.dataNasc}
 • *Teste para:* ${d.testePara}
+• *Possui Necessidade Especial?:* ${textoNecessidade}
 
 *2. INSTRUTORA*
 • *Nome:* ${d.nomeInstrutora}
@@ -1232,7 +1235,6 @@ _Data do Registro: ${d.dataPreenchimento}_
 • *Cultos/Semana:* ${d.cultosSemana}
 • *Organistas Culto:* ${d.qtdOrganistasCulto}
 • *Organistas Reunião:* ${d.qtdOrganistasReuniao}
-• *Possui Necessidade Especial?:* ${textoNecessidade}
 
 *4. MÉTODOS UTILIZADOS*
 ${d.metodos}
