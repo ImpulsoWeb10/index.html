@@ -10,9 +10,9 @@
 
 <style>
   :root {
-    --sky-top: #0a1128;
-    --sky-mid: #001f54;
-    --sky-bottom: #034078;
+    --sky-top: #050a18;
+    --sky-mid: #001233;
+    --sky-bottom: #002855;
     --gold: #FFC837;
     --wood-1: #9E5223;
     --wood-2: #6E320F;
@@ -20,33 +20,43 @@
     
     /* Cores Neon Azul Marinho */
     --neon-blue-border: #00d4ff;
-    --neon-blue-dark: #001233;
-    --neon-blue-glow: 0 0 10px #005f73, 0 0 20px #0a9396, inset 0 0 15px rgba(0, 212, 255, 0.5);
+    --neon-blue-glow: 0 0 10px #005f73, 0 0 20px #0a9396, inset 0 0 15px rgba(0, 212, 255, 0.4);
     --neon-blue-glow-active: 0 0 5px #005f73, 0 0 10px #0a9396, inset 0 0 8px rgba(0, 212, 255, 0.8);
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
   body {
-    margin: 0; padding: 0;
+    margin: 0; padding: 12px;
     font-family: 'Nunito', sans-serif;
-    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 50%, var(--sky-bottom) 100%);
+    background: #020611;
     min-height: 100vh;
     display: flex;
     justify-content: center;
+    align-items: center;
     color: #fff;
     overflow-x: hidden;
   }
 
+  /* CONTAINER PRINCIPAL COM MOLDURA NEON ENVOLTA DA TELA */
   .app-container {
     width: 100%;
     max-width: 480px;
-    min-height: 100vh;
-    padding: 16px 16px 110px 16px;
+    min-height: calc(100vh - 24px);
+    padding: 20px 16px 110px 16px;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 50%, var(--sky-bottom) 100%);
+    
+    /* ESTILO DA MOLDURA NEON DA TELA */
+    border: 3px solid var(--neon-blue-border);
+    border-radius: 36px;
+    box-shadow: 
+      0 0 15px rgba(0, 212, 255, 0.6),
+      0 0 30px rgba(0, 95, 115, 0.5),
+      inset 0 0 20px rgba(0, 212, 255, 0.3);
   }
 
   /* BARRA SUPERIOR */
@@ -150,7 +160,7 @@
     text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
   }
 
-  /* GRADE DE BOTÕES COM MOLDURA NEON AZUL MARINHO */
+  /* GRADE DE BOTÕES */
   .buttons-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -159,9 +169,8 @@
     margin-top: 8px;
   }
 
-  /* Moldura Neon do Botão */
   .btn-capsule {
-    background: rgba(0, 18, 51, 0.75); /* Fundo Azul Marinho Transparente */
+    background: rgba(0, 18, 51, 0.75);
     border: 2px solid var(--neon-blue-border);
     border-radius: 50px;
     padding: 6px 12px 6px 6px;
@@ -173,12 +182,11 @@
     box-shadow: var(--neon-blue-glow);
     position: relative;
     overflow: hidden;
-    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
     user-select: none;
     text-decoration: none;
   }
 
-  /* Brilho Superior Curvo */
   .btn-capsule::before {
     content: '';
     position: absolute;
@@ -194,7 +202,6 @@
     box-shadow: var(--neon-blue-glow-active);
   }
 
-  /* MOLDURA NEON PARA A IMAGEM JPG 500x500 */
   .btn-capsule .icon-box {
     width: 48px; 
     height: 48px;
@@ -232,7 +239,6 @@
     z-index: 1;
   }
 
-  /* BOTÃO EM DESTAQUE (MEDALHAS) */
   .b-medalhas {
     grid-column: span 2;
     min-height: 72px;
@@ -254,16 +260,14 @@
     text-shadow: 0 0 6px #FFC837;
   }
 
-  /* BARRA INFERIOR */
+  /* BARRA INFERIOR AJUSTADA À MOLDURA */
   nav.bottom-bar {
-    position: fixed;
-    bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 100%; max-width: 480px;
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
     background: rgba(0, 18, 51, 0.95);
     border-top: 2px solid var(--neon-blue-border);
-    box-shadow: 0 -5px 20px rgba(0, 212, 255, 0.3);
-    border-radius: 24px 24px 0 0;
+    border-radius: 0 0 32px 32px;
     padding: 8px 24px 12px;
     display: flex;
     justify-content: space-between;
@@ -417,7 +421,6 @@
       <span class="arrow-icon">➔</span>
     </a>
 
-    <!-- BOTÃO MEDALHAS EM DESTAQUE DOURADO NEON -->
     <a href="paginas/minhas-medalhas.html" class="btn-capsule b-medalhas">
       <div class="icon-box"><img src="minhas-medalhas.jpg" alt="Minhas Medalhas" loading="lazy"></div>
       <span class="btn-text">Minhas Medalhas & Conquistas</span>
