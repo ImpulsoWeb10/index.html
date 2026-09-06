@@ -96,20 +96,50 @@
       box-shadow: 0 2px 0 #16a34a;
     }
 
-    .btn-back {
-      background-color: #f87171;
-      color: #7f1d1d;
-      box-shadow: -2px 2px 0 #dc2626;
-      padding: 12px 6px;
+    /* Painel de Botões na Vertical à Direita */
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn-side {
+      padding: 8px 6px;
       border-radius: 10px;
       writing-mode: vertical-rl;
       text-orientation: mixed;
       letter-spacing: 1px;
+      font-size: 0.7rem;
     }
 
-    .btn-back:active {
+    .btn-easy {
+      background-color: #4ade80;
+      color: #14532d;
+      box-shadow: -2px 2px 0 #16a34a;
+    }
+
+    .btn-medium {
+      background-color: #facc15;
+      color: #713f12;
+      box-shadow: -2px 2px 0 #ca8a04;
+    }
+
+    .btn-hard {
+      background-color: #fb923c;
+      color: #7c2d12;
+      box-shadow: -2px 2px 0 #ea580c;
+    }
+
+    .btn-back {
+      background-color: #f87171;
+      color: #7f1d1d;
+      box-shadow: -2px 2px 0 #dc2626;
+    }
+
+    .btn-side:active {
       transform: translateX(2px);
-      box-shadow: 0 0 0 #dc2626;
+      box-shadow: 0 0 0 transparent;
     }
 
     #game-container {
@@ -205,7 +235,6 @@
       font-weight: bold;
     }
 
-    /* Imagem modelo maior na tela do celular */
     .model-img {
       max-width: 75vw;
       max-height: 55vh;
@@ -230,7 +259,14 @@
 
     <div id="game-container">
       <div id="board"></div>
-      <button class="btn btn-back" id="back-btn">VOLTAR</button>
+      
+      <!-- Botoes na direita na vertical -->
+      <div class="side-panel">
+        <button class="btn btn-side btn-easy" id="easy-btn">FÁCIL (6)</button>
+        <button class="btn btn-side btn-medium" id="medium-btn">MÉDIO (12)</button>
+        <button class="btn btn-side btn-hard" id="hard-btn">DIFÍCIL (20)</button>
+        <button class="btn btn-side btn-back" id="back-btn">VOLTAR</button>
+      </div>
     </div>
 
     <div id="tray"></div>
@@ -255,10 +291,12 @@
   </div>
 
   <script>
-    const COLS = 4;
-    const ROWS = 5;
-    const TOTAL_PIECES = COLS * ROWS; // 20 peças
     const IMAGE_SRC = 'noe.jpg';
+
+    // Níveis padrão
+    let COLS = 4;
+    let ROWS = 5;
+    let TOTAL_PIECES = COLS * ROWS; // Começa no difícil (20 peças)
 
     const board = document.getElementById('board');
     const tray = document.getElementById('tray');
@@ -266,6 +304,9 @@
     const restartBtn = document.getElementById('restart-btn');
     const modelBtn = document.getElementById('model-btn');
     const backBtn = document.getElementById('back-btn');
+    const easyBtn = document.getElementById('easy-btn');
+    const mediumBtn = document.getElementById('medium-btn');
+    const hardBtn = document.getElementById('hard-btn');
     const closeModelBtn = document.getElementById('close-model-btn');
     const modalRestartBtn = document.getElementById('modal-restart-btn');
     const winModal = document.getElementById('win-modal');
@@ -287,16 +328,16 @@
 
     function setupDimensions() {
       const container = document.getElementById('game-container');
-      const maxW = (container.clientWidth - 40) * 0.90;
+      const sidePanel = document.querySelector('.side-panel');
+      const maxW = (container.clientWidth - sidePanel.clientWidth - 30) * 0.95;
       const maxH = container.clientHeight * 0.95;
 
-      // Mantém a proporção exata 4:5 (para 20 peças em grade 4x5)
       let width = maxW;
-      let height = (width * 5) / 4;
+      let height = (width * ROWS) / COLS;
 
       if (height > maxH) {
         height = maxH;
-        width = (height * 4) / 5;
+        width = (height * COLS) / ROWS;
       }
 
       boardWidth = width;
@@ -307,6 +348,13 @@
 
       pieceWidth = boardWidth / COLS;
       pieceHeight = boardHeight / ROWS;
+    }
+
+    function changeLevel(cols, rows) {
+      COLS = cols;
+      ROWS = rows;
+      TOTAL_PIECES = COLS * ROWS;
+      setupGame();
     }
 
     function setupGame() {
@@ -466,6 +514,11 @@
       window.addEventListener('mousemove', onMove);
       window.addEventListener('mouseup', onEnd);
     }
+
+    // Ações dos Níveis
+    easyBtn.addEventListener('click', () => changeLevel(2, 3));   // 6 peças (2x3)
+    mediumBtn.addEventListener('click', () => changeLevel(3, 4)); // 12 peças (3x4)
+    hardBtn.addEventListener('click', () => changeLevel(4, 5));   // 20 peças (4x5)
 
     modelBtn.addEventListener('click', () => {
       imageModal.style.display = 'flex';
