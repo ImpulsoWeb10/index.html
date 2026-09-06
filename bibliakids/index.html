@@ -2,833 +2,458 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Aventuras na Bíblia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    /* ===== Paleta base ===== */
-    --sky-top:#3FA8FF;
-    --sky-bottom:#BDEBFF;
-    --ink:#1B3A63;
-    --ink-soft:#4C6E96;
-    --card-white:#ffffff;
-    --wood:#8B5E34;
-    --wood-dark:#6E4726;
-    --gold:#FFC93C;
+  :root {
+    --sky-top: #1B88F5;
+    --sky-mid: #4FACFE;
+    --sky-bottom: #00F2FE;
+    --gold: #FFC837;
+    --wood-1: #9E5223;
+    --wood-2: #6E320F;
+    --wood-border: #421C06;
+    
+    /* Gradientes dos Botões */
+    --g-hinos: linear-gradient(180deg, #FF6FB5 0%, #E01E79 100%);
+    --g-labirinto: linear-gradient(180deg, #FFB03A 0%, #FF6D00 100%);
+    --g-memoria: linear-gradient(180deg, #22E1FF 0%, #0083B0 100%);
+    --g-oracao: linear-gradient(180deg, #C277FF 0%, #7B1FA2 100%);
+    --g-colorir: linear-gradient(180deg, #FF6B6B 0%, #EE5253 100%);
+    --g-desafios: linear-gradient(180deg, #A259FF 0%, #512DA8 100%);
+    --g-familia: linear-gradient(180deg, #FFD043 0%, #F57C00 100%);
+    --g-encontre: linear-gradient(180deg, #36D1DC 0%, #5B86E5 100%);
+    --g-historia: linear-gradient(180deg, #2196F3 0%, #1565C0 100%);
+    --g-palavras: linear-gradient(180deg, #81C784 0%, #2E7D32 100%);
+    --g-perguntas: linear-gradient(180deg, #B388FF 0%, #6200EA 100%);
+    --g-arca: linear-gradient(180deg, #FF8A65 0%, #D84315 100%);
+    --g-quebracabeca: linear-gradient(180deg, #76FF03 0%, #33691E 100%);
+    --g-verso: linear-gradient(180deg, #3A7BD5 0%, #3A6073 100%);
+    --g-medalhas: linear-gradient(180deg, #FFE000 0%, #799F0C 100%);
 
-    /* cores dos botões (início/fim do degradê) */
-    --c1a:#FF6FA5; --c1b:#FF3E7F;   /* Hinos - rosa */
-    --c2a:#FFB74D; --c2b:#FF8A3D;   /* Labirinto - laranja */
-    --c3a:#2FE0D6; --c3b:#12ADA0;   /* Memória - turquesa */
-    --c4a:#B18CFF; --c4b:#7C4DFF;   /* Oração - lilás */
-    --c5a:#FF8A80; --c5b:#FF5252;   /* Colorir - coral */
-    --c6a:#A97BFF; --c6b:#7C3AED;   /* Desafios - roxo real */
-    --c7a:#FFD166; --c7b:#FFAA2B;   /* Desafio em Família - amarelo quente */
-    --c8a:#4FC3F7; --c8b:#1E88E5;   /* Encontre na Bíblia - azul céu */
-    --c9a:#8C9EFF; --c9b:#5C6BC0;   /* História - índigo */
-    --c10a:#7BD661; --c10b:#43A047; /* Monte Palavras - verde folha */
-    --c11a:#D07BE0; --c11b:#9C27B0; /* Perguntas - violeta */
-    --c12a:#E0B27A; --c12b:#B5793B; /* Perguntas sobre a Arca - terracota */
-    --c13a:#9BD84E; --c13b:#689F38; /* Quebra-Cabeça - verde grama */
-    --c14a:#FFDD6B; --c14b:#FFB300; /* Verso do Dia - dourado */
-    --gold-a:#FFE066; --gold-b:#FF8C00; /* Medalhas - banner especial */
-
-    /* Temas dos modais (inspirados nas capas de referência) */
-    --quiz1-top:#2E9BFF; --quiz1-bottom:#8FD3FF; --quiz1-banner:#3FAE44; --quiz1-banner-d:#2C8A31;
-    --quiz2-top:#20B6C4; --quiz2-bottom:#8FE3D0; --quiz2-banner:#7B3FE0; --quiz2-banner-d:#5E2CB5;
-
-    --radius-pill: 999px;
-    --shadow-btn: 0 6px 0 rgba(0,0,0,.15), 0 10px 18px rgba(0,0,0,.18);
-    --shadow-btn-active: 0 2px 0 rgba(0,0,0,.15), 0 4px 8px rgba(0,0,0,.18);
+    --shadow-3d: 0 8px 0 rgba(0, 0, 0, 0.22), 0 15px 20px rgba(0, 0, 0, 0.25);
+    --shadow-3d-active: 0 2px 0 rgba(0, 0, 0, 0.22), 0 5px 10px rgba(0, 0, 0, 0.2);
   }
 
-  @media (prefers-reduced-motion: reduce){
-    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 40%, #A8E6CF 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    color: #fff;
+    overflow-x: hidden;
   }
 
-  *{ box-sizing:border-box; }
-
-  html,body{
-    margin:0; padding:0; min-height:100%;
-    font-family:'Nunito', sans-serif;
-    color: var(--ink);
+  .app-container {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    padding: 16px 16px 110px 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  body{
-    background:
-      radial-gradient(120% 60% at 50% 0%, rgba(255,255,255,.35), transparent 60%),
-      linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 65%, var(--sky-bottom) 100%);
-    display:flex;
-    justify-content:center;
-    min-height:100vh;
-  }
-  body.modal-open{ overflow:hidden; }
-
-  /* ===== "Tela" do app, centralizada em telas largas ===== */
-  .app{
-    width:100%;
-    max-width:520px;
-    min-height:100vh;
-    position:relative;
-    overflow-x:hidden;
-    padding-bottom:96px; /* espaço pra barra inferior fixa */
+  /* BARRA SUPERIOR */
+  header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
   }
 
-  /* Nuvens decorativas simples, só CSS */
-  .cloud{
-    position:absolute;
-    background:#fff;
-    opacity:.55;
-    border-radius:50%;
-    filter:blur(1px);
+  .btn-icon-round {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #64B5F6 0%, #1E88E5 100%);
+    border: 3px solid #FFF;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.6);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: transform 0.1s ease;
   }
-  .cloud::before, .cloud::after{
-    content:"";
-    position:absolute;
-    background:#fff;
-    border-radius:50%;
-  }
-  .cloud1{ width:90px; height:34px; top:70px; left:-20px; }
-  .cloud1::before{ width:50px; height:50px; top:-22px; left:10px; }
-  .cloud1::after{ width:36px; height:36px; top:-14px; left:50px; }
-  .cloud2{ width:70px; height:26px; top:150px; right:-10px; opacity:.4; }
-  .cloud2::before{ width:38px; height:38px; top:-16px; left:8px; }
+  .btn-icon-round:active { transform: scale(0.92); }
+  .btn-icon-round svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; }
 
-  /* ===== Cabeçalho ===== */
-  header{
-    position:relative;
-    z-index:2;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:18px 18px 0 18px;
+  .badge-status {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #FFF;
+    border-radius: 30px;
+    padding: 4px 12px 4px 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
-
-  .icon-btn{
-    width:44px; height:44px;
-    border-radius:50%;
-    border:none;
-    background:rgba(255,255,255,.55);
-    backdrop-filter: blur(4px);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-    box-shadow:0 3px 8px rgba(0,0,0,.12);
-    transition: transform .15s ease, background .15s ease;
+  .badge-status .avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: #FFD54F;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 2px solid #FFF;
   }
-  .icon-btn:hover{ background:rgba(255,255,255,.8); transform:translateY(-2px); }
-  .icon-btn:active{ transform:scale(.92); }
-  .icon-btn svg{ width:20px; height:20px; stroke:var(--ink); }
-
-  .mascot-badge{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    background:rgba(255,255,255,.85);
-    padding:6px 14px 6px 6px;
-    border-radius:var(--radius-pill);
-    box-shadow:0 4px 10px rgba(0,0,0,.12);
-  }
-  .mascot-badge .face{
-    width:34px; height:34px;
-    border-radius:50%;
-    background:linear-gradient(160deg,#FFD8A8,#FFB870);
-    display:flex; align-items:center; justify-content:center;
-    font-size:18px;
-  }
-  .mascot-badge span{
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700;
-    font-size:.78rem;
-    line-height:1.1;
-    color:var(--ink);
+  .badge-status span {
+    color: #1565C0;
+    font-weight: 900;
+    font-size: 0.78rem;
+    line-height: 1.1;
   }
 
-  /* ===== Título ===== */
-  .title-wrap{
-    position:relative;
-    z-index:2;
-    text-align:center;
-    padding:22px 20px 6px;
-  }
-  h1{
-    font-family:'Baloo 2', sans-serif;
-    font-weight:800;
-    font-size:clamp(2.1rem, 9vw, 2.7rem);
-    line-height:1;
-    margin:0;
-    color:#fff;
-    text-shadow: 0 3px 0 rgba(0,60,120,.35), 0 6px 14px rgba(0,40,90,.25);
-    letter-spacing:.5px;
-  }
-  h1 .accent{
-    display:block;
-    color:var(--gold);
-    text-shadow: 0 3px 0 rgba(140,80,0,.35), 0 6px 14px rgba(0,40,90,.2);
+  /* TITULO E PLACA */
+  .hero-title-area {
+    text-align: center;
+    margin: 12px 0 16px;
+    position: relative;
+    width: 100%;
   }
 
-  .signboard{
-    display:inline-block;
-    margin-top:10px;
-    background: linear-gradient(180deg, var(--wood), var(--wood-dark));
-    color:#FFF3E0;
-    font-family:'Baloo 2', sans-serif;
-    font-weight:600;
-    font-size:.85rem;
-    padding:8px 18px;
-    border-radius:14px;
-    box-shadow:0 5px 0 rgba(0,0,0,.18), 0 8px 14px rgba(0,0,0,.2);
+  .main-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(2.4rem, 10vw, 3.2rem);
+    font-weight: 800;
+    line-height: 0.9;
+    margin: 0;
+    color: #FFF;
+    text-shadow: 
+      0 3px 0 #1565C0,
+      0 6px 0 #0D47A1,
+      0 10px 15px rgba(0,0,0,0.4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
   }
 
-  .tagline{
-    margin:14px auto 0;
-    max-width:280px;
-    font-weight:700;
-    color:#0E3A66;
-    font-size:.95rem;
+  .main-title .sub-yellow {
+    color: var(--gold);
+    display: block;
+    text-shadow: 
+      0 3px 0 #E65100,
+      0 6px 0 #BF360C,
+      0 10px 15px rgba(0,0,0,0.3);
   }
 
-  /* ===== Grade de botões ===== */
-  .grid{
-    position:relative;
-    z-index:2;
-    display:grid;
+  .wood-sign {
+    display: inline-block;
+    background: linear-gradient(180deg, var(--wood-1) 0%, var(--wood-2) 100%);
+    border: 3px solid var(--wood-border);
+    border-radius: 18px;
+    padding: 6px 20px;
+    color: #FFE082;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 0.92rem;
+    box-shadow: 0 6px 0 var(--wood-border), 0 10px 15px rgba(0,0,0,0.3);
+    margin-top: 6px;
+    text-shadow: 0 2px 0 rgba(0,0,0,0.5);
+  }
+
+  .sub-tagline {
+    font-size: 1rem;
+    font-weight: 900;
+    color: #0D47A1;
+    margin-top: 8px;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+  }
+
+  /* GRADE DE BOTÕES */
+  .buttons-grid {
+    display: grid;
     grid-template-columns: 1fr 1fr;
-    gap:14px;
-    padding:22px 16px 6px;
-  }
-  @media (max-width:360px){
-    .grid{ grid-template-columns: 1fr; }
+    gap: 14px 12px;
+    width: 100%;
+    margin-top: 8px;
   }
 
-  .btn{
-    --a: var(--c1a); --b: var(--c1b);
-    grid-column: span 1;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 12px;
-    min-height:78px;
-    border:none;
-    border-radius:22px;
-    cursor:pointer;
-    text-align:left;
-    color:#fff;
-    background: linear-gradient(155deg, var(--a), var(--b));
-    box-shadow: var(--shadow-btn);
-    font-family:'Baloo 2', sans-serif;
-    position:relative;
-    opacity:0;
-    transform: translateY(14px) scale(.96);
-    animation: pop-in .5s ease forwards;
-    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-  }
-  .btn:hover{
-    transform: translateY(-4px) scale(1.03);
-    filter:brightness(1.05);
-    box-shadow: 0 9px 0 rgba(0,0,0,.15), 0 16px 22px rgba(0,0,0,.2);
-  }
-  .btn:active{
-    transform: translateY(1px) scale(.97);
-    box-shadow: var(--shadow-btn-active);
-  }
-  .btn:focus-visible{
-    outline: 3px solid #fff;
-    outline-offset:3px;
+  .btn-capsule {
+    border: 3px solid #FFFFFF;
+    border-radius: 50px;
+    padding: 6px 12px 6px 6px;
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: var(--shadow-3d);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    user-select: none;
+    text-decoration: none;
   }
 
-  .btn .icon{
-    flex:0 0 auto;
-    width:46px; height:46px;
-    border-radius:50%;
-    background:rgba(255,255,255,.25);
-    display:flex; align-items:center; justify-content:center;
-    overflow:hidden;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,.4), inset 0 -3px 6px rgba(0,0,0,.15);
-  }
-  .btn .icon img{
-    width:100%; height:100%;
-    object-fit:cover;
-    display:block;
+  .btn-capsule::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 8%; width: 84%; height: 48%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 100%);
+    border-radius: 40px 40px 10px 10px;
+    pointer-events: none;
+    z-index: 2;
   }
 
-  .btn .label{
-    font-weight:700;
-    font-size:.98rem;
-    line-height:1.12;
+  .btn-capsule:active {
+    transform: translateY(6px);
+    box-shadow: var(--shadow-3d-active);
   }
 
-  .btn .chev{
-    margin-left:auto;
-    opacity:.85;
-    flex:0 0 auto;
-  }
-  .btn .chev svg{ width:18px; height:18px; }
-
-  /* Cores individuais via nth-child, mantendo 1 componente .btn reutilizável */
-  .grid .btn:nth-child(1){ --a:var(--c1a); --b:var(--c1b); }
-  .grid .btn:nth-child(2){ --a:var(--c2a); --b:var(--c2b); }
-  .grid .btn:nth-child(3){ --a:var(--c3a); --b:var(--c3b); }
-  .grid .btn:nth-child(4){ --a:var(--c4a); --b:var(--c4b); }
-  .grid .btn:nth-child(5){ --a:var(--c5a); --b:var(--c5b); }
-  .grid .btn:nth-child(6){ --a:var(--c6a); --b:var(--c6b); }
-  .grid .btn:nth-child(7){ --a:var(--c7a); --b:var(--c7b); }
-  .grid .btn:nth-child(8){ --a:var(--c8a); --b:var(--c8b); }
-  .grid .btn:nth-child(9){ --a:var(--c9a); --b:var(--c9b); }
-  .grid .btn:nth-child(10){ --a:var(--c10a); --b:var(--c10b); }
-  .grid .btn:nth-child(11){ --a:var(--c11a); --b:var(--c11b); }
-  .grid .btn:nth-child(12){ --a:var(--c12a); --b:var(--c12b); }
-  .grid .btn:nth-child(13){ --a:var(--c13a); --b:var(--c13b); }
-  .grid .btn:nth-child(14){ --a:var(--c14a); --b:var(--c14b); }
-
-  /* Atraso escalonado só na entrada (uma única sequência orquestrada) */
-  .grid .btn:nth-child(1){ animation-delay:.02s; }
-  .grid .btn:nth-child(2){ animation-delay:.06s; }
-  .grid .btn:nth-child(3){ animation-delay:.10s; }
-  .grid .btn:nth-child(4){ animation-delay:.14s; }
-  .grid .btn:nth-child(5){ animation-delay:.18s; }
-  .grid .btn:nth-child(6){ animation-delay:.22s; }
-  .grid .btn:nth-child(7){ animation-delay:.26s; }
-  .grid .btn:nth-child(8){ animation-delay:.30s; }
-  .grid .btn:nth-child(9){ animation-delay:.34s; }
-  .grid .btn:nth-child(10){ animation-delay:.38s; }
-  .grid .btn:nth-child(11){ animation-delay:.42s; }
-  .grid .btn:nth-child(12){ animation-delay:.46s; }
-  .grid .btn:nth-child(13){ animation-delay:.50s; }
-  .grid .btn:nth-child(14){ animation-delay:.54s; }
-
-  @keyframes pop-in{
-    to{ opacity:1; transform:translateY(0) scale(1); }
+  /* IMAGEM DO BOTÃO (500x500 JPG) */
+  .btn-capsule .icon-box {
+    width: 48px; 
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #FFFFFF;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    background: #FFF;
   }
 
-  /* ===== Banner de Medalhas (destaque único, fora do grid comum) ===== */
-  .medals{
-    position:relative;
-    z-index:2;
-    margin:8px 16px 18px;
-    padding:16px 18px;
-    border-radius:26px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    color:#5A3400;
-    background: linear-gradient(120deg, var(--gold-a), var(--gold-b));
-    box-shadow: 0 8px 0 rgba(0,0,0,.15), 0 14px 20px rgba(0,0,0,.2);
-    border:none;
-    cursor:pointer;
-    width:100%;
-    text-align:left;
-    font-family:'Baloo 2', sans-serif;
-    opacity:0;
-    transform: translateY(14px) scale(.97);
-    animation: pop-in .5s ease forwards;
-    animation-delay:.58s;
-    transition: transform .18s ease, box-shadow .18s ease;
-  }
-  .medals:hover{ transform:translateY(-3px) scale(1.015); }
-  .medals:active{ transform:translateY(1px) scale(.98); }
-  .medals:focus-visible{ outline:3px solid #fff; outline-offset:3px; }
-
-  .medals .icon{
-    width:54px; height:54px;
-    border-radius:50%;
-    background:rgba(255,255,255,.45);
-    display:flex; align-items:center; justify-content:center;
-    overflow:hidden;
-    animation: gentle-glow 2.6s ease-in-out infinite;
-  }
-  .medals .icon img{
-    width:100%; height:100%;
-    object-fit:cover;
-    display:block;
-  }
-  @keyframes gentle-glow{
-    0%,100%{ box-shadow:0 0 0 0 rgba(255,255,255,.55); }
-    50%{ box-shadow:0 0 0 8px rgba(255,255,255,0); }
+  .btn-capsule .icon-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
-  .medals .txt strong{ display:block; font-size:1.05rem; }
-  .medals .txt small{ font-family:'Nunito',sans-serif; font-weight:700; opacity:.75; font-size:.78rem; }
-
-  .medals .chev{ margin-left:auto; }
-  .medals .chev svg{ width:20px; height:20px; }
-
-  /* ===== Rodapé / navegação fixa ===== */
-  nav.bottom{
-    position:fixed;
-    left:50%;
-    transform:translateX(-50%);
-    bottom:0;
-    width:100%;
-    max-width:520px;
-    z-index:5;
-    background: linear-gradient(180deg,#123A66,#0B2A4D);
-    border-top-left-radius:26px;
-    border-top-right-radius:26px;
-    padding:12px 22px 16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    box-shadow:0 -6px 18px rgba(0,0,0,.25);
-  }
-  .nav-item{
-    background:none; border:none; cursor:pointer;
-    display:flex; flex-direction:column; align-items:center; gap:4px;
-    color:#B7CBE6;
-    font-family:'Baloo 2', sans-serif;
-    font-weight:600;
-    font-size:.7rem;
-  }
-  .nav-item .circle{
-    width:42px; height:42px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    background:rgba(255,255,255,.08);
-    transition: background .15s ease, transform .15s ease;
-  }
-  .nav-item svg{ width:20px; height:20px; }
-  .nav-item.active{ color:var(--gold); }
-  .nav-item.active .circle{ background:rgba(255,201,60,.18); }
-  .nav-item:hover .circle{ transform:translateY(-2px); }
-
-  .nav-caption{
-    font-family:'Nunito', sans-serif;
-    font-weight:700;
-    font-size:.72rem;
-    color:#DCE9F7;
-    text-align:center;
-    line-height:1.2;
-    max-width:150px;
+  .btn-capsule .btn-text {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: 0.95rem;
+    line-height: 1.1;
+    color: #FFFFFF;
+    text-shadow: 0 2px 3px rgba(0,0,0,0.35);
+    flex-grow: 1;
+    text-align: left;
+    z-index: 1;
   }
 
-  /* =========================================================
-     MODAIS estilo "capa de jogo" — usados por Perguntas
-     e Perguntas sobre a Arca (e reutilizável para outros)
-     ========================================================= */
-  .modal-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(9,25,46,.55);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:22px;
-    z-index:50;
-    opacity:0;
-    pointer-events:none;
-    transition: opacity .2s ease;
-  }
-  .modal-overlay.open{
-    opacity:1;
-    pointer-events:auto;
+  .btn-capsule .arrow-icon {
+    font-size: 14px;
+    opacity: 0.9;
+    color: #FFF;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    z-index: 1;
   }
 
-  .modal-card{
-    width:100%;
-    max-width:420px;
-    max-height:88vh;
-    overflow:hidden;
-    border-radius:32px;
-    background:#fff;
-    box-shadow:0 20px 40px rgba(0,0,0,.35);
-    display:flex;
-    flex-direction:column;
-    transform: translateY(18px) scale(.94);
-    opacity:0;
-    transition: transform .28s cubic-bezier(.34,1.56,.64,1), opacity .22s ease;
+  /* CORES DOS BOTÕES */
+  .b-hinos { background: var(--g-hinos); }
+  .b-labirinto { background: var(--g-labirinto); }
+  .b-memoria { background: var(--g-memoria); }
+  .b-oracao { background: var(--g-oracao); }
+  .b-colorir { background: var(--g-colorir); }
+  .b-desafios { background: var(--g-desafios); }
+  .b-familia { background: var(--g-familia); }
+  .b-encontre { background: var(--g-encontre); }
+  .b-historia { background: var(--g-historia); }
+  .b-palavras { background: var(--g-palavras); }
+  .b-perguntas { background: var(--g-perguntas); }
+  .b-arca { background: var(--g-arca); }
+  .b-quebracabeca { background: var(--g-quebracabeca); }
+  .b-verso { background: var(--g-verso); }
+  
+  .b-medalhas {
+    grid-column: span 2;
+    background: var(--g-medalhas);
+    min-height: 72px;
+    margin-top: 4px;
   }
-  .modal-overlay.open .modal-card{
-    transform:translateY(0) scale(1);
-    opacity:1;
+  .b-medalhas .btn-text { font-size: 1.1rem; }
+
+  /* BARRA INFERIOR */
+  nav.bottom-bar {
+    position: fixed;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; max-width: 480px;
+    background: linear-gradient(180deg, #1565C0 0%, #0D47A1 100%);
+    border-top: 3px solid #64B5F6;
+    border-radius: 24px 24px 0 0;
+    padding: 8px 24px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 -8px 20px rgba(0,0,0,0.3);
+    z-index: 100;
   }
 
-  .modal-hero{
-    position:relative;
-    padding:34px 20px 26px;
-    text-align:center;
-    overflow:hidden;
-    flex:0 0 auto;
+  .nav-btn {
+    background: none; border: none;
+    display: flex; flex-direction: column; align-items: center;
+    color: #90CAF9;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+  .nav-btn.active { color: var(--gold); }
+  .nav-btn .nav-icon {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 2px;
+    font-size: 20px;
+  }
+  .nav-btn.active .nav-icon {
+    background: rgba(255, 200, 55, 0.25);
+    border: 2px solid var(--gold);
   }
 
-  .modal-close{
-    position:absolute;
-    top:12px; right:12px;
-    width:34px; height:34px;
-    border-radius:50%;
-    border:none;
-    background:rgba(255,255,255,.85);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-    z-index:3;
-    box-shadow:0 3px 8px rgba(0,0,0,.2);
+  .nav-phrase {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #E3F2FD;
+    text-align: center;
+    max-width: 160px;
+    line-height: 1.2;
   }
-  .modal-close svg{ width:16px; height:16px; }
-  .modal-close:hover{ background:#fff; }
-
-  .modal-star{
-    position:absolute;
-    font-size:1.1rem;
-    opacity:.9;
-    z-index:1;
-  }
-
-  .modal-title{
-    position:relative;
-    z-index:2;
-    font-family:'Baloo 2', sans-serif;
-    font-weight:800;
-    font-size:2.1rem;
-    line-height:.95;
-    margin:6px 0 0;
-    color:#fff;
-    -webkit-text-stroke: 2px rgba(0,0,0,.18);
-    text-shadow: 0 4px 0 rgba(0,0,0,.18), 0 8px 14px rgba(0,0,0,.25);
-  }
-  .modal-title .line-gold{ color:var(--gold); -webkit-text-stroke: 2px rgba(120,70,0,.35); }
-  .modal-title .line-white{ color:#fff; }
-  .modal-title .line-cyan{ color:#8CF0E8; -webkit-text-stroke: 2px rgba(0,60,60,.3); }
-
-  .modal-banner{
-    position:relative;
-    z-index:2;
-    display:inline-block;
-    margin-top:12px;
-    padding:8px 22px;
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700;
-    font-size:.95rem;
-    color:#fff;
-    clip-path: polygon(4% 0%, 96% 0%, 100% 50%, 96% 100%, 4% 100%, 0% 50%);
-  }
-
-  .modal-scene{
-    position:relative;
-    z-index:2;
-    margin-top:16px;
-    display:flex;
-    justify-content:center;
-  }
-  .modal-scene img{
-    width:100px; height:100px;
-    object-fit:cover;
-    border-radius:22px;
-    box-shadow:0 8px 16px rgba(0,0,0,.25), 0 0 0 4px rgba(255,255,255,.5);
-  }
-
-  .modal-body{
-    padding:20px 24px 6px;
-    text-align:center;
-    overflow-y:auto;
-  }
-  .modal-body p{
-    font-weight:700;
-    color:var(--ink-soft);
-    font-size:.92rem;
-    margin:0 0 4px;
-  }
-
-  .modal-footer{
-    padding:14px 24px 24px;
-    flex:0 0 auto;
-  }
-
-  .modal-cta{
-    width:100%;
-    border:none;
-    border-radius:var(--radius-pill);
-    padding:14px 18px;
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700;
-    font-size:1.05rem;
-    color:#fff;
-    cursor:pointer;
-    box-shadow: var(--shadow-btn);
-    transition: transform .16s ease, box-shadow .16s ease;
-  }
-  .modal-cta:hover{ transform:translateY(-2px); }
-  .modal-cta:active{ transform:translateY(1px); box-shadow:var(--shadow-btn-active); }
-  .modal-cta:focus-visible{ outline:3px solid #fff; outline-offset:3px; }
-
-  /* --- Tema 1: Perguntas — "Aventura da Fé" --- */
-  #modal-perguntas .modal-hero{
-    background: radial-gradient(120% 100% at 50% 0%, rgba(255,255,255,.25), transparent 60%),
-                linear-gradient(180deg, var(--quiz1-top), var(--quiz1-bottom));
-  }
-  #modal-perguntas .modal-banner{ background: linear-gradient(180deg, var(--quiz1-banner), var(--quiz1-banner-d)); }
-  #modal-perguntas .modal-cta{ background: linear-gradient(155deg, var(--c11a), var(--c11b)); }
-  #modal-perguntas .s1{ top:18px; left:14px; }
-  #modal-perguntas .s2{ top:30px; right:52px; }
-  #modal-perguntas .s3{ bottom:10px; left:34%; }
-  #modal-perguntas .dove{ position:absolute; top:16px; right:14px; font-size:1.7rem; z-index:1; }
-
-  /* --- Tema 2: Perguntas sobre a Arca — "Desafio dos Heróis" --- */
-  #modal-arca .modal-hero{
-    background: radial-gradient(120% 100% at 50% 0%, rgba(255,255,255,.25), transparent 60%),
-                linear-gradient(180deg, var(--quiz2-top), var(--quiz2-bottom));
-  }
-  #modal-arca .modal-banner{ background: linear-gradient(180deg, var(--quiz2-banner), var(--quiz2-banner-d)); }
-  #modal-arca .modal-cta{ background: linear-gradient(155deg, var(--c12a), var(--c12b)); }
-  #modal-arca .rainbow{ position:absolute; top:-8px; left:50%; transform:translateX(-50%); width:260px; z-index:1; opacity:.9; }
-  #modal-arca .dove{ position:absolute; top:14px; right:16px; font-size:1.5rem; z-index:1; }
 </style>
 </head>
 <body>
-<div class="app">
 
-  <div class="cloud cloud1"></div>
-  <div class="cloud cloud2"></div>
+<div class="app-container">
 
   <header>
-    <button class="icon-btn" id="menuBtn" aria-label="Abrir menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    <button class="btn-icon-round" aria-label="Menu">
+      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
-    <div class="mascot-badge">
-      <div class="face">🙂</div>
-      <span>Continue<br>assim!</span>
+
+    <div class="badge-status">
+      <div class="avatar">👦</div>
+      <span>Você está<br>indo bem!</span>
     </div>
   </header>
 
-  <div class="title-wrap">
-    <h1>Aventuras<span class="accent">na Bíblia</span></h1>
-    <div class="signboard">Explore · Descubra · Aprenda</div>
-    <p class="tagline">Grandes histórias, grandes ensinamentos!</p>
+  <div class="hero-title-area">
+    <h1 class="main-title">
+      Aventuras
+      <span class="sub-yellow">na Bíblia</span>
+    </h1>
+    <div class="wood-sign">Explore · Descubra · Aprenda</div>
+    <div class="sub-tagline">Grandes histórias, grandes ensinamentos!</div>
   </div>
 
-  <div class="grid">
-    <button class="btn" data-app="hinos">
-      <span class="icon"><img src="hinos.jpg" alt="Hinos" loading="lazy"></span>
-      <span class="label">Hinos</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+  <div class="buttons-grid">
 
-    <button class="btn" data-app="labirinto">
-      <span class="icon"><img src="labirinto.jpg" alt="Labirinto" loading="lazy"></span>
-      <span class="label">Labirinto</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/hinos.html" class="btn-capsule b-hinos">
+      <div class="icon-box"><img src="hinos.jpg" alt="Hinos" loading="lazy"></div>
+      <span class="btn-text">Hinos</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="memoria">
-      <span class="icon"><img src="memoria.jpg" alt="Memória" loading="lazy"></span>
-      <span class="label">Memória</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/labirinto.html" class="btn-capsule b-labirinto">
+      <div class="icon-box"><img src="labirinto.jpg" alt="Labirinto" loading="lazy"></div>
+      <span class="btn-text">Labirinto</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="oracao">
-      <span class="icon"><img src="oracao.jpg" alt="Oração" loading="lazy"></span>
-      <span class="label">Oração</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/memoria.html" class="btn-capsule b-memoria">
+      <div class="icon-box"><img src="memoria.jpg" alt="Memória" loading="lazy"></div>
+      <span class="btn-text">Memória</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="colorir">
-      <span class="icon"><img src="colorir.jpg" alt="Colorir" loading="lazy"></span>
-      <span class="label">Colorir</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/oracao.html" class="btn-capsule b-oracao">
+      <div class="icon-box"><img src="oracao.jpg" alt="Oração" loading="lazy"></div>
+      <span class="btn-text">Oração</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="desafios">
-      <span class="icon"><img src="desafios.jpg" alt="Desafios" loading="lazy"></span>
-      <span class="label">Desafios</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/colorir.html" class="btn-capsule b-colorir">
+      <div class="icon-box"><img src="colorir.jpg" alt="Colorir" loading="lazy"></div>
+      <span class="btn-text">Colorir</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="desafio-familia">
-      <span class="icon"><img src="desafio-familia.jpg" alt="Desafio em Família" loading="lazy"></span>
-      <span class="label">Desafio em<br>Família</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/desafios.html" class="btn-capsule b-desafios">
+      <div class="icon-box"><img src="desafios.jpg" alt="Desafios" loading="lazy"></div>
+      <span class="btn-text">Desafios</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="encontre-na-biblia">
-      <span class="icon"><img src="encontre-na-biblia.jpg" alt="Encontre na Bíblia" loading="lazy"></span>
-      <span class="label">Encontre na<br>Bíblia</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/desafio-familia.html" class="btn-capsule b-familia">
+      <div class="icon-box"><img src="desafio-familia.jpg" alt="Desafio em Família" loading="lazy"></div>
+      <span class="btn-text">Desafio em<br>Família</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="historia">
-      <span class="icon"><img src="historia.jpg" alt="História" loading="lazy"></span>
-      <span class="label">História</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/encontre-na-biblia.html" class="btn-capsule b-encontre">
+      <div class="icon-box"><img src="encontre-na-biblia.jpg" alt="Encontre na Bíblia" loading="lazy"></div>
+      <span class="btn-text">Encontre na<br>Bíblia</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="monte-palavras">
-      <span class="icon"><img src="monte-palavras.jpg" alt="Monte Palavras" loading="lazy"></span>
-      <span class="label">Monte<br>Palavras</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/historia.html" class="btn-capsule b-historia">
+      <div class="icon-box"><img src="historia.jpg" alt="História" loading="lazy"></div>
+      <span class="btn-text">História</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="perguntas" data-modal="modal-perguntas">
-      <span class="icon"><img src="perguntas.jpg" alt="Perguntas" loading="lazy"></span>
-      <span class="label">Perguntas</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/monte-palavras.html" class="btn-capsule b-palavras">
+      <div class="icon-box"><img src="monte-palavras.jpg" alt="Monte Palavras" loading="lazy"></div>
+      <span class="btn-text">Monte<br>Palavras</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="perguntas-arca" data-modal="modal-arca">
-      <span class="icon"><img src="perguntas-arca.jpg" alt="Perguntas sobre a Arca" loading="lazy"></span>
-      <span class="label">Perguntas<br>sobre a Arca</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/perguntas.html" class="btn-capsule b-perguntas">
+      <div class="icon-box"><img src="perguntas.jpg" alt="Perguntas" loading="lazy"></div>
+      <span class="btn-text">Perguntas</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="quebra-cabeca">
-      <span class="icon"><img src="quebra-cabeca.jpg" alt="Quebra-Cabeça" loading="lazy"></span>
-      <span class="label">Quebra-<br>Cabeça</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/perguntas-arca.html" class="btn-capsule b-arca">
+      <div class="icon-box"><img src="perguntas-arca.jpg" alt="Perguntas sobre a Arca" loading="lazy"></div>
+      <span class="btn-text">Perguntas<br>da Arca</span>
+      <span class="arrow-icon">➔</span>
+    </a>
 
-    <button class="btn" data-app="verso-do-dia">
-      <span class="icon"><img src="verso-do-dia.jpg" alt="Verso do Dia" loading="lazy"></span>
-      <span class="label">Verso<br>do Dia</span>
-      <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-    </button>
+    <a href="paginas/quebra-cabeca.html" class="btn-capsule b-quebracabeca">
+      <div class="icon-box"><img src="quebra-cabeca.jpg" alt="Quebra-Cabeça" loading="lazy"></div>
+      <span class="btn-text">Quebra-<br>Cabeça</span>
+      <span class="arrow-icon">➔</span>
+    </a>
+
+    <a href="paginas/verso-do-dia.html" class="btn-capsule b-verso">
+      <div class="icon-box"><img src="verso-do-dia.jpg" alt="Verso do Dia" loading="lazy"></div>
+      <span class="btn-text">Verso do<br>Dia</span>
+      <span class="arrow-icon">➔</span>
+    </a>
+
+    <a href="paginas/minhas-medalhas.html" class="btn-capsule b-medalhas">
+      <div class="icon-box"><img src="minhas-medalhas.jpg" alt="Minhas Medalhas" loading="lazy"></div>
+      <span class="btn-text">Minhas Medalhas & Conquistas</span>
+      <span class="arrow-icon">➔</span>
+    </a>
+
   </div>
 
-  <button class="medals" data-app="minhas-medalhas">
-    <span class="icon"><img src="minhas-medalhas.jpg" alt="Minhas Medalhas" loading="lazy"></span>
-    <span class="txt">
-      <strong>Minhas Medalhas</strong>
-      <small>Veja tudo o que você já conquistou</small>
-    </span>
-    <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#5A3400" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-  </button>
-
-  <nav class="bottom">
-    <button class="nav-item active">
-      <span class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg></span>
+  <nav class="bottom-bar">
+    <button class="nav-btn active">
+      <div class="nav-icon">🏠</div>
       Início
     </button>
-    <p class="nav-caption">Com a Bíblia, todo dia é<br>uma nova descoberta!</p>
-    <button class="nav-item">
-      <span class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+
+    <div class="nav-phrase">
+      Com a Bíblia, todo dia é uma nova descoberta!
+    </div>
+
+    <button class="nav-btn">
+      <div class="nav-icon">⚙️</div>
       Config.
     </button>
   </nav>
 
 </div>
 
-<!-- ============ MODAL: Perguntas — "Aventura da Fé" ============ -->
-<div class="modal-overlay" id="modal-perguntas" role="dialog" aria-modal="true" aria-labelledby="modal-perguntas-title">
-  <div class="modal-card">
-    <div class="modal-hero">
-      <button class="modal-close" data-close aria-label="Fechar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#1B3A63" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
-      </button>
-      <span class="modal-star s1">⭐</span>
-      <span class="modal-star s2">⭐</span>
-      <span class="modal-star s3">⭐</span>
-      <span class="dove">🕊️</span>
-      <div id="modal-perguntas-title" class="modal-title">
-        <span class="line-gold">QUIZ</span><br>
-        <span class="line-white">BÍBLICO</span><br>
-        <span class="line-gold">KIDS</span>
-      </div>
-      <div class="modal-banner">Aventura da Fé</div>
-      <div class="modal-scene"><img src="perguntas.jpg" alt="Quiz Bíblico Kids"></div>
-    </div>
-    <div class="modal-body">
-      <p>Teste o que você aprendeu com perguntas divertidas sobre as histórias da Bíblia!</p>
-    </div>
-    <div class="modal-footer">
-      <button class="modal-cta" data-start="perguntas">Começar quiz</button>
-    </div>
-  </div>
-</div>
-
-<!-- ============ MODAL: Perguntas sobre a Arca — "Desafio dos Heróis" ============ -->
-<div class="modal-overlay" id="modal-arca" role="dialog" aria-modal="true" aria-labelledby="modal-arca-title">
-  <div class="modal-card">
-    <div class="modal-hero">
-      <button class="modal-close" data-close aria-label="Fechar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#1B3A63" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
-      </button>
-      <svg class="rainbow" viewBox="0 0 400 200">
-        <circle cx="200" cy="200" r="180" fill="none" stroke="#FF6B6B" stroke-width="16"/>
-        <circle cx="200" cy="200" r="160" fill="none" stroke="#FFB84D" stroke-width="16"/>
-        <circle cx="200" cy="200" r="140" fill="none" stroke="#FFE066" stroke-width="16"/>
-        <circle cx="200" cy="200" r="120" fill="none" stroke="#7BD661" stroke-width="16"/>
-        <circle cx="200" cy="200" r="100" fill="none" stroke="#4FC3F7" stroke-width="16"/>
-      </svg>
-      <span class="dove">🕊️</span>
-      <div id="modal-arca-title" class="modal-title" style="margin-top:46px;">
-        <span class="line-gold">QUIZ</span><br>
-        <span class="line-cyan">BÍBLICO</span><br>
-        <span class="line-white">KIDS</span>
-      </div>
-      <div class="modal-banner">Desafio dos Heróis</div>
-      <div class="modal-scene"><img src="perguntas-arca.jpg" alt="Quiz sobre a Arca de Noé"></div>
-    </div>
-    <div class="modal-body">
-      <p>Embarque com Noé! Responda perguntas sobre a arca e seus animais.</p>
-    </div>
-    <div class="modal-footer">
-      <button class="modal-cta" data-start="perguntas-arca">Começar quiz</button>
-    </div>
-  </div>
-</div>
-
-<script>
-  var modalMap = {
-    'perguntas': 'modal-perguntas',
-    'perguntas-arca': 'modal-arca'
-  };
-  var lastTrigger = null;
-
-  function openModal(id, trigger){
-    var overlay = document.getElementById(id);
-    if(!overlay) return;
-    lastTrigger = trigger || null;
-    overlay.classList.add('open');
-    document.body.classList.add('modal-open');
-    var closeBtn = overlay.querySelector('.modal-close');
-    if(closeBtn) closeBtn.focus();
-  }
-
-  function closeModal(overlay){
-    overlay.classList.remove('open');
-    document.body.classList.remove('modal-open');
-    if(lastTrigger) lastTrigger.focus();
-  }
-
-  // Placeholder de navegação: por enquanto só registra qual atividade foi tocada.
-  // Quando cada jogo for programado, troque este console.log por:
-  // window.location.href = 'paginas/' + app + '.html';
-  document.querySelectorAll('[data-app]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var app = btn.getAttribute('data-app');
-      if(modalMap[app]){
-        openModal(modalMap[app], btn);
-      } else {
-        console.log('Abrir atividade:', app);
-      }
-    });
-  });
-
-  // Fecha ao clicar no X ou fora do card
-  document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
-    overlay.addEventListener('click', function (e) {
-      if(e.target === overlay || e.target.closest('[data-close]')){
-        closeModal(overlay);
-      }
-    });
-  });
-
-  // Fecha com a tecla Esc
-  document.addEventListener('keydown', function (e) {
-    if(e.key === 'Escape'){
-      document.querySelectorAll('.modal-overlay.open').forEach(closeModal);
-    }
-  });
-
-  // Botão "Começar quiz" dentro do modal — troque pelo redirecionamento real depois
-  document.querySelectorAll('[data-start]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      console.log('Iniciar quiz:', btn.getAttribute('data-start'));
-      // window.location.href = 'paginas/' + btn.getAttribute('data-start') + '.html';
-    });
-  });
-
-  // Menu hambúrguer: placeholder para o drawer lateral que virá depois.
-  document.getElementById('menuBtn').addEventListener('click', function () {
-    console.log('Abrir menu lateral (a implementar)');
-  });
-</script>
 </body>
 </html>
