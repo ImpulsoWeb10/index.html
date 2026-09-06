@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Quebra-Cabeça da Arca de Noé</title>
   <style>
     * {
@@ -14,33 +14,42 @@
       padding: 0;
     }
 
-    body {
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
       background-color: #e0f2fe;
       font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka', cursive, sans-serif;
+      color: #0c4a6e;
+    }
+
+    /* Container Principal que ocupa 100% da tela do celular */
+    #app-container {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
+      width: 100vw;
       height: 100vh;
-      overflow: hidden;
-      color: #0c4a6e;
+      height: -webkit-fill-available; /* Ajuste para navegadores mobile */
+      justify-content: space-between;
+      align-items: center;
     }
 
     header {
       width: 100%;
-      padding: 8px 12px;
+      padding: 6px 10px;
       text-align: center;
       background-color: #38bdf8;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
+      flex-shrink: 0;
       z-index: 10;
     }
 
     h1 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: #ffffff;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
@@ -51,15 +60,15 @@
       justify-content: space-between;
       width: 100%;
       max-width: 360px;
-      gap: 5px;
+      gap: 4px;
     }
 
     .counter {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: bold;
       background: #ffffff;
-      padding: 5px 8px;
-      border-radius: 12px;
+      padding: 4px 8px;
+      border-radius: 10px;
       color: #0284c7;
       white-space: nowrap;
     }
@@ -68,48 +77,47 @@
       background-color: #facc15;
       color: #713f12;
       border: none;
-      padding: 6px 10px;
-      font-size: 0.8rem;
+      padding: 5px 8px;
+      font-size: 0.75rem;
       font-weight: bold;
-      border-radius: 12px;
-      box-shadow: 0 3px 0 #ca8a04;
+      border-radius: 10px;
+      box-shadow: 0 2px 0 #ca8a04;
       cursor: pointer;
       white-space: nowrap;
     }
 
     .btn:active {
       transform: translateY(2px);
-      box-shadow: 0 1px 0 #ca8a04;
+      box-shadow: 0 0 0 #ca8a04;
     }
 
     .btn-model {
       background-color: #4ade80;
       color: #14532d;
-      box-shadow: 0 3px 0 #16a34a;
+      box-shadow: 0 2px 0 #16a34a;
     }
 
     .btn-model:active {
-      box-shadow: 0 1px 0 #16a34a;
+      box-shadow: 0 0 0 #16a34a;
     }
 
+    /* Área central onde o tabuleiro fica bem alto */
     #game-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
       flex: 1;
-      padding-top: 5px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 0;
     }
 
-    /* Tabuleiro posicionado mais para cima */
+    /* Tabuleiro dimensionado dinamicamente para a tela */
     #board {
-      width: 280px;
-      height: 336px;
       background-color: #ffffff;
-      border: 4px solid #0284c7;
-      border-radius: 12px;
+      border: 3px solid #0284c7;
+      border-radius: 10px;
       position: relative;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
       overflow: hidden;
     }
 
@@ -123,7 +131,7 @@
       position: absolute;
       box-sizing: border-box;
       border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.25);
       border-radius: 4px;
       z-index: 10;
       cursor: grab;
@@ -137,14 +145,15 @@
       cursor: default;
     }
 
-    /* Bandeja inferior maior para caber bem as peças */
+    /* Bandeja inferior expansível */
     #tray {
       width: 100vw;
-      height: 35vh;
+      height: 38vh;
       background-color: #bae6fd;
-      border-top: 4px solid #38bdf8;
+      border-top: 3px solid #38bdf8;
       position: relative;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     /* Modais */
@@ -163,56 +172,57 @@
 
     .modal-card {
       background: #ffffff;
-      padding: 20px;
-      border-radius: 20px;
+      padding: 16px;
+      border-radius: 16px;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      border: 4px solid #facc15;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 3px solid #facc15;
       max-width: 85%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .modal-card h2 {
       color: #0284c7;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
     }
 
     .modal-card p {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #334155;
       font-weight: bold;
     }
 
-    /* Imagem modelo com metade do tamanho da original */
     .model-img {
-      width: 140px;
-      height: 168px;
-      object-fit: cover;
+      max-width: 140px;
+      max-height: 180px;
+      object-fit: contain;
       border-radius: 8px;
       border: 2px solid #0284c7;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>🚢 Quebra-Cabeça da Arca</h1>
-    <div class="controls">
-      <div class="counter">Movs: <span id="moves-count">0</span></div>
-      <button class="btn btn-model" id="model-btn">Imagem Modelo</button>
-      <button class="btn" id="restart-btn">Embaralhar</button>
+  <div id="app-container">
+    <header>
+      <h1>🚢 Quebra-Cabeça da Arca</h1>
+      <div class="controls">
+        <div class="counter">Movs: <span id="moves-count">0</span></div>
+        <button class="btn btn-model" id="model-btn">Imagem Modelo</button>
+        <button class="btn" id="restart-btn">Embaralhar</button>
+      </div>
+    </header>
+
+    <div id="game-container">
+      <div id="board"></div>
     </div>
-  </header>
 
-  <div id="game-container">
-    <div id="board"></div>
+    <div id="tray"></div>
   </div>
-
-  <div id="tray"></div>
 
   <!-- Modal Imagem Modelo -->
   <div class="modal" id="image-modal">
@@ -249,26 +259,46 @@
     const imageModal = document.getElementById('image-modal');
 
     let pieceWidth, pieceHeight;
+    let boardWidth, boardHeight;
     let placedCount = 0;
     let movesCount = 0;
 
     const img = new Image();
     img.src = IMAGE_SRC;
-    img.onload = () => {
+    img.onload = () => { setupGame(); };
+    img.onerror = () => { setupGame(); };
+
+    window.addEventListener('resize', () => {
       setupDimensions();
-      initGame();
-    };
-    img.onerror = () => {
-      setupDimensions();
-      initGame();
-    };
+    });
 
     function setupDimensions() {
-      const boardWidth = board.clientWidth;
-      const boardHeight = board.clientHeight;
+      const container = document.getElementById('game-container');
+      const maxW = container.clientWidth * 0.92;
+      const maxH = container.clientHeight * 0.95;
+
+      // Mantém a proporção exata 5:6
+      let width = maxW;
+      let height = (width * 6) / 5;
+
+      if (height > maxH) {
+        height = maxH;
+        width = (height * 5) / 6;
+      }
+
+      boardWidth = width;
+      boardHeight = height;
+
+      board.style.width = `${boardWidth}px`;
+      board.style.height = `${boardHeight}px`;
 
       pieceWidth = boardWidth / COLS;
       pieceHeight = boardHeight / ROWS;
+    }
+
+    function setupGame() {
+      setupDimensions();
+      initGame();
     }
 
     function initGame() {
@@ -279,9 +309,6 @@
       placedCount = 0;
       movesCount = 0;
       movesDisplay.textContent = movesCount;
-
-      const boardWidth = board.clientWidth;
-      const boardHeight = board.clientHeight;
 
       const pieces = [];
 
@@ -386,7 +413,7 @@
         const targetLeft = parseFloat(element.dataset.correctLeft);
         const targetTop = parseFloat(element.dataset.correctTop);
 
-        const tolerance = 25;
+        const tolerance = 30;
 
         if (
           Math.abs(currentLeft - targetLeft) < tolerance &&
