@@ -72,11 +72,11 @@
     border: none;
   }
 
-  /* CARROSSEL DOS JOGOS (DIMINUÍDO E MAIS PARA BAIXO) */
+  /* CARROSSEL POSICIONADO BEM ABAIXO DA BÍBLIA */
   .carousel-wrapper {
     width: 100%;
     position: absolute;
-    top: 64%; /* Movidinho mais para baixo */
+    top: 72%; /* Movidinho bem abaixo da Bíblia */
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
@@ -85,12 +85,12 @@
   }
 
   .swipe-hint {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: #FFF;
     font-weight: 800;
     text-shadow: 0 2px 4px #000;
-    margin-bottom: 4px;
-    background: rgba(0, 0, 0, 0.5);
+    margin-bottom: 3px;
+    background: rgba(0, 0, 0, 0.55);
     padding: 2px 10px;
     border-radius: 12px;
   }
@@ -101,20 +101,20 @@
     gap: 10px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    padding: 6px 16px;
+    padding: 4px 16px;
     scrollbar-width: none;
   }
   .carousel-container::-webkit-scrollbar { display: none; }
 
-  /* CARD INTERATIVO MENOR */
+  /* CARD INTERATIVO DOS JOGOS */
   .card-item {
-    flex: 0 0 52%;
-    max-width: 180px; /* Tamanho reduzido dos botões */
+    flex: 0 0 50%;
+    max-width: 170px;
     scroll-snap-align: center;
     background: rgba(2, 6, 17, 0.88);
     border: 2px solid var(--neon-blue);
     border-radius: 18px;
-    padding: 8px;
+    padding: 6px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -140,7 +140,7 @@
 
   .card-title {
     font-family: 'Baloo 2', cursive;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 800;
     color: #FFF;
     text-shadow: 0 0 6px var(--neon-blue);
@@ -153,15 +153,15 @@
     color: #FFF;
     border: none;
     border-radius: 12px;
-    padding: 4px 10px;
+    padding: 3px 8px;
     font-family: 'Baloo 2', cursive;
     font-weight: 800;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     box-shadow: 0 0 6px var(--neon-blue);
     width: 100%;
   }
 
-  /* BOTÕES SOBREPOSTOS DO RODAPÉ */
+  /* BOTÕES SOBREPOSTOS DO RODAPÉ (INÍCIO E CONFIGURAÇÕES) */
   .bottom-overlay-bar {
     position: absolute;
     bottom: 2%;
@@ -192,11 +192,11 @@
 
 <div class="app-container">
 
-  <!-- BOTÕES SUPERIORES -->
+  <!-- BOTÕES SUPERIORES INVISÍVEIS -->
   <button class="btn-menu-overlay" onclick="alert('Menu aberto!')" aria-label="Menu"></button>
   <button class="btn-profile-overlay" onclick="alert('Perfil do Usuário!')" aria-label="Perfil"></button>
 
-  <!-- CARROSSEL CENTRAL MENOR E MAIS PARA BAIXO -->
+  <!-- CARROSSEL LOGO ABAIXO DA BÍBLIA -->
   <div class="carousel-wrapper">
     <span class="swipe-hint">👈 Deslize para jogar 👉</span>
     
@@ -295,7 +295,7 @@
     </div>
   </div>
 
-  <!-- BOTÕES INVISÍVEIS DO RODAPÉ -->
+  <!-- BOTÕES SOBREPOSTOS DO RODAPÉ -->
   <div class="bottom-overlay-bar">
     <button class="btn-bottom-overlay" onclick="window.location.reload();" aria-label="Início"></button>
     <button class="btn-bottom-overlay" onclick="alert('Abrir Configurações!')" aria-label="Configurações"></button>
