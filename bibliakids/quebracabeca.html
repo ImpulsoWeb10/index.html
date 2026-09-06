@@ -23,13 +23,12 @@
       color: #0c4a6e;
     }
 
-    /* Container Principal que ocupa 100% da tela do celular */
     #app-container {
       display: flex;
       flex-direction: column;
       width: 100vw;
       height: 100vh;
-      height: -webkit-fill-available; /* Ajuste para navegadores mobile */
+      height: -webkit-fill-available;
       justify-content: space-between;
       align-items: center;
     }
@@ -97,21 +96,32 @@
       box-shadow: 0 2px 0 #16a34a;
     }
 
-    .btn-model:active {
-      box-shadow: 0 0 0 #16a34a;
+    .btn-back {
+      background-color: #f87171;
+      color: #7f1d1d;
+      box-shadow: -2px 2px 0 #dc2626;
+      padding: 12px 6px;
+      border-radius: 10px;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 1px;
     }
 
-    /* Área central onde o tabuleiro fica bem alto */
+    .btn-back:active {
+      transform: translateX(2px);
+      box-shadow: 0 0 0 #dc2626;
+    }
+
     #game-container {
       flex: 1;
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px 0;
+      padding: 4px 10px;
+      gap: 8px;
     }
 
-    /* Tabuleiro dimensionado dinamicamente para a tela */
     #board {
       background-color: #ffffff;
       border: 3px solid #0284c7;
@@ -145,7 +155,6 @@
       cursor: default;
     }
 
-    /* Bandeja inferior expansível */
     #tray {
       width: 100vw;
       height: 38vh;
@@ -156,7 +165,6 @@
       flex-shrink: 0;
     }
 
-    /* Modais */
     .modal {
       display: none;
       position: fixed;
@@ -177,11 +185,13 @@
       text-align: center;
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
       border: 3px solid #facc15;
-      max-width: 85%;
+      max-width: 90%;
+      max-height: 90vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 10px;
+      overflow-y: auto;
     }
 
     .modal-card h2 {
@@ -190,18 +200,19 @@
     }
 
     .modal-card p {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: #334155;
       font-weight: bold;
     }
 
+    /* Imagem modelo maior na tela do celular */
     .model-img {
-      max-width: 140px;
-      max-height: 180px;
+      max-width: 75vw;
+      max-height: 55vh;
       object-fit: contain;
       border-radius: 8px;
-      border: 2px solid #0284c7;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+      border: 3px solid #0284c7;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
   </style>
 </head>
@@ -219,6 +230,7 @@
 
     <div id="game-container">
       <div id="board"></div>
+      <button class="btn btn-back" id="back-btn">VOLTAR</button>
     </div>
 
     <div id="tray"></div>
@@ -243,9 +255,9 @@
   </div>
 
   <script>
-    const COLS = 5;
-    const ROWS = 6;
-    const TOTAL_PIECES = COLS * ROWS;
+    const COLS = 4;
+    const ROWS = 5;
+    const TOTAL_PIECES = COLS * ROWS; // 20 peças
     const IMAGE_SRC = 'noe.jpg';
 
     const board = document.getElementById('board');
@@ -253,6 +265,7 @@
     const movesDisplay = document.getElementById('moves-count');
     const restartBtn = document.getElementById('restart-btn');
     const modelBtn = document.getElementById('model-btn');
+    const backBtn = document.getElementById('back-btn');
     const closeModelBtn = document.getElementById('close-model-btn');
     const modalRestartBtn = document.getElementById('modal-restart-btn');
     const winModal = document.getElementById('win-modal');
@@ -274,16 +287,16 @@
 
     function setupDimensions() {
       const container = document.getElementById('game-container');
-      const maxW = container.clientWidth * 0.92;
+      const maxW = (container.clientWidth - 40) * 0.90;
       const maxH = container.clientHeight * 0.95;
 
-      // Mantém a proporção exata 5:6
+      // Mantém a proporção exata 4:5 (para 20 peças em grade 4x5)
       let width = maxW;
-      let height = (width * 6) / 5;
+      let height = (width * 5) / 4;
 
       if (height > maxH) {
         height = maxH;
-        width = (height * 5) / 6;
+        width = (height * 4) / 5;
       }
 
       boardWidth = width;
@@ -460,6 +473,10 @@
 
     closeModelBtn.addEventListener('click', () => {
       imageModal.style.display = 'none';
+    });
+
+    backBtn.addEventListener('click', () => {
+      window.history.back();
     });
 
     restartBtn.addEventListener('click', initGame);
