@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Quebra-Cabeça Infantil</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      touch-action: none; /* Previne rolagem de tela ao arrastar no celular */
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f0f8ff;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      padding: 10px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #ff4500;
+    }
+
+    /* Área do tabuleiro (tamanho padrão de celular) */
+    #board {
+      width: 90vw;
+      height: 60vh;
+      max-width: 360px;
+      max-height: 480px;
+      border: 3px dashed #4ca3dd;
+      background-color: #ffffff;
+      position: relative;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Slot onde as peças se encaixam */
+    .slot {
+      position: absolute;
+      box-sizing: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    /* Peças do quebra-cabeça */
+    .piece {
+      position: absolute;
+      border: 1px solid #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      cursor: grab;
+      border-radius: 4px;
+      z-index: 10;
+    }
+
+    .piece.placed {
+      border: none;
+      box-shadow: none;
+      z-index: 1;
+      cursor: default;
+    }
+
+    /* Banco de peças na parte inferior */
+    #tray {
+      width: 100vw;
+      height: 25vh;
+      background-color: #ffe4e1;
+      border-top: 4px solid #ff69b4;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #win-message {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #32cd32;
+      color: white;
+      padding: 15px 25px;
+      font-size: 1.5rem;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 100;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🧩 Monte o Quebra-Cabeça!</h1>
+  </header>
+
+  <div id="board"></div>
+
+  <div id="tray"></div>
+
+  <div id="win-message">🎉 Parabéns! Você conseguiu!</div>
+
+  <script>
+    const COLS = 5;
+    const ROWS = 6;
+    const TOTAL_PIECES = COLS * ROWS; // 30 peças
+
+    const board = document.getElementById('board');
+    const tray = document.getElementById('tray');
+    const winMessage = document.getElementById('win-message');
+
+    // Imagem infantil via URL (pode substituir por qualquer imagem)
+    const imageUrl = 'https://picsum.photos/id/1025/360/480';
+
+    let pieceWidth, pieceHeight;
+    let placedCount = 0;
+
+    function initGame() {
+      const boardWidth = board.clientWidth;
+      const boardHeight = board.clientHeight;
+
+      pieceWidth = boardWidth / COLS;
+      pieceHeight = boardHeight / ROWS;
+
+      const pieces = [];
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const index = r * COLS + c;
+
+          // Criar Slot de destino no tabuleiro
+          const slot = document.createElement('div');
+          slot.classList.add('slot');
+          slot.style.width = `${pieceWidth}px`;
+          slot.style.height = `${pieceHeight}px`;
+          slot.style.left = `${c * pieceWidth}px`;
+          slot.style.top = `${r * pieceHeight}px`;
+          board.appendChild(slot);
+
+          // Criar Peça
+          const piece = document.createElement('div');
+          piece.classList.add('piece');
+          piece.style.width = `${pieceWidth}px`;
+          piece.style.height = `${pieceHeight}px`;
+          piece.style.backgroundImage = `url(${imageUrl})`;
+          piece.style.backgroundSize = `${boardWidth}px ${boardHeight}px`;
+          piece.style.backgroundPosition = `-${c * pieceWidth}px -${r * pieceHeight}px`;
+          
+          // Guardar a posição correta da peça
+          piece.dataset.correctLeft = c * pieceWidth;
+          piece.dataset.correctTop = r * pieceHeight;
+
+          // Posicionar na bandeja de forma aleatória
+          const randomX = Math.random() * (window.innerWidth - pieceWidth);
+          const randomY = Math.random() * (tray.clientHeight - pieceHeight);
+          
+          piece.style.left = `${randomX}px`;
+          piece.style.top = `${randomY}px`;
+
+          tray.appendChild(piece);
+          enableDrag(piece);
+        }
+      }
+    }
+
+    function enableDrag(element) {
+      let active = false;
+      let currentX, currentY, initialX, initialY;
+      let xOffset = 0, yOffset = 0;
+
+      element.addEventListener('touchstart', dragStart, {passive: false});
+      element.addEventListener('touchend', dragEnd, {passive: false});
+      element.addEventListener('touchmove', drag, {passive: false});
+
+      element.addEventListener('mousedown', dragStart);
+      element.addEventListener('mouseup', dragEnd);
+      element.addEventListener('mousemove', drag);
+
+      function dragStart(e) {
+        if (element.classList.contains('placed')) return;
+
+        if (e.type === 'touchstart') {
+          initialX = e.touches[0].clientX - xOffset;
+          initialY = e.touches[0].clientY - yOffset;
+        } else {
+          initialX = e.clientX - xOffset;
+          initialY = e.clientY - yOffset;
+        }
+
+        // Mover a peça para o corpo do documento para arrastar livremente
+        document.body.appendChild(element);
+        active = true;
+      }
+
+      function drag(e) {
+        if (!active) return;
+        e.preventDefault();
+
+        if (e.type === 'touchmove') {
+          currentX = e.touches[0].clientX - initialX;
+          currentY = e.touches[0].clientY - initialY;
+        } else {
+          currentX = e.clientX - initialX;
+          currentY = e.clientY - initialY;
+        }
+
+        xOffset = currentX;
+        yOffset = currentY;
+
+        element.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      }
+
+      function dragEnd() {
+        if (!active) return;
+        active = false;
+
+        const rect = element.getBoundingClientRect();
+        const boardRect = board.getBoundingClientRect();
+
+        // Posição relativa ao tabuleiro
+        const relativeLeft = rect.left - boardRect.left;
+        const relativeTop = rect.top - boardRect.top;
+
+        const targetLeft = parseFloat(element.dataset.correctLeft);
+        const targetTop = parseFloat(element.dataset.correctTop);
+
+        // Margem de erro para encaixe (20px)
+        const tolerance = 20;
+
+        if (
+          Math.abs(relativeLeft - targetLeft) < tolerance &&
+          Math.abs(relativeTop - targetTop) < tolerance
+        ) {
+          // Encaixe Correto!
+          element.classList.add('placed');
+          element.style.transform = 'none';
+          element.style.left = `${targetLeft}px`;
+          element.style.top = `${targetTop}px`;
+          board.appendChild(element);
+
+          placedCount++;
+          if (placedCount === TOTAL_PIECES) {
+            winMessage.style.display = 'block';
+          }
+        }
+      }
+    }
+
+    window.onload = initGame;
+  </script>
+</body>
+</html>
