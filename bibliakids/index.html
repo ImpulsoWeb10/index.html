@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -246,8 +245,13 @@
     border-radius:50%;
     background:rgba(255,255,255,.25);
     display:flex; align-items:center; justify-content:center;
-    font-size:22px;
+    overflow:hidden;
     box-shadow: inset 0 2px 4px rgba(255,255,255,.4), inset 0 -3px 6px rgba(0,0,0,.15);
+  }
+  .btn .icon img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
   }
 
   .btn .label{
@@ -332,8 +336,13 @@
     border-radius:50%;
     background:rgba(255,255,255,.45);
     display:flex; align-items:center; justify-content:center;
-    font-size:28px;
+    overflow:hidden;
     animation: gentle-glow 2.6s ease-in-out infinite;
+  }
+  .medals .icon img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
   }
   @keyframes gentle-glow{
     0%,100%{ box-shadow:0 0 0 0 rgba(255,255,255,.55); }
@@ -497,9 +506,14 @@
     position:relative;
     z-index:2;
     margin-top:16px;
-    font-size:2.4rem;
-    line-height:1;
-    letter-spacing:6px;
+    display:flex;
+    justify-content:center;
+  }
+  .modal-scene img{
+    width:100px; height:100px;
+    object-fit:cover;
+    border-radius:22px;
+    box-shadow:0 8px 16px rgba(0,0,0,.25), 0 0 0 4px rgba(255,255,255,.5);
   }
 
   .modal-body{
@@ -583,92 +597,92 @@
 
   <div class="grid">
     <button class="btn" data-app="hinos">
-      <span class="icon">🎵</span>
+      <span class="icon"><img src="hinos.jpg" alt="Hinos" loading="lazy"></span>
       <span class="label">Hinos</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="labirinto">
-      <span class="icon">🌀</span>
+      <span class="icon"><img src="labirinto.jpg" alt="Labirinto" loading="lazy"></span>
       <span class="label">Labirinto</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="memoria">
-      <span class="icon">🃏</span>
+      <span class="icon"><img src="memoria.jpg" alt="Memória" loading="lazy"></span>
       <span class="label">Memória</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="oracao">
-      <span class="icon">🙏</span>
+      <span class="icon"><img src="oracao.jpg" alt="Oração" loading="lazy"></span>
       <span class="label">Oração</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="colorir">
-      <span class="icon">🎨</span>
+      <span class="icon"><img src="colorir.jpg" alt="Colorir" loading="lazy"></span>
       <span class="label">Colorir</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="desafios">
-      <span class="icon">🏆</span>
+      <span class="icon"><img src="desafios.jpg" alt="Desafios" loading="lazy"></span>
       <span class="label">Desafios</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="desafio-familia">
-      <span class="icon">👨‍👩‍👧‍👦</span>
+      <span class="icon"><img src="desafio-familia.jpg" alt="Desafio em Família" loading="lazy"></span>
       <span class="label">Desafio em<br>Família</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="encontre-na-biblia">
-      <span class="icon">🔍</span>
+      <span class="icon"><img src="encontre-na-biblia.jpg" alt="Encontre na Bíblia" loading="lazy"></span>
       <span class="label">Encontre na<br>Bíblia</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="historia">
-      <span class="icon">📖</span>
+      <span class="icon"><img src="historia.jpg" alt="História" loading="lazy"></span>
       <span class="label">História</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="monte-palavras">
-      <span class="icon">🔤</span>
+      <span class="icon"><img src="monte-palavras.jpg" alt="Monte Palavras" loading="lazy"></span>
       <span class="label">Monte<br>Palavras</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="perguntas" data-modal="modal-perguntas">
-      <span class="icon">❓</span>
+      <span class="icon"><img src="perguntas.jpg" alt="Perguntas" loading="lazy"></span>
       <span class="label">Perguntas</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="perguntas-arca" data-modal="modal-arca">
-      <span class="icon">🚢</span>
+      <span class="icon"><img src="perguntas-arca.jpg" alt="Perguntas sobre a Arca" loading="lazy"></span>
       <span class="label">Perguntas<br>sobre a Arca</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="quebra-cabeca">
-      <span class="icon">🧩</span>
+      <span class="icon"><img src="quebra-cabeca.jpg" alt="Quebra-Cabeça" loading="lazy"></span>
       <span class="label">Quebra-<br>Cabeça</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
 
     <button class="btn" data-app="verso-do-dia">
-      <span class="icon">⭐</span>
+      <span class="icon"><img src="verso-do-dia.jpg" alt="Verso do Dia" loading="lazy"></span>
       <span class="label">Verso<br>do Dia</span>
       <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
     </button>
   </div>
 
   <button class="medals" data-app="minhas-medalhas">
-    <span class="icon">🏅</span>
+    <span class="icon"><img src="minhas-medalhas.jpg" alt="Minhas Medalhas" loading="lazy"></span>
     <span class="txt">
       <strong>Minhas Medalhas</strong>
       <small>Veja tudo o que você já conquistou</small>
@@ -707,7 +721,7 @@
         <span class="line-gold">KIDS</span>
       </div>
       <div class="modal-banner">Aventura da Fé</div>
-      <div class="modal-scene">🧒📖👧</div>
+      <div class="modal-scene"><img src="perguntas.jpg" alt="Quiz Bíblico Kids"></div>
     </div>
     <div class="modal-body">
       <p>Teste o que você aprendeu com perguntas divertidas sobre as histórias da Bíblia!</p>
@@ -739,7 +753,7 @@
         <span class="line-white">KIDS</span>
       </div>
       <div class="modal-banner">Desafio dos Heróis</div>
-      <div class="modal-scene">🐘🦒🦁🐑🦓</div>
+      <div class="modal-scene"><img src="perguntas-arca.jpg" alt="Quiz sobre a Arca de Noé"></div>
     </div>
     <div class="modal-body">
       <p>Embarque com Noé! Responda perguntas sobre a arca e seus animais.</p>
