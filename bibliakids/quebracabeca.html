@@ -96,7 +96,7 @@
       box-shadow: 0 2px 0 #16a34a;
     }
 
-    /* Painel de Botões na Vertical à Direita */
+    /* Painel Lateral de Botões */
     .side-panel {
       display: flex;
       flex-direction: column;
@@ -210,7 +210,7 @@
       pointer-events: none;
     }
 
-    /* Modais Estilizados */
+    /* Modais */
     .modal {
       display: none;
       position: fixed;
@@ -226,82 +226,85 @@
 
     .modal-card {
       background: #ffffff;
-      padding: 16px;
+      padding: 12px;
       border-radius: 16px;
       text-align: center;
       box-shadow: 0 8px 25px rgba(0,0,0,0.4);
       border: 4px solid #facc15;
-      width: 92%;
-      max-width: 480px;
-      max-height: 90vh;
+      width: 95vw;
+      max-width: 420px;
+      max-height: 92vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       overflow-y: auto;
     }
 
     .modal-card h2 {
       color: #0284c7;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
 
     .modal-card p {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: #334155;
       font-weight: bold;
     }
 
     .model-img {
       max-width: 80vw;
-      max-height: 55vh;
+      max-height: 50vh;
       object-fit: contain;
       border-radius: 8px;
       border: 3px solid #0284c7;
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
-    /* CARROSSEL E NAVEGAÇÃO DE IMAGENS */
+    /* CARROSSEL ADAPTADO PARA CELULAR (TOUCH / SWIPE / SETAS) */
     .carousel-container {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 12px;
+      justify-content: space-between;
       width: 100%;
-      margin: 10px 0;
+      gap: 6px;
+      margin: 4px 0;
+      touch-action: pan-y;
     }
 
     .carousel-display {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
-      width: 240px;
+      gap: 6px;
+      flex: 1;
+      width: 100%;
     }
 
     .carousel-img {
-      width: 240px;
-      height: 180px;
+      width: 100%;
+      height: 150px;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 10px;
       border: 3px solid #38bdf8;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
 
     .carousel-btn {
       background-color: #0284c7;
       color: #ffffff;
       border: none;
-      font-size: 1.5rem;
-      width: 40px;
-      height: 40px;
+      font-size: 1.2rem;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      box-shadow: 0 3px 0 #0369a1;
+      box-shadow: 0 2px 0 #0369a1;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      touch-action: manipulation;
     }
 
     .carousel-btn:active {
@@ -309,51 +312,48 @@
       box-shadow: 0 0 0 #0369a1;
     }
 
-    /* GRID DAS 5 IMAGENS EM BAIXO DO CARROSSEL */
+    /* MINIATURAS EM BAIXO (RESPONSIVAS) */
     .image-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
       width: 100%;
-      max-height: 35vh;
-      overflow-y: auto;
-      padding: 6px;
+      padding: 2px;
     }
 
     .image-card {
       background: #f0f9ff;
       border: 2px solid #38bdf8;
-      border-radius: 10px;
-      padding: 4px;
+      border-radius: 6px;
+      padding: 2px;
       cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-    }
-
-    .image-card:active {
-      transform: scale(0.95);
+      touch-action: manipulation;
     }
 
     .image-card.active {
       border-color: #a855f7;
       background-color: #f3e8ff;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+      box-shadow: 0 0 6px rgba(168, 85, 247, 0.6);
     }
 
     .image-card img {
       width: 100%;
-      height: 60px;
+      height: 38px;
       object-fit: cover;
-      border-radius: 6px;
+      border-radius: 4px;
     }
 
     .image-card span {
-      font-size: 0.75rem;
+      font-size: 0.6rem;
       font-weight: bold;
       color: #0c4a6e;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
     }
   </style>
 </head>
@@ -385,29 +385,27 @@
     </div>
   </div>
 
-  <!-- Modal Escolha de Imagem (Com Carrossel acima do Grid) -->
+  <!-- Modal Escolha de Imagem Otimizado para Celular -->
   <div class="modal" id="select-modal">
     <div class="modal-card">
       <h2>🖼️ Escolha uma Imagem</h2>
       
-      <!-- Carrossel no topo -->
-      <div class="carousel-container">
+      <!-- Carrossel com Suporte a Deslizar (Swipe) e Clique em Celular -->
+      <div class="carousel-container" id="carousel-swipe-area">
         <button class="carousel-btn" id="prev-btn">❮</button>
         <div class="carousel-display">
           <img src="noe.jpg" id="carousel-img" class="carousel-img" alt="Destaque">
-          <span id="carousel-title" style="font-size:0.9rem; font-weight:bold; color:#0c4a6e;">Noé 1</span>
+          <span id="carousel-title" style="font-size:0.85rem; font-weight:bold; color:#0c4a6e;">Noé 1</span>
         </div>
         <button class="carousel-btn" id="next-btn">❯</button>
       </div>
 
-      <button class="btn btn-model" id="confirm-carousel-btn" style="width: 100%; padding: 8px;">Usar Imagem do Carrossel</button>
+      <button class="btn btn-model" id="confirm-carousel-btn" style="width: 100%; padding: 8px; font-size: 0.85rem;">Usar Esta Imagem</button>
 
-      <hr style="width:100%; border:0; border-top:1px dashed #38bdf8; margin: 4px 0;">
-
-      <!-- Grid com as 5 imagens abaixo -->
+      <!-- Miniaturas horizontais para tela mobile -->
       <div class="image-grid" id="image-grid"></div>
 
-      <button class="btn" id="close-select-btn">Cancelar</button>
+      <button class="btn" id="close-select-btn" style="padding: 6px 12px; font-size: 0.75rem;">Cancelar</button>
     </div>
   </div>
 
@@ -420,12 +418,12 @@
     </div>
   </div>
 
-  <!-- Modal Trava de Mudança de Nível -->
+  <!-- Modal Trava de Nível -->
   <div class="modal" id="lock-modal">
     <div class="modal-card">
       <h2>⚠️ Mudar de Nível</h2>
-      <p>Você já está jogando um nível! Clique em <strong>VOLTAR</strong> para zerar as peças e escolher outro nível.</p>
-      <button class="btn btn-back" id="lock-reset-btn" style="writing-mode: horizontal-tb; font-size: 0.9rem; padding: 8px 16px;">VOLTAR</button>
+      <p>Você já está jogando! Clique em <strong>VOLTAR</strong> para zerar e escolher outro nível.</p>
+      <button class="btn btn-back" id="lock-reset-btn" style="writing-mode: horizontal-tb; font-size: 0.85rem; padding: 8px 16px;">VOLTAR</button>
     </div>
   </div>
 
@@ -480,6 +478,7 @@
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const confirmCarouselBtn = document.getElementById('confirm-carousel-btn');
+    const carouselSwipeArea = document.getElementById('carousel-swipe-area');
 
     let pieceWidth, pieceHeight;
     let boardWidth, boardHeight;
@@ -517,10 +516,10 @@
         card.appendChild(imgEl);
         card.appendChild(labelEl);
 
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (e) => {
+          e.stopPropagation();
           currentImageIndex = index;
           updateCarousel();
-          applySelectedImage();
         });
 
         imageGrid.appendChild(card);
@@ -533,6 +532,32 @@
       selectModal.style.display = 'none';
       clearAllPieces();
       setupGame();
+    }
+
+    // GESTOS DE TOUCH (SWIPE) PARA CELULAR NO CARROSSEL
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    carouselSwipeArea.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    carouselSwipeArea.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const threshold = 30; // Distância mínima do deslize
+      if (touchEndX < touchStartX - threshold) {
+        // Deslizou para a esquerda -> Próxima
+        currentImageIndex = (currentImageIndex + 1) % IMAGES.length;
+        updateCarousel();
+      } else if (touchEndX > touchStartX + threshold) {
+        // Deslizou para a direita -> Anterior
+        currentImageIndex = (currentImageIndex - 1 + IMAGES.length) % IMAGES.length;
+        updateCarousel();
+      }
     }
 
     function setupDimensions() {
@@ -763,13 +788,15 @@
       window.addEventListener('mouseup', onEnd);
     }
 
-    // Carrossel Controles
-    prevBtn.addEventListener('click', () => {
+    // Eventos do Carrossel
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       currentImageIndex = (currentImageIndex - 1 + IMAGES.length) % IMAGES.length;
       updateCarousel();
     });
 
-    nextBtn.addEventListener('click', () => {
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       currentImageIndex = (currentImageIndex + 1) % IMAGES.length;
       updateCarousel();
     });
