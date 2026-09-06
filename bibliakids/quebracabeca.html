@@ -21,14 +21,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      min-height: 100vh;
+      height: 100vh;
       overflow: hidden;
       color: #0c4a6e;
     }
 
     header {
       width: 100%;
-      padding: 10px 15px;
+      padding: 8px 12px;
       text-align: center;
       background-color: #38bdf8;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -36,10 +36,11 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
+      z-index: 10;
     }
 
     h1 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: #ffffff;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
@@ -50,27 +51,30 @@
       justify-content: space-between;
       width: 100%;
       max-width: 360px;
+      gap: 5px;
     }
 
     .counter {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: bold;
       background: #ffffff;
-      padding: 4px 12px;
-      border-radius: 15px;
+      padding: 5px 8px;
+      border-radius: 12px;
       color: #0284c7;
+      white-space: nowrap;
     }
 
     .btn {
       background-color: #facc15;
       color: #713f12;
       border: none;
-      padding: 6px 14px;
-      font-size: 0.9rem;
+      padding: 6px 10px;
+      font-size: 0.8rem;
       font-weight: bold;
-      border-radius: 15px;
+      border-radius: 12px;
       box-shadow: 0 3px 0 #ca8a04;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .btn:active {
@@ -78,36 +82,43 @@
       box-shadow: 0 1px 0 #ca8a04;
     }
 
+    .btn-model {
+      background-color: #4ade80;
+      color: #14532d;
+      box-shadow: 0 3px 0 #16a34a;
+    }
+
+    .btn-model:active {
+      box-shadow: 0 1px 0 #16a34a;
+    }
+
     #game-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 12px;
+      justify-content: flex-start;
       flex: 1;
-      padding: 10px 0;
+      padding-top: 5px;
     }
 
-    /* Tabuleiro do quebra-cabeça */
+    /* Tabuleiro posicionado mais para cima */
     #board {
-      width: 320px;
-      height: 384px;
+      width: 280px;
+      height: 336px;
       background-color: #ffffff;
       border: 4px solid #0284c7;
       border-radius: 12px;
       position: relative;
-      box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
       overflow: hidden;
     }
 
-    /* Slots de destino */
     .slot {
       position: absolute;
       box-sizing: border-box;
       border: 1px dashed #bae6fd;
     }
 
-    /* Peças soltas e encaixadas */
     .piece {
       position: absolute;
       box-sizing: border-box;
@@ -126,50 +137,63 @@
       cursor: default;
     }
 
-    /* Bandeja inferior onde ficam as peças para arrastar */
+    /* Bandeja inferior maior para caber bem as peças */
     #tray {
       width: 100vw;
-      height: 130px;
+      height: 35vh;
       background-color: #bae6fd;
       border-top: 4px solid #38bdf8;
       position: relative;
       overflow: hidden;
     }
 
-    /* Mensagem de Vitória */
-    #win-modal {
+    /* Modais */
+    .modal {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       z-index: 200;
       justify-content: center;
       align-items: center;
     }
 
-    .win-card {
+    .modal-card {
       background: #ffffff;
-      padding: 25px;
+      padding: 20px;
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
       border: 4px solid #facc15;
       max-width: 85%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
 
-    .win-card h2 {
+    .modal-card h2 {
       color: #0284c7;
-      font-size: 1.6rem;
-      margin-bottom: 10px;
+      font-size: 1.4rem;
     }
 
-    .win-card p {
-      font-size: 1.1rem;
-      margin-bottom: 15px;
+    .modal-card p {
+      font-size: 1rem;
       color: #334155;
+      font-weight: bold;
+    }
+
+    /* Imagem modelo com metade do tamanho da original */
+    .model-img {
+      width: 140px;
+      height: 168px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid #0284c7;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
   </style>
 </head>
@@ -178,7 +202,8 @@
   <header>
     <h1>🚢 Quebra-Cabeça da Arca</h1>
     <div class="controls">
-      <div class="counter">Movimentos: <span id="moves-count">0</span></div>
+      <div class="counter">Movs: <span id="moves-count">0</span></div>
+      <button class="btn btn-model" id="model-btn">Imagem Modelo</button>
       <button class="btn" id="restart-btn">Embaralhar</button>
     </div>
   </header>
@@ -189,8 +214,18 @@
 
   <div id="tray"></div>
 
-  <div id="win-modal">
-    <div class="win-card">
+  <!-- Modal Imagem Modelo -->
+  <div class="modal" id="image-modal">
+    <div class="modal-card">
+      <img src="noe.jpg" alt="Modelo da Arca" class="model-img">
+      <p>Vamos lá amiguinhos, montar esse animado quebra-cabeça!</p>
+      <button class="btn" id="close-model-btn">Fechar</button>
+    </div>
+  </div>
+
+  <!-- Modal Vitória -->
+  <div class="modal" id="win-modal">
+    <div class="modal-card">
       <h2>🎉 Parabéns!</h2>
       <p>Você completou o quebra-cabeça!</p>
       <button class="btn" id="modal-restart-btn">Jogar Novamente</button>
@@ -207,14 +242,16 @@
     const tray = document.getElementById('tray');
     const movesDisplay = document.getElementById('moves-count');
     const restartBtn = document.getElementById('restart-btn');
+    const modelBtn = document.getElementById('model-btn');
+    const closeModelBtn = document.getElementById('close-model-btn');
     const modalRestartBtn = document.getElementById('modal-restart-btn');
     const winModal = document.getElementById('win-modal');
+    const imageModal = document.getElementById('image-modal');
 
     let pieceWidth, pieceHeight;
     let placedCount = 0;
     let movesCount = 0;
 
-    // Garante que a imagem está carregada para pegar proporções perfeitas sem deformar
     const img = new Image();
     img.src = IMAGE_SRC;
     img.onload = () => {
@@ -222,7 +259,6 @@
       initGame();
     };
     img.onerror = () => {
-      // Caso a imagem demore ou seja carregada offline, roda com dimensão padrão
       setupDimensions();
       initGame();
     };
@@ -239,6 +275,7 @@
       board.innerHTML = '';
       tray.innerHTML = '';
       winModal.style.display = 'none';
+      imageModal.style.display = 'none';
       placedCount = 0;
       movesCount = 0;
       movesDisplay.textContent = movesCount;
@@ -246,12 +283,10 @@
       const boardWidth = board.clientWidth;
       const boardHeight = board.clientHeight;
 
-      // Lista para controlar e embaralhar as peças na bandeja
       const pieces = [];
 
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
-          // Criar Slot visual no tabuleiro
           const slot = document.createElement('div');
           slot.classList.add('slot');
           slot.style.width = `${pieceWidth}px`;
@@ -260,7 +295,6 @@
           slot.style.top = `${r * pieceHeight}px`;
           board.appendChild(slot);
 
-          // Criar Peça recortada da imagem original
           const piece = document.createElement('div');
           piece.classList.add('piece');
           piece.style.width = `${pieceWidth}px`;
@@ -276,10 +310,8 @@
         }
       }
 
-      // Embaralhar a ordem de inserção das peças na bandeja
       pieces.sort(() => Math.random() - 0.5);
 
-      // Posicionar peças aleatoriamente na bandeja inferior
       pieces.forEach(piece => {
         const trayWidth = tray.clientWidth;
         const trayHeight = tray.clientHeight;
@@ -317,7 +349,6 @@
         initialLeft = rect.left;
         initialTop = rect.top;
 
-        // Move a peça para o body para que transite livremente por cima de tudo
         document.body.appendChild(element);
         element.style.left = `${initialLeft}px`;
         element.style.top = `${initialTop}px`;
@@ -355,14 +386,12 @@
         const targetLeft = parseFloat(element.dataset.correctLeft);
         const targetTop = parseFloat(element.dataset.correctTop);
 
-        // Tolerância de encaixe em pixels para facilitar para crianças
         const tolerance = 25;
 
         if (
           Math.abs(currentLeft - targetLeft) < tolerance &&
           Math.abs(currentTop - targetTop) < tolerance
         ) {
-          // Encaixe correto no tabuleiro
           element.classList.add('placed');
           element.style.left = `${targetLeft}px`;
           element.style.top = `${targetTop}px`;
@@ -375,7 +404,6 @@
             }, 200);
           }
         } else {
-          // Se soltar fora da área válida, retorna para a bandeja
           const trayRect = tray.getBoundingClientRect();
           if (
             rect.bottom < trayRect.top ||
@@ -398,6 +426,14 @@
       window.addEventListener('mousemove', onMove);
       window.addEventListener('mouseup', onEnd);
     }
+
+    modelBtn.addEventListener('click', () => {
+      imageModal.style.display = 'flex';
+    });
+
+    closeModelBtn.addEventListener('click', () => {
+      imageModal.style.display = 'none';
+    });
 
     restartBtn.addEventListener('click', initGame);
     modalRestartBtn.addEventListener('click', initGame);
