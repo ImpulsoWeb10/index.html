@@ -14,14 +14,8 @@
     --sky-mid: #001233;
     --sky-bottom: #002855;
     --gold: #FFC837;
-    --wood-1: #9E5223;
-    --wood-2: #6E320F;
-    --wood-border: #421C06;
-    
-    /* Cores Neon Azul Marinho */
-    --neon-blue-border: #00d4ff;
-    --neon-blue-glow: 0 0 10px #005f73, 0 0 20px #0a9396, inset 0 0 15px rgba(0, 212, 255, 0.4);
-    --neon-blue-glow-active: 0 0 5px #005f73, 0 0 10px #0a9396, inset 0 0 8px rgba(0, 212, 255, 0.8);
+    --neon-blue: #00d4ff;
+    --neon-glow: 0 0 15px rgba(0, 212, 255, 0.6), 0 0 30px rgba(0, 95, 115, 0.4);
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -38,28 +32,22 @@
     overflow-x: hidden;
   }
 
-  /* CONTAINER PRINCIPAL COM MOLDURA NEON ENVOLTA DA TELA */
+  /* Moldura da Tela */
   .app-container {
     width: 100%;
     max-width: 480px;
     min-height: calc(100vh - 24px);
-    padding: 20px 16px 110px 16px;
+    padding: 20px 16px 90px 16px;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 50%, var(--sky-bottom) 100%);
-    
-    /* ESTILO DA MOLDURA NEON DA TELA */
-    border: 3px solid var(--neon-blue-border);
+    border: 3px solid var(--neon-blue);
     border-radius: 36px;
-    box-shadow: 
-      0 0 15px rgba(0, 212, 255, 0.6),
-      0 0 30px rgba(0, 95, 115, 0.5),
-      inset 0 0 20px rgba(0, 212, 255, 0.3);
+    box-shadow: var(--neon-glow);
   }
 
-  /* BARRA SUPERIOR */
   header {
     width: 100%;
     display: flex;
@@ -72,243 +60,137 @@
     width: 48px; height: 48px;
     border-radius: 50%;
     background: rgba(0, 18, 51, 0.8);
-    border: 2px solid var(--neon-blue-border);
-    box-shadow: 0 0 12px var(--neon-blue-border);
+    border: 2px solid var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-blue);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
-    transition: transform 0.1s ease;
   }
-  .btn-icon-round:active { transform: scale(0.92); }
-  .btn-icon-round svg { width: 24px; height: 24px; fill: none; stroke: var(--neon-blue-border); stroke-width: 3; stroke-linecap: round; }
+  .btn-icon-round svg { width: 24px; height: 24px; fill: none; stroke: var(--neon-blue); stroke-width: 3; }
 
   .badge-status {
     background: rgba(0, 18, 51, 0.85);
-    border: 2px solid var(--neon-blue-border);
+    border: 2px solid var(--neon-blue);
     box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
     border-radius: 30px;
     padding: 4px 12px 4px 6px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex; align-items: center; gap: 8px;
   }
-  .badge-status .avatar {
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    background: #FFD54F;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    border: 2px solid #FFF;
-  }
-  .badge-status span {
-    color: #E0F7FA;
-    font-weight: 900;
-    font-size: 0.78rem;
-    line-height: 1.1;
-  }
+  .badge-status .avatar { width: 34px; height: 34px; border-radius: 50%; background: #FFD54F; display: flex; align-items: center; justify-content: center; border: 2px solid #FFF; }
+  .badge-status span { color: #E0F7FA; font-weight: 900; font-size: 0.78rem; line-height: 1.1; }
 
-  /* TITULO E PLACA */
-  .hero-title-area {
-    text-align: center;
-    margin: 12px 0 16px;
-    position: relative;
-    width: 100%;
-  }
-
+  .hero-title-area { text-align: center; margin: 10px 0; }
   .main-title {
     font-family: 'Baloo 2', cursive;
-    font-size: clamp(2.4rem, 10vw, 3.2rem);
+    font-size: 2.2rem;
     font-weight: 800;
     line-height: 0.9;
     margin: 0;
     color: #FFF;
-    text-shadow: 
-      0 0 10px var(--neon-blue-border),
-      0 0 20px #005f73,
-      0 4px 10px rgba(0,0,0,0.8);
-    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px var(--neon-blue);
     text-transform: uppercase;
   }
+  .main-title .sub-yellow { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
 
-  .main-title .sub-yellow {
-    color: var(--gold);
-    display: block;
-    text-shadow: 
-      0 0 10px #FFC837,
-      0 4px 10px rgba(0,0,0,0.8);
-  }
-
-  .wood-sign {
-    display: inline-block;
-    background: linear-gradient(180deg, var(--wood-1) 0%, var(--wood-2) 100%);
-    border: 3px solid var(--wood-border);
-    border-radius: 18px;
-    padding: 6px 20px;
-    color: #FFE082;
-    font-family: 'Baloo 2', cursive;
-    font-weight: 700;
-    font-size: 0.92rem;
-    box-shadow: 0 6px 0 var(--wood-border), 0 10px 15px rgba(0,0,0,0.5);
-    margin-top: 6px;
-    text-shadow: 0 2px 0 rgba(0,0,0,0.5);
-  }
-
-  .sub-tagline {
-    font-size: 1rem;
-    font-weight: 900;
-    color: #80DEEA;
-    margin-top: 8px;
-    text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
-  }
-
-  /* GRADE DE BOTÕES */
-  .buttons-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px 12px;
+  /* CARROSSEL HORIZONTAL DE BOTÕES 500x500 */
+  .carousel-wrapper {
     width: 100%;
-    margin-top: 8px;
-  }
-
-  .btn-capsule {
-    background: rgba(0, 18, 51, 0.75);
-    border: 2px solid var(--neon-blue-border);
-    border-radius: 50px;
-    padding: 6px 12px 6px 6px;
-    min-height: 68px;
+    margin-top: 10px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    box-shadow: var(--neon-blue-glow);
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-    user-select: none;
+  }
+
+  .carousel-container {
+    width: 100%;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 10px 0 20px 0;
+    scrollbar-width: none; /* Esconde scrollbar */
+  }
+  .carousel-container::-webkit-scrollbar { display: none; }
+
+  /* CARD ELEGANTE DE CADA BOTÃO 500x500 */
+  .card-item {
+    flex: 0 0 82%;
+    max-width: 320px;
+    scroll-snap-align: center;
+    background: rgba(0, 18, 51, 0.8);
+    border: 3px solid var(--neon-blue);
+    border-radius: 28px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: var(--neon-glow);
     text-decoration: none;
+    transition: transform 0.2s ease;
   }
+  .card-item:active { transform: scale(0.97); }
 
-  .btn-capsule::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 8%; width: 84%; height: 40%;
-    background: linear-gradient(180deg, rgba(0, 212, 255, 0.4) 0%, rgba(0, 212, 255, 0) 100%);
-    border-radius: 40px 40px 10px 10px;
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .btn-capsule:active {
-    transform: translateY(4px);
-    box-shadow: var(--neon-blue-glow-active);
-  }
-
-  .btn-capsule .icon-box {
-    width: 48px; 
-    height: 48px;
-    border-radius: 50%;
+  .card-img-box {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 20px;
     overflow: hidden;
-    border: 2px solid var(--neon-blue-border);
-    box-shadow: 0 0 8px var(--neon-blue-border);
-    flex-shrink: 0;
-    background: #000;
+    border: 2px solid var(--neon-blue);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
   }
-
-  .btn-capsule .icon-box img {
+  .card-img-box img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
 
-  .btn-capsule .btn-text {
+  .card-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #FFF;
+    text-shadow: 0 0 8px var(--neon-blue);
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .card-btn-action {
+    margin-top: 8px;
+    background: linear-gradient(180deg, #00d4ff 0%, #005f73 100%);
+    color: #FFF;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 24px;
     font-family: 'Baloo 2', cursive;
     font-weight: 800;
-    font-size: 0.95rem;
-    line-height: 1.1;
-    color: #FFFFFF;
-    text-shadow: 0 0 6px var(--neon-blue-border);
-    flex-grow: 1;
-    text-align: left;
-    z-index: 1;
+    font-size: 1rem;
+    box-shadow: 0 0 10px var(--neon-blue);
   }
 
-  .btn-capsule .arrow-icon {
-    font-size: 14px;
-    color: var(--neon-blue-border);
-    text-shadow: 0 0 6px var(--neon-blue-border);
-    z-index: 1;
+  /* INDICADOR DE NAVEGAÇÃO */
+  .swipe-hint {
+    font-size: 0.85rem;
+    color: #80DEEA;
+    font-weight: 800;
+    text-shadow: 0 0 6px var(--neon-blue);
+    margin-top: -5px;
   }
 
-  .b-medalhas {
-    grid-column: span 2;
-    min-height: 72px;
-    margin-top: 4px;
-    border-color: #FFC837;
-    box-shadow: 0 0 10px #FFC837, inset 0 0 15px rgba(255, 200, 55, 0.4);
-  }
-  .b-medalhas .icon-box {
-    border-color: #FFC837;
-    box-shadow: 0 0 8px #FFC837;
-  }
-  .b-medalhas .btn-text {
-    font-size: 1.1rem;
-    color: #FFF;
-    text-shadow: 0 0 6px #FFC837;
-  }
-  .b-medalhas .arrow-icon {
-    color: #FFC837;
-    text-shadow: 0 0 6px #FFC837;
-  }
-
-  /* BARRA INFERIOR AJUSTADA À MOLDURA */
   nav.bottom-bar {
     position: absolute;
     bottom: 0; left: 0;
     width: 100%;
     background: rgba(0, 18, 51, 0.95);
-    border-top: 2px solid var(--neon-blue-border);
+    border-top: 2px solid var(--neon-blue);
     border-radius: 0 0 32px 32px;
-    padding: 8px 24px 12px;
+    padding: 8px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 100;
   }
 
-  .nav-btn {
-    background: none; border: none;
-    display: flex; flex-direction: column; align-items: center;
-    color: #80DEEA;
-    font-family: 'Baloo 2', cursive;
-    font-weight: 700;
-    font-size: 0.75rem;
-    cursor: pointer;
-  }
+  .nav-btn { background: none; border: none; color: #80DEEA; font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 0.75rem; cursor: pointer; }
   .nav-btn.active { color: var(--gold); }
-  .nav-btn .nav-icon {
-    width: 42px; height: 42px;
-    border-radius: 50%;
-    background: rgba(0, 212, 255, 0.1);
-    border: 1px solid var(--neon-blue-border);
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 2px;
-    font-size: 20px;
-  }
-  .nav-btn.active .nav-icon {
-    background: rgba(255, 200, 55, 0.2);
-    border-color: var(--gold);
-    box-shadow: 0 0 8px var(--gold);
-  }
-
-  .nav-phrase {
-    font-size: 0.72rem;
-    font-weight: 800;
-    color: #E0F7FA;
-    text-align: center;
-    max-width: 160px;
-    line-height: 1.2;
-    text-shadow: 0 0 4px rgba(0, 212, 255, 0.5);
-  }
 </style>
 </head>
 <body>
@@ -319,7 +201,6 @@
     <button class="btn-icon-round" aria-label="Menu">
       <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
-
     <div class="badge-status">
       <div class="avatar">👦</div>
       <span>Você está<br>indo bem!</span>
@@ -327,122 +208,113 @@
   </header>
 
   <div class="hero-title-area">
-    <h1 class="main-title">
-      Aventuras
-      <span class="sub-yellow">na Bíblia</span>
-    </h1>
-    <div class="wood-sign">Explore · Descubra · Aprenda</div>
-    <div class="sub-tagline">Grandes histórias, grandes ensinamentos!</div>
+    <h1 class="main-title">Aventuras <span class="sub-yellow">na Bíblia</span></h1>
   </div>
 
-  <div class="buttons-grid">
+  <!-- NAVEGAÇÃO EM CARROSSEL (DESLIZE PRO LADO) -->
+  <div class="carousel-wrapper">
+    <span class="swipe-hint">👈 Deslize para explorar 👉</span>
+    
+    <div class="carousel-container">
 
-    <a href="paginas/hinos.html" class="btn-capsule">
-      <div class="icon-box"><img src="hinos.jpg" alt="Hinos" loading="lazy"></div>
-      <span class="btn-text">Hinos</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/colorir.html" class="card-item">
+        <div class="card-img-box"><img src="colorir.jpg" alt="Colorir"></div>
+        <div class="card-title">Colorir</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
 
-    <a href="paginas/labirinto.html" class="btn-capsule">
-      <div class="icon-box"><img src="labirinto.jpg" alt="Labirinto" loading="lazy"></div>
-      <span class="btn-text">Labirinto</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/hinos.html" class="card-item">
+        <div class="card-img-box"><img src="hinos.jpg" alt="Hinos"></div>
+        <div class="card-title">Hinos</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
 
-    <a href="paginas/memoria.html" class="btn-capsule">
-      <div class="icon-box"><img src="memoria.jpg" alt="Memória" loading="lazy"></div>
-      <span class="btn-text">Memória</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/labirinto.html" class="card-item">
+        <div class="card-img-box"><img src="labirinto.jpg" alt="Labirinto"></div>
+        <div class="card-title">Labirinto</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
 
-    <a href="paginas/oracao.html" class="btn-capsule">
-      <div class="icon-box"><img src="oracao.jpg" alt="Oração" loading="lazy"></div>
-      <span class="btn-text">Oração</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/memoria.html" class="card-item">
+        <div class="card-img-box"><img src="memoria.jpg" alt="Memória"></div>
+        <div class="card-title">Jogo da Memória</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
 
-    <a href="paginas/colorir.html" class="btn-capsule">
-      <div class="icon-box"><img src="colorir.jpg" alt="Colorir" loading="lazy"></div>
-      <span class="btn-text">Colorir</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/oracao.html" class="card-item">
+        <div class="card-img-box"><img src="oracao.jpg" alt="Oração"></div>
+        <div class="card-title">Oração</div>
+        <button class="card-btn-action">ABRIR ➔</button>
+      </a>
 
-    <a href="paginas/desafios.html" class="btn-capsule">
-      <div class="icon-box"><img src="desafios.jpg" alt="Desafios" loading="lazy"></div>
-      <span class="btn-text">Desafios</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/desafios.html" class="card-item">
+        <div class="card-img-box"><img src="desafios.jpg" alt="Desafios"></div>
+        <div class="card-title">Desafios</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
 
-    <a href="paginas/desafio-familia.html" class="btn-capsule">
-      <div class="icon-box"><img src="desafio-familia.jpg" alt="Desafio em Família" loading="lazy"></div>
-      <span class="btn-text">Desafio em<br>Família</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/desafio-familia.html" class="card-item">
+        <div class="card-img-box"><img src="desafio-familia.jpg" alt="Desafio em Família"></div>
+        <div class="card-title">Desafio em Família</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
 
-    <a href="paginas/encontre-na-biblia.html" class="btn-capsule">
-      <div class="icon-box"><img src="encontre-na-biblia.jpg" alt="Encontre na Bíblia" loading="lazy"></div>
-      <span class="btn-text">Encontre na<br>Bíblia</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/encontre-na-biblia.html" class="card-item">
+        <div class="card-img-box"><img src="encontre-na-biblia.jpg" alt="Encontre na Bíblia"></div>
+        <div class="card-title">Encontre na Bíblia</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
 
-    <a href="paginas/historia.html" class="btn-capsule">
-      <div class="icon-box"><img src="historia.jpg" alt="História" loading="lazy"></div>
-      <span class="btn-text">História</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/historia.html" class="card-item">
+        <div class="card-img-box"><img src="historia.jpg" alt="História"></div>
+        <div class="card-title">Histórias</div>
+        <button class="card-btn-action">LER ➔</button>
+      </a>
 
-    <a href="paginas/monte-palavras.html" class="btn-capsule">
-      <div class="icon-box"><img src="monte-palavras.jpg" alt="Monte Palavras" loading="lazy"></div>
-      <span class="btn-text">Monte<br>Palavras</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/monte-palavras.html" class="card-item">
+        <div class="card-img-box"><img src="monte-palavras.jpg" alt="Monte Palavras"></div>
+        <div class="card-title">Monte Palavras</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
 
-    <a href="paginas/perguntas.html" class="btn-capsule">
-      <div class="icon-box"><img src="perguntas.jpg" alt="Perguntas" loading="lazy"></div>
-      <span class="btn-text">Perguntas</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/perguntas.html" class="card-item">
+        <div class="card-item">
+          <div class="card-img-box"><img src="perguntas.jpg" alt="Perguntas"></div>
+          <div class="card-title">Perguntas / Quiz</div>
+          <button class="card-btn-action">RESPONDER ➔</button>
+        </div>
+      </a>
 
-    <a href="paginas/perguntas-arca.html" class="btn-capsule">
-      <div class="icon-box"><img src="perguntas-arca.jpg" alt="Perguntas sobre a Arca" loading="lazy"></div>
-      <span class="btn-text">Perguntas<br>da Arca</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/perguntas-arca.html" class="card-item">
+        <div class="card-img-box"><img src="perguntas-arca.jpg" alt="Perguntas sobre a Arca"></div>
+        <div class="card-title">Perguntas da Arca</div>
+        <button class="card-btn-action">RESPONDER ➔</button>
+      </a>
 
-    <a href="paginas/quebra-cabeca.html" class="btn-capsule">
-      <div class="icon-box"><img src="quebra-cabeca.jpg" alt="Quebra-Cabeça" loading="lazy"></div>
-      <span class="btn-text">Quebra-<br>Cabeça</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/quebra-cabeca.html" class="card-item">
+        <div class="card-img-box"><img src="quebra-cabeca.jpg" alt="Quebra-Cabeça"></div>
+        <div class="card-title">Quebra-Cabeça</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
 
-    <a href="paginas/verso-do-dia.html" class="btn-capsule">
-      <div class="icon-box"><img src="verso-do-dia.jpg" alt="Verso do Dia" loading="lazy"></div>
-      <span class="btn-text">Verso do<br>Dia</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/verso-do-dia.html" class="card-item">
+        <div class="card-img-box"><img src="verso-do-dia.jpg" alt="Verso do Dia"></div>
+        <div class="card-title">Verso do Dia</div>
+        <button class="card-btn-action">VER ➔</button>
+      </a>
 
-    <a href="paginas/minhas-medalhas.html" class="btn-capsule b-medalhas">
-      <div class="icon-box"><img src="minhas-medalhas.jpg" alt="Minhas Medalhas" loading="lazy"></div>
-      <span class="btn-text">Minhas Medalhas & Conquistas</span>
-      <span class="arrow-icon">➔</span>
-    </a>
+      <a href="paginas/minhas-medalhas.html" class="card-item">
+        <div class="card-img-box"><img src="minhas-medalhas.jpg" alt="Minhas Medalhas"></div>
+        <div class="card-title">Minhas Conquistas</div>
+        <button class="card-btn-action">VER MEDALHAS ➔</button>
+      </a>
 
+    </div>
   </div>
 
   <nav class="bottom-bar">
-    <button class="nav-btn active">
-      <div class="nav-icon">🏠</div>
-      Início
-    </button>
-
-    <div class="nav-phrase">
-      Com a Bíblia, todo dia é uma nova descoberta!
-    </div>
-
-    <button class="nav-btn">
-      <div class="nav-icon">⚙️</div>
-      Config.
-    </button>
+    <button class="nav-btn active">🏠 Início</button>
+    <button class="nav-btn">⚙️ Config.</button>
   </nav>
 
 </div>
