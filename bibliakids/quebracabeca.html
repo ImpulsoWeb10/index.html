@@ -3,66 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Quebra-Cabeça Infantil</title>
+  <title>Quebra-Cabeça da Arca de Noé</title>
   <style>
     * {
       box-sizing: border-box;
-      touch-action: none; /* Previne rolagem de tela ao arrastar no celular */
+      touch-action: none;
       user-select: none;
+      -webkit-user-select: none;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      padding: 0;
-      background-color: #f0f8ff;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #e0f2fe;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka', cursive, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      height: 100vh;
+      min-height: 100vh;
       overflow: hidden;
+      color: #0c4a6e;
     }
 
     header {
-      padding: 10px;
+      width: 100%;
+      padding: 10px 15px;
       text-align: center;
+      background-color: #38bdf8;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
     }
 
     h1 {
-      margin: 0;
       font-size: 1.2rem;
-      color: #ff4500;
+      color: #ffffff;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
 
-    /* Área do tabuleiro (tamanho padrão de celular) */
-    #board {
-      width: 90vw;
-      height: 60vh;
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
       max-width: 360px;
-      max-height: 480px;
-      border: 3px dashed #4ca3dd;
-      background-color: #ffffff;
-      position: relative;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
-    /* Slot onde as peças se encaixam */
+    .counter {
+      font-size: 0.95rem;
+      font-weight: bold;
+      background: #ffffff;
+      padding: 4px 12px;
+      border-radius: 15px;
+      color: #0284c7;
+    }
+
+    .btn {
+      background-color: #facc15;
+      color: #713f12;
+      border: none;
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      border-radius: 15px;
+      box-shadow: 0 3px 0 #ca8a04;
+      cursor: pointer;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #ca8a04;
+    }
+
+    #game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex: 1;
+      padding: 10px 0;
+    }
+
+    /* Tabuleiro do quebra-cabeça */
+    #board {
+      width: 320px;
+      height: 384px;
+      background-color: #ffffff;
+      border: 4px solid #0284c7;
+      border-radius: 12px;
+      position: relative;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    /* Slots de destino */
     .slot {
       position: absolute;
       box-sizing: border-box;
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      border: 1px dashed #bae6fd;
     }
 
-    /* Peças do quebra-cabeça */
+    /* Peças soltas e encaixadas */
     .piece {
       position: absolute;
-      border: 1px solid #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      cursor: grab;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.25);
       border-radius: 4px;
       z-index: 10;
+      cursor: grab;
+      background-repeat: no-repeat;
     }
 
     .piece.placed {
@@ -72,74 +126,132 @@
       cursor: default;
     }
 
-    /* Banco de peças na parte inferior */
+    /* Bandeja inferior onde ficam as peças para arrastar */
     #tray {
       width: 100vw;
-      height: 25vh;
-      background-color: #ffe4e1;
-      border-top: 4px solid #ff69b4;
+      height: 130px;
+      background-color: #bae6fd;
+      border-top: 4px solid #38bdf8;
       position: relative;
       overflow: hidden;
     }
 
-    #win-message {
+    /* Mensagem de Vitória */
+    #win-modal {
       display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #32cd32;
-      color: white;
-      padding: 15px 25px;
-      font-size: 1.5rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .win-card {
+      background: #ffffff;
+      padding: 25px;
       border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      z-index: 100;
       text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      border: 4px solid #facc15;
+      max-width: 85%;
+    }
+
+    .win-card h2 {
+      color: #0284c7;
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .win-card p {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: #334155;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>🧩 Monte o Quebra-Cabeça!</h1>
+    <h1>🚢 Quebra-Cabeça da Arca</h1>
+    <div class="controls">
+      <div class="counter">Movimentos: <span id="moves-count">0</span></div>
+      <button class="btn" id="restart-btn">Embaralhar</button>
+    </div>
   </header>
 
-  <div id="board"></div>
+  <div id="game-container">
+    <div id="board"></div>
+  </div>
 
   <div id="tray"></div>
 
-  <div id="win-message">🎉 Parabéns! Você conseguiu!</div>
+  <div id="win-modal">
+    <div class="win-card">
+      <h2>🎉 Parabéns!</h2>
+      <p>Você completou o quebra-cabeça!</p>
+      <button class="btn" id="modal-restart-btn">Jogar Novamente</button>
+    </div>
+  </div>
 
   <script>
     const COLS = 5;
     const ROWS = 6;
-    const TOTAL_PIECES = COLS * ROWS; // 30 peças
+    const TOTAL_PIECES = COLS * ROWS;
+    const IMAGE_SRC = 'noe.jpg';
 
     const board = document.getElementById('board');
     const tray = document.getElementById('tray');
-    const winMessage = document.getElementById('win-message');
-
-    // Imagem infantil via URL (pode substituir por qualquer imagem)
-    const imageUrl = 'https://picsum.photos/id/1025/360/480';
+    const movesDisplay = document.getElementById('moves-count');
+    const restartBtn = document.getElementById('restart-btn');
+    const modalRestartBtn = document.getElementById('modal-restart-btn');
+    const winModal = document.getElementById('win-modal');
 
     let pieceWidth, pieceHeight;
     let placedCount = 0;
+    let movesCount = 0;
 
-    function initGame() {
+    // Garante que a imagem está carregada para pegar proporções perfeitas sem deformar
+    const img = new Image();
+    img.src = IMAGE_SRC;
+    img.onload = () => {
+      setupDimensions();
+      initGame();
+    };
+    img.onerror = () => {
+      // Caso a imagem demore ou seja carregada offline, roda com dimensão padrão
+      setupDimensions();
+      initGame();
+    };
+
+    function setupDimensions() {
       const boardWidth = board.clientWidth;
       const boardHeight = board.clientHeight;
 
       pieceWidth = boardWidth / COLS;
       pieceHeight = boardHeight / ROWS;
+    }
 
+    function initGame() {
+      board.innerHTML = '';
+      tray.innerHTML = '';
+      winModal.style.display = 'none';
+      placedCount = 0;
+      movesCount = 0;
+      movesDisplay.textContent = movesCount;
+
+      const boardWidth = board.clientWidth;
+      const boardHeight = board.clientHeight;
+
+      // Lista para controlar e embaralhar as peças na bandeja
       const pieces = [];
 
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
-          const index = r * COLS + c;
-
-          // Criar Slot de destino no tabuleiro
+          // Criar Slot visual no tabuleiro
           const slot = document.createElement('div');
           slot.classList.add('slot');
           slot.style.width = `${pieceWidth}px`;
@@ -148,116 +260,147 @@
           slot.style.top = `${r * pieceHeight}px`;
           board.appendChild(slot);
 
-          // Criar Peça
+          // Criar Peça recortada da imagem original
           const piece = document.createElement('div');
           piece.classList.add('piece');
           piece.style.width = `${pieceWidth}px`;
           piece.style.height = `${pieceHeight}px`;
-          piece.style.backgroundImage = `url(${imageUrl})`;
+          piece.style.backgroundImage = `url('${IMAGE_SRC}')`;
           piece.style.backgroundSize = `${boardWidth}px ${boardHeight}px`;
           piece.style.backgroundPosition = `-${c * pieceWidth}px -${r * pieceHeight}px`;
-          
-          // Guardar a posição correta da peça
+
           piece.dataset.correctLeft = c * pieceWidth;
           piece.dataset.correctTop = r * pieceHeight;
 
-          // Posicionar na bandeja de forma aleatória
-          const randomX = Math.random() * (window.innerWidth - pieceWidth);
-          const randomY = Math.random() * (tray.clientHeight - pieceHeight);
-          
-          piece.style.left = `${randomX}px`;
-          piece.style.top = `${randomY}px`;
-
-          tray.appendChild(piece);
-          enableDrag(piece);
+          pieces.push(piece);
         }
       }
+
+      // Embaralhar a ordem de inserção das peças na bandeja
+      pieces.sort(() => Math.random() - 0.5);
+
+      // Posicionar peças aleatoriamente na bandeja inferior
+      pieces.forEach(piece => {
+        const trayWidth = tray.clientWidth;
+        const trayHeight = tray.clientHeight;
+
+        const maxLeft = Math.max(0, trayWidth - pieceWidth);
+        const maxTop = Math.max(0, trayHeight - pieceHeight);
+
+        const randomLeft = Math.random() * maxLeft;
+        const randomTop = Math.random() * maxTop;
+
+        piece.style.left = `${randomLeft}px`;
+        piece.style.top = `${randomTop}px`;
+
+        tray.appendChild(piece);
+        makeDraggable(piece);
+      });
     }
 
-    function enableDrag(element) {
-      let active = false;
-      let currentX, currentY, initialX, initialY;
-      let xOffset = 0, yOffset = 0;
+    function makeDraggable(element) {
+      let isDragging = false;
+      let startX, startY;
+      let initialLeft, initialTop;
 
-      element.addEventListener('touchstart', dragStart, {passive: false});
-      element.addEventListener('touchend', dragEnd, {passive: false});
-      element.addEventListener('touchmove', drag, {passive: false});
-
-      element.addEventListener('mousedown', dragStart);
-      element.addEventListener('mouseup', dragEnd);
-      element.addEventListener('mousemove', drag);
-
-      function dragStart(e) {
+      const onStart = (e) => {
         if (element.classList.contains('placed')) return;
 
-        if (e.type === 'touchstart') {
-          initialX = e.touches[0].clientX - xOffset;
-          initialY = e.touches[0].clientY - yOffset;
-        } else {
-          initialX = e.clientX - xOffset;
-          initialY = e.clientY - yOffset;
-        }
+        isDragging = true;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-        // Mover a peça para o corpo do documento para arrastar livremente
+        startX = clientX;
+        startY = clientY;
+
+        const rect = element.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+
+        // Move a peça para o body para que transite livremente por cima de tudo
         document.body.appendChild(element);
-        active = true;
-      }
+        element.style.left = `${initialLeft}px`;
+        element.style.top = `${initialTop}px`;
+        element.style.zIndex = '1000';
+      };
 
-      function drag(e) {
-        if (!active) return;
-        e.preventDefault();
+      const onMove = (e) => {
+        if (!isDragging) return;
+        if (e.cancelable) e.preventDefault();
 
-        if (e.type === 'touchmove') {
-          currentX = e.touches[0].clientX - initialX;
-          currentY = e.touches[0].clientY - initialY;
-        } else {
-          currentX = e.clientX - initialX;
-          currentY = e.clientY - initialY;
-        }
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-        xOffset = currentX;
-        yOffset = currentY;
+        const deltaX = clientX - startX;
+        const deltaY = clientY - startY;
 
-        element.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-      }
+        element.style.left = `${initialLeft + deltaX}px`;
+        element.style.top = `${initialTop + deltaY}px`;
+      };
 
-      function dragEnd() {
-        if (!active) return;
-        active = false;
+      const onEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        element.style.zIndex = '10';
+
+        movesCount++;
+        movesDisplay.textContent = movesCount;
 
         const rect = element.getBoundingClientRect();
         const boardRect = board.getBoundingClientRect();
 
-        // Posição relativa ao tabuleiro
-        const relativeLeft = rect.left - boardRect.left;
-        const relativeTop = rect.top - boardRect.top;
+        const currentLeft = rect.left - boardRect.left;
+        const currentTop = rect.top - boardRect.top;
 
         const targetLeft = parseFloat(element.dataset.correctLeft);
         const targetTop = parseFloat(element.dataset.correctTop);
 
-        // Margem de erro para encaixe (20px)
-        const tolerance = 20;
+        // Tolerância de encaixe em pixels para facilitar para crianças
+        const tolerance = 25;
 
         if (
-          Math.abs(relativeLeft - targetLeft) < tolerance &&
-          Math.abs(relativeTop - targetTop) < tolerance
+          Math.abs(currentLeft - targetLeft) < tolerance &&
+          Math.abs(currentTop - targetTop) < tolerance
         ) {
-          // Encaixe Correto!
+          // Encaixe correto no tabuleiro
           element.classList.add('placed');
-          element.style.transform = 'none';
           element.style.left = `${targetLeft}px`;
           element.style.top = `${targetTop}px`;
           board.appendChild(element);
 
           placedCount++;
           if (placedCount === TOTAL_PIECES) {
-            winMessage.style.display = 'block';
+            setTimeout(() => {
+              winModal.style.display = 'flex';
+            }, 200);
+          }
+        } else {
+          // Se soltar fora da área válida, retorna para a bandeja
+          const trayRect = tray.getBoundingClientRect();
+          if (
+            rect.bottom < trayRect.top ||
+            rect.top > trayRect.bottom ||
+            rect.right < trayRect.left ||
+            rect.left > trayRect.right
+          ) {
+            tray.appendChild(element);
+            element.style.left = `${Math.random() * Math.max(0, tray.clientWidth - pieceWidth)}px`;
+            element.style.top = `${Math.random() * Math.max(0, tray.clientHeight - pieceHeight)}px`;
           }
         }
-      }
+      };
+
+      element.addEventListener('touchstart', onStart, { passive: false });
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('touchend', onEnd);
+
+      element.addEventListener('mousedown', onStart);
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onEnd);
     }
 
-    window.onload = initGame;
+    restartBtn.addEventListener('click', initGame);
+    modalRestartBtn.addEventListener('click', initGame);
   </script>
 </body>
 </html>
