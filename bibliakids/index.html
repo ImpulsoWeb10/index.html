@@ -12,6 +12,7 @@
   :root {
     --neon-blue: #00d4ff;
     --gold: #FFC837;
+    --bg-blue: #020611; /* Cor azul contínua de fundo */
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -22,11 +23,13 @@
     width: 100%;
     height: 100%;
     font-family: 'Nunito', sans-serif;
-    background: #020611;
+    background: var(--bg-blue);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto; /* Permite rolar e atualizar com puxão */
   }
 
   /* CONTAINER PROPORCIONAL À IMAGEM CAPA (843 x 1264) */
@@ -34,22 +37,23 @@
     position: relative;
     width: 100vw;
     height: 100dvh;
-    max-width: calc(100dvh * (843 / 1264)); /* Mantém proporção perfeita da imagem */
+    max-width: calc(100dvh * (843 / 1264));
     max-height: calc(100vw * (1264 / 843));
-    background: url('capa.jpg') no-repeat center center;
+    background: url('capa.jpg') no-repeat top center;
     background-size: 100% 100%;
     box-shadow: 0 0 25px rgba(0,0,0,0.9);
     overflow: hidden;
+    flex-shrink: 0;
   }
 
   /* ---------------------------------------------------
      BOTÕES SUPERIORES COM POSICIONAMENTO PRECISO
   --------------------------------------------------- */
   
-  /* Botão Menu (Ícone das 3 barras no canto superior esquerdo) */
+  /* Botão Menu */
   .btn-menu-overlay {
     position: absolute;
-    top: 2.8%;
+    top: 2.5%;
     left: 4.2%;
     width: 12.5%;
     height: 6.2%;
@@ -60,10 +64,10 @@
     z-index: 20;
   }
 
-  /* Botão Perfil/Status ("Você está indo bem!" no canto superior direito) */
+  /* Botão Perfil/Status */
   .btn-profile-overlay {
     position: absolute;
-    top: 2.5%;
+    top: 2.2%;
     right: 4.2%;
     width: 44%;
     height: 6.5%;
@@ -75,12 +79,12 @@
   }
 
   /* ---------------------------------------------------
-     CARROSSEL DOS JOGOS (SUBIDO LIGEIRAMENTE)
+     CARROSSEL DOS JOGOS
   --------------------------------------------------- */
   .carousel-wrapper {
     width: 100%;
     position: absolute;
-    top: 66%; /* Posição ajustada logo abaixo da Bíblia */
+    top: 65%; /* Posição ajustada logo abaixo da Bíblia */
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
@@ -104,7 +108,6 @@
     display: flex;
     gap: 10px;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
     padding: 4px 16px;
     scrollbar-width: none;
   }
@@ -114,7 +117,6 @@
   .card-item {
     flex: 0 0 44%;
     max-width: 145px;
-    scroll-snap-align: center;
     background: rgba(2, 6, 17, 0.92);
     border: 2px solid var(--neon-blue);
     border-radius: 16px;
@@ -170,10 +172,10 @@
   }
 
   /* ---------------------------------------------------
-     BOTÕES INFERIORES COM POSICIONAMENTO EXATO
+     BOTÕES INFERIORES
   --------------------------------------------------- */
   
-  /* Botão Início (Casinha Amarela / Canto Inferior Esquerdo) */
+  /* Botão Início (Casinha Amarela) */
   .btn-home-overlay {
     position: absolute;
     bottom: 3.5%;
@@ -187,7 +189,7 @@
     z-index: 20;
   }
 
-  /* Botão Configurações (Engrenagem Azul / Canto Inferior Direito) */
+  /* Botão Configurações (Engrenagem Azul) */
   .btn-config-overlay {
     position: absolute;
     bottom: 3.5%;
@@ -201,12 +203,47 @@
     z-index: 20;
   }
 
-  /* Efeito de toque para feedback do clique */
   .btn-menu-overlay:active,
   .btn-profile-overlay:active,
   .btn-home-overlay:active,
   .btn-config-overlay:active {
     background: rgba(255, 255, 255, 0.25);
+  }
+
+  /* ---------------------------------------------------
+     RODAPÉ AZUL CONTINUAÇÃO COM CADEADO E LINK IMPULSOWEB
+  --------------------------------------------------- */
+  .footer-bar {
+    width: 100%;
+    background: var(--bg-blue);
+    padding: 12px 0 16px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: #00d4ff;
+    z-index: 30;
+  }
+
+  .footer-bar svg {
+    width: 14px;
+    height: 14px;
+    fill: #00d4ff;
+  }
+
+  .footer-bar a {
+    color: #00d4ff;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease;
+  }
+
+  .footer-bar a:hover {
+    color: #FFC837;
+    text-decoration: underline;
   }
 </style>
 </head>
@@ -214,17 +251,17 @@
 
 <div class="app-container">
 
-  <!-- 1. BOTÃO MENU (Canto Superior Esquerdo) -->
+  <!-- 1. BOTÃO MENU -->
   <button class="btn-menu-overlay" onclick="alert('Menu aberto!')" aria-label="Menu"></button>
 
-  <!-- 2. BOTÃO PERFIL / STATUS (Canto Superior Direito) -->
+  <!-- 2. BOTÃO PERFIL / STATUS -->
   <button class="btn-profile-overlay" onclick="alert('Perfil do Usuário!')" aria-label="Perfil"></button>
 
-  <!-- 3. CARROSSEL DE JOGOS (Posição Central Ajustada) -->
+  <!-- 3. CARROSSEL DE JOGOS -->
   <div class="carousel-wrapper">
     <span class="swipe-hint">👈 Deslize para jogar 👉</span>
     
-    <div class="carousel-container">
+    <div class="carousel-container" id="carousel">
 
       <a href="paginas/colorir.html" class="card-item">
         <div class="card-img-box"><img src="colorir.jpg" alt="Colorir"></div>
@@ -319,13 +356,52 @@
     </div>
   </div>
 
-  <!-- 4. BOTÃO INÍCIO (Exatamente sobre a casinha amarela) -->
+  <!-- 4. BOTÃO INÍCIO -->
   <button class="btn-home-overlay" onclick="window.location.reload();" aria-label="Início"></button>
 
-  <!-- 5. BOTÃO CONFIGURAÇÕES (Exatamente sobre a engrenagem azul) -->
+  <!-- 5. BOTÃO CONFIGURAÇÕES -->
   <button class="btn-config-overlay" onclick="alert('Abrir Configurações!')" aria-label="Configurações"></button>
 
 </div>
+
+<!-- 6. RODAPÉ SSL E LINK IMPULSOWEB -->
+<div class="footer-bar">
+  <svg viewBox="0 0 24 24">
+    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+  </svg>
+  <span>Proteção SSL | Desenvolvido por <a href="https://impulsoweb.net.br/" target="_blank" rel="noopener">ImpulsoWeb</a></span>
+</div>
+
+<!-- SCRIPT DE MOVIMENTO AUTOMÁTICO DO CARROSSEL -->
+<script>
+  const container = document.getElementById('carousel');
+  let autoScrollTimer = null;
+
+  function startAutoScroll() {
+    stopAutoScroll();
+    autoScrollTimer = setInterval(() => {
+      if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 1) {
+        container.scrollLeft = 0;
+      } else {
+        container.scrollLeft += 1; // Velocidade de rolagem suave
+      }
+    }, 25);
+  }
+
+  function stopAutoScroll() {
+    if (autoScrollTimer) {
+      clearInterval(autoScrollTimer);
+      autoScrollTimer = null;
+    }
+  }
+
+  // Inicia a movimentação automática
+  startAutoScroll();
+
+  // Pausa se o usuário interagir
+  container.addEventListener('touchstart', stopAutoScroll, { passive: true });
+  container.addEventListener('mousedown', stopAutoScroll);
+</script>
 
 </body>
 </html>
