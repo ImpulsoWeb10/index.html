@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -22,6 +21,7 @@
       background-color: #e0f2fe;
       font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka', cursive, sans-serif;
       color: #0c4a6e;
+      font-weight: 900;
     }
 
     #app-container {
@@ -49,7 +49,7 @@
     }
 
     h1 {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: 900;
       color: #ffffff;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
@@ -68,8 +68,8 @@
       background-color: #facc15;
       color: #713f12;
       border: none;
-      padding: 8px 12px;
-      font-size: 0.95rem;
+      padding: 10px 14px;
+      font-size: 1.05rem;
       font-weight: 900;
       border-radius: 12px;
       box-shadow: 0 3px 0 #ca8a04;
@@ -102,12 +102,12 @@
     }
 
     .btn-side {
-      padding: 10px 8px;
+      padding: 12px 8px;
       border-radius: 12px;
       writing-mode: vertical-rl;
       text-orientation: mixed;
       letter-spacing: 1px;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       font-weight: 900;
     }
 
@@ -173,10 +173,10 @@
       position: absolute;
       bottom: 8px;
       left: 10px;
-      font-size: 0.95rem;
+      font-size: 1.1rem;
       font-weight: 900;
       background: #ffffff;
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 14px;
       color: #0284c7;
       box-shadow: 0 2px 5px rgba(0,0,0,0.15);
@@ -192,7 +192,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.8);
       z-index: 200;
       justify-content: center;
       align-items: center;
@@ -205,7 +205,7 @@
       text-align: center;
       box-shadow: 0 8px 25px rgba(0,0,0,0.4);
       border: 4px solid #facc15;
-      width: 94vw;
+      width: 95vw;
       max-width: 440px;
       max-height: 92vh;
       display: flex;
@@ -217,7 +217,7 @@
 
     .modal-card h2 {
       color: #0284c7;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       font-weight: 900;
     }
 
@@ -253,10 +253,10 @@
       background-color: #0284c7;
       color: #ffffff;
       border: none;
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       font-weight: 900;
-      width: 42px;
-      height: 42px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
       box-shadow: 0 3px 0 #0369a1;
       cursor: pointer;
@@ -281,26 +281,26 @@
     }
 
     .verse-title {
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       font-weight: 900;
       color: #7e22ce;
     }
 
     .verse-text {
-      font-size: 0.95rem;
-      font-weight: 800;
+      font-size: 1.05rem;
+      font-weight: 900;
       color: #0f172a;
       line-height: 1.4;
     }
 
-    .ver-tudo-btn {
+    .resumo-btn {
       align-self: flex-end;
       background: #0284c7;
       color: #ffffff;
       border: none;
       border-radius: 12px;
-      padding: 8px 14px;
-      font-size: 0.9rem;
+      padding: 10px 16px;
+      font-size: 1rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
@@ -310,7 +310,7 @@
       touch-action: manipulation;
     }
 
-    .ver-tudo-btn:active {
+    .resumo-btn:active {
       transform: translateY(2px);
       box-shadow: 0 0 0 #0369a1;
     }
@@ -323,7 +323,7 @@
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       border: 5px solid #a855f7;
-      width: 94vw;
+      width: 95vw;
       max-width: 480px;
       max-height: 90vh;
       display: flex;
@@ -335,7 +335,7 @@
 
     .story-card h2 {
       color: #6b21a8;
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 900;
     }
 
@@ -348,8 +348,8 @@
     }
 
     .story-text {
-      font-size: 1rem;
-      font-weight: 800;
+      font-size: 1.1rem;
+      font-weight: 900;
       color: #0f172a;
       line-height: 1.5;
       text-align: justify;
@@ -365,8 +365,8 @@
       background-color: #4ade80;
       color: #14532d;
       border: none;
-      padding: 12px 20px;
-      font-size: 1.05rem;
+      padding: 14px 20px;
+      font-size: 1.15rem;
       font-weight: 900;
       border-radius: 14px;
       box-shadow: 0 4px 0 #16a34a;
@@ -381,11 +381,23 @@
     }
 
     .model-img {
-      max-width: 82vw;
+      max-width: 85vw;
       max-height: 52vh;
       object-fit: contain;
       border-radius: 10px;
       border: 3px solid #0284c7;
+    }
+
+    /* AJUSTES ESPECÍFICOS PARA CELULAR (TELAS PEQUENAS) */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.2rem; }
+      .btn { font-size: 0.95rem; padding: 8px 10px; }
+      .verse-title { font-size: 1.1rem; }
+      .verse-text { font-size: 1rem; font-weight: 900; }
+      .resumo-btn { font-size: 0.95rem; padding: 8px 14px; }
+      .story-card h2 { font-size: 1.25rem; }
+      .story-text { font-size: 1.05rem; font-weight: 900; }
+      .btn-go-puzzle { font-size: 1.05rem; padding: 12px; }
     }
   </style>
 </head>
@@ -427,7 +439,7 @@
         <button class="carousel-btn" id="prev-btn">❮</button>
         <div class="carousel-display">
           <img src="noe.jpg" id="carousel-img" class="carousel-img" alt="Imagem selecionada">
-          <span id="carousel-title" style="font-size:1.1rem; font-weight:900; color:#0c4a6e;">Noé 1</span>
+          <span id="carousel-title" style="font-size:1.2rem; font-weight:900; color:#0c4a6e;">Noé 1</span>
         </div>
         <button class="carousel-btn" id="next-btn">❯</button>
       </div>
@@ -436,11 +448,11 @@
       <div class="verse-box">
         <span class="verse-title" id="verse-ref">Gênesis 7:1</span>
         <p class="verse-text" id="verse-content">"Depois, disse o SENHOR a Noé: Entra tu e toda a tua casa na arca..."</p>
-        <button class="ver-tudo-btn" id="ver-tudo-btn">Resumo ➔</button>
+        <button class="resumo-btn" id="resumo-btn">Resumo ➔</button>
       </div>
 
-      <button class="btn btn-model" id="confirm-carousel-btn" style="width: 100%; padding: 12px; font-size: 1rem;">Usar Esta Imagem</button>
-      <button class="btn" id="close-select-btn" style="padding: 8px 16px; font-size: 0.85rem;">Cancelar</button>
+      <button class="btn btn-model" id="confirm-carousel-btn" style="width: 100%; padding: 12px; font-size: 1.05rem;">Usar Esta Imagem</button>
+      <button class="btn" id="close-select-btn" style="padding: 8px 16px; font-size: 0.9rem;">Cancelar</button>
     </div>
   </div>
 
@@ -458,7 +470,7 @@
   <div class="modal" id="image-modal">
     <div class="modal-card">
       <img src="noe.jpg" id="model-img-element" alt="Modelo da Arca" class="model-img">
-      <p style="font-size:1rem; color:#0f172a; font-weight:900;">Vamos lá amiguinhos, montar esse animado quebra-cabeça!</p>
+      <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Vamos lá amiguinhos, montar esse animado quebra-cabeça!</p>
       <button class="btn" id="close-model-btn">Fechar</button>
     </div>
   </div>
@@ -467,8 +479,8 @@
   <div class="modal" id="lock-modal">
     <div class="modal-card">
       <h2>⚠️ Mudar de Nível</h2>
-      <p style="font-size:1rem; color:#0f172a; font-weight:900;">Você já está jogando! Clique em <strong>VOLTAR</strong> para zerar e escolher outro nível.</p>
-      <button class="btn btn-back" id="lock-reset-btn" style="writing-mode: horizontal-tb; font-size: 1rem; padding: 10px 20px;">VOLTAR</button>
+      <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Você já está jogando! Clique em <strong>VOLTAR</strong> para zerar e escolher outro nível.</p>
+      <button class="btn btn-back" id="lock-reset-btn" style="writing-mode: horizontal-tb; font-size: 1.05rem; padding: 10px 20px;">VOLTAR</button>
     </div>
   </div>
 
@@ -476,16 +488,17 @@
   <div class="modal" id="win-modal">
     <div class="modal-card">
       <h2>🎉 Parabéns!</h2>
-      <p style="font-size:1rem; color:#0f172a; font-weight:900;">Você completou o quebra-cabeça!</p>
+      <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Você completou o quebra-cabeça!</p>
       <button class="btn" id="modal-restart-btn">Jogar Novamente</button>
     </div>
   </div>
 
   <script>
+    // Suporte às imagens .jpg e .jpeg para compatibilidade em celulares
     const IMAGES = [
       {
         id: 'noe1',
-        src: 'noe.jpg',
+        srcs: ['noe.jpg', 'noe.jpeg', 'noe1.jpg', 'noe1.jpeg'],
         label: 'Noé 1 - Entrando na Arca',
         ref: 'Gênesis 7:1',
         verse: '"Depois, disse o SENHOR a Noé: Entra tu e toda a tua casa na arca, porque te hei visto justo diante de mim nesta geração..."',
@@ -493,7 +506,7 @@
       },
       {
         id: 'noe2',
-        src: 'noe1.jpg',
+        srcs: ['noe1.jpg', 'noe1.jpeg', 'noe.jpg', 'noe.jpeg'],
         label: 'Noé 2 - Animais e Família Entrando',
         ref: 'Gênesis 7:8-9',
         verse: '"Dos animais limpos, e dos animais que não são limpos, e das aves... entraram de dois em dois para junto de Noé na arca..."',
@@ -501,7 +514,7 @@
       },
       {
         id: 'noe3',
-        src: 'noe2.jpg',
+        srcs: ['noe2.jpg', 'noe2.jpeg', 'noe.jpg', 'noe.jpeg'],
         label: 'Noé 3 - 40 Dias no Dilúvio',
         ref: 'Gênesis 7:12',
         verse: '"E houve chuva sobre a terra quarenta dias e quarenta noites."',
@@ -509,7 +522,7 @@
       },
       {
         id: 'noe4',
-        src: 'noe3.jpg',
+        srcs: ['noe3.jpg', 'noe3.jpeg', 'noe.jpg', 'noe.jpeg'],
         label: 'Noé 4 - Construindo a Arca',
         ref: 'Gênesis 6:22',
         verse: '"Assim fez Noé; conforme a tudo o que Deus lhe mandou, assim o fez."',
@@ -517,7 +530,7 @@
       },
       {
         id: 'noe5',
-        src: 'noe4.jpg',
+        srcs: ['noe4.jpg', 'noe4.jpeg', 'noe.jpg', 'noe.jpeg'],
         label: 'Noé 5 - Repouso no Monte Ararate',
         ref: 'Gênesis 8:4',
         verse: '"E a arca repousou, no sétimo mês, no dia dezessete do mês, sobre os montes de Ararate."',
@@ -526,7 +539,7 @@
     ];
 
     let currentImageIndex = 0;
-    let currentImageSrc = IMAGES[0].src;
+    let currentImageSrc = IMAGES[0].srcs[0];
 
     let currentLevel = null;
     let COLS = 4;
@@ -562,7 +575,7 @@
 
     const verseRef = document.getElementById('verse-ref');
     const verseContent = document.getElementById('verse-content');
-    const verTudoBtn = document.getElementById('ver-tudo-btn');
+    const resumoBtn = document.getElementById('resumo-btn');
 
     const storyTitle = document.getElementById('story-title');
     const storyImg = document.getElementById('story-img');
@@ -574,14 +587,24 @@
     let placedCount = 0;
     let movesCount = 0;
 
+    // Função de carregamento seguro de imagem para celulares
+    function setImageWithFallback(imgElement, sources, index = 0) {
+      if (!sources || index >= sources.length) return;
+      imgElement.src = sources[index];
+      imgElement.onerror = () => {
+        if (index + 1 < sources.length) {
+          setImageWithFallback(imgElement, sources, index + 1);
+        }
+      };
+    }
+
     window.addEventListener('resize', () => {
       setupDimensions();
     });
 
     function updateCarouselView() {
       const item = IMAGES[currentImageIndex];
-      carouselImg.src = item.src;
-      carouselImg.onerror = () => { carouselImg.src = 'noe.jpg'; };
+      setImageWithFallback(carouselImg, item.srcs);
       carouselTitle.textContent = item.label;
       verseRef.textContent = item.ref;
       verseContent.textContent = item.verse;
@@ -590,17 +613,16 @@
     function openStoryModal() {
       const item = IMAGES[currentImageIndex];
       storyTitle.textContent = `${item.label} (${item.ref})`;
-      storyImg.src = item.src;
-      storyImg.onerror = () => { storyImg.src = 'noe.jpg'; };
+      setImageWithFallback(storyImg, item.srcs);
       storyFullText.textContent = item.summary;
       selectModal.style.display = 'none';
       storyModal.style.display = 'flex';
     }
 
     function applySelectedImage() {
-      currentImageSrc = IMAGES[currentImageIndex].src;
-      modelImgElement.src = currentImageSrc;
-      modelImgElement.onerror = () => { modelImgElement.src = 'noe.jpg'; };
+      const item = IMAGES[currentImageIndex];
+      currentImageSrc = item.srcs[0];
+      setImageWithFallback(modelImgElement, item.srcs);
       selectModal.style.display = 'none';
       storyModal.style.display = 'none';
       clearAllPieces();
@@ -872,7 +894,7 @@
       updateCarouselView();
     });
 
-    verTudoBtn.addEventListener('click', openStoryModal);
+    resumoBtn.addEventListener('click', openStoryModal);
     confirmCarouselBtn.addEventListener('click', applySelectedImage);
     storyGoPuzzleBtn.addEventListener('click', applySelectedImage);
 
@@ -912,10 +934,7 @@
 
     modalRestartBtn.addEventListener('click', initGame);
 
-    const imgLoader = new Image();
-    imgLoader.src = currentImageSrc;
-    imgLoader.onload = () => setupDimensions();
-    imgLoader.onerror = () => setupDimensions();
+    setupDimensions();
   </script>
 </body>
 </html>
