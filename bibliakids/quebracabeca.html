@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Quebra-Cabeça da Arca de Noé</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #e0f2fe;
+      font-family: Arial, Helvetica, sans-serif !important;
+      color: #0c4a6e;
+      font-weight: 800;
+    }
+
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      height: -webkit-fill-available;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      padding: 6px 10px;
+      text-align: center;
+      background-color: #38bdf8;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    h1 {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 380px;
+      gap: 6px;
+    }
+
+    .btn {
+      background-color: #facc15;
+      color: #713f12;
+      border: none;
+      padding: 10px 14px;
+      font-size: 1.05rem;
+      font-weight: 900 !important;
+      border-radius: 12px;
+      box-shadow: 0 3px 0 #ca8a04;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 0 0 #ca8a04;
+    }
+
+    .btn-select-img {
+      background-color: #a855f7;
+      color: #ffffff;
+      box-shadow: 0 3px 0 #7e22ce;
+    }
+
+    .btn-model {
+      background-color: #4ade80;
+      color: #14532d;
+      box-shadow: 0 3px 0 #16a34a;
+    }
+
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn-side {
+      padding: 12px 8px;
+      border-radius: 12px;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 1px;
+      font-size: 0.95rem;
+      font-weight: 900 !important;
+    }
+
+    .btn-easy { background-color: #4ade80; color: #14532d; box-shadow: -2px 2px 0 #16a34a; }
+    .btn-medium { background-color: #facc15; color: #713f12; box-shadow: -2px 2px 0 #ca8a04; }
+    .btn-hard { background-color: #fb923c; color: #7c2d12; box-shadow: -2px 2px 0 #ea580c; }
+    .btn-back { background-color: #f87171; color: #7f1d1d; box-shadow: -2px 2px 0 #dc2626; }
+
+    #game-container {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      gap: 8px;
+    }
+
+    #board {
+      background-color: #ffffff;
+      border: 4px solid #0284c7;
+      border-radius: 12px;
+      position: relative;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    .slot {
+      position: absolute;
+      box-sizing: border-box;
+      border: 1px dashed #bae6fd;
+    }
+
+    .piece {
+      position: absolute;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+      border-radius: 4px;
+      z-index: 10;
+      cursor: grab;
+      background-repeat: no-repeat;
+    }
+
+    .piece.placed {
+      border: none;
+      box-shadow: none;
+      z-index: 1;
+      cursor: default;
+    }
+
+    #tray {
+      width: 100vw;
+      height: 38vh;
+      background-color: #bae6fd;
+      border-top: 4px solid #38bdf8;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    /* Botão pequeno de contagem no canto esquerdo inferior */
+    .tray-counter-small {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      font-size: 0.85rem;
+      font-weight: 900 !important;
+      background: #ffffff;
+      padding: 4px 10px;
+      border-radius: 10px;
+      color: #0284c7;
+      border: 2px solid #38bdf8;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      border: 4px solid #facc15;
+      width: 95vw;
+      max-width: 440px;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      overflow-y: auto;
+    }
+
+    .modal-card h2 {
+      color: #0284c7;
+      font-size: 1.4rem;
+      font-weight: 900 !important;
+    }
+
+    .carousel-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 8px;
+      touch-action: pan-y;
+    }
+
+    .carousel-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .carousel-img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 3px solid #38bdf8;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+
+    .carousel-btn {
+      background-color: #0284c7;
+      color: #ffffff;
+      border: none;
+      font-size: 1.6rem;
+      font-weight: 900 !important;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      box-shadow: 0 3px 0 #0369a1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      touch-action: manipulation;
+    }
+
+    .verse-box {
+      background: #f0f9ff;
+      border: 3px solid #38bdf8;
+      border-radius: 12px;
+      padding: 12px;
+      width: 100%;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .verse-title {
+      font-size: 1.15rem;
+      font-weight: 900 !important;
+      color: #7e22ce;
+    }
+
+    .verse-text {
+      font-size: 1.05rem;
+      font-weight: 900 !important;
+      color: #0f172a;
+      line-height: 1.4;
+    }
+
+    .resumo-btn {
+      align-self: flex-end;
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 1rem;
+      font-weight: 900 !important;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 0 #0369a1;
+      touch-action: manipulation;
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    .story-card {
+      background: #ffffff;
+      padding: 18px;
+      border-radius: 22px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 5px solid #a855f7;
+      width: 95vw;
+      max-width: 480px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      overflow-y: auto;
+    }
+
+    .story-card h2 {
+      color: #6b21a8;
+      font-size: 1.4rem;
+      font-weight: 900 !important;
+    }
+
+    .story-card img {
+      width: 100%;
+      max-height: 170px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 3px solid #d8b4fe;
+    }
+
+    .story-text {
+      font-size: 1.1rem;
+      font-weight: 900 !important;
+      color: #0f172a;
+      line-height: 1.5;
+      text-align: justify;
+      background: #f3e8ff;
+      padding: 14px;
+      border-radius: 12px;
+      border: 2px solid #c084fc;
+      white-space: pre-line;
+      width: 100%;
+    }
+
+    .btn-action-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .btn-go-puzzle {
+      background-color: #4ade80;
+      color: #14532d;
+      border: none;
+      padding: 14px 20px;
+      font-size: 1.15rem;
+      font-weight: 900 !important;
+      border-radius: 14px;
+      box-shadow: 0 4px 0 #16a34a;
+      cursor: pointer;
+      width: 100%;
+      touch-action: manipulation;
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    .btn-modal-back {
+      background-color: #f87171;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: 900 !important;
+      border-radius: 14px;
+      box-shadow: 0 3px 0 #dc2626;
+      cursor: pointer;
+      width: 100%;
+      touch-action: manipulation;
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    .message-card {
+      background: linear-gradient(135deg, #a855f7, #38bdf8);
+      border: 5px solid #facc15;
+      border-radius: 24px;
+      padding: 24px;
+      color: #ffffff;
+      text-align: center;
+      width: 90vw;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .message-text {
+      font-size: 1.4rem;
+      font-weight: 900 !important;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .model-img {
+      max-width: 85vw;
+      max-height: 52vh;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 3px solid #0284c7;
+    }
+
+    @media (max-width: 600px) {
+      body, button, p, span, h1, h2 {
+        font-family: Arial, Helvetica, sans-serif !important;
+      }
+      h1 { font-size: 1.2rem; }
+      .btn { font-size: 1rem; padding: 10px 12px; font-weight: 900 !important; }
+      .verse-title { font-size: 1.15rem; font-weight: 900 !important; }
+      .verse-text { font-size: 1.05rem; font-weight: 900 !important; }
+      .resumo-btn { font-size: 1rem; padding: 10px 16px; font-weight: 900 !important; }
+      .story-card h2 { font-size: 1.3rem; font-weight: 900 !important; }
+      .story-text { font-size: 1.1rem; font-weight: 900 !important; }
+      .btn-go-puzzle { font-size: 1.1rem; padding: 12px; font-weight: 900 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app-container">
+    <header>
+      <h1>🚢 Quebra-Cabeça da Arca</h1>
+      <div class="controls">
+        <button class="btn btn-select-img" id="select-img-btn">Escolha Imagem</button>
+        <button class="btn btn-model" id="model-btn">Imagem Modelo</button>
+        <button class="btn" id="restart-btn">Embaralhar</button>
+      </div>
+    </header>
+
+    <div id="game-container">
+      <div id="board"></div>
+      
+      <div class="side-panel">
+        <button class="btn btn-side btn-easy" id="easy-btn">FÁCIL (6)</button>
+        <button class="btn btn-side btn-medium" id="medium-btn">MÉDIO (12)</button>
+        <button class="btn btn-side btn-hard" id="hard-btn">DIFÍCIL (20)</button>
+        <button class="btn btn-side btn-back" id="back-btn">VOLTAR</button>
+      </div>
+    </div>
+
+    <div id="tray">
+      <!-- Botão de contagem de tentativas no lado esquerdo embaixo -->
+      <div class="tray-counter-small">Tentativas: <span id="moves-count">0</span></div>
+    </div>
+  </div>
+
+  <!-- Modal Escolha de Imagem -->
+  <div class="modal" id="select-modal">
+    <div class="modal-card">
+      <h2>🖼️ Escolha uma Imagem</h2>
+      
+      <div class="carousel-container" id="carousel-swipe-area">
+        <button class="carousel-btn" id="prev-btn">❮</button>
+        <div class="carousel-display">
+          <img src="noe.jpg" id="carousel-img" class="carousel-img" alt="Imagem selecionada">
+          <span id="carousel-title" style="font-size:1.2rem; font-weight:900; color:#0c4a6e;">Noé 1</span>
+        </div>
+        <button class="carousel-btn" id="next-btn">❯</button>
+      </div>
+
+      <div class="verse-box">
+        <span class="verse-title" id="verse-ref">Gênesis 7:1</span>
+        <p class="verse-text" id="verse-content">"Depois, disse o SENHOR a Noé: Entra tu e toda a tua casa na arca..."</p>
+        <button class="resumo-btn" id="resumo-btn">Resumo ➔</button>
+      </div>
+
+      <div class="btn-action-group">
+        <button class="btn btn-model" id="confirm-carousel-btn" style="width: 100%; padding: 12px; font-size: 1.05rem;">Usar Esta Imagem</button>
+        <button class="btn-modal-back" id="close-select-btn">Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Resumo da Passagem -->
+  <div class="modal" id="story-modal">
+    <div class="story-card">
+      <h2 id="story-title">Noé Entrando na Arca</h2>
+      <img src="noe.jpg" id="story-img" alt="História">
+      <div class="story-text" id="story-full-text"></div>
+      
+      <div class="btn-action-group">
+        <button class="btn-go-puzzle" id="story-go-puzzle-btn">Usar esta imagem</button>
+        <button class="btn-modal-back" id="story-back-btn">Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Mensagem de Fé -->
+  <div class="modal" id="faith-modal">
+    <div class="message-card">
+      <div class="message-text" id="faith-message-text">✨ Jesus te ama muito!</div>
+    </div>
+  </div>
+
+  <!-- Modal Imagem Modelo -->
+  <div class="modal" id="image-modal">
+    <div class="modal-card">
+      <img src="noe.jpg" id="model-img-element" alt="Modelo da Arca" class="model-img">
+      <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Vamos lá amiguinhos, montar esse animado quebra-cabeça!</p>
+      <button class="btn-modal-back" id="close-model-btn">Voltar</button>
+    </div>
+  </div>
+
+  <!-- Modal Trava de Nível -->
+  <div class="modal" id="lock-modal">
+    <div class="modal-card">
+      <h2>⚠️ Mudar de Nível</h2>
+      <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Você já está jogando! Clique em VOLTAR para zerar e escolher outro nível.</p>
+      <button class="btn-modal-back" id="lock-reset-btn">Voltar ao Início</button>
+    </div>
+  </div>
+
+  <!-- Modal Vitória -->
+  <div class="modal" id="win-modal">
+    <div class="modal-card">
+      <h2>🎉 Parabéns!</h2>
+      <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Você completou o quebra-cabeça em <span id="final-moves">0</span> tentativas!</p>
+      <button class="btn" id="modal-restart-btn">Jogar Novamente</button>
+    </div>
+  </div>
+
+  <script>
+    const IMAGES = [
+      {
+        id: 'noe1',
+        srcs: ['noe.jpg', 'noe.jpeg', 'noe1.jpg', 'noe1.jpeg'],
+        label: 'Noé 1 - Entrando na Arca',
+        ref: 'Gênesis 7:1',
+        verse: '"Depois, disse o SENHOR a Noé: Entra tu e toda a tua casa na arca..."',
+        summary: 'Deus chamou Noé e toda a sua família para entrarem na arca.\n\nEles obedeceram e foram se abrigar com alegria, sabendo que estariam seguros sob a proteção do Senhor.'
+      },
+      {
+        id: 'noe2',
+        srcs: ['noe1.jpg', 'noe1.jpeg', 'noe.jpg', 'noe.jpeg'],
+        label: 'Noé 2 - Animais e Família Entrando',
+        ref: 'Gênesis 7:8-9',
+        verse: '"Dos animais limpos, e dos animais que não são limpos, e das aves... entraram de dois em dois para junto de Noé na arca..."',
+        summary: 'Os animais vieram de todos os cantos, de dois em dois, caminhando em ordem para dentro da arca.\n\nQuando o último animal e toda a família de Noé entraram, o próprio Deus fechou a porta da arca com segurança.'
+      },
+      {
+        id: 'noe3',
+        srcs: ['noe2.jpg', 'noe2.jpeg', 'noe.jpg', 'noe.jpeg'],
+        label: 'Noé 3 - 40 Dias no Dilúvio',
+        ref: 'Gênesis 7:12',
+        verse: '"E houve chuva sobre a terra quarenta dias e quarenta noites."',
+        summary: 'A chuva caiu fortemente do céu durante quarenta dias e quarenta noites sem parar.\n\nEnquanto as águas subiam cobrindo tudo, a arca flutuava tranquilamente, mantendo todos em paz e em segurança lá dentro.'
+      },
+      {
+        id: 'noe4',
+        srcs: ['noe3.jpg', 'noe3.jpeg', 'noe.jpg', 'noe.jpeg'],
+        label: 'Noé 4 - Construindo a Arca',
+        ref: 'Gênesis 6:22',
+        verse: '"Assim fez Noé; conforme a tudo o que Deus lhe mandou, assim o fez."',
+        summary: 'Com muita dedicação, fé e esforço, Noé e seus filhos usaram madeira de gofer para construir a grande arca.\n\nEles seguiram exatamente cada instrução que Deus deu, preparando o barco perfeito para a grande missão.'
+      },
+      {
+        id: 'noe5',
+        srcs: ['noe4.jpg', 'noe4.jpeg', 'noe.jpg', 'noe.jpeg'],
+        label: 'Noé 5 - Repouso no Monte Ararate',
+        ref: 'Gênesis 8:4',
+        verse: '"E a arca repousou, no sétimo mês, no dia dezessete do mês, sobre os montes de Ararate."',
+        summary: 'Após as águas começarem a baixar, a arca repousou firme no topo do Monte Ararate.\n\nNoé abriu a janela, a terra voltou a secar e todos saíram radiantes para celebrar o novo recomeço sob o lindo arco-íris de Deus.'
+      }
+    ];
+
+    const FAITH_MESSAGES = [
+      "❤️ Jesus te ama muito!",
+      "⭐ Você é especial para Deus!",
+      "👑 Deus é o seu Pai celestial!",
+      "🕊️ O amor de Deus nunca falha!",
+      "🌟 Você é uma preciosidade divina!",
+      "🛡️ Deus cuida de você em todo tempo!",
+      "🌈 Tudo é possível ao que crê!",
+      "🙏 Com Deus você é mais que vencedor!",
+      "✨ A paz de Jesus habita no seu coração!",
+      "☀️ O Senhor é o seu pastor e nada te faltará!"
+    ];
+
+    let currentMessageIndex = 0;
+    let currentImageIndex = 0;
+    let currentImageSrc = IMAGES[0].srcs[0];
+
+    let currentLevel = null;
+    let COLS = 4;
+    let ROWS = 5;
+    let TOTAL_PIECES = COLS * ROWS;
+
+    const board = document.getElementById('board');
+    const tray = document.getElementById('tray');
+    const restartBtn = document.getElementById('restart-btn');
+    const modelBtn = document.getElementById('model-btn');
+    const selectImgBtn = document.getElementById('select-img-btn');
+    const backBtn = document.getElementById('back-btn');
+    const easyBtn = document.getElementById('easy-btn');
+    const mediumBtn = document.getElementById('medium-btn');
+    const hardBtn = document.getElementById('hard-btn');
+    const closeModelBtn = document.getElementById('close-model-btn');
+    const closeSelectBtn = document.getElementById('close-select-btn');
+    const modalRestartBtn = document.getElementById('modal-restart-btn');
+    const winModal = document.getElementById('win-modal');
+    const imageModal = document.getElementById('image-modal');
+    const selectModal = document.getElementById('select-modal');
+    const storyModal = document.getElementById('story-modal');
+    const faithModal = document.getElementById('faith-modal');
+    const lockModal = document.getElementById('lock-modal');
+    const lockResetBtn = document.getElementById('lock-reset-btn');
+    const modelImgElement = document.getElementById('model-img-element');
+
+    const carouselImg = document.getElementById('carousel-img');
+    const carouselTitle = document.getElementById('carousel-title');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const confirmCarouselBtn = document.getElementById('confirm-carousel-btn');
+    const carouselSwipeArea = document.getElementById('carousel-swipe-area');
+
+    const verseRef = document.getElementById('verse-ref');
+    const verseContent = document.getElementById('verse-content');
+    const resumoBtn = document.getElementById('resumo-btn');
+
+    const storyTitle = document.getElementById('story-title');
+    const storyImg = document.getElementById('story-img');
+    const storyFullText = document.getElementById('story-full-text');
+    const storyGoPuzzleBtn = document.getElementById('story-go-puzzle-btn');
+    const storyBackBtn = document.getElementById('story-back-btn');
+
+    const faithMessageText = document.getElementById('faith-message-text');
+
+    let pieceWidth, pieceHeight;
+    let boardWidth, boardHeight;
+    let placedCount = 0;
+    let movesCount = 0;
+
+    function setImageWithFallback(imgElement, sources, index = 0) {
+      if (!sources || index >= sources.length) return;
+      imgElement.src = sources[index];
+      imgElement.onerror = () => {
+        if (index + 1 < sources.length) {
+          setImageWithFallback(imgElement, sources, index + 1);
+        }
+      };
+    }
+
+    window.addEventListener('resize', () => {
+      setupDimensions();
+    });
+
+    function updateCarouselView() {
+      const item = IMAGES[currentImageIndex];
+      setImageWithFallback(carouselImg, item.srcs);
+      carouselTitle.textContent = item.label;
+      verseRef.textContent = item.ref;
+      verseContent.textContent = item.verse;
+    }
+
+    function openStoryModal() {
+      const item = IMAGES[currentImageIndex];
+      storyTitle.textContent = `${item.label} (${item.ref})`;
+      setImageWithFallback(storyImg, item.srcs);
+      storyFullText.textContent = item.summary;
+      selectModal.style.display = 'none';
+      storyModal.style.display = 'flex';
+    }
+
+    function triggerFaithModalAndStart() {
+      selectModal.style.display = 'none';
+      storyModal.style.display = 'none';
+      
+      faithMessageText.textContent = FAITH_MESSAGES[currentMessageIndex];
+      currentMessageIndex = (currentMessageIndex + 1) % FAITH_MESSAGES.length;
+
+      faithModal.style.display = 'flex';
+
+      setTimeout(() => {
+        faithModal.style.display = 'none';
+        applySelectedImage();
+      }, 2500);
+    }
+
+    function applySelectedImage() {
+      const item = IMAGES[currentImageIndex];
+      currentImageSrc = item.srcs[0];
+      setImageWithFallback(modelImgElement, item.srcs);
+      clearAllPieces();
+      setupGame();
+    }
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    carouselSwipeArea.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    carouselSwipeArea.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const threshold = 30;
+      if (touchEndX < touchStartX - threshold) {
+        currentImageIndex = (currentImageIndex + 1) % IMAGES.length;
+        updateCarouselView();
+      } else if (touchEndX > touchStartX + threshold) {
+        currentImageIndex = (currentImageIndex - 1 + IMAGES.length) % IMAGES.length;
+        updateCarouselView();
+      }
+    }
+
+    function setupDimensions() {
+      const container = document.getElementById('game-container');
+      const sidePanel = document.querySelector('.side-panel');
+      const maxW = (container.clientWidth - sidePanel.clientWidth - 30) * 0.95;
+      const maxH = container.clientHeight * 0.95;
+
+      let width = maxW;
+      let height = (width * ROWS) / COLS;
+
+      if (height > maxH) {
+        height = maxH;
+        width = (height * COLS) / ROWS;
+      }
+
+      boardWidth = width;
+      boardHeight = height;
+
+      board.style.width = `${boardWidth}px`;
+      board.style.height = `${boardHeight}px`;
+
+      pieceWidth = boardWidth / COLS;
+      pieceHeight = boardHeight / ROWS;
+    }
+
+    function handleLevelClick(levelName, cols, rows) {
+      if (currentLevel !== null && currentLevel !== levelName) {
+        lockModal.style.display = 'flex';
+        return;
+      }
+
+      currentLevel = levelName;
+      COLS = cols;
+      ROWS = rows;
+      TOTAL_PIECES = COLS * ROWS;
+      setupGame();
+    }
+
+    function resetAndClearGame() {
+      currentLevel = null;
+      clearAllPieces();
+      board.innerHTML = '';
+      movesCount = 0;
+      placedCount = 0;
+      const movesEl = document.getElementById('moves-count');
+      if (movesEl) movesEl.textContent = '0';
+      lockModal.style.display = 'none';
+      winModal.style.display = 'none';
+    }
+
+    function clearAllPieces() {
+      document.querySelectorAll('.piece').forEach(p => p.remove());
+    }
+
+    function setupGame() {
+      setupDimensions();
+      initGame();
+    }
+
+    function initGame() {
+      clearAllPieces();
+      board.innerHTML = '';
+
+      const existingCounter = tray.querySelector('.tray-counter-small');
+      tray.innerHTML = '';
+      if (existingCounter) {
+        tray.appendChild(existingCounter);
+      } else {
+        const newCounter = document.createElement('div');
+        newCounter.className = 'tray-counter-small';
+        newCounter.innerHTML = 'Tentativas: <span id="moves-count">0</span>';
+        tray.appendChild(newCounter);
+      }
+
+      winModal.style.display = 'none';
+      imageModal.style.display = 'none';
+      selectModal.style.display = 'none';
+      storyModal.style.display = 'none';
+      faithModal.style.display = 'none';
+      lockModal.style.display = 'none';
+      
+      placedCount = 0;
+      movesCount = 0;
+      const movesEl = document.getElementById('moves-count');
+      if (movesEl) movesEl.textContent = movesCount;
+
+      const pieces = [];
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const slot = document.createElement('div');
+          slot.classList.add('slot');
+          slot.style.width = `${pieceWidth}px`;
+          slot.style.height = `${pieceHeight}px`;
+          slot.style.left = `${c * pieceWidth}px`;
+          slot.style.top = `${r * pieceHeight}px`;
+          board.appendChild(slot);
+
+          const piece = document.createElement('div');
+          piece.classList.add('piece');
+          piece.style.width = `${pieceWidth}px`;
+          piece.style.height = `${pieceHeight}px`;
+          piece.style.backgroundImage = `url('${currentImageSrc}')`;
+          piece.style.backgroundSize = `${boardWidth}px ${boardHeight}px`;
+          piece.style.backgroundPosition = `-${c * pieceWidth}px -${r * pieceHeight}px`;
+
+          piece.dataset.correctLeft = c * pieceWidth;
+          piece.dataset.correctTop = r * pieceHeight;
+
+          pieces.push(piece);
+        }
+      }
+
+      pieces.sort(() => Math.random() - 0.5);
+
+      pieces.forEach(piece => {
+        const trayWidth = tray.clientWidth;
+        const trayHeight = tray.clientHeight;
+
+        const maxLeft = Math.max(0, trayWidth - pieceWidth);
+        const maxTop = Math.max(0, trayHeight - pieceHeight - 30);
+
+        const randomLeft = Math.random() * maxLeft;
+        const randomTop = Math.random() * maxTop;
+
+        piece.style.left = `${randomLeft}px`;
+        piece.style.top = `${randomTop}px`;
+
+        tray.appendChild(piece);
+        makeDraggable(piece);
+      });
+    }
+
+    function makeDraggable(element) {
+      let isDragging = false;
+      let startX, startY;
+      let initialLeft, initialTop;
+
+      const onStart = (e) => {
+        if (element.classList.contains('placed')) return;
+
+        isDragging = true;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        startX = clientX;
+        startY = clientY;
+
+        const rect = element.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+
+        document.body.appendChild(element);
+        element.style.left = `${initialLeft}px`;
+        element.style.top = `${initialTop}px`;
+        element.style.zIndex = '1000';
+      };
+
+      const onMove = (e) => {
+        if (!isDragging) return;
+        if (e.cancelable) e.preventDefault();
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+        const deltaX = clientX - startX;
+        const deltaY = clientY - startY;
+
+        element.style.left = `${initialLeft + deltaX}px`;
+        element.style.top = `${initialTop + deltaY}px`;
+      };
+
+      const onEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        element.style.zIndex = '10';
+
+        // Incrementa o número de tentativas
+        movesCount++;
+        const movesEl = document.getElementById('moves-count');
+        if (movesEl) movesEl.textContent = movesCount;
+
+        const rect = element.getBoundingClientRect();
+        const boardRect = board.getBoundingClientRect();
+
+        const currentLeft = rect.left - boardRect.left;
+        const currentTop = rect.top - boardRect.top;
+
+        const targetLeft = parseFloat(element.dataset.correctLeft);
+        const targetTop = parseFloat(element.dataset.correctTop);
+
+        const tolerance = 30;
+
+        if (
+          Math.abs(currentLeft - targetLeft) < tolerance &&
+          Math.abs(currentTop - targetTop) < tolerance
+        ) {
+          element.classList.add('placed');
+          element.style.left = `${targetLeft}px`;
+          element.style.top = `${targetTop}px`;
+          board.appendChild(element);
+
+          placedCount++;
+          if (placedCount === TOTAL_PIECES) {
+            document.getElementById('final-moves').textContent = movesCount;
+            setTimeout(() => {
+              winModal.style.display = 'flex';
+            }, 200);
+          }
+        } else {
+          const trayRect = tray.getBoundingClientRect();
+          if (
+            rect.bottom < trayRect.top ||
+            rect.top > trayRect.bottom ||
+            rect.right < trayRect.left ||
+            rect.left > trayRect.right
+          ) {
+            tray.appendChild(element);
+            element.style.left = `${Math.random() * Math.max(0, tray.clientWidth - pieceWidth)}px`;
+            element.style.top = `${Math.random() * Math.max(0, tray.clientHeight - pieceHeight - 30)}px`;
+          }
+        }
+      };
+
+      element.addEventListener('touchstart', onStart, { passive: false });
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('touchend', onEnd);
+
+      element.addEventListener('mousedown', onStart);
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onEnd);
+    }
+
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentImageIndex = (currentImageIndex - 1 + IMAGES.length) % IMAGES.length;
+      updateCarouselView();
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentImageIndex = (currentImageIndex + 1) % IMAGES.length;
+      updateCarouselView();
+    });
+
+    resumoBtn.addEventListener('click', openStoryModal);
+    confirmCarouselBtn.addEventListener('click', triggerFaithModalAndStart);
+    storyGoPuzzleBtn.addEventListener('click', triggerFaithModalAndStart);
+
+    storyBackBtn.addEventListener('click', () => {
+      storyModal.style.display = 'none';
+      selectModal.style.display = 'flex';
+    });
+
+    easyBtn.addEventListener('click', () => handleLevelClick('easy', 2, 3));
+    mediumBtn.addEventListener('click', () => handleLevelClick('medium', 3, 4));
+    hardBtn.addEventListener('click', () => handleLevelClick('hard', 4, 5));
+
+    lockResetBtn.addEventListener('click', resetAndClearGame);
+    backBtn.addEventListener('click', () => {
+      if (currentLevel !== null) {
+        resetAndClearGame();
+      } else {
+        window.history.back();
+      }
+    });
+
+    selectImgBtn.addEventListener('click', () => {
+      updateCarouselView();
+      selectModal.style.display = 'flex';
+    });
+
+    closeSelectBtn.addEventListener('click', () => {
+      selectModal.style.display = 'none';
+    });
+
+    modelBtn.addEventListener('click', () => {
+      imageModal.style.display = 'flex';
+    });
+
+    closeModelBtn.addEventListener('click', () => {
+      imageModal.style.display = 'none';
+    });
+
+    restartBtn.addEventListener('click', () => {
+      if (currentLevel !== null) initGame();
+    });
+
+    modalRestartBtn.addEventListener('click', initGame);
+
+    setupDimensions();
+  </script>
+</body>
+</html>

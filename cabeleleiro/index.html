@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agendamento — Salão (exemplo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#241E22;
+    --ink-soft:#3A3037;
+    --rose:#C98B93;
+    --rose-light:#E7C6C9;
+    --rose-pale:#F4E4E3;
+    --gold:#C9A462;
+    --cream:#FAF4EE;
+    --cream-dim:#F0E6DD;
+    --gray:#93858A;
+    --line:rgba(36,30,34,0.1);
+    --radius:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--cream);
+    background-image: radial-gradient(circle at 20% 0%, rgba(201,139,147,0.09), transparent 50%),
+                       radial-gradient(circle at 90% 100%, rgba(201,164,98,0.08), transparent 50%);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    padding:36px 16px 60px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--rose);
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  h1.hero{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-style:italic;
+    font-size:clamp(30px,5.5vw,46px);
+    text-align:center;
+    color:var(--ink);
+    max-width:520px;
+    line-height:1.15;
+  }
+  .subtitle{
+    font-size:14.5px;
+    color:var(--ink-soft);
+    text-align:center;
+    max-width:420px;
+    margin:14px 0 34px;
+    line-height:1.55;
+  }
+
+  /* ---------- CARD ---------- */
+  .card{
+    width:100%;
+    max-width:540px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:30px 26px;
+    position:relative;
+    box-shadow:0 30px 60px -30px rgba(36,30,34,0.25);
+  }
+  /* scalloped mirror-frame top edge, the signature element */
+  .scallop{
+    position:absolute;
+    top:-11px; left:20px; right:20px;
+    height:22px;
+    background-image: radial-gradient(circle at 10px 0, transparent 10px, var(--rose) 10.5px);
+    background-size:22px 22px;
+    background-repeat:repeat-x;
+    background-position:top;
+  }
+
+  .progress-dots{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-bottom:24px;
+  }
+  .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--rose-light);
+    transition:background .3s, transform .3s;
+  }
+  .dot.active{background:var(--rose); transform:scale(1.3);}
+  .dot.done{background:var(--gold);}
+
+  .step-label{
+    font-size:11px;
+    letter-spacing:1.8px;
+    text-transform:uppercase;
+    color:var(--gray);
+    margin-bottom:6px;
+    text-align:center;
+  }
+  .step-title{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-size:22px;
+    text-align:center;
+    margin-bottom:22px;
+    color:var(--ink);
+  }
+
+  /* ---------- SERVICE CARDS ---------- */
+  .service-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:24px;
+  }
+  .service-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--cream);
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    cursor:pointer;
+    transition:border-color .18s, background .18s, transform .15s;
+  }
+  .service-item:hover{transform:translateY(-1px);}
+  .service-item.selected{
+    border-color:var(--rose);
+    background:var(--rose-pale);
+  }
+  .service-info .s-name{font-weight:600; font-size:14.5px; margin-bottom:2px;}
+  .service-info .s-meta{font-size:12px; color:var(--gray);}
+  .service-price{
+    font-family:'Work Sans', sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    color:var(--ink);
+    white-space:nowrap;
+    padding-left:12px;
+  }
+  .check-circle{
+    width:20px; height:20px;
+    border-radius:50%;
+    border:1.5px solid var(--gray);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin-right:12px;
+    flex-shrink:0;
+    transition:border-color .18s, background .18s;
+  }
+  .service-item.selected .check-circle{
+    background:var(--rose);
+    border-color:var(--rose);
+  }
+  .check-circle svg{width:11px; height:11px; opacity:0; transition:opacity .15s;}
+  .service-item.selected .check-circle svg{opacity:1;}
+  .service-left{display:flex; align-items:center;}
+
+  .selection-summary{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:var(--ink);
+    color:var(--cream);
+    border-radius:12px;
+    padding:12px 16px;
+    margin-bottom:20px;
+    font-size:13px;
+  }
+  .selection-summary b{font-family:'Work Sans',sans-serif; font-size:15px; color:var(--gold);}
+
+  /* ---------- CALENDAR ---------- */
+  .cal-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .cal-nav{
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-radius:8px;
+    width:32px; height:32px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    font-size:16px;
+    color:var(--ink-soft);
+  }
+  .cal-nav:hover{background:var(--rose-pale);}
+  .cal-month{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-size:17px;
+    text-transform:capitalize;
+  }
+  .cal-grid{
+    display:grid;
+    grid-template-columns:repeat(7, 1fr);
+    gap:6px;
+    margin-bottom:22px;
+  }
+  .cal-dow{
+    text-align:center;
+    font-size:10.5px;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    color:var(--gray);
+    padding-bottom:4px;
+  }
+  .cal-day{
+    aspect-ratio:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    font-size:13.5px;
+    cursor:pointer;
+    border:1.5px solid transparent;
+    transition:background .15s, border-color .15s, transform .12s;
+    position:relative;
+  }
+  .cal-day.empty{cursor:default;}
+  .cal-day.past{color:var(--gray); opacity:0.35; cursor:not-allowed;}
+  .cal-day.closed{color:var(--gray); opacity:0.35; cursor:not-allowed; text-decoration:line-through;}
+  .cal-day.available:hover{background:var(--rose-pale); border-color:var(--rose-light); transform:translateY(-1px);}
+  .cal-day.today{border-color:var(--gold);}
+  .cal-day.selected{background:var(--rose); color:#fff; font-weight:700;}
+
+  .time-section-label{
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .time-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
+    margin-bottom:8px;
+    min-height:44px;
+  }
+  .time-slot{
+    background:var(--cream);
+    border:1.5px solid var(--line);
+    border-radius:9px;
+    padding:10px 6px;
+    text-align:center;
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .time-slot:hover{border-color:var(--rose-light); background:var(--rose-pale);}
+  .time-slot.selected{background:var(--rose); border-color:var(--rose); color:#fff; font-weight:700;}
+  .time-slot.taken{
+    opacity:0.3;
+    text-decoration:line-through;
+    cursor:not-allowed;
+    pointer-events:none;
+  }
+  .empty-note{
+    font-size:12.5px;
+    color:var(--gray);
+    font-style:italic;
+    text-align:center;
+    padding:10px 0;
+  }
+
+  /* ---------- BUTTONS ---------- */
+  .btn-row{display:flex; gap:12px; margin-top:26px;}
+  button{
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size:14px;
+    border:none;
+    border-radius:11px;
+    padding:14px 22px;
+    cursor:pointer;
+    transition:transform .15s, box-shadow .15s, background .15s;
+  }
+  button:active{transform:scale(0.97);}
+  .btn-primary{
+    background:var(--rose);
+    color:#fff;
+    flex:1;
+    box-shadow:0 10px 22px -10px rgba(201,139,147,0.7);
+  }
+  .btn-primary:hover{background:#BD7A83;}
+  .btn-primary:disabled{opacity:0.35; cursor:not-allowed; box-shadow:none;}
+  .btn-ghost{
+    background:transparent;
+    border:1.5px solid var(--line);
+    color:var(--ink-soft);
+  }
+  .btn-ghost:hover{border-color:var(--gray);}
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0;
+    background:rgba(36,30,34,0.55);
+    backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center;
+    z-index:100;
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease;
+    padding:20px;
+  }
+  .modal-overlay.active{opacity:1; pointer-events:auto;}
+  .modal-box{
+    background:#fff;
+    border-radius:20px;
+    max-width:440px; width:100%;
+    padding:34px 28px;
+    text-align:center;
+    position:relative;
+    transform:scale(0.85) translateY(20px);
+    opacity:0;
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+    box-shadow:0 40px 80px -20px rgba(36,30,34,0.4);
+  }
+  .modal-overlay.active .modal-box{transform:scale(1) translateY(0); opacity:1;}
+  .modal-close{
+    position:absolute; top:16px; right:16px;
+    background:transparent; border:none; color:var(--gray);
+    font-size:22px; width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-close:hover{background:var(--cream);}
+  .check-badge{
+    width:56px; height:56px;
+    border-radius:50%;
+    background:var(--rose-pale);
+    color:var(--rose);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 18px;
+  }
+  .check-badge svg{width:26px; height:26px;}
+  .modal-title{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-size:23px;
+    margin-bottom:6px;
+  }
+  .modal-sub{font-size:13px; color:var(--gray); margin-bottom:22px;}
+  .booking-recap{
+    background:var(--cream);
+    border-radius:12px;
+    padding:16px 18px;
+    text-align:left;
+    font-size:13.5px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:22px;
+  }
+  .recap-row{display:flex; justify-content:space-between;}
+  .recap-row span:first-child{color:var(--gray);}
+  .recap-row span:last-child{font-weight:600;}
+  .recap-total{border-top:1px dashed var(--line); padding-top:10px; margin-top:2px;}
+  .recap-total span:last-child{color:var(--rose); font-size:16px;}
+
+  .whatsapp-btn{
+    width:100%;
+    background:#25D366;
+    color:#0b2b16;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    font-size:14.5px;
+    padding:15px;
+  }
+  .whatsapp-btn:hover{background:#2ee879;}
+  .whatsapp-btn svg{width:19px; height:19px;}
+  .restart-link{
+    display:block; text-align:center; margin-top:14px;
+    font-size:12.5px; color:var(--gray); text-decoration:underline;
+    cursor:pointer; background:none; border:none; width:100%;
+  }
+  .restart-link:hover{color:var(--ink-soft);}
+
+  footer{
+    margin-top:38px;
+    font-size:11px;
+    letter-spacing:1px;
+    color:var(--gray);
+    text-align:center;
+    text-transform:uppercase;
+  }
+
+  @keyframes shakeX{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Exemplo · Salão de Beleza</div>
+<h1 class="hero">Reserve seu horário<br>em poucos cliques</h1>
+<p class="subtitle">Escolha os serviços, veja os horários disponíveis no calendário e confirme direto pelo WhatsApp.</p>
+
+<div class="card">
+  <div class="scallop"></div>
+
+  <div class="progress-dots">
+    <div class="dot" id="dot1"></div>
+    <div class="dot" id="dot2"></div>
+    <div class="dot" id="dot3"></div>
+  </div>
+
+  <!-- STEP 1: SERVICES -->
+  <div class="step" id="step1">
+    <div class="step-label">Passo 1 de 3</div>
+    <div class="step-title">Quais serviços você quer?</div>
+
+    <div class="service-list" id="serviceList"></div>
+
+    <div class="selection-summary" id="summaryBar" style="display:none">
+      <span id="summaryCount">0 serviços</span>
+      <b id="summaryTotal">R$ 0</b>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" id="btnStep1" disabled onclick="goStep(2)" style="flex:1">Escolher data</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: CALENDAR -->
+  <div class="step" id="step2" style="display:none">
+    <div class="step-label">Passo 2 de 3</div>
+    <div class="step-title">Escolha o dia e horário</div>
+
+    <div class="cal-header">
+      <div class="cal-nav" onclick="changeMonth(-1)">&#8249;</div>
+      <div class="cal-month" id="calMonthLabel"></div>
+      <div class="cal-nav" onclick="changeMonth(1)">&#8250;</div>
+    </div>
+
+    <div class="cal-grid" id="calDow"></div>
+    <div class="cal-grid" id="calGrid"></div>
+
+    <div class="time-section-label" id="timeLabel" style="display:none">Horários disponíveis</div>
+    <div class="time-grid" id="timeGrid"></div>
+
+    <div class="btn-row">
+      <button class="btn-ghost" onclick="goStep(1)">Voltar</button>
+      <button class="btn-primary" id="btnStep2" disabled onclick="goStep(3)">Confirmar dados</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: CLIENT INFO -->
+  <div class="step" id="step3" style="display:none">
+    <div class="step-label">Passo 3 de 3</div>
+    <div class="step-title">Seus dados</div>
+
+    <div style="margin-bottom:18px;">
+      <label style="display:block; font-size:13px; font-weight:600; color:var(--ink-soft); margin-bottom:8px;">Seu nome</label>
+      <input type="text" id="clientName" placeholder="Ex: Ana Souza" style="width:100%; border:1.5px solid var(--line); border-radius:10px; padding:13px 14px; font-size:14.5px; font-family:'Work Sans',sans-serif;">
+    </div>
+
+    <div style="margin-bottom:8px;">
+      <label style="display:block; font-size:13px; font-weight:600; color:var(--ink-soft); margin-bottom:8px;">Seu telefone (WhatsApp)</label>
+      <input type="text" id="clientPhone" placeholder="Ex: (11) 9 9999-9999" style="width:100%; border:1.5px solid var(--line); border-radius:10px; padding:13px 14px; font-size:14.5px; font-family:'Work Sans',sans-serif;">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-ghost" onclick="goStep(2)">Voltar</button>
+      <button class="btn-primary" onclick="confirmBooking()">Confirmar agendamento</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>Desenvolvido por ImpulsoWeb10 · exemplo demonstrativo</footer>
+
+<!-- CONFIRMATION MODAL -->
+<div class="modal-overlay" id="resultModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+
+    <div class="check-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+
+    <div class="modal-title">Quase lá!</div>
+    <div class="modal-sub">Confira os detalhes e confirme pelo WhatsApp</div>
+
+    <div class="booking-recap" id="recapBox"></div>
+
+    <button class="whatsapp-btn" onclick="sendWhatsapp()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10 9 9.5 7.8 9.3 7.3c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.3c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 15 3.6 13.5 3.6 12c0-4.6 3.8-8.4 8.4-8.4s8.4 3.8 8.4 8.4-3.8 8.3-8.4 8.3z"/></svg>
+      Confirmar pelo WhatsApp
+    </button>
+    <button class="restart-link" onclick="restart()">Fazer novo agendamento</button>
+  </div>
+</div>
+
+<script>
+  // ---------- OPÇÕES SORTIDAS (exemplo — edite à vontade) ----------
+  const services = [
+    { id:'corte',      name:'Corte feminino',        duration:'40 min',  price:70 },
+    { id:'escova',     name:'Escova modelada',       duration:'50 min',  price:60 },
+    { id:'coloracao',  name:'Coloração completa',    duration:'2h',      price:180 },
+    { id:'luzes',      name:'Luzes / mechas',        duration:'2h30',    price:250 },
+    { id:'hidratacao', name:'Hidratação profunda',   duration:'45 min',  price:80 },
+    { id:'manicure',   name:'Manicure',              duration:'40 min',  price:35 },
+    { id:'pedicure',   name:'Pedicure',              duration:'40 min',  price:40 },
+    { id:'sobrancelha',name:'Design de sobrancelha', duration:'25 min',  price:45 },
+    { id:'maquiagem',  name:'Maquiagem profissional',duration:'1h',      price:150 },
+  ];
+
+  // horários já ocupados por dia (exemplo fixo, na prática viria de uma agenda real)
+  const takenSlotsByDay = {
+    // "YYYY-M-D": [horários ocupados]
+  };
+  const allTimeSlots = ['09:00','10:00','11:00','13:00','14:00','15:00','16:00','17:00'];
+
+  const state = { services:[], date:null, time:null };
+  let calRefDate = new Date();
+
+  // ---------- STEP 1: render serviços ----------
+  const serviceList = document.getElementById('serviceList');
+  services.forEach(s=>{
+    const item = document.createElement('div');
+    item.className = 'service-item';
+    item.dataset.id = s.id;
+    item.innerHTML = `
+      <div class="service-left">
+        <span class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <div class="service-info">
+          <div class="s-name">${s.name}</div>
+          <div class="s-meta">${s.duration}</div>
+        </div>
+      </div>
+      <div class="service-price">R$ ${s.price}</div>
+    `;
+    item.onclick = ()=>toggleService(s.id, item);
+    serviceList.appendChild(item);
+  });
+
+  function toggleService(id, el){
+    const idx = state.services.indexOf(id);
+    if(idx>-1){ state.services.splice(idx,1); el.classList.remove('selected'); }
+    else { state.services.push(id); el.classList.add('selected'); }
+    updateSummary();
+  }
+
+  function updateSummary(){
+    const bar = document.getElementById('summaryBar');
+    const btn = document.getElementById('btnStep1');
+    if(state.services.length===0){
+      bar.style.display='none';
+      btn.disabled = true;
+      return;
+    }
+    bar.style.display='flex';
+    btn.disabled = false;
+    const total = state.services.reduce((sum,id)=> sum + services.find(s=>s.id===id).price, 0);
+    document.getElementById('summaryCount').textContent = `${state.services.length} serviço(s) selecionado(s)`;
+    document.getElementById('summaryTotal').textContent = `R$ ${total}`;
+  }
+
+  // ---------- STEP 2: calendário ----------
+  const dowLabels = ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
+  const monthLabels = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+  function renderCalendar(){
+    const dowGrid = document.getElementById('calDow');
+    dowGrid.innerHTML = '';
+    dowLabels.forEach(d=>{
+      const el = document.createElement('div');
+      el.className='cal-dow';
+      el.textContent = d;
+      dowGrid.appendChild(el);
+    });
+
+    document.getElementById('calMonthLabel').textContent = `${monthLabels[calRefDate.getMonth()]} ${calRefDate.getFullYear()}`;
+
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+
+    const year = calRefDate.getFullYear();
+    const month = calRefDate.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    for(let i=0;i<firstDay;i++){
+      const empty = document.createElement('div');
+      empty.className = 'cal-day empty';
+      grid.appendChild(empty);
+    }
+
+    for(let d=1; d<=daysInMonth; d++){
+      const cellDate = new Date(year, month, d);
+      const cell = document.createElement('div');
+      cell.textContent = d;
+      cell.className = 'cal-day';
+
+      const isPast = cellDate < today;
+      const isSunday = cellDate.getDay() === 0; // salão fechado aos domingos (exemplo)
+
+      if(isPast){ cell.classList.add('past'); }
+      else if(isSunday){ cell.classList.add('closed'); }
+      else {
+        cell.classList.add('available');
+        cell.onclick = ()=>selectDate(cellDate, cell);
+      }
+
+      if(cellDate.getTime()===today.getTime()) cell.classList.add('today');
+      if(state.date && cellDate.toDateString()===state.date.toDateString()) cell.classList.add('selected');
+
+      grid.appendChild(cell);
+    }
+  }
+
+  function changeMonth(delta){
+    calRefDate = new Date(calRefDate.getFullYear(), calRefDate.getMonth()+delta, 1);
+    renderCalendar();
+  }
+
+  function selectDate(date, el){
+    document.querySelectorAll('.cal-day.selected').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.date = date;
+    state.time = null;
+    document.getElementById('btnStep2').disabled = true;
+    renderTimeSlots(date);
+  }
+
+  function renderTimeSlots(date){
+    const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    const taken = takenSlotsByDay[key] || [];
+    const label = document.getElementById('timeLabel');
+    const grid = document.getElementById('timeGrid');
+    grid.innerHTML = '';
+    label.style.display = 'block';
+
+    allTimeSlots.forEach(t=>{
+      const slot = document.createElement('div');
+      slot.className = 'time-slot';
+      slot.textContent = t;
+      if(taken.includes(t)){
+        slot.classList.add('taken');
+      } else {
+        slot.onclick = ()=>selectTime(t, slot);
+      }
+      grid.appendChild(slot);
+    });
+  }
+
+  function selectTime(t, el){
+    document.querySelectorAll('.time-slot.selected').forEach(s=>s.classList.remove('selected'));
+    el.classList.add('selected');
+    state.time = t;
+    document.getElementById('btnStep2').disabled = false;
+  }
+
+  renderCalendar();
+
+  // ---------- NAVEGAÇÃO ENTRE STEPS ----------
+  function goStep(n){
+    document.querySelectorAll('.step').forEach(s=>s.style.display='none');
+    document.getElementById('step'+n).style.display='block';
+    updateDots(n);
+  }
+
+  function updateDots(n){
+    for(let i=1;i<=3;i++){
+      const dot = document.getElementById('dot'+i);
+      dot.classList.remove('active','done');
+      if(i<n) dot.classList.add('done');
+      if(i===n) dot.classList.add('active');
+    }
+  }
+  updateDots(1);
+
+  // ---------- CONFIRMAÇÃO ----------
+  function confirmBooking(){
+    const name = document.getElementById('clientName').value.trim();
+    const phone = document.getElementById('clientPhone').value.trim();
+    if(!name || !phone){
+      const el = document.getElementById('step3');
+      el.style.animation='none';
+      requestAnimationFrame(()=>{ el.style.animation='shakeX .4s'; });
+      return;
+    }
+    state.clientName = name;
+    state.clientPhone = phone;
+
+    const chosen = state.services.map(id=>services.find(s=>s.id===id));
+    const total = chosen.reduce((sum,s)=>sum+s.price,0);
+    const dateStr = state.date.toLocaleDateString('pt-BR', { weekday:'long', day:'numeric', month:'long' });
+
+    const recap = document.getElementById('recapBox');
+    recap.innerHTML = `
+      <div class="recap-row"><span>Cliente</span><span>${name}</span></div>
+      <div class="recap-row"><span>Serviços</span><span>${chosen.map(s=>s.name).join(', ')}</span></div>
+      <div class="recap-row"><span>Data</span><span>${capitalize(dateStr)}</span></div>
+      <div class="recap-row"><span>Horário</span><span>${state.time}</span></div>
+      <div class="recap-row recap-total"><span>Total</span><span>R$ ${total}</span></div>
+    `;
+
+    document.getElementById('resultModal').classList.add('active');
+  }
+
+  function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+  function closeModal(){
+    document.getElementById('resultModal').classList.remove('active');
+  }
+
+  function sendWhatsapp(){
+    const chosen = state.services.map(id=>services.find(s=>s.id===id));
+    const total = chosen.reduce((sum,s)=>sum+s.price,0);
+    const dateStr = state.date.toLocaleDateString('pt-BR', { day:'numeric', month:'long' });
+    const msg = `Olá! Quero confirmar meu agendamento:\nNome: ${state.clientName}\nServiços: ${chosen.map(s=>s.name).join(', ')}\nData: ${dateStr}\nHorário: ${state.time}\nTotal: R$ ${total}`;
+    const phone = '5511954950044'; // <-- trocar pelo WhatsApp real do salão
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  function restart(){
+    closeModal();
+    state.services = [];
+    state.date = null;
+    state.time = null;
+    document.querySelectorAll('.service-item.selected').forEach(el=>el.classList.remove('selected'));
+    document.getElementById('clientName').value='';
+    document.getElementById('clientPhone').value='';
+    document.getElementById('timeGrid').innerHTML='';
+    document.getElementById('timeLabel').style.display='none';
+    updateSummary();
+    goStep(1);
+    renderCalendar();
+  }
+</script>
+
+</body>
+</html>

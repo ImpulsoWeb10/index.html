@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-H0DBG2GS6F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-H0DBG2GS6F');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Agenda de Ensaios 2026 - CCB Itaquaquecetuba</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        /* Animação de Brilho e Pulso para o Logo Sem Contorno */
+        @keyframes logoPulseGlow {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.4));
+            }
+            50% {
+                transform: scale(1.08);
+                filter: drop-shadow(0 0 35px rgba(251, 191, 36, 0.9));
+            }
+        }
+        .animate-logo-splash {
+            animation: logoPulseGlow 2s infinite ease-in-out;
+        }
+
+        /* Animação de Brilho (Shimmer/Glow) para o Botão do Maps */
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .btn-maps-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-maps-shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+            animation: shine 2s infinite;
+        }
+
+        /* Pulso Suave no Botão */
+        @keyframes customPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); }
+            50% { transform: scale(1.02); box-shadow: 0 0 15px 4px rgba(251, 191, 36, 0.5); }
+        }
+        .animate-maps-pulse {
+            animation: customPulse 2s infinite ease-in-out;
+        }
+
+        /* Estilização Customizada de Inputs de Range */
+        input[type=range] {
+            accent-color: #f59e0b;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 pb-16 overflow-hidden" id="main-body">
+
+    <!-- Anti-página / Tela de Abertura (Splash Screen) -->
+    <div id="splash-screen" class="fixed inset-0 bg-slate-950 z-50 flex flex-col justify-between items-center p-8 text-center transition-opacity duration-700">
+        <!-- Espaçador Superior -->
+        <div></div>
+
+        <!-- Conteúdo Central: Logo Solto (Sem Contorno) + Mensagem + Contador -->
+        <div class="flex flex-col items-center gap-6 max-w-xs sm:max-w-md">
+            <!-- Logo Solto Transparente -->
+            <div class="w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center">
+                <img src="logo-ccb.png" alt="Logo CCB" class="w-full h-full object-contain animate-logo-splash" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/4300/4300058.png';">
+            </div>
+            
+            <!-- Frase Principal -->
+            <h2 class="text-white text-xl sm:text-2xl font-extrabold tracking-tight leading-snug">
+                Deus abençoe, e tenha um ótimo Ensaio
+            </h2>
+
+            <!-- Contagem Regressiva Visual (4,3, 2, 1...) -->
+            <div class="flex items-center gap-2 mt-2 bg-slate-900/80 px-4 py-2 rounded-full border border-slate-800">
+                <span class="text-xs text-slate-400 font-semibold">...</span>
+                <span id="splash-timer" class="text-amber-400 font-black text-base w-4 text-center">3</span>
+            </div>
+        </div>
+
+        <!-- Rodapé do Splash Screen -->
+        <div class="pb-2">
+            <p class="text-slate-400 text-xs font-semibold tracking-wide uppercase">
+                Secretaria Musical de Itaquáquecetuba
+            </p>
+        </div>
+    </div>
+
+    <!-- Cabeçalho Estilo App CCB -->
+    <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-lg border-b border-slate-800">
+        <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+            <!-- Logo Transparente -->
+            <div class="w-20 h-20 flex items-center justify-center shrink-0">
+                <img src="logo-ccb.png" alt="Logo CCB" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/4300/4300058.png';">
+            </div>
+
+            <!-- Título e Total de Igrejas -->
+            <div class="flex items-center justify-end gap-3 flex-1">
+                <div class="text-right">
+                    <div class="flex items-center justify-end gap-1.5">
+                        <span class="text-[10px] bg-amber-400 text-slate-950 font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">CCB</span>
+                        <h1 class="text-lg font-extrabold tracking-tight">Ensaios Locais</h1>
+                    </div>
+                    <p class="text-slate-400 text-xs font-medium">Itaquaquecetuba • 2026</p>
+                </div>
+                
+                <div class="bg-slate-800/90 border border-slate-700/70 px-3.5 py-2.5 rounded-2xl text-center shrink-0">
+                    <span class="block text-[9px] text-slate-400 uppercase tracking-wider font-semibold">Total</span>
+                    <span id="total-count" class="text-base font-black text-amber-400">50</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade de Filtros Fixa em 2 Colunas (2x2) -->
+        <div class="bg-slate-950/90 border-t border-slate-800/80 px-4 py-3.5">
+            <div class="grid grid-cols-2 gap-2.5">
+                <!-- Filtro Bairro / Comum -->
+                <select id="filter-bairro" class="w-full bg-slate-800 text-slate-100 text-xs px-3 py-2.5 rounded-xl border border-slate-700 font-bold focus:outline-none focus:border-amber-400 cursor-pointer shadow-xs">
+                    <option value="">Bairro / Comum (Todos)</option>
+                </select>
+
+                <!-- Filtro Setor -->
+                <select id="filter-setor" class="w-full bg-slate-800 text-slate-100 text-xs px-3 py-2.5 rounded-xl border border-slate-700 font-bold focus:outline-none focus:border-amber-400 cursor-pointer shadow-xs">
+                    <option value="">Setores (Todos)</option>
+                    <option value="1">Setor 1</option>
+                    <option value="2">Setor 2</option>
+                    <option value="3">Setor 3</option>
+                    <option value="4">Setor 4</option>
+                </select>
+
+                <!-- Filtro Dia da Semana -->
+                <select id="filter-dia" class="w-full bg-slate-800 text-slate-100 text-xs px-3 py-2.5 rounded-xl border border-slate-700 font-bold focus:outline-none focus:border-amber-400 cursor-pointer shadow-xs">
+                    <option value="">Dia da Semana</option>
+                    <option value="S">Sábado (S)</option>
+                    <option value="D">Domingo (D)</option>
+                    <option value="6°">Sexta (6°)</option>
+                </select>
+
+                <!-- Filtro Horário -->
+                <select id="filter-hora" class="w-full bg-slate-800 text-slate-100 text-xs px-3 py-2.5 rounded-xl border border-slate-700 font-bold focus:outline-none focus:border-amber-400 cursor-pointer shadow-xs">
+                    <option value="">Horário</option>
+                    <option value="16h">16:00</option>
+                    <option value="16:30">16:30</option>
+                    <option value="17h">17:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="19:30">19:30</option>
+                </select>
+            </div>
+
+            <!-- Botão Limpar Filtros -->
+            <button onclick="resetFilters()" class="w-full mt-2.5 py-1.5 text-center text-xs text-amber-400 hover:text-amber-300 font-extrabold bg-slate-800/40 hover:bg-slate-800/70 rounded-xl border border-slate-700/60 transition">
+                <i class="fa-solid fa-arrows-rotate mr-1 text-[10px]"></i> Limpar Seleções
+            </button>
+        </div>
+    </header>
+
+    <!-- Player de Áudio Personalizado -->
+    <div class="max-w-md mx-auto px-4 pt-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 shadow-md text-white flex flex-col gap-2.5">
+            <audio id="audio-player" src="380ccb.mp3" preload="metadata"></audio>
+            
+            <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <button id="btn-play-pause" onclick="togglePlayPause()" class="w-10 h-10 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 hover:bg-amber-300 transition active:scale-95">
+                        <i id="play-icon" class="fa-solid fa-play text-sm ml-0.5"></i>
+                    </button>
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold truncate text-slate-100">Hino 380 - CCB</p>
+                        <p class="text-[10px] text-amber-400 font-medium">Áudio de Ensaio</p>
+                    </div>
+                </div>
+
+                <!-- Controle de Volume -->
+                <div class="flex items-center gap-1.5 bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-700/50">
+                    <i id="volume-icon" class="fa-solid fa-volume-high text-xs text-slate-400"></i>
+                    <input id="volume-control" type="range" min="0" max="1" step="0.05" value="1" oninput="changeVolume(this.value)" class="w-16 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                </div>
+            </div>
+
+            <!-- Progresso do Áudio -->
+            <div class="space-y-1">
+                <input id="progress-bar" type="range" value="0" min="0" max="100" oninput="seekAudio(this.value)" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-[10px] text-slate-400 font-mono font-semibold">
+                    <span id="current-time">0:00</span>
+                    <span id="total-duration">0:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista Principal de Igrejas / Ensaios -->
+    <main class="max-w-md mx-auto px-4 pt-4">
+        <div id="cards-container" class="space-y-3">
+            <!-- Cards injetados via JavaScript -->
+        </div>
+
+        <!-- Estado Vazio -->
+        <div id="no-results" class="hidden text-center py-20 px-4">
+            <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-3 border border-amber-200">
+                <i class="fa-solid fa-church text-xl"></i>
+            </div>
+            <p class="text-slate-700 font-bold text-sm">Nenhum ensaio encontrado</p>
+            <p class="text-slate-400 text-xs mt-1">Tente alterar os filtros selecionados.</p>
+        </div>
+    </main>
+
+    <!-- Modal Elegante de Detalhes -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center sm:p-4 hidden opacity-0 transition-opacity duration-300">
+        <div id="modal-container" class="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl w-full sm:max-w-md p-6 transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300 max-h-[90vh] overflow-y-auto">
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-4 sm:hidden"></div>
+            
+            <div class="flex justify-between items-start mb-3">
+                <span id="modal-setor" class="bg-amber-100 text-amber-900 text-xs font-extrabold px-3 py-1 rounded-full border border-amber-200 uppercase tracking-wider"></span>
+                <button onclick="closeModal()" class="w-9 h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-2 mb-1">
+                <i class="fa-solid fa-church text-amber-600 text-sm"></i>
+                <span class="text-xs font-bold text-amber-800 uppercase tracking-wide">CCB Itaquaquecetuba</span>
+            </div>
+            <h3 id="modal-bairro" class="text-2xl font-extrabold text-slate-900 mb-4 leading-snug"></h3>
+            
+            <!-- Card de Programação -->
+            <div class="bg-gradient-to-br from-amber-500/10 to-amber-500/5 rounded-2xl p-4 border border-amber-200/60 mb-4">
+                <span class="text-[10px] font-extrabold text-amber-800 uppercase tracking-widest block mb-1">Programação do Ensaio</span>
+                <p class="text-lg font-bold text-slate-900 flex items-center gap-2.5">
+                    <i class="fa-regular fa-calendar-days text-amber-600 text-base"></i> <span id="modal-ensaio"></span>
+                </p>
+            </div>
+
+            <!-- Card de Endereço -->
+            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-5 space-y-3">
+                <div>
+                    <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block mb-1">Endereço Completo</span>
+                    <p id="modal-endereco" class="text-xs text-slate-700 font-semibold leading-relaxed"></p>
+                </div>
+                <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">CEP</span>
+                        <span id="modal-cep" class="text-xs font-bold text-slate-800"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões do Modal -->
+            <a id="modal-maps-link" href="#" target="_blank" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold py-4 rounded-2xl text-sm transition flex items-center justify-center gap-2.5 mb-3 btn-maps-shimmer animate-maps-pulse z-10 shadow-md active:scale-[0.98]">
+                <i class="fa-solid fa-map-location-dot text-lg"></i>
+                Abrir no Google Maps
+            </a>
+
+            <a id="modal-foto-link" href="#" target="_blank" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-4 rounded-2xl text-sm transition flex items-center justify-center gap-2.5 mb-3 shadow-md active:scale-[0.98]">
+                <i class="fa-solid fa-camera text-lg text-amber-400"></i>
+                Foto / Fachada
+            </a>
+
+            <button onclick="closeModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold py-3.5 rounded-2xl text-xs transition">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+    <!-- Script de Contagem Regressiva e Transição -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const splash = document.getElementById('splash-screen');
+            const body = document.getElementById('main-body');
+            const timerEl = document.getElementById('splash-timer');
+            
+            let count = 3;
+            
+            const interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    timerEl.textContent = count;
+                } else {
+                    clearInterval(interval);
+                    timerEl.textContent = "0";
+                    splash.classList.add('opacity-0');
+                    body.classList.remove('overflow-hidden');
+                    setTimeout(() => {
+                        splash.style.display = 'none';
+                    }, 700);
+                }
+            }, 1000);
+        });
+    </script>
+
+    <!-- Script do Player de Áudio -->
+    <script>
+        const audio = document.getElementById('audio-player');
+        const playIcon = document.getElementById('play-icon');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalDurationEl = document.getElementById('total-duration');
+        const volumeIcon = document.getElementById('volume-icon');
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function togglePlayPause() {
+            if (audio.paused) {
+                audio.play();
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+            } else {
+                audio.pause();
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play');
+            }
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            totalDurationEl.textContent = formatTime(audio.duration);
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            if (!isNaN(audio.duration)) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = progress;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+            }
+        });
+
+        audio.addEventListener('ended', () => {
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play');
+            progressBar.value = 0;
+            currentTimeEl.textContent = "0:00";
+        });
+
+        function seekAudio(value) {
+            if (!isNaN(audio.duration)) {
+                audio.currentTime = (value / 100) * audio.duration;
+            }
+        }
+
+        function changeVolume(value) {
+            audio.volume = value;
+            if (value == 0) {
+                volumeIcon.className = "fa-solid fa-volume-xmark text-xs text-slate-500";
+            } else if (value < 0.5) {
+                volumeIcon.className = "fa-solid fa-volume-low text-xs text-slate-400";
+            } else {
+                volumeIcon.className = "fa-solid fa-volume-high text-xs text-slate-400";
+            }
+        }
+    </script>
+
+    <!-- Base de Dados Completa -->
+    <script>
+        const agendaData = [
+            { id: 1, setor: "2", cidade: "Itaqua", bairro: "Pium", ensaio: "3° S - 17h", endereco: "Estrada do Merendá, 40 - Avenida das Monções - Altura do nº 1800, Itaquaquecetuba/SP", cep: "08592-390", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Pium+Itaquaquecetuba+SP+fachada" },
+            { id: 2, setor: "2", cidade: "Itaqua", bairro: "Sitio José de Moraes", ensaio: "4° S - 17h", endereco: "Avenida Cacique Dobre, 298 - Parque Nossa Senhora das Graças, Itaquaquecetuba/SP", cep: "08591-520", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Sitio+Jos%C3%A9+de+Moraes+Itaquaquecetuba+SP+fachada" },
+            { id: 3, setor: "2", cidade: "Itaqua", bairro: "Jardim São Paulo", ensaio: "U° D - 16h", endereco: "Rua Ferlópolis, 355, Itaquaquecetuba/SP", cep: "08597-005", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+S%C3%A3o+Paulo+Itaquaquecetuba+SP+fachada" },
+            { id: 4, setor: "2", cidade: "Itaqua", bairro: "Água das Pedras", ensaio: "1° D - 16h", endereco: "Rua Lages, 360, Itaquaquecetuba/SP", cep: "08593-430", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+%C3%81gua+das+Pedras+Itaquaquecetuba+SP+fachada" },
+            { id: 5, setor: "2", cidade: "Itaqua", bairro: "Parque Marengo", ensaio: "4° Sab - 17h", endereco: "Rua Olavo Dantas, 325 - Residencial Marengo, Itaquaquecetuba/SP", cep: "08594-450", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Marengo+Itaquaquecetuba+SP+fachada" },
+            { id: 6, setor: "2", cidade: "Itaqua", bairro: "Parque Macedo", ensaio: "1° D - 16h", endereco: "Rua Jardim Alegre, 69 - Parque Dirce, Itaquaquecetuba/SP", cep: "08595-290", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Macedo+Itaquaquecetuba+SP+fachada" },
+            { id: 7, setor: "3", cidade: "Itaqua", bairro: "Jardim Amazonas", ensaio: "Úº D - 16h", endereco: "Estrada São Bento, 4082 - Jardim Novo Horizonte II, Itaquaquecetuba/SP", cep: "08591-840", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Amazonas+Itaquaquecetuba+SP+fachada" },
+            { id: 8, setor: "2", cidade: "Itaqua", bairro: "Parque Residencial Marengo", ensaio: "2° S - 19:00", endereco: "Avenida Veridiano de Carvalho, 95, Itaquaquecetuba/SP", cep: "08594-100", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Residencial+Marengo+Itaquaquecetuba+SP+fachada" },
+            { id: 9, setor: "2", cidade: "Itaqua", bairro: "Parque Residencial Furtuna", ensaio: "4° D - 16h", endereco: "Rua Boracéia, 153, Itaquaquecetuba/SP", cep: "08598-718", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Residencial+Furtuna+Itaquaquecetuba+SP+fachada" },
+            { id: 10, setor: "2", cidade: "Itaqua", bairro: "Jardim Moraes", ensaio: "4° D - 16h", endereco: "Rua Edgard Roquette Pinto, 434, Itaquaquecetuba/SP", cep: "08597-712", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Moraes+Itaquaquecetuba+SP+fachada" },
+            { id: 11, setor: "2", cidade: "Itaqua", bairro: "Parque Novo Horizonte", ensaio: "3° 6° - 19:30h", endereco: "Rua da Felicidade, 321 - Residencial Pamela, Itaquaquecetuba/SP", cep: "08596-350", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Novo+Horizonte+Itaquaquecetuba+SP+fachada" },
+            { id: 12, setor: "2", cidade: "Itaqua", bairro: "Terra Prometida", ensaio: "U° D - 16h", endereco: "Rua Moisés, 590, Itaquaquecetuba/SP", cep: "08595-874", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Terra+Prometida+Itaquaquecetuba+SP+fachada" },
+            { id: 13, setor: "2", cidade: "Itaqua", bairro: "Jardim Marcelo", ensaio: "4° S - 17h", endereco: "Rua Crisópolis, 142, Itaquaquecetuba/SP", cep: "08592-609", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Marcelo+Itaquaquecetuba+SP+fachada" },
+            { id: 14, setor: "1", cidade: "Itaqua", bairro: "Jardim Miray", ensaio: "2° S - 16:30h", endereco: "Rua da Tubulação, 73, Itaquaquecetuba/SP", cep: "08574-440", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Miray+Itaquaquecetuba+SP+fachada" },
+            { id: 15, setor: "1", cidade: "Itaqua", bairro: "Pedreira", ensaio: "2° S - 19:30", endereco: "Avenida Brasil, 953, Itaquaquecetuba/SP", cep: "08572-010", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Pedreira+Itaquaquecetuba+SP+fachada" },
+            { id: 16, setor: "1", cidade: "Itaqua", bairro: "Central", ensaio: "1° S - 19:30", endereco: "Rua MMDC, 35 - Centro, Itaquaquecetuba/SP", cep: "08570-007", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Central+Itaquaquecetuba+SP+fachada" },
+            { id: 17, setor: "1", cidade: "Itaqua", bairro: "Aracaré", ensaio: "Úº D - 16h", endereco: "Rua Piauí, 417, Itaquaquecetuba/SP", cep: "08572-510", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Aracar%C3%A9+Itaquaquecetuba+SP+fachada" },
+            { id: 18, setor: "1", cidade: "Itaqua", bairro: "Jardim do Carmo", ensaio: "4° D - 16h", endereco: "Rua Atibaia, 211, Itaquaquecetuba/SP", cep: "08577-660", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+do+Carmo+Itaquaquecetuba+SP+fachada" },
+            { id: 19, setor: "1", cidade: "Itaqua", bairro: "Jardim Odete", ensaio: "3° S - 19:30", endereco: "Rua Rosa, 396, Itaquaquecetuba/SP", cep: "08598-220", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Odete+Itaquaquecetuba+SP+fachada" },
+            { id: 20, setor: "1", cidade: "Itaqua", bairro: "Morro Branco", ensaio: "4° D - 16h", endereco: "Rua Curitiba, 60 - Jardim Anita, Itaquaquecetuba/SP", cep: "08573-370", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Morro+Branco+Itaquaquecetuba+SP+fachada" },
+            { id: 21, setor: "1", cidade: "Itaqua", bairro: "Rancho Grande", ensaio: "Ú° S - 17h", endereco: "Rua Palmas, 99 - Jardim Aracaré, Itaquaquecetuba/SP", cep: "08574-110", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Rancho+Grande+Itaquaquecetuba+SP+fachada" },
+            { id: 22, setor: "1", cidade: "Itaqua", bairro: "Vila Arizona", ensaio: "1° D - 16h", endereco: "Rua Ariranha, 160, Itaquaquecetuba/SP", cep: "08575-540", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+Arizona+Itaquaquecetuba+SP+fachada" },
+            { id: 23, setor: "1", cidade: "Itaqua", bairro: "Vila Sônia", ensaio: "2° S - 17h", endereco: "Estrada Walter da Silva, 1156, Itaquaquecetuba/SP", cep: "08570-330", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+S%C3%B4nia+Itaquaquecetuba+SP+fachada" },
+            { id: 24, setor: "1", cidade: "Itaqua", bairro: "Monte belo", ensaio: "Ú° D - 16h", endereco: "Rua Jundiaí, 140 - Estação Manoel Feio, Itaquaquecetuba/SP", cep: "08577-320", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Monte+belo+Itaquaquecetuba+SP+fachada" },
+            { id: 25, setor: "1", cidade: "Itaqua", bairro: "Vila Virginia", ensaio: "4° D - 16h", endereco: "Avenida Marginal I, 43 - Antiga Estrada São Paulo-Rio - Km 32, Itaquaquecetuba/SP", cep: "08576-275", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+Virginia+Itaquaquecetuba+SP+fachada" },
+            { id: 26, setor: "4", cidade: "Itaqua", bairro: "Jardim Itapuã", ensaio: "Ú° D - 16h", endereco: "Rua Epitácio Pessoa, 390, Itaquaquecetuba/SP", cep: "08579-040", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Itapu%C3%A3+Itaquaquecetuba+SP+fachada" },
+            { id: 27, setor: "4", cidade: "Itaqua", bairro: "Jardim Itaquá", ensaio: "1° D - 16h", endereco: "Rua dos Economistas, 160, Itaquaquecetuba/SP", cep: "08580-100", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Itaqu%C3%A1+Itaquaquecetuba+SP+fachada" },
+            { id: 28, setor: "4", cidade: "Itaqua", bairro: "Jardim Karine", ensaio: "3° S - 17h", endereco: "Rua Carlos Chagas, 30, Itaquaquecetuba/SP", cep: "08579-460", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Karine+Itaquaquecetuba+SP+fachada" },
+            { id: 29, setor: "4", cidade: "Itaqua", bairro: "Jardim Maria Eliza", ensaio: "Ú° S - 17h", endereco: "Rua Pacaembu, 130, Itaquaquecetuba/SP", cep: "08580-440", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Maria+Eliza+Itaquaquecetuba+SP+fachada" },
+            { id: 30, setor: "4", cidade: "Itaqua", bairro: "Jardim Maria Rosa", ensaio: "2° S - 17h", endereco: "Rua Alvorada, 125, Itaquaquecetuba/SP", cep: "08582-785", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Maria+Rosa+Itaquaquecetuba+SP+fachada" },
+            { id: 31, setor: "4", cidade: "Itaqua", bairro: "Jardim Paineira", ensaio: "1° D - 16h", endereco: "Rua Serra da Mantiqueira, 715, Itaquaquecetuba/SP", cep: "08581-220", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Paineira+Itaquaquecetuba+SP+fachada" },
+            { id: 32, setor: "4", cidade: "Itaqua", bairro: "Jardim Tropical", ensaio: "4° D - 16h", endereco: "Rua Itápolis, 50, Itaquaquecetuba/SP", cep: "08582-640", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Tropical+Itaquaquecetuba+SP+fachada" },
+            { id: 33, setor: "4", cidade: "Itaqua", bairro: "Parque Piratininga I", ensaio: "Ú° S - 19:30h", endereco: "Rua Gomes Leal, 165, Itaquaquecetuba/SP", cep: "08583-430", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Piratininga+I+Itaquaquecetuba+SP+fachada" },
+            { id: 34, setor: "4", cidade: "Itaqua", bairro: "Parque Piratininga II", ensaio: "1° D - 16h", endereco: "Rua Raul Pompéia, 71, Itaquaquecetuba/SP", cep: "08583-685", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Piratininga+II+Itaquaquecetuba+SP+fachada" },
+            { id: 35, setor: "4", cidade: "Itaqua", bairro: "Parque São Pedro", ensaio: "Ú° D - 16h", endereco: "Avenida Cardeal, 319, Itaquaquecetuba/SP", cep: "08586-010", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+S%C3%A3o+Pedro+Itaquaquecetuba+SP+fachada" },
+            { id: 36, setor: "4", cidade: "Itaqua", bairro: "Vila Japão", ensaio: "1° D - 16h", endereco: "Rua São Judas Tadeu, 181, Itaquaquecetuba/SP", cep: "08599-170", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+Jap%C3%A3o+Itaquaquecetuba+SP+fachada" },
+            { id: 37, setor: "4", cidade: "Itaqua", bairro: "Vila Nely", ensaio: "1° S - 17h", endereco: "Rua Rio Grande, 66 - Nova Itaquá, Itaquaquecetuba/SP", cep: "08599-340", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+Nely+Itaquaquecetuba+SP+fachada" },
+            { id: 38, setor: "4", cidade: "Itaqua", bairro: "Vila São Carlos", ensaio: "1° S - 17h", endereco: "Rua Tocantins, 136, Itaquaquecetuba/SP", cep: "08599-600", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Vila+S%C3%A3o+Carlos+Itaquaquecetuba+SP+fachada" },
+            { id: 39, setor: "3", cidade: "Itaqua", bairro: "Cidade Nova Louzada", ensaio: "4° D - 16h", endereco: "Avenida Turmalinas, 1323, Itaquaquecetuba/SP", cep: "08589-000", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Cidade+Nova+Louzada+Itaquaquecetuba+SP+fachada" },
+            { id: 40, setor: "3", cidade: "Itaqua", bairro: "Estancia Guatambú", ensaio: "1° D - 16h", endereco: "Rua Dirce, 54, Itaquaquecetuba/SP", cep: "08588-720", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Estancia+Guatamb%C3%BA+Itaquaquecetuba+SP+fachada" },
+            { id: 41, setor: "3", cidade: "Itaqua", bairro: "Jardim Adriane", ensaio: "U° S - 17h", endereco: "Rua Venezuela, 193 - Jardim Americano, Itaquaquecetuba/SP", cep: "08598-732", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Adriane+Itaquaquecetuba+SP+fachada" },
+            { id: 42, setor: "3", cidade: "Itaqua", bairro: "Jardim Caiuby", ensaio: "1° S - 17h", endereco: "Rua Alvilândia, 295, Itaquaquecetuba/SP", cep: "08588-550", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Caiuby+Itaquaquecetuba+SP+fachada" },
+            { id: 43, setor: "3", cidade: "Itaqua", bairro: "Jardim Canaã", ensaio: "Ú° D - 16h", endereco: "Rua João Aranha, 18, Itaquaquecetuba/SP", cep: "08585-200", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Cana%C3%A3+Itaquaquecetuba+SP+fachada" },
+            { id: 44, setor: "3", cidade: "Itaqua", bairro: "Jardim Carolina", ensaio: "1° D - 16h", endereco: "Rua Padre Azevedo, 18, Itaquaquecetuba/SP", cep: "08588-370", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Carolina+Itaquaquecetuba+SP+fachada" },
+            { id: 45, setor: "3", cidade: "Itaqua", bairro: "Jardim Josely", ensaio: "1° D - 16h", endereco: "Estrada de São Bento, 8215, Itaquaquecetuba/SP", cep: "08590-315", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Josely+Itaquaquecetuba+SP+fachada" },
+            { id: 46, setor: "3", cidade: "Itaqua", bairro: "Jardim Monica", ensaio: "4° D - 16h", endereco: "Rua Guadalajara, 224, Itaquaquecetuba/SP", cep: "08584-400", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Monica+Itaquaquecetuba+SP+fachada" },
+            { id: 47, setor: "3", cidade: "Itaqua", bairro: "Jardim Patricia", ensaio: "1° D - 16h", endereco: "Rua Paes de Barros, 88, Itaquaquecetuba/SP", cep: "08584-150", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Patricia+Itaquaquecetuba+SP+fachada" },
+            { id: 48, setor: "3", cidade: "Itaqua", bairro: "Jardim Pinheirinho", ensaio: "3° S - 17h", endereco: "Rua Itapetininga, 521 A, Itaquaquecetuba/SP", cep: "08589-180", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Pinheirinho+Itaquaquecetuba+SP+fachada" },
+            { id: 49, setor: "3", cidade: "Itaqua", bairro: "Jardim Silvestre", ensaio: "3° S - 16:30h", endereco: "Rua Cascalho Rico, 385, Itaquaquecetuba/SP", cep: "08584-450", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Jardim+Silvestre+Itaquaquecetuba+SP+fachada" },
+            { id: 50, setor: "3", cidade: "Itaqua", bairro: "Parque Village", ensaio: "Ú° S - 17h", endereco: "Estrada do Cuiabá, 1625 - Bairro Amanda Caiubi, Itaquaquecetuba/SP", cep: "08587-190", fotoUrl: "https://www.google.com/search?tbm=isch&q=Congrega%C3%A7%C3%A3o+Crist%C3%A3+no+Brasil+Parque+Village+Itaquaquecetuba+SP+fachada" }
+        ];
+
+        const container = document.getElementById('cards-container');
+        const filterBairro = document.getElementById('filter-bairro');
+        const filterSetor = document.getElementById('filter-setor');
+        const filterDia = document.getElementById('filter-dia');
+        const filterHora = document.getElementById('filter-hora');
+        const noResults = document.getElementById('no-results');
+        const totalCount = document.getElementById('total-count');
+
+        function populateBairroSelect() {
+            const bairros = [...new Set(agendaData.map(item => item.bairro))].sort((a, b) => a.localeCompare(b));
+            bairros.forEach(bairro => {
+                const opt = document.createElement('option');
+                opt.value = bairro;
+                opt.textContent = bairro;
+                filterBairro.appendChild(opt);
+            });
+        }
+
+        function renderCards(data) {
+            container.innerHTML = '';
+            totalCount.textContent = data.length;
+            
+            if(data.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-4 shadow-xs border border-slate-100 hover:border-slate-300 active:scale-[0.99] transition-all flex items-center justify-between gap-3 cursor-pointer";
+                card.onclick = () => openModal(item);
+                
+                card.innerHTML = `
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-slate-100 text-slate-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-slate-200">Setor ${item.setor}</span>
+                            <span class="text-xs text-slate-400 truncate"><i class="fa-solid fa-church text-[10px] mr-1"></i> CCB</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-900 truncate">${item.bairro}</h4>
+                        <div class="mt-1.5 text-xs text-amber-800 font-semibold flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock text-[11px] text-amber-600"></i>
+                            <span>${item.ensaio}</span>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 shrink-0 border border-slate-100">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterData() {
+            const bairroVal = filterBairro.value;
+            const setorVal = filterSetor.value;
+            const diaVal = filterDia.value;
+            const horaVal = filterHora.value;
+
+            const filtered = agendaData.filter(item => {
+                const matchBairro = bairroVal === "" || item.bairro === bairroVal;
+                const matchSetor = setorVal === "" || item.setor === setorVal;
+                const matchDia = diaVal === "" || item.ensaio.toUpperCase().includes(diaVal.toUpperCase());
+                const matchHora = horaVal === "" || item.ensaio.toLowerCase().includes(horaVal.toLowerCase());
+                
+                return matchBairro && matchSetor && matchDia && matchHora;
+            });
+
+            renderCards(filtered);
+        }
+
+        function resetFilters() {
+            filterBairro.value = '';
+            filterSetor.value = '';
+            filterDia.value = '';
+            filterHora.value = '';
+            renderCards(agendaData);
+        }
+
+        filterBairro.addEventListener('change', filterData);
+        filterSetor.addEventListener('change', filterData);
+        filterDia.addEventListener('change', filterData);
+        filterHora.addEventListener('change', filterData);
+
+        const modal = document.getElementById('detail-modal');
+        const modalContainer = document.getElementById('modal-container');
+
+        function openModal(item) {
+            document.getElementById('modal-setor').textContent = `Setor ${item.setor}`;
+            document.getElementById('modal-bairro').textContent = item.bairro;
+            document.getElementById('modal-ensaio').textContent = item.ensaio;
+            document.getElementById('modal-endereco').textContent = item.endereco;
+            document.getElementById('modal-cep').textContent = item.cep;
+
+            const mapsQuery = encodeURIComponent(`CCB ${item.bairro} ${item.endereco}`);
+            document.getElementById('modal-maps-link').href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+            document.getElementById('modal-foto-link').href = item.fotoUrl;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContainer.classList.remove('translate-y-full', 'sm:scale-95');
+                modalContainer.classList.add('translate-y-0', 'sm:scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContainer.classList.remove('translate-y-0', 'sm:scale-100');
+            modalContainer.classList.add('translate-y-full', 'sm:scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) closeModal();
+        });
+
+        populateBairroSelect();
+        renderCards(agendaData);
+    </script>
+</body>
+</html>
