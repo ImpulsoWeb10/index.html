@@ -19,9 +19,9 @@
       height: 100%;
       overflow: hidden;
       background-color: #e0f2fe;
-      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka', cursive, sans-serif;
+      font-family: Arial, Helvetica, sans-serif !important;
       color: #0c4a6e;
-      font-weight: 900;
+      font-weight: 800;
     }
 
     #app-container {
@@ -70,11 +70,12 @@
       border: none;
       padding: 10px 14px;
       font-size: 1.05rem;
-      font-weight: 900;
+      font-weight: 900 !important;
       border-radius: 12px;
       box-shadow: 0 3px 0 #ca8a04;
       cursor: pointer;
       white-space: nowrap;
+      font-family: Arial, Helvetica, sans-serif !important;
     }
 
     .btn:active {
@@ -108,7 +109,7 @@
       text-orientation: mixed;
       letter-spacing: 1px;
       font-size: 0.95rem;
-      font-weight: 900;
+      font-weight: 900 !important;
     }
 
     .btn-easy { background-color: #4ade80; color: #14532d; box-shadow: -2px 2px 0 #16a34a; }
@@ -174,7 +175,7 @@
       bottom: 8px;
       left: 10px;
       font-size: 1.1rem;
-      font-weight: 900;
+      font-weight: 900 !important;
       background: #ffffff;
       padding: 6px 14px;
       border-radius: 14px;
@@ -184,7 +185,6 @@
       pointer-events: none;
     }
 
-    /* Modais */
     .modal {
       display: none;
       position: fixed;
@@ -192,7 +192,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.85);
       z-index: 200;
       justify-content: center;
       align-items: center;
@@ -218,10 +218,9 @@
     .modal-card h2 {
       color: #0284c7;
       font-size: 1.4rem;
-      font-weight: 900;
+      font-weight: 900 !important;
     }
 
-    /* Carrossel Principal */
     .carousel-container {
       display: flex;
       align-items: center;
@@ -254,7 +253,7 @@
       color: #ffffff;
       border: none;
       font-size: 1.6rem;
-      font-weight: 900;
+      font-weight: 900 !important;
       width: 46px;
       height: 46px;
       border-radius: 50%;
@@ -267,7 +266,6 @@
       touch-action: manipulation;
     }
 
-    /* Versículo e Botão Resumo */
     .verse-box {
       background: #f0f9ff;
       border: 3px solid #38bdf8;
@@ -282,13 +280,13 @@
 
     .verse-title {
       font-size: 1.15rem;
-      font-weight: 900;
+      font-weight: 900 !important;
       color: #7e22ce;
     }
 
     .verse-text {
       font-size: 1.05rem;
-      font-weight: 900;
+      font-weight: 900 !important;
       color: #0f172a;
       line-height: 1.4;
     }
@@ -301,21 +299,16 @@
       border-radius: 12px;
       padding: 10px 16px;
       font-size: 1rem;
-      font-weight: 900;
+      font-weight: 900 !important;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
       box-shadow: 0 3px 0 #0369a1;
       touch-action: manipulation;
+      font-family: Arial, Helvetica, sans-serif !important;
     }
 
-    .resumo-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 0 0 #0369a1;
-    }
-
-    /* Modal Elegante de Resumo da Passagem */
     .story-card {
       background: #ffffff;
       padding: 18px;
@@ -329,19 +322,19 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       overflow-y: auto;
     }
 
     .story-card h2 {
       color: #6b21a8;
       font-size: 1.4rem;
-      font-weight: 900;
+      font-weight: 900 !important;
     }
 
     .story-card img {
       width: 100%;
-      max-height: 190px;
+      max-height: 170px;
       object-fit: cover;
       border-radius: 14px;
       border: 3px solid #d8b4fe;
@@ -349,7 +342,7 @@
 
     .story-text {
       font-size: 1.1rem;
-      font-weight: 900;
+      font-weight: 900 !important;
       color: #0f172a;
       line-height: 1.5;
       text-align: justify;
@@ -361,23 +354,81 @@
       width: 100%;
     }
 
+    .btn-action-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
     .btn-go-puzzle {
       background-color: #4ade80;
       color: #14532d;
       border: none;
       padding: 14px 20px;
       font-size: 1.15rem;
-      font-weight: 900;
+      font-weight: 900 !important;
       border-radius: 14px;
       box-shadow: 0 4px 0 #16a34a;
       cursor: pointer;
       width: 100%;
       touch-action: manipulation;
+      font-family: Arial, Helvetica, sans-serif !important;
     }
 
-    .btn-go-puzzle:active {
-      transform: translateY(2px);
-      box-shadow: 0 0 0 #16a34a;
+    .btn-modal-back {
+      background-color: #f87171;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: 900 !important;
+      border-radius: 14px;
+      box-shadow: 0 3px 0 #dc2626;
+      cursor: pointer;
+      width: 100%;
+      touch-action: manipulation;
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    .message-card {
+      background: linear-gradient(135deg, #a855f7, #38bdf8);
+      border: 5px solid #facc15;
+      border-radius: 24px;
+      padding: 24px;
+      color: #ffffff;
+      text-align: center;
+      width: 90vw;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .message-text {
+      font-size: 1.5rem;
+      font-weight: 900 !important;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .countdown-timer {
+      font-size: 2.5rem;
+      font-weight: 900 !important;
+      background: #ffffff;
+      color: #7e22ce;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
     .model-img {
@@ -388,16 +439,18 @@
       border: 3px solid #0284c7;
     }
 
-    /* AJUSTES ESPECÍFICOS PARA CELULAR (TELAS PEQUENAS) */
     @media (max-width: 600px) {
+      body, button, p, span, h1, h2 {
+        font-family: Arial, Helvetica, sans-serif !important;
+      }
       h1 { font-size: 1.2rem; }
-      .btn { font-size: 0.95rem; padding: 8px 10px; }
-      .verse-title { font-size: 1.1rem; }
-      .verse-text { font-size: 1rem; font-weight: 900; }
-      .resumo-btn { font-size: 0.95rem; padding: 8px 14px; }
-      .story-card h2 { font-size: 1.25rem; }
-      .story-text { font-size: 1.05rem; font-weight: 900; }
-      .btn-go-puzzle { font-size: 1.05rem; padding: 12px; }
+      .btn { font-size: 1rem; padding: 10px 12px; font-weight: 900 !important; }
+      .verse-title { font-size: 1.15rem; font-weight: 900 !important; }
+      .verse-text { font-size: 1.05rem; font-weight: 900 !important; }
+      .resumo-btn { font-size: 1rem; padding: 10px 16px; font-weight: 900 !important; }
+      .story-card h2 { font-size: 1.3rem; font-weight: 900 !important; }
+      .story-text { font-size: 1.1rem; font-weight: 900 !important; }
+      .btn-go-puzzle { font-size: 1.1rem; padding: 12px; font-weight: 900 !important; }
     }
   </style>
 </head>
@@ -434,7 +487,6 @@
     <div class="modal-card">
       <h2>🖼️ Escolha uma Imagem</h2>
       
-      <!-- Carrossel -->
       <div class="carousel-container" id="carousel-swipe-area">
         <button class="carousel-btn" id="prev-btn">❮</button>
         <div class="carousel-display">
@@ -444,15 +496,16 @@
         <button class="carousel-btn" id="next-btn">❯</button>
       </div>
 
-      <!-- Versículo Exclusivo -->
       <div class="verse-box">
         <span class="verse-title" id="verse-ref">Gênesis 7:1</span>
         <p class="verse-text" id="verse-content">"Depois, disse o SENHOR a Noé: Entra tu e toda a tua casa na arca..."</p>
         <button class="resumo-btn" id="resumo-btn">Resumo ➔</button>
       </div>
 
-      <button class="btn btn-model" id="confirm-carousel-btn" style="width: 100%; padding: 12px; font-size: 1.05rem;">Usar Esta Imagem</button>
-      <button class="btn" id="close-select-btn" style="padding: 8px 16px; font-size: 0.9rem;">Cancelar</button>
+      <div class="btn-action-group">
+        <button class="btn btn-model" id="confirm-carousel-btn" style="width: 100%; padding: 12px; font-size: 1.05rem;">Usar Esta Imagem</button>
+        <button class="btn-modal-back" id="close-select-btn">Voltar</button>
+      </div>
     </div>
   </div>
 
@@ -462,7 +515,19 @@
       <h2 id="story-title">Noé Entrando na Arca</h2>
       <img src="noe.jpg" id="story-img" alt="História">
       <div class="story-text" id="story-full-text"></div>
-      <button class="btn-go-puzzle" id="story-go-puzzle-btn">Ir para quebra cabeça</button>
+      
+      <div class="btn-action-group">
+        <button class="btn-go-puzzle" id="story-go-puzzle-btn">Usar esta imagem</button>
+        <button class="btn-modal-back" id="story-back-btn">Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Mensagem de Fé e Contagem Regressiva -->
+  <div class="modal" id="faith-modal">
+    <div class="message-card">
+      <div class="message-text" id="faith-message-text">✨ Jesus te ama muito!</div>
+      <div class="countdown-timer" id="faith-countdown">3</div>
     </div>
   </div>
 
@@ -471,7 +536,7 @@
     <div class="modal-card">
       <img src="noe.jpg" id="model-img-element" alt="Modelo da Arca" class="model-img">
       <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Vamos lá amiguinhos, montar esse animado quebra-cabeça!</p>
-      <button class="btn" id="close-model-btn">Fechar</button>
+      <button class="btn-modal-back" id="close-model-btn">Voltar</button>
     </div>
   </div>
 
@@ -479,8 +544,8 @@
   <div class="modal" id="lock-modal">
     <div class="modal-card">
       <h2>⚠️ Mudar de Nível</h2>
-      <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Você já está jogando! Clique em <strong>VOLTAR</strong> para zerar e escolher outro nível.</p>
-      <button class="btn btn-back" id="lock-reset-btn" style="writing-mode: horizontal-tb; font-size: 1.05rem; padding: 10px 20px;">VOLTAR</button>
+      <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Você já está jogando! Clique em VOLTAR para zerar e escolher outro nível.</p>
+      <button class="btn-modal-back" id="lock-reset-btn">Voltar ao Início</button>
     </div>
   </div>
 
@@ -494,14 +559,13 @@
   </div>
 
   <script>
-    // Suporte às imagens .jpg e .jpeg para compatibilidade em celulares
     const IMAGES = [
       {
         id: 'noe1',
         srcs: ['noe.jpg', 'noe.jpeg', 'noe1.jpg', 'noe1.jpeg'],
         label: 'Noé 1 - Entrando na Arca',
         ref: 'Gênesis 7:1',
-        verse: '"Depois, disse o SENHOR a Noé: Entra tu e toda a tua casa na arca, porque te hei visto justo diante de mim nesta geração..."',
+        verse: '"Depois, disse o SENHOR a Noé: Entra tu e toda a tua casa na arca..."',
         summary: 'Deus chamou Noé e toda a sua família para entrarem na arca.\n\nEles obedeceram e foram se abrigar com alegria, sabendo que estariam seguros sob a proteção do Senhor.'
       },
       {
@@ -538,6 +602,20 @@
       }
     ];
 
+    const FAITH_MESSAGES = [
+      "❤️ Jesus te ama muito!",
+      "⭐ Você é especial para Deus!",
+      "👑 Deus é o seu Pai celestial!",
+      "🕊️ O amor de Deus nunca falha!",
+      "🌟 Você é uma preciosidade divina!",
+      "🛡️ Deus cuida de você em todo tempo!",
+      "🌈 Tudo é possível ao que crê!",
+      "🙏 Com Deus você é mais que vencedor!",
+      "✨ A paz de Jesus habita no seu coração!",
+      "☀️ O Senhor é o seu pastor e nada te faltará!"
+    ];
+
+    let currentMessageIndex = 0;
     let currentImageIndex = 0;
     let currentImageSrc = IMAGES[0].srcs[0];
 
@@ -562,6 +640,7 @@
     const imageModal = document.getElementById('image-modal');
     const selectModal = document.getElementById('select-modal');
     const storyModal = document.getElementById('story-modal');
+    const faithModal = document.getElementById('faith-modal');
     const lockModal = document.getElementById('lock-modal');
     const lockResetBtn = document.getElementById('lock-reset-btn');
     const modelImgElement = document.getElementById('model-img-element');
@@ -581,13 +660,16 @@
     const storyImg = document.getElementById('story-img');
     const storyFullText = document.getElementById('story-full-text');
     const storyGoPuzzleBtn = document.getElementById('story-go-puzzle-btn');
+    const storyBackBtn = document.getElementById('story-back-btn');
+
+    const faithMessageText = document.getElementById('faith-message-text');
+    const faithCountdown = document.getElementById('faith-countdown');
 
     let pieceWidth, pieceHeight;
     let boardWidth, boardHeight;
     let placedCount = 0;
     let movesCount = 0;
 
-    // Função de carregamento seguro de imagem para celulares
     function setImageWithFallback(imgElement, sources, index = 0) {
       if (!sources || index >= sources.length) return;
       imgElement.src = sources[index];
@@ -619,17 +701,37 @@
       storyModal.style.display = 'flex';
     }
 
+    function triggerFaithModalAndStart() {
+      selectModal.style.display = 'none';
+      storyModal.style.display = 'none';
+      
+      faithMessageText.textContent = FAITH_MESSAGES[currentMessageIndex];
+      currentMessageIndex = (currentMessageIndex + 1) % FAITH_MESSAGES.length;
+
+      let timer = 3;
+      faithCountdown.textContent = timer;
+      faithModal.style.display = 'flex';
+
+      const interval = setInterval(() => {
+        timer--;
+        if (timer > 0) {
+          faithCountdown.textContent = timer;
+        } else {
+          clearInterval(interval);
+          faithModal.style.display = 'none';
+          applySelectedImage();
+        }
+      }, 1000);
+    }
+
     function applySelectedImage() {
       const item = IMAGES[currentImageIndex];
       currentImageSrc = item.srcs[0];
       setImageWithFallback(modelImgElement, item.srcs);
-      selectModal.style.display = 'none';
-      storyModal.style.display = 'none';
       clearAllPieces();
       setupGame();
     }
 
-    // Gestos Touch Swipe
     let touchStartX = 0;
     let touchEndX = 0;
 
@@ -730,6 +832,7 @@
       imageModal.style.display = 'none';
       selectModal.style.display = 'none';
       storyModal.style.display = 'none';
+      faithModal.style.display = 'none';
       lockModal.style.display = 'none';
       
       placedCount = 0;
@@ -895,8 +998,13 @@
     });
 
     resumoBtn.addEventListener('click', openStoryModal);
-    confirmCarouselBtn.addEventListener('click', applySelectedImage);
-    storyGoPuzzleBtn.addEventListener('click', applySelectedImage);
+    confirmCarouselBtn.addEventListener('click', triggerFaithModalAndStart);
+    storyGoPuzzleBtn.addEventListener('click', triggerFaithModalAndStart);
+
+    storyBackBtn.addEventListener('click', () => {
+      storyModal.style.display = 'none';
+      selectModal.style.display = 'flex';
+    });
 
     easyBtn.addEventListener('click', () => handleLevelClick('easy', 2, 3));
     mediumBtn.addEventListener('click', () => handleLevelClick('medium', 3, 4));
