@@ -96,7 +96,6 @@
       box-shadow: 0 2px 0 #16a34a;
     }
 
-    /* Painel Lateral de Botões */
     .side-panel {
       display: flex;
       flex-direction: column;
@@ -113,34 +112,10 @@
       font-size: 0.7rem;
     }
 
-    .btn-easy {
-      background-color: #4ade80;
-      color: #14532d;
-      box-shadow: -2px 2px 0 #16a34a;
-    }
-
-    .btn-medium {
-      background-color: #facc15;
-      color: #713f12;
-      box-shadow: -2px 2px 0 #ca8a04;
-    }
-
-    .btn-hard {
-      background-color: #fb923c;
-      color: #7c2d12;
-      box-shadow: -2px 2px 0 #ea580c;
-    }
-
-    .btn-back {
-      background-color: #f87171;
-      color: #7f1d1d;
-      box-shadow: -2px 2px 0 #dc2626;
-    }
-
-    .btn-side:active {
-      transform: translateX(2px);
-      box-shadow: 0 0 0 transparent;
-    }
+    .btn-easy { background-color: #4ade80; color: #14532d; box-shadow: -2px 2px 0 #16a34a; }
+    .btn-medium { background-color: #facc15; color: #713f12; box-shadow: -2px 2px 0 #ca8a04; }
+    .btn-hard { background-color: #fb923c; color: #7c2d12; box-shadow: -2px 2px 0 #ea580c; }
+    .btn-back { background-color: #f87171; color: #7f1d1d; box-shadow: -2px 2px 0 #dc2626; }
 
     #game-container {
       flex: 1;
@@ -210,7 +185,7 @@
       pointer-events: none;
     }
 
-    /* Modais */
+    /* Modais Estilizados */
     .modal {
       display: none;
       position: fixed;
@@ -232,7 +207,7 @@
       box-shadow: 0 8px 25px rgba(0,0,0,0.4);
       border: 4px solid #facc15;
       width: 95vw;
-      max-width: 420px;
+      max-width: 440px;
       max-height: 92vh;
       display: flex;
       flex-direction: column;
@@ -246,12 +221,6 @@
       font-size: 1.1rem;
     }
 
-    .modal-card p {
-      font-size: 0.85rem;
-      color: #334155;
-      font-weight: bold;
-    }
-
     .model-img {
       max-width: 80vw;
       max-height: 50vh;
@@ -261,14 +230,14 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
-    /* CARROSSEL ADAPTADO PARA CELULAR (TOUCH / SWIPE / SETAS) */
+    /* Carrossel */
     .carousel-container {
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
       gap: 6px;
-      margin: 4px 0;
+      margin: 2px 0;
       touch-action: pan-y;
     }
 
@@ -276,14 +245,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       flex: 1;
       width: 100%;
     }
 
     .carousel-img {
       width: 100%;
-      height: 150px;
+      height: 140px;
       object-fit: cover;
       border-radius: 10px;
       border: 3px solid #38bdf8;
@@ -307,16 +276,11 @@
       touch-action: manipulation;
     }
 
-    .carousel-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 0 0 #0369a1;
-    }
-
-    /* MINIATURAS EM BAIXO (RESPONSIVAS) */
+    /* Lista de Imagens em Coluna */
     .image-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       width: 100%;
       padding: 2px;
     }
@@ -324,13 +288,14 @@
     .image-card {
       background: #f0f9ff;
       border: 2px solid #38bdf8;
-      border-radius: 6px;
-      padding: 2px;
+      border-radius: 10px;
+      padding: 6px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      touch-action: manipulation;
+      align-items: flex-start;
+      gap: 4px;
+      text-align: left;
     }
 
     .image-card.active {
@@ -339,21 +304,115 @@
       box-shadow: 0 0 6px rgba(168, 85, 247, 0.6);
     }
 
-    .image-card img {
+    .image-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       width: 100%;
-      height: 38px;
-      object-fit: cover;
-      border-radius: 4px;
     }
 
-    .image-card span {
-      font-size: 0.6rem;
+    .image-card img {
+      width: 60px;
+      height: 45px;
+      object-fit: cover;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .image-card-title {
+      font-size: 0.85rem;
       font-weight: bold;
       color: #0c4a6e;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    }
+
+    .mini-explanation {
+      font-size: 0.7rem;
+      color: #334155;
+      line-height: 1.2;
+      background: #ffffff;
+      padding: 6px;
+      border-radius: 6px;
+      border-left: 3px solid #38bdf8;
       width: 100%;
+    }
+
+    .ver-tudo-btn {
+      align-self: flex-end;
+      background: none;
+      border: none;
+      color: #0284c7;
+      font-size: 0.75rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-top: 2px;
+      padding: 2px 4px;
+      touch-action: manipulation;
+    }
+
+    /* Modal Elegante de História Completa */
+    .story-card {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 4px solid #38bdf8;
+      width: 92vw;
+      max-width: 480px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      overflow-y: auto;
+    }
+
+    .story-card h2 {
+      color: #0284c7;
+      font-size: 1.2rem;
+    }
+
+    .story-card img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 2px solid #bae6fd;
+    }
+
+    .story-text {
+      font-size: 0.9rem;
+      color: #1e293b;
+      line-height: 1.5;
+      text-align: justify;
+      background: #f0f9ff;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #bae6fd;
+      white-space: pre-line;
+      width: 100%;
+    }
+
+    .btn-go-puzzle {
+      background-color: #4ade80;
+      color: #14532d;
+      border: none;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border-radius: 12px;
+      box-shadow: 0 3px 0 #16a34a;
+      cursor: pointer;
+      width: 100%;
+      touch-action: manipulation;
+    }
+
+    .btn-go-puzzle:active {
+      transform: translateY(2px);
+      box-shadow: 0 0 0 #16a34a;
     }
   </style>
 </head>
@@ -385,12 +444,12 @@
     </div>
   </div>
 
-  <!-- Modal Escolha de Imagem Otimizado para Celular -->
+  <!-- Modal Escolha de Imagem -->
   <div class="modal" id="select-modal">
     <div class="modal-card">
       <h2>🖼️ Escolha uma Imagem</h2>
       
-      <!-- Carrossel com Suporte a Deslizar (Swipe) e Clique em Celular -->
+      <!-- Carrossel -->
       <div class="carousel-container" id="carousel-swipe-area">
         <button class="carousel-btn" id="prev-btn">❮</button>
         <div class="carousel-display">
@@ -402,10 +461,20 @@
 
       <button class="btn btn-model" id="confirm-carousel-btn" style="width: 100%; padding: 8px; font-size: 0.85rem;">Usar Esta Imagem</button>
 
-      <!-- Miniaturas horizontais para tela mobile -->
+      <!-- Lista de Opções -->
       <div class="image-grid" id="image-grid"></div>
 
-      <button class="btn" id="close-select-btn" style="padding: 6px 12px; font-size: 0.75rem;">Cancelar</button>
+      <button class="btn" id="close-select-btn" style="padding: 6px 12px; font-size: 0.75rem; margin-top: 4px;">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal Maior e Elegante de História Completa -->
+  <div class="modal" id="story-modal">
+    <div class="story-card">
+      <h2 id="story-title">Noé Entrando na Arca</h2>
+      <img src="noe1.jpg" id="story-img" alt="História">
+      <div class="story-text" id="story-full-text"></div>
+      <button class="btn-go-puzzle" id="story-go-puzzle-btn">Ir para quebra cabeça</button>
     </div>
   </div>
 
@@ -413,7 +482,7 @@
   <div class="modal" id="image-modal">
     <div class="modal-card">
       <img src="noe.jpg" id="model-img-element" alt="Modelo da Arca" class="model-img">
-      <p>Vamos lá amiguinhos, montar esse animado quebra-cabeça!</p>
+      <p style="font-size:0.85rem; color:#334155; font-weight:bold;">Vamos lá amiguinhos, montar esse animado quebra-cabeça!</p>
       <button class="btn" id="close-model-btn">Fechar</button>
     </div>
   </div>
@@ -422,7 +491,7 @@
   <div class="modal" id="lock-modal">
     <div class="modal-card">
       <h2>⚠️ Mudar de Nível</h2>
-      <p>Você já está jogando! Clique em <strong>VOLTAR</strong> para zerar e escolher outro nível.</p>
+      <p style="font-size:0.85rem; color:#334155; font-weight:bold;">Você já está jogando! Clique em <strong>VOLTAR</strong> para zerar e escolher outro nível.</p>
       <button class="btn btn-back" id="lock-reset-btn" style="writing-mode: horizontal-tb; font-size: 0.85rem; padding: 8px 16px;">VOLTAR</button>
     </div>
   </div>
@@ -431,18 +500,48 @@
   <div class="modal" id="win-modal">
     <div class="modal-card">
       <h2>🎉 Parabéns!</h2>
-      <p>Você completou o quebra-cabeça!</p>
+      <p style="font-size:0.85rem; color:#334155; font-weight:bold;">Você completou o quebra-cabeça!</p>
       <button class="btn" id="modal-restart-btn">Jogar Novamente</button>
     </div>
   </div>
 
   <script>
     const IMAGES = [
-      { id: 'noe', src: 'noe.jpg', label: 'Noé 1' },
-      { id: 'noe1', src: 'noe1.jpg', label: 'Noé 2' },
-      { id: 'noe2', src: 'noe2.jpg', label: 'Noé 3' },
-      { id: 'noe3', src: 'noe3.jpg', label: 'Noé 4' },
-      { id: 'noe4', src: 'noe4.jpg', label: 'Noé 5' }
+      {
+        id: 'noe',
+        src: 'noe.jpg',
+        label: 'Noé 1',
+        mini: 'Deus chamou Noé para construir uma grande arca e salvar sua família e os animais do dilúvio.',
+        full: 'Deus viu que Noé era um homem justo e obediente.\n\nPor isso, mandou que ele construísse uma enorme arca de madeira para abrigar sua família e um casal de cada espécie de animal, garantindo a proteção de todos.'
+      },
+      {
+        id: 'noe1',
+        src: 'noe1.jpg',
+        label: 'Noé 2',
+        mini: '"Depois, disse o SENHOR a Noé: Entra tu e toda a tua casa na arca, porque te hei visto justo diante de mim nesta geração..."',
+        full: 'Noé entrou na arca com sua família, obedecendo às ordens de Deus.\n\nOs animais também entraram, de dois em dois, sete em sete conforme Deus havia determinado.\n\nDepois que todos estavam seguros, Deus fechou a porta da arca.\n\nEntão começou o grande dilúvio sobre toda a terra.'
+      },
+      {
+        id: 'noe2',
+        src: 'noe2.jpg',
+        label: 'Noé 3',
+        mini: 'Choveu durante quarenta dias e quarenta noites sem parar, cobrindo toda a terra.',
+        full: 'As águas do dilúvio subiram muito e a arca flutuou com segurança sobre as águas.\n\nDurante quarenta dias e quarenta noites a chuva caiu do céu, mas dentro da arca todos estavam seguros e protegidos por Deus.'
+      },
+      {
+        id: 'noe3',
+        src: 'noe3.jpg',
+        label: 'Noé 4',
+        mini: 'Noé soltou uma pomba para saber se as águas do dilúvio já haviam baixado.',
+        full: 'Quando a chuva parou, Noé soltou uma pomba.\n\nNa segunda vez, ela voltou trazendo uma folhinha de oliveira no bico, mostrando que a terra seca já estava aparecendo novamente.'
+      },
+      {
+        id: 'noe4',
+        src: 'noe4.jpg',
+        label: 'Noé 5',
+        mini: 'Deus colocou o arco-íris no céu como sinal de sua aliança e promessa de proteção.',
+        full: 'Todos saíram da arca felizes e agradeceram a Deus.\n\nDeus colocou um lindo arco-íris no céu como promessa de que nunca mais haveria um dilúvio cobrindo toda a terra.'
+      }
     ];
 
     let currentImageIndex = 0;
@@ -468,6 +567,7 @@
     const winModal = document.getElementById('win-modal');
     const imageModal = document.getElementById('image-modal');
     const selectModal = document.getElementById('select-modal');
+    const storyModal = document.getElementById('story-modal');
     const lockModal = document.getElementById('lock-modal');
     const lockResetBtn = document.getElementById('lock-reset-btn');
     const imageGrid = document.getElementById('image-grid');
@@ -479,6 +579,11 @@
     const nextBtn = document.getElementById('next-btn');
     const confirmCarouselBtn = document.getElementById('confirm-carousel-btn');
     const carouselSwipeArea = document.getElementById('carousel-swipe-area');
+
+    const storyTitle = document.getElementById('story-title');
+    const storyImg = document.getElementById('story-img');
+    const storyFullText = document.getElementById('story-full-text');
+    const storyGoPuzzleBtn = document.getElementById('story-go-puzzle-btn');
 
     let pieceWidth, pieceHeight;
     let boardWidth, boardHeight;
@@ -505,19 +610,39 @@
           card.classList.add('active');
         }
 
+        const headerDiv = document.createElement('div');
+        headerDiv.classList.add('image-card-header');
+
         const imgEl = document.createElement('img');
         imgEl.src = imgData.src;
         imgEl.alt = imgData.label;
         imgEl.onerror = () => { imgEl.src = 'noe.jpg'; };
 
-        const labelEl = document.createElement('span');
-        labelEl.textContent = imgData.label;
+        const titleEl = document.createElement('div');
+        titleEl.classList.add('image-card-title');
+        titleEl.textContent = imgData.label;
 
-        card.appendChild(imgEl);
-        card.appendChild(labelEl);
+        headerDiv.appendChild(imgEl);
+        headerDiv.appendChild(titleEl);
 
-        card.addEventListener('click', (e) => {
+        const miniText = document.createElement('div');
+        miniText.classList.add('mini-explanation');
+        miniText.textContent = imgData.mini;
+
+        const verTudoBtn = document.createElement('button');
+        verTudoBtn.classList.add('ver-tudo-btn');
+        verTudoBtn.innerHTML = 'ver tudo ➔';
+
+        verTudoBtn.addEventListener('click', (e) => {
           e.stopPropagation();
+          openStoryModal(imgData, index);
+        });
+
+        card.appendChild(headerDiv);
+        card.appendChild(miniText);
+        card.appendChild(verTudoBtn);
+
+        card.addEventListener('click', () => {
           currentImageIndex = index;
           updateCarousel();
         });
@@ -526,15 +651,25 @@
       });
     }
 
+    function openStoryModal(imgData, index) {
+      currentImageIndex = index;
+      storyTitle.textContent = imgData.label;
+      storyImg.src = imgData.src;
+      storyFullText.textContent = imgData.full;
+      selectModal.style.display = 'none';
+      storyModal.style.display = 'flex';
+    }
+
     function applySelectedImage() {
       currentImageSrc = IMAGES[currentImageIndex].src;
       modelImgElement.src = currentImageSrc;
       selectModal.style.display = 'none';
+      storyModal.style.display = 'none';
       clearAllPieces();
       setupGame();
     }
 
-    // GESTOS DE TOUCH (SWIPE) PARA CELULAR NO CARROSSEL
+    // Touch Swipe no Carrossel
     let touchStartX = 0;
     let touchEndX = 0;
 
@@ -548,13 +683,11 @@
     }, { passive: true });
 
     function handleSwipe() {
-      const threshold = 30; // Distância mínima do deslize
+      const threshold = 30;
       if (touchEndX < touchStartX - threshold) {
-        // Deslizou para a esquerda -> Próxima
         currentImageIndex = (currentImageIndex + 1) % IMAGES.length;
         updateCarousel();
       } else if (touchEndX > touchStartX + threshold) {
-        // Deslizou para a direita -> Anterior
         currentImageIndex = (currentImageIndex - 1 + IMAGES.length) % IMAGES.length;
         updateCarousel();
       }
@@ -636,6 +769,7 @@
       winModal.style.display = 'none';
       imageModal.style.display = 'none';
       selectModal.style.display = 'none';
+      storyModal.style.display = 'none';
       lockModal.style.display = 'none';
       
       placedCount = 0;
@@ -788,7 +922,6 @@
       window.addEventListener('mouseup', onEnd);
     }
 
-    // Eventos do Carrossel
     prevBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       currentImageIndex = (currentImageIndex - 1 + IMAGES.length) % IMAGES.length;
@@ -801,9 +934,8 @@
       updateCarousel();
     });
 
-    confirmCarouselBtn.addEventListener('click', () => {
-      applySelectedImage();
-    });
+    confirmCarouselBtn.addEventListener('click', applySelectedImage);
+    storyGoPuzzleBtn.addEventListener('click', applySelectedImage);
 
     easyBtn.addEventListener('click', () => handleLevelClick('easy', 2, 3));
     mediumBtn.addEventListener('click', () => handleLevelClick('medium', 3, 4));
