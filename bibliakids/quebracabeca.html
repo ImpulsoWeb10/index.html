@@ -170,17 +170,19 @@
       flex-shrink: 0;
     }
 
-    .tray-counter {
+    /* Botão pequeno de contagem no canto esquerdo inferior */
+    .tray-counter-small {
       position: absolute;
       bottom: 8px;
       left: 10px;
-      font-size: 1.1rem;
+      font-size: 0.85rem;
       font-weight: 900 !important;
       background: #ffffff;
-      padding: 6px 14px;
-      border-radius: 14px;
+      padding: 4px 10px;
+      border-radius: 10px;
       color: #0284c7;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      border: 2px solid #38bdf8;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
       z-index: 50;
       pointer-events: none;
     }
@@ -391,7 +393,6 @@
       font-family: Arial, Helvetica, sans-serif !important;
     }
 
-    /* Modal Mensagem de Fé Atualizado */
     .message-card {
       background: linear-gradient(135deg, #a855f7, #38bdf8);
       border: 5px solid #facc15;
@@ -417,29 +418,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    /* Container para alinhar o botão de contagem pequeno no canto esquerdo inferior */
-    .faith-footer {
-      width: 100%;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      margin-top: 5px;
-    }
-
-    .countdown-btn-small {
-      font-size: 0.85rem;
-      font-weight: 900 !important;
-      background: #ffffff;
-      color: #7e22ce;
-      padding: 6px 12px;
-      border-radius: 12px;
-      border: 2px solid #facc15;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      gap: 5px;
     }
 
     .model-img {
@@ -489,7 +467,8 @@
     </div>
 
     <div id="tray">
-      <div class="tray-counter">Movs: <span id="moves-count">0</span></div>
+      <!-- Botão de contagem de tentativas no lado esquerdo embaixo -->
+      <div class="tray-counter-small">Tentativas: <span id="moves-count">0</span></div>
     </div>
   </div>
 
@@ -534,16 +513,10 @@
     </div>
   </div>
 
-  <!-- Modal Mensagem de Fé Atualizado -->
+  <!-- Modal Mensagem de Fé -->
   <div class="modal" id="faith-modal">
     <div class="message-card">
       <div class="message-text" id="faith-message-text">✨ Jesus te ama muito!</div>
-      
-      <div class="faith-footer">
-        <div class="countdown-btn-small">
-          Contagem: <span id="faith-countdown">3</span>s
-        </div>
-      </div>
     </div>
   </div>
 
@@ -569,7 +542,7 @@
   <div class="modal" id="win-modal">
     <div class="modal-card">
       <h2>🎉 Parabéns!</h2>
-      <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Você completou o quebra-cabeça!</p>
+      <p style="font-size:1.1rem; color:#0f172a; font-weight:900;">Você completou o quebra-cabeça em <span id="final-moves">0</span> tentativas!</p>
       <button class="btn" id="modal-restart-btn">Jogar Novamente</button>
     </div>
   </div>
@@ -679,7 +652,6 @@
     const storyBackBtn = document.getElementById('story-back-btn');
 
     const faithMessageText = document.getElementById('faith-message-text');
-    const faithCountdown = document.getElementById('faith-countdown');
 
     let pieceWidth, pieceHeight;
     let boardWidth, boardHeight;
@@ -724,20 +696,12 @@
       faithMessageText.textContent = FAITH_MESSAGES[currentMessageIndex];
       currentMessageIndex = (currentMessageIndex + 1) % FAITH_MESSAGES.length;
 
-      let timer = 3;
-      faithCountdown.textContent = timer;
       faithModal.style.display = 'flex';
 
-      const interval = setInterval(() => {
-        timer--;
-        if (timer > 0) {
-          faithCountdown.textContent = timer;
-        } else {
-          clearInterval(interval);
-          faithModal.style.display = 'none';
-          applySelectedImage();
-        }
-      }, 1000);
+      setTimeout(() => {
+        faithModal.style.display = 'none';
+        applySelectedImage();
+      }, 2500);
     }
 
     function applySelectedImage() {
@@ -833,14 +797,14 @@
       clearAllPieces();
       board.innerHTML = '';
 
-      const existingCounter = tray.querySelector('.tray-counter');
+      const existingCounter = tray.querySelector('.tray-counter-small');
       tray.innerHTML = '';
       if (existingCounter) {
         tray.appendChild(existingCounter);
       } else {
         const newCounter = document.createElement('div');
-        newCounter.className = 'tray-counter';
-        newCounter.innerHTML = 'Movs: <span id="moves-count">0</span>';
+        newCounter.className = 'tray-counter-small';
+        newCounter.innerHTML = 'Tentativas: <span id="moves-count">0</span>';
         tray.appendChild(newCounter);
       }
 
@@ -947,6 +911,7 @@
         isDragging = false;
         element.style.zIndex = '10';
 
+        // Incrementa o número de tentativas
         movesCount++;
         const movesEl = document.getElementById('moves-count');
         if (movesEl) movesEl.textContent = movesCount;
@@ -973,6 +938,7 @@
 
           placedCount++;
           if (placedCount === TOTAL_PIECES) {
+            document.getElementById('final-moves').textContent = movesCount;
             setTimeout(() => {
               winModal.style.display = 'flex';
             }, 200);
