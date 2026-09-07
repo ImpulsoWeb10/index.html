@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Colorir - BibliaKids</title>
+  <style>
+    :root {
+      --ink: #18324b;
+      --sky: #dff5ff;
+      --blue: #1688c4;
+      --yellow: #ffd65a;
+      --paper: #fffdf7;
+      --line: #c8dce7;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: linear-gradient(145deg, #bfeeff, #fff8d5 52%, #d9f7e8);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+    }
+
+    header {
+      padding: 18px 16px 14px;
+      text-align: center;
+      background: rgba(255, 255, 255, .8);
+      border-bottom: 3px solid rgba(22, 136, 196, .18);
+    }
+    h1 { margin: 0; font-size: clamp(1.7rem, 6vw, 2.7rem); }
+    header p { margin: 5px 0 0; font-weight: 700; }
+
+    main { width: min(1100px, 100%); margin: 0 auto; padding: 18px 14px 34px; }
+    .toolbar, .viewer {
+      background: var(--paper);
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 8px 22px rgba(28, 85, 112, .12);
+    }
+    .toolbar { padding: 14px; margin-bottom: 16px; }
+    .toolbar strong { display: block; margin-bottom: 10px; }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 9px;
+    }
+    .scene-button, .action {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 8px;
+      color: var(--ink);
+      background: #e9f7fc;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #a8d5e5;
+    }
+    .scene-button:hover, .scene-button.active { background: var(--yellow); box-shadow: 0 3px 0 #d4a72c; }
+    .scene-button:active, .action:active { transform: translateY(2px); box-shadow: none; }
+
+    .viewer { padding: 14px; }
+    .viewer-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    h2 { margin: 0; font-size: 1.35rem; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .action { background: var(--blue); color: white; box-shadow: 0 3px 0 #08638e; }
+    .action.secondary { background: #52b788; box-shadow: 0 3px 0 #287c59; }
+    .action.warning { background: #f29f05; box-shadow: 0 3px 0 #b87100; }
+
+    .pdf-frame {
+      width: 100%;
+      height: min(62vh, 650px);
+      margin-top: 14px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      background: white;
+    }
+    .paint-area { margin-top: 18px; }
+    .paint-area h3 { margin: 0 0 6px; }
+    .paint-area p { margin: 0 0 9px; font-size: .92rem; }
+    .canvas-wrap {
+      position: relative;
+      overflow: hidden;
+      border: 2px dashed #91baca;
+      border-radius: 12px;
+      background: white;
+      touch-action: none;
+    }
+    canvas { display: block; width: 100%; height: min(58vh, 560px); cursor: crosshair; }
+    .canvas-note { position: absolute; right: 9px; bottom: 7px; padding: 4px 7px; border-radius: 7px; background: rgba(255,255,255,.8); font-size: .76rem; pointer-events: none; }
+    .missing { display: none; padding: 13px; margin-top: 14px; color: #744b00; background: #fff3c4; border-radius: 10px; font-weight: 700; }
+
+    @media (max-width: 560px) {
+      main { padding: 12px 9px 25px; }
+      .gallery { grid-template-columns: repeat(2, 1fr); }
+      .pdf-frame { height: 54vh; }
+      canvas { height: 54vh; }
+      .viewer-top { align-items: stretch; }
+      .actions { width: 100%; }
+      .action { flex: 1; min-width: 110px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Desenhos para Colorir</h1>
+    <p>Escolha uma cena bíblica para imprimir ou pintar na tela.</p>
+  </header>
+
+  <main>
+    <section class="toolbar" aria-labelledby="scene-title">
+      <strong id="scene-title">20 cenas bíblicas</strong>
+      <div class="gallery" id="gallery"></div>
+    </section>
+
+    <section class="viewer" aria-live="polite">
+      <div class="viewer-top">
+        <h2 id="selected-title">Cena bíblica 01</h2>
+        <div class="actions">
+          <a class="action" id="download-image" href="../pdfs/01_criacao_do_mundo.png" download>Baixar imagem</a>
+          <button class="action" id="print-pdf" type="button">Imprimir</button>
+        </div>
+      </div>
+      <img class="pdf-frame" id="image-viewer" alt="Desenho bíblico para colorir" src="../pdfs/01_criacao_do_mundo.png">
+      <div class="missing" id="missing-file">A imagem desta cena ainda não foi colocada na pasta <b>pdfs</b>.</div>
+
+      <div class="paint-area">
+        <h3>Pintar na tela</h3>
+        <p>Use o dedo ou o mouse para desenhar. Essa pintura é salva como imagem PNG.</p>
+        <div class="canvas-wrap">
+          <canvas id="paint-canvas" aria-label="Área para pintar"></canvas>
+          <span class="canvas-note">Desenhe aqui</span>
+        </div>
+        <div class="actions" style="margin-top: 10px">
+          <button class="action secondary" id="download-paint" type="button">Baixar minha pintura</button>
+          <button class="action warning" id="clear-paint" type="button">Limpar pintura</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const gallery = document.getElementById('gallery');
+    const imageViewer = document.getElementById('image-viewer');
+    const downloadImage = document.getElementById('download-image');
+    const selectedTitle = document.getElementById('selected-title');
+    const missingFile = document.getElementById('missing-file');
+    const canvas = document.getElementById('paint-canvas');
+    const context = canvas.getContext('2d');
+    let selectedScene = 1;
+    let drawing = false;
+
+    const scenes = [
+      ['01_criacao_do_mundo.png', 'A criação do mundo'],
+      ['02_adao_e_eva.png', 'Adão e Eva'],
+      ['03_noe_construindo_a_arca.png', 'Noé construindo a arca'],
+      ['04_animais_na_arca.png', 'Animais na arca'],
+      ['05_arco_iris_de_noe.png', 'O arco-íris de Noé'],
+      ['06_abraao_e_as_estrelas.png', 'Abraão e as estrelas'],
+      ['07_moises_no_cesto.png', 'Moisés no cesto'],
+      ['08_moises_e_o_mar_vermelho.png', 'Moisés e o mar vermelho'],
+      ['09_dez_mandamentos.png', 'Os dez mandamentos'],
+      ['10_josue_e_as_muralhas.png', 'Josué e as muralhas'],
+      ['11_davi_e_golias.png', 'Davi e Golias'],
+      ['12_davi_com_as_ovelhas.png', 'Davi com as ovelhas'],
+      ['13_jonas_e_o_peixe.png', 'Jonas e o peixe'],
+      ['14_nascimento_de_jesus.png', 'Nascimento de Jesus'],
+      ['15_pastores_e_anjo.png', 'Pastores e o anjo'],
+      ['16_jesus_acalma_a_tempestade.png', 'Jesus acalma a tempestade'],
+      ['17_bom_samaritano.png', 'O bom samaritano'],
+      ['18_jesus_e_as_criancas.png', 'Jesus e as crianças'],
+      ['19_multiplicacao_dos_paes.png', 'Multiplicação dos pães'],
+      ['20_ressurreicao.png', 'A ressurreição']
+    ];
+
+    function imagePath(number) {
+      return `../pdfs/${scenes[number - 1][0]}`;
+    }
+
+    function selectScene(number) {
+      selectedScene = number;
+      const path = imagePath(number);
+      selectedTitle.textContent = `${String(number).padStart(2, '0')} - ${scenes[number - 1][1]}`;
+      imageViewer.src = path;
+      downloadImage.href = path;
+      missingFile.style.display = 'none';
+      document.querySelectorAll('.scene-button').forEach(button => button.classList.toggle('active', Number(button.dataset.scene) === number));
+      clearPaint();
+    }
+
+    scenes.forEach((scene, index) => {
+      const number = index + 1;
+      const button = document.createElement('button');
+      button.className = 'scene-button';
+      button.dataset.scene = number;
+      button.type = 'button';
+      button.textContent = `${String(number).padStart(2, '0')} - ${scene[1]}`;
+      button.addEventListener('click', () => selectScene(number));
+      gallery.appendChild(button);
+    });
+
+    function resizeCanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      const width = canvas.clientWidth || 800;
+      const height = canvas.clientHeight || 500;
+      const oldImage = canvas.width ? canvas.toDataURL() : null;
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      context.lineWidth = 7;
+      context.lineCap = 'round';
+      context.lineJoin = 'round';
+      context.strokeStyle = '#1688c4';
+      if (oldImage) { const image = new Image(); image.onload = () => context.drawImage(image, 0, 0, width, height); image.src = oldImage; }
+    }
+
+    function point(event) {
+      const rect = canvas.getBoundingClientRect();
+      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    }
+    function startDrawing(event) { drawing = true; canvas.setPointerCapture(event.pointerId); const p = point(event); context.beginPath(); context.moveTo(p.x, p.y); }
+    function draw(event) { if (!drawing) return; const p = point(event); context.lineTo(p.x, p.y); context.stroke(); }
+    function stopDrawing() { drawing = false; context.closePath(); }
+    function clearPaint() { context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight); }
+
+    canvas.addEventListener('pointerdown', startDrawing);
+    canvas.addEventListener('pointermove', draw);
+    canvas.addEventListener('pointerup', stopDrawing);
+    canvas.addEventListener('pointercancel', stopDrawing);
+    document.getElementById('clear-paint').addEventListener('click', clearPaint);
+    document.getElementById('download-paint').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = `minha-pintura-cena-${String(selectedScene).padStart(2, '0')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+    document.getElementById('print-pdf').addEventListener('click', () => {
+      const printWindow = window.open(imagePath(selectedScene), '_blank');
+      if (printWindow) printWindow.addEventListener('load', () => printWindow.print());
+    });
+    imageViewer.addEventListener('error', () => { missingFile.style.display = 'block'; });
+    window.addEventListener('resize', resizeCanvas);
+    selectScene(1);
+    resizeCanvas();
+  </script>
+</body>
+</html>

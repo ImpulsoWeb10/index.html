@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-31JKDQEQ2L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-31JKDQEQ2L');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Encontre na Bíblia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --neon-blue: #00d4ff;
+    --gold: #FFC837;
+    --bg-blue: #020611;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    margin: 0; 
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg-blue);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .app-container {
+    position: relative;
+    width: 100vw;
+    height: 100dvh;
+    max-width: calc(100dvh * (843 / 1264));
+    max-height: calc(100vw * (1264 / 843));
+    background: url('capa.jpg') no-repeat center center;
+    background-size: 100% 100%;
+    box-shadow: 0 0 25px rgba(0,0,0,0.9);
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-top: 15px;
+  }
+
+  .btn-menu-overlay {
+    position: absolute;
+    top: 2.5%;
+    left: 4.2%;
+    width: 12.5%;
+    height: 6.2%;
+    border-radius: 50%;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    z-index: 20;
+  }
+
+  .btn-profile-overlay {
+    position: absolute;
+    top: 2.2%;
+    right: 4.2%;
+    width: 44%;
+    height: 6.5%;
+    border-radius: 30px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    z-index: 20;
+  }
+
+  /* ---------------------------------------------------
+     CARROSSEL DOS JOGOS (EFEITO 3D / SCALE)
+  --------------------------------------------------- */
+  .carousel-wrapper {
+    width: 100%;
+    position: absolute;
+    top: 65%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+  }
+
+  .swipe-hint {
+    font-size: clamp(0.65rem, 2.5vw, 0.75rem);
+    color: #FFF;
+    font-weight: 800;
+    text-shadow: 0 2px 4px #000;
+    margin-bottom: 4px;
+    background: rgba(0, 0, 0, 0.65);
+    padding: 2px 10px;
+    border-radius: 12px;
+  }
+
+  .carousel-container {
+    width: 100%;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    /* Padding para permitir que o primeiro e o último card cheguem até o meio */
+    padding: 25px calc(50% - 70px);
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+  }
+  .carousel-container::-webkit-scrollbar { display: none; }
+
+  /* CARD INTERATIVO */
+  .card-item {
+    flex: 0 0 140px;
+    background: rgba(2, 6, 17, 0.92);
+    border: 2px solid var(--neon-blue);
+    border-radius: 16px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    text-decoration: none;
+    scroll-snap-align: center;
+    
+    /* Transição suave para o efeito de escala e transparência */
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out, box-shadow 0.2s ease-out;
+    transform: scale(0.78);
+    opacity: 0.6;
+  }
+
+  /* ESTILO DO CARD NO CENTRO (ATIVO) */
+  .card-item.active {
+    transform: scale(1.18) !important;
+    opacity: 1 !important;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.9);
+    z-index: 5;
+  }
+
+  .card-img-box {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--neon-blue);
+  }
+  .card-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(0.75rem, 2.8vw, 0.85rem);
+    font-weight: 800;
+    color: #FFF;
+    text-shadow: 0 0 6px var(--neon-blue);
+    margin: 3px 0 2px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  .card-btn-action {
+    background: linear-gradient(180deg, #00d4ff 0%, #005f73 100%);
+    color: #FFF;
+    border: none;
+    border-radius: 10px;
+    padding: 3px 6px;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: clamp(0.68rem, 2.6vw, 0.75rem);
+    box-shadow: 0 0 6px var(--neon-blue);
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .btn-home-overlay {
+    position: absolute;
+    bottom: 3.5%;
+    left: 18.5%;
+    width: 18%;
+    height: 8.5%;
+    border-radius: 50%;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    z-index: 20;
+  }
+
+  .btn-config-overlay {
+    position: absolute;
+    bottom: 3.5%;
+    right: 18.5%;
+    width: 18%;
+    height: 8.5%;
+    border-radius: 50%;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    z-index: 20;
+  }
+
+  .footer-bar {
+    width: 100%;
+    background: var(--bg-blue);
+    padding: 16px 0 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: #00d4ff;
+    z-index: 30;
+  }
+
+  .footer-bar svg {
+    width: 14px;
+    height: 14px;
+    fill: #00d4ff;
+  }
+
+  .footer-bar a {
+    color: #00d4ff;
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <button class="btn-menu-overlay" onclick="alert('Menu aberto!')" aria-label="Menu"></button>
+  <button class="btn-profile-overlay" onclick="alert('Perfil do Usuário!')" aria-label="Perfil"></button>
+
+  <div class="carousel-wrapper">
+    <span class="swipe-hint">👈 Deslize para jogar 👉</span>
+    
+    <div class="carousel-container" id="carousel">
+
+      <a href="colorir/index.html" class="card-item">
+        <div class="card-img-box"><img src="colorir.jpg" alt="Colorir"></div>
+        <div class="card-title">Colorir</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
+
+      <a href="hinos/index.html" class="card-item">
+        <div class="card-img-box"><img src="hinos.jpg" alt="Hinos"></div>
+        <div class="card-title">Hinos</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
+
+      <a href="labirinto/index.html" class="card-item">
+        <div class="card-img-box"><img src="labirinto.jpg" alt="Labirinto"></div>
+        <div class="card-title">Labirinto</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
+
+      <a href="memoria/index.html" class="card-item">
+        <div class="card-img-box"><img src="memoria.jpg" alt="Memória"></div>
+        <div class="card-title">Jogo da Memória</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
+
+      <a href="oracao/index.html" class="card-item">
+        <div class="card-img-box"><img src="oracao.jpg" alt="Oração"></div>
+        <div class="card-title">Oração</div>
+        <button class="card-btn-action">ABRIR ➔</button>
+      </a>
+
+      <a href="desafios/index.html" class="card-item">
+        <div class="card-img-box"><img src="desafios.jpg" alt="Desafios"></div>
+        <div class="card-title">Desafios</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
+
+      <a href="desafio-familia/index.html" class="card-item">
+        <div class="card-img-box"><img src="desafioemfamilia.jpg" alt="Desafio em Família"></div>
+        <div class="card-title">Desafio em Família</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
+
+      <a href="encontre-na-biblia/index.html" class="card-item">
+        <div class="card-img-box"><img src="encontrenabiblia.jpg" alt="Encontre na Bíblia"></div>
+        <div class="card-title">Encontre na Bíblia</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
+
+      <a href="historias/index.html" class="card-item">
+        <div class="card-img-box"><img src="historias.jpg" alt="História"></div>
+        <div class="card-title">Histórias</div>
+        <button class="card-btn-action">LER ➔</button>
+      </a>
+
+      <a href="monte-palavras/index.html" class="card-item">
+        <div class="card-img-box"><img src="palavras.jpg" alt="Monte Palavras"></div>
+        <div class="card-title">Monte Palavras</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
+
+      <a href="perguntas/index.html" class="card-item">
+        <div class="card-img-box"><img src="perguntas.png" alt="Perguntas"></div>
+        <div class="card-title">Perguntas / Quiz</div>
+        <button class="card-btn-action">RESPONDER ➔</button>
+      </a>
+
+      <a href="perguntas-arca/index.html" class="card-item">
+        <div class="card-item card-img-box"><img src="perguntasarca.png" alt="Perguntas da Arca"></div>
+        <div class="card-title">Perguntas da Arca</div>
+        <button class="card-btn-action">RESPONDER ➔</button>
+      </a>
+
+      <a href="quebracabeca.html" class="card-item">
+        <div class="card-img-box"><img src="quebracabeca.jpg" alt="Quebra-Cabeça"></div>
+        <div class="card-title">Quebra-Cabeça</div>
+        <button class="card-btn-action">JOGAR ➔</button>
+      </a>
+
+      <a href="verso-do-dia/index.html" class="card-item">
+        <div class="card-img-box"><img src="versododia.jpg" alt="Verso do Dia"></div>
+        <div class="card-title">Verso do Dia</div>
+        <button class="card-btn-action">VER ➔</button>
+      </a>
+
+      <a href="minhas-medalhas/index.html" class="card-item">
+        <div class="card-img-box"><img src="minhas-medalhas.jpg" alt="Minhas Medalhas"></div>
+        <div class="card-title">Minhas Conquistas</div>
+        <button class="card-btn-action">MEDALHAS ➔</button>
+      </a>
+
+    </div>
+  </div>
+
+  <button class="btn-home-overlay" onclick="window.location.reload();" aria-label="Início"></button>
+  <button class="btn-config-overlay" onclick="alert('Abrir Configurações!')" aria-label="Configurações"></button>
+
+</div>
+
+<div class="footer-bar">
+  <svg viewBox="0 0 24 24">
+    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+  </svg>
+  <span>Proteção SSL | Desenvolvido por <a href="https://impulsoweb10.com.br/" target="_blank" rel="noopener">ImpulsoWeb10</a></span>
+</div>
+
+<script>
+  const container = document.getElementById('carousel');
+  const cards = document.querySelectorAll('.card-item');
+  let autoScrollTimer = null;
+
+  // Função que detecta a distância de cada card do centro e aplica o destaque
+  function updateCardScales() {
+    const containerCenter = container.getBoundingClientRect().left + container.clientWidth / 2;
+
+    cards.forEach(card => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const distance = Math.abs(containerCenter - cardCenter);
+
+      // Se o card estiver bem próximo do centro (menos de 60px de tolerância)
+      if (distance < 60) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    });
+  }
+
+  // Rola automaticamente devagar
+  function startAutoScroll() {
+    stopAutoScroll();
+    autoScrollTimer = setInterval(() => {
+      if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 2) {
+        container.scrollLeft = 0;
+      } else {
+        container.scrollLeft += 1;
+      }
+      updateCardScales();
+    }, 25);
+  }
+
+  function stopAutoScroll() {
+    if (autoScrollTimer) {
+      clearInterval(autoScrollTimer);
+      autoScrollTimer = null;
+    }
+  }
+
+  // Eventos de rolagem e toque
+  container.addEventListener('scroll', updateCardScales);
+  container.addEventListener('touchstart', stopAutoScroll, { passive: true });
+  container.addEventListener('mousedown', stopAutoScroll);
+
+  // Inicialização
+  updateCardScales();
+  startAutoScroll();
+</script>
+
+</body>
+</html>
