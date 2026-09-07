@@ -48,9 +48,10 @@
     }
 
     h1 {
-      font-size: 1rem;
+      font-size: 1.2rem;
+      font-weight: 900;
       color: #ffffff;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
 
     .controls {
@@ -58,19 +59,19 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      max-width: 360px;
-      gap: 4px;
+      max-width: 380px;
+      gap: 6px;
     }
 
     .btn {
       background-color: #facc15;
       color: #713f12;
       border: none;
-      padding: 6px 10px;
-      font-size: 0.8rem;
-      font-weight: bold;
-      border-radius: 10px;
-      box-shadow: 0 2px 0 #ca8a04;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      font-weight: 900;
+      border-radius: 12px;
+      box-shadow: 0 3px 0 #ca8a04;
       cursor: pointer;
       white-space: nowrap;
     }
@@ -83,13 +84,13 @@
     .btn-select-img {
       background-color: #a855f7;
       color: #ffffff;
-      box-shadow: 0 2px 0 #7e22ce;
+      box-shadow: 0 3px 0 #7e22ce;
     }
 
     .btn-model {
       background-color: #4ade80;
       color: #14532d;
-      box-shadow: 0 2px 0 #16a34a;
+      box-shadow: 0 3px 0 #16a34a;
     }
 
     .side-panel {
@@ -100,12 +101,13 @@
     }
 
     .btn-side {
-      padding: 8px 6px;
-      border-radius: 10px;
+      padding: 10px 8px;
+      border-radius: 12px;
       writing-mode: vertical-rl;
       text-orientation: mixed;
       letter-spacing: 1px;
-      font-size: 0.7rem;
+      font-size: 0.85rem;
+      font-weight: 900;
     }
 
     .btn-easy { background-color: #4ade80; color: #14532d; box-shadow: -2px 2px 0 #16a34a; }
@@ -125,8 +127,8 @@
 
     #board {
       background-color: #ffffff;
-      border: 3px solid #0284c7;
-      border-radius: 10px;
+      border: 4px solid #0284c7;
+      border-radius: 12px;
       position: relative;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
       overflow: hidden;
@@ -160,7 +162,7 @@
       width: 100vw;
       height: 38vh;
       background-color: #bae6fd;
-      border-top: 3px solid #38bdf8;
+      border-top: 4px solid #38bdf8;
       position: relative;
       overflow: hidden;
       flex-shrink: 0;
@@ -170,11 +172,11 @@
       position: absolute;
       bottom: 8px;
       left: 10px;
-      font-size: 0.8rem;
-      font-weight: bold;
+      font-size: 0.95rem;
+      font-weight: 900;
       background: #ffffff;
-      padding: 4px 10px;
-      border-radius: 12px;
+      padding: 6px 12px;
+      border-radius: 14px;
       color: #0284c7;
       box-shadow: 0 2px 5px rgba(0,0,0,0.15);
       z-index: 50;
@@ -197,24 +199,25 @@
 
     .modal-card {
       background: #ffffff;
-      padding: 14px;
-      border-radius: 18px;
+      padding: 16px;
+      border-radius: 20px;
       text-align: center;
       box-shadow: 0 8px 25px rgba(0,0,0,0.4);
       border: 4px solid #facc15;
-      width: 92vw;
-      max-width: 420px;
-      max-height: 90vh;
+      width: 94vw;
+      max-width: 440px;
+      max-height: 92vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       overflow-y: auto;
     }
 
     .modal-card h2 {
       color: #0284c7;
-      font-size: 1.1rem;
+      font-size: 1.3rem;
+      font-weight: 900;
     }
 
     /* Carrossel Principal */
@@ -223,7 +226,7 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      gap: 6px;
+      gap: 8px;
       touch-action: pan-y;
     }
 
@@ -231,16 +234,16 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       flex: 1;
       width: 100%;
     }
 
     .carousel-img {
       width: 100%;
-      height: 140px;
+      height: 150px;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 3px solid #38bdf8;
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
@@ -249,11 +252,12 @@
       background-color: #0284c7;
       color: #ffffff;
       border: none;
-      font-size: 1.2rem;
-      width: 36px;
-      height: 36px;
+      font-size: 1.4rem;
+      font-weight: 900;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      box-shadow: 0 2px 0 #0369a1;
+      box-shadow: 0 3px 0 #0369a1;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -262,30 +266,30 @@
       touch-action: manipulation;
     }
 
-    /* Versículo e Botão Ver Tudo do Item Selecionado */
+    /* Versículo e Botão Ver Tudo */
     .verse-box {
       background: #f0f9ff;
-      border: 2px solid #38bdf8;
-      border-radius: 10px;
-      padding: 10px;
+      border: 3px solid #38bdf8;
+      border-radius: 12px;
+      padding: 12px;
       width: 100%;
       text-align: left;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .verse-title {
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: #a855f7;
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #7e22ce;
     }
 
     .verse-text {
-      font-size: 0.75rem;
-      color: #334155;
-      line-height: 1.3;
-      font-style: italic;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.4;
     }
 
     .ver-tudo-btn {
@@ -294,62 +298,64 @@
       color: #ffffff;
       border: none;
       border-radius: 12px;
-      padding: 4px 10px;
-      font-size: 0.75rem;
-      font-weight: bold;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      font-weight: 900;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 0 #0369a1;
+      gap: 6px;
+      box-shadow: 0 3px 0 #0369a1;
       touch-action: manipulation;
     }
 
     .ver-tudo-btn:active {
-      transform: translateY(1px);
+      transform: translateY(2px);
       box-shadow: 0 0 0 #0369a1;
     }
 
     /* Modal Elegante de Resumo da Passagem */
     .story-card {
       background: #ffffff;
-      padding: 16px;
-      border-radius: 20px;
+      padding: 18px;
+      border-radius: 22px;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border: 4px solid #a855f7;
-      width: 92vw;
-      max-width: 460px;
-      max-height: 88vh;
+      border: 5px solid #a855f7;
+      width: 94vw;
+      max-width: 480px;
+      max-height: 90vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       overflow-y: auto;
     }
 
     .story-card h2 {
-      color: #7e22ce;
-      font-size: 1.2rem;
+      color: #6b21a8;
+      font-size: 1.35rem;
+      font-weight: 900;
     }
 
     .story-card img {
       width: 100%;
-      max-height: 180px;
+      max-height: 190px;
       object-fit: cover;
-      border-radius: 12px;
-      border: 3px solid #e9d5ff;
+      border-radius: 14px;
+      border: 3px solid #d8b4fe;
     }
 
     .story-text {
-      font-size: 0.9rem;
-      color: #1e293b;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
       line-height: 1.5;
       text-align: justify;
       background: #f3e8ff;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #d8b4fe;
+      padding: 14px;
+      border-radius: 12px;
+      border: 2px solid #c084fc;
       white-space: pre-line;
       width: 100%;
     }
@@ -358,11 +364,11 @@
       background-color: #4ade80;
       color: #14532d;
       border: none;
-      padding: 10px 18px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      border-radius: 12px;
-      box-shadow: 0 3px 0 #16a34a;
+      padding: 12px 20px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      border-radius: 14px;
+      box-shadow: 0 4px 0 #16a34a;
       cursor: pointer;
       width: 100%;
       touch-action: manipulation;
@@ -374,10 +380,10 @@
     }
 
     .model-img {
-      max-width: 80vw;
-      max-height: 50vh;
+      max-width: 82vw;
+      max-height: 52vh;
       object-fit: contain;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 3px solid #0284c7;
     }
   </style>
@@ -410,7 +416,7 @@
     </div>
   </div>
 
-  <!-- Modal Escolha de Imagem Exclusiva -->
+  <!-- Modal Escolha de Imagem -->
   <div class="modal" id="select-modal">
     <div class="modal-card">
       <h2>🖼️ Escolha uma Imagem</h2>
@@ -420,28 +426,28 @@
         <button class="carousel-btn" id="prev-btn">❮</button>
         <div class="carousel-display">
           <img src="noe.jpg" id="carousel-img" class="carousel-img" alt="Imagem selecionada">
-          <span id="carousel-title" style="font-size:0.9rem; font-weight:bold; color:#0c4a6e;">Noé 1</span>
+          <span id="carousel-title" style="font-size:1.1rem; font-weight:900; color:#0c4a6e;">Noé 1</span>
         </div>
         <button class="carousel-btn" id="next-btn">❯</button>
       </div>
 
-      <!-- Versículo Exclusivo da Imagem Selecionada -->
+      <!-- Versículo Exclusivo -->
       <div class="verse-box">
-        <span class="verse-title" id="verse-ref">Gênesis 6:14</span>
-        <p class="verse-text" id="verse-content">"Faze para ti uma arca da madeira de gofer..."</p>
+        <span class="verse-title" id="verse-ref">Gênesis 7:1</span>
+        <p class="verse-text" id="verse-content">"Depois, disse o SENHOR a Noé: Entra tu e toda a tua casa na arca..."</p>
         <button class="ver-tudo-btn" id="ver-tudo-btn">ver tudo ➔</button>
       </div>
 
-      <button class="btn btn-model" id="confirm-carousel-btn" style="width: 100%; padding: 10px; font-size: 0.9rem;">Usar Esta Imagem</button>
-      <button class="btn" id="close-select-btn" style="padding: 6px 12px; font-size: 0.75rem;">Cancelar</button>
+      <button class="btn btn-model" id="confirm-carousel-btn" style="width: 100%; padding: 12px; font-size: 1rem;">Usar Esta Imagem</button>
+      <button class="btn" id="close-select-btn" style="padding: 8px 16px; font-size: 0.85rem;">Cancelar</button>
     </div>
   </div>
 
-  <!-- Modal Resumo da Passagem Completa -->
+  <!-- Modal Resumo da Passagem -->
   <div class="modal" id="story-modal">
     <div class="story-card">
       <h2 id="story-title">Noé Entrando na Arca</h2>
-      <img src="noe1.jpg" id="story-img" alt="História">
+      <img src="noe.jpg" id="story-img" alt="História">
       <div class="story-text" id="story-full-text"></div>
       <button class="btn-go-puzzle" id="story-go-puzzle-btn">Ir para quebra cabeça</button>
     </div>
@@ -451,7 +457,7 @@
   <div class="modal" id="image-modal">
     <div class="modal-card">
       <img src="noe.jpg" id="model-img-element" alt="Modelo da Arca" class="model-img">
-      <p style="font-size:0.85rem; color:#334155; font-weight:bold;">Vamos lá amiguinhos, montar esse animado quebra-cabeça!</p>
+      <p style="font-size:1rem; color:#0f172a; font-weight:900;">Vamos lá amiguinhos, montar esse animado quebra-cabeça!</p>
       <button class="btn" id="close-model-btn">Fechar</button>
     </div>
   </div>
@@ -460,8 +466,8 @@
   <div class="modal" id="lock-modal">
     <div class="modal-card">
       <h2>⚠️ Mudar de Nível</h2>
-      <p style="font-size:0.85rem; color:#334155; font-weight:bold;">Você já está jogando! Clique em <strong>VOLTAR</strong> para zerar e escolher outro nível.</p>
-      <button class="btn btn-back" id="lock-reset-btn" style="writing-mode: horizontal-tb; font-size: 0.85rem; padding: 8px 16px;">VOLTAR</button>
+      <p style="font-size:1rem; color:#0f172a; font-weight:900;">Você já está jogando! Clique em <strong>VOLTAR</strong> para zerar e escolher outro nível.</p>
+      <button class="btn btn-back" id="lock-reset-btn" style="writing-mode: horizontal-tb; font-size: 1rem; padding: 10px 20px;">VOLTAR</button>
     </div>
   </div>
 
@@ -469,7 +475,7 @@
   <div class="modal" id="win-modal">
     <div class="modal-card">
       <h2>🎉 Parabéns!</h2>
-      <p style="font-size:0.85rem; color:#334155; font-weight:bold;">Você completou o quebra-cabeça!</p>
+      <p style="font-size:1rem; color:#0f172a; font-weight:900;">Você completou o quebra-cabeça!</p>
       <button class="btn" id="modal-restart-btn">Jogar Novamente</button>
     </div>
   </div>
@@ -477,44 +483,44 @@
   <script>
     const IMAGES = [
       {
-        id: 'noe',
-        src: 'noe.jpg',
-        label: 'Noé 1',
-        ref: 'Gênesis 6:14',
-        verse: '"Faze para ti uma arca da madeira de gofer; farás compartimentos na arca e a betumarás por dentro e por fora com betume."',
-        summary: 'Deus viu que Noé era um homem justo e obediente em meio a um mundo mau.\n\nEle ordenou que Noé construísse uma grande arca de madeira para abrigar sua família e um casal de cada espécie de animal, preparando tudo com muito amor para protegê-los do dilúvio que viria.'
-      },
-      {
         id: 'noe1',
-        src: 'noe1.jpg',
-        label: 'Noé 2',
+        src: 'noe.jpg',
+        label: 'Noé 1 - Entrando na Arca',
         ref: 'Gênesis 7:1',
         verse: '"Depois, disse o SENHOR a Noé: Entra tu e toda a tua casa na arca, porque te hei visto justo diante de mim nesta geração..."',
-        summary: 'Noé entrou na arca com sua família, obedecendo às ordens de Deus.\n\nOs animais também entraram, de dois em dois, sete em sete conforme Deus havia determinado.\n\nDepois que todos estavam seguros, Deus fechou a porta da arca.\n\nEntão começou o grande dilúvio sobre toda a terra.'
+        summary: 'Deus chamou Noé e toda a sua família para entrarem na arca.\n\nEles obedeceram e foram se abrigar com alegria, sabendo que estariam seguros sob a proteção do Senhor.'
       },
       {
         id: 'noe2',
-        src: 'noe2.jpg',
-        label: 'Noé 3',
-        ref: 'Gênesis 7:12',
-        verse: '"E houve chuva sobre a terra quarenta dias e quarenta noites."',
-        summary: 'As águas do dilúvio subiram muito e a arca flutuou com total segurança sobre as águas.\n\nDurante quarenta dias e quarenta noites a chuva caiu sem parar, mas lá dentro, Noé, sua família e todos os animais estavam protegidos pelo cuidado divino.'
+        src: 'noe1.jpg',
+        label: 'Noé 2 - Animais e Família Entrando',
+        ref: 'Gênesis 7:8-9',
+        verse: '"Dos animais limpos, e dos animais que não são limpos, e das aves... entraram de dois em dois para junto de Noé na arca..."',
+        summary: 'Os animais vieram de todos os cantos, de dois em dois, caminhando em ordem para dentro da arca.\n\nQuando o último animal e toda a família de Noé entraram, o próprio Deus fechou a porta da arca com segurança.'
       },
       {
         id: 'noe3',
-        src: 'noe3.jpg',
-        label: 'Noé 4',
-        ref: 'Gênesis 8:11',
-        verse: '"E a pomba voltou a ele à tarde; e eis que trazia no bico uma folha verde de oliveira; assim soube Noé que as águas tinham minguado de sobre a terra."',
-        summary: 'Quando a chuva parou, as águas começaram a baixar. Noé enviou uma pomba para verificar as condições da terra.\n\nNa segunda vez, ela retornou trazendo um ramo verde de oliveira, sinalizando que a vegetação estava renascendo e a terra estava secando.'
+        src: 'noe2.jpg',
+        label: 'Noé 3 - 40 Dias no Dilúvio',
+        ref: 'Gênesis 7:12',
+        verse: '"E houve chuva sobre a terra quarenta dias e quarenta noites."',
+        summary: 'A chuva caiu fortemente do céu durante quarenta dias e quarenta noites sem parar.\n\nEnquanto as águas subiam cobrindo tudo, a arca flutuava tranquilamente, mantendo todos em paz e em segurança lá dentro.'
       },
       {
         id: 'noe4',
+        src: 'noe3.jpg',
+        label: 'Noé 4 - Construindo a Arca',
+        ref: 'Gênesis 6:22',
+        verse: '"Assim fez Noé; conforme a tudo o que Deus lhe mandou, assim o fez."',
+        summary: 'Com muita dedicação, fé e esforço, Noé e seus filhos usaram madeira de gofer para construir a grande arca.\n\nEles seguiram exatamente cada instrução que Deus deu, preparando o barco perfeito para a grande missão.'
+      },
+      {
+        id: 'noe5',
         src: 'noe4.jpg',
-        label: 'Noé 5',
-        ref: 'Gênesis 9:13',
-        verse: '"O meu arco tenho posto nas nuvens; este será por sinal da aliança entre mim e a terra."',
-        summary: 'Todos saíram da arca em segurança e felizes agradeceram a Deus.\n\nDeus colocou um lindo arco-íris brilhante no céu como aliança eterna de que nunca mais haveria outro dilúvio cobrindo toda a terra.'
+        label: 'Noé 5 - Repouso no Monte Ararate',
+        ref: 'Gênesis 8:4',
+        verse: '"E a arca repousou, no sétimo mês, no dia dezessete do mês, sobre os montes de Ararate."',
+        summary: 'Após as águas começarem a baixar, a arca repousou firme no topo do Monte Ararate.\n\nNoé abriu a janela, a terra voltou a secar e todos saíram radiantes para celebrar o novo recomeço sob o lindo arco-íris de Deus.'
       }
     ];
 
@@ -574,6 +580,7 @@
     function updateCarouselView() {
       const item = IMAGES[currentImageIndex];
       carouselImg.src = item.src;
+      carouselImg.onerror = () => { carouselImg.src = 'noe.jpg'; };
       carouselTitle.textContent = item.label;
       verseRef.textContent = item.ref;
       verseContent.textContent = item.verse;
@@ -581,8 +588,9 @@
 
     function openStoryModal() {
       const item = IMAGES[currentImageIndex];
-      storyTitle.textContent = `${item.label} - ${item.ref}`;
+      storyTitle.textContent = `${item.label} (${item.ref})`;
       storyImg.src = item.src;
+      storyImg.onerror = () => { storyImg.src = 'noe.jpg'; };
       storyFullText.textContent = item.summary;
       selectModal.style.display = 'none';
       storyModal.style.display = 'flex';
@@ -591,6 +599,7 @@
     function applySelectedImage() {
       currentImageSrc = IMAGES[currentImageIndex].src;
       modelImgElement.src = currentImageSrc;
+      modelImgElement.onerror = () => { modelImgElement.src = 'noe.jpg'; };
       selectModal.style.display = 'none';
       storyModal.style.display = 'none';
       clearAllPieces();
