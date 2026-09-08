@@ -342,9 +342,11 @@
     <h2>Como adicionar as imagens</h2>
     <p class="sub">Enquanto não há imagens, o jogo usa ícones coloridos</p>
     <div class="help-text">
-      <p>Crie uma pasta <code>imagens</code> ao lado deste arquivo HTML, com uma subpasta para cada tema (o nome exato está entre parênteses abaixo). Dentro de cada subpasta, salve as imagens numeradas de <code>1.jpg</code> até <code>30.jpg</code>:</p>
+      <p>Coloque este arquivo HTML dentro da pasta <code>memoria</code>. Dentro de <code>memoria</code>, crie uma subpasta para cada tema (nome exato entre parênteses abaixo). Dentro de cada tema, crie 3 subpastas — <code>facil</code>, <code>medio</code> e <code>dificil</code> — e salve as imagens numeradas de <code>1.jpg</code> em diante:</p>
       <ul id="ajudaLista"></ul>
-      <p><strong>No tema "Histórias Bíblicas" (pasta <code>imagens/historias/</code>)</strong>, cada número corresponde a uma história específica:</p>
+      <p>Exemplo de caminho: <code>memoria/coragem/facil/1.jpg</code></p>
+      <p><strong>facil</strong> usa as imagens <code>1.jpg</code> a <code>5.jpg</code>, <strong>medio</strong> usa <code>1.jpg</code> a <code>10.jpg</code> e <strong>dificil</strong> usa <code>1.jpg</code> a <code>15.jpg</code> — cada nível tem sua própria pasta e suas próprias imagens. Cada imagem vira 2 cartinhas iguais no jogo. Formatos aceitos: <code>.jpg</code>, <code>.png</code> ou <code>.webp</code> (ajuste a extensão no código se preferir).</p>
+      <p><strong>No tema "Histórias Bíblicas" (pasta <code>memoria/historias/facil/</code>)</strong>, cada número corresponde a uma história específica:</p>
       <ul>
         <li><code>1.jpg</code> → Arca de Noé</li>
         <li><code>2.jpg</code> → Davi e Golias</li>
@@ -353,8 +355,6 @@
         <li><code>5.jpg</code> → Moisés e o Mar Vermelho</li>
       </ul>
       <p>Ao acertar cada um desses pares no nível Fácil, aparece um cartão grande com o versículo relacionado àquela história.</p>
-      <p>Exemplo de caminho: <code>imagens/coragem/1.jpg</code></p>
-      <p><strong>Fácil</strong> usa 5 imagens (1 a 5) de cada tema, <strong>Médio</strong> usa 10 imagens (1 a 10) e <strong>Difícil</strong> usa 15 imagens (1 a 15). Cada imagem vira 2 cartinhas iguais no jogo. Formatos aceitos: <code>.jpg</code>, <code>.png</code> ou <code>.webp</code> (ajuste a extensão no código se preferir).</p>
     </div>
   </div>
 </div>
@@ -517,7 +517,7 @@ function buildLevelList(){
 
 function buildAjudaLista(){
   const ul = document.getElementById('ajudaLista');
-  ul.innerHTML = THEMES.map(t=>`<li><strong>${t.nome}</strong> → <code>imagens/${t.slug}/</code></li>`).join('');
+  ul.innerHTML = THEMES.map(t=>`<li><strong>${t.nome}</strong> → <code>memoria/${t.slug}/</code></li>`).join('');
 }
 
 /* ---------- GAME LOGIC ---------- */
@@ -560,7 +560,7 @@ function startGame(){
       <div class="card-inner">
         <div class="face face-back"><i class="ti ${state.theme.icon}"></i></div>
         <div class="face face-front">
-          <img src="imagens/${state.theme.slug}/${c.pair}.${IMG_EXT}" alt="${v ? v.titulo : state.theme.nome + ' ' + c.pair}"
+          <img src="${state.theme.slug}/${state.level.id}/${c.pair}.${IMG_EXT}" alt="${v ? v.titulo : state.theme.nome + ' ' + c.pair}"
                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div class="placeholder" style="display:none;background:${state.theme.c1}">
             <i class="ti ${phIcon}"></i>
