@@ -1,362 +1,436 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-31JKDQEQ2L"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="H0X_Y32S7UtBxajFIRBsI01P5COkoMmY9bC-Pm-4u7w" />
 
-  gtag('config', 'G-31JKDQEQ2L');
-</script>
+    <title>Avaliar Empresas e Fornecedores | Central ImpulsoWeb10</title>
+    <meta name="description" content="Acesse a central de avaliações da ImpulsoWeb10. Veja o portfólio de empresas atendidas e ajude a fortalecer a reputação local no Google.">
+    <meta name="keywords" content="avaliar empresas, portfólio impulsoweb10, avaliações google, reputação online">
+    <meta name="author" content="ImpulsoWeb10">
+    <meta name="robots" content="index, follow">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Encontre na Bíblia</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+    <meta property="og:title" content="Central de Avaliações - ImpulsoWeb10">
+    <meta property="og:description" content="Veja nosso portfólio de clientes e faça sua avaliação.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://avaliar.impulsoweb10.com.br/">
 
-<style>
-  :root {
-    --neon-blue: #00d4ff;
-    --gold: #FFC837;
-    --bg-blue: #020611;
-    --card-background: rgba(2, 6, 17, 0.92);
-  }
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
 
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-  html, body {
-    margin: 0; 
-    padding: 0;
-    width: 100%;
-    min-height: 100vh;
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg-blue);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+    <style>
+        :root {
+            --bg-dark: #06100d;
+            --bg-dark-2: #081512;
+            --card-bg: rgba(16, 28, 24, 0.6);
+            --card-border: rgba(56, 227, 145, 0.18);
+            --neon-green: #3ef2a0;
+            --neon-lime: #c6ff5e;
+            --neon-teal: #34e8d6;
+            --text-primary: #f3fff8;
+            --text-secondary: #9fb8ae;
+            --border-dim: #1c2b26;
+        }
 
-  .app-container {
-    position: relative;
-    width: 100vw;
-    height: 100dvh;
-    max-width: calc(100dvh * (843 / 1264));
-    max-height: calc(100vw * (1264 / 843));
-    background: url('capa.jpg') no-repeat center center;
-    background-size: 100% 100%;
-    box-shadow: 0 0 25px rgba(0,0,0,0.9);
-    overflow: hidden;
-    flex-shrink: 0;
-    margin-top: 15px;
-  }
+        * { box-sizing: border-box; }
 
-  .btn-menu-overlay {
-    position: absolute;
-    top: 2.5%;
-    left: 4.2%;
-    width: 12.5%;
-    height: 6.2%;
-    border-radius: 50%;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    z-index: 20;
-  }
+        html { scroll-behavior: smooth; }
 
-  .btn-profile-overlay {
-    position: absolute;
-    top: 2.2%;
-    right: 4.2%;
-    width: 44%;
-    height: 6.5%;
-    border-radius: 30px;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    z-index: 20;
-  }
+        body {
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            margin: 0;
+            color: var(--text-secondary);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
 
-  /* ---------------------------------------------------
-     CARROSSEL DOS JOGOS (EFEITO 3D / SCALE)
-  --------------------------------------------------- */
-  .carousel-wrapper {
-    width: 100%;
-    position: absolute;
-    top: 65%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 10;
-  }
+        h1, h2, h3, .btn-avaliar, .cta-main {
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        }
 
-  .swipe-hint {
-    font-size: clamp(0.65rem, 2.5vw, 0.75rem);
-    color: #FFF;
-    font-weight: 800;
-    text-shadow: 0 2px 4px #000;
-    margin-bottom: 4px;
-    background: rgba(0, 0, 0, 0.65);
-    padding: 2px 10px;
-    border-radius: 12px;
-  }
+        /* ---- Animated aurora background ---- */
+        .aurora {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+        .aurora::before,
+        .aurora::after {
+            content: "";
+            position: absolute;
+            width: 140vw;
+            height: 140vw;
+            top: -40vw;
+            left: -20vw;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.35;
+            background: conic-gradient(from 90deg, var(--neon-green), var(--neon-teal), var(--neon-lime), var(--neon-green));
+            animation: driftA 26s ease-in-out infinite;
+        }
+        .aurora::after {
+            top: auto;
+            bottom: -50vw;
+            left: auto;
+            right: -25vw;
+            opacity: 0.22;
+            animation: driftB 32s ease-in-out infinite;
+        }
+        @keyframes driftA {
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate(6vw, 4vw) scale(1.15) rotate(40deg); }
+        }
+        @keyframes driftB {
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            50% { transform: translate(-5vw, -6vw) scale(1.2) rotate(-35deg); }
+        }
 
-  .carousel-container {
-    width: 100%;
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    /* Padding para permitir que o primeiro e o último card cheguem até o meio */
-    padding: 25px calc(50% - 70px);
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-  }
-  .carousel-container::-webkit-scrollbar { display: none; }
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(56, 227, 145, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 227, 145, 0.06) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, black 40%, transparent 100%);
+        }
 
-  /* CARD INTERATIVO */
-  .card-item {
-    flex: 0 0 140px;
-    background: var(--card-background);
-    border: 2px solid var(--neon-blue);
-    border-radius: 16px;
-    padding: 6px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
-    text-decoration: none;
-    scroll-snap-align: center;
-    
-    /* Transição suave para o efeito de escala e transparência */
-    transition: transform 0.2s ease-out, opacity 0.2s ease-out, box-shadow 0.2s ease-out;
-    transform: scale(0.78);
-    opacity: 0.6;
-  }
+        /* ---- Floating particles ---- */
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            bottom: -10px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--neon-green);
+            box-shadow: 0 0 8px 2px var(--neon-green);
+            opacity: 0;
+            animation: rise linear infinite;
+        }
+        @keyframes rise {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-110vh) translateX(20px); opacity: 0; }
+        }
 
-  /* ESTILO DO CARD NO CENTRO (ATIVO) */
-  .card-item.active {
-    transform: scale(1.18) !important;
-    opacity: 1 !important;
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.9);
-    z-index: 5;
-  }
+        header { text-align: center; padding: 80px 20px 40px; position: relative; }
 
-  .card-img-box {
-    width: 100%;
-    aspect-ratio: 1/1;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid var(--neon-blue);
-  }
-  .card-img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+        .eyebrow {
+            display: inline-block;
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--neon-green);
+            border: 1px solid var(--card-border);
+            padding: 6px 16px;
+            border-radius: 999px;
+            margin-bottom: 22px;
+            background: rgba(56, 227, 145, 0.06);
+        }
 
-  .card-title {
-    font-family: 'Baloo 2', cursive;
-    font-size: clamp(0.75rem, 2.8vw, 0.85rem);
-    font-weight: 800;
-    color: #FFF;
-    text-shadow: 0 0 6px var(--neon-blue);
-    margin: 3px 0 2px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-  }
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 14px;
+            letter-spacing: -0.01em;
+        }
+        h1 span {
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-teal));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
 
-  .card-btn-action {
-    background: linear-gradient(180deg, #00d4ff 0%, #005f73 100%);
-    color: #FFF;
-    border: none;
-    border-radius: 10px;
-    padding: 3px 6px;
-    font-family: 'Baloo 2', cursive;
-    font-weight: 800;
-    font-size: clamp(0.68rem, 2.6vw, 0.75rem);
-    box-shadow: 0 0 6px var(--neon-blue);
-    width: 100%;
-    cursor: pointer;
-  }
+        header p {
+            max-width: 480px;
+            margin: 0 auto;
+            font-size: 1.02rem;
+            line-height: 1.5;
+        }
 
-  .btn-home-overlay {
-    position: absolute;
-    bottom: 3.5%;
-    left: 18.5%;
-    width: 18%;
-    height: 8.5%;
-    border-radius: 50%;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    z-index: 20;
-  }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 22px;
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto 70px;
+        }
 
-  .btn-config-overlay {
-    position: absolute;
-    bottom: 3.5%;
-    right: 18.5%;
-    width: 18%;
-    height: 8.5%;
-    border-radius: 50%;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    z-index: 20;
-  }
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: cardIn 0.6s ease forwards;
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(56, 227, 145, 0.15), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+        .card:hover {
+            border-color: var(--neon-green);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px -12px rgba(56, 227, 145, 0.35);
+        }
+        .card:hover::before { opacity: 1; }
 
-  .footer-bar {
-    width: 100%;
-    background: var(--bg-blue);
-    padding: 16px 0 20px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.75rem;
-    color: #00d4ff;
-    z-index: 30;
-  }
+        @keyframes cardIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-  .footer-bar svg {
-    width: 14px;
-    height: 14px;
-    fill: #00d4ff;
-  }
+        .card img {
+            max-height: 60px;
+            max-width: 100%;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .card h3 {
+            color: #fff;
+            margin: 10px 0;
+            font-size: 1.15rem;
+            position: relative;
+        }
 
-  .footer-bar a {
-    color: #00d4ff;
-    text-decoration: none;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-</style>
+        .btn-avaliar {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 22px;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .card:hover .btn-avaliar {
+            background: var(--neon-green);
+            color: #04140d;
+        }
+
+        /* FAQ */
+        .faq-section { max-width: 700px; margin: 0 auto 90px; padding: 0 20px; }
+        .faq-section h2 {
+            text-align: center;
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+        }
+        .faq-item { border-bottom: 1px solid var(--border-dim); margin-bottom: 6px; }
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            color: var(--neon-green);
+            padding: 20px 6px;
+            text-align: left;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-question::after {
+            content: "+";
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+            color: var(--neon-green);
+        }
+        .faq-question.open::after { transform: rotate(45deg); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; padding: 0 6px; }
+        .faq-answer p { color: #ccc; padding-bottom: 20px; margin: 0; line-height: 1.6; }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left:0; top:0; width:100%; height:100%;
+            background: rgba(3, 10, 8, 0.85);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: #0c1a15;
+            border: 1px solid var(--neon-green);
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 20px 60px -15px rgba(56, 227, 145, 0.3);
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .cta-main {
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-teal));
+            color: #04140d;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+        .cta-main:hover { transform: translateY(-2px); }
+
+        footer p { text-align: center; padding: 40px 20px; font-size: 0.85rem; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .aurora::before, .aurora::after, .particle, .card { animation: none !important; }
+            .card { opacity: 1; transform: none; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="app-container">
+<div class="aurora"></div>
+<div class="grid-overlay"></div>
+<div class="particles" id="particles"></div>
 
-  <button class="btn-menu-overlay" onclick="alert('Menu aberto!')" aria-label="Menu"></button>
-  <button class="btn-profile-overlay" onclick="alert('Perfil do Usuário!')" aria-label="Perfil"></button>
+<header>
+    <span class="eyebrow">Central de Clientes · ImpulsoWeb10</span>
+    <h1>Conheça e <span>avalie</span> nossos parceiros</h1>
+    <p>Selecione uma empresa para visualizar detalhes ou realizar uma avaliação real no Google.</p>
+</header>
 
-  <div class="carousel-wrapper">
-    <span class="swipe-hint">👈 Deslize para jogar 👉</span>
-    
-    <div class="carousel-container" id="carousel"></div>
-  </div>
+<main>
+    <div class="container" id="clientesContainer">
+        </div>
 
-  <button class="btn-home-overlay" onclick="window.location.reload();" aria-label="Início"></button>
-  <button class="btn-config-overlay" onclick="alert('Abrir Configurações!')" aria-label="Configurações"></button>
+    <section class="faq-section">
+        <h2>Dúvidas Frequentes</h2>
+        <div class="faq-item">
+            <button class="faq-question">Como funciona a avaliação?</button>
+            <div class="faq-answer"><p>Você será redirecionado para a página oficial da empresa no Google Maps para deixar seu comentário real.</p></div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">O serviço é gratuito?</button>
+            <div class="faq-answer"><p>Sim, nossa central visa facilitar o acesso dos clientes às empresas de forma transparente.</p></div>
+        </div>
+    </section>
+</main>
 
+<div id="modalInfo" class="modal">
+    <div class="modal-content">
+        <div id="modalData"></div>
+        <br>
+        <button onclick="document.getElementById('modalInfo').style.display='none'" style="background:none; border:none; color:#ff4444; cursor:pointer; font-family:'Inter',sans-serif;">Fechar</button>
+    </div>
 </div>
 
-<div class="footer-bar">
-  <svg viewBox="0 0 24 24">
-    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-  </svg>
-  <span>Proteção SSL | Desenvolvido por <a href="https://impulsoweb10.com.br/" target="_blank" rel="noopener">ImpulsoWeb10</a></span>
-</div>
+<footer>
+    <p>© 2026 ImpulsoWeb10 - Todos os direitos reservados.</p>
+</footer>
+
+<script src="clientes.js"></script>
 
 <script>
-  const APP_MODELS = {
-    oceano: {
-      colors: { neonBlue: '#00d4ff', gold: '#FFC837', bgBlue: '#020611', cardBackground: 'rgba(2, 6, 17, 0.92)' },
-      games: [
-        ['colorir/index.html', 'colorir.jpg', 'Colorir', 'JOGAR'],
-        ['hinos/index.html', 'hinos.jpg', 'Hinos', 'JOGAR'],
-        ['labirinto/index.html', 'labirinto.jpg', 'Labirinto', 'JOGAR'],
-        ['memoria/index.html', 'memoria.jpg', 'Jogo da Memória', 'JOGAR'],
-        ['oracao/index.html', 'oracao.jpg', 'Oração', 'ABRIR'],
-        ['desafios/index.html', 'desafios.jpg', 'Desafios', 'JOGAR'],
-        ['desafio-familia/index.html', 'desafioemfamilia.jpg', 'Desafio em Família', 'JOGAR'],
-        ['encontre-na-biblia/index.html', 'encontrenabiblia.jpg', 'Encontre na Bíblia', 'JOGAR'],
-        ['historias/index.html', 'historias.jpg', 'Histórias', 'LER'],
-        ['monte-palavras/index.html', 'palavras.jpg', 'Monte Palavras', 'JOGAR'],
-        ['perguntas/index.html', 'perguntas.png', 'Perguntas / Quiz', 'RESPONDER'],
-        ['perguntas-arca/index.html', 'perguntasarca.png', 'Perguntas da Arca', 'RESPONDER'],
-        ['quebracabeca.html', 'quebracabeca.jpg', 'Quebra-Cabeça', 'JOGAR'],
-        ['verso-do-dia/index.html', 'versododia.jpg', 'Verso do Dia', 'VER'],
-        ['minhas-medalhas/index.html', 'minhas-medalhas.jpg', 'Minhas Conquistas', 'MEDALHAS']
-      ]
-    }
-  };
+document.addEventListener("DOMContentLoaded", function() {
+    const container = document.getElementById("clientesContainer");
+    const modal = document.getElementById("modalInfo");
+    const modalData = document.getElementById("modalData");
 
-  const currentModel = APP_MODELS.oceano;
-  const appRoot = 'bibliakids-baixado';
-  const container = document.getElementById('carousel');
-  Object.entries(currentModel.colors).forEach(([name, value]) => {
-    document.documentElement.style.setProperty(`--${name.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)}`, value);
-  });
+    // Fallback de demonstração caso clientes.js ainda não esteja carregado no ambiente de preview
+    const dadosClientes = (typeof clientes !== "undefined") ? clientes : [
+        { nome: "Qualy Quimy Tintas", logo: "https://via.placeholder.com/100/3ef2a0/04140d?text=QQ", pasta: "#", descricao: "Fabricante de tintas e texturas para construção civil." },
+        { nome: "WG10 Pinturas", logo: "https://via.placeholder.com/100/34e8d6/04140d?text=WG", pasta: "#", descricao: "Serviços de pintura residencial e comercial em Itaquá." },
+        { nome: "Loja Parceira Shopee", logo: "https://via.placeholder.com/100/c6ff5e/04140d?text=SP", pasta: "#", descricao: "Produtos para pintura e acabamento." }
+    ];
 
-  container.innerHTML = currentModel.games.map(([page, image, title, action]) => `
-    <a href="${appRoot}/${page}" class="card-item">
-      <div class="card-img-box"><img src="${appRoot}/${image}" alt="${title}" loading="lazy"></div>
-      <div class="card-title">${title}</div>
-      <button class="card-btn-action" type="button">${action} ➔</button>
-    </a>
-  `).join('');
+    dadosClientes.forEach((cliente, i) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.style.animationDelay = `${i * 0.08}s`;
 
-  const cards = document.querySelectorAll('.card-item');
-  let autoScrollTimer = null;
+        const imgPath = cliente.logo.startsWith('http') ? cliente.logo : `${cliente.pasta}/${cliente.logo}`;
 
-  // Função que detecta a distância de cada card do centro e aplica o destaque
-  function updateCardScales() {
-    const containerCenter = container.getBoundingClientRect().left + container.clientWidth / 2;
+        card.innerHTML = `
+            <img src="${imgPath}" alt="Logo ${cliente.nome}" onerror="this.src='https://via.placeholder.com/100?text=Logo'">
+            <h3>${cliente.nome}</h3>
+            <span class="btn-avaliar">Ver Detalhes</span>
+        `;
 
-    cards.forEach(card => {
-      const cardRect = card.getBoundingClientRect();
-      const cardCenter = cardRect.left + cardRect.width / 2;
-      const distance = Math.abs(containerCenter - cardCenter);
+        card.onclick = () => {
+            modalData.innerHTML = `
+                <img src="${imgPath}" style="max-height:80px; margin-bottom:20px; border-radius:8px;">
+                <h2 style="color:var(--neon-green); font-family:'Space Grotesk',sans-serif;">${cliente.nome}</h2>
+                <p>${cliente.descricao || 'Empresa parceira ImpulsoWeb10.'}</p>
+                <br>
+                <a href="${cliente.pasta}/" class="cta-main">Conheça esse Modelo</a>
+            `;
+            modal.style.display = "flex";
+        };
 
-      // Se o card estiver bem próximo do centro (menos de 60px de tolerância)
-      if (distance < 60) {
-        card.classList.add('active');
-      } else {
-        card.classList.remove('active');
-      }
+        container.appendChild(card);
     });
-  }
 
-  // Rola automaticamente devagar
-  function startAutoScroll() {
-    stopAutoScroll();
-    autoScrollTimer = setInterval(() => {
-      if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 2) {
-        container.scrollLeft = 0;
-      } else {
-        container.scrollLeft += 1;
-      }
-      updateCardScales();
-    }, 25);
-  }
+    // FAQ Accordion
+    document.querySelectorAll(".faq-question").forEach(btn => {
+        btn.onclick = () => {
+            const ans = btn.nextElementSibling;
+            btn.classList.toggle("open");
+            ans.style.maxHeight = ans.style.maxHeight ? null : ans.scrollHeight + "px";
+        };
+    });
 
-  function stopAutoScroll() {
-    if (autoScrollTimer) {
-      clearInterval(autoScrollTimer);
-      autoScrollTimer = null;
+    // Partículas flutuantes
+    const particlesContainer = document.getElementById("particles");
+    const total = 26;
+    for (let i = 0; i < total; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        p.style.left = `${Math.random() * 100}%`;
+        p.style.animationDuration = `${10 + Math.random() * 14}s`;
+        p.style.animationDelay = `${Math.random() * 14}s`;
+        p.style.opacity = `${0.3 + Math.random() * 0.4}`;
+        particlesContainer.appendChild(p);
     }
-  }
-
-  // Eventos de rolagem e toque
-  container.addEventListener('scroll', updateCardScales);
-  container.addEventListener('touchstart', stopAutoScroll, { passive: true });
-  container.addEventListener('mousedown', stopAutoScroll);
-
-  // Inicialização
-  updateCardScales();
-  startAutoScroll();
+});
 </script>
 
 </body>
