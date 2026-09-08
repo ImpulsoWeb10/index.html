@@ -234,6 +234,52 @@
   .help-text code{background:#eee0c4;padding:2px 6px;border-radius:6px;font-size:12px;color:var(--purple);}
   .help-text ul{padding-left:18px;}
 
+  /* modal do versículo (acerto de par) */
+  .modal-verso{
+    max-width:600px;
+    background:linear-gradient(180deg,var(--cream),#fff);
+    border:5px solid var(--yellow);
+    padding:32px 28px 28px;
+  }
+  .verso-icon-wrap{
+    width:78px;height:78px;border-radius:50%;
+    margin:0 auto 14px;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,var(--theme-c1,var(--purple-light)),var(--theme-c2,var(--purple)));
+    box-shadow:0 6px 0 rgba(0,0,0,0.18);
+  }
+  .verso-icon-wrap i{font-size:36px;color:#fff;}
+  .verso-badge{
+    display:inline-block;font-family:'Baloo 2';font-weight:700;font-size:12px;
+    color:var(--green);background:rgba(63,190,122,0.15);
+    border-radius:999px;padding:5px 14px;margin-bottom:10px;
+    letter-spacing:.5px;text-transform:uppercase;
+  }
+  .modal-verso h2{font-size:26px;color:var(--purple-deep);}
+  .verso-ref{
+    font-family:'Baloo 2';font-weight:700;color:var(--yellow-dark);font-size:14px;margin:0 0 16px;
+  }
+  .verso-quote{
+    position:relative;
+    background:#fff;
+    border:2px dashed var(--purple-light);
+    border-radius:var(--radius-md);
+    padding:22px 20px;
+    margin:0 0 22px;
+    font-family:'Baloo 2';
+    font-size:17px;
+    line-height:1.55;
+    color:var(--ink);
+  }
+  .verso-quote i.ti-quote{
+    position:absolute;top:-14px;left:16px;
+    background:var(--yellow);color:var(--purple-deep);
+    border-radius:50%;width:30px;height:30px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px;box-shadow:0 3px 0 rgba(0,0,0,0.15);
+  }
+  .verso-progresso{color:var(--ink-soft);font-size:12px;margin:0 0 20px;font-weight:700;font-family:'Baloo 2';}
+
   footer{text-align:center;color:rgba(255,255,255,0.55);font-size:12px;margin-top:30px;}
 
   @media (max-width:480px){
@@ -252,7 +298,7 @@
   </header>
 
   <div class="controls">
-    <button class="pill-btn accent" id="btnTema"><i class="ti ti-list-details"></i> Tema: <span id="temaAtual">Coragem</span></button>
+    <button class="pill-btn accent" id="btnTema"><i class="ti ti-list-details"></i> Tema: <span id="temaAtual">Histórias Bíblicas</span></button>
     <button class="pill-btn blue" id="btnNivel"><i class="ti ti-stars"></i> Nível: <span id="nivelAtual">Fácil</span></button>
     <button class="pill-btn coral" id="btnNovoJogo"><i class="ti ti-refresh"></i> Novo jogo</button>
     <button class="pill-btn" id="btnAjuda"><i class="ti ti-photo-plus"></i> Adicionar imagens</button>
@@ -298,8 +344,36 @@
     <div class="help-text">
       <p>Crie uma pasta <code>imagens</code> ao lado deste arquivo HTML, com uma subpasta para cada tema (o nome exato está entre parênteses abaixo). Dentro de cada subpasta, salve as imagens numeradas de <code>1.jpg</code> até <code>30.jpg</code>:</p>
       <ul id="ajudaLista"></ul>
+      <p><strong>No tema "Histórias Bíblicas" (pasta <code>imagens/historias/</code>)</strong>, cada número corresponde a uma história específica:</p>
+      <ul>
+        <li><code>1.jpg</code> → Arca de Noé</li>
+        <li><code>2.jpg</code> → Davi e Golias</li>
+        <li><code>3.jpg</code> → Daniel e os Leões</li>
+        <li><code>4.jpg</code> → Nascimento de Jesus</li>
+        <li><code>5.jpg</code> → Moisés e o Mar Vermelho</li>
+      </ul>
+      <p>Ao acertar cada um desses pares no nível Fácil, aparece um cartão grande com o versículo relacionado àquela história.</p>
       <p>Exemplo de caminho: <code>imagens/coragem/1.jpg</code></p>
       <p><strong>Fácil</strong> usa 5 imagens (1 a 5) de cada tema, <strong>Médio</strong> usa 10 imagens (1 a 10) e <strong>Difícil</strong> usa 15 imagens (1 a 15). Cada imagem vira 2 cartinhas iguais no jogo. Formatos aceitos: <code>.jpg</code>, <code>.png</code> ou <code>.webp</code> (ajuste a extensão no código se preferir).</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: VERSÍCULO (aparece a cada par certo) -->
+<div class="overlay" id="overlayVerso">
+  <div class="modal modal-verso" id="modalVersoBox">
+    <button class="close-x" id="btnFecharVerso">&times;</button>
+    <span class="verso-badge"><i class="ti ti-check"></i> Par encontrado!</span>
+    <div class="verso-icon-wrap" id="versoIconWrap"><i class="ti ti-book" id="versIcon"></i></div>
+    <h2 id="versTitulo">Arca de Noé</h2>
+    <p class="verso-ref" id="versRef">Gênesis 9:13</p>
+    <div class="verso-quote">
+      <i class="ti ti-quote"></i>
+      <span id="versTexto">Texto do versículo aqui.</span>
+    </div>
+    <p class="verso-progresso" id="versProgresso">1 de 5 histórias encontradas</p>
+    <div class="modal-actions">
+      <button class="pill-btn accent" id="btnContinuarVerso"><i class="ti ti-arrow-right"></i> Continuar jogando</button>
     </div>
   </div>
 </div>
@@ -325,6 +399,7 @@
 <script>
 /* ---------- CONFIG ---------- */
 const THEMES = [
+  {slug:'historias',  nome:'Histórias Bíblicas', icon:'ti-book-2', c1:'#8B5CF6', c2:'#5B3FA8', versiculos:true},
   {slug:'coragem',    nome:'Coragem',    icon:'ti-shield-check',   c1:'#2E86F0', c2:'#1B5FB0'},
   {slug:'fe',          nome:'Fé',         icon:'ti-star',           c1:'#FFB020', c2:'#C97C00'},
   {slug:'esperanca',  nome:'Esperança',  icon:'ti-rainbow',        c1:'#3FBE7A', c2:'#1F8A54'},
@@ -344,6 +419,40 @@ const LEVELS = [
 ];
 
 const IMG_EXT = 'jpg'; // troque para 'png' ou 'webp' se preferir
+
+// Versículos relacionados a cada par do tema "Histórias Bíblicas" (id do par = número da imagem 1 a 5)
+const VERSICULOS = {
+  1: {
+    titulo: 'Arca de Noé',
+    ref: 'Gênesis 9:13',
+    texto: 'Deus colocou o arco-íris no céu como sinal de que fez uma aliança com Noé e com toda a terra, prometendo nunca mais destruir o mundo com um dilúvio.',
+    icone: 'ti-anchor'
+  },
+  2: {
+    titulo: 'Davi e Golias',
+    ref: '1 Samuel 17:47',
+    texto: 'Davi declarou diante de Golias que a vitória não vem de espadas ou lanças, mas pertence ao Senhor, para que todos soubessem que há um Deus em Israel.',
+    icone: 'ti-sword'
+  },
+  3: {
+    titulo: 'Daniel e os Leões',
+    ref: 'Daniel 6:22',
+    texto: 'Daniel contou ao rei que Deus enviou um anjo para fechar a boca dos leões, protegendo-o porque foi encontrado inocente diante Dele.',
+    icone: 'ti-paw'
+  },
+  4: {
+    titulo: 'Nascimento de Jesus',
+    ref: 'Lucas 2:11',
+    texto: 'O anjo anunciou aos pastores que, na cidade de Davi, havia nascido o Salvador: Cristo, o Senhor.',
+    icone: 'ti-star'
+  },
+  5: {
+    titulo: 'Moisés e o Mar Vermelho',
+    ref: 'Êxodo 14:21',
+    texto: 'Moisés estendeu a mão sobre o mar, e o Senhor abriu um caminho em terra seca, dividindo as águas para que o povo atravessasse.',
+    icone: 'ti-droplet'
+  }
+};
 
 /* ---------- STATE ---------- */
 let state = {
@@ -442,20 +551,25 @@ function startGame(){
   const cols = Math.min(8, Math.max(4, Math.ceil(Math.sqrt(state.cards.length*1.5))));
   board.style.gridTemplateColumns = `repeat(${cols}, minmax(52px, 92px))`;
 
-  board.innerHTML = state.cards.map((c, idx) => `
+  board.innerHTML = state.cards.map((c, idx) => {
+    const v = state.theme.versiculos ? VERSICULOS[c.pair] : null;
+    const phIcon = v ? v.icone : state.theme.icon;
+    const phLabel = v ? v.titulo : c.pair;
+    return `
     <div class="card" data-idx="${idx}" data-pair="${c.pair}" style="--theme-c1:${state.theme.c1};--theme-c2:${state.theme.c2}">
       <div class="card-inner">
         <div class="face face-back"><i class="ti ${state.theme.icon}"></i></div>
         <div class="face face-front">
-          <img src="imagens/${state.theme.slug}/${c.pair}.${IMG_EXT}" alt="${state.theme.nome} ${c.pair}"
+          <img src="imagens/${state.theme.slug}/${c.pair}.${IMG_EXT}" alt="${v ? v.titulo : state.theme.nome + ' ' + c.pair}"
                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div class="placeholder" style="display:none;background:${state.theme.c1}">
-            <i class="ti ${state.theme.icon}"></i>
-            <span>${c.pair}</span>
+            <i class="ti ${phIcon}"></i>
+            <span>${phLabel}</span>
           </div>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   board.querySelectorAll('.card').forEach(el=>{
     el.addEventListener('click', ()=>onCardClick(el));
@@ -480,10 +594,17 @@ function onCardClick(el){
       b.classList.add('matched');
       state.matchedPairs++;
       state.flipped = [];
-      state.locked = false;
       updateStats();
-      if(state.matchedPairs === state.level.pares){
-        setTimeout(showWin, 500);
+      const pairNum = parseInt(a.dataset.pair, 10);
+      const verso = state.theme.versiculos ? VERSICULOS[pairNum] : null;
+      if(verso){
+        // mantém o jogo travado e mostra o versículo relacionado à história encontrada
+        setTimeout(()=>showVerseModal(verso), 550);
+      } else {
+        state.locked = false;
+        if(state.matchedPairs === state.level.pares){
+          setTimeout(showWin, 500);
+        }
       }
     } else {
       setTimeout(()=>{
@@ -511,6 +632,25 @@ function updateStats(){
   document.getElementById('statTime').textContent = `${m}:${s}`;
 }
 
+function showVerseModal(verso){
+  document.getElementById('versTitulo').textContent = verso.titulo;
+  document.getElementById('versRef').textContent = verso.ref;
+  document.getElementById('versTexto').textContent = verso.texto;
+  document.getElementById('versIcon').className = 'ti ' + verso.icone;
+  document.getElementById('versoIconWrap').style.setProperty('--theme-c1', state.theme.c1);
+  document.getElementById('versoIconWrap').style.setProperty('--theme-c2', state.theme.c2);
+  document.getElementById('versProgresso').textContent = `${state.matchedPairs} de ${state.level.pares} histórias encontradas`;
+  openOverlay('overlayVerso');
+}
+
+function continuarAposVerso(){
+  closeOverlay('overlayVerso');
+  state.locked = false;
+  if(state.matchedPairs === state.level.pares){
+    setTimeout(showWin, 300);
+  }
+}
+
 function showWin(){
   clearInterval(state.timer);
   document.getElementById('winThemeText').textContent = `Você completou o tema ${state.theme.nome}`;
@@ -531,8 +671,15 @@ document.querySelectorAll('[data-close]').forEach(btn=>{
   btn.addEventListener('click', (e)=> closeOverlay(e.target.closest('.overlay').id));
 });
 document.querySelectorAll('.overlay').forEach(ov=>{
-  ov.addEventListener('click', (e)=>{ if(e.target === ov) closeOverlay(ov.id); });
+  ov.addEventListener('click', (e)=>{
+    if(e.target !== ov) return;
+    if(ov.id === 'overlayVerso'){ continuarAposVerso(); }
+    else { closeOverlay(ov.id); }
+  });
 });
+
+document.getElementById('btnContinuarVerso').addEventListener('click', continuarAposVerso);
+document.getElementById('btnFecharVerso').addEventListener('click', continuarAposVerso);
 
 document.getElementById('btnTema').addEventListener('click', ()=>{ buildThemeGrid(); openOverlay('overlayTema'); });
 document.getElementById('btnNivel').addEventListener('click', ()=>{ buildLevelList(); openOverlay('overlayNivel'); });
