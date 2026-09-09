@@ -355,6 +355,14 @@
         <li><code>5.jpg</code> → Moisés e o Mar Vermelho</li>
       </ul>
       <p>Ao acertar cada um desses pares no nível Fácil, aparece um cartão grande com o versículo relacionado àquela história.</p>
+      <p><strong>No tema "Criação" (pasta <code>memoria/criacao/facil/</code>)</strong>, cada número corresponde a um versículo sobre a criação:</p>
+      <ul>
+        <li><code>1.jpg</code> → Deus, o Criador (Gênesis 1:1)</li>
+        <li><code>2.jpg</code> → Os Céus Declaram Sua Glória (Salmos 19:1)</li>
+        <li><code>3.jpg</code> → Águas Tranquilas (Salmos 23:2)</li>
+        <li><code>4.jpg</code> → Nada É Impossível Para Deus (Lucas 1:37)</li>
+        <li><code>5.jpg</code> → Paz em Toda a Criação (Isaías 11:6)</li>
+      </ul>
     </div>
   </div>
 </div>
@@ -371,7 +379,7 @@
       <i class="ti ti-quote"></i>
       <span id="versTexto">Texto do versículo aqui.</span>
     </div>
-    <p class="verso-progresso" id="versProgresso">1 de 5 histórias encontradas</p>
+    <p class="verso-progresso" id="versProgresso">1 de 5 versículos encontrados</p>
     <div class="modal-actions">
       <button class="pill-btn accent" id="btnContinuarVerso"><i class="ti ti-arrow-right"></i> Continuar jogando</button>
     </div>
@@ -408,7 +416,7 @@ const THEMES = [
   {slug:'obediencia', nome:'Obediência', icon:'ti-checkbox',       c1:'#4C3A8A', c2:'#2E2159'},
   {slug:'sabedoria',  nome:'Sabedoria',  icon:'ti-bulb',           c1:'#FF6F59', c2:'#C7442F'},
   {slug:'milagres',    nome:'Milagres',   icon:'ti-sparkles',       c1:'#2EC4C4', c2:'#0F8A8A'},
-  {slug:'criacao',    nome:'Criação',    icon:'ti-world',          c1:'#63A653', c2:'#3B7A2E'},
+  {slug:'criacao',    nome:'Criação',    icon:'ti-world',          c1:'#63A653', c2:'#3B7A2E', versiculos:true},
   {slug:'amizade',     nome:'Amizade',    icon:'ti-users',          c1:'#E0A800', c2:'#A87A00'},
 ];
 
@@ -420,37 +428,71 @@ const LEVELS = [
 
 const IMG_EXT = 'jpg'; // troque para 'png' ou 'webp' se preferir
 
-// Versículos relacionados a cada par do tema "Histórias Bíblicas" (id do par = número da imagem 1 a 5)
-const VERSICULOS = {
-  1: {
-    titulo: 'Arca de Noé',
-    ref: 'Gênesis 9:13',
-    texto: 'Deus colocou o arco-íris no céu como sinal de que fez uma aliança com Noé e com toda a terra, prometendo nunca mais destruir o mundo com um dilúvio.',
-    icone: 'ti-anchor'
+// Versículos relacionados a cada par, organizados por tema (id do par = número da imagem 1 a 5)
+const VERSICULOS_POR_TEMA = {
+  historias: {
+    1: {
+      titulo: 'Arca de Noé',
+      ref: 'Gênesis 9:13',
+      texto: 'Deus colocou o arco-íris no céu como sinal de que fez uma aliança com Noé e com toda a terra, prometendo nunca mais destruir o mundo com um dilúvio.',
+      icone: 'ti-anchor'
+    },
+    2: {
+      titulo: 'Davi e Golias',
+      ref: '1 Samuel 17:47',
+      texto: 'Davi declarou diante de Golias que a vitória não vem de espadas ou lanças, mas pertence ao Senhor, para que todos soubessem que há um Deus em Israel.',
+      icone: 'ti-sword'
+    },
+    3: {
+      titulo: 'Daniel e os Leões',
+      ref: 'Daniel 6:22',
+      texto: 'Daniel contou ao rei que Deus enviou um anjo para fechar a boca dos leões, protegendo-o porque foi encontrado inocente diante Dele.',
+      icone: 'ti-paw'
+    },
+    4: {
+      titulo: 'Nascimento de Jesus',
+      ref: 'Lucas 2:11',
+      texto: 'O anjo anunciou aos pastores que, na cidade de Davi, havia nascido o Salvador: Cristo, o Senhor.',
+      icone: 'ti-star'
+    },
+    5: {
+      titulo: 'Moisés e o Mar Vermelho',
+      ref: 'Êxodo 14:21',
+      texto: 'Moisés estendeu a mão sobre o mar, e o Senhor abriu um caminho em terra seca, dividindo as águas para que o povo atravessasse.',
+      icone: 'ti-droplet'
+    }
   },
-  2: {
-    titulo: 'Davi e Golias',
-    ref: '1 Samuel 17:47',
-    texto: 'Davi declarou diante de Golias que a vitória não vem de espadas ou lanças, mas pertence ao Senhor, para que todos soubessem que há um Deus em Israel.',
-    icone: 'ti-sword'
-  },
-  3: {
-    titulo: 'Daniel e os Leões',
-    ref: 'Daniel 6:22',
-    texto: 'Daniel contou ao rei que Deus enviou um anjo para fechar a boca dos leões, protegendo-o porque foi encontrado inocente diante Dele.',
-    icone: 'ti-paw'
-  },
-  4: {
-    titulo: 'Nascimento de Jesus',
-    ref: 'Lucas 2:11',
-    texto: 'O anjo anunciou aos pastores que, na cidade de Davi, havia nascido o Salvador: Cristo, o Senhor.',
-    icone: 'ti-star'
-  },
-  5: {
-    titulo: 'Moisés e o Mar Vermelho',
-    ref: 'Êxodo 14:21',
-    texto: 'Moisés estendeu a mão sobre o mar, e o Senhor abriu um caminho em terra seca, dividindo as águas para que o povo atravessasse.',
-    icone: 'ti-droplet'
+  criacao: {
+    1: {
+      titulo: 'Deus, o Criador',
+      ref: 'Gênesis 1:1',
+      texto: 'No princípio, Deus criou os céus e a terra, dando origem a tudo o que existe pelo poder da Sua palavra.',
+      icone: 'ti-sun'
+    },
+    2: {
+      titulo: 'Os Céus Declaram Sua Glória',
+      ref: 'Salmos 19:1',
+      texto: 'O céu, com o sol, a lua e as estrelas, mostra todos os dias a grandeza e a glória do Criador.',
+      icone: 'ti-moon-stars'
+    },
+    3: {
+      titulo: 'Águas Tranquilas',
+      ref: 'Salmos 23:2',
+      texto: 'Como um bom pastor, Deus cuida de nós e nos conduz a lugares de descanso, junto a águas calmas e tranquilas.',
+      icone: 'ti-droplet'
+    },
+    4: {
+      titulo: 'Nada É Impossível Para Deus',
+      ref: 'Lucas 1:37',
+      texto: 'Diante de toda a beleza que Deus criou na natureza, sabemos que nenhuma tarefa é grande demais ou impossível para Ele.',
+      icone: 'ti-sparkles'
+    },
+    5: {
+      titulo: 'Paz em Toda a Criação',
+      ref: 'Isaías 11:6',
+      texto: 'Um dia, todos os seres viverão em paz uns com os outros, exatamente como Deus planejou desde a criação do mundo.',
+      icone: 'ti-leaf'
+    }
   }
 };
 
@@ -552,7 +594,7 @@ function startGame(){
   board.style.gridTemplateColumns = `repeat(${cols}, minmax(52px, 92px))`;
 
   board.innerHTML = state.cards.map((c, idx) => {
-    const v = state.theme.versiculos ? VERSICULOS[c.pair] : null;
+    const v = state.theme.versiculos ? (VERSICULOS_POR_TEMA[state.theme.slug] || {})[c.pair] : null;
     const phIcon = v ? v.icone : state.theme.icon;
     const phLabel = v ? v.titulo : c.pair;
     return `
@@ -596,7 +638,7 @@ function onCardClick(el){
       state.flipped = [];
       updateStats();
       const pairNum = parseInt(a.dataset.pair, 10);
-      const verso = state.theme.versiculos ? VERSICULOS[pairNum] : null;
+      const verso = state.theme.versiculos ? (VERSICULOS_POR_TEMA[state.theme.slug] || {})[pairNum] : null;
       if(verso){
         // mantém o jogo travado e mostra o versículo relacionado à história encontrada
         setTimeout(()=>showVerseModal(verso), 550);
@@ -639,7 +681,7 @@ function showVerseModal(verso){
   document.getElementById('versIcon').className = 'ti ' + verso.icone;
   document.getElementById('versoIconWrap').style.setProperty('--theme-c1', state.theme.c1);
   document.getElementById('versoIconWrap').style.setProperty('--theme-c2', state.theme.c2);
-  document.getElementById('versProgresso').textContent = `${state.matchedPairs} de ${state.level.pares} histórias encontradas`;
+  document.getElementById('versProgresso').textContent = `${state.matchedPairs} de ${state.level.pares} versículos encontrados`;
   openOverlay('overlayVerso');
 }
 
