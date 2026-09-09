@@ -1,0 +1,32 @@
+{
+  "1": {
+    "titulo": "Deus, o Criador",
+    "ref": "Gênesis 1:1",
+    "texto": "No princípio, Deus criou os céus e a terra, dando origem a tudo o que existe pelo poder da Sua palavra.",
+    "icone": "ti-sun"
+  },
+  "2": {
+    "titulo": "Os Céus Declaram Sua Glória",
+    "ref": "Salmos 19:1",
+    "texto": "O céu, com o sol, a lua e as estrelas, mostra todos os dias a grandeza e a glória do Criador.",
+    "icone": "ti-moon-stars"
+  },
+  "3": {
+    "titulo": "Águas Tranquilas",
+    "ref": "Salmos 23:2",
+    "texto": "Como um bom pastor, Deus cuida de nós e nos conduz a lugares de descanso, junto a águas calmas e tranquilas.",
+    "icone": "ti-droplet"
+  },
+  "4": {
+    "titulo": "Nada É Impossível Para Deus",
+    "ref": "Lucas 1:37",
+    "texto": "Diante de toda a beleza que Deus criou na natureza, sabemos que nenhuma tarefa é grande demais ou impossível para Ele.",
+    "icone": "ti-sparkles"
+  },
+  "5": {
+    "titulo": "Paz em Toda a Criação",
+    "ref": "Isaías 11:6",
+    "texto": "Um dia, todos os seres viverão em paz uns com os outros, exatamente como Deus planejou desde a criação do mundo.",
+    "icone": "ti-leaf"
+  }
+}
