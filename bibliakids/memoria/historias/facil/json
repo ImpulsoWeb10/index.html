@@ -1,0 +1,32 @@
+{
+  "1": {
+    "titulo": "Arca de Noé",
+    "ref": "Gênesis 9:13",
+    "texto": "Deus colocou o arco-íris no céu como sinal de que fez uma aliança com Noé e com toda a terra, prometendo nunca mais destruir o mundo com um dilúvio.",
+    "icone": "ti-anchor"
+  },
+  "2": {
+    "titulo": "Davi e Golias",
+    "ref": "1 Samuel 17:47",
+    "texto": "Davi declarou diante de Golias que a vitória não vem de espadas ou lanças, mas pertence ao Senhor, para que todos soubessem que há um Deus em Israel.",
+    "icone": "ti-sword"
+  },
+  "3": {
+    "titulo": "Daniel e os Leões",
+    "ref": "Daniel 6:22",
+    "texto": "Daniel contou ao rei que Deus enviou um anjo para fechar a boca dos leões, protegendo-o porque foi encontrado inocente diante Dele.",
+    "icone": "ti-paw"
+  },
+  "4": {
+    "titulo": "Nascimento de Jesus",
+    "ref": "Lucas 2:11",
+    "texto": "O anjo anunciou aos pastores que, na cidade de Davi, havia nascido o Salvador: Cristo, o Senhor.",
+    "icone": "ti-star"
+  },
+  "5": {
+    "titulo": "Moisés e o Mar Vermelho",
+    "ref": "Êxodo 14:21",
+    "texto": "Moisés estendeu a mão sobre o mar, e o Senhor abriu um caminho em terra seca, dividindo as águas para que o povo atravessasse.",
+    "icone": "ti-droplet"
+  }
+}
