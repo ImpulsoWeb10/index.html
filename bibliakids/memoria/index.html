@@ -384,6 +384,24 @@
         <li><code>4.jpg</code> → Jesus e João (João 13:23)</li>
         <li><code>5.jpg</code> → Paulo e Barnabé (Atos 13:2-3)</li>
       </ul>
+      <p><strong>No tema "Fé" (pasta <code>memoria/fe/</code>)</strong>, são 15 versículos — os primeiros 5 valem para o nível Fácil, e os mesmos reaparecem dentro do Médio (imagens 1 a 10) e do Difícil (imagens 1 a 15):</p>
+      <ul>
+        <li><code>1.jpg</code> → A Certeza da Fé (Hebreus 11:1)</li>
+        <li><code>2.jpg</code> → Ore Com Fé (Marcos 11:24)</li>
+        <li><code>3.jpg</code> → Fé Que Move Montanhas (Mateus 17:20)</li>
+        <li><code>4.jpg</code> → A Fé Vem Pelo Ouvir (Romanos 10:17)</li>
+        <li><code>5.jpg</code> → Confie de Todo o Coração (Provérbios 3:5-6)</li>
+        <li><code>6.jpg</code> → Seja Forte e Corajoso (Josué 1:9)</li>
+        <li><code>7.jpg</code> → Quando Tiver Medo (Salmos 56:3)</li>
+        <li><code>8.jpg</code> → Deus Te Fortalece (Isaías 41:10)</li>
+        <li><code>9.jpg</code> → Vivemos Por Fé (2 Coríntios 5:7)</li>
+        <li><code>10.jpg</code> → Sem Fé, Impossível Agradar a Deus (Hebreus 11:6)</li>
+        <li><code>11.jpg</code> → Peça Com Fé (Mateus 21:22)</li>
+        <li><code>12.jpg</code> → Feliz É Quem Creu (Lucas 1:45)</li>
+        <li><code>13.jpg</code> → Tudo É Possível (Marcos 9:23)</li>
+        <li><code>14.jpg</code> → Peça Sem Duvidar (Tiago 1:6)</li>
+        <li><code>15.jpg</code> → Entregue Seu Caminho (Salmos 37:5)</li>
+      </ul>
     </div>
   </div>
 </div>
@@ -434,7 +452,7 @@
 const THEMES = [
   {slug:'historias',  nome:'Histórias Bíblicas', icon:'ti-book-2', c1:'#8B5CF6', c2:'#5B3FA8', versiculos:true},
   {slug:'coragem',    nome:'Coragem',    icon:'ti-shield-check',   c1:'#2E86F0', c2:'#1B5FB0'},
-  {slug:'fe',          nome:'Fé',         icon:'ti-star',           c1:'#FFB020', c2:'#C97C00'},
+  {slug:'fe',          nome:'Fé',         icon:'ti-star',           c1:'#FFB020', c2:'#C97C00', versiculos:true},
   {slug:'esperanca',  nome:'Esperança',  icon:'ti-rainbow',        c1:'#3FBE7A', c2:'#1F8A54'},
   {slug:'amor',        nome:'Amor',       icon:'ti-heart',          c1:'#F0568A', c2:'#B92E62'},
   {slug:'perdao',      nome:'Perdão',     icon:'ti-heart-handshake',c1:'#9B6BD6', c2:'#6B3FA8'},
@@ -527,6 +545,113 @@ const VERSICULOS_POR_TEMA = {
       texto: 'Um dia, todos os seres viverão em paz uns com os outros, exatamente como Deus planejou desde a criação do mundo.',
       aplicacao: 'Deus sonha com um mundo em paz. Podemos começar isso sendo pacificadores hoje mesmo.',
       icone: 'ti-leaf'
+    }
+  },
+  fe: {
+    1: {
+      titulo: 'A Certeza da Fé',
+      ref: 'Hebreus 11:1',
+      texto: 'Fé é ter certeza daquilo que esperamos, mesmo sem poder ver com os nossos olhos.',
+      aplicacao: 'Você não precisa ver para acreditar — pode confiar em Deus mesmo no que ainda não aconteceu.',
+      icone: 'ti-cloud'
+    },
+    2: {
+      titulo: 'Ore Com Fé',
+      ref: 'Marcos 11:24',
+      texto: 'Jesus ensinou que, quando oramos, devemos crer que já recebemos o que pedimos, e assim será.',
+      aplicacao: 'Ore com confiança, sabendo que Deus ouve e cuida de cada pedido do seu coração.',
+      icone: 'ti-gift'
+    },
+    3: {
+      titulo: 'Fé Que Move Montanhas',
+      ref: 'Mateus 17:20',
+      texto: 'Jesus disse que, com fé do tamanho de um grãozinho de mostarda, seria possível até mover uma montanha.',
+      aplicacao: 'Não é o tamanho da sua fé que importa, mas em quem você coloca a sua confiança.',
+      icone: 'ti-mountain'
+    },
+    4: {
+      titulo: 'A Fé Vem Pelo Ouvir',
+      ref: 'Romanos 10:17',
+      texto: 'A fé nasce quando ouvimos e conhecemos a palavra de Deus.',
+      aplicacao: 'Quanto mais você conhece a Bíblia, mais forte a sua fé pode crescer.',
+      icone: 'ti-ear'
+    },
+    5: {
+      titulo: 'Confie de Todo o Coração',
+      ref: 'Provérbios 3:5-6',
+      texto: 'Devemos confiar no Senhor de todo o coração, sem depender apenas do nosso próprio entendimento.',
+      aplicacao: 'Quando não entender tudo o que está acontecendo, confie que Deus sabe o melhor caminho.',
+      icone: 'ti-heart'
+    },
+    6: {
+      titulo: 'Seja Forte e Corajoso',
+      ref: 'Josué 1:9',
+      texto: 'Deus ordenou que Josué fosse forte e corajoso, garantindo que estaria com ele em todos os lugares por onde andasse.',
+      aplicacao: 'Você não enfrenta nada sozinho: Deus está com você em cada novo desafio.',
+      icone: 'ti-shield-check'
+    },
+    7: {
+      titulo: 'Quando Tiver Medo',
+      ref: 'Salmos 56:3',
+      texto: 'O salmista declarou que, quando sentisse medo, colocaria sua confiança em Deus.',
+      aplicacao: 'É normal sentir medo às vezes — o segredo é escolher confiar em Deus mesmo assim.',
+      icone: 'ti-shield'
+    },
+    8: {
+      titulo: 'Deus Te Fortalece',
+      ref: 'Isaías 41:10',
+      texto: 'Deus promete que não precisamos temer, pois Ele está conosco, nos fortalecendo e ajudando em todo momento.',
+      aplicacao: 'Nos dias difíceis, lembre-se de que a força de Deus é maior do que qualquer medo.',
+      icone: 'ti-bolt'
+    },
+    9: {
+      titulo: 'Vivemos Por Fé',
+      ref: '2 Coríntios 5:7',
+      texto: 'Paulo ensinou que devemos viver pela fé, e não apenas pelo que conseguimos enxergar.',
+      aplicacao: 'Mesmo sem saber o que vem pela frente, você pode caminhar confiando em Deus.',
+      icone: 'ti-walk'
+    },
+    10: {
+      titulo: 'Sem Fé, Impossível Agradar a Deus',
+      ref: 'Hebreus 11:6',
+      texto: 'Sem fé é impossível agradar a Deus, pois quem se aproxima dEle precisa crer que Ele existe e recompensa quem o busca.',
+      aplicacao: 'Buscar a Deus de coração é o primeiro passo para uma fé que agrada a Ele.',
+      icone: 'ti-key'
+    },
+    11: {
+      titulo: 'Peça Com Fé',
+      ref: 'Mateus 21:22',
+      texto: 'Jesus ensinou que tudo o que pedimos em oração, com fé, poderemos receber.',
+      aplicacao: 'Leve seus pedidos a Deus em oração, confiando que Ele se importa com você.',
+      icone: 'ti-hand-click'
+    },
+    12: {
+      titulo: 'Feliz É Quem Creu',
+      ref: 'Lucas 1:45',
+      texto: 'Maria foi chamada de feliz por ter acreditado que as promessas do Senhor se cumpririam.',
+      aplicacao: 'Acreditar nas promessas de Deus traz alegria, mesmo antes de vê-las se cumprir.',
+      icone: 'ti-star-filled'
+    },
+    13: {
+      titulo: 'Tudo É Possível',
+      ref: 'Marcos 9:23',
+      texto: 'Jesus respondeu que tudo é possível para aquele que crê.',
+      aplicacao: 'Não deixe que o "impossível" te paralise: para quem confia em Deus, sempre há esperança.',
+      icone: 'ti-infinity'
+    },
+    14: {
+      titulo: 'Peça Sem Duvidar',
+      ref: 'Tiago 1:6',
+      texto: 'Tiago ensina que devemos pedir com fé, sem duvidar, pois quem duvida é como uma onda do mar levada pelo vento.',
+      aplicacao: 'Firme sua confiança em Deus, sem deixar as dúvidas te sacudirem de um lado para o outro.',
+      icone: 'ti-wind'
+    },
+    15: {
+      titulo: 'Entregue Seu Caminho',
+      ref: 'Salmos 37:5',
+      texto: 'O salmo ensina a entregar nosso caminho ao Senhor, confiando que Ele mesmo agirá.',
+      aplicacao: 'Você pode descansar sabendo que, ao confiar em Deus, Ele cuida dos detalhes da sua vida.',
+      icone: 'ti-route'
     }
   },
   amizade: {
