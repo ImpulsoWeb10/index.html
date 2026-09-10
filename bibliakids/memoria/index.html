@@ -278,6 +278,19 @@
     display:flex;align-items:center;justify-content:center;
     font-size:15px;box-shadow:0 3px 0 rgba(0,0,0,0.15);
   }
+  .verso-aplicacao{
+    display:flex;align-items:flex-start;gap:10px;text-align:left;
+    background:rgba(63,190,122,0.12);
+    border:2px solid var(--green);
+    border-radius:var(--radius-md);
+    padding:14px 16px;
+    margin:0 0 18px;
+    font-family:'Nunito';
+    font-size:14px;
+    line-height:1.5;
+    color:var(--ink);
+  }
+  .verso-aplicacao i{color:var(--green);font-size:20px;flex-shrink:0;margin-top:1px;}
   .verso-progresso{color:var(--ink-soft);font-size:12px;margin:0 0 20px;font-weight:700;font-family:'Baloo 2';}
 
   footer{text-align:center;color:rgba(255,255,255,0.55);font-size:12px;margin-top:30px;}
@@ -363,6 +376,14 @@
         <li><code>4.jpg</code> → Nada É Impossível Para Deus (Lucas 1:37)</li>
         <li><code>5.jpg</code> → Paz em Toda a Criação (Isaías 11:6)</li>
       </ul>
+      <p><strong>No tema "Amizade" (pasta <code>memoria/amizade/facil/</code>)</strong>, cada número corresponde a uma dupla de amigos da Bíblia:</p>
+      <ul>
+        <li><code>1.jpg</code> → Davi e Jônatas (1 Samuel 18:1-4)</li>
+        <li><code>2.jpg</code> → Elias e Eliseu (2 Reis 2:2-6)</li>
+        <li><code>3.jpg</code> → Rute e Noemi (Rute 1:16-17)</li>
+        <li><code>4.jpg</code> → Jesus e João (João 13:23)</li>
+        <li><code>5.jpg</code> → Paulo e Barnabé (Atos 13:2-3)</li>
+      </ul>
     </div>
   </div>
 </div>
@@ -378,6 +399,10 @@
     <div class="verso-quote">
       <i class="ti ti-quote"></i>
       <span id="versTexto">Texto do versículo aqui.</span>
+    </div>
+    <div class="verso-aplicacao" id="versAplicacaoBox">
+      <i class="ti ti-bulb"></i>
+      <span id="versAplicacao">Mensagem de aplicação aqui.</span>
     </div>
     <p class="verso-progresso" id="versProgresso">1 de 5 versículos encontrados</p>
     <div class="modal-actions">
@@ -417,7 +442,7 @@ const THEMES = [
   {slug:'sabedoria',  nome:'Sabedoria',  icon:'ti-bulb',           c1:'#FF6F59', c2:'#C7442F'},
   {slug:'milagres',    nome:'Milagres',   icon:'ti-sparkles',       c1:'#2EC4C4', c2:'#0F8A8A'},
   {slug:'criacao',    nome:'Criação',    icon:'ti-world',          c1:'#63A653', c2:'#3B7A2E', versiculos:true},
-  {slug:'amizade',     nome:'Amizade',    icon:'ti-users',          c1:'#E0A800', c2:'#A87A00'},
+  {slug:'amizade',     nome:'Amizade',    icon:'ti-users',          c1:'#E0A800', c2:'#A87A00', versiculos:true},
 ];
 
 const LEVELS = [
@@ -435,30 +460,35 @@ const VERSICULOS_POR_TEMA = {
       titulo: 'Arca de Noé',
       ref: 'Gênesis 9:13',
       texto: 'Deus colocou o arco-íris no céu como sinal de que fez uma aliança com Noé e com toda a terra, prometendo nunca mais destruir o mundo com um dilúvio.',
+      aplicacao: 'Deus cumpre suas promessas. Podemos confiar nEle mesmo quando tudo parece incerto.',
       icone: 'ti-anchor'
     },
     2: {
       titulo: 'Davi e Golias',
       ref: '1 Samuel 17:47',
       texto: 'Davi declarou diante de Golias que a vitória não vem de espadas ou lanças, mas pertence ao Senhor, para que todos soubessem que há um Deus em Israel.',
+      aplicacao: 'Com Deus ao nosso lado, nenhum gigante é grande demais para enfrentarmos.',
       icone: 'ti-sword'
     },
     3: {
       titulo: 'Daniel e os Leões',
       ref: 'Daniel 6:22',
       texto: 'Daniel contou ao rei que Deus enviou um anjo para fechar a boca dos leões, protegendo-o porque foi encontrado inocente diante Dele.',
+      aplicacao: 'Fazer o que é certo, mesmo com medo, é sempre o melhor caminho — Deus cuida de quem confia nEle.',
       icone: 'ti-paw'
     },
     4: {
       titulo: 'Nascimento de Jesus',
       ref: 'Lucas 2:11',
       texto: 'O anjo anunciou aos pastores que, na cidade de Davi, havia nascido o Salvador: Cristo, o Senhor.',
+      aplicacao: 'Jesus veio para todos, até para os mais simples, como os pastores. Ele também nasceu para você.',
       icone: 'ti-star'
     },
     5: {
       titulo: 'Moisés e o Mar Vermelho',
       ref: 'Êxodo 14:21',
       texto: 'Moisés estendeu a mão sobre o mar, e o Senhor abriu um caminho em terra seca, dividindo as águas para que o povo atravessasse.',
+      aplicacao: 'Quando parece não haver saída, Deus pode abrir um caminho onde nem imaginamos.',
       icone: 'ti-droplet'
     }
   },
@@ -467,31 +497,73 @@ const VERSICULOS_POR_TEMA = {
       titulo: 'Deus, o Criador',
       ref: 'Gênesis 1:1',
       texto: 'No princípio, Deus criou os céus e a terra, dando origem a tudo o que existe pelo poder da Sua palavra.',
+      aplicacao: 'Tudo o que existe começou com Deus. Ele também tem um propósito especial para a sua vida.',
       icone: 'ti-sun'
     },
     2: {
       titulo: 'Os Céus Declaram Sua Glória',
       ref: 'Salmos 19:1',
       texto: 'O céu, com o sol, a lua e as estrelas, mostra todos os dias a grandeza e a glória do Criador.',
+      aplicacao: 'Da próxima vez que olhar para o céu, lembre-se: ele existe para mostrar como Deus é grande.',
       icone: 'ti-moon-stars'
     },
     3: {
       titulo: 'Águas Tranquilas',
       ref: 'Salmos 23:2',
       texto: 'Como um bom pastor, Deus cuida de nós e nos conduz a lugares de descanso, junto a águas calmas e tranquilas.',
+      aplicacao: 'Quando estiver ansioso, lembre-se de que Deus quer te levar a um lugar de paz e descanso.',
       icone: 'ti-droplet'
     },
     4: {
       titulo: 'Nada É Impossível Para Deus',
       ref: 'Lucas 1:37',
       texto: 'Diante de toda a beleza que Deus criou na natureza, sabemos que nenhuma tarefa é grande demais ou impossível para Ele.',
+      aplicacao: 'Mesmo diante de um problema grande, você pode confiar: para Deus, nada é impossível.',
       icone: 'ti-sparkles'
     },
     5: {
       titulo: 'Paz em Toda a Criação',
       ref: 'Isaías 11:6',
       texto: 'Um dia, todos os seres viverão em paz uns com os outros, exatamente como Deus planejou desde a criação do mundo.',
+      aplicacao: 'Deus sonha com um mundo em paz. Podemos começar isso sendo pacificadores hoje mesmo.',
       icone: 'ti-leaf'
+    }
+  },
+  amizade: {
+    1: {
+      titulo: 'Davi e Jônatas',
+      ref: '1 Samuel 18:1-4',
+      texto: 'Jônatas amava Davi como a si mesmo, e os dois fizeram um pacto de amizade, e Jônatas deu a Davi suas próprias roupas e armas em sinal desse compromisso.',
+      aplicacao: 'Um amigo de verdade torce pelo seu sucesso, mesmo quando isso significa abrir mão do que é seu.',
+      icone: 'ti-heart-handshake'
+    },
+    2: {
+      titulo: 'Elias e Eliseu',
+      ref: '2 Reis 2:2-6',
+      texto: 'Por três vezes Elias pediu que Eliseu ficasse para trás, mas Eliseu respondeu que não o abandonaria, seguindo o amigo até o fim da jornada.',
+      aplicacao: 'Bons amigos permanecem juntos nos momentos difíceis, sem desistir uns dos outros.',
+      icone: 'ti-walk'
+    },
+    3: {
+      titulo: 'Rute e Noemi',
+      ref: 'Rute 1:16-17',
+      texto: 'Rute disse a Noemi que iria para onde ela fosse, que o povo de Noemi seria o seu povo e o Deus dela seria o seu Deus.',
+      aplicacao: 'A amizade verdadeira escolhe ficar ao lado do outro, mesmo quando seria mais fácil ir embora.',
+      icone: 'ti-heart'
+    },
+    4: {
+      titulo: 'Jesus e João',
+      ref: 'João 13:23',
+      texto: 'João, o discípulo a quem Jesus amava, estava bem perto dele à mesa durante a última ceia, mostrando a proximidade dessa amizade.',
+      aplicacao: 'Estar perto de quem amamos, com confiança e carinho, fortalece qualquer amizade.',
+      icone: 'ti-users'
+    },
+    5: {
+      titulo: 'Paulo e Barnabé',
+      ref: 'Atos 13:2-3',
+      texto: 'O Espírito Santo separou Paulo e Barnabé para uma missão especial, e a igreja os enviou juntos, unidos em oração e propósito.',
+      aplicacao: 'Amigos que caminham na mesma direção podem realizar juntos coisas muito maiores.',
+      icone: 'ti-map'
     }
   }
 };
@@ -681,6 +753,13 @@ function showVerseModal(verso){
   document.getElementById('versIcon').className = 'ti ' + verso.icone;
   document.getElementById('versoIconWrap').style.setProperty('--theme-c1', state.theme.c1);
   document.getElementById('versoIconWrap').style.setProperty('--theme-c2', state.theme.c2);
+  const aplicacaoBox = document.getElementById('versAplicacaoBox');
+  if(verso.aplicacao){
+    document.getElementById('versAplicacao').textContent = verso.aplicacao;
+    aplicacaoBox.style.display = 'flex';
+  } else {
+    aplicacaoBox.style.display = 'none';
+  }
   document.getElementById('versProgresso').textContent = `${state.matchedPairs} de ${state.level.pares} versículos encontrados`;
   openOverlay('overlayVerso');
 }
