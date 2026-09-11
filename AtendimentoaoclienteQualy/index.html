@@ -1,179 +1,1447 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Atendimento Qualy Quimy</title>
+<title>Atendimento Qualy Quimy</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f2f4f7;
-        }
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-        .topo {
-            background: #1f4d2b;
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f1f3f5;
+        color: #222;
+    }
+
+    .topo {
+        background: #176b3a;
+        color: white;
+        padding: 18px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
+
+    .topo h1 {
+        margin: 0 0 5px;
+        font-size: 23px;
+    }
+
+    .topo p {
+        margin: 0;
+        font-size: 14px;
+        opacity: .95;
+    }
+
+    .status {
+        background: white;
+        max-width: 900px;
+        margin: 15px auto 0;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 13px;
+        color: #555;
+        box-shadow: 0 2px 7px rgba(0,0,0,.08);
+    }
+
+    .status strong {
+        color: #176b3a;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 900px;
+        margin: 15px auto;
+        padding: 0 12px 30px;
+    }
+
+    .chat {
+        background: white;
+        border-radius: 14px;
+        min-height: 430px;
+        padding: 18px;
+        box-shadow: 0 3px 12px rgba(0,0,0,.08);
+        overflow-y: auto;
+    }
+
+    .mensagem {
+        display: flex;
+        margin: 12px 0;
+    }
+
+    .mensagem.bot {
+        justify-content: flex-start;
+    }
+
+    .mensagem.usuario {
+        justify-content: flex-end;
+    }
+
+    .bolha {
+        max-width: 82%;
+        padding: 12px 15px;
+        border-radius: 14px;
+        line-height: 1.5;
+        font-size: 15px;
+        white-space: normal;
+    }
+
+    .bot .bolha {
+        background: #eef7f1;
+        border: 1px solid #d6eadc;
+    }
+
+    .usuario .bolha {
+        background: #176b3a;
+        color: white;
+    }
+
+    .produto {
+        margin-top: 10px;
+        padding: 14px;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+    }
+
+    .produto h3 {
+        margin: 0 0 8px;
+        color: #176b3a;
+    }
+
+    .produto p {
+        margin: 5px 0;
+        font-size: 14px;
+    }
+
+    .produto strong {
+        color: #333;
+    }
+
+    .variacao {
+        margin-top: 10px;
+        padding: 10px;
+        background: #f7f7f7;
+        border-radius: 8px;
+        border-left: 4px solid #176b3a;
+    }
+
+    .perguntas {
+        margin-top: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .perguntas button {
+        border: 1px solid #176b3a;
+        background: white;
+        color: #176b3a;
+        padding: 9px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .perguntas button:hover {
+        background: #176b3a;
+        color: white;
+    }
+
+    .entrada {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+    }
+
+    .entrada input {
+        flex: 1;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        padding: 14px 17px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    .entrada input:focus {
+        border-color: #176b3a;
+    }
+
+    .entrada button {
+        border: none;
+        background: #176b3a;
+        color: white;
+        padding: 0 22px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .entrada button:hover {
+        background: #0f4f2a;
+    }
+
+    .botoes-final {
+        display: flex;
+        gap: 10px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        text-decoration: none;
+        padding: 11px 15px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        display: inline-block;
+    }
+
+    .btn-whatsapp {
+        background: #25d366;
+        color: white;
+    }
+
+    .btn-cadastro {
+        background: #333;
+        color: white;
+    }
+
+    .aviso {
+        text-align: center;
+        padding: 25px 15px;
+        color: #777;
+    }
+
+    .sem-produtos {
+        text-align: center;
+        padding: 35px 15px;
+        color: #777;
+    }
+
+    .sem-produtos strong {
+        display: block;
+        color: #c0392b;
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 600px) {
 
         .topo h1 {
-            margin: 0;
-            font-size: 28px;
+            font-size: 20px;
         }
 
-        .topo p {
-            margin: 8px 0 0;
+        .bolha {
+            max-width: 92%;
         }
 
-        .chat {
-            max-width: 700px;
-            margin: 30px auto;
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+        .entrada button {
+            padding: 0 16px;
         }
-
-        .mensagem {
-            background: #eef5ef;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        textarea {
-            width: 100%;
-            box-sizing: border-box;
-            height: 100px;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-            resize: vertical;
-        }
-
-        button {
-            width: 100%;
-            margin-top: 12px;
-            padding: 15px;
-            background: #1f4d2b;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 17px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #163a20;
-        }
-
-        #resposta {
-            display: none;
-            margin-top: 25px;
-            padding: 18px;
-            background: #f7f7f7;
-            border-left: 5px solid #1f4d2b;
-            border-radius: 8px;
-            line-height: 1.6;
-        }
-
-        .rodape {
-            text-align: center;
-            color: #666;
-            padding: 20px;
-            font-size: 14px;
-        }
-    </style>
+    }
+</style>
 </head>
 
 <body>
 
-    <div class="topo">
-        <h1>Atendimento Qualy Quimy</h1>
-        <p>Fábrica de Tintas, Massas e Texturas</p>
-    </div>
+<header class="topo">
 
-    <div class="chat">
+    <h1>Atendimento Qualy Quimy</h1>
 
-        <div class="mensagem">
-            <strong>Atendente Qualy:</strong><br>
-            Olá! Seja bem-vindo à Qualy Quimy.<br><br>
-            Como posso ajudar?
+    <p>Fábrica de Tintas, Massas e Texturas</p>
+
+</header>
+
+<div class="status">
+
+    Base de produtos:
+    <strong id="contador">verificando...</strong>
+
+</div>
+
+<main class="container">
+
+    <section class="chat" id="chat">
+
+        <div class="mensagem bot">
+
+            <div class="bolha">
+
+                Olá! Sou o atendimento virtual da <strong>Qualy Quimy</strong>.
+
+                <br><br>
+
+                Posso ajudar você a encontrar informações sobre nossos produtos,
+                embalagens, preços, rendimento, utilização e muito mais.
+
+                <br><br>
+
+                <strong>O que você gostaria de saber?</strong>
+
+            </div>
+
         </div>
 
-        <textarea
-            id="pergunta"
-            placeholder="Digite sua pergunta..."
-        ></textarea>
+    </section>
 
-        <button onclick="responder()">
-            Perguntar
+
+    <div class="perguntas">
+
+        <button onclick="perguntar('Quais produtos vocês têm?')">
+            Ver produtos
         </button>
 
-        <div id="resposta"></div>
+        <button onclick="perguntar('Tem tinta PVA?')">
+            Tinta PVA
+        </button>
+
+        <button onclick="perguntar('Tem massa?')">
+            Massas
+        </button>
+
+        <button onclick="perguntar('Tem grafiato?')">
+            Grafiato
+        </button>
+
+        <button onclick="perguntar('Quais embalagens vocês têm?')">
+            Embalagens
+        </button>
+
+        <button onclick="perguntar('Quanto rende?')">
+            Rendimento
+        </button>
 
     </div>
 
-    <div class="rodape">
-        Atendimento Qualy Quimy
+
+    <div class="entrada">
+
+        <input
+            type="text"
+            id="pergunta"
+            placeholder="Digite sua pergunta..."
+            autocomplete="off"
+        >
+
+        <button onclick="enviarPergunta()">
+            ENVIAR
+        </button>
+
     </div>
 
-    <script>
 
-        function responder() {
+    <div class="botoes-final">
 
-            const pergunta = document
-                .getElementById("pergunta")
-                .value
-                .toLowerCase();
+        <a
+            class="btn btn-whatsapp"
+            href="https://wa.me/5511954950044"
+            target="_blank"
+        >
+            Falar com atendente
+        </a>
 
-            const resposta = document
-                .getElementById("resposta");
+        <a
+            class="btn btn-cadastro"
+            href="cadastro.html"
+        >
+            Cadastro de produtos
+        </a>
 
-            if (pergunta.trim() === "") {
-                resposta.style.display = "block";
-                resposta.innerHTML =
-                    "Digite uma pergunta para que eu possa ajudar.";
-                return;
-            }
+    </div>
 
-            if (
-                pergunta.includes("pva") &&
-                pergunta.includes("18")
-            ) {
+</main>
 
-                resposta.innerHTML = `
-                    <strong>Tinta PVA Látex 18kg</strong><br><br>
 
-                    A Tinta PVA Látex é indicada para
-                    ambientes internos.<br><br>
+<script>
 
-                    Rendimento: até 130 m² por demão.<br>
-                    Base: água.<br>
-                    Acabamento: fosco.<br>
-                    Características: antimofo.
-                `;
+/* ==========================================================
+   CONFIGURAÇÃO
+========================================================== */
 
-            } else {
+const CHAVE = "produtosQualy";
 
-                resposta.innerHTML = `
-                    Ainda estou aprendendo sobre os produtos
-                    da Qualy Quimy.<br><br>
+const WHATSAPP = "5511954950044";
 
-                    Em breve poderei responder essa pergunta
-                    automaticamente.
-                `;
-            }
 
-            resposta.style.display = "block";
+/* ==========================================================
+   CARREGAR PRODUTOS
+========================================================== */
+
+function carregarProdutos() {
+
+    try {
+
+        const dados = localStorage.getItem(CHAVE);
+
+        if (!dados) {
+            return [];
         }
 
-    </script>
+        const produtos = JSON.parse(dados);
+
+        if (!Array.isArray(produtos)) {
+            return [];
+        }
+
+        return produtos;
+
+    } catch (erro) {
+
+        console.error("Erro ao carregar produtos:", erro);
+
+        return [];
+
+    }
+}
+
+
+/* ==========================================================
+   CONTADOR
+========================================================== */
+
+function atualizarContador() {
+
+    const produtos = carregarProdutos();
+
+    const contador = document.getElementById("contador");
+
+    if (produtos.length === 0) {
+
+        contador.innerHTML = "nenhum produto encontrado";
+
+    } else {
+
+        contador.innerHTML =
+            produtos.length +
+            (produtos.length === 1
+                ? " produto cadastrado"
+                : " produtos cadastrados");
+
+    }
+}
+
+
+/* ==========================================================
+   NORMALIZAR TEXTO
+========================================================== */
+
+function normalizar(texto) {
+
+    if (!texto) return "";
+
+    return String(texto)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+}
+
+
+/* ==========================================================
+   ESCAPAR HTML
+========================================================== */
+
+function escapar(texto) {
+
+    if (texto === null || texto === undefined) {
+        return "";
+    }
+
+    return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ==========================================================
+   ADICIONAR MENSAGEM
+========================================================== */
+
+function adicionarMensagem(texto, tipo) {
+
+    const chat = document.getElementById("chat");
+
+    const div = document.createElement("div");
+
+    div.className = "mensagem " + tipo;
+
+    const bolha = document.createElement("div");
+
+    bolha.className = "bolha";
+
+    bolha.innerHTML = texto;
+
+    div.appendChild(bolha);
+
+    chat.appendChild(div);
+
+    chat.scrollTop = chat.scrollHeight;
+
+}
+
+
+/* ==========================================================
+   PEGAR TODOS OS TEXTOS DO PRODUTO
+========================================================== */
+
+function textoProduto(produto) {
+
+    return normalizar(
+        [
+            produto.nome,
+            produto.categoria,
+            produto.descricao,
+            produto.uso,
+            produto.superficies,
+            produto.superficiesNao,
+            produto.indicacoes,
+            produto.rendimento,
+            produto.acabamento,
+            produto.cores,
+            produto.diluicao,
+            produto.aplicacao,
+            produto.secagem,
+            produto.caracteristicas,
+            produto.observacoes,
+            produto.linkCompra,
+            produto.linkWhatsApp
+        ].join(" ")
+    );
+
+}
+
+
+/* ==========================================================
+   PALAVRAS IMPORTANTES
+========================================================== */
+
+const palavrasIgnorar = [
+
+    "a",
+    "o",
+    "as",
+    "os",
+    "um",
+    "uma",
+    "uns",
+    "umas",
+    "de",
+    "da",
+    "do",
+    "das",
+    "dos",
+    "para",
+    "por",
+    "em",
+    "no",
+    "na",
+    "nos",
+    "nas",
+    "e",
+    "ou",
+    "eu",
+    "voce",
+    "voces",
+    "tem",
+    "tenho",
+    "quero",
+    "preciso",
+    "qual",
+    "quais",
+    "como",
+    "onde",
+    "que",
+    "me",
+    "pode",
+    "podem",
+    "sobre",
+    "seu",
+    "sua"
+
+];
+
+
+/* ==========================================================
+   PEGAR PALAVRAS DA PERGUNTA
+========================================================== */
+
+function palavrasDaPergunta(pergunta) {
+
+    return normalizar(pergunta)
+        .split(/\s+/)
+        .filter(palavra =>
+            palavra.length >= 3 &&
+            !palavrasIgnorar.includes(palavra)
+        );
+
+}
+
+
+/* ==========================================================
+   PROCURAR PRODUTOS
+========================================================== */
+
+function encontrarProdutos(pergunta) {
+
+    const produtos = carregarProdutos();
+
+    const palavras = palavrasDaPergunta(pergunta);
+
+    if (produtos.length === 0) {
+        return [];
+    }
+
+    if (palavras.length === 0) {
+        return produtos;
+    }
+
+    const resultados = produtos.map(produto => {
+
+        const texto = textoProduto(produto);
+
+        let pontos = 0;
+
+        palavras.forEach(palavra => {
+
+            if (texto.includes(palavra)) {
+
+                pontos++;
+
+            }
+
+        });
+
+        /* Dá mais importância ao nome do produto */
+
+        const nome = normalizar(produto.nome);
+
+        palavras.forEach(palavra => {
+
+            if (nome.includes(palavra)) {
+
+                pontos += 4;
+
+            }
+
+        });
+
+
+        return {
+            produto,
+            pontos
+        };
+
+    })
+    .filter(item => item.pontos > 0)
+    .sort((a, b) => b.pontos - a.pontos);
+
+    return resultados.map(item => item.produto);
+
+}
+
+
+/* ==========================================================
+   DETECTAR INTENÇÃO
+========================================================== */
+
+function detectarIntencao(pergunta) {
+
+    const p = normalizar(pergunta);
+
+    if (
+        p.includes("preco") ||
+        p.includes("valor") ||
+        p.includes("quanto custa") ||
+        p.includes("custa")
+    ) {
+        return "preco";
+    }
+
+    if (
+        p.includes("rendimento") ||
+        p.includes("rende") ||
+        p.includes("quantos metros") ||
+        p.includes("m2") ||
+        p.includes("metro")
+    ) {
+        return "rendimento";
+    }
+
+    if (
+        p.includes("embalagem") ||
+        p.includes("tamanho") ||
+        p.includes("litro") ||
+        p.includes("kg") ||
+        p.includes("quilo")
+    ) {
+        return "embalagem";
+    }
+
+    if (
+        p.includes("estoque") ||
+        p.includes("disponivel") ||
+        p.includes("tem ")
+    ) {
+        return "estoque";
+    }
+
+    if (
+        p.includes("onde usar") ||
+        p.includes("pode usar") ||
+        p.includes("serve para") ||
+        p.includes("indicado") ||
+        p.includes("superficie")
+    ) {
+        return "uso";
+    }
+
+    if (
+        p.includes("cor") ||
+        p.includes("cores")
+    ) {
+        return "cores";
+    }
+
+    if (
+        p.includes("diluir") ||
+        p.includes("diluicao") ||
+        p.includes("agua")
+    ) {
+        return "diluicao";
+    }
+
+    if (
+        p.includes("aplicar") ||
+        p.includes("aplicacao") ||
+        p.includes("rolo") ||
+        p.includes("pincel")
+    ) {
+        return "aplicacao";
+    }
+
+    if (
+        p.includes("secar") ||
+        p.includes("secagem") ||
+        p.includes("seca")
+    ) {
+        return "secagem";
+    }
+
+    if (
+        p.includes("caracteristica") ||
+        p.includes("caracteristicas") ||
+        p.includes("beneficio") ||
+        p.includes("beneficios")
+    ) {
+        return "caracteristicas";
+    }
+
+    return "geral";
+
+}
+
+
+/* ==========================================================
+   FORMATAR PREÇO
+========================================================== */
+
+function formatarPreco(valor) {
+
+    if (
+        valor === null ||
+        valor === undefined ||
+        valor === ""
+    ) {
+        return "";
+    }
+
+    const numero = Number(
+        String(valor)
+            .replace("R$", "")
+            .replace(/\./g, "")
+            .replace(",", ".")
+            .trim()
+    );
+
+    if (isNaN(numero)) {
+
+        return escapar(valor);
+
+    }
+
+    return numero.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+
+}
+
+
+/* ==========================================================
+   MOSTRAR VARIAÇÕES
+========================================================== */
+
+function mostrarVariacoes(produto, intencao) {
+
+    if (
+        !produto.variacoes ||
+        !Array.isArray(produto.variacoes) ||
+        produto.variacoes.length === 0
+    ) {
+
+        return "";
+
+    }
+
+
+    let html = "";
+
+    produto.variacoes.forEach(v => {
+
+        if (!v) return;
+
+        const embalagem =
+            v.embalagem ||
+            v.nome ||
+            v.tamanho ||
+            "";
+
+        const preco =
+            v.preco ||
+            v.precoVenda ||
+            v.valor ||
+            "";
+
+        const rendimento =
+            v.rendimento ||
+            "";
+
+        const estoque =
+            v.estoque ||
+            "";
+
+        const sku =
+            v.sku ||
+            "";
+
+
+        if (
+            intencao === "preco" &&
+            !preco
+        ) {
+            return;
+        }
+
+        if (
+            intencao === "rendimento" &&
+            !rendimento
+        ) {
+            return;
+        }
+
+
+        html += `
+            <div class="variacao">
+
+                ${
+                    embalagem
+                    ? `<strong>${escapar(embalagem)}</strong>`
+                    : ""
+                }
+
+                ${
+                    preco
+                    ? `<p><strong>Preço:</strong> ${formatarPreco(preco)}</p>`
+                    : ""
+                }
+
+                ${
+                    rendimento
+                    ? `<p><strong>Rendimento:</strong> ${escapar(rendimento)}</p>`
+                    : ""
+                }
+
+                ${
+                    estoque
+                    ? `<p><strong>Estoque:</strong> ${escapar(estoque)}</p>`
+                    : ""
+                }
+
+                ${
+                    sku
+                    ? `<p><strong>SKU:</strong> ${escapar(sku)}</p>`
+                    : ""
+                }
+
+            </div>
+        `;
+
+    });
+
+
+    return html;
+
+}
+
+
+/* ==========================================================
+   MOSTRAR PRODUTO
+========================================================== */
+
+function montarProduto(produto, intencao) {
+
+    let html = `
+        <div class="produto">
+
+            <h3>${escapar(produto.nome || "Produto")}</h3>
+    `;
+
+
+    if (produto.categoria) {
+
+        html += `
+            <p>
+                <strong>Categoria:</strong>
+                ${escapar(produto.categoria)}
+            </p>
+        `;
+
+    }
+
+
+    if (
+        intencao === "uso" ||
+        intencao === "geral"
+    ) {
+
+        if (produto.uso) {
+
+            html += `
+                <p>
+                    <strong>Uso:</strong>
+                    ${escapar(produto.uso)}
+                </p>
+            `;
+
+        }
+
+        if (produto.superficies) {
+
+            html += `
+                <p>
+                    <strong>Superfícies indicadas:</strong>
+                    ${escapar(produto.superficies)}
+                </p>
+            `;
+
+        }
+
+        if (produto.superficiesNao) {
+
+            html += `
+                <p>
+                    <strong>Não indicado para:</strong>
+                    ${escapar(produto.superficiesNao)}
+                </p>
+            `;
+
+        }
+
+        if (produto.indicacoes) {
+
+            html += `
+                <p>
+                    <strong>Indicações:</strong>
+                    ${escapar(produto.indicacoes)}
+                </p>
+            `;
+
+        }
+
+    }
+
+
+    if (
+        intencao === "rendimento" ||
+        intencao === "geral"
+    ) {
+
+        if (produto.rendimento) {
+
+            html += `
+                <p>
+                    <strong>Rendimento geral:</strong>
+                    ${escapar(produto.rendimento)}
+                </p>
+            `;
+
+        }
+
+    }
+
+
+    if (
+        intencao === "cores" ||
+        intencao === "geral"
+    ) {
+
+        if (produto.cores) {
+
+            html += `
+                <p>
+                    <strong>Cores:</strong>
+                    ${escapar(produto.cores)}
+                </p>
+            `;
+
+        }
+
+    }
+
+
+    if (
+        intencao === "diluicao" ||
+        intencao === "geral"
+    ) {
+
+        if (produto.diluicao) {
+
+            html += `
+                <p>
+                    <strong>Diluição:</strong>
+                    ${escapar(produto.diluicao)}
+                </p>
+            `;
+
+        }
+
+    }
+
+
+    if (
+        intencao === "aplicacao" ||
+        intencao === "geral"
+    ) {
+
+        if (produto.aplicacao) {
+
+            html += `
+                <p>
+                    <strong>Aplicação:</strong>
+                    ${escapar(produto.aplicacao)}
+                </p>
+            `;
+
+        }
+
+    }
+
+
+    if (
+        intencao === "secagem" ||
+        intencao === "geral"
+    ) {
+
+        if (produto.secagem) {
+
+            html += `
+                <p>
+                    <strong>Secagem:</strong>
+                    ${escapar(produto.secagem)}
+                </p>
+            `;
+
+        }
+
+    }
+
+
+    if (
+        intencao === "caracteristicas" ||
+        intencao === "geral"
+    ) {
+
+        if (produto.caracteristicas) {
+
+            html += `
+                <p>
+                    <strong>Características:</strong>
+                    ${escapar(produto.caracteristicas)}
+                </p>
+            `;
+
+        }
+
+    }
+
+
+    if (produto.descricao) {
+
+        html += `
+            <p>
+                <strong>Descrição:</strong>
+                ${escapar(produto.descricao)}
+            </p>
+        `;
+
+    }
+
+
+    if (produto.observacoes) {
+
+        html += `
+            <p>
+                <strong>Observações:</strong>
+                ${escapar(produto.observacoes)}
+            </p>
+        `;
+
+    }
+
+
+    const variacoes = mostrarVariacoes(
+        produto,
+        intencao
+    );
+
+    if (variacoes) {
+
+        html += `
+            <div>
+                <strong>Variações:</strong>
+                ${variacoes}
+            </div>
+        `;
+
+    }
+
+
+    if (produto.linkCompra) {
+
+        html += `
+            <p>
+                <a
+                    href="${escapar(produto.linkCompra)}"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    Comprar / ver produto
+                </a>
+            </p>
+        `;
+
+    }
+
+
+    html += `</div>`;
+
+
+    return html;
+
+}
+
+
+/* ==========================================================
+   RESPONDER
+========================================================== */
+
+function responder(pergunta) {
+
+    const produtos = carregarProdutos();
+
+    if (produtos.length === 0) {
+
+        return `
+            Ainda não encontrei produtos cadastrados na minha base.
+
+            <br><br>
+
+            Cadastre um produto primeiro pelo botão
+            <strong>Cadastro de produtos</strong>.
+
+            <br><br>
+
+            Se precisar, você também pode falar diretamente
+            com um atendente.
+        `;
+
+    }
+
+
+    const p = normalizar(pergunta);
+
+    /* ------------------------------------------------------
+       SAUDAÇÕES
+    ------------------------------------------------------ */
+
+    if (
+        p === "oi" ||
+        p === "ola" ||
+        p === "bom dia" ||
+        p === "boa tarde" ||
+        p === "boa noite" ||
+        p.includes("ola tudo bem") ||
+        p.includes("oi tudo bem")
+    ) {
+
+        return `
+            Olá! Tudo bem?
+
+            <br><br>
+
+            Sou o atendimento virtual da <strong>Qualy Quimy</strong>.
+
+            <br><br>
+
+            Posso consultar nossa base de produtos para você.
+        `;
+
+    }
+
+
+    /* ------------------------------------------------------
+       LISTAR TODOS OS PRODUTOS
+    ------------------------------------------------------ */
+
+    if (
+        p.includes("quais produtos") ||
+        p.includes("lista de produtos") ||
+        p.includes("catalogo") ||
+        p.includes("catalogo de produtos") ||
+        p.includes("o que voces vendem") ||
+        p.includes("o que vocês vendem")
+    ) {
+
+        let html = `
+            Temos atualmente
+            <strong>${produtos.length}</strong>
+            produto(s) cadastrado(s):
+
+            <br><br>
+        `;
+
+        produtos.forEach(produto => {
+
+            html += `
+                <div class="produto">
+
+                    <h3>
+                        ${escapar(produto.nome)}
+                    </h3>
+
+                    ${
+                        produto.categoria
+                        ? `<p><strong>Categoria:</strong> ${escapar(produto.categoria)}</p>`
+                        : ""
+                    }
+
+                    ${
+                        produto.uso
+                        ? `<p><strong>Uso:</strong> ${escapar(produto.uso)}</p>`
+                        : ""
+                    }
+
+                </div>
+            `;
+
+        });
+
+        return html;
+
+    }
+
+
+    /* ------------------------------------------------------
+       ENCONTRAR
+    ------------------------------------------------------ */
+
+    const resultados = encontrarProdutos(pergunta);
+
+    const intencao = detectarIntencao(pergunta);
+
+
+    if (resultados.length === 0) {
+
+        return `
+            Não encontrei um produto ou informação relacionada
+            à sua pergunta na minha base.
+
+            <br><br>
+
+            Para evitar passar uma informação errada,
+            prefiro não inventar.
+
+            <br><br>
+
+            Posso encaminhar você para um atendente da
+            <strong>Qualy Quimy</strong>.
+        `;
+
+    }
+
+
+    /* ------------------------------------------------------
+       LIMITE DE RESULTADOS
+    ------------------------------------------------------ */
+
+    const encontrados = resultados.slice(0, 5);
+
+
+    let html = "";
+
+
+    if (intencao === "preco") {
+
+        html += `
+            Encontrei estas informações de preço:
+
+            <br><br>
+        `;
+
+    } else if (intencao === "rendimento") {
+
+        html += `
+            Encontrei estas informações de rendimento:
+
+            <br><br>
+        `;
+
+    } else if (intencao === "embalagem") {
+
+        html += `
+            Estas são as embalagens cadastradas:
+
+            <br><br>
+        `;
+
+    } else {
+
+        html += `
+            Encontrei estas informações na nossa base:
+
+            <br><br>
+        `;
+
+    }
+
+
+    encontrados.forEach(produto => {
+
+        html += montarProduto(
+            produto,
+            intencao
+        );
+
+    });
+
+
+    return html;
+
+}
+
+
+/* ==========================================================
+   ENVIAR PERGUNTA
+========================================================== */
+
+function enviarPergunta() {
+
+    const input = document.getElementById("pergunta");
+
+    const pergunta = input.value.trim();
+
+    if (!pergunta) {
+
+        return;
+
+    }
+
+
+    adicionarMensagem(
+        escapar(pergunta),
+        "usuario"
+    );
+
+
+    input.value = "";
+
+
+    setTimeout(() => {
+
+        const resposta = responder(pergunta);
+
+        adicionarMensagem(
+            resposta,
+            "bot"
+        );
+
+    }, 250);
+
+}
+
+
+/* ==========================================================
+   PERGUNTA RÁPIDA
+========================================================== */
+
+function perguntar(texto) {
+
+    const input = document.getElementById("pergunta");
+
+    input.value = texto;
+
+    enviarPergunta();
+
+}
+
+
+/* ==========================================================
+   ENTER PARA ENVIAR
+========================================================== */
+
+document
+    .getElementById("pergunta")
+    .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            enviarPergunta();
+
+        }
+
+    });
+
+
+/* ==========================================================
+   INICIALIZAR
+========================================================== */
+
+atualizarContador();
+
+
+/* Atualiza se o cadastro mudar em outra aba */
+
+window.addEventListener("storage", function(event) {
+
+    if (event.key === CHAVE) {
+
+        atualizarContador();
+
+    }
+
+});
+
+</script>
 
 </body>
 </html>
