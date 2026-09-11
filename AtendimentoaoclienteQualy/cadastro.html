@@ -1,1 +1,1482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Cadastro de Produtos - Qualy Quimy</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f3f5;
+            color: #222;
+        }
+
+        header {
+            background: #1f4d2b;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        header p {
+            margin: 8px 0 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #1f4d2b;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .campo {
+            margin-bottom: 15px;
+        }
+
+        .campo.completo {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .opcoes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .opcao {
+            border: 1px solid #ccc;
+            padding: 12px;
+            border-radius: 8px;
+            background: #fafafa;
+            cursor: pointer;
+        }
+
+        .opcao:hover {
+            background: #f0f5f1;
+        }
+
+        .opcao input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .variacao {
+            border: 2px solid #dfe7e1;
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 15px;
+            background: #fafcfb;
+        }
+
+        .variacao h3 {
+            margin-top: 0;
+            color: #1f4d2b;
+        }
+
+        .botoes {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 13px 20px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .btn-salvar {
+            background: #1f4d2b;
+            color: white;
+        }
+
+        .btn-novo {
+            background: #555;
+            color: white;
+        }
+
+        .btn-exportar {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-excluir {
+            background: #b42318;
+            color: white;
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        .btn-editar {
+            background: #e0a800;
+            color: white;
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        .produto-lista {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .produto-lista strong {
+            color: #1f4d2b;
+        }
+
+        .produto-acoes {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .pergunta {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 12px;
+            background: #fafafa;
+        }
+
+        .mensagem {
+            display: none;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .sucesso {
+            background: #dff5e3;
+            color: #155724;
+        }
+
+        .erro {
+            background: #fde2e1;
+            color: #842029;
+        }
+
+        .vazio {
+            color: #777;
+            padding: 15px 0;
+        }
+
+        @media (max-width: 700px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .opcoes {
+                grid-template-columns: 1fr;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>Cadastro de Produtos</h1>
+
+    <p>Base de conhecimento — Qualy Quimy</p>
+
+</header>
+
+
+<div class="container">
+
+    <div id="mensagem" class="mensagem"></div>
+
+
+    <!-- DADOS PRINCIPAIS -->
+
+    <div class="card">
+
+        <h2>1. Informações do produto</h2>
+
+        <div class="grid">
+
+            <div class="campo">
+
+                <label>Nome do produto *</label>
+
+                <input
+                    type="text"
+                    id="nome"
+                    placeholder="Ex.: Tinta PVA Látex"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Categoria *</label>
+
+                <select id="categoria">
+
+                    <option value="">Selecione</option>
+
+                    <option value="Tinta">Tinta</option>
+
+                    <option value="Massa">Massa</option>
+
+                    <option value="Textura">Textura</option>
+
+                    <option value="Grafiato">Grafiato</option>
+
+                    <option value="Seladora">Seladora</option>
+
+                    <option value="Resina">Resina / Liqui Brilho</option>
+
+                    <option value="Fundo Preparador">Fundo Preparador</option>
+
+                    <option value="Outro">Outro</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo completo">
+
+                <label>Descrição do produto</label>
+
+                <textarea
+                    id="descricao"
+                    placeholder="Descrição geral do produto"
+                ></textarea>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- UTILIZAÇÃO -->
+
+    <div class="card">
+
+        <h2>2. Utilização</h2>
+
+        <div class="grid">
+
+            <div class="campo">
+
+                <label>Uso</label>
+
+                <select id="uso">
+
+                    <option value="">Selecione</option>
+
+                    <option value="Interno">Interno</option>
+
+                    <option value="Externo">Externo</option>
+
+                    <option value="Interno e externo">Interno e externo</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Acabamento</label>
+
+                <input
+                    type="text"
+                    id="acabamento"
+                    placeholder="Ex.: Fosco"
+                >
+
+            </div>
+
+
+            <div class="campo completo">
+
+                <label>Superfícies indicadas</label>
+
+                <textarea
+                    id="superficies"
+                    placeholder="Ex.: Paredes, tetos, reboco..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="campo completo">
+
+                <label>Superfícies não indicadas</label>
+
+                <textarea
+                    id="superficiesNao"
+                    placeholder="Informe onde o produto não deve ser utilizado"
+                ></textarea>
+
+            </div>
+
+
+            <div class="campo completo">
+
+                <label>Indicações de uso</label>
+
+                <textarea
+                    id="indicacoes"
+                    placeholder="Quando o cliente deve utilizar este produto?"
+                ></textarea>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- INFORMAÇÕES TÉCNICAS -->
+
+    <div class="card">
+
+        <h2>3. Informações técnicas</h2>
+
+        <div class="grid">
+
+            <div class="campo">
+
+                <label>Rendimento geral</label>
+
+                <input
+                    type="text"
+                    id="rendimento"
+                    placeholder="Ex.: Até 130 m² por demão"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Cor / cores disponíveis</label>
+
+                <input
+                    type="text"
+                    id="cores"
+                    placeholder="Ex.: Branco, Verde, outras cores"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Diluição</label>
+
+                <input
+                    type="text"
+                    id="diluicao"
+                    placeholder="Informe a diluição"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Tempo de secagem</label>
+
+                <input
+                    type="text"
+                    id="secagem"
+                    placeholder="Ex.: 2 horas"
+                >
+
+            </div>
+
+
+            <div class="campo completo">
+
+                <label>Modo de aplicação</label>
+
+                <textarea
+                    id="aplicacao"
+                    placeholder="Rolo, pincel, desempenadeira, compressor..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="campo completo">
+
+                <label>Características</label>
+
+                <textarea
+                    id="caracteristicas"
+                    placeholder="Antimofo, base água, fácil aplicação..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="campo completo">
+
+                <label>Observações</label>
+
+                <textarea
+                    id="observacoes"
+                    placeholder="Informações importantes, cuidados e restrições"
+                ></textarea>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- VARIAÇÕES -->
+
+    <div class="card">
+
+        <h2>4. Variações / embalagens</h2>
+
+        <p>
+            Marque todas as embalagens disponíveis para este produto.
+        </p>
+
+        <div class="opcoes">
+
+            <label class="opcao">
+                <input
+                    type="checkbox"
+                    value="1 Litro"
+                    onchange="mostrarVariacao(this)"
+                >
+                1 Litro
+            </label>
+
+
+            <label class="opcao">
+                <input
+                    type="checkbox"
+                    value="3,6 Litros"
+                    onchange="mostrarVariacao(this)"
+                >
+                3,6 Litros
+            </label>
+
+
+            <label class="opcao">
+                <input
+                    type="checkbox"
+                    value="5,6 kg"
+                    onchange="mostrarVariacao(this)"
+                >
+                5,6 kg
+            </label>
+
+
+            <label class="opcao">
+                <input
+                    type="checkbox"
+                    value="Balde 16 Litros"
+                    onchange="mostrarVariacao(this)"
+                >
+                Balde 16 Litros
+            </label>
+
+
+            <label class="opcao">
+                <input
+                    type="checkbox"
+                    value="Balde 18 Litros"
+                    onchange="mostrarVariacao(this)"
+                >
+                Balde 18 Litros
+            </label>
+
+
+            <label class="opcao">
+                <input
+                    type="checkbox"
+                    value="Balde 25 kg"
+                    onchange="mostrarVariacao(this)"
+                >
+                Balde 25 kg
+            </label>
+
+
+            <label class="opcao">
+                <input
+                    type="checkbox"
+                    value="Barrica 25 kg"
+                    onchange="mostrarVariacao(this)"
+                >
+                Barrica 25 kg
+            </label>
+
+
+            <label class="opcao">
+                <input
+                    type="checkbox"
+                    value="Lata 18 Litros"
+                    onchange="mostrarVariacao(this)"
+                >
+                Lata 18 Litros
+            </label>
+
+
+            <label class="opcao">
+                <input
+                    type="checkbox"
+                    value="Lata 28 kg"
+                    onchange="mostrarVariacao(this)"
+                >
+                Lata 28 kg
+            </label>
+
+        </div>
+
+
+        <div id="variacoes"></div>
+
+    </div>
+
+
+
+    <!-- PERGUNTAS -->
+
+    <div class="card">
+
+        <h2>5. Perguntas frequentes</h2>
+
+        <p>
+            Cadastre perguntas que seus clientes costumam fazer.
+        </p>
+
+        <div id="perguntas"></div>
+
+        <button
+            type="button"
+            class="btn-novo"
+            onclick="adicionarPergunta()"
+        >
+            + Adicionar pergunta
+        </button>
+
+    </div>
+
+
+
+    <!-- LINKS -->
+
+    <div class="card">
+
+        <h2>6. Links</h2>
+
+        <div class="grid">
+
+            <div class="campo">
+
+                <label>Link de compra</label>
+
+                <input
+                    type="url"
+                    id="linkCompra"
+                    placeholder="https://..."
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Link WhatsApp</label>
+
+                <input
+                    type="url"
+                    id="linkWhatsApp"
+                    placeholder="https://wa.me/..."
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- BOTÕES -->
+
+    <div class="card">
+
+        <div class="botoes">
+
+            <button
+                class="btn-salvar"
+                onclick="salvarProduto()"
+            >
+                SALVAR PRODUTO
+            </button>
+
+
+            <button
+                class="btn-novo"
+                onclick="novoProduto()"
+            >
+                NOVO PRODUTO
+            </button>
+
+
+            <button
+                class="btn-exportar"
+                onclick="exportarProdutos()"
+            >
+                EXPORTAR BASE
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LISTA -->
+
+    <div class="card">
+
+        <h2>7. Produtos cadastrados</h2>
+
+        <input
+            type="text"
+            id="pesquisa"
+            placeholder="Pesquisar produto..."
+            oninput="listarProdutos()"
+        >
+
+        <div id="listaProdutos"></div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+let produtos = JSON.parse(
+    localStorage.getItem("produtosQualy")
+) || [];
+
+let produtoEditando = null;
+
+
+
+function mostrarVariacao(checkbox) {
+
+    const container = document.getElementById("variacoes");
+
+    const nome = checkbox.value;
+
+    const id = "var_" + nome
+        .replace(/\s/g, "_")
+        .replace(/,/g, "")
+        .replace(/\./g, "")
+        .replace(/ã/g, "a")
+        .replace(/á/g, "a")
+        .replace(/é/g, "e");
+
+    if (checkbox.checked) {
+
+        const div = document.createElement("div");
+
+        div.className = "variacao";
+
+        div.id = id;
+
+        div.innerHTML = `
+
+            <h3>${nome}</h3>
+
+            <div class="grid">
+
+                <div class="campo">
+
+                    <label>Preço</label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        class="var-preco"
+                        placeholder="0,00"
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>Rendimento</label>
+
+                    <input
+                        type="text"
+                        class="var-rendimento"
+                        placeholder="Ex.: Até 30 m²"
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>Estoque</label>
+
+                    <input
+                        type="number"
+                        class="var-estoque"
+                        placeholder="Quantidade"
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>SKU</label>
+
+                    <input
+                        type="text"
+                        class="var-sku"
+                        placeholder="Código do produto"
+                    >
+
+                </div>
+
+            </div>
+
+        `;
+
+        container.appendChild(div);
+
+    } else {
+
+        const div = document.getElementById(id);
+
+        if (div) {
+            div.remove();
+        }
+
+    }
+
+}
+
+
+
+function coletarVariacoes() {
+
+    const resultado = [];
+
+    document
+        .querySelectorAll(".variacao")
+        .forEach(div => {
+
+            const nome =
+                div.querySelector("h3").innerText;
+
+            const preco =
+                div.querySelector(".var-preco").value;
+
+            const rendimento =
+                div.querySelector(".var-rendimento").value;
+
+            const estoque =
+                div.querySelector(".var-estoque").value;
+
+            const sku =
+                div.querySelector(".var-sku").value;
+
+            resultado.push({
+
+                embalagem: nome,
+
+                preco: preco,
+
+                rendimento: rendimento,
+
+                estoque: estoque,
+
+                sku: sku
+
+            });
+
+        });
+
+    return resultado;
+
+}
+
+
+
+function adicionarPergunta(pergunta = "", resposta = "") {
+
+    const container =
+        document.getElementById("perguntas");
+
+    const div =
+        document.createElement("div");
+
+    div.className = "pergunta";
+
+    div.innerHTML = `
+
+        <div class="campo">
+
+            <label>Pergunta</label>
+
+            <input
+                type="text"
+                class="faq-pergunta"
+                value="${escapar(pergunta)}"
+                placeholder="Ex.: Quanto rende?"
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>Resposta</label>
+
+            <textarea
+                class="faq-resposta"
+                placeholder="Resposta para o cliente"
+            >${escapar(resposta)}</textarea>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="btn-excluir"
+            onclick="this.parentElement.remove()"
+        >
+            Remover pergunta
+        </button>
+
+    `;
+
+    container.appendChild(div);
+
+}
+
+
+
+function coletarPerguntas() {
+
+    const resultado = [];
+
+    document
+        .querySelectorAll(".pergunta")
+        .forEach(div => {
+
+            const pergunta =
+                div.querySelector(".faq-pergunta").value;
+
+            const resposta =
+                div.querySelector(".faq-resposta").value;
+
+            if (pergunta.trim() !== "") {
+
+                resultado.push({
+
+                    pergunta: pergunta,
+
+                    resposta: resposta
+
+                });
+
+            }
+
+        });
+
+    return resultado;
+
+}
+
+
+
+function salvarProduto() {
+
+    const nome =
+        document.getElementById("nome").value.trim();
+
+    const categoria =
+        document.getElementById("categoria").value;
+
+    if (!nome || !categoria) {
+
+        mostrarMensagem(
+            "Preencha pelo menos o nome e a categoria do produto.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    const produto = {
+
+        id:
+            produtoEditando !== null
+                ? produtos[produtoEditando].id
+                : Date.now(),
+
+        nome: nome,
+
+        categoria:
+            categoria,
+
+        descricao:
+            document.getElementById("descricao").value,
+
+        uso:
+            document.getElementById("uso").value,
+
+        superficies:
+            document.getElementById("superficies").value,
+
+        superficiesNao:
+            document.getElementById("superficiesNao").value,
+
+        indicacoes:
+            document.getElementById("indicacoes").value,
+
+        rendimento:
+            document.getElementById("rendimento").value,
+
+        acabamento:
+            document.getElementById("acabamento").value,
+
+        cores:
+            document.getElementById("cores").value,
+
+        diluicao:
+            document.getElementById("diluicao").value,
+
+        aplicacao:
+            document.getElementById("aplicacao").value,
+
+        secagem:
+            document.getElementById("secagem").value,
+
+        caracteristicas:
+            document.getElementById("caracteristicas").value,
+
+        observacoes:
+            document.getElementById("observacoes").value,
+
+        variacoes:
+            coletarVariacoes(),
+
+        perguntas:
+            coletarPerguntas(),
+
+        linkCompra:
+            document.getElementById("linkCompra").value,
+
+        linkWhatsApp:
+            document.getElementById("linkWhatsApp").value
+
+    };
+
+
+    if (produtoEditando !== null) {
+
+        produtos[produtoEditando] = produto;
+
+        mostrarMensagem(
+            "Produto atualizado com sucesso!",
+            "sucesso"
+        );
+
+    } else {
+
+        produtos.push(produto);
+
+        mostrarMensagem(
+            "Produto salvo com sucesso!",
+            "sucesso"
+        );
+
+    }
+
+
+    localStorage.setItem(
+        "produtosQualy",
+        JSON.stringify(produtos)
+    );
+
+
+    produtoEditando = null;
+
+    listarProdutos();
+
+}
+
+
+
+function listarProdutos() {
+
+    const lista =
+        document.getElementById("listaProdutos");
+
+    const pesquisa =
+        document.getElementById("pesquisa")
+            .value
+            .toLowerCase();
+
+    lista.innerHTML = "";
+
+    const encontrados =
+        produtos.filter(produto =>
+            produto.nome
+                .toLowerCase()
+                .includes(pesquisa)
+        );
+
+
+    if (encontrados.length === 0) {
+
+        lista.innerHTML =
+            '<div class="vazio">Nenhum produto cadastrado.</div>';
+
+        return;
+
+    }
+
+
+    encontrados.forEach(produto => {
+
+        const indice =
+            produtos.findIndex(
+                p => p.id === produto.id
+            );
+
+        const div =
+            document.createElement("div");
+
+        div.className = "produto-lista";
+
+        div.innerHTML = `
+
+            <strong>${escapar(produto.nome)}</strong>
+
+            <br>
+
+            Categoria:
+            ${escapar(produto.categoria)}
+
+            <br>
+
+            Variações:
+            ${produto.variacoes.length}
+
+            <div class="produto-acoes">
+
+                <button
+                    class="btn-editar"
+                    onclick="editarProduto(${indice})"
+                >
+                    Editar
+                </button>
+
+                <button
+                    class="btn-excluir"
+                    onclick="excluirProduto(${indice})"
+                >
+                    Excluir
+                </button>
+
+            </div>
+
+        `;
+
+        lista.appendChild(div);
+
+    });
+
+}
+
+
+
+function editarProduto(indice) {
+
+    const produto = produtos[indice];
+
+    produtoEditando = indice;
+
+
+    document.getElementById("nome").value =
+        produto.nome;
+
+    document.getElementById("categoria").value =
+        produto.categoria;
+
+    document.getElementById("descricao").value =
+        produto.descricao || "";
+
+    document.getElementById("uso").value =
+        produto.uso || "";
+
+    document.getElementById("superficies").value =
+        produto.superficies || "";
+
+    document.getElementById("superficiesNao").value =
+        produto.superficiesNao || "";
+
+    document.getElementById("indicacoes").value =
+        produto.indicacoes || "";
+
+    document.getElementById("rendimento").value =
+        produto.rendimento || "";
+
+    document.getElementById("acabamento").value =
+        produto.acabamento || "";
+
+    document.getElementById("cores").value =
+        produto.cores || "";
+
+    document.getElementById("diluicao").value =
+        produto.diluicao || "";
+
+    document.getElementById("aplicacao").value =
+        produto.aplicacao || "";
+
+    document.getElementById("secagem").value =
+        produto.secagem || "";
+
+    document.getElementById("caracteristicas").value =
+        produto.caracteristicas || "";
+
+    document.getElementById("observacoes").value =
+        produto.observacoes || "";
+
+    document.getElementById("linkCompra").value =
+        produto.linkCompra || "";
+
+    document.getElementById("linkWhatsApp").value =
+        produto.linkWhatsApp || "";
+
+
+    document
+        .querySelectorAll(".opcoes input")
+        .forEach(checkbox => {
+
+            checkbox.checked =
+                produto.variacoes.some(
+                    v => v.embalagem === checkbox.value
+                );
+
+        });
+
+
+    document.getElementById("variacoes").innerHTML = "";
+
+
+    produto.variacoes.forEach(variacao => {
+
+        const checkbox =
+            Array.from(
+                document.querySelectorAll(".opcoes input")
+            ).find(
+                c => c.value === variacao.embalagem
+            );
+
+        if (checkbox) {
+
+            checkbox.checked = true;
+
+            mostrarVariacao(checkbox);
+
+            const id = "var_" + variacao.embalagem
+                .replace(/\s/g, "_")
+                .replace(/,/g, "")
+                .replace(/\./g, "")
+                .replace(/ã/g, "a")
+                .replace(/á/g, "a")
+                .replace(/é/g, "e");
+
+            const div =
+                document.getElementById(id);
+
+            if (div) {
+
+                div.querySelector(".var-preco").value =
+                    variacao.preco || "";
+
+                div.querySelector(".var-rendimento").value =
+                    variacao.rendimento || "";
+
+                div.querySelector(".var-estoque").value =
+                    variacao.estoque || "";
+
+                div.querySelector(".var-sku").value =
+                    variacao.sku || "";
+
+            }
+
+        }
+
+    });
+
+
+    document.getElementById("perguntas").innerHTML = "";
+
+    produto.perguntas.forEach(faq => {
+
+        adicionarPergunta(
+            faq.pergunta,
+            faq.resposta
+        );
+
+    });
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+
+function excluirProduto(indice) {
+
+    if (
+        !confirm(
+            "Tem certeza que deseja excluir este produto?"
+        )
+    ) {
+        return;
+    }
+
+
+    produtos.splice(indice, 1);
+
+
+    localStorage.setItem(
+        "produtosQualy",
+        JSON.stringify(produtos)
+    );
+
+
+    listarProdutos();
+
+
+    mostrarMensagem(
+        "Produto excluído.",
+        "sucesso"
+    );
+
+}
+
+
+
+function novoProduto() {
+
+    produtoEditando = null;
+
+    document
+        .querySelectorAll("input, textarea, select")
+        .forEach(elemento => {
+
+            if (
+                elemento.type === "checkbox" ||
+                elemento.type === "button"
+            ) {
+                return;
+            }
+
+            elemento.value = "";
+
+        });
+
+
+    document
+        .querySelectorAll(".opcoes input")
+        .forEach(checkbox => {
+
+            checkbox.checked = false;
+
+        });
+
+
+    document.getElementById("variacoes").innerHTML = "";
+
+    document.getElementById("perguntas").innerHTML = "";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+
+function exportarProdutos() {
+
+    if (produtos.length === 0) {
+
+        mostrarMensagem(
+            "Não existem produtos para exportar.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    const dados =
+        JSON.stringify(produtos, null, 4);
+
+    const arquivo =
+        new Blob(
+            [dados],
+            { type: "application/json" }
+        );
+
+
+    const url =
+        URL.createObjectURL(arquivo);
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "produtos-qualy-quimy.json";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+
+function mostrarMensagem(texto, tipo) {
+
+    const elemento =
+        document.getElementById("mensagem");
+
+    elemento.textContent = texto;
+
+    elemento.className =
+        "mensagem " + tipo;
+
+    elemento.style.display = "block";
+
+
+    setTimeout(() => {
+
+        elemento.style.display = "none";
+
+    }, 4000);
+
+}
+
+
+
+function escapar(texto) {
+
+    if (!texto) {
+        return "";
+    }
+
+    return texto
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+
+listarProdutos();
+
+</script>
+
+</body>
+</html>
