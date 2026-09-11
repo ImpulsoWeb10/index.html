@@ -19,9 +19,9 @@ body {
     color: #222;
 }
 
-/* ==============================
+/* =========================
    TOPO
-============================== */
+========================= */
 
 .topo {
     background: #176b3a;
@@ -41,9 +41,9 @@ body {
     font-size: 14px;
 }
 
-/* ==============================
+/* =========================
    STATUS
-============================== */
+========================= */
 
 .status {
     background: white;
@@ -60,9 +60,9 @@ body {
     color: #176b3a;
 }
 
-/* ==============================
+/* =========================
    CONTAINER
-============================== */
+========================= */
 
 .container {
     width: 100%;
@@ -71,9 +71,9 @@ body {
     padding: 0 12px 30px;
 }
 
-/* ==============================
+/* =========================
    CHAT
-============================== */
+========================= */
 
 .chat {
     background: white;
@@ -115,9 +115,9 @@ body {
     color: white;
 }
 
-/* ==============================
+/* =========================
    PRODUTO
-============================== */
+========================= */
 
 .produto {
     margin-top: 10px;
@@ -141,9 +141,9 @@ body {
     color: #333;
 }
 
-/* ==============================
+/* =========================
    VARIAÇÕES
-============================== */
+========================= */
 
 .variacao {
     margin-top: 10px;
@@ -157,9 +157,9 @@ body {
     margin: 5px 0;
 }
 
-/* ==============================
+/* =========================
    PERGUNTAS RÁPIDAS
-============================== */
+========================= */
 
 .perguntas {
     margin-top: 15px;
@@ -183,9 +183,9 @@ body {
     color: white;
 }
 
-/* ==============================
-   CAMPO DE PERGUNTA
-============================== */
+/* =========================
+   ENTRADA
+========================= */
 
 .entrada {
     margin-top: 12px;
@@ -220,9 +220,9 @@ body {
     background: #0f4f2a;
 }
 
-/* ==============================
+/* =========================
    BOTÕES
-============================== */
+========================= */
 
 .botoes-final {
     display: flex;
@@ -250,9 +250,9 @@ body {
     color: white;
 }
 
-/* ==============================
-   CELULAR
-============================== */
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 600px) {
 
@@ -275,10 +275,6 @@ body {
 
 <body>
 
-<!-- =========================================
-     TOPO
-========================================= -->
-
 <header class="topo">
 
     <h1>Atendimento Qualy Quimy</h1>
@@ -290,10 +286,6 @@ body {
 </header>
 
 
-<!-- =========================================
-     STATUS DA BASE
-========================================= -->
-
 <div class="status">
 
     Base de produtos:
@@ -303,10 +295,6 @@ body {
 
 </div>
 
-
-<!-- =========================================
-     ATENDIMENTO
-========================================= -->
 
 <main class="container">
 
@@ -323,7 +311,7 @@ body {
 
                 Posso ajudar você a encontrar informações
                 sobre nossos produtos, embalagens,
-                preços, rendimento, utilização e muito mais.
+                preços, rendimento e utilização.
 
                 <br><br>
 
@@ -335,10 +323,6 @@ body {
 
     </section>
 
-
-    <!-- =====================================
-         PERGUNTAS RÁPIDAS
-    ====================================== -->
 
     <div class="perguntas">
 
@@ -373,10 +357,6 @@ body {
     </div>
 
 
-    <!-- =====================================
-         CAMPO DE PERGUNTA
-    ====================================== -->
-
     <div class="entrada">
 
         <input
@@ -392,10 +372,6 @@ body {
 
     </div>
 
-
-    <!-- =====================================
-         BOTÕES
-    ====================================== -->
 
     <div class="botoes-final">
 
@@ -421,18 +397,18 @@ body {
 
 <script>
 
-/* =========================================================
+/* =====================================================
    CONFIGURAÇÃO
-========================================================= */
+===================================================== */
 
 const CHAVE = "produtosQualy";
 
 const WHATSAPP = "5511954950044";
 
 
-/* =========================================================
+/* =====================================================
    CARREGAR PRODUTOS
-========================================================= */
+===================================================== */
 
 function carregarProdutos() {
 
@@ -454,10 +430,7 @@ function carregarProdutos() {
 
     } catch (erro) {
 
-        console.error(
-            "Erro ao carregar produtos:",
-            erro
-        );
+        console.error("Erro ao carregar produtos:", erro);
 
         return [];
 
@@ -466,9 +439,9 @@ function carregarProdutos() {
 }
 
 
-/* =========================================================
-   ATUALIZAR CONTADOR
-========================================================= */
+/* =====================================================
+   CONTADOR
+===================================================== */
 
 function atualizarContador() {
 
@@ -497,9 +470,9 @@ function atualizarContador() {
 }
 
 
-/* =========================================================
+/* =====================================================
    NORMALIZAR TEXTO
-========================================================= */
+===================================================== */
 
 function normalizar(texto) {
 
@@ -515,9 +488,9 @@ function normalizar(texto) {
 }
 
 
-/* =========================================================
+/* =====================================================
    ESCAPAR HTML
-========================================================= */
+===================================================== */
 
 function escapar(texto) {
 
@@ -525,9 +498,7 @@ function escapar(texto) {
         texto === null ||
         texto === undefined
     ) {
-
         return "";
-
     }
 
     return String(texto)
@@ -540,14 +511,11 @@ function escapar(texto) {
 }
 
 
-/* =========================================================
+/* =====================================================
    ADICIONAR MENSAGEM
-========================================================= */
+===================================================== */
 
-function adicionarMensagem(
-    texto,
-    tipo
-) {
+function adicionarMensagem(texto, tipo) {
 
     const chat =
         document.getElementById("chat");
@@ -569,15 +537,14 @@ function adicionarMensagem(
 
     chat.appendChild(mensagem);
 
-    chat.scrollTop =
-        chat.scrollHeight;
+    chat.scrollTop = chat.scrollHeight;
 
 }
 
 
-/* =========================================================
-   TRANSFORMAR PRODUTO EM TEXTO
-========================================================= */
+/* =====================================================
+   TRANSFORMAR PRODUTO EM TEXTO DE BUSCA
+===================================================== */
 
 function textoProduto(produto) {
 
@@ -599,11 +566,10 @@ function textoProduto(produto) {
     texto += " " + (produto.caracteristicas || "");
     texto += " " + (produto.observacoes || "");
 
+
     /* Variações */
 
-    if (
-        Array.isArray(produto.variacoes)
-    ) {
+    if (Array.isArray(produto.variacoes)) {
 
         produto.variacoes.forEach(v => {
 
@@ -612,6 +578,7 @@ function textoProduto(produto) {
             texto += " " + (v.embalagem || "");
             texto += " " + (v.nome || "");
             texto += " " + (v.tamanho || "");
+            texto += " " + (v.volume || "");
             texto += " " + (v.preco || "");
             texto += " " + (v.rendimento || "");
             texto += " " + (v.estoque || "");
@@ -624,9 +591,7 @@ function textoProduto(produto) {
 
     /* Perguntas frequentes */
 
-    if (
-        Array.isArray(produto.perguntas)
-    ) {
+    if (Array.isArray(produto.perguntas)) {
 
         produto.perguntas.forEach(p => {
 
@@ -653,9 +618,9 @@ function textoProduto(produto) {
 }
 
 
-/* =========================================================
-   PALAVRAS QUE NÃO AJUDAM NA BUSCA
-========================================================= */
+/* =====================================================
+   PALAVRAS IGNORADAS
+===================================================== */
 
 const palavrasIgnorar = [
 
@@ -704,26 +669,29 @@ const palavrasIgnorar = [
 ];
 
 
-/* =========================================================
+/* =====================================================
    PEGAR PALAVRAS IMPORTANTES
-========================================================= */
+===================================================== */
 
 function palavrasDaPergunta(pergunta) {
 
     return normalizar(pergunta)
         .split(/\s+/)
-        .filter(
-            palavra =>
+        .filter(palavra => {
+
+            return (
                 palavra.length >= 3 &&
                 !palavrasIgnorar.includes(palavra)
-        );
+            );
+
+        });
 
 }
 
 
-/* =========================================================
+/* =====================================================
    ENCONTRAR PRODUTOS
-========================================================= */
+===================================================== */
 
 function encontrarProdutos(pergunta) {
 
@@ -733,17 +701,14 @@ function encontrarProdutos(pergunta) {
     const palavras =
         palavrasDaPergunta(pergunta);
 
+
     if (produtos.length === 0) {
-
         return [];
-
     }
 
 
     if (palavras.length === 0) {
-
         return produtos;
-
     }
 
 
@@ -758,88 +723,60 @@ function encontrarProdutos(pergunta) {
 
             palavras.forEach(palavra => {
 
-                if (
-                    texto.includes(palavra)
-                ) {
-
+                if (texto.includes(palavra)) {
                     pontos++;
-
                 }
 
             });
 
 
-            /* Nome tem peso maior */
+            /* Nome do produto tem peso maior */
 
             const nome =
-                normalizar(
-                    produto.nome || ""
-                );
-
+                normalizar(produto.nome || "");
 
             palavras.forEach(palavra => {
 
-                if (
-                    nome.includes(palavra)
-                ) {
-
+                if (nome.includes(palavra)) {
                     pontos += 5;
-
                 }
 
             });
 
 
-            /* Categoria também tem peso */
+            /* Categoria tem peso maior */
 
             const categoria =
-                normalizar(
-                    produto.categoria || ""
-                );
-
+                normalizar(produto.categoria || "");
 
             palavras.forEach(palavra => {
 
-                if (
-                    categoria.includes(palavra)
-                ) {
-
+                if (categoria.includes(palavra)) {
                     pontos += 3;
-
                 }
 
             });
 
 
             return {
-
                 produto: produto,
-
                 pontos: pontos
-
             };
 
         });
 
 
     return resultados
-        .filter(
-            item => item.pontos > 0
-        )
-        .sort(
-            (a, b) =>
-                b.pontos - a.pontos
-        )
-        .map(
-            item => item.produto
-        );
+        .filter(item => item.pontos > 0)
+        .sort((a,b) => b.pontos - a.pontos)
+        .map(item => item.produto);
 
 }
 
 
-/* =========================================================
+/* =====================================================
    DETECTAR INTENÇÃO
-========================================================= */
+===================================================== */
 
 function detectarIntencao(pergunta) {
 
@@ -851,10 +788,12 @@ function detectarIntencao(pergunta) {
 
     if (
         p.includes("preco") ||
+        p.includes("precos") ||
         p.includes("valor") ||
+        p.includes("valores") ||
         p.includes("quanto custa") ||
-        p.includes("custa") ||
-        p.includes("quanto e")
+        p.includes("quanto custa") ||
+        p.includes("custa")
     ) {
 
         return "preco";
@@ -867,9 +806,11 @@ function detectarIntencao(pergunta) {
     if (
         p.includes("rendimento") ||
         p.includes("rende") ||
+        p.includes("rendem") ||
         p.includes("quantos metros") ||
         p.includes("m2") ||
-        p.includes("metro quadrado")
+        p.includes("metro quadrado") ||
+        p.includes("metros quadrados")
     ) {
 
         return "rendimento";
@@ -877,16 +818,24 @@ function detectarIntencao(pergunta) {
     }
 
 
-    /* EMBALAGEM */
+    /* EMBALAGENS */
 
     if (
         p.includes("embalagem") ||
+        p.includes("embalagens") ||
         p.includes("tamanho") ||
+        p.includes("tamanhos") ||
         p.includes("litro") ||
         p.includes("litros") ||
         p.includes("kg") ||
         p.includes("quilo") ||
-        p.includes("quilo")
+        p.includes("quilos") ||
+        p.includes("lata") ||
+        p.includes("latas") ||
+        p.includes("balde") ||
+        p.includes("baldes") ||
+        p.includes("barrica") ||
+        p.includes("barricas")
     ) {
 
         return "embalagem";
@@ -901,12 +850,21 @@ function detectarIntencao(pergunta) {
         p.includes("pode usar") ||
         p.includes("serve para") ||
         p.includes("indicado") ||
+        p.includes("indicada") ||
+        p.includes("indicacao") ||
+        p.includes("indicacoes") ||
         p.includes("superficie") ||
+        p.includes("superficies") ||
         p.includes("parede") ||
+        p.includes("paredes") ||
         p.includes("externo") ||
         p.includes("externa") ||
+        p.includes("externos") ||
+        p.includes("externas") ||
         p.includes("interno") ||
-        p.includes("interna")
+        p.includes("interna") ||
+        p.includes("internos") ||
+        p.includes("internas")
     ) {
 
         return "uso";
@@ -930,7 +888,9 @@ function detectarIntencao(pergunta) {
 
     if (
         p.includes("diluir") ||
-        p.includes("diluicao")
+        p.includes("diluicao") ||
+        p.includes("diluir") ||
+        p.includes("agua")
     ) {
 
         return "diluicao";
@@ -944,7 +904,8 @@ function detectarIntencao(pergunta) {
         p.includes("aplicar") ||
         p.includes("aplicacao") ||
         p.includes("rolo") ||
-        p.includes("pincel")
+        p.includes("pincel") ||
+        p.includes("pistola")
     ) {
 
         return "aplicacao";
@@ -957,7 +918,8 @@ function detectarIntencao(pergunta) {
     if (
         p.includes("secar") ||
         p.includes("secagem") ||
-        p.includes("seca")
+        p.includes("seca") ||
+        p.includes("tempo para secar")
     ) {
 
         return "secagem";
@@ -984,9 +946,9 @@ function detectarIntencao(pergunta) {
 }
 
 
-/* =========================================================
+/* =====================================================
    FORMATAR PREÇO
-========================================================= */
+===================================================== */
 
 function formatarPreco(valor) {
 
@@ -995,9 +957,7 @@ function formatarPreco(valor) {
         valor === undefined ||
         valor === ""
     ) {
-
         return "";
-
     }
 
 
@@ -1016,25 +976,13 @@ function formatarPreco(valor) {
                 .trim();
 
 
-        /*
-           Se vier no formato 29,90
-        */
-
-        if (
-            texto.includes(",")
-        ) {
+        if (texto.includes(",")) {
 
             texto =
-                texto.replace(
-                    /\./g,
-                    ""
-                );
+                texto.replace(/\./g, "");
 
             texto =
-                texto.replace(
-                    ",",
-                    "."
-                );
+                texto.replace(",", ".");
 
         }
 
@@ -1046,9 +994,7 @@ function formatarPreco(valor) {
 
 
     if (isNaN(numero)) {
-
         return escapar(valor);
-
     }
 
 
@@ -1063,9 +1009,9 @@ function formatarPreco(valor) {
 }
 
 
-/* =========================================================
-   OBTER CAMPO DE VARIAÇÃO
-========================================================= */
+/* =====================================================
+   PEGAR EMBALAGEM
+===================================================== */
 
 function pegarEmbalagem(v) {
 
@@ -1082,6 +1028,10 @@ function pegarEmbalagem(v) {
 }
 
 
+/* =====================================================
+   PEGAR PREÇO
+===================================================== */
+
 function pegarPreco(v) {
 
     if (!v) return "";
@@ -1097,6 +1047,10 @@ function pegarPreco(v) {
 }
 
 
+/* =====================================================
+   PEGAR RENDIMENTO
+===================================================== */
+
 function pegarRendimento(v) {
 
     if (!v) return "";
@@ -1110,153 +1064,11 @@ function pegarRendimento(v) {
 }
 
 
-/* =========================================================
-   MOSTRAR VARIAÇÕES
-========================================================= */
+/* =====================================================
+   MOSTRAR PRODUTO
+===================================================== */
 
-function mostrarVariacoes(
-    produto,
-    intencao
-) {
-
-    if (
-        !Array.isArray(
-            produto.variacoes
-        ) ||
-        produto.variacoes.length === 0
-    ) {
-
-        return "";
-
-    }
-
-
-    let html = "";
-
-
-    produto.variacoes.forEach(v => {
-
-        if (!v) return;
-
-
-        const embalagem =
-            pegarEmbalagem(v);
-
-        const preco =
-            pegarPreco(v);
-
-        const rendimento =
-            pegarRendimento(v);
-
-        const estoque =
-            v.estoque || "";
-
-        const sku =
-            v.sku || "";
-
-
-        /* Para pergunta de preço */
-
-        if (
-            intencao === "preco" &&
-            !preco
-        ) {
-
-            return;
-
-        }
-
-
-        /* Para pergunta de rendimento */
-
-        if (
-            intencao === "rendimento" &&
-            !rendimento
-        ) {
-
-            return;
-
-        }
-
-
-        html += `
-
-            <div class="variacao">
-
-                ${
-                    embalagem
-                    ? `
-                        <strong>
-                            ${escapar(embalagem)}
-                        </strong>
-                    `
-                    : ""
-                }
-
-                ${
-                    preco
-                    ? `
-                        <p>
-                            <strong>Preço:</strong>
-                            ${formatarPreco(preco)}
-                        </p>
-                    `
-                    : ""
-                }
-
-                ${
-                    rendimento
-                    ? `
-                        <p>
-                            <strong>Rendimento:</strong>
-                            ${escapar(rendimento)}
-                        </p>
-                    `
-                    : ""
-                }
-
-                ${
-                    estoque !== ""
-                    ? `
-                        <p>
-                            <strong>Estoque:</strong>
-                            ${escapar(estoque)}
-                        </p>
-                    `
-                    : ""
-                }
-
-                ${
-                    sku
-                    ? `
-                        <p>
-                            <strong>SKU:</strong>
-                            ${escapar(sku)}
-                        </p>
-                    `
-                    : ""
-                }
-
-            </div>
-
-        `;
-
-    });
-
-
-    return html;
-
-}
-
-
-/* =========================================================
-   MONTAR PRODUTO
-========================================================= */
-
-function montarProduto(
-    produto,
-    intencao
-) {
+function montarProduto(produto, intencao) {
 
     let html = `
 
@@ -1264,8 +1076,7 @@ function montarProduto(
 
             <h3>
                 ${escapar(
-                    produto.nome ||
-                    "Produto"
+                    produto.nome || "Produto"
                 )}
             </h3>
 
@@ -1280,9 +1091,7 @@ function montarProduto(
 
             <p>
                 <strong>Categoria:</strong>
-                ${escapar(
-                    produto.categoria
-                )}
+                ${escapar(produto.categoria)}
             </p>
 
         `;
@@ -1303,9 +1112,7 @@ function montarProduto(
 
                 <p>
                     <strong>Uso:</strong>
-                    ${escapar(
-                        produto.uso
-                    )}
+                    ${escapar(produto.uso)}
                 </p>
 
             `;
@@ -1402,9 +1209,7 @@ function montarProduto(
 
     /* ACABAMENTO */
 
-    if (
-        intencao === "geral"
-    ) {
+    if (intencao === "geral") {
 
         if (produto.acabamento) {
 
@@ -1611,28 +1416,99 @@ function montarProduto(
 
     /* VARIAÇÕES */
 
-    const variacoes =
-        mostrarVariacoes(
-            produto,
-            intencao
-        );
-
-
-    if (variacoes) {
+    if (
+        Array.isArray(produto.variacoes) &&
+        produto.variacoes.length > 0
+    ) {
 
         html += `
 
-            <div>
-
+            <p>
                 <strong>
-                    Variações:
+                    Embalagens e variações:
                 </strong>
-
-                ${variacoes}
-
-            </div>
+            </p>
 
         `;
+
+
+        produto.variacoes.forEach(v => {
+
+            if (!v) return;
+
+
+            const embalagem =
+                pegarEmbalagem(v);
+
+            const preco =
+                pegarPreco(v);
+
+            const rendimento =
+                pegarRendimento(v);
+
+
+            html += `
+
+                <div class="variacao">
+
+                    ${
+                        embalagem
+                        ? `
+                            <strong>
+                                ${escapar(embalagem)}
+                            </strong>
+                        `
+                        : ""
+                    }
+
+                    ${
+                        preco
+                        ? `
+                            <p>
+                                <strong>
+                                    Preço:
+                                </strong>
+
+                                ${formatarPreco(preco)}
+                            </p>
+                        `
+                        : ""
+                    }
+
+                    ${
+                        rendimento
+                        ? `
+                            <p>
+                                <strong>
+                                    Rendimento:
+                                </strong>
+
+                                ${escapar(rendimento)}
+                            </p>
+                        `
+                        : ""
+                    }
+
+                    ${
+                        v.estoque !== undefined &&
+                        v.estoque !== ""
+                        ? `
+                            <p>
+                                <strong>
+                                    Estoque:
+                                </strong>
+
+                                ${escapar(v.estoque)}
+                            </p>
+                        `
+                        : ""
+                    }
+
+                </div>
+
+            `;
+
+        });
 
     }
 
@@ -1670,9 +1546,9 @@ function montarProduto(
 }
 
 
-/* =========================================================
+/* =====================================================
    RESPONDER
-========================================================= */
+===================================================== */
 
 function responder(pergunta) {
 
@@ -1680,9 +1556,7 @@ function responder(pergunta) {
         carregarProdutos();
 
 
-    /* =========================================
-       SEM PRODUTOS
-    ========================================= */
+    /* SEM PRODUTOS */
 
     if (produtos.length === 0) {
 
@@ -1707,14 +1581,11 @@ function responder(pergunta) {
     const p =
         normalizar(pergunta);
 
-
     const intencao =
         detectarIntencao(pergunta);
 
 
-    /* =========================================
-       SAUDAÇÕES
-    ========================================= */
+    /* SAUDAÇÕES */
 
     if (
         p === "oi" ||
@@ -1732,8 +1603,8 @@ function responder(pergunta) {
 
             <br><br>
 
-            Sou o atendimento virtual
-            da <strong>Qualy Quimy</strong>.
+            Sou o atendimento virtual da
+            <strong>Qualy Quimy</strong>.
 
             <br><br>
 
@@ -1745,14 +1616,13 @@ function responder(pergunta) {
     }
 
 
-    /* =========================================
-       LISTA DE PRODUTOS
-    ========================================= */
+    /* LISTA DE PRODUTOS */
 
     if (
         p.includes("quais produtos") ||
         p.includes("lista de produtos") ||
         p.includes("catalogo") ||
+        p.includes("catalogo de produtos") ||
         p.includes("o que voces vendem") ||
         p.includes("o que vendem")
     ) {
@@ -1827,19 +1697,21 @@ function responder(pergunta) {
     }
 
 
-    /* =========================================
-       PRODUTO ESPECÍFICO
-    ========================================= */
+    /* ENCONTRAR PRODUTOS */
 
-    const resultados =
-        encontrarProdutos(
-            pergunta
-        );
+    let resultados =
+        encontrarProdutos(pergunta);
 
 
-    /* =========================================
-       PERGUNTA GERAL
-    ========================================= */
+    /*
+       Perguntas gerais como:
+
+       Quanto rende?
+       Qual o preço?
+       Quais embalagens?
+
+       precisam consultar todos os produtos.
+    */
 
     const perguntaGeral =
 
@@ -1854,38 +1726,20 @@ function responder(pergunta) {
         intencao === "caracteristicas";
 
 
-    /*
-       Se o cliente perguntar somente:
-
-       "Quanto rende?"
-       "Qual o preço?"
-       "Quais embalagens?"
-
-       vamos consultar os produtos cadastrados.
-    */
-
-    let produtosParaMostrar =
-        resultados;
-
-
     if (
-        produtosParaMostrar.length === 0 &&
+        resultados.length === 0 &&
         perguntaGeral
     ) {
 
-        produtosParaMostrar =
+        resultados =
             produtos;
 
     }
 
 
-    /* =========================================
-       NENHUM RESULTADO
-    ========================================= */
+    /* NENHUM RESULTADO */
 
-    if (
-        produtosParaMostrar.length === 0
-    ) {
+    if (resultados.length === 0) {
 
         return `
 
@@ -1903,18 +1757,26 @@ function responder(pergunta) {
             Você pode falar diretamente com um
             atendente da <strong>Qualy Quimy</strong>.
 
+            <br><br>
+
+            <a
+                class="btn btn-whatsapp"
+                href="https://wa.me/${WHATSAPP}"
+                target="_blank"
+            >
+                Falar no WhatsApp
+            </a>
+
         `;
 
     }
 
 
-    /* =========================================
+    /* =================================================
        PREÇO
-    ========================================= */
+    ================================================= */
 
-    if (
-        intencao === "preco"
-    ) {
+    if (intencao === "preco") {
 
         let html = `
 
@@ -1927,82 +1789,98 @@ function responder(pergunta) {
         `;
 
 
-        produtosParaMostrar
-            .forEach(produto => {
+        resultados.forEach(produto => {
+
+            html += `
+
+                <div class="produto">
+
+                    <h3>
+                        ${escapar(
+                            produto.nome ||
+                            "Produto"
+                        )}
+                    </h3>
+
+            `;
+
+
+            let encontrouPreco = false;
+
+
+            if (
+                Array.isArray(
+                    produto.variacoes
+                )
+            ) {
+
+                produto.variacoes.forEach(v => {
+
+                    const embalagem =
+                        pegarEmbalagem(v);
+
+                    const preco =
+                        pegarPreco(v);
+
+
+                    if (!preco) {
+                        return;
+                    }
+
+
+                    encontrouPreco = true;
+
+
+                    html += `
+
+                        <div class="variacao">
+
+                            ${
+                                embalagem
+                                ? `
+                                    <strong>
+                                        ${escapar(
+                                            embalagem
+                                        )}
+                                    </strong>
+                                `
+                                : ""
+                            }
+
+                            <p>
+                                <strong>
+                                    Preço:
+                                </strong>
+
+                                ${formatarPreco(preco)}
+                            </p>
+
+                        </div>
+
+                    `;
+
+                });
+
+            }
+
+
+            if (!encontrouPreco) {
 
                 html += `
 
-                    <div class="produto">
-
-                        <h3>
-                            ${escapar(
-                                produto.nome ||
-                                "Produto"
-                            )}
-                        </h3>
+                    <p>
+                        Não há preço cadastrado
+                        para este produto.
+                    </p>
 
                 `;
 
-
-                if (
-                    Array.isArray(
-                        produto.variacoes
-                    )
-                ) {
-
-                    produto.variacoes
-                        .forEach(v => {
-
-                            const embalagem =
-                                pegarEmbalagem(v);
-
-                            const preco =
-                                pegarPreco(v);
+            }
 
 
-                            if (!preco) {
-                                return;
-                            }
+            html += `</div>`;
 
-
-                            html += `
-
-                                <div class="variacao">
-
-                                    ${
-                                        embalagem
-                                        ? `
-                                            <strong>
-                                                ${escapar(
-                                                    embalagem
-                                                )}
-                                            </strong>
-                                        `
-                                        : ""
-                                    }
-
-                                    <p>
-                                        <strong>
-                                            Preço:
-                                        </strong>
-
-                                        ${formatarPreco(
-                                            preco
-                                        )}
-                                    </p>
-
-                                </div>
-
-                            `;
-
-                        });
-
-                }
-
-
-                html += `</div>`;
-
-            });
+        });
 
 
         return html;
@@ -2010,13 +1888,11 @@ function responder(pergunta) {
     }
 
 
-    /* =========================================
+    /* =================================================
        RENDIMENTO
-    ========================================= */
+    ================================================= */
 
-    if (
-        intencao === "rendimento"
-    ) {
+    if (intencao === "rendimento") {
 
         let html = `
 
@@ -2029,197 +1905,99 @@ function responder(pergunta) {
         `;
 
 
-        produtosParaMostrar
-            .forEach(produto => {
+        resultados.forEach(produto => {
+
+            html += `
+
+                <div class="produto">
+
+                    <h3>
+                        ${escapar(
+                            produto.nome ||
+                            "Produto"
+                        )}
+                    </h3>
+
+            `;
+
+
+            if (produto.rendimento) {
 
                 html += `
 
-                    <div class="produto">
+                    <p>
+                        <strong>
+                            Rendimento geral:
+                        </strong>
 
-                        <h3>
-                            ${escapar(
-                                produto.nome ||
-                                "Produto"
-                            )}
-                        </h3>
+                        ${escapar(
+                            produto.rendimento
+                        )}
+                    </p>
 
                 `;
 
+            }
 
-                if (
-                    produto.rendimento
-                ) {
+
+            if (
+                Array.isArray(
+                    produto.variacoes
+                )
+            ) {
+
+                produto.variacoes.forEach(v => {
+
+                    const embalagem =
+                        pegarEmbalagem(v);
+
+                    const rendimento =
+                        pegarRendimento(v);
+
+
+                    if (!rendimento) {
+                        return;
+                    }
+
 
                     html += `
 
-                        <p>
-                            <strong>
-                                Rendimento geral:
-                            </strong>
+                        <div class="variacao">
 
-                            ${escapar(
-                                produto.rendimento
-                            )}
-                        </p>
-
-                    `;
-
-                }
-
-
-                if (
-                    Array.isArray(
-                        produto.variacoes
-                    )
-                ) {
-
-                    produto.variacoes
-                        .forEach(v => {
-
-                            const embalagem =
-                                pegarEmbalagem(v);
-
-                            const rendimento =
-                                pegarRendimento(v);
-
-
-                            if (!rendimento) {
-                                return;
-                            }
-
-
-                            html += `
-
-                                <div class="variacao">
-
-                                    ${
-                                        embalagem
-                                        ? `
-                                            <strong>
-                                                ${escapar(
-                                                    embalagem
-                                                )}
-                                            </strong>
-                                        `
-                                        : ""
-                                    }
-
-                                    <p>
-                                        <strong>
-                                            Rendimento:
-                                        </strong>
-
+                            ${
+                                embalagem
+                                ? `
+                                    <strong>
                                         ${escapar(
-                                            rendimento
+                                            embalagem
                                         )}
-                                    </p>
-
-                                </div>
-
-                            `;
-
-                        });
-
-                }
-
-
-                html += `</div>`;
-
-            });
-
-
-        return html;
-
-    }
-
-
-    /* =========================================
-       EMBALAGENS
-    ========================================= */
-
-    if (
-        intencao === "embalagem"
-    ) {
-
-        let html = `
-
-            <strong>
-                Embalagens cadastradas:
-            </strong>
-
-            <br><br>
-
-        `;
-
-
-        produtosParaMostrar
-            .forEach(produto => {
-
-                html += `
-
-                    <div class="produto">
-
-                        <h3>
-                            ${escapar(
-                                produto.nome ||
-                                "Produto"
-                            )}
-                        </h3>
-
-                `;
-
-
-                if (
-                    Array.isArray(
-                        produto.variacoes
-                    ) &&
-                    produto.variacoes.length > 0
-                ) {
-
-                    produto.variacoes
-                        .forEach(v => {
-
-                            const embalagem =
-                                pegarEmbalagem(v);
-
-
-                            if (!embalagem) {
-                                return;
+                                    </strong>
+                                `
+                                : ""
                             }
 
+                            <p>
+                                <strong>
+                                    Rendimento:
+                                </strong>
 
-                            html += `
+                                ${escapar(
+                                    rendimento
+                                )}
+                            </p>
 
-                                <div class="variacao">
-
-                                    ${escapar(
-                                        embalagem
-                                    )}
-
-                                </div>
-
-                            `;
-
-                        });
-
-                } else {
-
-                    html += `
-
-                        <p>
-                            Não há variações
-                            de embalagem cadastradas
-                            para este produto.
-                        </p>
+                        </div>
 
                     `;
 
-                }
+                });
+
+            }
 
 
-                html += `</div>`;
+            html += `</div>`;
 
-            });
+        });
 
 
         return html;
@@ -2227,18 +2005,16 @@ function responder(pergunta) {
     }
 
 
-    /* =========================================
-       USO / SUPERFÍCIES
-    ========================================= */
+    /* =================================================
+       EMBALAGENS
+    ================================================= */
 
-    if (
-        intencao === "uso"
-    ) {
+    if (intencao === "embalagem") {
 
         let html = `
 
             <strong>
-                Informações de uso:
+                Embalagens disponíveis:
             </strong>
 
             <br><br>
@@ -2246,12 +2022,100 @@ function responder(pergunta) {
         `;
 
 
-        produtosParaMostrar
+        resultados.forEach(produto => {
+
+            html += `
+
+                <div class="produto">
+
+                    <h3>
+                        ${escapar(
+                            produto.nome ||
+                            "Produto"
+                        )}
+                    </h3>
+
+            `;
+
+
+            if (
+                Array.isArray(
+                    produto.variacoes
+                ) &&
+                produto.variacoes.length > 0
+            ) {
+
+                produto.variacoes.forEach(v => {
+
+                    const embalagem =
+                        pegarEmbalagem(v);
+
+
+                    if (!embalagem) {
+                        return;
+                    }
+
+
+                    html += `
+
+                        <div class="variacao">
+
+                            ${escapar(
+                                embalagem
+                            )}
+
+                        </div>
+
+                    `;
+
+                });
+
+            } else {
+
+                html += `
+
+                    <p>
+                        Não há embalagens
+                        cadastradas para este produto.
+                    </p>
+
+                `;
+
+            }
+
+
+            html += `</div>`;
+
+        });
+
+
+        return html;
+
+    }
+
+
+    /* =================================================
+       OUTRAS INFORMAÇÕES
+    ================================================= */
+
+    if (
+        intencao === "uso" ||
+        intencao === "cores" ||
+        intencao === "diluicao" ||
+        intencao === "aplicacao" ||
+        intencao === "secagem" ||
+        intencao === "caracteristicas"
+    ) {
+
+        let html = "";
+
+        resultados
+            .slice(0, 5)
             .forEach(produto => {
 
                 html += montarProduto(
                     produto,
-                    "uso"
+                    intencao
                 );
 
             });
@@ -2262,313 +2126,9 @@ function responder(pergunta) {
     }
 
 
-    /* =========================================
-       CORES
-    ========================================= */
-
-    if (
-        intencao === "cores"
-    ) {
-
-        let html = `
-
-            <strong>
-                Cores cadastradas:
-            </strong>
-
-            <br><br>
-
-        `;
-
-
-        produtosParaMostrar
-            .forEach(produto => {
-
-                if (!produto.cores) {
-                    return;
-                }
-
-
-                html += `
-
-                    <div class="produto">
-
-                        <h3>
-                            ${escapar(
-                                produto.nome ||
-                                "Produto"
-                            )}
-                        </h3>
-
-                        <p>
-                            ${escapar(
-                                produto.cores
-                            )}
-                        </p>
-
-                    </div>
-
-                `;
-
-            });
-
-
-        return html;
-
-    }
-
-
-    /* =========================================
-       DILUIÇÃO
-    ========================================= */
-
-    if (
-        intencao === "diluicao"
-    ) {
-
-        let html = `
-
-            <strong>
-                Informações de diluição:
-            </strong>
-
-            <br><br>
-
-        `;
-
-
-        produtosParaMostrar
-            .forEach(produto => {
-
-                if (!produto.diluicao) {
-                    return;
-                }
-
-
-                html += `
-
-                    <div class="produto">
-
-                        <h3>
-                            ${escapar(
-                                produto.nome ||
-                                "Produto"
-                            )}
-                        </h3>
-
-                        <p>
-                            ${escapar(
-                                produto.diluicao
-                            )}
-                        </p>
-
-                    </div>
-
-                `;
-
-            });
-
-
-        return html;
-
-    }
-
-
-    /* =========================================
-       APLICAÇÃO
-    ========================================= */
-
-    if (
-        intencao === "aplicacao"
-    ) {
-
-        let html = `
-
-            <strong>
-                Informações de aplicação:
-            </strong>
-
-            <br><br>
-
-        `;
-
-
-        produtosParaMostrar
-            .forEach(produto => {
-
-                if (!produto.aplicacao) {
-                    return;
-                }
-
-
-                html += `
-
-                    <div class="produto">
-
-                        <h3>
-                            ${escapar(
-                                produto.nome ||
-                                "Produto"
-                            )}
-                        </h3>
-
-                        <p>
-                            ${escapar(
-                                produto.aplicacao
-                            )}
-                        </p>
-
-                    </div>
-
-                `;
-
-            });
-
-
-        return html;
-
-    }
-
-
-    /* =========================================
-       SECAGEM
-    ========================================= */
-
-    if (
-        intencao === "secagem"
-    ) {
-
-        let html = `
-
-            <strong>
-                Informações de secagem:
-            </strong>
-
-            <br><br>
-
-        `;
-
-
-        produtosParaMostrar
-            .forEach(produto => {
-
-                if (!produto.secagem) {
-                    return;
-                }
-
-
-                html += `
-
-                    <div class="produto">
-
-                        <h3>
-                            ${escapar(
-                                produto.nome ||
-                                "Produto"
-                            )}
-                        </h3>
-
-                        <p>
-                            ${escapar(
-                                produto.secagem
-                            )}
-                        </p>
-
-                    </div>
-
-                `;
-
-            });
-
-
-        return html;
-
-    }
-
-
-    /* =========================================
-       CARACTERÍSTICAS
-    ========================================= */
-
-    if (
-        intencao === "caracteristicas"
-    ) {
-
-        let html = `
-
-            <strong>
-                Características dos produtos:
-            </strong>
-
-            <br><br>
-
-        `;
-
-
-        produtosParaMostrar
-            .forEach(produto => {
-
-                html += `
-
-                    <div class="produto">
-
-                        <h3>
-                            ${escapar(
-                                produto.nome ||
-                                "Produto"
-                            )}
-                        </h3>
-
-                `;
-
-
-                if (
-                    produto.caracteristicas
-                ) {
-
-                    html += `
-
-                        <p>
-                            ${escapar(
-                                produto.caracteristicas
-                            )}
-                        </p>
-
-                    `;
-
-                }
-
-
-                if (
-                    produto.descricao
-                ) {
-
-                    html += `
-
-                        <p>
-                            ${escapar(
-                                produto.descricao
-                            )}
-                        </p>
-
-                    `;
-
-                }
-
-
-                html += `</div>`;
-
-            });
-
-
-        return html;
-
-    }
-
-
-    /* =========================================
+    /* =================================================
        RESPOSTA GERAL
-    ========================================= */
+    ================================================= */
 
     let html = `
 
@@ -2580,7 +2140,7 @@ function responder(pergunta) {
     `;
 
 
-    produtosParaMostrar
+    resultados
         .slice(0, 5)
         .forEach(produto => {
 
@@ -2597,16 +2157,14 @@ function responder(pergunta) {
 }
 
 
-/* =========================================================
+/* =====================================================
    ENVIAR PERGUNTA
-========================================================= */
+===================================================== */
 
 function enviarPergunta() {
 
     const input =
-        document.getElementById(
-            "pergunta"
-        );
+        document.getElementById("pergunta");
 
 
     const pergunta =
@@ -2618,8 +2176,6 @@ function enviarPergunta() {
     }
 
 
-    /* Mostrar pergunta do cliente */
-
     adicionarMensagem(
         escapar(pergunta),
         "usuario"
@@ -2629,50 +2185,42 @@ function enviarPergunta() {
     input.value = "";
 
 
-    /* Pequeno intervalo para parecer atendimento */
+    setTimeout(() => {
 
-    setTimeout(
-        function() {
-
-            const resposta =
-                responder(pergunta);
+        const resposta =
+            responder(pergunta);
 
 
-            adicionarMensagem(
-                resposta,
-                "bot"
-            );
+        adicionarMensagem(
+            resposta,
+            "bot"
+        );
 
-        },
-        250
-    );
+    }, 250);
 
 }
 
 
-/* =========================================================
-   PERGUNTAS RÁPIDAS
-========================================================= */
+/* =====================================================
+   PERGUNTA RÁPIDA
+===================================================== */
 
 function perguntar(texto) {
 
     const input =
-        document.getElementById(
-            "pergunta"
-        );
+        document.getElementById("pergunta");
 
 
     input.value = texto;
-
 
     enviarPergunta();
 
 }
 
 
-/* =========================================================
-   ENTER PARA ENVIAR
-========================================================= */
+/* =====================================================
+   ENTER
+===================================================== */
 
 document
     .getElementById("pergunta")
@@ -2680,9 +2228,7 @@ document
         "keydown",
         function(event) {
 
-            if (
-                event.key === "Enter"
-            ) {
+            if (event.key === "Enter") {
 
                 event.preventDefault();
 
@@ -2694,24 +2240,22 @@ document
     );
 
 
-/* =========================================================
-   INICIALIZAÇÃO
-========================================================= */
+/* =====================================================
+   INICIAR
+===================================================== */
 
 atualizarContador();
 
 
-/* =========================================================
-   ATUALIZAR SE CADASTRO MUDAR
-========================================================= */
+/* =====================================================
+   ATUALIZAR CASO CADASTRO MUDE
+===================================================== */
 
 window.addEventListener(
     "storage",
     function(event) {
 
-        if (
-            event.key === CHAVE
-        ) {
+        if (event.key === CHAVE) {
 
             atualizarContador();
 
