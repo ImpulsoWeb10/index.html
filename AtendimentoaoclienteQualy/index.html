@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Atendimento Qualy Quimy</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+        }
+
+        .topo {
+            background: #1f4d2b;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .topo h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .topo p {
+            margin: 8px 0 0;
+        }
+
+        .chat {
+            max-width: 700px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+        }
+
+        .mensagem {
+            background: #eef5ef;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            height: 100px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 12px;
+            padding: 15px;
+            background: #1f4d2b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #163a20;
+        }
+
+        #resposta {
+            display: none;
+            margin-top: 25px;
+            padding: 18px;
+            background: #f7f7f7;
+            border-left: 5px solid #1f4d2b;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .rodape {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topo">
+        <h1>Atendimento Qualy Quimy</h1>
+        <p>Fábrica de Tintas, Massas e Texturas</p>
+    </div>
+
+    <div class="chat">
+
+        <div class="mensagem">
+            <strong>Atendente Qualy:</strong><br>
+            Olá! Seja bem-vindo à Qualy Quimy.<br><br>
+            Como posso ajudar?
+        </div>
+
+        <textarea
+            id="pergunta"
+            placeholder="Digite sua pergunta..."
+        ></textarea>
+
+        <button onclick="responder()">
+            Perguntar
+        </button>
+
+        <div id="resposta"></div>
+
+    </div>
+
+    <div class="rodape">
+        Atendimento Qualy Quimy
+    </div>
+
+    <script>
+
+        function responder() {
+
+            const pergunta = document
+                .getElementById("pergunta")
+                .value
+                .toLowerCase();
+
+            const resposta = document
+                .getElementById("resposta");
+
+            if (pergunta.trim() === "") {
+                resposta.style.display = "block";
+                resposta.innerHTML =
+                    "Digite uma pergunta para que eu possa ajudar.";
+                return;
+            }
+
+            if (
+                pergunta.includes("pva") &&
+                pergunta.includes("18")
+            ) {
+
+                resposta.innerHTML = `
+                    <strong>Tinta PVA Látex 18kg</strong><br><br>
+
+                    A Tinta PVA Látex é indicada para
+                    ambientes internos.<br><br>
+
+                    Rendimento: até 130 m² por demão.<br>
+                    Base: água.<br>
+                    Acabamento: fosco.<br>
+                    Características: antimofo.
+                `;
+
+            } else {
+
+                resposta.innerHTML = `
+                    Ainda estou aprendendo sobre os produtos
+                    da Qualy Quimy.<br><br>
+
+                    Em breve poderei responder essa pergunta
+                    automaticamente.
+                `;
+            }
+
+            resposta.style.display = "block";
+        }
+
+    </script>
+
+</body>
+</html>
