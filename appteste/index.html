@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -188,11 +187,17 @@
         <div class="bg-white rounded-[3rem] p-8 w-full max-w-sm text-center shadow-2xl">
             <img v-if="prodSel.imagem" :src="prodSel.imagem" class="w-32 h-32 object-cover rounded-2xl mx-auto mb-4 border border-slate-200">
             <h4 class="font-black text-slate-800 mb-1 leading-tight">{{ prodSel.produto }} - {{ prodSel.embalagem }}</h4>
-            <p v-if="prodSel.cor && prodSel.cor !== '-' && prodSel.cor !== 'Branca'" class="text-emerald-600 font-black text-[11px] uppercase mb-4">{{ prodSel.cor }}</p>
+            <p v-if="precisaCor" class="text-emerald-600 font-black text-[11px] uppercase mb-4">{{ prodSel.cor }}</p>
 
-            <button v-if="prodSel.tabelaCores" @click="modal = 'cores'" class="text-[10px] font-black text-blue-600 underline mb-4">
-                <i class="fas fa-palette"></i> Ver tabela de cores
-            </button>
+            <div v-if="precisaCor" class="border border-slate-200 rounded-2xl p-4 mb-4 text-left flex items-center justify-between gap-3">
+                <div>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Cor escolhida</p>
+                    <p class="font-bold text-slate-700 text-sm">{{ corEscolhida || 'Nenhuma cor ainda' }}</p>
+                </div>
+                <button @click="abrirEscolhaCor" class="shrink-0 flex items-center gap-1.5 border border-emerald-200 text-emerald-700 text-[10px] font-bold uppercase tracking-wide px-3 py-2 rounded-full hover:bg-emerald-50 transition-colors">
+                    <i class="fas fa-palette text-[10px]"></i> {{ corEscolhida ? 'Trocar' : 'Escolher' }}
+                </button>
+            </div>
 
             <p v-if="prodSel.qtdMinCor" class="text-[10px] text-amber-600 font-bold uppercase mb-2">Quantidade mínima: {{ prodSel.qtdMinCor }} un</p>
 
@@ -213,7 +218,9 @@
                 A partir de {{ prodSel.qtdAtacado2 }} un: R$ {{ prodSel.precoAtacado2.toFixed(2) }} cada
             </p>
 
-            <button @click="confirmarItem" :disabled="prodSel.qtdMinCor && qtd < prodSel.qtdMinCor"
+            <p v-if="precisaCor && !corEscolhida" class="text-[10px] text-red-500 font-bold uppercase mb-3">Escolha a cor antes de adicionar</p>
+
+            <button @click="confirmarItem" :disabled="(prodSel.qtdMinCor && qtd < prodSel.qtdMinCor) || (precisaCor && !corEscolhida)"
                     class="w-full bg-slate-900 text-white py-5 rounded-[2rem] font-black uppercase mb-3 disabled:opacity-40">
                 Adicionar
             </button>
@@ -221,9 +228,23 @@
         </div>
     </div>
 
-    <div v-if="modal == 'cores'" class="fixed inset-0 z-[70] bg-black/85 flex flex-col items-center justify-center p-6" @click="modal = 'detalhe'">
-        <img :src="prodSel.tabelaCores" class="max-h-[75vh] max-w-full rounded-2xl shadow-2xl" @click.stop>
-        <button @click="modal = 'detalhe'" class="mt-6 bg-white/20 text-white font-black text-[10px] uppercase px-6 py-3 rounded-full">Fechar</button>
+    <div v-if="modal == 'escolherCor'" class="fixed inset-0 z-[70] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-6">
+        <div class="bg-white rounded-[3rem] p-8 w-full max-w-sm shadow-2xl text-center">
+            <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-palette text-emerald-600 text-2xl"></i>
+            </div>
+            <h4 class="font-black text-slate-800 mb-2 leading-tight text-lg">Qual cor você quer?</h4>
+            <p class="text-[11px] text-slate-400 mb-5 leading-relaxed">Consulte o catálogo e escreva o nome ou código da cor escolhida.</p>
+
+            <button @click="abrirCatalogoCores" class="mx-auto mb-6 flex items-center gap-2 border border-slate-300 text-slate-600 text-[11px] font-semibold px-4 py-2 rounded-full hover:border-blue-400 hover:text-blue-600 transition-colors">
+                <i class="fas fa-file-pdf text-[11px]"></i> Abrir catálogo de cores
+            </button>
+
+            <input v-model="corInput" @keyup.enter="salvarCor" placeholder="Ex: Azul Céu, Amarelo Canário..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-sm outline-none focus:border-emerald-400 mb-6 text-center font-medium text-slate-800">
+
+            <button @click="salvarCor" :disabled="!corInput.trim()" class="w-full bg-emerald-600 text-white text-sm font-bold py-3.5 rounded-2xl mb-2 disabled:opacity-40 shadow-sm hover:bg-emerald-700 transition-colors">Salvar e continuar</button>
+            <button @click="modal = 'detalhe'" class="w-full py-2 text-slate-400 text-[10px] font-bold uppercase tracking-wide hover:text-slate-600 transition-colors">Cancelar</button>
+        </div>
     </div>
 
     <div id="pdf-template" style="display:none; width: 100%; padding: 20px; font-family: sans-serif; background: white;">
@@ -264,7 +285,13 @@
    Como gerar: Arquivo > Compartilhar > Publicar na web > selecione a
    aba "Produtos" > formato CSV > Publicar > copie o link gerado.
    ===================================================================== */
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSIKrMVG0DNULg5UxWo1yJlH9eZD_nTrMpjw2o5nD842MuZCOAN-pnbAKyEgkpkKJ_pDAh7Z_vLxF-a/pub?gid=867058318&single=true&output=csv";
+const CSV_URL = "COLE_AQUI_O_LINK_CSV_PUBLICADO";
+
+/* Arquivo (ou link) do catálogo de cores único, usado por todos os produtos
+   "Na Cor". Coloque o PDF na mesma pasta do index.html e deixe só o nome do
+   arquivo, ou troque por um link completo (https://...) se preferir hospedar
+   em outro lugar. */
+const CATALOGO_CORES = "catalogoqualy.pdf";
 
 function normalizarCabecalho(h) {
     return (h || '')
@@ -301,6 +328,7 @@ createApp({
         return {
             tela: 'home', modal: null, vendedor: '', cliente: '', pagamento: '', parcelas: null, diasCheque: '',
             categoriaAtiva: '', prodSel: {}, qtd: 1, carrinho: [], dataPedido: '',
+            corInput: '', corEscolhida: '',
             produtos: [],
             carregando: true,
             erroCarregamento: null,
@@ -315,6 +343,7 @@ createApp({
     },
     computed: {
         csvConfigurado() { return CSV_URL && CSV_URL.indexOf('COLE_AQUI') === -1; },
+        precisaCor() { return !!(this.prodSel && this.prodSel.cor && this.prodSel.cor !== '-' && this.prodSel.cor !== 'Branca'); },
         produtosFiltrados() { return this.produtos.filter(p => p.categoria === this.categoriaAtiva); },
         gruposFiltrados() {
             const grupos = {};
@@ -391,15 +420,30 @@ createApp({
         selecionarProduto(p) {
             this.prodSel = p;
             this.qtd = p.qtdMinCor || 1;
+            this.corEscolhida = '';
+            this.corInput = '';
             this.modal = 'detalhe';
         },
         diminuirQtd() {
             const minimo = this.prodSel.qtdMinCor || 1;
             if (this.qtd > minimo) this.qtd--;
         },
+        abrirEscolhaCor() {
+            this.corInput = this.corEscolhida || '';
+            this.modal = 'escolherCor';
+        },
+        abrirCatalogoCores() {
+            window.open(CATALOGO_CORES, '_blank');
+        },
+        salvarCor() {
+            if (!this.corInput.trim()) return;
+            this.corEscolhida = this.corInput.trim();
+            this.modal = 'detalhe';
+        },
         confirmarItem() {
             if (this.prodSel.qtdMinCor && this.qtd < this.prodSel.qtdMinCor) return;
-            const cor = (this.prodSel.cor && this.prodSel.cor !== '-' && this.prodSel.cor !== 'Branca') ? ' - ' + this.prodSel.cor : '';
+            if (this.precisaCor && !this.corEscolhida) { this.abrirEscolhaCor(); return; }
+            const cor = this.precisaCor ? ` - Cor: ${this.corEscolhida}` : '';
             const nome = `${this.prodSel.produto} - ${this.prodSel.embalagem}${cor}`;
             this.carrinho.push({ nome, preco: this.precoAtual, qty: this.qtd, categoria: this.prodSel.categoria });
             this.modal = null;
