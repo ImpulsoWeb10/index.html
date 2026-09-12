@@ -10,13 +10,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: radial-gradient(circle at 50% 0%, #0f2447 0%, #050a17 65%);
             min-height: 100vh;
         }
         .sidebar-blue { background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%); }
+        .hero-navy { background: radial-gradient(circle at 50% 0%, #16264d 0%, #0a1330 75%); }
+        .font-display { font-family: 'Playfair Display', serif; }
         .page-transition { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -46,6 +48,27 @@
                     inset 0 0 28px rgba(56, 189, 248, 0.4);
             }
         }
+
+        /* Moldura do logo com luz pulsando por trás */
+        .logo-frame {
+            background: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 1.25rem;
+            padding: 8px;
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+        @keyframes logoPulse {
+            0%, 100% {
+                box-shadow:
+                    0 0 10px 2px rgba(56, 189, 248, 0.55),
+                    0 0 30px 8px rgba(56, 189, 248, 0.3);
+            }
+            50% {
+                box-shadow:
+                    0 0 20px 6px rgba(56, 189, 248, 0.95),
+                    0 0 55px 16px rgba(56, 189, 248, 0.55);
+            }
+        }
     </style>
 </head>
 <body class="py-6 px-3">
@@ -53,17 +76,23 @@
 <div id="app" class="neon-frame max-w-md mx-auto min-h-[95vh] relative flex flex-col bg-white rounded-[2.5rem] overflow-hidden">
 
     <div v-if="tela === 'home'" class="flex flex-col flex-1 page-transition">
-        <header class="sidebar-blue text-white p-8 rounded-b-[3rem] shadow-xl text-center">
-            <div class="flex flex-col items-center mb-6">
-                <div class="flex items-center gap-3">
-                    <h1 class="text-3xl font-extrabold italic uppercase tracking-tighter">Qualy Quimy</h1>
-                    <button @click="$refs.calendario.showPicker()" class="bg-white/20 p-2 rounded-lg"><i class="fas fa-calendar-alt"></i></button>
-                    <input type="date" ref="calendario" v-model="dataPedido" class="absolute opacity-0 w-0 h-0">
-                </div>
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-200 mt-1">
-                    {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}
-                </p>
+        <header class="hero-navy text-white p-8 pt-10 rounded-b-[3rem] shadow-xl text-center relative">
+            <button @click="$refs.calendario.showPicker()" class="absolute top-6 right-6 bg-white/10 border border-white/20 w-9 h-9 rounded-lg flex items-center justify-center"><i class="fas fa-calendar-alt text-xs"></i></button>
+            <input type="date" ref="calendario" v-model="dataPedido" class="absolute opacity-0 w-0 h-0">
+
+            <div class="logo-frame w-24 h-24 mx-auto mb-5 flex items-center justify-center">
+                <img src="qualyquimy.jpg" alt="Logo Qualy Quimy" class="w-full h-full object-contain rounded-xl">
             </div>
+
+            <h1 class="font-display text-3xl text-white leading-tight">
+                Tintas <span class="italic text-amber-300">Qualy Quimy</span>
+            </h1>
+            <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-blue-200/70 mt-2 mb-1">
+                Qualidade · Confiança · Compromisso
+            </p>
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300/60 mb-6">
+                {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}
+            </p>
 
             <div class="space-y-3">
                 <input v-model="vendedor" placeholder="Nome do Vendedor" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white placeholder:text-blue-200">
@@ -307,7 +336,8 @@
         </div>
     </div>
 
-    <footer class="mt-auto py-4 text-center border-t bg-slate-50">
+    <footer class="mt-auto py-5 text-center border-t border-slate-100 bg-slate-50">
+        <p class="text-[9px] text-slate-300 mb-1"><i class="fas fa-lock text-[8px]"></i> Protegido por SSL</p>
         <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Desenvolvido por ImpulsoWeb10</span>
     </footer>
 </div>
