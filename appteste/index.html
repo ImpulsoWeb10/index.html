@@ -76,27 +76,27 @@
 <div id="app" class="neon-frame max-w-md mx-auto min-h-[95vh] relative flex flex-col bg-white rounded-[2.5rem] overflow-hidden">
 
     <div v-if="tela === 'home'" class="flex flex-col flex-1 page-transition">
-        <header class="hero-navy text-white p-8 pt-10 rounded-b-[3rem] shadow-xl text-center relative">
-            <button @click="$refs.calendario.showPicker()" class="absolute top-6 right-6 bg-white/10 border border-white/20 w-9 h-9 rounded-lg flex items-center justify-center"><i class="fas fa-calendar-alt text-xs"></i></button>
+        <header class="hero-navy text-white p-5 pt-6 rounded-b-[2.5rem] shadow-xl text-center relative">
+            <button @click="$refs.calendario.showPicker()" class="absolute top-4 right-4 bg-white/10 border border-white/20 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-calendar-alt text-xs"></i></button>
             <input type="date" ref="calendario" v-model="dataPedido" class="absolute opacity-0 w-0 h-0">
 
-            <div class="logo-frame w-24 h-24 mx-auto mb-5 flex items-center justify-center">
+            <div class="logo-frame w-20 h-20 mx-auto mb-3 flex items-center justify-center">
                 <img src="qualyquimy.jpg" alt="Logo Qualy Quimy" class="w-full h-full object-contain rounded-xl">
             </div>
 
-            <h1 class="font-display text-3xl text-white leading-tight">
+            <h1 class="font-display text-2xl text-white leading-tight">
                 Tintas <span class="italic text-amber-300">Qualy Quimy</span>
             </h1>
-            <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-blue-200/70 mt-2 mb-1">
+            <p class="text-[9px] font-bold uppercase tracking-[0.25em] text-blue-200/70 mt-1.5 mb-0.5">
                 Qualidade · Confiança · Compromisso
             </p>
-            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300/60 mb-6">
+            <p class="text-[9px] font-bold uppercase tracking-[0.2em] text-blue-300/60 mb-4">
                 {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}
             </p>
 
-            <div class="space-y-3">
-                <input v-model="vendedor" placeholder="Nome do Vendedor" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white placeholder:text-blue-200">
-                <input v-model="cliente" placeholder="Nome do Cliente" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white placeholder:text-blue-200">
+            <div class="space-y-2">
+                <input v-model="vendedor" placeholder="Nome do Vendedor" class="w-full bg-white/10 border border-white/20 p-2.5 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white placeholder:text-blue-200">
+                <input v-model="cliente" placeholder="Nome do Cliente" class="w-full bg-white/10 border border-white/20 p-2.5 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white placeholder:text-blue-200">
             </div>
         </header>
 
@@ -113,13 +113,13 @@
             <button @click="carregarProdutos" class="block mt-2 font-black underline">Tentar novamente</button>
         </div>
 
-        <main class="p-6 flex-1">
-            <div class="grid grid-cols-2 gap-4">
-                <div v-for="cat in categoriasSetup" @click="abrirCategoria(cat.nome)" class="bg-white p-5 rounded-[2.5rem] shadow-sm flex flex-col items-center border border-slate-100 active:scale-95 transition-all cursor-pointer">
-                    <div :class="cat.bg" class="w-14 h-14 rounded-2xl flex items-center justify-center mb-3">
-                        <i :class="[cat.icon, cat.color]" class="text-2xl"></i>
+        <main class="p-5 flex-1">
+            <div class="grid grid-cols-2 gap-3">
+                <div v-for="cat in categoriasSetup" @click="abrirCategoria(cat.nome)" class="bg-white p-3 rounded-[1.75rem] shadow-sm flex flex-col items-center border border-slate-100 active:scale-95 transition-all cursor-pointer">
+                    <div :class="cat.bg" class="w-9 h-9 rounded-xl flex items-center justify-center mb-1.5">
+                        <i :class="[cat.icon, cat.color]" class="text-sm"></i>
                     </div>
-                    <span class="font-bold text-gray-700 text-[10px] uppercase">{{ cat.nome }}</span>
+                    <span class="font-bold text-gray-700 text-[9px] uppercase">{{ cat.nome }}</span>
                 </div>
             </div>
 
@@ -309,12 +309,15 @@
 
     <div id="pdf-template" style="display:none; width: 700px; max-width: 100%; margin: 0 auto; padding: 20px; font-family: sans-serif; background: white; text-align: center;">
         <div style="text-align: center; border-bottom: 3px solid #1e3a8a; padding-bottom: 20px;">
-            <h1 style="font-size: 32px; text-transform: uppercase; margin: 0; color: #1e3a8a;">Qualy Quimy</h1>
-            <p style="font-size: 14px; font-weight: bold; margin: 5px 0;">PEDIDO DE VENDA</p>
+            <h1 style="font-size: 30px; text-transform: uppercase; margin: 0; color: #1e3a8a;">Tintas Qualy Quimy</h1>
+            <p style="font-size: 12px; color: #64748b; margin: 6px 0 0;">Rua Leiria 45, Chácara Cuiabá - Itaquaquecetuba</p>
+            <p style="font-size: 14px; font-weight: bold; margin: 10px 0 0;">PEDIDO DE VENDA</p>
             <p style="font-size: 12px;">Data: {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}</p>
         </div>
-        <div style="padding: 20px 0; font-size: 14px; text-align: center;">
-            <p><strong>Vendedor:</strong> {{ vendedor }} &nbsp;|&nbsp; <strong>Cliente:</strong> {{ cliente }}</p>
+        <div style="padding: 16px 0; font-size: 14px; text-align: left;">
+            <p style="margin: 2px 0;"><strong>Loja:</strong> Tintas Qualy Quimy</p>
+            <p style="margin: 2px 0;"><strong>Vendedor:</strong> {{ vendedor }}</p>
+            <p style="margin: 2px 0;"><strong>Cliente:</strong> {{ cliente }}</p>
         </div>
         <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
             <tr style="background: #1e3a8a; color: white;">
@@ -334,11 +337,16 @@
             <p><strong>Pagamento:</strong> {{ formatarPagamento() }}</p>
             <h2 style="font-size: 26px; color: #1e3a8a; margin: 8px 0 0;">Total Final: R$ {{ totalFinal.toFixed(2) }}</h2>
         </div>
+        <div style="margin-top: 25px; text-align: center;">
+            <p style="font-size: 13px; color: #334155; margin: 0;">Obrigado pela preferência!</p>
+            <p style="font-size: 13px; color: #334155; margin: 2px 0 0;">Deus abençoe, boas vendas!</p>
+        </div>
     </div>
 
     <footer class="mt-auto py-5 text-center border-t border-slate-100 bg-slate-50">
         <p class="text-[9px] text-slate-300 mb-1"><i class="fas fa-lock text-[8px]"></i> Protegido por SSL</p>
-        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Desenvolvido por ImpulsoWeb10</span>
+        <!-- Troque o href abaixo pelo site/whatsapp da ImpulsoWeb10, se quiser outro link -->
+        <a href="https://impulsoweb10.com.br" target="_blank" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest hover:text-blue-500 transition-colors">Desenvolvido por ImpulsoWeb10</a>
     </footer>
 </div>
 
