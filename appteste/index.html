@@ -1,1 +1,443 @@
 
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qualy Quimy - PDV Profissional</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
+        .sidebar-blue { background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%); }
+        .page-transition { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div id="app" class="max-w-md mx-auto min-h-screen relative flex flex-col bg-white shadow-2xl">
+
+    <div v-if="tela === 'home'" class="flex flex-col flex-1 page-transition">
+        <header class="sidebar-blue text-white p-8 rounded-b-[3rem] shadow-xl text-center">
+            <div class="flex flex-col items-center mb-6">
+                <div class="flex items-center gap-3">
+                    <h1 class="text-3xl font-extrabold italic uppercase tracking-tighter">Qualy Quimy</h1>
+                    <button @click="$refs.calendario.showPicker()" class="bg-white/20 p-2 rounded-lg"><i class="fas fa-calendar-alt"></i></button>
+                    <input type="date" ref="calendario" v-model="dataPedido" class="absolute opacity-0 w-0 h-0">
+                </div>
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-200 mt-1">
+                    {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <input v-model="vendedor" placeholder="Nome do Vendedor" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white placeholder:text-blue-200">
+                <input v-model="cliente" placeholder="Nome do Cliente" class="w-full bg-white/10 border border-white/20 p-3 rounded-xl text-sm outline-none focus:bg-white focus:text-gray-900 text-white placeholder:text-blue-200">
+            </div>
+        </header>
+
+        <div v-if="!csvConfigurado" class="mx-6 mt-4 p-4 bg-amber-50 border-2 border-amber-200 text-amber-800 text-[11px] rounded-2xl leading-relaxed">
+            <strong class="block mb-1">⚠️ Planilha não conectada</strong>
+            Cole o link CSV publicado da sua planilha na constante <code>CSV_URL</code>, no início do &lt;script&gt; deste arquivo.
+        </div>
+        <div v-else-if="carregando" class="text-center text-[11px] text-slate-400 py-4 flex items-center justify-center gap-2">
+            <i class="fas fa-spinner fa-spin"></i> Carregando produtos da planilha...
+        </div>
+        <div v-else-if="erroCarregamento" class="mx-6 mt-4 p-4 bg-red-50 border-2 border-red-200 text-red-600 text-[11px] rounded-2xl leading-relaxed">
+            <strong class="block mb-1">⚠️ Não foi possível carregar a planilha</strong>
+            {{ erroCarregamento }}
+            <button @click="carregarProdutos" class="block mt-2 font-black underline">Tentar novamente</button>
+        </div>
+
+        <main class="p-6 flex-1">
+            <div class="grid grid-cols-2 gap-4">
+                <div v-for="cat in categoriasSetup" @click="abrirCategoria(cat.nome)" class="bg-white p-5 rounded-[2.5rem] shadow-sm flex flex-col items-center border border-slate-100 active:scale-95 transition-all cursor-pointer">
+                    <div :class="cat.bg" class="w-14 h-14 rounded-2xl flex items-center justify-center mb-3">
+                        <i :class="[cat.icon, cat.color]" class="text-2xl"></i>
+                    </div>
+                    <span class="font-bold text-gray-700 text-[10px] uppercase">{{ cat.nome }}</span>
+                </div>
+            </div>
+
+            <div v-if="carrinho.length > 0" class="mt-8 space-y-2">
+                <div class="flex justify-between items-center px-2">
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Carrinho</h3>
+                    <button @click="zerarPedido" class="bg-red-600 text-white font-black text-[10px] uppercase px-4 py-2 rounded-xl shadow-md">Zerar Pedido</button>
+                </div>
+                <div v-for="(item, idx) in carrinho" class="bg-slate-50 p-3 rounded-xl flex justify-between items-center border border-slate-100">
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-slate-800">{{ item.qty }}x {{ item.nome }}</p>
+                        <p class="text-[10px] text-blue-600 font-bold">R$ {{ (item.preco * item.qty).toFixed(2) }}</p>
+                    </div>
+                    <button @click="removerItem(idx)" class="text-red-300 ml-2"><i class="fas fa-times-circle"></i></button>
+                </div>
+            </div>
+
+            <div v-if="carrinho.length > 0" class="mt-8 sticky bottom-4">
+                <button @click="tela = 'pagamento'" class="w-full bg-blue-600 text-white py-5 rounded-[2rem] font-black italic shadow-2xl flex items-center justify-center gap-4 active:scale-95 transition-all">
+                    <span>FECHAR PEDIDO</span>
+                    <span class="bg-white/20 px-3 py-1 rounded-full text-sm font-sans">R$ {{ totalPedido.toFixed(2) }}</span>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <div v-if="tela === 'pagamento'" class="flex flex-col flex-1 p-6 page-transition">
+        <div class="flex items-center justify-between mb-8">
+            <button @click="tela = 'home'" class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-800 flex items-center justify-center shadow-sm"><i class="fas fa-chevron-left"></i></button>
+            <button @click="zerarPedido" class="bg-red-50 text-red-600 font-black text-[10px] uppercase px-4 py-2 rounded-xl">Zerar Tudo</button>
+        </div>
+
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-black text-slate-900 uppercase italic leading-tight">
+                Qual a forma de <br><span class="text-blue-600 underline">pagamento</span>?
+            </h2>
+        </div>
+
+        <div class="bg-slate-50 border-2 p-6 rounded-[3rem] shadow-inner flex-1 flex flex-col space-y-4">
+            <div class="grid grid-cols-2 gap-3" v-if="!pagamento">
+                <button @click="setPagamento('Pix')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">📱 Pix (-3%)</button>
+                <button @click="setPagamento('Espécie')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">💵 Dinheiro (-3%)</button>
+                <button @click="setPagamento('Cartão')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">💳 Cartão</button>
+                <button @click="setPagamento('Cheque')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">✍️ Cheque</button>
+            </div>
+
+            <div v-if="(pagamento === 'Cartão' || pagamento === 'Cheque') && !parcelas" class="space-y-3">
+                <p class="text-center text-[10px] font-black text-slate-400 uppercase">Selecione o parcelamento:</p>
+                <template v-if="pagamento === 'Cartão'">
+                    <button v-for="n in 3" @click="setParcelas(n)" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold text-sm flex justify-between items-center shadow-lg">
+                        <span>{{n}}x Sem Juros</span>
+                        <span>R$ {{ (totalPedido / n).toFixed(2) }}</span>
+                    </button>
+                </template>
+                <template v-if="pagamento === 'Cheque'">
+                    <button v-if="totalPedido <= 1000" @click="setParcelas(2, '30/45')" class="w-full bg-amber-500 text-white p-4 rounded-2xl font-bold text-sm flex justify-between items-center shadow-lg">
+                        <span>2x (30/45 dias)</span>
+                        <span>R$ {{ (totalPedido / 2).toFixed(2) }}</span>
+                    </button>
+                    <button v-else @click="setParcelas(3, '30/45/60')" class="w-full bg-amber-500 text-white p-4 rounded-2xl font-bold text-sm flex justify-between items-center shadow-lg">
+                        <span>3x (30/45/60 dias)</span>
+                        <span>R$ {{ (totalPedido / 3).toFixed(2) }}</span>
+                    </button>
+                </template>
+            </div>
+
+            <div v-if="pagamento && (parcelas || ['Pix', 'Espécie'].includes(pagamento))" class="space-y-6">
+                <div class="p-5 bg-blue-600 rounded-[2rem] text-white text-center shadow-xl">
+                    <p class="font-black text-sm uppercase">{{ formatarPagamento() }}</p>
+                    <button @click="resetPagamento" class="mt-2 text-[10px] font-black bg-white/20 px-4 py-1 rounded-full uppercase">Trocar Forma</button>
+                </div>
+
+                <div class="bg-slate-900 p-6 rounded-[2rem] text-center border-b-8 border-blue-500">
+                    <p class="text-slate-500 text-[10px] font-bold uppercase mb-1">Total Líquido</p>
+                    <p class="text-4xl font-black text-white italic">R$ {{ totalFinal.toFixed(2) }}</p>
+                </div>
+
+                <div class="space-y-3">
+                    <button @click="enviarWhats" class="w-full bg-green-600 text-white py-5 rounded-2xl font-black shadow-lg flex items-center justify-center gap-3">
+                        <i class="fab fa-whatsapp text-2xl"></i> WHATSAPP
+                    </button>
+                    <button @click="gerarPDF" class="w-full bg-slate-800 text-white py-5 rounded-2xl font-black shadow-lg flex items-center justify-center gap-3">
+                        <i class="fas fa-file-pdf text-2xl"></i> GERAR PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="modal == 'produtos'" class="fixed inset-0 bg-black/70 z-50 flex items-end">
+        <div class="bg-white w-full rounded-t-[3rem] p-8 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-black text-slate-800 uppercase italic">{{ categoriaAtiva }}</h3>
+                <button @click="modal = null" class="w-10 h-10 bg-slate-100 rounded-full font-bold">&times;</button>
+            </div>
+            <div class="overflow-y-auto space-y-5 pb-6">
+                <div v-for="grupo in gruposFiltrados" :key="grupo.nome">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                        <img v-if="grupo.itens[0].imagem" :src="grupo.itens[0].imagem" class="w-6 h-6 rounded-lg object-cover border border-slate-200">
+                        {{ grupo.nome }}
+                    </p>
+                    <div class="space-y-2">
+                        <div v-for="p in grupo.itens" :key="p.id" @click="selecionarProduto(p)" class="p-4 border border-slate-100 rounded-2xl hover:bg-blue-50 flex justify-between items-center cursor-pointer gap-3">
+                            <div class="flex-1">
+                                <p class="font-bold text-slate-700 text-sm">
+                                    {{ p.embalagem }}
+                                    <span v-if="p.cor && p.cor !== '-' && p.cor !== 'Branca'" class="text-emerald-600 font-black text-[10px] uppercase ml-1">· {{ p.cor }}</span>
+                                </p>
+                                <p v-if="p.qtdMinCor" class="text-[9px] text-amber-600 font-bold uppercase">mín. {{ p.qtdMinCor }} un</p>
+                                <p v-if="p.obs" class="text-[9px] text-slate-400 italic">{{ p.obs }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-blue-700 font-black text-sm">R$ {{ p.preco.toFixed(2) }}</p>
+                                <p v-if="p.qtdAtacado1" class="text-[9px] text-slate-400 font-bold">{{p.qtdAtacado1}}+un: R$ {{p.precoAtacado1.toFixed(2)}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p v-if="gruposFiltrados.length === 0" class="text-center text-slate-400 text-sm py-10">Nenhum produto nesta categoria.</p>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="modal == 'detalhe'" class="fixed inset-0 z-[60] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-6">
+        <div class="bg-white rounded-[3rem] p-8 w-full max-w-sm text-center shadow-2xl">
+            <img v-if="prodSel.imagem" :src="prodSel.imagem" class="w-32 h-32 object-cover rounded-2xl mx-auto mb-4 border border-slate-200">
+            <h4 class="font-black text-slate-800 mb-1 leading-tight">{{ prodSel.produto }} - {{ prodSel.embalagem }}</h4>
+            <p v-if="prodSel.cor && prodSel.cor !== '-' && prodSel.cor !== 'Branca'" class="text-emerald-600 font-black text-[11px] uppercase mb-4">{{ prodSel.cor }}</p>
+
+            <button v-if="prodSel.tabelaCores" @click="modal = 'cores'" class="text-[10px] font-black text-blue-600 underline mb-4">
+                <i class="fas fa-palette"></i> Ver tabela de cores
+            </button>
+
+            <p v-if="prodSel.qtdMinCor" class="text-[10px] text-amber-600 font-bold uppercase mb-2">Quantidade mínima: {{ prodSel.qtdMinCor }} un</p>
+
+            <div class="flex items-center justify-center gap-6 my-6">
+                <button @click="diminuirQtd" class="w-16 h-16 rounded-2xl bg-slate-100 text-2xl font-black">-</button>
+                <span class="text-5xl font-black text-slate-900">{{ qtd }}</span>
+                <button @click="qtd++" class="w-16 h-16 rounded-2xl bg-blue-600 text-white text-2xl font-black shadow-lg">+</button>
+            </div>
+
+            <div class="bg-blue-50 p-4 rounded-2xl mb-2 border-2 border-blue-100 text-blue-700">
+                <p class="text-3xl font-black italic">R$ {{ (precoAtual * qtd).toFixed(2) }}</p>
+                <p class="text-[10px] font-bold uppercase text-blue-400">R$ {{ precoAtual.toFixed(2) }} / un</p>
+            </div>
+            <p v-if="prodSel.qtdAtacado1 && qtd < prodSel.qtdAtacado1" class="text-[10px] text-slate-400 mb-4">
+                A partir de {{ prodSel.qtdAtacado1 }} un: R$ {{ prodSel.precoAtacado1.toFixed(2) }} cada
+            </p>
+            <p v-if="prodSel.qtdAtacado2 && qtd < prodSel.qtdAtacado2" class="text-[10px] text-slate-400 mb-4">
+                A partir de {{ prodSel.qtdAtacado2 }} un: R$ {{ prodSel.precoAtacado2.toFixed(2) }} cada
+            </p>
+
+            <button @click="confirmarItem" :disabled="prodSel.qtdMinCor && qtd < prodSel.qtdMinCor"
+                    class="w-full bg-slate-900 text-white py-5 rounded-[2rem] font-black uppercase mb-3 disabled:opacity-40">
+                Adicionar
+            </button>
+            <button @click="modal = 'produtos'" class="w-full py-2 bg-slate-100 rounded-xl text-slate-500 text-[10px] font-black uppercase">Voltar</button>
+        </div>
+    </div>
+
+    <div v-if="modal == 'cores'" class="fixed inset-0 z-[70] bg-black/85 flex flex-col items-center justify-center p-6" @click="modal = 'detalhe'">
+        <img :src="prodSel.tabelaCores" class="max-h-[75vh] max-w-full rounded-2xl shadow-2xl" @click.stop>
+        <button @click="modal = 'detalhe'" class="mt-6 bg-white/20 text-white font-black text-[10px] uppercase px-6 py-3 rounded-full">Fechar</button>
+    </div>
+
+    <div id="pdf-template" style="display:none; width: 100%; padding: 20px; font-family: sans-serif; background: white;">
+        <div style="text-align: center; border-bottom: 3px solid #1e3a8a; padding-bottom: 20px;">
+            <h1 style="font-size: 32px; text-transform: uppercase; margin: 0; color: #1e3a8a;">Qualy Quimy</h1>
+            <p style="font-size: 14px; font-weight: bold; margin: 5px 0;">PEDIDO DE VENDA</p>
+            <p style="font-size: 12px;">Data: {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}</p>
+        </div>
+        <div style="padding: 20px 0; font-size: 14px;">
+            <p><strong>Vendedor:</strong> {{ vendedor }} | <strong>Cliente:</strong> {{ cliente }}</p>
+        </div>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background: #1e3a8a; color: white;">
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Qtd</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Produto</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: right;">Total</th>
+            </tr>
+            <tr v-for="i in carrinho">
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ i.qty }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ i.nome }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">R$ {{ (i.preco * i.qty).toFixed(2) }}</td>
+            </tr>
+        </table>
+        <div style="margin-top: 30px; padding: 20px; background: #f8fafc; text-align: right; border-radius: 10px;">
+            <p><strong>Pagamento:</strong> {{ formatarPagamento() }}</p>
+            <h2 style="font-size: 26px; color: #1e3a8a;">Total Final: R$ {{ totalFinal.toFixed(2) }}</h2>
+        </div>
+    </div>
+
+    <footer class="mt-auto py-4 text-center border-t bg-slate-50">
+        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Desenvolvido por ImpulsoWeb10</span>
+    </footer>
+</div>
+
+<script>
+/* =====================================================================
+   COLE AQUI o link CSV publicado da sua planilha do Google Sheets.
+   Como gerar: Arquivo > Compartilhar > Publicar na web > selecione a
+   aba "Produtos" > formato CSV > Publicar > copie o link gerado.
+   ===================================================================== */
+const CSV_URL = "COLE_AQUI_O_LINK_CSV_PUBLICADO";
+
+function normalizarCabecalho(h) {
+    return (h || '')
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '');
+}
+
+function parsePreco(raw) {
+    if (raw === undefined || raw === null) return null;
+    let s = String(raw).trim();
+    if (!s) return null;
+    s = s.replace(/[^0-9.,-]/g, '');
+    if (!s) return null;
+    const lastComma = s.lastIndexOf(',');
+    const lastDot = s.lastIndexOf('.');
+    if (lastComma > lastDot) s = s.replace(/\./g, '').replace(',', '.');
+    else s = s.replace(/,/g, '');
+    const n = parseFloat(s);
+    return isNaN(n) ? null : n;
+}
+
+function parseInteiro(raw) {
+    if (raw === undefined || raw === null) return null;
+    const s = String(raw).trim().replace(/[^0-9]/g, '');
+    if (!s) return null;
+    const n = parseInt(s, 10);
+    return isNaN(n) ? null : n;
+}
+
+const { createApp } = Vue;
+createApp({
+    data() {
+        return {
+            tela: 'home', modal: null, vendedor: '', cliente: '', pagamento: '', parcelas: null, diasCheque: '',
+            categoriaAtiva: '', prodSel: {}, qtd: 1, carrinho: [], dataPedido: '',
+            produtos: [],
+            carregando: true,
+            erroCarregamento: null,
+            categoriasSetup: [
+                { nome: 'Tintas', icon: 'fas fa-fill-drip', color: 'text-blue-600', bg: 'bg-blue-50' },
+                { nome: 'Massas', icon: 'fas fa-brush', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                { nome: 'Texturas', icon: 'fas fa-scroll', color: 'text-orange-600', bg: 'bg-orange-50' },
+                { nome: 'Selantes', icon: 'fas fa-spray-can', color: 'text-purple-600', bg: 'bg-purple-50' },
+                { nome: 'Complementos', icon: 'fas fa-tools', color: 'text-rose-600', bg: 'bg-rose-50' }
+            ]
+        }
+    },
+    computed: {
+        csvConfigurado() { return CSV_URL && CSV_URL.indexOf('COLE_AQUI') === -1; },
+        produtosFiltrados() { return this.produtos.filter(p => p.categoria === this.categoriaAtiva); },
+        gruposFiltrados() {
+            const grupos = {};
+            this.produtosFiltrados.forEach(p => {
+                if (!grupos[p.produto]) grupos[p.produto] = [];
+                grupos[p.produto].push(p);
+            });
+            return Object.keys(grupos).sort().map(nome => ({ nome, itens: grupos[nome] }));
+        },
+        precoAtual() {
+            if (!this.prodSel || this.prodSel.preco == null) return 0;
+            let preco = this.prodSel.preco;
+            if (this.prodSel.qtdAtacado2 && this.prodSel.precoAtacado2 != null && this.qtd >= this.prodSel.qtdAtacado2) {
+                preco = this.prodSel.precoAtacado2;
+            } else if (this.prodSel.qtdAtacado1 && this.prodSel.precoAtacado1 != null && this.qtd >= this.prodSel.qtdAtacado1) {
+                preco = this.prodSel.precoAtacado1;
+            }
+            return preco;
+        },
+        totalPedido() { return this.carrinho.reduce((acc, i) => acc + (i.preco * i.qty), 0); },
+        totalFinal() {
+            let t = this.totalPedido;
+            if (this.pagamento === 'Pix' || this.pagamento === 'Espécie') t *= 0.97;
+            return t;
+        }
+    },
+    methods: {
+        carregarProdutos() {
+            if (!this.csvConfigurado) { this.carregando = false; return; }
+            this.carregando = true;
+            this.erroCarregamento = null;
+            fetch(CSV_URL)
+                .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+                .then(texto => {
+                    const parsed = Papa.parse(texto, { header: true, skipEmptyLines: true });
+                    const cabecalhos = {};
+                    (parsed.meta.fields || []).forEach(f => { cabecalhos[normalizarCabecalho(f)] = f; });
+
+                    const get = (row, chave) => cabecalhos[chave] !== undefined ? row[cabecalhos[chave]] : undefined;
+
+                    const lista = [];
+                    parsed.data.forEach((row, idx) => {
+                        const preco = parsePreco(get(row, 'precounidader'));
+                        const categoria = (get(row, 'categoria') || '').trim();
+                        const produto = (get(row, 'produto') || '').trim();
+                        if (preco === null || !categoria || !produto) return; // pula linhas de legenda/instrução
+
+                        lista.push({
+                            id: idx,
+                            categoria,
+                            produto,
+                            embalagem: (get(row, 'embalagem') || '').trim(),
+                            cor: (get(row, 'cor') || '-').trim(),
+                            preco,
+                            qtdMinCor: parseInteiro(get(row, 'qtdminimacorencomenda')),
+                            qtdAtacado1: parseInteiro(get(row, 'qtdminimaatacado')),
+                            precoAtacado1: parsePreco(get(row, 'precoatacador')),
+                            qtdAtacado2: parseInteiro(get(row, 'qtdminimaatacado2')),
+                            precoAtacado2: parsePreco(get(row, 'precoatacado2r')),
+                            obs: (get(row, 'observacoes') || '').trim(),
+                            imagem: (get(row, 'linkimagemdoproduto') || '').trim(),
+                            tabelaCores: (get(row, 'linktabeladecores') || '').trim(),
+                        });
+                    });
+                    this.produtos = lista;
+                    this.carregando = false;
+                })
+                .catch(err => {
+                    this.erroCarregamento = 'Verifique se o link CSV está correto e publicado (' + err.message + ').';
+                    this.carregando = false;
+                });
+        },
+        abrirCategoria(c) { this.categoriaAtiva = c; this.modal = 'produtos'; },
+        selecionarProduto(p) {
+            this.prodSel = p;
+            this.qtd = p.qtdMinCor || 1;
+            this.modal = 'detalhe';
+        },
+        diminuirQtd() {
+            const minimo = this.prodSel.qtdMinCor || 1;
+            if (this.qtd > minimo) this.qtd--;
+        },
+        confirmarItem() {
+            if (this.prodSel.qtdMinCor && this.qtd < this.prodSel.qtdMinCor) return;
+            const cor = (this.prodSel.cor && this.prodSel.cor !== '-' && this.prodSel.cor !== 'Branca') ? ' - ' + this.prodSel.cor : '';
+            const nome = `${this.prodSel.produto} - ${this.prodSel.embalagem}${cor}`;
+            this.carrinho.push({ nome, preco: this.precoAtual, qty: this.qtd, categoria: this.prodSel.categoria });
+            this.modal = null;
+        },
+        removerItem(idx) { this.carrinho.splice(idx, 1); if (!this.carrinho.length) this.tela = 'home'; },
+        zerarPedido() { this.carrinho = []; this.pagamento = ''; this.parcelas = null; this.tela = 'home'; },
+        setPagamento(tipo) { this.pagamento = tipo; this.parcelas = null; },
+        setParcelas(n, dias = '') { this.parcelas = n; this.diasCheque = dias; },
+        resetPagamento() { this.pagamento = ''; this.parcelas = null; },
+        formatarPagamento() {
+            if (this.pagamento === 'Cartão' && this.parcelas) return `${this.parcelas}x no Cartão (R$ ${(this.totalPedido/this.parcelas).toFixed(2)})`;
+            if (this.pagamento === 'Cheque' && this.parcelas) return `${this.parcelas}x no Cheque ${this.diasCheque} (R$ ${(this.totalPedido/this.parcelas).toFixed(2)})`;
+            if (this.pagamento === 'Pix') return 'Pix (-3%)';
+            if (this.pagamento === 'Espécie') return 'Dinheiro (-3%)';
+            return this.pagamento;
+        },
+        enviarWhats() {
+            let m = `*QUALY QUIMY*\n*Cliente:* ${this.cliente}\n\n`;
+            this.carrinho.forEach(i => m += `• ${i.qty}x ${i.nome} = R$ ${(i.preco * i.qty).toFixed(2)}\n`);
+            m += `\n*PAGAMENTO:* ${this.formatarPagamento()}\n*TOTAL: R$ ${this.totalFinal.toFixed(2)}*`;
+            window.open(`https://api.whatsapp.com/send?phone=5511954950044&text=${encodeURIComponent(m)}`);
+        },
+        gerarPDF() {
+            const el = document.getElementById('pdf-template');
+            el.style.display = 'block';
+            const opt = {
+                margin: 10,
+                filename: 'Pedido_QualyQuimy.pdf',
+                html2canvas: { scale: 2, windowWidth: 800 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(el).set(opt).save().then(() => el.style.display = 'none');
+        }
+    },
+    mounted() {
+        this.carregarProdutos();
+    }
+}).mount('#app')
+</script>
+</body>
+</html>
