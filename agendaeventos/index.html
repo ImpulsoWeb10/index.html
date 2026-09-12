@@ -177,10 +177,22 @@
     padding:6px 10px; border-radius:14px; cursor:pointer; flex-shrink:0;
   }
   .audio-row .mini-btn:hover{ border-color:var(--rose); color:var(--rose); }
+  .audio-status{ font-size:11.5px; margin-top:2px; flex-basis:100%; line-height:1.4; }
   .img-thumb{ width:52px;height:52px; border-radius:6px; object-fit:cover; flex-shrink:0; background:var(--paper-2); border:1px solid var(--line); }
   .img-thumb.empty{ display:flex; align-items:center; justify-content:center; color:var(--ink-soft); }
   .img-thumb.empty svg{ width:20px;height:20px; }
-  .img-cat-label{ flex:1; font-size:14.5px; font-weight:500; }
+  .img-cat-label{ font-size:14.5px; font-weight:500; }
+  .label-wrap{ display:flex; align-items:center; gap:6px; flex:1; min-width:0; flex-wrap:wrap; }
+  .edit-icon-btn{ background:none;border:none;cursor:pointer;color:var(--ink-soft);padding:2px;display:flex;align-items:center;flex-shrink:0; }
+  .edit-icon-btn:hover{ color:var(--rose-dark); }
+  .edit-icon-btn svg{ width:13px;height:13px; }
+  .label-edit-input{
+    border:none;border-bottom:1.5px solid var(--rose-dark); background:transparent;
+    font-family:'Work Sans', sans-serif; font-size:14.5px; font-weight:500; color:var(--ink);
+    outline:none; padding:2px 0; width:150px; max-width:100%;
+  }
+  .reset-link{ font-size:11.5px; color:var(--ink-soft); background:none; border:none; cursor:pointer; }
+  .reset-link:hover{ color:var(--rose-dark); }
   .img-actions{ display:flex; gap:8px; align-items:center; }
   .file-btn{ font-size:12.5px; color:var(--rose-dark); cursor:pointer; }
   .file-btn input{ display:none; }
@@ -252,13 +264,7 @@
     <form id="eventForm">
       <div class="field">
         <label for="tipo">Tipo</label>
-        <select id="tipo" required>
-          <option value="compromisso">Compromisso</option>
-          <option value="aniversario">Aniversário</option>
-          <option value="festa">Festa</option>
-          <option value="show">Show</option>
-          <option value="outro">Outro</option>
-        </select>
+        <select id="tipo" required></select>
       </div>
       <div class="field">
         <label for="titulo">Nome</label>
@@ -297,7 +303,10 @@
   <div class="modal">
     <button class="modal-close" onclick="fecharModalImagens()">×</button>
     <h2>Imagens e sons por situação</h2>
-    <p style="font-size:13px;color:var(--ink-soft);margin:-10px 0 16px;">Escolha uma imagem e, se quiser, um link de áudio para cada tipo. Eles tocam/aparecem em tela cheia quando o aviso dessa situação disparar.</p>
+    <p style="font-size:13px;color:var(--ink-soft);margin:-10px 0 16px;">
+      Toque no lápis para renomear cada categoria (ex.: trocar "Aniversário" por outro nome). Escolha uma imagem e, se quiser, um link de áudio para cada uma — eles tocam/aparecem em tela cheia quando o aviso dessa situação disparar.
+      <br><strong>Importante:</strong> o link de áudio precisa apontar direto para um arquivo (.mp3, .wav, .ogg) — links de página (YouTube, Spotify, etc.) não funcionam.
+    </p>
     <div id="imgList"></div>
     <div class="modal-actions" style="margin-top:18px;">
       <button type="button" class="btn btn-ghost" style="flex:1;" onclick="fecharModalImagens()">Fechar</button>
@@ -340,6 +349,8 @@ const UNIT_MS = { minutos:60000, horas:3600000, dias:86400000 };
 let events = [];
 let images = {};
 let audios = {};
+let labels = {};
+let audioElements = {};
 let audioCtx = null;
 let soundReady = false;
 let editId = null;
@@ -351,6 +362,8 @@ function saveLocalImages(){ localStorage.setItem('agenda_images', JSON.stringify
 function loadLocalImages(){ try{ return JSON.parse(localStorage.getItem('agenda_images')) || {}; }catch(e){ return {}; } }
 function saveLocalAudios(){ localStorage.setItem('agenda_audios', JSON.stringify(audios)); }
 function loadLocalAudios(){ try{ return JSON.parse(localStorage.getItem('agenda_audios')) || {}; }catch(e){ return {}; } }
+function saveLocalLabels(){ localStorage.setItem('agenda_labels', JSON.stringify(labels)); }
+function loadLocalLabels(){ try{ return JSON.parse(localStorage.getItem('agenda_labels')) || {}; }catch(e){ return {}; } }
 
 function sheetsAtivo(){ return !!(CONFIG.SHEETS_URL && CONFIG.SHEETS_URL.startsWith('http')); }
 
@@ -361,6 +374,53 @@ function setStatus(){
   } else {
     el.innerHTML = '<span class="dot" style="background:var(--grey);"></span>Modo local — dados salvos apenas neste navegador';
   }
+}
+
+/* ---------- nomes de categoria (editáveis) ---------- */
+function getLabel(key){
+  return (labels[key] && labels[key].trim()) ? labels[key] : CATEGORIES[key].label;
+}
+function iniciarEdicaoLabel(key){
+  const atual = getLabel(key);
+  const wrap = document.getElementById('labelWrap-' + key);
+  if(!wrap) return;
+  wrap.innerHTML =
+    '<input type="text" class="label-edit-input" id="labelInput-' + key + '" value="' + atual.replace(/"/g,'&quot;') + '" ' +
+    'onkeydown="if(event.key===\'Enter\'){salvarLabelEdit(\'' + key + '\')} if(event.key===\'Escape\'){renderImgList();}" ' +
+    'onblur="salvarLabelEdit(\'' + key + '\')">';
+  const input = document.getElementById('labelInput-' + key);
+  input.focus();
+  input.select();
+}
+function salvarLabelEdit(key){
+  const input = document.getElementById('labelInput-' + key);
+  if(!input) return;
+  const val = input.value.trim();
+  if(!val || val === CATEGORIES[key].label){
+    delete labels[key];
+  } else {
+    labels[key] = val;
+  }
+  saveLocalLabels();
+  renderImgList();
+  popularSelectTipo();
+  render();
+}
+function resetarLabel(key){
+  delete labels[key];
+  saveLocalLabels();
+  renderImgList();
+  popularSelectTipo();
+  render();
+}
+function popularSelectTipo(){
+  const sel = document.getElementById('tipo');
+  if(!sel) return;
+  const atual = sel.value;
+  sel.innerHTML = Object.keys(CATEGORIES).map(function(k){
+    return '<option value="' + k + '">' + getLabel(k) + '</option>';
+  }).join('');
+  if(atual) sel.value = atual;
 }
 
 /* ---------- integração com Sheets (Apps Script Web App) ---------- */
@@ -393,6 +453,10 @@ function ativarAvisos(){
   if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
   if(audioCtx.state === 'suspended') audioCtx.resume();
   playChime();
+  // Aproveita este clique (gesto do usuário) para "destravar" a reprodução
+  // dos áudios personalizados de cada categoria, senão o navegador (principalmente
+  // no celular) bloqueia sons tocados depois, fora de um clique direto.
+  Object.keys(audios).forEach(function(tipo){ primarAudio(tipo); });
   if('Notification' in window && Notification.permission === 'default'){ Notification.requestPermission(); }
   soundReady = true;
   document.getElementById('soundToggle').classList.add('active');
@@ -413,11 +477,91 @@ function playChime(){
   });
 }
 function vibrar(){ if(navigator.vibrate){ navigator.vibrate([220,120,220,120,220]); } }
+
+/* Converte alguns formatos de link "de página" para link direto de arquivo,
+   quando possível (Google Drive e Dropbox). Outros serviços (YouTube, Spotify,
+   SoundCloud etc.) não oferecem link direto de arquivo e não vão funcionar aqui. */
+function converterLinkAudio(url){
+  if(!url) return url;
+  const gdrive = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if(gdrive){ return 'https://drive.google.com/uc?export=download&id=' + gdrive[1]; }
+  if(url.includes('dropbox.com') && url.includes('dl=0')){ return url.replace('dl=0','dl=1'); }
+  return url;
+}
+
+/* Cria (ou reaproveita) o elemento <audio> de uma categoria */
+function prepararAudioElement(tipo){
+  const url = audios[tipo];
+  if(!url) return null;
+  if(!audioElements[tipo] || audioElements[tipo].getAttribute('data-src') !== url){
+    const el = new Audio(url);
+    el.preload = 'auto';
+    el.setAttribute('data-src', url);
+    audioElements[tipo] = el;
+  }
+  return audioElements[tipo];
+}
+
+/* Toca e pausa imediatamente o áudio, aproveitando um gesto do usuário,
+   para o navegador liberar a reprodução automática dele mais tarde. */
+function primarAudio(tipo){
+  const el = prepararAudioElement(tipo);
+  if(!el) return;
+  el.volume = 0;
+  const p = el.play();
+  if(p && p.then){
+    p.then(function(){ el.pause(); el.currentTime = 0; el.volume = 1; })
+     .catch(function(){ el.volume = 1; });
+  } else {
+    try{ el.pause(); el.currentTime = 0; }catch(e){}
+    el.volume = 1;
+  }
+}
+
+/* Testa se um link carrega como áudio de verdade e mostra o resultado na tela */
+function validarAudio(tipo, url){
+  const status = document.getElementById('audioStatus-' + tipo);
+  if(!status) return;
+  if(!url){ status.textContent = ''; return; }
+  status.textContent = 'verificando link…';
+  status.style.color = 'var(--ink-soft)';
+  const teste = new Audio();
+  teste.preload = 'auto';
+  let resolvido = false;
+  teste.addEventListener('canplaythrough', function(){
+    if(resolvido) return; resolvido = true;
+    status.textContent = '✓ link tocável';
+    status.style.color = '#8FBF8F';
+  });
+  teste.addEventListener('error', function(){
+    if(resolvido) return; resolvido = true;
+    status.textContent = '⚠ esse link não é um arquivo de áudio direto (mp3/wav/ogg) — não vai tocar sozinho';
+    status.style.color = 'var(--coral)';
+  });
+  setTimeout(function(){
+    if(!resolvido){
+      resolvido = true;
+      status.textContent = '⚠ não deu para confirmar o link (pode ser bloqueio de acesso externo) — use "Testar"';
+      status.style.color = 'var(--gold)';
+    }
+  }, 4000);
+  teste.src = url;
+  teste.load();
+}
+
 function tocarSom(tipo){
   const url = audios[tipo];
   if(url){
-    const player = new Audio(url);
-    player.play().catch(()=>{ if(soundReady) playChime(); });
+    const el = prepararAudioElement(tipo);
+    el.currentTime = 0;
+    el.volume = 1;
+    const p = el.play();
+    if(p && p.catch){
+      p.catch(function(err){
+        console.warn('Não consegui tocar o áudio personalizado de "' + tipo + '":', err);
+        if(soundReady) playChime();
+      });
+    }
   } else if(soundReady){
     playChime();
   }
@@ -499,42 +643,64 @@ function renderImgList(){
     const cat = CATEGORIES[key];
     const img = images[key];
     const audioUrl = audios[key] || '';
+    const nomeAtual = getLabel(key);
+    const personalizado = !!(labels[key] && labels[key].trim());
     const thumb = img
       ? '<img class="img-thumb" src="' + img + '">'
       : '<div class="img-thumb empty" style="background:' + cat.color + '22;">' + cat.icon.replace(/white/g, cat.color) + '</div>';
     return '' +
       '<div class="img-row">' +
         thumb +
-        '<span class="img-cat-label">' + cat.label + '</span>' +
+        '<div class="label-wrap" id="labelWrap-' + key + '">' +
+          '<span class="img-cat-label">' + nomeAtual + '</span>' +
+          '<button type="button" class="edit-icon-btn" title="Renomear" onclick="iniciarEdicaoLabel(\'' + key + '\')">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>' +
+          '</button>' +
+          (personalizado ? '<button type="button" class="reset-link" onclick="resetarLabel(\'' + key + '\')">restaurar</button>' : '') +
+        '</div>' +
         '<div class="img-actions">' +
           '<label class="file-btn">Escolher<input type="file" accept="image/*" onchange="salvarImagem(\'' + key + '\', this)"></label>' +
           (img ? '<button class="remove-link" onclick="removerImagem(\'' + key + '\')">Remover</button>' : '') +
         '</div>' +
         '<div class="audio-row">' +
-          '<input type="url" placeholder="Link do áudio (opcional)" value="' + audioUrl.replace(/"/g,'&quot;') + '" onchange="salvarAudioLink(\'' + key + '\', this.value)">' +
+          '<input type="url" placeholder="Link do áudio (mp3, wav...)" value="' + audioUrl.replace(/"/g,'&quot;') + '" onchange="salvarAudioLink(\'' + key + '\', this.value)">' +
           '<button type="button" class="mini-btn" onclick="testarAudio(\'' + key + '\')">Testar</button>' +
           (audioUrl ? '<button type="button" class="mini-btn" onclick="removerAudio(\'' + key + '\')">Remover</button>' : '') +
         '</div>' +
+        '<span class="audio-status" id="audioStatus-' + key + '"></span>' +
       '</div>';
   }).join('');
+  Object.keys(CATEGORIES).forEach(function(key){
+    if(audios[key]) validarAudio(key, audios[key]);
+  });
 }
 
 function salvarAudioLink(tipo, valor){
-  const url = valor.trim();
+  const url = converterLinkAudio(valor.trim());
   if(url){ audios[tipo] = url; } else { delete audios[tipo]; }
+  delete audioElements[tipo];
   saveLocalAudios();
   renderImgList();
+  if(url){
+    validarAudio(tipo, url);
+    primarAudio(tipo);
+  }
 }
 function removerAudio(tipo){
   delete audios[tipo];
+  delete audioElements[tipo];
   saveLocalAudios();
   renderImgList();
 }
 function testarAudio(tipo){
   const url = audios[tipo];
   if(!url){ alert('Cole um link de áudio antes de testar.'); return; }
-  const player = new Audio(url);
-  player.play().catch(()=> alert('Não consegui tocar esse link. Verifique se é um link direto para um arquivo de áudio (mp3, wav) e se permite acesso externo.'));
+  const el = prepararAudioElement(tipo);
+  el.currentTime = 0;
+  el.volume = 1;
+  el.play().catch(function(){
+    alert('Não consegui tocar esse link. Verifique se é um link direto para um arquivo de áudio (mp3, wav) e se permite acesso externo.');
+  });
 }
 
 function salvarImagem(tipo, input){
@@ -608,7 +774,7 @@ function render(){
           '<div class="event-icon" style="background:' + cat.color + '">' + cat.icon + '</div>' +
           '<div class="event-info">' +
             '<p class="title-line">' + ev.titulo + '</p>' +
-            '<p class="meta-line">' + cat.label + ' · ' + formatHora(ev._dt) + ' · aviso ' + ev.reminderQtd + ' ' + ev.reminderUnidade + ' antes</p>' +
+            '<p class="meta-line">' + getLabel(ev.tipo) + ' · ' + formatHora(ev._dt) + ' · aviso ' + ev.reminderQtd + ' ' + ev.reminderUnidade + ' antes</p>' +
           '</div>' +
           '<button class="del-btn" onclick="excluirRapido(\'' + ev.id + '\', event)" title="Excluir">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>' +
@@ -624,20 +790,20 @@ function render(){
 function dispararAviso(ev){
   const cat = CATEGORIES[ev.tipo];
   document.getElementById('alertStrip').style.background = cat.color;
-  document.getElementById('alertCat').textContent = cat.label;
+  document.getElementById('alertCat').textContent = getLabel(ev.tipo);
   document.getElementById('alertTitle').textContent = ev.titulo;
   document.getElementById('alertTime').textContent = 'às ' + formatHora(new Date(ev.data+'T'+ev.hora));
 
   const img = images[ev.tipo];
   document.getElementById('alertImageWrap').innerHTML = img
     ? '<img class="alert-image" src="' + img + '">'
-    : '<div class="alert-noimg">Nenhuma imagem salva para "' + cat.label + '". Adicione uma em "Imagens por situação".</div>';
+    : '<div class="alert-noimg">Nenhuma imagem salva para "' + getLabel(ev.tipo) + '". Adicione uma em "Imagens e sons por situação".</div>';
 
   document.getElementById('alertOverlay').classList.add('show');
   tocarSom(ev.tipo);
   vibrar();
   if('Notification' in window && Notification.permission === 'granted'){
-    new Notification(cat.label + ': ' + ev.titulo, { body: 'às ' + formatHora(new Date(ev.data+'T'+ev.hora)) });
+    new Notification(getLabel(ev.tipo) + ': ' + ev.titulo, { body: 'às ' + formatHora(new Date(ev.data+'T'+ev.hora)) });
   }
 }
 function fecharAlerta(){ document.getElementById('alertOverlay').classList.remove('show'); }
@@ -663,9 +829,11 @@ function checarLembretes(){
 /* ---------- inicialização ---------- */
 async function init(){
   setStatus();
+  labels = loadLocalLabels();
   images = loadLocalImages();
   audios = loadLocalAudios();
   events = loadLocalEvents();
+  popularSelectTipo();
   render();
 
   if(sheetsAtivo()){
