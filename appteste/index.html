@@ -81,11 +81,11 @@
             <input type="date" ref="calendario" v-model="dataPedido" class="absolute opacity-0 w-0 h-0">
 
             <div class="logo-frame w-20 h-20 mx-auto mb-3 flex items-center justify-center">
-                <img src="qualyquimy.jpg" alt="qualyquimy" class="w-full h-full object-contain rounded-xl">
+                <img src="logoqualquimy.jpg" alt="Logo Qualy Quimy" class="w-full h-full object-contain rounded-xl">
             </div>
 
             <h1 class="font-display text-3xl text-white leading-tight">
-                Tintas <span class="italic text-amber-300">Qualy Quimy</span>
+                Tintas Qualy Quimy
             </h1>
             <p class="text-[9px] font-bold uppercase tracking-[0.25em] text-blue-200/70 mt-1.5 mb-0.5">
                 Qualidade · Confiança · Compromisso
@@ -115,7 +115,7 @@
 
         <main class="p-5 flex-1">
             <div class="grid grid-cols-2 gap-3">
-                <div v-for="cat in categoriasSetup" @click="abrirCategoria(cat.nome)" class="bg-white p-3 rounded-[1.75rem] shadow-sm flex flex-col items-center border border-slate-100 active:scale-95 transition-all cursor-pointer">
+                <div v-for="cat in categoriasSetup" @click="cat.info ? (modal = 'infoUso') : abrirCategoria(cat.nome)" class="bg-white p-3 rounded-[1.75rem] shadow-sm flex flex-col items-center border border-slate-100 active:scale-95 transition-all cursor-pointer">
                     <div :class="cat.bg" class="w-9 h-9 rounded-xl flex items-center justify-center mb-1.5">
                         <i :class="[cat.icon, cat.color]" class="text-lg"></i>
                     </div>
@@ -220,7 +220,7 @@
             </div>
             <div class="overflow-y-auto space-y-5 pb-6">
                 <div v-for="grupo in gruposFiltrados" :key="grupo.nome">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                    <p class="text-[13px] font-black text-blue-900 uppercase tracking-wide mb-2 flex items-center gap-2">
                         <img v-if="grupo.itens[0].imagem" :src="grupo.itens[0].imagem" class="w-6 h-6 rounded-lg object-cover border border-slate-200">
                         {{ grupo.nome }}
                     </p>
@@ -242,6 +242,48 @@
                     </div>
                 </div>
                 <p v-if="gruposFiltrados.length === 0" class="text-center text-slate-400 text-sm py-10">Nenhum produto nesta categoria.</p>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="modal == 'infoUso'" class="fixed inset-0 bg-black/70 z-50 flex items-end">
+        <div class="bg-white w-full rounded-t-[3rem] p-8 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-amber-50 flex items-center justify-center shrink-0">
+                        <i class="fas fa-triangle-exclamation text-amber-500 text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display text-2xl italic text-blue-900 leading-none">Onde Usar</h3>
+                        <div class="w-10 h-1 bg-amber-400 rounded-full mt-2"></div>
+                    </div>
+                </div>
+                <button @click="modal = null" class="w-10 h-10 bg-slate-100 rounded-full font-bold shrink-0">&times;</button>
+            </div>
+
+            <!-- Conteúdo abaixo é um modelo — edite os textos de cada bloco com a
+                 orientação real de cada linha de produto antes de publicar. -->
+            <div class="overflow-y-auto space-y-4 pb-6 text-left">
+                <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
+                    <p class="font-black text-emerald-700 text-xs uppercase tracking-wide mb-1"><i class="fas fa-circle-check mr-1"></i> Uso Interno</p>
+                    <p class="text-slate-600 text-[13px] leading-relaxed">Ambientes secos e protegidos (quartos, salas, corredores). Indicado: Standard, Premium, Latex, Massa Corrida PVA.</p>
+                </div>
+                <div class="p-4 bg-sky-50 border border-sky-100 rounded-2xl">
+                    <p class="font-black text-sky-700 text-xs uppercase tracking-wide mb-1"><i class="fas fa-circle-check mr-1"></i> Uso Externo</p>
+                    <p class="text-slate-600 text-[13px] leading-relaxed">Fachadas, muros e áreas expostas ao sol e chuva. Indicado: linhas com "Uso Externo", Textura, Grafiato, Massa Acrílica.</p>
+                </div>
+                <div class="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
+                    <p class="font-black text-amber-700 text-xs uppercase tracking-wide mb-1"><i class="fas fa-triangle-exclamation mr-1"></i> Áreas com Umidade</p>
+                    <p class="text-slate-600 text-[13px] leading-relaxed">Banheiros, cozinhas e lavanderias pedem tintas laváveis/acrílicas de linha Premium. Evite Massa Corrida PVA comum nessas áreas.</p>
+                </div>
+                <div class="p-4 bg-red-50 border border-red-100 rounded-2xl">
+                    <p class="font-black text-red-600 text-xs uppercase tracking-wide mb-1"><i class="fas fa-ban mr-1"></i> Não Usar</p>
+                    <p class="text-slate-600 text-[13px] leading-relaxed">Não use tinta de parede comum em pisos ou áreas de tráfego — use a linha Piso Standard/Premium. Superfícies em gesso sempre precisam de Selador para Gesso antes da pintura.</p>
+                </div>
+                <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl">
+                    <p class="font-black text-slate-600 text-xs uppercase tracking-wide mb-1"><i class="fas fa-info-circle mr-1"></i> Em caso de dúvida</p>
+                    <p class="text-slate-600 text-[13px] leading-relaxed">Consulte o vendedor antes de comprar — a aplicação errada pode reduzir a durabilidade e o rendimento do produto.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -407,11 +449,12 @@ createApp({
             carregando: true,
             erroCarregamento: null,
             categoriasSetup: [
-                { nome: 'Tintas', icon: 'fas fa-fill-drip', color: 'text-blue-600', bg: 'bg-blue-50' },
-                { nome: 'Massas', icon: 'fas fa-brush', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                { nome: 'Texturas', icon: 'fas fa-scroll', color: 'text-orange-600', bg: 'bg-orange-50' },
-                { nome: 'Selantes', icon: 'fas fa-spray-can', color: 'text-purple-600', bg: 'bg-purple-50' },
-                { nome: 'Complementos', icon: 'fas fa-tools', color: 'text-rose-600', bg: 'bg-rose-50' }
+                { nome: 'Tintas', icon: 'fas fa-fill-drip', color: 'text-sky-600', bg: 'bg-sky-100' },
+                { nome: 'Massas', icon: 'fas fa-brush', color: 'text-sky-600', bg: 'bg-sky-100' },
+                { nome: 'Texturas', icon: 'fas fa-scroll', color: 'text-sky-600', bg: 'bg-sky-100' },
+                { nome: 'Selantes', icon: 'fas fa-spray-can', color: 'text-sky-600', bg: 'bg-sky-100' },
+                { nome: 'Complementos', icon: 'fas fa-tools', color: 'text-sky-600', bg: 'bg-sky-100' },
+                { nome: 'Onde Usar', icon: 'fas fa-triangle-exclamation', color: 'text-amber-500', bg: 'bg-amber-50', info: true }
             ]
         }
     },
