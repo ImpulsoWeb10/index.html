@@ -11,15 +11,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 50% 0%, #0f2447 0%, #050a17 65%);
+            min-height: 100vh;
+        }
         .sidebar-blue { background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%); }
         .page-transition { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Moldura neon azul com efeito de luz por trás */
+        .neon-frame {
+            border: 2px solid #38bdf8;
+            box-shadow:
+                0 0 8px 2px rgba(56, 189, 248, 0.85),
+                0 0 30px 8px rgba(56, 189, 248, 0.55),
+                0 0 70px 20px rgba(37, 99, 235, 0.45),
+                inset 0 0 20px rgba(56, 189, 248, 0.25);
+            animation: neonPulse 3.5s ease-in-out infinite;
+        }
+        @keyframes neonPulse {
+            0%, 100% {
+                box-shadow:
+                    0 0 8px 2px rgba(56, 189, 248, 0.85),
+                    0 0 30px 8px rgba(56, 189, 248, 0.55),
+                    0 0 70px 20px rgba(37, 99, 235, 0.45),
+                    inset 0 0 20px rgba(56, 189, 248, 0.25);
+            }
+            50% {
+                box-shadow:
+                    0 0 12px 4px rgba(56, 189, 248, 1),
+                    0 0 45px 14px rgba(56, 189, 248, 0.75),
+                    0 0 90px 28px rgba(37, 99, 235, 0.6),
+                    inset 0 0 28px rgba(56, 189, 248, 0.4);
+            }
+        }
     </style>
 </head>
-<body>
+<body class="py-6 px-3">
 
-<div id="app" class="max-w-md mx-auto min-h-screen relative flex flex-col bg-white shadow-2xl">
+<div id="app" class="neon-frame max-w-md mx-auto min-h-[95vh] relative flex flex-col bg-white rounded-[2.5rem] overflow-hidden">
 
     <div v-if="tela === 'home'" class="flex flex-col flex-1 page-transition">
         <header class="sidebar-blue text-white p-8 rounded-b-[3rem] shadow-xl text-center">
@@ -247,30 +278,32 @@
         </div>
     </div>
 
-    <div id="pdf-template" style="display:none; width: 100%; padding: 20px; font-family: sans-serif; background: white;">
+    <div id="pdf-template" style="display:none; width: 700px; max-width: 100%; margin: 0 auto; padding: 20px; font-family: sans-serif; background: white; text-align: center;">
         <div style="text-align: center; border-bottom: 3px solid #1e3a8a; padding-bottom: 20px;">
             <h1 style="font-size: 32px; text-transform: uppercase; margin: 0; color: #1e3a8a;">Qualy Quimy</h1>
             <p style="font-size: 14px; font-weight: bold; margin: 5px 0;">PEDIDO DE VENDA</p>
             <p style="font-size: 12px;">Data: {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}</p>
         </div>
-        <div style="padding: 20px 0; font-size: 14px;">
-            <p><strong>Vendedor:</strong> {{ vendedor }} | <strong>Cliente:</strong> {{ cliente }}</p>
+        <div style="padding: 20px 0; font-size: 14px; text-align: center;">
+            <p><strong>Vendedor:</strong> {{ vendedor }} &nbsp;|&nbsp; <strong>Cliente:</strong> {{ cliente }}</p>
         </div>
-        <table style="width: 100%; border-collapse: collapse;">
+        <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
             <tr style="background: #1e3a8a; color: white;">
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Qtd</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Produto</th>
-                <th style="padding: 10px; border: 1px solid #ddd; text-align: right;">Total</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Unidade</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Produto</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Valor Unitário</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Total</th>
             </tr>
             <tr v-for="i in carrinho">
-                <td style="padding: 10px; border: 1px solid #ddd;">{{ i.qty }}</td>
-                <td style="padding: 10px; border: 1px solid #ddd;">{{ i.nome }}</td>
-                <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">R$ {{ (i.preco * i.qty).toFixed(2) }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">{{ i.qty }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">{{ i.nome }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">R$ {{ i.preco.toFixed(2) }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">R$ {{ (i.preco * i.qty).toFixed(2) }}</td>
             </tr>
         </table>
-        <div style="margin-top: 30px; padding: 20px; background: #f8fafc; text-align: right; border-radius: 10px;">
+        <div style="margin: 30px auto 0; padding: 20px; background: #f8fafc; text-align: center; border-radius: 10px; max-width: 500px;">
             <p><strong>Pagamento:</strong> {{ formatarPagamento() }}</p>
-            <h2 style="font-size: 26px; color: #1e3a8a;">Total Final: R$ {{ totalFinal.toFixed(2) }}</h2>
+            <h2 style="font-size: 26px; color: #1e3a8a; margin: 8px 0 0;">Total Final: R$ {{ totalFinal.toFixed(2) }}</h2>
         </div>
     </div>
 
@@ -285,7 +318,7 @@
    Como gerar: Arquivo > Compartilhar > Publicar na web > selecione a
    aba "Produtos" > formato CSV > Publicar > copie o link gerado.
    ===================================================================== */
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSIKrMVG0DNULg5UxWo1yJlH9eZD_nTrMpjw2o5nD842MuZCOAN-pnbAKyEgkpkKJ_pDAh7Z_vLxF-a/pub?gid=867058318&single=true&output=csv";
+const CSV_URL = "COLE_AQUI_O_LINK_CSV_PUBLICADO";
 
 /* Arquivo (ou link) do catálogo de cores único, usado por todos os produtos
    "Na Cor". Coloque o PDF na mesma pasta do index.html e deixe só o nome do
@@ -351,7 +384,12 @@ createApp({
                 if (!grupos[p.produto]) grupos[p.produto] = [];
                 grupos[p.produto].push(p);
             });
-            return Object.keys(grupos).sort().map(nome => ({ nome, itens: grupos[nome] }));
+            return Object.keys(grupos)
+                .map(nome => {
+                    const itens = grupos[nome].slice().sort((a, b) => a.preco - b.preco);
+                    return { nome, itens, menorPreco: itens[0].preco };
+                })
+                .sort((a, b) => a.menorPreco - b.menorPreco);
         },
         precoAtual() {
             if (!this.prodSel || this.prodSel.preco == null) return 0;
@@ -461,9 +499,28 @@ createApp({
             return this.pagamento;
         },
         enviarWhats() {
-            let m = `*QUALY QUIMY*\n*Cliente:* ${this.cliente}\n\n`;
-            this.carrinho.forEach(i => m += `• ${i.qty}x ${i.nome} = R$ ${(i.preco * i.qty).toFixed(2)}\n`);
-            m += `\n*PAGAMENTO:* ${this.formatarPagamento()}\n*TOTAL: R$ ${this.totalFinal.toFixed(2)}*`;
+            const linha = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬';
+            const dataFmt = this.dataPedido ? this.dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString();
+
+            let m = `🧾 *QUALY QUIMY*\n_Comprovante de Pedido_\n${linha}\n`;
+            m += `📅 Data: ${dataFmt}\n`;
+            if (this.vendedor) m += `🧑‍💼 Vendedor: ${this.vendedor}\n`;
+            if (this.cliente) m += `👤 Cliente: ${this.cliente}\n`;
+            m += `${linha}\n*ITENS*\n${linha}\n`;
+
+            this.carrinho.forEach(i => {
+                m += `▪️ ${i.qty}x *${i.nome}*\n`;
+                m += `   Unid: R$ ${i.preco.toFixed(2)}   Subtotal: R$ ${(i.preco * i.qty).toFixed(2)}\n`;
+            });
+
+            m += `${linha}\n`;
+            m += `Subtotal: R$ ${this.totalPedido.toFixed(2)}\n`;
+            m += `Forma de pagamento: ${this.formatarPagamento()}\n`;
+            m += `${linha}\n`;
+            m += `*TOTAL: R$ ${this.totalFinal.toFixed(2)}*\n`;
+            m += `${linha}\n`;
+            m += `Obrigado pela preferência! 💙`;
+
             window.open(`https://api.whatsapp.com/send?phone=5511954950044&text=${encodeURIComponent(m)}`);
         },
         gerarPDF() {
