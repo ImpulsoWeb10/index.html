@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda — compromissos, aniversários e eventos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#2A0D30;
+    --paper:#42154A;
+    --paper-2:#4F1A58;
+    --ink:#F6E7F2;
+    --ink-soft:#C99BC0;
+    --rose:#E85A93;
+    --rose-dark:#D03E79;
+    --gold:#E0B24A;
+    --coral:#FF6F59;
+    --plum:#9B6FB0;
+    --wine:#B23A55;
+    --grey:#9E8CA6;
+    --line:rgba(255,255,255,0.16);
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  header{
+    padding:56px 24px 20px;
+    text-align:center;
+  }
+  header .mark{ width:34px;height:34px;margin:0 auto 14px; color:var(--rose-dark); }
+  header h1{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size:44px; margin:0; letter-spacing:0.5px; }
+  header p{ font-family:'Cormorant Garamond', serif; font-style:italic; color:var(--ink-soft); font-size:19px; margin:8px 0 0; }
+
+  .top-actions{
+    display:flex; justify-content:center; gap:10px; margin-top:22px; flex-wrap:wrap;
+  }
+  .ghost-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:9px 18px; border-radius:20px; font-family:'Work Sans', sans-serif;
+    font-size:13px; cursor:pointer; transition:border-color .2s, color .2s;
+  }
+  .ghost-btn:hover{ border-color:var(--rose); color:var(--rose-dark); }
+  .ghost-btn.active{ border-color:var(--gold); color:var(--gold); background:rgba(224,178,74,.14); }
+  .ghost-btn svg{ width:15px;height:15px; }
+
+  #statusLine{
+    text-align:center; font-size:12.5px; color:var(--ink-soft); margin-top:14px;
+  }
+  #statusLine .dot{ display:inline-block; width:7px;height:7px;border-radius:50%; margin-right:6px; position:relative; top:-1px; }
+
+  main{ max-width:760px; margin:0 auto; padding:24px 24px 120px; }
+
+  .timeline h2{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size:26px; margin:0 0 4px; }
+  .timeline > p.hint{ font-size:13px; color:var(--ink-soft); margin:0 0 20px; }
+
+  .day-group{ margin-bottom:8px; }
+  .day-group h3{
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:500; font-size:19px;
+    color:var(--plum); border-bottom:1px solid var(--line); padding-bottom:8px; margin:0 0 4px;
+  }
+
+  .event-row{
+    display:flex; align-items:center; gap:14px; padding:14px 4px;
+    border-bottom:1px solid var(--line); cursor:pointer; transition:background .15s;
+    border-radius:4px;
+  }
+  .event-row:hover{ background:var(--paper-2); }
+  .event-row.past{ opacity:0.45; }
+
+  .accent-bar{ width:4px; align-self:stretch; border-radius:2px; flex-shrink:0; }
+  .event-icon{ width:30px;height:30px; border-radius:50%; display:flex;align-items:center;justify-content:center; flex-shrink:0; }
+  .event-icon svg{ width:16px;height:16px; }
+
+  .event-info{ flex:1; min-width:0; }
+  .event-info .title-line{ font-size:15.5px; font-weight:500; margin:0; }
+  .event-info .meta-line{ font-size:13px; color:var(--ink-soft); margin:2px 0 0; }
+
+  .del-btn{ background:none;border:none;cursor:pointer; color:var(--ink-soft); padding:6px; flex-shrink:0; transition:color .2s; }
+  .del-btn:hover{ color:var(--wine); }
+  .del-btn svg{ width:16px;height:16px; }
+
+  .empty-state{ padding:40px 0; text-align:center; color:var(--ink-soft); font-size:14.5px; }
+
+  /* FAB */
+  #fabNovo{
+    position:fixed; bottom:28px; right:28px; width:58px;height:58px; border-radius:50%;
+    background:var(--rose-dark); color:#fff; border:none; cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 26px rgba(0,0,0,.4); transition:transform .15s;
+    z-index:50;
+  }
+  #fabNovo:hover{ transform:scale(1.06); }
+  #fabNovo svg{ width:26px;height:26px; }
+
+  /* Modals */
+  .overlay{
+    position:fixed; inset:0; background:rgba(10,4,12,.6);
+    display:none; align-items:center; justify-content:center; padding:20px; z-index:200;
+  }
+  .overlay.show{ display:flex; }
+  .modal{
+    background:var(--paper); border-radius:8px; width:100%; max-width:420px;
+    max-height:88vh; overflow-y:auto; padding:30px 28px;
+    box-shadow:0 24px 60px rgba(0,0,0,.45);
+    animation:modalIn .25s cubic-bezier(.2,.8,.3,1.1);
+  }
+  @keyframes modalIn{ from{ opacity:0; transform:translateY(10px) scale(.98);} to{ opacity:1; transform:translateY(0) scale(1);} }
+
+  .modal h2{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size:24px; margin:0 0 22px; }
+
+  .field{ margin-bottom:20px; }
+  .field label{ display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:6px; }
+  .field input, .field select{
+    width:100%; border:none; border-bottom:1.5px solid var(--line); background:transparent;
+    padding:8px 2px; font-family:'Work Sans', sans-serif; font-size:15px; color:var(--ink);
+    outline:none; transition:border-color .2s;
+  }
+  .field input:focus, .field select:focus{ border-bottom-color:var(--rose-dark); }
+  .field select{ cursor:pointer; }
+  .reminder-row{ display:grid; grid-template-columns:80px 1fr; gap:12px; }
+
+  .modal-actions{ display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
+  .btn{ border:none; padding:12px 18px; border-radius:5px; font-family:'Work Sans', sans-serif; font-size:14px; font-weight:500; cursor:pointer; transition:background .2s, color .2s; }
+  .btn-primary{ background:var(--rose-dark); color:#fff; flex:1; }
+  .btn-primary:hover{ background:var(--wine); }
+  .btn-ghost{ background:none; color:var(--ink-soft); border:1px solid var(--line); }
+  .btn-ghost:hover{ border-color:var(--ink-soft); }
+  .btn-danger{ background:none; color:var(--coral); border:1px solid rgba(255,111,89,.4); }
+  .btn-danger:hover{ background:rgba(255,111,89,.12); }
+
+  .modal-close{ float:right; background:none; border:none; font-size:20px; color:var(--ink-soft); cursor:pointer; line-height:1; margin-top:-6px; }
+
+  /* Image manager */
+  .img-row{ display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid var(--line); }
+  .img-thumb{ width:52px;height:52px; border-radius:6px; object-fit:cover; flex-shrink:0; background:var(--paper-2); border:1px solid var(--line); }
+  .img-thumb.empty{ display:flex; align-items:center; justify-content:center; color:var(--ink-soft); }
+  .img-thumb.empty svg{ width:20px;height:20px; }
+  .img-cat-label{ flex:1; font-size:14.5px; font-weight:500; }
+  .img-actions{ display:flex; gap:8px; align-items:center; }
+  .file-btn{ font-size:12.5px; color:var(--rose-dark); cursor:pointer; }
+  .file-btn input{ display:none; }
+  .remove-link{ font-size:12.5px; color:var(--ink-soft); cursor:pointer; background:none; border:none; }
+  .remove-link:hover{ color:var(--wine); }
+
+  /* Full-screen alert */
+  #alertOverlay{ z-index:300; background:rgba(8,3,10,.85); }
+  .alert-card{
+    background:var(--paper); border-radius:10px; width:100%; max-width:440px; overflow:hidden;
+    animation:modalIn .3s cubic-bezier(.2,.8,.3,1.1);
+  }
+  .alert-strip{ height:6px; }
+  .alert-body{ padding:26px 26px 22px; text-align:center; }
+  .alert-body .alert-cat{ font-size:12.5px; color:var(--ink-soft); margin-bottom:6px; }
+  .alert-body h3{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size:26px; margin:0 0 4px; }
+  .alert-body .alert-time{ font-size:13.5px; color:var(--ink-soft); margin-bottom:18px; }
+  .alert-image{ width:100%; max-height:52vh; object-fit:contain; border-radius:6px; margin-bottom:18px; background:var(--paper-2); }
+  .alert-noimg{
+    padding:30px 10px; color:var(--ink-soft); font-size:13.5px; border:1px dashed var(--line);
+    border-radius:6px; margin-bottom:18px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+    <path d="M12 2c1.6 2 1.6 4-0.6 5.4C9.6 8.7 9 10.4 9 12c0 3.3 2.7 6 6 6s6-2.7 6-6"/>
+    <path d="M12 2c-1.6 2-1.6 4 0.6 5.4C14.4 8.7 15 10.4 15 12c0 3.3-2.7 6-6 6s-6-2.7-6-6"/>
+  </svg>
+  <h1>Agenda</h1>
+  <p>compromissos, aniversários, festas e shows — lembrados na hora certa</p>
+
+  <div class="top-actions">
+    <button class="ghost-btn" id="soundToggle" onclick="ativarAvisos()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
+      <span id="soundLabel">Ativar avisos sonoros</span>
+    </button>
+    <button class="ghost-btn" onclick="abrirModalImagens()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+      Imagens por situação
+    </button>
+  </div>
+
+  <div id="statusLine"></div>
+</header>
+
+<main>
+  <section class="timeline">
+    <h2>Linha do tempo</h2>
+    <p class="hint">Toque em um item para editar. Mantenha esta página aberta no navegador para receber os avisos.</p>
+    <div id="list"></div>
+  </section>
+</main>
+
+<button id="fabNovo" onclick="abrirModalNovo()" title="Novo evento">
+  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+
+<!-- Modal: criar/editar evento -->
+<div class="overlay" id="eventOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModalEvento()">×</button>
+    <h2 id="eventModalTitle">Novo registro</h2>
+    <form id="eventForm">
+      <div class="field">
+        <label for="tipo">Tipo</label>
+        <select id="tipo" required>
+          <option value="compromisso">Compromisso</option>
+          <option value="aniversario">Aniversário</option>
+          <option value="festa">Festa</option>
+          <option value="show">Show</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="titulo">Nome</label>
+        <input id="titulo" type="text" placeholder="Ex.: Maria Silva" required>
+      </div>
+      <div class="field">
+        <label for="data">Data</label>
+        <input id="data" type="date" required>
+      </div>
+      <div class="field">
+        <label for="hora">Horário</label>
+        <input id="hora" type="time" required>
+      </div>
+      <div class="field">
+        <label>Avisar antes</label>
+        <div class="reminder-row">
+          <input id="qtd" type="number" min="1" value="1" required>
+          <select id="unidade">
+            <option value="minutos">minutos</option>
+            <option value="horas" selected>horas</option>
+            <option value="dias">dias</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-danger" id="btnExcluir" onclick="excluirEvento()" style="display:none;">Excluir</button>
+        <button type="button" class="btn btn-ghost" onclick="fecharModalEvento()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: imagens por situação -->
+<div class="overlay" id="imageOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModalImagens()">×</button>
+    <h2>Imagens por situação</h2>
+    <p style="font-size:13px;color:var(--ink-soft);margin:-10px 0 16px;">Escolha uma imagem para cada tipo. Ela aparece na tela cheia quando o aviso dessa situação disparar.</p>
+    <div id="imgList"></div>
+    <div class="modal-actions" style="margin-top:18px;">
+      <button type="button" class="btn btn-ghost" style="flex:1;" onclick="fecharModalImagens()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Alerta em tela cheia -->
+<div class="overlay" id="alertOverlay">
+  <div class="alert-card">
+    <div class="alert-strip" id="alertStrip"></div>
+    <div class="alert-body">
+      <p class="alert-cat" id="alertCat"></p>
+      <h3 id="alertTitle"></h3>
+      <p class="alert-time" id="alertTime"></p>
+      <div id="alertImageWrap"></div>
+      <button class="btn btn-primary" style="width:100%;" onclick="fecharAlerta()">Entendi</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ====== CONFIGURAÇÃO ======
+   Cole aqui a URL do seu Google Apps Script Web App (veja o arquivo
+   Agenda-Script-Sheets.gs com as instruções de implantação).
+   Deixe vazio '' para usar apenas o navegador (modo local). */
+const CONFIG = {
+  SHEETS_URL: ''
+};
+
+const CATEGORIES = {
+  compromisso: { label:'Compromisso', color:'#9B6FB0', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>' },
+  aniversario: { label:'Aniversário', color:'#FF6F59', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M20 12v9H4v-9M2 8h20v4H2zM12 8V5a2 2 0 1 1 2 2h-2zM12 8V5a2 2 0 1 0-2 2h2z"/></svg>' },
+  festa: { label:'Festa', color:'#E0B24A', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M5.8 11.3 2 22l10.7-3.8M4 15l4-1.5M8 19l1.5-4M2 10l1-1a3 3 0 0 1 4.24 0l7.76 7.76a3 3 0 0 1 0 4.24l-1 1M17 4l1 1M12 3l.5 2M20 8l1.5.5M18 3l-1 4 4-1"/></svg>' },
+  show: { label:'Show', color:'#E85A93', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>' },
+  outro: { label:'Outro', color:'#9E8CA6', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 6.9L12 17.3 5.7 20.8l1.7-6.9L2 9.2l7.1-.6z"/></svg>' }
+};
+const UNIT_MS = { minutos:60000, horas:3600000, dias:86400000 };
+
+let events = [];
+let images = {};
+let audioCtx = null;
+let soundReady = false;
+let editId = null;
+
+/* ---------- armazenamento local (cache no navegador) ---------- */
+function saveLocalEvents(){ localStorage.setItem('agenda_events', JSON.stringify(events)); }
+function loadLocalEvents(){ try{ return JSON.parse(localStorage.getItem('agenda_events')) || []; }catch(e){ return []; } }
+function saveLocalImages(){ localStorage.setItem('agenda_images', JSON.stringify(images)); }
+function loadLocalImages(){ try{ return JSON.parse(localStorage.getItem('agenda_images')) || {}; }catch(e){ return {}; } }
+
+function sheetsAtivo(){ return !!(CONFIG.SHEETS_URL && CONFIG.SHEETS_URL.startsWith('http')); }
+
+function setStatus(){
+  const el = document.getElementById('statusLine');
+  if(sheetsAtivo()){
+    el.innerHTML = '<span class="dot" style="background:#5C8A5C;"></span>Conectado à planilha Google Sheets';
+  } else {
+    el.innerHTML = '<span class="dot" style="background:var(--grey);"></span>Modo local — dados salvos apenas neste navegador';
+  }
+}
+
+/* ---------- integração com Sheets (Apps Script Web App) ---------- */
+async function fetchFromSheets(){
+  try{
+    const res = await fetch(CONFIG.SHEETS_URL, { method:'GET' });
+    const data = await res.json();
+    return data.events || [];
+  }catch(err){
+    console.warn('Falha ao buscar na planilha, usando cache local.', err);
+    return null;
+  }
+}
+
+async function pushToSheets(action, ev){
+  if(!sheetsAtivo()) return;
+  try{
+    await fetch(CONFIG.SHEETS_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action, event: ev })
+    });
+  }catch(err){
+    console.warn('Falha ao sincronizar com a planilha.', err);
+  }
+}
+
+/* ---------- som e vibração ---------- */
+function ativarAvisos(){
+  if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  playChime();
+  if('Notification' in window && Notification.permission === 'default'){ Notification.requestPermission(); }
+  soundReady = true;
+  document.getElementById('soundToggle').classList.add('active');
+  document.getElementById('soundLabel').textContent = 'Avisos ativados';
+}
+function playChime(){
+  if(!audioCtx) return;
+  [660,830,990].forEach((freq,i)=>{
+    const t = audioCtx.currentTime + i*0.16;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type='sine'; osc.frequency.setValueAtTime(freq,t);
+    gain.gain.setValueAtTime(0.0001,t);
+    gain.gain.exponentialRampToValueAtTime(0.22,t+0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001,t+0.35);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t); osc.stop(t+0.4);
+  });
+}
+function vibrar(){ if(navigator.vibrate){ navigator.vibrate([220,120,220,120,220]); } }
+
+/* ---------- modal: novo/editar evento ---------- */
+function abrirModalNovo(){
+  editId = null;
+  document.getElementById('eventModalTitle').textContent = 'Novo registro';
+  document.getElementById('btnExcluir').style.display = 'none';
+  document.getElementById('eventForm').reset();
+  document.getElementById('unidade').value = 'horas';
+  document.getElementById('eventOverlay').classList.add('show');
+}
+function abrirModalEditar(id){
+  const ev = events.find(e=>e.id===id);
+  if(!ev) return;
+  editId = id;
+  document.getElementById('eventModalTitle').textContent = 'Editar registro';
+  document.getElementById('btnExcluir').style.display = 'inline-block';
+  document.getElementById('tipo').value = ev.tipo;
+  document.getElementById('titulo').value = ev.titulo;
+  document.getElementById('data').value = ev.data;
+  document.getElementById('hora').value = ev.hora;
+  document.getElementById('qtd').value = ev.reminderQtd;
+  document.getElementById('unidade').value = ev.reminderUnidade;
+  document.getElementById('eventOverlay').classList.add('show');
+}
+function fecharModalEvento(){ document.getElementById('eventOverlay').classList.remove('show'); }
+
+document.getElementById('eventForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const tipo = document.getElementById('tipo').value;
+  const titulo = document.getElementById('titulo').value.trim();
+  const data = document.getElementById('data').value;
+  const hora = document.getElementById('hora').value;
+  const reminderQtd = parseFloat(document.getElementById('qtd').value);
+  const reminderUnidade = document.getElementById('unidade').value;
+  if(!titulo || !data || !hora) return;
+
+  if(editId){
+    const ev = events.find(e=>e.id===editId);
+    Object.assign(ev, { tipo, titulo, data, hora, reminderQtd, reminderUnidade, notified:false });
+    await pushToSheets('update', ev);
+  } else {
+    const ev = {
+      id: (crypto.randomUUID ? crypto.randomUUID() : 'ev_'+Date.now()),
+      tipo, titulo, data, hora, reminderQtd, reminderUnidade, notified:false
+    };
+    events.push(ev);
+    await pushToSheets('create', ev);
+  }
+  saveLocalEvents();
+  render();
+  fecharModalEvento();
+});
+
+async function excluirEvento(){
+  if(!editId) return;
+  if(!confirm('Excluir este registro?')) return;
+  const ev = events.find(e=>e.id===editId);
+  events = events.filter(e=>e.id!==editId);
+  await pushToSheets('delete', ev);
+  saveLocalEvents();
+  render();
+  fecharModalEvento();
+}
+
+/* ---------- modal: imagens por situação ---------- */
+function abrirModalImagens(){
+  renderImgList();
+  document.getElementById('imageOverlay').classList.add('show');
+}
+function fecharModalImagens(){ document.getElementById('imageOverlay').classList.remove('show'); }
+
+function renderImgList(){
+  const wrap = document.getElementById('imgList');
+  wrap.innerHTML = Object.keys(CATEGORIES).map(key=>{
+    const cat = CATEGORIES[key];
+    const img = images[key];
+    const thumb = img
+      ? '<img class="img-thumb" src="' + img + '">'
+      : '<div class="img-thumb empty" style="background:' + cat.color + '22;">' + cat.icon.replace(/white/g, cat.color) + '</div>';
+    return '' +
+      '<div class="img-row">' +
+        thumb +
+        '<span class="img-cat-label">' + cat.label + '</span>' +
+        '<div class="img-actions">' +
+          '<label class="file-btn">Escolher<input type="file" accept="image/*" onchange="salvarImagem(\'' + key + '\', this)"></label>' +
+          (img ? '<button class="remove-link" onclick="removerImagem(\'' + key + '\')">Remover</button>' : '') +
+        '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function salvarImagem(tipo, input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    images[tipo] = e.target.result;
+    saveLocalImages();
+    renderImgList();
+  };
+  reader.readAsDataURL(file);
+}
+function removerImagem(tipo){
+  delete images[tipo];
+  saveLocalImages();
+  renderImgList();
+}
+
+/* ---------- lista principal ---------- */
+function excluirRapido(id, evt){
+  evt.stopPropagation();
+  const ev = events.find(e=>e.id===id);
+  if(!confirm('Excluir este registro?')) return;
+  events = events.filter(e=>e.id!==id);
+  pushToSheets('delete', ev);
+  saveLocalEvents();
+  render();
+}
+
+function formatDiaLabel(date){
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const alvo = new Date(date); alvo.setHours(0,0,0,0);
+  const diffDias = Math.round((alvo - hoje) / 86400000);
+  if(diffDias === 0) return 'Hoje';
+  if(diffDias === 1) return 'Amanhã';
+  if(diffDias === -1) return 'Ontem';
+  return alvo.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' });
+}
+function formatHora(date){ return date.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }); }
+
+function render(){
+  const list = document.getElementById('list');
+  if(events.length === 0){
+    list.innerHTML = '<div class="empty-state">Nenhum compromisso registrado ainda. Toque no botão + para adicionar.</div>';
+    return;
+  }
+  const ordenados = events.map(function(ev){
+    const copy = Object.assign({}, ev);
+    copy._dt = new Date(ev.data + 'T' + ev.hora);
+    return copy;
+  }).sort((a,b)=> a._dt - b._dt);
+
+  const grupos = {};
+  ordenados.forEach(ev=>{
+    const key = ev._dt.toDateString();
+    if(!grupos[key]) grupos[key] = [];
+    grupos[key].push(ev);
+  });
+  const now = new Date();
+  let html = '';
+  Object.keys(grupos).forEach(key=>{
+    const grupo = grupos[key];
+    html += '<div class="day-group"><h3>' + formatDiaLabel(grupo[0]._dt) + '</h3>';
+    grupo.forEach(ev=>{
+      const cat = CATEGORIES[ev.tipo];
+      const past = ev._dt < now ? 'past' : '';
+      html += '' +
+        '<div class="event-row ' + past + '" onclick="abrirModalEditar(\'' + ev.id + '\')">' +
+          '<div class="accent-bar" style="background:' + cat.color + '"></div>' +
+          '<div class="event-icon" style="background:' + cat.color + '">' + cat.icon + '</div>' +
+          '<div class="event-info">' +
+            '<p class="title-line">' + ev.titulo + '</p>' +
+            '<p class="meta-line">' + cat.label + ' · ' + formatHora(ev._dt) + ' · aviso ' + ev.reminderQtd + ' ' + ev.reminderUnidade + ' antes</p>' +
+          '</div>' +
+          '<button class="del-btn" onclick="excluirRapido(\'' + ev.id + '\', event)" title="Excluir">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>' +
+          '</button>' +
+        '</div>';
+    });
+    html += '</div>';
+  });
+  list.innerHTML = html;
+}
+
+/* ---------- alerta em tela cheia ---------- */
+function dispararAviso(ev){
+  const cat = CATEGORIES[ev.tipo];
+  document.getElementById('alertStrip').style.background = cat.color;
+  document.getElementById('alertCat').textContent = cat.label;
+  document.getElementById('alertTitle').textContent = ev.titulo;
+  document.getElementById('alertTime').textContent = 'às ' + formatHora(new Date(ev.data+'T'+ev.hora));
+
+  const img = images[ev.tipo];
+  document.getElementById('alertImageWrap').innerHTML = img
+    ? '<img class="alert-image" src="' + img + '">'
+    : '<div class="alert-noimg">Nenhuma imagem salva para "' + cat.label + '". Adicione uma em "Imagens por situação".</div>';
+
+  document.getElementById('alertOverlay').classList.add('show');
+  if(soundReady) playChime();
+  vibrar();
+  if('Notification' in window && Notification.permission === 'granted'){
+    new Notification(cat.label + ': ' + ev.titulo, { body: 'às ' + formatHora(new Date(ev.data+'T'+ev.hora)) });
+  }
+}
+function fecharAlerta(){ document.getElementById('alertOverlay').classList.remove('show'); }
+
+function checarLembretes(){
+  const now = Date.now();
+  let mudou = false;
+  events.forEach(ev=>{
+    if(!ev.notified){
+      const evTime = new Date(ev.data+'T'+ev.hora).getTime();
+      const trigger = evTime - (ev.reminderQtd * UNIT_MS[ev.reminderUnidade]);
+      if(now >= trigger){
+        ev.notified = true;
+        dispararAviso(ev);
+        pushToSheets('notify', ev);
+        mudou = true;
+      }
+    }
+  });
+  if(mudou) saveLocalEvents();
+}
+
+/* ---------- inicialização ---------- */
+async function init(){
+  setStatus();
+  images = loadLocalImages();
+  events = loadLocalEvents();
+  render();
+
+  if(sheetsAtivo()){
+    const remoto = await fetchFromSheets();
+    if(remoto){
+      events = remoto;
+      saveLocalEvents();
+      render();
+    }
+  }
+  setInterval(checarLembretes, 15000);
+}
+init();
+</script>
+
+</body>
+</html>
