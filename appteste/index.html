@@ -80,7 +80,7 @@
             <button @click="$refs.calendario.showPicker()" class="absolute top-4 right-4 bg-white/10 border border-white/20 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-calendar-alt text-xs"></i></button>
             <input type="date" ref="calendario" v-model="dataPedido" class="absolute opacity-0 w-0 h-0">
 
-            <div class="logo-frame w-20 h-20 mx-auto mb-3 flex items-center justify-center">
+            <div class="logo-frame w-24 h-24 mx-auto mb-3 flex items-center justify-center">
                 <img src="logoqualquimy.jpg" alt="Logo Qualy Quimy" class="w-full h-full object-contain rounded-xl">
             </div>
 
@@ -116,8 +116,8 @@
         <main class="p-5 flex-1">
             <div class="grid grid-cols-2 gap-3">
                 <div v-for="cat in categoriasSetup" @click="cat.info ? (modal = 'infoUso') : abrirCategoria(cat.nome)" class="bg-white p-3 rounded-[1.75rem] shadow-sm flex flex-col items-center border border-slate-100 active:scale-95 transition-all cursor-pointer">
-                    <div :class="cat.bg" class="w-9 h-9 rounded-xl flex items-center justify-center mb-1.5">
-                        <i :class="[cat.icon, cat.color]" class="text-lg"></i>
+                    <div :class="cat.bg" class="w-8 h-8 rounded-lg flex items-center justify-center mb-1.5">
+                        <i :class="[cat.icon, cat.color]" class="text-xl"></i>
                     </div>
                     <span class="font-bold text-gray-700 text-[9px] uppercase">{{ cat.nome }}</span>
                 </div>
@@ -261,9 +261,19 @@
                 <button @click="modal = null" class="w-10 h-10 bg-slate-100 rounded-full font-bold shrink-0">&times;</button>
             </div>
 
-            <!-- Conteúdo abaixo é um modelo — edite os textos de cada bloco com a
-                 orientação real de cada linha de produto antes de publicar. -->
+            <!-- Se a aba "Como Usar" da planilha estiver preenchida e publicada,
+                 o conteúdo abaixo vem direto dela, por categoria. Sem isso,
+                 mostra um texto padrão genérico. -->
             <div class="overflow-y-auto space-y-4 pb-6 text-left">
+                <template v-if="comoUsar.length">
+                    <div v-for="c in comoUsar" :key="c.categoria" class="p-4 bg-sky-50 border border-sky-100 rounded-2xl">
+                        <p class="font-black text-blue-900 text-sm uppercase tracking-wide mb-2">{{ c.categoria }}</p>
+                        <p v-if="c.ondeUsar" class="text-slate-600 text-[13px] leading-relaxed mb-2"><i class="fas fa-circle-check text-emerald-500 mr-1"></i> <strong>Onde usar:</strong> {{ c.ondeUsar }}</p>
+                        <p v-if="c.ondeNaoUsar" class="text-slate-600 text-[13px] leading-relaxed mb-2"><i class="fas fa-ban text-red-500 mr-1"></i> <strong>Onde não usar:</strong> {{ c.ondeNaoUsar }}</p>
+                        <p v-if="c.obs" class="text-slate-500 text-[12px] italic leading-relaxed">{{ c.obs }}</p>
+                    </div>
+                </template>
+                <template v-else>
                 <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
                     <p class="font-black text-emerald-700 text-xs uppercase tracking-wide mb-1"><i class="fas fa-circle-check mr-1"></i> Uso Interno</p>
                     <p class="text-slate-600 text-[13px] leading-relaxed">Ambientes secos e protegidos (quartos, salas, corredores). Indicado: Standard, Premium, Latex, Massa Corrida PVA.</p>
@@ -284,6 +294,7 @@
                     <p class="font-black text-slate-600 text-xs uppercase tracking-wide mb-1"><i class="fas fa-info-circle mr-1"></i> Em caso de dúvida</p>
                     <p class="text-slate-600 text-[13px] leading-relaxed">Consulte o vendedor antes de comprar — a aplicação errada pode reduzir a durabilidade e o rendimento do produto.</p>
                 </div>
+                </template>
             </div>
         </div>
     </div>
@@ -403,6 +414,11 @@
    ===================================================================== */
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSIKrMVG0DNULg5UxWo1yJlH9eZD_nTrMpjw2o5nD842MuZCOAN-pnbAKyEgkpkKJ_pDAh7Z_vLxF-a/pub?gid=867058318&single=true&output=csv";
 
+/* Link CSV publicado da aba "Como Usar" da mesma planilha. Publique essa aba
+   separadamente (Arquivo > Compartilhar > Publicar na Web > selecione a aba
+   "Como Usar" > formato CSV) e cole o link gerado aqui. */
+const CSV_URL_COMO_USAR = "COLE_AQUI_O_LINK_CSV_DA_ABA_COMO_USAR";
+
 /* Arquivo (ou link) do catálogo de cores único, usado por todos os produtos
    "Na Cor". Coloque o PDF na mesma pasta do index.html e deixe só o nome do
    arquivo, ou troque por um link completo (https://...) se preferir hospedar
@@ -446,6 +462,7 @@ createApp({
             categoriaAtiva: '', prodSel: {}, qtd: 1, carrinho: [], dataPedido: '',
             corInput: '', corEscolhida: '',
             produtos: [],
+            comoUsar: [],
             carregando: true,
             erroCarregamento: null,
             categoriasSetup: [
@@ -538,6 +555,31 @@ createApp({
                     this.carregando = false;
                 });
         },
+        carregarComoUsar() {
+            if (!CSV_URL_COMO_USAR || CSV_URL_COMO_USAR.indexOf('COLE_AQUI') !== -1) return;
+            fetch(CSV_URL_COMO_USAR)
+                .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+                .then(texto => {
+                    const parsed = Papa.parse(texto, { header: true, skipEmptyLines: true });
+                    const cabecalhos = {};
+                    (parsed.meta.fields || []).forEach(f => { cabecalhos[normalizarCabecalho(f)] = f; });
+                    const get = (row, chave) => cabecalhos[chave] !== undefined ? row[cabecalhos[chave]] : undefined;
+
+                    const lista = [];
+                    parsed.data.forEach(row => {
+                        const categoria = (get(row, 'categoria') || '').trim();
+                        if (!categoria) return;
+                        lista.push({
+                            categoria,
+                            ondeUsar: (get(row, 'ondeusar') || '').trim(),
+                            ondeNaoUsar: (get(row, 'ondenaousar') || '').trim(),
+                            obs: (get(row, 'observacoes') || '').trim(),
+                        });
+                    });
+                    this.comoUsar = lista;
+                })
+                .catch(() => { /* silencioso: se falhar, o modal mostra o texto padrão */ });
+        },
         abrirCategoria(c) { this.categoriaAtiva = c; this.modal = 'produtos'; },
         selecionarProduto(p) {
             this.prodSel = p;
@@ -621,6 +663,7 @@ createApp({
     },
     mounted() {
         this.carregarProdutos();
+        this.carregarComoUsar();
     }
 }).mount('#app')
 </script>
