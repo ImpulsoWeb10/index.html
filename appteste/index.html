@@ -353,7 +353,8 @@
             <p class="text-[11px] text-slate-400 mb-5 leading-relaxed">Consulte o catálogo e escreva o nome ou código da cor escolhida.</p>
 
             <button @click="abrirCatalogoCores" class="mx-auto mb-6 flex items-center gap-2 border border-slate-300 text-slate-600 text-[11px] font-semibold px-4 py-2 rounded-full hover:border-blue-400 hover:text-blue-600 transition-colors">
-                <i class="fas fa-file-pdf text-[11px]"></i> Abrir catálogo de cores
+                <i :class="catalogoEhImagem ? 'fas fa-image' : 'fas fa-file-pdf'" class="text-[11px]"></i>
+                {{ catalogoEhImagem ? 'Ver tabela de cores' : 'Abrir catálogo de cores' }}
             </button>
 
             <input v-model="corInput" @keyup.enter="salvarCor" placeholder="Ex: Azul Céu, Amarelo Canário..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-sm outline-none focus:border-emerald-400 mb-6 text-center font-medium text-slate-800">
@@ -361,6 +362,11 @@
             <button @click="salvarCor" :disabled="!corInput.trim()" class="w-full bg-emerald-600 text-white text-sm font-bold py-3.5 rounded-2xl mb-2 disabled:opacity-40 shadow-sm hover:bg-emerald-700 transition-colors">Salvar e continuar</button>
             <button @click="modal = 'detalhe'" class="w-full py-2 text-slate-400 text-[10px] font-bold uppercase tracking-wide hover:text-slate-600 transition-colors">Cancelar</button>
         </div>
+    </div>
+
+    <div v-if="modal == 'verCatalogoImagem'" class="fixed inset-0 z-[80] bg-black/90 flex flex-col items-center justify-center p-6" @click="modal = 'escolherCor'">
+        <img :src="catalogoArquivo" class="max-h-[75vh] max-w-full rounded-2xl shadow-2xl" @click.stop>
+        <button @click="modal = 'escolherCor'" class="mt-6 bg-white/20 text-white font-black text-[10px] uppercase px-6 py-3 rounded-full">Fechar</button>
     </div>
 
     <div id="pdf-template" style="display:none; width: 700px; max-width: 100%; margin: 0 auto; padding: 20px; font-family: sans-serif; background: white; text-align: center;">
@@ -400,9 +406,9 @@
     </div>
 
     <footer class="mt-auto py-5 text-center border-t border-slate-100 bg-slate-50">
-        <p class="text-[9px] text-slate-300 mb-1"><i class="fas fa-lock text-[8px]"></i> Protegido por SSL</p>
+        <p class="text-[9px] text-slate-500 font-semibold mb-1"><i class="fas fa-lock text-[8px]"></i> Protegido por SSL</p>
         <!-- Troque o href abaixo pelo site/whatsapp da ImpulsoWeb10, se quiser outro link -->
-        <a href="https://avaliar.impulsoweb10.com.br" target="_blank" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest hover:text-blue-500 transition-colors">Desenvolvido por ImpulsoWeb10</a>
+        <a href="https://impulsoweb10.com.br" target="_blank" class="text-[9px] font-black text-slate-700 uppercase tracking-widest hover:text-blue-600 transition-colors">Desenvolvido por ImpulsoWeb10</a>
     </footer>
 </div>
 
@@ -419,11 +425,26 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSIKrMVG0DNULg5
    "Como Usar" > formato CSV) e cole o link gerado aqui. */
 const CSV_URL_COMO_USAR = "COLE_AQUI_O_LINK_CSV_DA_ABA_COMO_USAR";
 
-/* Arquivo (ou link) do catálogo de cores único, usado por todos os produtos
-   "Na Cor". Coloque o PDF na mesma pasta do index.html e deixe só o nome do
-   arquivo, ou troque por um link completo (https://...) se preferir hospedar
-   em outro lugar. */
+/* Catálogo de cores padrão (usado quando o produto não tem uma imagem
+   específica no mapa abaixo). Coloque o arquivo na mesma pasta do index.html. */
 const CATALOGO_CORES = "catalogoqualy.pdf";
+
+/* Catálogos específicos por produto: a chave é o nome do "Produto" exatamente
+   como está na planilha (sem acentuação importa pouco, a comparação ignora
+   maiúsculas/acentos), o valor é o nome do arquivo de imagem que você vai
+   subir na mesma pasta do index.html. Adicione mais linhas aqui conforme for
+   subindo novas imagens. */
+const CATALOGO_POR_PRODUTO = {
+    "qualy color economica": "qualycolor.png",
+    "standard": "standard.png",
+    "premium": "premium.png",
+};
+
+function chaveCatalogo(texto) {
+    return (texto || '')
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase().trim();
+}
 
 function normalizarCabecalho(h) {
     return (h || '')
@@ -478,6 +499,12 @@ createApp({
     computed: {
         csvConfigurado() { return CSV_URL && CSV_URL.indexOf('COLE_AQUI') === -1; },
         precisaCor() { return !!(this.prodSel && this.prodSel.cor && this.prodSel.cor !== '-' && this.prodSel.cor !== 'Branca'); },
+        catalogoArquivo() {
+            if (!this.prodSel || !this.prodSel.produto) return CATALOGO_CORES;
+            const chave = chaveCatalogo(this.prodSel.produto);
+            return CATALOGO_POR_PRODUTO[chave] || CATALOGO_CORES;
+        },
+        catalogoEhImagem() { return /\.(png|jpe?g|webp|gif)$/i.test(this.catalogoArquivo); },
         produtosFiltrados() { return this.produtos.filter(p => p.categoria === this.categoriaAtiva); },
         gruposFiltrados() {
             const grupos = {};
@@ -597,7 +624,11 @@ createApp({
             this.modal = 'escolherCor';
         },
         abrirCatalogoCores() {
-            window.open(CATALOGO_CORES, '_blank');
+            if (this.catalogoEhImagem) {
+                this.modal = 'verCatalogoImagem';
+            } else {
+                window.open(this.catalogoArquivo, '_blank');
+            }
         },
         salvarCor() {
             if (!this.corInput.trim()) return;
