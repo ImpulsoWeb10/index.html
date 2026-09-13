@@ -116,8 +116,8 @@
         <main class="p-5 flex-1">
             <div class="grid grid-cols-2 gap-3">
                 <div v-for="cat in categoriasSetup" @click="cat.info ? (modal = 'infoUso') : abrirCategoria(cat.nome)" class="bg-white p-3 rounded-[1.75rem] shadow-sm flex flex-col items-center border border-slate-100 active:scale-95 transition-all cursor-pointer">
-                    <div :class="cat.bg" class="w-8 h-8 rounded-lg flex items-center justify-center mb-1.5">
-                        <i :class="[cat.icon, cat.color]" class="text-xl"></i>
+                    <div :class="cat.bg" class="w-8 h-8 rounded-lg flex items-center justify-center mb-1.5 overflow-visible">
+                        <i :class="[cat.icon, cat.color]" class="text-3xl"></i>
                     </div>
                     <span class="font-bold text-gray-700 text-[9px] uppercase">{{ cat.nome }}</span>
                 </div>
