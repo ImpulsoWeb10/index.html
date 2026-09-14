@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Contagem Profissional CCB</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding-bottom: 200px; }
+        .header { background: #1a2a3a; color: white; text-align: center; padding: 10px; position: sticky; top: 0; z-index: 10; }
+        .container { padding: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn-item { background: white; border: 1px solid #ddd; padding: 18px 10px; border-radius: 10px; font-weight: bold; cursor: pointer; color: #333; }
+        
+        /* ALERTA DE SALDO */
+        .barra-saldo { background: #f1c40f; color: #1a2a3a; padding: 10px; text-align: center; font-weight: bold; position: sticky; top: 60px; z-index: 9; }
+
+        /* MODAIS */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; }
+        .seletor { display: flex; justify-content: center; align-items: center; gap: 15px; margin: 15px 0; }
+        .btn-c { width: 50px; height: 50px; border: none; border-radius: 12px; font-size: 1.8em; color: white; font-weight: bold; }
+        .mais { background: #27ae60; } .menos { background: #e74c3c; }
+        .confirmar { background: #27ae60; color: white; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; }
+
+        /* RODAPÉ */
+        .footer { position: fixed; bottom: 0; width: 100%; background: #1a2a3a; color: white; padding: 12px; box-sizing: border-box; font-size: 0.85em; }
+        .stats-linha { display: flex; justify-content: space-around; margin-bottom: 8px; border-bottom: 1px solid #334; padding-bottom: 5px; }
+        .total-g { display: flex; justify-content: space-between; font-size: 1.2em; font-weight: bold; color: #f1c40f; margin-bottom: 8px; }
+        .acoes { display: flex; gap: 8px; }
+        .btn-f { flex: 1; border: none; padding: 8px; border-radius: 5px; font-weight: bold; font-size: 0.8em; cursor: pointer; }
+        .btn-res { background: #f1c40f; color: #111; }
+        .btn-zer { background: #c0392b; color: white; }
+
+        #tela-inst { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div style="font-size: 0.7em; color: #f1c40f;" id="data-topo"></div>
+        <div style="font-size: 1em; font-weight: bold;">Ensaio Regional Aracaré</div>
+    </div>
+
+    <div id="aviso-saldo" class="barra-saldo" style="display:none;">
+        Restam <span id="saldo-num">0</span> músicos da comum <span id="saldo-comum"></span>
+    </div>
+
+    <div id="tela-comum" class="container">
+        <h4 style="text-align: center; color: #555;">1. Selecione a Comum</h4>
+        <div class="grid" id="lista-comuns"></div>
+    </div>
+
+    <div id="tela-inst" class="container">
+        <div class="grid" id="lista-instrumentos"></div>
+    </div>
+
+    <div id="modal-global" class="modal">
+        <div class="modal-content">
+            <h3 id="modal-titulo" style="margin-top:0;">Qtd</h3>
+            <div class="seletor">
+                <button class="btn-c menos" onclick="mudarQtd(-1)">-</button>
+                <span id="valor-modal" style="font-size: 3em; font-weight: bold;">1</span>
+                <button class="btn-c mais" onclick="mudarQtd(1)">+</button>
+            </div>
+            <button class="confirmar" onclick="confirmarStep()">CONFIRMAR</button>
+            <button onclick="fecharModal()" style="background:none; border:none; color:#999; margin-top:15px;">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="stats-linha">
+            <div>🎻 <span id="rCordas">0</span> (<span id="pCordas">0</span>%)</div>
+            <div>🎷 <span id="rMadeiras">0</span> (<span id="pMadeiras">0</span>%)</div>
+            <div>🎺 <span id="rMetais">0</span> (<span id="pMetais">0</span>%)</div>
+        </div>
+        <div class="total-g">
+            <span>TOTAL GERAL:</span>
+            <span id="rTotal">0</span>
+        </div>
+        <div class="acoes">
+            <button class="btn-f btn-res" onclick="gerarResumo()">RESUMO WHATSAPP</button>
+            <button class="btn-f btn-zer" onclick="limparTudo()">ZERAR</button>
+        </div>
+    </div>
+
+<script>
+    const comunsNomes = ["Jardim Adriane", "Água das Pedras", "Jardim Amazonas", "Aracaré", "Vila Arizona", "Jardim Caiuby", "Jardim Canaã", "Jardim do Carmo", "Jardim Carolina", "Central", "Cidade Nova Louzada", "Jardim Estancia Guatambú", "Parque Residencial Furtuna", "Vila Japão", "Jardim Itapuã", "Jardim Itaquá", "Jardim Josely", "Jardim Karine", "Jardim Marcelo", "Parque Macedo", "Parque Marengo", "Parque Residencial Marengo", "Jardim Maria Eliza", "Jardim Maria Rosa", "Monte Belo", "Jardim Miray", "Jardim Monica", "Jardim Moraes", "Sítio José de Moraes", "Morro Branco", "Vila Nely", "Parque Novo Horizonte", "Jardim Odete", "Jardim Paineira", "Jardim Patricia", "Pedreira", "Jardim Pinheirinho", "Parque Piratininga I", "Parque Piratininga II", "Pium", "Rancho Grande", "Vila São Carlos", "Parque São Pedro", "Jardim São Paulo", "Scaffid", "Jardim Silvestre", "Vila Sônia", "Terra Prometida", "Jardim Tropical", "Parque Village", "Vila Virginia"];
+    
+    const instrumentos = [
+        {n: "Organistas", t: "cordas"}, {n: "Violino", t: "cordas"}, {n: "Viola", t: "cordas"}, {n: "Violoncelo", t: "cordas"},
+        {n: "Flauta", t: "madeiras"}, {n: "Clarinete", t: "madeiras"}, {n: "Sax Alto", t: "madeiras"}, {n: "Sax Tenor", t: "madeiras"},
+        {n: "Trompete", t: "metais"}, {n: "Trompa", t: "metais"}, {n: "Trombone", t: "metais"}, {n: "Tuba", t: "metais"}, {n: "Eufônio", t: "metais"}
+    ];
+
+    let banco = JSON.parse(localStorage.getItem('banco_ensaio')) || { totais: {cordas:0, madeiras:0, metais:0}, porComum: {} };
+    let step = "comum", tempComum = "", tempInst = "", tempTipo = "", qtdModal = 1, saldoGrupo = 0;
+
+    function init() {
+        document.getElementById('data-topo').innerText = new Date().toLocaleDateString('pt-BR', {day:'2-digit', month:'long', year:'numeric'});
+        const divC = document.getElementById('lista-comuns');
+        comunsNomes.forEach(c => {
+            let b = document.createElement('button'); b.className = 'btn-item'; b.innerText = c;
+            b.onclick = () => { tempComum = c; openModal("comum"); };
+            divC.appendChild(b);
+        });
+        const divI = document.getElementById('lista-instrumentos');
+        instrumentos.forEach(i => {
+            let b = document.createElement('button'); b.className = 'btn-item'; b.innerText = i.n;
+            b.onclick = () => { tempInst = i.n; tempTipo = i.t; openModal("inst"); };
+            divI.appendChild(b);
+        });
+        atualizarRodape();
+    }
+
+    function openModal(tipo) {
+        step = tipo; qtdModal = 1;
+        document.getElementById('valor-modal').innerText = "1";
+        document.getElementById('modal-titulo').innerText = tipo === "comum" ? tempComum : tempInst;
+        if(tipo === "inst" && saldoGrupo < qtdModal) qtdModal = saldoGrupo; // Não deixa marcar mais que o saldo
+        document.getElementById('modal-global').style.display = 'flex';
+    }
+
+    function mudarQtd(v) {
+        let max = (step === "inst") ? saldoGrupo : 99;
+        qtdModal = Math.max(1, Math.min(max, qtdModal + v));
+        document.getElementById('valor-modal').innerText = qtdModal;
+    }
+
+    function fecharModal() { document.getElementById('modal-global').style.display = 'none'; }
+
+    function confirmarStep() {
+        fecharModal();
+        if(step === "comum") {
+            saldoGrupo = qtdModal;
+            document.getElementById('tela-comum').style.display = 'none';
+            document.getElementById('tela-inst').style.display = 'block';
+            document.getElementById('aviso-saldo').style.display = 'block';
+            atualizarSaldoBarra();
+        } else {
+            // Salva nos totais
+            banco.totais[tempTipo] += qtdModal;
+            // Salva por comum
+            banco.porComum[tempComum] = (banco.porComum[tempComum] || 0) + qtdModal;
+            saldoGrupo -= qtdModal;
+            
+            if(saldoGrupo <= 0) {
+                document.getElementById('tela-comum').style.display = 'block';
+                document.getElementById('tela-inst').style.display = 'none';
+                document.getElementById('aviso-saldo').style.display = 'none';
+            } else {
+                atualizarSaldoBarra();
+            }
+            localStorage.setItem('banco_ensaio', JSON.stringify(banco));
+            atualizarRodape();
+        }
+    }
+
+    function atualizarSaldoBarra() {
+        document.getElementById('saldo-num').innerText = saldoGrupo;
+        document.getElementById('saldo-comum').innerText = tempComum;
+    }
+
+    function atualizarRodape() {
+        const t = banco.totais;
+        const total = t.cordas + t.madeiras + t.metais;
+        document.getElementById('rCordas').innerText = t.cordas;
+        document.getElementById('rMadeiras').innerText = t.madeiras;
+        document.getElementById('rMetais').innerText = t.metais;
+        document.getElementById('rTotal').innerText = total;
+        
+        if(total > 0) {
+            document.getElementById('pCordas').innerText = Math.round((t.cordas/total)*100);
+            document.getElementById('pMadeiras').innerText = Math.round((t.madeiras/total)*100);
+            document.getElementById('pMetais').innerText = Math.round((t.metais/total)*100);
+        }
+    }
+
+    function gerarResumo() {
+        const total = banco.totais.cordas + banco.totais.madeiras + banco.totais.metais;
+        if(total === 0) return alert("Sem dados.");
+        let txt = `*RELATÓRIO REGIONAL ARACARÉ*\n\n*FAMÍLIAS:*\n🎻 Cordas: ${banco.totais.cordas}\n🎷 Madeiras: ${banco.totais.madeiras}\n🎺 Metais: ${banco.totais.metais}\n\n*POR COMUM:*\n`;
+        
+        for(let c in banco.porComum) {
+            txt += `• ${c}: ${banco.porComum[c]}\n`;
+        }
+        txt += `\n*TOTAL GERAL: ${total} MÚSICOS*`;
+        
+        if(navigator.share) navigator.share({text: txt}); else console.log(txt);
+    }
+
+    function limparTudo() {
+        if(confirm("Zerar relatório?")) {
+            banco = { totais: {cordas:0, madeiras:0, metais:0}, porComum: {} };
+            localStorage.removeItem('banco_ensaio');
+            atualizarRodape();
+        }
+    }
+    init();
+</script>
+</body>
+</html>
