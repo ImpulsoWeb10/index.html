@@ -3,276 +3,332 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ótica Dolce Visione — Suzano</title>
-<meta name="description" content="Ótica Dolce Visione: visão, qualidade e estilo. Loja física em Suzano e e-commerce para todo o Brasil, em até 10x.">
+<title>Ótica Dolce Visione — Visão, Elegância & Estilo</title>
+<meta name="description" content="Ótica Dolce Visione: alta ótica, curadoria exclusiva e estilo único. Loja física em Suzano e entrega para todo o Brasil em até 10x sem juros.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --black:#121012;
-    --black-2:#1b181a;
-    --gold:#c9a227;
-    --gold-light:#e3c25f;
-    --rose:#d6538b;
-    --cream:#f7f2e8;
-    --cream-2:#efe7d6;
-    --ink:#1c1712;
-    --line: rgba(247,242,232,0.14);
-    --line-dark: rgba(28,23,18,0.12);
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--cream);
-    color:var(--ink);
-    font-family:'Inter',sans-serif;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  h1,h2,h3,.serif{
-    font-family:'Fraunces',serif;
-    font-weight:500;
-    letter-spacing:-0.01em;
-  }
-  a{color:inherit;text-decoration:none;}
-  img,svg{display:block;max-width:100%;}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
-  ::selection{background:var(--gold-light);color:var(--black);}
-
-  /* focus visibility */
-  a:focus-visible, button:focus-visible{
-    outline:2px solid var(--rose);
-    outline-offset:3px;
+  :root {
+    --bg-dark: #0b0a0a;
+    --bg-card: #141213;
+    --bg-card-hover: #1c1a1b;
+    --champagne: #e5c378;
+    --champagne-light: #f3e3b6;
+    --rose-accent: #e0528e;
+    --cream: #f9f6f0;
+    --cream-muted: rgba(249, 246, 240, 0.65);
+    --border-dark: rgba(229, 195, 120, 0.15);
+    --border-light: rgba(0, 0, 0, 0.08);
+    --glass: rgba(20, 18, 19, 0.75);
   }
 
-  @media (prefers-reduced-motion: reduce){
-    *{animation:none !important; transition:none !important;}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--cream);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    line-height: 1.6;
   }
+
+  h1, h2, h3, .serif {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  
+  a { color: inherit; text-decoration: none; }
+  img, svg { display: block; max-width: 100%; }
+  .wrap { max-width: 1220px; margin: 0 auto; padding: 0 32px; }
+  ::selection { background: var(--champagne); color: var(--bg-dark); }
 
   /* ---------- HEADER ---------- */
-  header{
-    position:sticky;top:0;z-index:50;
-    background:rgba(18,16,18,0.92);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line);
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-dark);
+    transition: all 0.3s ease;
   }
-  .nav{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:16px 32px;max-width:1180px;margin:0 auto;
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 32px; max-width: 1220px; margin: 0 auto;
   }
-  .brand{display:flex;align-items:center;gap:12px;color:var(--cream);}
-  .brand-mark{width:40px;height:40px;flex-shrink:0;}
-  .brand-word{font-family:'Fraunces',serif;font-size:1.05rem;letter-spacing:0.02em;line-height:1.1;}
-  .brand-word span{display:block;font-family:'Inter',sans-serif;font-size:0.58rem;letter-spacing:0.18em;color:var(--gold-light);margin-top:2px;}
-  nav.links{display:flex;gap:34px;}
-  nav.links a{
-    color:rgba(247,242,232,0.78);font-size:0.92rem;
-    padding:6px 0;border-bottom:1px solid transparent;
-    transition:color .2s ease, border-color .2s ease;
+  .brand { display: flex; align-items: center; gap: 14px; color: var(--cream); }
+  .brand-mark { width: 42px; height: 42px; flex-shrink: 0; filter: drop-shadow(0 0 8px rgba(229,195,120,0.3)); }
+  .brand-word { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.1; }
+  .brand-word span { display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.55rem; font-weight: 600; letter-spacing: 0.22em; color: var(--champagne); margin-top: 3px; }
+  
+  nav.links { display: flex; gap: 36px; align-items: center; }
+  nav.links a {
+    color: var(--cream-muted); font-size: 0.88rem; font-weight: 500;
+    letter-spacing: 0.03em; position: relative; padding: 4px 0;
+    transition: color .3s ease;
   }
-  nav.links a:hover{color:var(--cream);border-color:var(--gold);}
-  .cta-btn{
-    display:inline-flex;align-items:center;gap:8px;
-    background:var(--gold);color:var(--black);
-    font-size:0.88rem;font-weight:600;
-    padding:11px 20px;border-radius:999px;
-    white-space:nowrap;
-    transition:background .2s ease, transform .2s ease;
+  nav.links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
+    background: var(--champagne); transition: width .3s ease;
   }
-  .cta-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
-  .menu-toggle{display:none;background:none;border:none;color:var(--cream);font-size:1.6rem;cursor:pointer;}
+  nav.links a:hover { color: var(--cream); }
+  nav.links a:hover::after { width: 100%; }
+
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, var(--champagne), #b89235);
+    color: var(--bg-dark); font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 12px 24px; border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(229, 195, 120, 0.25);
+    transition: all .3s ease;
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(229, 195, 120, 0.4);
+    background: linear-gradient(135deg, var(--champagne-light), var(--champagne));
+  }
+  
+  .menu-toggle { display: none; background: none; border: none; color: var(--cream); font-size: 1.8rem; cursor: pointer; }
 
   /* ---------- HERO ---------- */
-  .hero{
-    background:var(--black);
-    color:var(--cream);
-    position:relative;
-    padding:96px 0 120px;
-    overflow:hidden;
+  .hero {
+    position: relative; padding: 120px 0 100px;
+    background: radial-gradient(circle at 80% 20%, rgba(224, 82, 142, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(229, 195, 120, 0.06) 0%, transparent 50%);
   }
-  .hero .wrap{
-    display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;align-items:center;
-    position:relative;z-index:2;
+  .hero .wrap {
+    display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 60px; align-items: center;
   }
-  .eyebrow{
-    font-size:0.85rem;color:var(--gold-light);
-    display:flex;align-items:center;gap:10px;margin-bottom:22px;
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 6px 16px; border-radius: 30px;
+    background: rgba(229, 195, 120, 0.08); border: 1px solid var(--border-dark);
+    font-size: 0.8rem; font-weight: 600; color: var(--champagne);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 28px;
   }
-  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--rose);}
-  .hero h1{
-    font-size:clamp(2.4rem, 4.6vw, 4rem);
-    line-height:1.04;
-    max-width:11.5ch;
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--rose-accent); box-shadow: 0 0 8px var(--rose-accent); }
+  
+  .hero h1 {
+    font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: 1.05; margin-bottom: 24px;
   }
-  .hero h1 em{
-    font-style:italic;
-    background:linear-gradient(100deg,var(--gold-light),var(--rose));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
+  .hero h1 em {
+    font-style: italic; font-weight: 400;
+    background: linear-gradient(120deg, var(--champagne-light), var(--rose-accent));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .hero p.lead{
-    margin-top:26px;font-size:1.08rem;line-height:1.6;
-    color:rgba(247,242,232,0.72);max-width:42ch;
+  .hero p.lead {
+    font-size: 1.1rem; line-height: 1.7; color: var(--cream-muted);
+    max-width: 48ch; font-weight: 300;
   }
-  .hero-ctas{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap;}
-  .btn-outline{
-    display:inline-flex;align-items:center;gap:8px;
-    border:1px solid rgba(247,242,232,0.35);
-    color:var(--cream);padding:11px 22px;border-radius:999px;
-    font-size:0.9rem;transition:border-color .2s ease, background .2s ease;
+  
+  .hero-ctas { display: flex; gap: 18px; margin-top: 40px; flex-wrap: wrap; }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border-dark); color: var(--cream);
+    padding: 12px 26px; border-radius: 50px; font-size: 0.88rem; font-weight: 600;
+    background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(4px);
+    transition: all .3s ease;
   }
-  .btn-outline:hover{border-color:var(--cream);background:rgba(247,242,232,0.06);}
-  .hero-stats{display:flex;gap:36px;margin-top:56px;padding-top:32px;border-top:1px solid var(--line);}
-  .hero-stats div p:first-child{font-family:'Fraunces',serif;font-size:1.7rem;color:var(--gold-light);}
-  .hero-stats div p:last-child{font-size:0.8rem;color:rgba(247,242,232,0.6);margin-top:2px;}
+  .btn-outline:hover {
+    border-color: var(--champagne); background: rgba(229, 195, 120, 0.08); color: var(--champagne-light);
+  }
 
-  .hero-visual{position:relative;display:flex;align-items:center;justify-content:center;}
-  .ring-orbit{
-    position:absolute;inset:0;
-    border-radius:50%;
-    background:conic-gradient(from 210deg, var(--gold) 0deg, var(--rose) 130deg, var(--gold-light) 230deg, var(--gold) 360deg);
-    -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
-    mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
-    animation:spin 22s linear infinite;
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    margin-top: 60px; padding-top: 36px; border-top: 1px solid var(--border-dark);
   }
-  @keyframes spin{to{transform:rotate(360deg);}}
-  .hero-glasses{position:relative;z-index:2;width:78%;}
+  .hero-stats div p:first-child { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--champagne); line-height: 1; }
+  .hero-stats div p:last-child { font-size: 0.78rem; color: var(--cream-muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* VISUAL HERO */
+  .hero-visual { position: relative; display: flex; align-items: center; justify-content: center; }
+  .visual-card {
+    position: relative; width: 100%; aspect-ratio: 1/1; max-width: 440px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.005));
+    border: 1px solid var(--border-dark); border-radius: 30px;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(10px);
+  }
+  .ring-orbit {
+    position: absolute; inset: -20px; border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent, var(--champagne), transparent 60%, var(--rose-accent), transparent);
+    opacity: 0.3; animation: spin 20s linear infinite;
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hero-glasses { width: 80%; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); transition: transform 0.5s ease; }
+  .visual-card:hover .hero-glasses { transform: scale(1.05) rotate(-2deg); }
 
   /* ---------- MARQUEE STRIP ---------- */
-  .strip{
-    background:var(--gold);color:var(--black);
-    overflow:hidden;white-space:nowrap;
-    border-bottom:1px solid var(--black);
+  .strip {
+    background: linear-gradient(90deg, var(--champagne), var(--champagne-light), var(--champagne));
+    color: var(--bg-dark); overflow: hidden; white-space: nowrap; padding: 14px 0;
+    font-weight: 700; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase;
   }
-  .strip-track{
-    display:inline-flex;gap:48px;padding:13px 0;
-    animation:marquee 28s linear infinite;
-  }
-  .strip-track span{font-size:0.86rem;font-weight:600;letter-spacing:0.03em;display:inline-flex;align-items:center;gap:48px;}
-  @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  .strip-track { display: inline-flex; gap: 32px; animation: marquee 30s linear infinite; }
+  .strip-track span { display: inline-flex; align-items: center; gap: 32px; }
+  .strip-track span::after { content: '✦'; font-size: 0.6rem; opacity: 0.6; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-  /* ---------- SECTION GENERIC ---------- */
-  section{padding:104px 0;}
-  .section-head{max-width:640px;margin-bottom:56px;}
-  .kicker{color:var(--rose);font-size:0.9rem;margin-bottom:14px;}
-  .section-head h2{font-size:clamp(1.9rem,3.4vw,2.7rem);line-height:1.15;}
-  .section-head p{margin-top:16px;font-size:1.05rem;line-height:1.6;color:#4b453d;max-width:52ch;}
+  /* ---------- SECTIONS GENERAL ---------- */
+  section { padding: 120px 0; position: relative; }
+  .section-head { max-width: 680px; margin-bottom: 64px; }
+  .kicker { font-size: 0.8rem; font-weight: 700; color: var(--rose-accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px; }
+  .section-head h2 { font-size: clamp(2.2rem, 3.8vw, 3.2rem); line-height: 1.1; }
+  .section-head p { margin-top: 18px; font-size: 1.05rem; color: var(--cream-muted); font-weight: 300; }
 
   /* ---------- SOBRE ---------- */
-  .sobre{background:var(--cream);}
-  .sobre .grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:64px;align-items:start;}
-  .sobre-card{
-    background:var(--black);color:var(--cream);
-    border-radius:20px;padding:40px;position:relative;
-    aspect-ratio:4/5;display:flex;flex-direction:column;justify-content:space-between;
+  .sobre { background: #0f0e0f; }
+  .sobre .grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 64px; align-items: center; }
+  .sobre-card {
+    background: var(--bg-card); border: 1px solid var(--border-dark);
+    border-radius: 24px; padding: 48px; position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   }
-  .sobre-card .quote{font-family:'Fraunces',serif;font-style:italic;font-size:1.5rem;line-height:1.35;}
-  .sobre-card .who{font-size:0.85rem;color:var(--gold-light);margin-top:24px;}
-  .sobre-text p{font-size:1.06rem;line-height:1.75;color:#3a3530;margin-bottom:20px;max-width:58ch;}
-  .sobre-list{margin-top:32px;display:flex;flex-direction:column;gap:16px;}
-  .sobre-list .row{display:flex;gap:14px;align-items:flex-start;}
-  .sobre-list .ico{
-    width:34px;height:34px;flex-shrink:0;border-radius:50%;
-    background:var(--cream-2);display:flex;align-items:center;justify-content:center;
-    border:1px solid var(--line-dark);
+  .sobre-card::before {
+    content: '“'; font-family: 'Playfair Display', serif; font-size: 8rem;
+    position: absolute; top: -20px; left: 30px; color: var(--champagne); opacity: 0.15; line-height: 1;
   }
-  .sobre-list b{display:block;font-size:0.98rem;}
-  .sobre-list span{font-size:0.9rem;color:#5b554c;}
+  .sobre-card .quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.6rem; line-height: 1.4; color: var(--cream); position: relative; z-index: 2; }
+  .sobre-card .who { font-size: 0.85rem; font-weight: 600; color: var(--champagne); margin-top: 28px; letter-spacing: 0.05em; }
+  
+  .sobre-text p { font-size: 1.05rem; line-height: 1.8; color: var(--cream-muted); margin-bottom: 20px; font-weight: 300; }
+  .sobre-list { margin-top: 40px; display: flex; flex-direction: column; gap: 20px; }
+  .sobre-list .row { display: flex; gap: 18px; align-items: flex-start; }
+  .sobre-list .ico {
+    width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%;
+    background: rgba(229, 195, 120, 0.08); border: 1px solid var(--border-dark);
+    display: flex; align-items: center; justify-content: center; color: var(--champagne);
+  }
+  .sobre-list b { display: block; font-size: 1rem; color: var(--cream); margin-bottom: 2px; }
+  .sobre-list span { font-size: 0.88rem; color: var(--cream-muted); }
 
   /* ---------- DIFERENCIAIS ---------- */
-  .diferenciais{background:var(--black);color:var(--cream);}
-  .diferenciais .section-head p{color:rgba(247,242,232,0.66);}
-  .diferenciais .kicker{color:var(--gold-light);}
-  .dif-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;}
-  .dif-card{background:var(--black-2);padding:34px 28px;min-height:220px;display:flex;flex-direction:column;justify-content:space-between;transition:background .25s ease;}
-  .dif-card:hover{background:#221f21;}
-  .dif-card .ring{
-    width:44px;height:44px;border-radius:50%;
-    border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;
+  .diferenciais { background: var(--bg-dark); }
+  .dif-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .dif-card {
+    background: var(--bg-card); border: 1px solid var(--border-dark);
+    border-radius: 20px; padding: 36px 28px; display: flex; flex-direction: column; justify-content: space-between;
+    transition: all 0.3s ease;
   }
-  .dif-card h3{font-size:1.08rem;margin-top:22px;font-weight:500;}
-  .dif-card p{font-size:0.88rem;color:rgba(247,242,232,0.58);margin-top:8px;line-height:1.5;}
+  .dif-card:hover { background: var(--bg-card-hover); transform: translateY(-5px); border-color: rgba(229,195,120,0.3); }
+  .dif-card .ring {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(229,195,120,0.1), rgba(224,82,142,0.1));
+    border: 1px solid var(--border-dark); display: flex; align-items: center; justify-content: center;
+    color: var(--champagne); margin-bottom: 24px;
+  }
+  .dif-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 10px; color: var(--cream); }
+  .dif-card p { font-size: 0.88rem; color: var(--cream-muted); line-height: 1.6; font-weight: 300; }
 
   /* ---------- COLEÇÕES ---------- */
-  .colecoes{background:var(--cream);}
-  .col-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
-  .col-card{
-    border:1px solid var(--line-dark);border-radius:18px;padding:30px 26px;
-    background:#fffdf8;transition:transform .25s ease, box-shadow .25s ease;
+  .colecoes { background: #0c0b0c; }
+  .col-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .col-card {
+    border: 1px solid var(--border-dark); border-radius: 24px; padding: 36px 28px;
+    background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(10px);
+    transition: all 0.3s ease; position: relative; overflow: hidden;
   }
-  .col-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -20px rgba(28,23,18,0.28);}
-  .col-card .shape{width:52px;height:52px;margin-bottom:22px;}
-  .col-card h3{font-size:1.12rem;margin-bottom:8px;}
-  .col-card p{font-size:0.88rem;color:#5b554c;line-height:1.55;}
+  .col-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at top right, rgba(229, 195, 120, 0.08), transparent 70%);
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .col-card:hover { transform: translateY(-6px); border-color: var(--champagne); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+  .col-card:hover::before { opacity: 1; }
+  .col-card .shape { width: 56px; height: 56px; margin-bottom: 24px; position: relative; z-index: 2; }
+  .col-card h3 { font-size: 1.25rem; margin-bottom: 10px; position: relative; z-index: 2; }
+  .col-card p { font-size: 0.88rem; color: var(--cream-muted); line-height: 1.6; font-weight: 300; position: relative; z-index: 2; }
 
   /* ---------- DEPOIMENTOS ---------- */
-  .depo{background:var(--cream-2);}
-  .depo-track{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-  .depo-card{
-    background:#fffdf8;border-radius:18px;padding:32px;border:1px solid var(--line-dark);
-    display:flex;flex-direction:column;justify-content:space-between;min-height:220px;
+  .depo { background: var(--bg-dark); }
+  .depo-track { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .depo-card {
+    background: var(--bg-card); border-radius: 20px; padding: 36px; border: 1px solid var(--border-dark);
+    display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s ease;
   }
-  .stars{color:var(--gold);font-size:0.95rem;letter-spacing:2px;}
-  .depo-card p.txt{margin-top:16px;font-size:0.98rem;line-height:1.6;color:#3a3530;}
-  .depo-card .who{margin-top:22px;display:flex;align-items:center;gap:10px;}
-  .who-dot{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--rose));flex-shrink:0;}
-  .who b{font-size:0.88rem;display:block;}
-  .who span{font-size:0.78rem;color:#7a7367;}
-  .depo-note{margin-top:36px;font-size:0.82rem;color:#7a7367;}
+  .depo-card:hover { transform: translateY(-4px); }
+  .stars { color: var(--champagne); font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 18px; }
+  .depo-card p.txt { font-size: 0.95rem; line-height: 1.7; color: var(--cream-muted); font-style: italic; font-weight: 300; }
+  .depo-card .who { margin-top: 28px; display: flex; align-items: center; gap: 12px; }
+  .who-dot { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--champagne), var(--rose-accent)); flex-shrink: 0; }
+  .who b { font-size: 0.9rem; display: block; color: var(--cream); }
+  .who span { font-size: 0.78rem; color: var(--champagne); }
+  .depo-note { margin-top: 40px; font-size: 0.8rem; color: rgba(249, 246, 240, 0.4); text-align: center; }
 
   /* ---------- CONTATO ---------- */
-  .contato{background:var(--black);color:var(--cream);}
-  .contato .kicker{color:var(--gold-light);}
-  .cont-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:stretch;}
-  .cont-info{display:flex;flex-direction:column;gap:26px;}
-  .cont-row{display:flex;gap:16px;align-items:flex-start;padding-bottom:22px;border-bottom:1px solid var(--line);}
-  .cont-row:last-child{border-bottom:none;}
-  .cont-row .ico{width:36px;height:36px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .cont-row b{display:block;font-size:0.98rem;margin-bottom:4px;}
-  .cont-row span, .cont-row a{font-size:0.9rem;color:rgba(247,242,232,0.68);}
-  .cont-row a:hover{color:var(--gold-light);}
-  .map-wrap{border-radius:18px;overflow:hidden;border:1px solid var(--line);min-height:340px;}
-  .map-wrap iframe{width:100%;height:100%;min-height:340px;border:0;filter:grayscale(0.15) contrast(1.05);}
+  .contato { background: #0a0909; }
+  .cont-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .cont-info { display: flex; flex-direction: column; gap: 28px; }
+  .cont-row { display: flex; gap: 18px; align-items: flex-start; padding-bottom: 24px; border-bottom: 1px solid var(--border-dark); }
+  .cont-row:last-child { border-bottom: none; }
+  .cont-row .ico {
+    width: 42px; height: 42px; border-radius: 50%; background: rgba(229,195,120,0.05);
+    border: 1px solid var(--border-dark); display: flex; align-items: center; justify-content: center;
+    color: var(--champagne); flex-shrink: 0;
+  }
+  .cont-row b { display: block; font-size: 1rem; margin-bottom: 4px; color: var(--cream); }
+  .cont-row span, .cont-row a { font-size: 0.9rem; color: var(--cream-muted); font-weight: 300; }
+  .cont-row a:hover { color: var(--champagne); }
+  
+  .map-wrap { border-radius: 24px; overflow: hidden; border: 1px solid var(--border-dark); min-height: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+  .map-wrap iframe { width: 100%; height: 100%; min-height: 380px; border: 0; filter: invert(90%) hue-rotate(180deg) contrast(1.2); }
 
   /* ---------- FOOTER ---------- */
-  footer{background:var(--black);border-top:1px solid var(--line);padding:40px 0;}
-  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
-  .foot-brand{display:flex;align-items:center;gap:12px;color:var(--cream);}
-  .foot-brand .brand-mark{width:30px;height:30px;}
-  .foot-links{display:flex;gap:26px;}
-  .foot-links a{font-size:0.85rem;color:rgba(247,242,232,0.6);}
-  .foot-links a:hover{color:var(--gold-light);}
-  .foot-copy{font-size:0.78rem;color:rgba(247,242,232,0.4);margin-top:26px;text-align:center;}
+  footer { background: #050505; border-top: 1px solid var(--border-dark); padding: 50px 0 30px; }
+  .foot-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+  .foot-brand { display: flex; align-items: center; gap: 12px; color: var(--cream); }
+  .foot-brand .brand-mark { width: 32px; height: 32px; }
+  .foot-links { display: flex; gap: 28px; }
+  .foot-links a { font-size: 0.85rem; color: var(--cream-muted); transition: color 0.3s ease; }
+  .foot-links a:hover { color: var(--champagne); }
+  .foot-copy { font-size: 0.78rem; color: rgba(249, 246, 240, 0.3); margin-top: 36px; text-align: center; font-weight: 300; }
 
   /* ---------- FLOATING WHATSAPP ---------- */
-  .float-wa{
-    position:fixed;bottom:24px;right:24px;z-index:60;
-    width:56px;height:56px;border-radius:50%;
-    background:var(--gold);display:flex;align-items:center;justify-content:center;
-    box-shadow:0 10px 26px -8px rgba(0,0,0,0.5);
-    transition:transform .2s ease;
+  .float-wa {
+    position: fixed; bottom: 28px; right: 28px; z-index: 99;
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, #25d366, #128c7e); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+    transition: all 0.3s ease;
   }
-  .float-wa:hover{transform:scale(1.06);}
+  .float-wa:hover { transform: scale(1.1) translateY(-3px); box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4); }
 
   /* ---------- RESPONSIVE ---------- */
-  @media (max-width:980px){
-    nav.links{display:none;}
-    .menu-toggle{display:block;}
-    .hero .wrap{grid-template-columns:1fr;}
-    .hero-visual{order:-1;max-width:280px;margin:0 auto 20px;aspect-ratio:1/1;}
-    .sobre .grid{grid-template-columns:1fr;}
-    .sobre-card{aspect-ratio:auto;}
-    .dif-grid{grid-template-columns:repeat(2,1fr);}
-    .col-grid{grid-template-columns:repeat(2,1fr);}
-    .depo-track{grid-template-columns:1fr;}
-    .cont-grid{grid-template-columns:1fr;}
+  @media (max-width: 1024px) {
+    .hero .wrap { grid-template-columns: 1fr; text-align: center; }
+    .hero p.lead { margin: 0 auto; }
+    .hero-ctas { justify-content: center; }
+    .hero-stats { max-width: 500px; margin: 40px auto 0; }
+    .hero-visual { margin-top: 20px; }
+    .sobre .grid { grid-template-columns: 1fr; }
+    .dif-grid, .col-grid { grid-template-columns: repeat(2, 1fr); }
+    .depo-track { grid-template-columns: 1fr; }
+    .cont-grid { grid-template-columns: 1fr; }
   }
-  @media (max-width:560px){
-    .wrap{padding:0 20px;}
-    section{padding:72px 0;}
-    .dif-grid{grid-template-columns:1fr;}
-    .col-grid{grid-template-columns:1fr;}
-    .hero-stats{gap:22px;flex-wrap:wrap;}
+  
+  @media (max-width: 768px) {
+    nav.links {
+      display: none; position: absolute; top: 100%; left: 0; width: 100%;
+      background: var(--bg-card); border-bottom: 1px solid var(--border-dark);
+      flex-direction: column; padding: 24px; gap: 18px; text-align: center;
+    }
+    nav.links.active { display: flex; }
+    .menu-toggle { display: block; }
+    .cta-btn.mobile-hide { display: none; }
+  }
+
+  @media (max-width: 560px) {
+    .wrap { padding: 0 20px; }
+    section { padding: 80px 0; }
+    .dif-grid, .col-grid { grid-template-columns: 1fr; }
+    .hero-stats { grid-template-columns: 1fr; gap: 20px; }
+    .foot-row { flex-direction: column; gap: 20px; text-align: center; }
   }
 </style>
 </head>
@@ -282,67 +338,77 @@
   <div class="nav">
     <a href="#top" class="brand">
       <svg class="brand-mark" viewBox="0 0 40 40" fill="none">
-        <circle cx="20" cy="20" r="19" stroke="url(#g1)" stroke-width="1.6"/>
-        <path d="M9 21c0-3 2-5 5-5s5 2 5 5-2 5-5 5-5-2-5-5Z" stroke="#f7f2e8" stroke-width="1.4"/>
-        <path d="M21 21c0-3 2-5 5-5s5 2 5 5-2 5-5 5-5-2-5-5Z" stroke="#f7f2e8" stroke-width="1.4"/>
-        <path d="M19 20h2" stroke="#f7f2e8" stroke-width="1.4"/>
-        <defs><linearGradient id="g1" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#c9a227"/><stop offset="1" stop-color="#d6538b"/></linearGradient></defs>
+        <circle cx="20" cy="20" r="19" stroke="url(#g1)" stroke-width="1.5"/>
+        <path d="M9 21c0-3 2-5 5-5s5 2 5 5-2 5-5 5-5-2-5-5Z" stroke="#f3e3b6" stroke-width="1.4"/>
+        <path d="M21 21c0-3 2-5 5-5s5 2 5 5-2 5-5 5-5-2-5-5Z" stroke="#f3e3b6" stroke-width="1.4"/>
+        <path d="M19 20h2" stroke="#f3e3b6" stroke-width="1.4"/>
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#e5c378"/><stop offset="1" stop-color="#e0528e"/></linearGradient></defs>
       </svg>
       <span class="brand-word">Ótica Dolce Visione<span>ENXERGANDO COM ESTILO</span></span>
     </a>
-    <nav class="links">
+    <nav class="links" id="navLinks">
       <a href="#sobre">Quem somos</a>
       <a href="#diferenciais">Diferenciais</a>
       <a href="#colecoes">Coleções</a>
       <a href="#depoimentos">Depoimentos</a>
       <a href="#contato">Contato</a>
     </nav>
-    <a class="cta-btn" href="https://wa.me/5511961807842" target="_blank" rel="noopener">Fale no WhatsApp</a>
+    <a class="cta-btn mobile-hide" href="https://wa.me/5511961807842" target="_blank" rel="noopener">Fale no WhatsApp</a>
+    <button class="menu-toggle" id="menuBtn" aria-label="Abrir Menu">☰</button>
   </div>
 </header>
 
 <main id="top">
 
   <!-- HERO -->
-  <section class="hero" style="padding-top:64px;padding-bottom:0;">
+  <section class="hero">
     <div class="wrap">
       <div>
-        <p class="eyebrow"><span class="dot"></span>Suzano, SP — loja física e e-commerce</p>
-        <h1>Visão, qualidade<br>e <em>estilo</em>, sempre<br>no seu rosto.</h1>
-        <p class="lead">A Ótica Dolce Visione une armações selecionadas, atendimento próximo e entrega para todo o Brasil — pra você enxergar bem e se enxergar com estilo.</p>
+        <div class="eyebrow"><span class="dot"></span>Suzano, SP — Loja física e e-commerce</div>
+        <h1>Visão, qualidade e <em>estilo</em> em perfeita harmonia.</h1>
+        <p class="lead">A Ótica Dolce Visione une armações selecionadas, atendimento personalizado e entrega para todo o Brasil — para você enxergar bem e expressar sua identidade.</p>
         <div class="hero-ctas">
           <a class="cta-btn" href="https://wa.me/5511961807842" target="_blank" rel="noopener">Fale no WhatsApp</a>
           <a class="btn-outline" href="#colecoes">Ver coleções</a>
         </div>
         <div class="hero-stats">
           <div><p>10x</p><p>sem juros no cartão</p></div>
-          <div><p>100%</p><p>Brasil, via e-commerce</p></div>
-          <div><p>Suzano</p><p>loja física de portas abertas</p></div>
+          <div><p>100%</p><p>Brasil via e-commerce</p></div>
+          <div><p>Suzano</p><p>loja física exclusiva</p></div>
         </div>
       </div>
       <div class="hero-visual">
-        <div class="ring-orbit"></div>
-        <svg class="hero-glasses" viewBox="0 0 320 200" fill="none">
-          <circle cx="90" cy="100" r="62" stroke="#f7f2e8" stroke-width="3"/>
-          <circle cx="230" cy="100" r="62" stroke="#f7f2e8" stroke-width="3"/>
-          <path d="M152 96c8-10 28-10 36 0" stroke="#f7f2e8" stroke-width="3"/>
-          <path d="M28 96c-10-4-20-2-24 6" stroke="#f7f2e8" stroke-width="3"/>
-          <path d="M292 96c10-4 20-2 24 6" stroke="#f7f2e8" stroke-width="3"/>
-          <circle cx="90" cy="100" r="62" fill="url(#lens1)" opacity="0.25"/>
-          <circle cx="230" cy="100" r="62" fill="url(#lens2)" opacity="0.25"/>
-          <defs>
-            <linearGradient id="lens1" x1="28" y1="38" x2="152" y2="162"><stop stop-color="#e3c25f"/><stop offset="1" stop-color="#d6538b"/></linearGradient>
-            <linearGradient id="lens2" x1="168" y1="38" x2="292" y2="162"><stop stop-color="#d6538b"/><stop offset="1" stop-color="#e3c25f"/></linearGradient>
-          </defs>
-        </svg>
+        <div class="visual-card">
+          <div class="ring-orbit"></div>
+          <svg class="hero-glasses" viewBox="0 0 320 200" fill="none">
+            <circle cx="90" cy="100" r="62" stroke="#f3e3b6" stroke-width="2.5"/>
+            <circle cx="230" cy="100" r="62" stroke="#f3e3b6" stroke-width="2.5"/>
+            <path d="M152 96c8-10 28-10 36 0" stroke="#f3e3b6" stroke-width="2.5"/>
+            <path d="M28 96c-10-4-20-2-24 6" stroke="#f3e3b6" stroke-width="2.5"/>
+            <path d="M292 96c10-4 20-2 24 6" stroke="#f3e3b6" stroke-width="2.5"/>
+            <circle cx="90" cy="100" r="62" fill="url(#lens1)" opacity="0.3"/>
+            <circle cx="230" cy="100" r="62" fill="url(#lens2)" opacity="0.3"/>
+            <defs>
+              <linearGradient id="lens1" x1="28" y1="38" x2="152" y2="162"><stop stop-color="#e5c378"/><stop offset="1" stop-color="#e0528e"/></linearGradient>
+              <linearGradient id="lens2" x1="168" y1="38" x2="292" y2="162"><stop stop-color="#e0528e"/><stop offset="1" stop-color="#e5c378"/></linearGradient>
+            </defs>
+          </svg>
+        </div>
       </div>
     </div>
   </section>
 
-  <div class="strip" style="margin-top:64px;">
+  <!-- MARQUEE -->
+  <div class="strip">
     <div class="strip-track">
-      <span>ENVIAMOS PARA TODO O BRASIL • PARCELAMOS EM ATÉ 10X • LOJA FÍSICA EM SUZANO • ATENDIMENTO PERSONALIZADO • ENVIAMOS PARA TODO O BRASIL • PARCELAMOS EM ATÉ 10X • LOJA FÍSICA EM SUZANO • ATENDIMENTO PERSONALIZADO •</span>
-      <span>ENVIAMOS PARA TODO O BRASIL • PARCELAMOS EM ATÉ 10X • LOJA FÍSICA EM SUZANO • ATENDIMENTO PERSONALIZADO • ENVIAMOS PARA TODO O BRASIL • PARCELAMOS EM ATÉ 10X • LOJA FÍSICA EM SUZANO • ATENDIMENTO PERSONALIZADO •</span>
+      <span>ENVIAMOS PARA TODO O BRASIL</span>
+      <span>PARCELAMOS EM ATÉ 10X</span>
+      <span>LOJA FÍSICA EM SUZANO</span>
+      <span>ATENDIMENTO PERSONALIZADO</span>
+      <span>ENVIAMOS PARA TODO O BRASIL</span>
+      <span>PARCELAMOS EM ATÉ 10X</span>
+      <span>LOJA FÍSICA EM SUZANO</span>
+      <span>ATENDIMENTO PERSONALIZADO</span>
     </div>
   </div>
 
@@ -350,32 +416,32 @@
   <section class="sobre" id="sobre">
     <div class="wrap grid">
       <div class="sobre-card">
-        <p class="quote">"Óculos não é só pra ver — é pra ser visto."</p>
-        <div class="who">Ótica Dolce Visione, Suzano</div>
+        <p class="quote">Óculos não é apenas um instrumento para ver — é a moldura que expressa quem você é.</p>
+        <div class="who">ÓTICA DOLCE VISIONE — SUZANO</div>
       </div>
       <div class="sobre-text">
         <p class="kicker">Quem somos</p>
-        <h2 style="margin-bottom:20px;">Uma ótica de bairro com alcance nacional.</h2>
-        <p>A Dolce Visione nasceu em Suzano para ser aquela ótica de confiança: a que conhece o cliente pelo nome, ajusta a armação na hora e explica o grau sem pressa. Com o tempo, viramos também loja online — hoje enviamos óculos para todo o Brasil sem perder esse cuidado de atendimento local.</p>
-        <p>Trabalhamos com armações de grau, óculos de sol e lentes de contato, sempre buscando o equilíbrio entre qualidade óptica e estilo pessoal.</p>
+        <h2 style="margin-bottom: 20px;">Tradição em atendimento local com elegância nacional.</h2>
+        <p>A Dolce Visione nasceu em Suzano com a missão de resgatar o cuidado genuíno: conhecer cada cliente pelo nome, realizar ajustes precisos e orientar a escolha das lentes de forma transparente e acolhedora.</p>
+        <p>Expandimos nossa visão para todo o país por meio do nosso e-commerce, levando a mesma excelência, curadoria de marcas e sofisticação para clientes de todo o Brasil.</p>
         <div class="sobre-list">
           <div class="row">
             <div class="ico">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8c1.5-3 3.5-4.5 6-4.5S12.5 5 14 8c-1.5 3-3.5 4.5-6 4.5S3.5 11 2 8Z" stroke="#1c1712" stroke-width="1.2"/><circle cx="8" cy="8" r="1.8" stroke="#1c1712" stroke-width="1.2"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
             </div>
-            <div><b>Loja física e e-commerce</b><span>Atendimento presencial em Suzano ou pelo site, como preferir.</span></div>
+            <div><b>Loja Física e E-commerce</b><span>Acolhimento presencial em Suzano ou conveniência digital pelo site.</span></div>
           </div>
           <div class="row">
             <div class="ico">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5h9l3 3v3h-1" stroke="#1c1712" stroke-width="1.2"/><rect x="2" y="5" width="9" height="6" stroke="#1c1712" stroke-width="1.2"/><circle cx="5" cy="12.5" r="1.3" stroke="#1c1712" stroke-width="1.2"/><circle cx="11.5" cy="12.5" r="1.3" stroke="#1c1712" stroke-width="1.2"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
             </div>
-            <div><b>Envio para todo o Brasil</b><span>Compre pelo site ou WhatsApp e receba em casa.</span></div>
+            <div><b>Envio Seguro para Todo o Brasil</b><span>Escolha pelo site ou WhatsApp e receba no conforto da sua casa.</span></div>
           </div>
           <div class="row">
             <div class="ico">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8.5" rx="1.4" stroke="#1c1712" stroke-width="1.2"/><path d="M2 6.6h12" stroke="#1c1712" stroke-width="1.2"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
             </div>
-            <div><b>Parcelamos em até 10x</b><span>Facilidade no cartão pra você não esperar pra enxergar bem.</span></div>
+            <div><b>Parcelamento Facilitado em até 10x</b><span>Flexibilidade no cartão de crédito para priorizar a sua saúde visual.</span></div>
           </div>
         </div>
       </div>
@@ -386,45 +452,37 @@
   <section class="diferenciais" id="diferenciais">
     <div class="wrap">
       <div class="section-head">
-        <p class="kicker">Por que a Dolce Visione</p>
-        <h2>Cuidado de ótica de bairro, estrutura pra atender o Brasil inteiro.</h2>
+        <p class="kicker">Por que escolher a Dolce Visione</p>
+        <h2>A atenção dedicada de uma ótica boutique com alcance nacional.</h2>
       </div>
       <div class="dif-grid">
         <div class="dif-card">
           <div class="ring">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9c1.7-3.4 4-5 7-5s5.3 1.6 7 5c-1.7 3.4-4 5-7 5s-5.3-1.6-7-5Z" stroke="#c9a227" stroke-width="1.3"/><circle cx="9" cy="9" r="2" stroke="#c9a227" stroke-width="1.3"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8"></path></svg>
           </div>
-          <div>
-            <h3>Curadoria de armações</h3>
-            <p>Seleção de modelos de grau e sol pensada pra combinar com diferentes formatos de rosto e estilos.</p>
-          </div>
+          <h3>Curadoria Exclusiva</h3>
+          <p>Seleção criteriosa de armações receituárias e solares pensadas para harmonia facial e tendência.</p>
         </div>
         <div class="dif-card">
           <div class="ring">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v3M9 13v3M2 9h3M13 9h3" stroke="#c9a227" stroke-width="1.3"/><circle cx="9" cy="9" r="4" stroke="#c9a227" stroke-width="1.3"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
           </div>
-          <div>
-            <h3>Ajuste e pós-venda</h3>
-            <p>Ajuste de armação, revisão e suporte depois da compra — mesmo quem compra pelo site é atendido de perto.</p>
-          </div>
+          <h3>Ajuste & Pós-Venda</h3>
+          <p>Suporte completo, calibração de hastes e manutenção continuada mesmo para compras online.</p>
         </div>
         <div class="dif-card">
           <div class="ring">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.5" y="4.5" width="13" height="9.5" rx="1.6" stroke="#c9a227" stroke-width="1.3"/><path d="M2.5 7.2h13" stroke="#c9a227" stroke-width="1.3"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
           </div>
-          <div>
-            <h3>Pagamento facilitado</h3>
-            <p>Parcelamento em até 10x no cartão, pra encaixar no seu orçamento sem enrolação.</p>
-          </div>
+          <h3>Facilidade de Pagamento</h3>
+          <p>Condições especiais de parcelamento em até 10 vezes sem juros para maior tranquilidade.</p>
         </div>
         <div class="dif-card">
           <div class="ring">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6l4-3 4 3v6l-4 3-4-3V6Z" stroke="#c9a227" stroke-width="1.3"/><path d="M11 6l4-3v9l-4 3" stroke="#c9a227" stroke-width="1.3"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
           </div>
-          <div>
-            <h3>Entrega nacional</h3>
-            <p>Compra segura e envio rastreado para qualquer cidade do Brasil, com o mesmo cuidado da loja física.</p>
-          </div>
+          <h3>Entrega Rastreada</h3>
+          <p>Logística ágil e embalagens protegidas para garantir a chegada perfeita do seu produto.</p>
         </div>
       </div>
     </div>
@@ -434,45 +492,45 @@
   <section class="colecoes" id="colecoes">
     <div class="wrap">
       <div class="section-head">
-        <p class="kicker">Coleções</p>
-        <h2>Para cada rosto, um jeito de enxergar o mundo.</h2>
-        <p>Fale com a gente pelo WhatsApp pra ver o catálogo atualizado e simular seu grau — nossa equipe te ajuda a escolher pelo celular como se estivesse no balcão.</p>
+        <p class="kicker">Coleções Selecionadas</p>
+        <h2>Design contemporâneo para todas as perspectivas.</h2>
+        <p>Converse conosco via WhatsApp para conferir nosso catálogo em tempo real ou enviar sua receita médica para uma cotação sob medida.</p>
       </div>
       <div class="col-grid">
         <div class="col-card">
           <svg class="shape" viewBox="0 0 52 52" fill="none">
-            <circle cx="16" cy="26" r="15" stroke="#1c1712" stroke-width="1.6"/>
-            <circle cx="36" cy="26" r="15" stroke="#1c1712" stroke-width="1.6"/>
-            <path d="M31 24c2-2.5 7-2.5 9 0" stroke="#1c1712" stroke-width="1.6"/>
+            <circle cx="16" cy="26" r="14" stroke="#e5c378" stroke-width="2"/>
+            <circle cx="36" cy="26" r="14" stroke="#e5c378" stroke-width="2"/>
+            <path d="M30 24c2-2 6-2 8 0" stroke="#e5c378" stroke-width="2"/>
           </svg>
-          <h3>Óculos de grau</h3>
-          <p>Armações leves e confortáveis para o dia a dia, do clássico ao contemporâneo.</p>
+          <h3>Óculos de Grau</h3>
+          <p>Estruturas leves, ergonômicas e elegantes para conforto ininterrupto durante todo o dia.</p>
         </div>
         <div class="col-card">
           <svg class="shape" viewBox="0 0 52 52" fill="none">
-            <circle cx="16" cy="26" r="15" fill="#c9a227" opacity="0.18" stroke="#1c1712" stroke-width="1.6"/>
-            <circle cx="36" cy="26" r="15" fill="#d6538b" opacity="0.18" stroke="#1c1712" stroke-width="1.6"/>
-            <path d="M31 24c2-2.5 7-2.5 9 0" stroke="#1c1712" stroke-width="1.6"/>
+            <circle cx="16" cy="26" r="14" fill="#e5c378" fill-opacity="0.2" stroke="#e5c378" stroke-width="2"/>
+            <circle cx="36" cy="26" r="14" fill="#e0528e" fill-opacity="0.2" stroke="#e0528e" stroke-width="2"/>
+            <path d="M30 24c2-2 6-2 8 0" stroke="#e5c378" stroke-width="2"/>
           </svg>
-          <h3>Óculos de sol</h3>
-          <p>Proteção UV com atitude — modelos pra todo mundo que não abre mão do estilo.</p>
+          <h3>Óculos de Sol</h3>
+          <p>Máxima proteção UV400 alinhada às últimas tendências internacionais de design.</p>
         </div>
         <div class="col-card">
           <svg class="shape" viewBox="0 0 52 52" fill="none">
-            <circle cx="26" cy="26" r="6" stroke="#1c1712" stroke-width="1.6"/>
-            <circle cx="26" cy="26" r="15" stroke="#1c1712" stroke-width="1.2" stroke-dasharray="2 3"/>
+            <circle cx="26" cy="26" r="6" stroke="#e5c378" stroke-width="2"/>
+            <circle cx="26" cy="26" r="16" stroke="#e5c378" stroke-width="1.5" stroke-dasharray="3 3"/>
           </svg>
-          <h3>Lentes de contato</h3>
-          <p>Conforto no dia a dia com orientação de uso e cuidado personalizados.</p>
+          <h3>Lentes de Contato</h3>
+          <p>Tecnologia avançada em hidratação e oxigenação com acompanhamento de adaptação.</p>
         </div>
         <div class="col-card">
           <svg class="shape" viewBox="0 0 52 52" fill="none">
-            <circle cx="14" cy="30" r="10" stroke="#1c1712" stroke-width="1.6"/>
-            <circle cx="30" cy="30" r="10" stroke="#1c1712" stroke-width="1.6"/>
-            <path d="M24 28c1.5-1.6 4.5-1.6 6 0" stroke="#1c1712" stroke-width="1.6"/>
+            <circle cx="15" cy="28" r="10" stroke="#e5c378" stroke-width="2"/>
+            <circle cx="31" cy="28" r="10" stroke="#e5c378" stroke-width="2"/>
+            <path d="M25 26c1-1 4-1 5 0" stroke="#e5c378" stroke-width="2"/>
           </svg>
-          <h3>Armações infantis</h3>
-          <p>Resistentes e divertidas, pensadas pra acompanhar a energia da criançada.</p>
+          <h3>Linha Infantil</h3>
+          <p>Armações altamente flexíveis, duráveis e divertidas projetadas para o público infantil.</p>
         </div>
       </div>
     </div>
@@ -483,32 +541,32 @@
     <div class="wrap">
       <div class="section-head">
         <p class="kicker">Depoimentos</p>
-        <h2>O que dizem quem já passou pela Dolce Visione.</h2>
+        <h2>A satisfação de quem enxerga a vida com a Dolce Visione.</h2>
       </div>
       <div class="depo-track">
         <div class="depo-card">
           <div>
             <div class="stars">★★★★★</div>
-            <p class="txt">Atendimento atencioso, ajudaram a escolher a armação ideal pro formato do meu rosto e o óculos ficou pronto rapidinho.</p>
+            <p class="txt">"Atendimento impecável! Tiveram a paciência de encontrar a armação perfeita para o formato do meu rosto. Os óculos ficaram prontos super rápido."</p>
           </div>
-          <div class="who"><div class="who-dot"></div><div><b>Cliente Dolce Visione</b><span>Suzano, SP</span></div></div>
+          <div class="who"><div class="who-dot"></div><div><b>Cliente Dolce Visione</b><span>Loja Física Suzano</span></div></div>
         </div>
         <div class="depo-card">
           <div>
             <div class="stars">★★★★★</div>
-            <p class="txt">Comprei pelo WhatsApp mesmo morando longe e recebi certinho, com todo suporte pra tirar dúvida sobre o grau.</p>
+            <p class="txt">"Realizei minha compra diretamente pelo WhatsApp de outra cidade e o suporte foi fantástico. Chegou perfeitamente embalado e no prazo!"</p>
           </div>
-          <div class="who"><div class="who-dot"></div><div><b>Cliente Dolce Visione</b><span>Compra pelo e-commerce</span></div></div>
+          <div class="who"><div class="who-dot"></div><div><b>Cliente Dolce Visione</b><span>Atendimento Online</span></div></div>
         </div>
         <div class="depo-card">
           <div>
             <div class="stars">★★★★★</div>
-            <p class="txt">Parcelei em 10x e nem senti no bolso. Recomendo pra quem quer qualidade sem pesar no orçamento.</p>
+            <p class="txt">"Qualidade excepcional dos óculos e das lentes. A facilidade de parcelar em 10x sem juros tornou a experiência ainda mais acessível."</p>
           </div>
-          <div class="who"><div class="who-dot"></div><div><b>Cliente Dolce Visione</b><span>Loja física</span></div></div>
+          <div class="who"><div class="who-dot"></div><div><b>Cliente Dolce Visione</b><span>Loja Física Suzano</span></div></div>
         </div>
       </div>
-      <p class="depo-note">Depoimentos ilustrativos de exemplo — troque pelos relatos reais dos seus clientes (do Instagram ou Google) antes de publicar.</p>
+      <p class="depo-note">Relatos ilustrativos de demonstração — substitua pelas avaliações reais dos seus clientes do Google ou Instagram.</p>
     </div>
   </section>
 
@@ -516,26 +574,34 @@
   <section class="contato" id="contato">
     <div class="wrap">
       <div class="section-head">
-        <p class="kicker">Contato</p>
-        <h2>Vem enxergar melhor com a gente.</h2>
+        <p class="kicker">Contato & Localização</p>
+        <h2>Estamos prontos para receber você.</h2>
       </div>
       <div class="cont-grid">
         <div class="cont-info">
           <div class="cont-row">
-            <div class="ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 14s5-4.4 5-8.2A5 5 0 0 0 3 5.8C3 9.6 8 14 8 14Z" stroke="#c9a227" stroke-width="1.3"/><circle cx="8" cy="5.8" r="1.7" stroke="#c9a227" stroke-width="1.3"/></svg></div>
-            <div><b>Loja física</b><span>Rua Benjamin Constant, 576 — Suzano, SP, 08674-011</span></div>
+            <div class="ico">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
+            <div><b>Endereço da Loja Física</b><span>Rua Benjamin Constant, 576 — Centro, Suzano, SP (CEP: 08674-011)</span></div>
           </div>
           <div class="cont-row">
-            <div class="ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 3.5h3l1.4 3.4-1.7 1.2a9 9 0 0 0 4.2 4.2l1.2-1.7 3.4 1.4v3c-6 0-11.5-5.5-11.5-11.5Z" stroke="#c9a227" stroke-width="1.2"/></svg></div>
-            <div><b>WhatsApp</b><a href="https://wa.me/5511961807842" target="_blank" rel="noopener">(11) 96180-7842 — falar agora</a></div>
+            <div class="ico">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </div>
+            <div><b>WhatsApp & Telefone</b><a href="https://wa.me/5511961807842" target="_blank" rel="noopener">(11) 96180-7842 — Iniciar conversa imediata</a></div>
           </div>
           <div class="cont-row">
-            <div class="ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" stroke="#c9a227" stroke-width="1.2"/><circle cx="8" cy="8" r="2.6" stroke="#c9a227" stroke-width="1.2"/><circle cx="11.3" cy="4.7" r="0.6" fill="#c9a227"/></svg></div>
-            <div><b>Instagram</b><a href="https://www.instagram.com/dolce_visione.suzano/" target="_blank" rel="noopener">@dolce_visione.suzano</a></div>
+            <div class="ico">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </div>
+            <div><b>Instagram Oficial</b><a href="https://www.instagram.com/dolce_visione.suzano/" target="_blank" rel="noopener">@dolce_visione.suzano</a></div>
           </div>
           <div class="cont-row">
-            <div class="ico"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#c9a227" stroke-width="1.2"/><path d="M8 4.5v3.7l2.6 1.5" stroke="#c9a227" stroke-width="1.2"/></svg></div>
-            <div><b>Horário</b><span>Segunda a sábado — consulte horários atualizados pelo WhatsApp</span></div>
+            <div class="ico">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div><b>Horário de Funcionamento</b><span>Segunda a Sábado — Consulte horários específicos via WhatsApp</span></div>
           </div>
         </div>
         <div class="map-wrap">
@@ -552,35 +618,50 @@
     <div class="foot-row">
       <a href="#top" class="foot-brand">
         <svg class="brand-mark" viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="19" stroke="url(#g2)" stroke-width="1.6"/>
-          <path d="M9 21c0-3 2-5 5-5s5 2 5 5-2 5-5 5-5-2-5-5Z" stroke="#f7f2e8" stroke-width="1.4"/>
-          <path d="M21 21c0-3 2-5 5-5s5 2 5 5-2 5-5 5-5-2-5-5Z" stroke="#f7f2e8" stroke-width="1.4"/>
-          <path d="M19 20h2" stroke="#f7f2e8" stroke-width="1.4"/>
-          <defs><linearGradient id="g2" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#c9a227"/><stop offset="1" stop-color="#d6538b"/></linearGradient></defs>
+          <circle cx="20" cy="20" r="19" stroke="url(#g2)" stroke-width="1.5"/>
+          <path d="M9 21c0-3 2-5 5-5s5 2 5 5-2 5-5 5-5-2-5-5Z" stroke="#f3e3b6" stroke-width="1.4"/>
+          <path d="M21 21c0-3 2-5 5-5s5 2 5 5-2 5-5 5-5-2-5-5Z" stroke="#f3e3b6" stroke-width="1.4"/>
+          <path d="M19 20h2" stroke="#f3e3b6" stroke-width="1.4"/>
+          <defs><linearGradient id="g2" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#e5c378"/><stop offset="1" stop-color="#e0528e"/></linearGradient></defs>
         </svg>
-        <span style="font-family:'Fraunces',serif;">Ótica Dolce Visione</span>
+        <span style="font-family:'Playfair Display', serif; font-size: 1.1rem; font-weight: 600;">Ótica Dolce Visione</span>
       </a>
       <div class="foot-links">
         <a href="https://wa.me/5511961807842" target="_blank" rel="noopener">WhatsApp</a>
         <a href="https://www.instagram.com/dolce_visione.suzano/" target="_blank" rel="noopener">Instagram</a>
-        <a href="#contato">Endereço</a>
+        <a href="#contato">Localização</a>
       </div>
     </div>
-    <p class="foot-copy">© 2026 Ótica Dolce Visione — Suzano, SP. Site ilustrativo desenvolvido com base no perfil @dolce_visione.suzano.</p>
+    <p class="foot-copy">© 2026 Ótica Dolce Visione — Suzano, SP. Todos os direitos reservados.</p>
   </div>
 </footer>
 
-<a class="float-wa" href="https://wa.me/5511961807842" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
-  <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M4 22l1.6-5A9 9 0 1 1 9 20.3L4 22Z" stroke="#121012" stroke-width="1.6"/><path d="M9 11c.4 2.6 2.4 4.6 5 5" stroke="#121012" stroke-width="1.6" stroke-linecap="round"/></svg>
+<!-- WHATSAPP FLOAT -->
+<a class="float-wa" href="https://wa.me/5511961807842" target="_blank" rel="noopener" aria-label="Atendimento via WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
 </a>
 
 <script>
-  document.querySelectorAll('a[href^="#"]').forEach(function(a){
-    a.addEventListener('click', function(e){
-      var id = a.getAttribute('href').slice(1);
-      var el = document.getElementById(id);
-      if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+  // Smooth Scrolling
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const targetId = this.getAttribute('href').slice(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        e.preventDefault();
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Close menu mobile if open
+        document.getElementById('navLinks').classList.remove('active');
+      }
     });
+  });
+
+  // Toggle Menu Mobile
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
   });
 </script>
 
