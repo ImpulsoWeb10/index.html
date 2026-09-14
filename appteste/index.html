@@ -237,13 +237,14 @@
                     <h3 class="font-display text-3xl italic text-blue-900 leading-none">{{ categoriaAtiva }}</h3>
                     <div class="w-10 h-1 bg-amber-400 rounded-full mt-2"></div>
                 </div>
-                <button @click="modal = null" class="w-10 h-10 bg-slate-100 rounded-full font-bold shrink-0">&times;</button>
+                <button @click="modal = null" class="w-10 h-10 bg-amber-400 text-slate-900 rounded-full font-bold shrink-0 shadow-md active:scale-95 transition-all">&times;</button>
             </div>
             <div class="overflow-y-auto space-y-4 pb-6">
                 <div v-for="grupo in gruposFiltrados" :key="grupo.nome" class="border-2 border-blue-200 rounded-[1.75rem] p-4 bg-slate-50/40">
-                    <p class="text-[13px] font-black text-blue-900 uppercase tracking-wide mb-3 pb-2 border-b-2 border-blue-200 flex items-center gap-2">
+                    <p class="text-[13px] font-black text-blue-900 uppercase tracking-wide mb-3 pb-2 border-b-2 border-blue-200 flex items-center gap-2 flex-wrap">
                         <img v-if="imagemDoProduto(grupo.itens[0])" :src="imagemDoProduto(grupo.itens[0])" @error="$event.target.style.display='none'" class="w-6 h-6 rounded-lg object-cover border border-slate-200">
                         {{ grupo.nome }}
+                        <span v-if="categoriaAtiva === 'Tintas' && usoProduto(grupo.nome)" class="text-emerald-600 bg-emerald-50 border border-emerald-200 normal-case font-bold text-[9px] px-2 py-0.5 rounded-full tracking-normal">{{ usoProduto(grupo.nome) }}</span>
                     </p>
                     <div class="space-y-2">
                         <div v-for="p in grupo.itens" :key="p.id" @click="selecionarProduto(p)" class="p-4 bg-white border border-slate-100 rounded-2xl hover:bg-blue-50 flex justify-between items-center cursor-pointer gap-3">
@@ -279,7 +280,7 @@
                         <div class="w-10 h-1 bg-amber-400 rounded-full mt-2"></div>
                     </div>
                 </div>
-                <button @click="modal = null" class="w-10 h-10 bg-slate-100 rounded-full font-bold shrink-0">&times;</button>
+                <button @click="modal = null" class="w-10 h-10 bg-amber-400 text-slate-900 rounded-full font-bold shrink-0 shadow-md active:scale-95 transition-all">&times;</button>
             </div>
 
             <!-- Se a aba "Como Usar" da planilha estiver preenchida e publicada,
@@ -321,7 +322,8 @@
     </div>
 
     <div v-if="modal == 'detalhe'" class="fixed inset-0 z-[60] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-6">
-        <div class="bg-white rounded-[3rem] p-8 w-full max-w-sm text-center shadow-2xl">
+        <div class="bg-white rounded-[3rem] p-8 w-full max-w-sm text-center shadow-2xl relative">
+            <button @click="modal = 'produtos'" class="absolute top-5 right-5 w-10 h-10 bg-amber-400 text-slate-900 rounded-full font-bold shrink-0 shadow-md active:scale-95 transition-all">&times;</button>
             <img v-if="imagemDoProduto(prodSel)" :src="imagemDoProduto(prodSel)" @error="$event.target.style.display='none'" @click="modal = 'verFotoProduto'" class="w-32 h-32 object-cover rounded-2xl mx-auto mb-4 border border-slate-200 cursor-zoom-in">
             <h4 class="font-black text-slate-800 mb-1 leading-tight">{{ prodSel.produto }} - {{ prodSel.embalagem }}</h4>
             <p v-if="precisaCor" class="text-emerald-600 font-black text-[11px] uppercase mb-4">{{ prodSel.cor }}</p>
@@ -370,12 +372,13 @@
                     class="w-full bg-slate-900 text-white py-5 rounded-[2rem] font-black uppercase mb-3 disabled:opacity-40">
                 Adicionar
             </button>
-            <button @click="modal = 'produtos'" class="w-full py-2 bg-slate-100 rounded-xl text-slate-500 text-[10px] font-black uppercase">Voltar</button>
+            <button @click="modal = 'produtos'" class="w-full py-2 bg-amber-400 rounded-xl text-slate-900 text-[10px] font-black uppercase shadow-sm active:scale-95 transition-all">Voltar</button>
         </div>
     </div>
 
     <div v-if="modal == 'escolherCor'" class="fixed inset-0 z-[70] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-6">
-        <div class="bg-white rounded-[3rem] p-8 w-full max-w-sm shadow-2xl text-center">
+        <div class="bg-white rounded-[3rem] p-8 w-full max-w-sm shadow-2xl text-center relative">
+            <button @click="modal = 'detalhe'" class="absolute top-5 right-5 w-10 h-10 bg-amber-400 text-slate-900 rounded-full font-bold shrink-0 shadow-md active:scale-95 transition-all">&times;</button>
             <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-palette text-emerald-600 text-2xl"></i>
             </div>
@@ -390,18 +393,20 @@
             <input v-model="corInput" @keyup.enter="salvarCor" placeholder="Ex: Azul Céu, Amarelo Canário..." class="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl text-sm outline-none focus:border-emerald-400 mb-6 text-center font-medium text-slate-800">
 
             <button @click="salvarCor" :disabled="!corInput.trim()" class="w-full bg-emerald-600 text-white text-sm font-bold py-3.5 rounded-2xl mb-2 disabled:opacity-40 shadow-sm hover:bg-emerald-700 transition-colors">Salvar e continuar</button>
-            <button @click="modal = 'detalhe'" class="w-full py-2 text-slate-400 text-[10px] font-bold uppercase tracking-wide hover:text-slate-600 transition-colors">Cancelar</button>
+            <button @click="modal = 'detalhe'" class="w-full py-2 bg-amber-400 rounded-xl text-slate-900 text-[10px] font-black uppercase tracking-wide shadow-sm active:scale-95 transition-all">Cancelar</button>
         </div>
     </div>
 
     <div v-if="modal == 'verCatalogoImagem'" class="fixed inset-0 z-[80] bg-black/90 flex flex-col items-center justify-center p-6" @click="modal = 'escolherCor'">
+        <button @click.stop="modal = 'escolherCor'" class="absolute top-5 right-5 w-10 h-10 bg-amber-400 text-slate-900 rounded-full font-bold shrink-0 shadow-md active:scale-95 transition-all">&times;</button>
         <img :src="catalogoArquivo" class="max-h-[75vh] max-w-full rounded-2xl shadow-2xl" @click.stop>
-        <button @click="modal = 'escolherCor'" class="mt-6 bg-white/20 text-white font-black text-[10px] uppercase px-6 py-3 rounded-full">Fechar</button>
+        <button @click="modal = 'escolherCor'" class="mt-6 bg-amber-400 text-slate-900 font-black text-[10px] uppercase px-6 py-3 rounded-full shadow-md active:scale-95 transition-all">Fechar</button>
     </div>
 
     <div v-if="modal == 'verFotoProduto'" class="fixed inset-0 z-[80] bg-black/90 flex flex-col items-center justify-center p-6" @click="modal = 'detalhe'">
+        <button @click.stop="modal = 'detalhe'" class="absolute top-5 right-5 w-10 h-10 bg-amber-400 text-slate-900 rounded-full font-bold shrink-0 shadow-md active:scale-95 transition-all">&times;</button>
         <img :src="imagemDoProduto(prodSel)" class="max-h-[75vh] max-w-full rounded-2xl shadow-2xl" @click.stop>
-        <button @click="modal = 'detalhe'" class="mt-6 bg-white/20 text-white font-black text-[10px] uppercase px-6 py-3 rounded-full">Fechar</button>
+        <button @click="modal = 'detalhe'" class="mt-6 bg-amber-400 text-slate-900 font-black text-[10px] uppercase px-6 py-3 rounded-full shadow-md active:scale-95 transition-all">Fechar</button>
     </div>
 
     <div id="pdf-template" style="display:none; width: 700px; max-width: 100%; margin: 0 auto; padding: 20px; font-family: sans-serif; background: white; text-align: center;">
@@ -612,6 +617,15 @@ createApp({
         }
     },
     methods: {
+        usoProduto(nome) {
+            if (!nome) return '';
+            const n = nome.toLowerCase();
+            if (n.includes('emborrachad')) return 'Interno, Externo, Chão, Parede, Laje, Telha';
+            if (n.includes('piso')) return 'Interno e Externo';
+            if (n.includes('econ')) return 'Interno';
+            if (n.includes('standard') || n.includes('premium')) return 'Interno e Externo';
+            return '';
+        },
         carregarProdutos() {
             if (!this.csvConfigurado) { this.carregando = false; return; }
             this.carregando = true;
