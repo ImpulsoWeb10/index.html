@@ -152,44 +152,52 @@
             <button @click="zerarPedido" class="bg-red-50 text-red-600 font-black text-[10px] uppercase px-4 py-2 rounded-xl">Zerar Tudo</button>
         </div>
 
-        <div class="text-center mb-8">
+        <div class="text-center mb-6">
             <h2 class="text-2xl font-black text-slate-900 uppercase italic leading-tight">
                 Qual a forma de <br><span class="text-blue-600 underline">pagamento</span>?
             </h2>
         </div>
 
+        <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+            <i class="fas fa-triangle-exclamation text-amber-500 text-lg mt-0.5 shrink-0"></i>
+            <p class="text-[12px] text-amber-800 leading-relaxed">
+                <strong>Caro(a) {{ cliente || 'Cliente' }},</strong> oriente a aplicação a não ser feita em dias úmidos ou chuvosos — isso prejudica o rendimento e o acabamento do produto.
+            </p>
+        </div>
+
         <div class="bg-slate-50 border-2 p-6 rounded-[3rem] shadow-inner flex-1 flex flex-col space-y-4">
             <div class="grid grid-cols-2 gap-3" v-if="!pagamento">
-                <button @click="setPagamento('Pix')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">📱 Pix (-3%)</button>
-                <button @click="setPagamento('Espécie')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">💵 Dinheiro (-3%)</button>
-                <button @click="setPagamento('Cartão')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">💳 Cartão</button>
-                <button @click="setPagamento('Cheque')" class="bg-white border-2 p-4 rounded-2xl font-bold text-[10px] uppercase shadow-sm">✍️ Cheque</button>
+                <button @click="setPagamento('Pix')" class="bg-white border-2 border-slate-100 p-5 rounded-[1.75rem] font-black text-[11px] uppercase shadow-sm hover:border-blue-300 hover:shadow-md active:scale-95 transition-all flex flex-col items-center gap-2">
+                    <span class="text-2xl">📱</span> Pix <span class="text-emerald-600 text-[9px] font-bold">-3% desconto</span>
+                </button>
+                <button @click="setPagamento('Espécie')" class="bg-white border-2 border-slate-100 p-5 rounded-[1.75rem] font-black text-[11px] uppercase shadow-sm hover:border-blue-300 hover:shadow-md active:scale-95 transition-all flex flex-col items-center gap-2">
+                    <span class="text-2xl">💵</span> Dinheiro <span class="text-emerald-600 text-[9px] font-bold">-3% desconto</span>
+                </button>
+                <button @click="setPagamento('Cartão')" class="bg-white border-2 border-slate-100 p-5 rounded-[1.75rem] font-black text-[11px] uppercase shadow-sm hover:border-blue-300 hover:shadow-md active:scale-95 transition-all flex flex-col items-center gap-2">
+                    <span class="text-2xl">💳</span> Cartão
+                </button>
+                <button @click="setPagamento('Cheque')" class="bg-white border-2 border-slate-100 p-5 rounded-[1.75rem] font-black text-[11px] uppercase shadow-sm hover:border-blue-300 hover:shadow-md active:scale-95 transition-all flex flex-col items-center gap-2">
+                    <span class="text-2xl">✍️</span> Cheque
+                </button>
             </div>
 
-            <div v-if="(pagamento === 'Cartão' || pagamento === 'Cheque') && !parcelas" class="space-y-3">
+            <div v-if="pagamento === 'Cartão' && !parcelas" class="space-y-3">
                 <p class="text-center text-[10px] font-black text-slate-400 uppercase">Selecione o parcelamento:</p>
-                <template v-if="pagamento === 'Cartão'">
-                    <button v-for="n in 3" @click="setParcelas(n)" class="w-full bg-blue-600 text-white p-4 rounded-2xl font-bold text-sm flex justify-between items-center shadow-lg">
-                        <span>{{n}}x Sem Juros</span>
-                        <span>R$ {{ (totalPedido / n).toFixed(2) }}</span>
-                    </button>
-                </template>
-                <template v-if="pagamento === 'Cheque'">
-                    <button v-if="totalPedido <= 1000" @click="setParcelas(2, '30/45')" class="w-full bg-amber-500 text-white p-4 rounded-2xl font-bold text-sm flex justify-between items-center shadow-lg">
-                        <span>2x (30/45 dias)</span>
-                        <span>R$ {{ (totalPedido / 2).toFixed(2) }}</span>
-                    </button>
-                    <button v-else @click="setParcelas(3, '30/45/60')" class="w-full bg-amber-500 text-white p-4 rounded-2xl font-bold text-sm flex justify-between items-center shadow-lg">
-                        <span>3x (30/45/60 dias)</span>
-                        <span>R$ {{ (totalPedido / 3).toFixed(2) }}</span>
-                    </button>
-                </template>
+                <button v-for="n in maxParcelasCartao" @click="setParcelas(n)" class="w-full bg-blue-600 text-white p-5 rounded-[1.75rem] font-black text-base flex justify-between items-center shadow-lg active:scale-95 transition-all">
+                    <span>{{n}}x Sem Juros</span>
+                    <span>R$ {{ (totalPedido / n).toFixed(2) }}</span>
+                </button>
             </div>
 
             <div v-if="pagamento && (parcelas || ['Pix', 'Espécie'].includes(pagamento))" class="space-y-6">
                 <div class="p-5 bg-blue-600 rounded-[2rem] text-white text-center shadow-xl">
                     <p class="font-black text-sm uppercase">{{ formatarPagamento() }}</p>
                     <button @click="resetPagamento" class="mt-2 text-[10px] font-black bg-white/20 px-4 py-1 rounded-full uppercase">Trocar Forma</button>
+                </div>
+
+                <div v-if="pagamento === 'Cheque'" class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 flex items-start gap-3">
+                    <i class="fas fa-circle-info text-amber-500 mt-0.5 shrink-0"></i>
+                    <p class="text-[12px] text-amber-800 leading-relaxed">Parcelamento em cheque? <strong>Consulte com o vendedor essa possibilidade!</strong></p>
                 </div>
 
                 <div class="bg-slate-900 p-6 rounded-[2rem] text-center border-b-8 border-blue-500">
@@ -327,12 +335,21 @@
                 <p class="text-3xl font-black italic">R$ {{ (precoAtual * qtd).toFixed(2) }}</p>
                 <p class="text-[10px] font-bold uppercase text-blue-400">R$ {{ precoAtual.toFixed(2) }} / un</p>
             </div>
-            <p v-if="prodSel.qtdAtacado1 && qtd < prodSel.qtdAtacado1" class="text-[10px] text-slate-400 mb-4">
-                A partir de {{ prodSel.qtdAtacado1 }} un: R$ {{ prodSel.precoAtacado1.toFixed(2) }} cada
-            </p>
-            <p v-if="prodSel.qtdAtacado2 && qtd < prodSel.qtdAtacado2" class="text-[10px] text-slate-400 mb-4">
-                A partir de {{ prodSel.qtdAtacado2 }} un: R$ {{ prodSel.precoAtacado2.toFixed(2) }} cada
-            </p>
+
+            <div v-if="prodSel.qtdAtacado1" class="border-2 rounded-2xl p-3 mb-2 flex items-center justify-center gap-2" :class="qtd >= prodSel.qtdAtacado1 ? 'bg-emerald-500 border-emerald-500' : 'bg-emerald-50 border-emerald-200'">
+                <i class="fas fa-boxes-stacked" :class="qtd >= prodSel.qtdAtacado1 ? 'text-white' : 'text-emerald-600'"></i>
+                <p class="text-[13px] font-black" :class="qtd >= prodSel.qtdAtacado1 ? 'text-white' : 'text-emerald-700'">
+                    A partir de {{ prodSel.qtdAtacado1 }} un: <span class="text-base">R$ {{ prodSel.precoAtacado1.toFixed(2) }}</span> cada
+                    <i v-if="qtd >= prodSel.qtdAtacado1" class="fas fa-circle-check ml-1"></i>
+                </p>
+            </div>
+            <div v-if="prodSel.qtdAtacado2" class="border-2 rounded-2xl p-3 mb-4 flex items-center justify-center gap-2" :class="qtd >= prodSel.qtdAtacado2 ? 'bg-emerald-600 border-emerald-600' : 'bg-emerald-50 border-emerald-200'">
+                <i class="fas fa-boxes-stacked" :class="qtd >= prodSel.qtdAtacado2 ? 'text-white' : 'text-emerald-700'"></i>
+                <p class="text-[13px] font-black" :class="qtd >= prodSel.qtdAtacado2 ? 'text-white' : 'text-emerald-800'">
+                    A partir de {{ prodSel.qtdAtacado2 }} un: <span class="text-base">R$ {{ prodSel.precoAtacado2.toFixed(2) }}</span> cada
+                    <i v-if="qtd >= prodSel.qtdAtacado2" class="fas fa-circle-check ml-1"></i>
+                </p>
+            </div>
 
             <p v-if="precisaCor && !corEscolhida" class="text-[10px] text-red-500 font-bold uppercase mb-3">Escolha a cor antes de adicionar</p>
 
@@ -375,11 +392,15 @@
     </div>
 
     <div id="pdf-template" style="display:none; width: 700px; max-width: 100%; margin: 0 auto; padding: 20px; font-family: sans-serif; background: white; text-align: center;">
-        <div style="text-align: center; border-bottom: 3px solid #1e3a8a; padding-bottom: 20px;">
-            <h1 style="font-size: 30px; text-transform: uppercase; margin: 0; color: #1e3a8a;">Tintas Qualy Quimy</h1>
-            <p style="font-size: 12px; color: #64748b; margin: 6px 0 0;">Rua Leiria 45, Chácara Cuiabá - Itaquaquecetuba</p>
-            <p style="font-size: 14px; font-weight: bold; margin: 10px 0 0;">PEDIDO DE VENDA</p>
-            <p style="font-size: 12px;">Data: {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}</p>
+        <div style="display: flex; align-items: center; gap: 16px; border-bottom: 3px solid #1e3a8a; padding-bottom: 20px;">
+            <img src="logoqualquimy.jpg" alt="Logo" style="width: 60px; height: 60px; object-fit: contain; border-radius: 10px; flex-shrink: 0;">
+            <div style="flex: 1; text-align: center;">
+                <h1 style="font-size: 28px; text-transform: uppercase; margin: 0; color: #1e3a8a;">Tintas Qualy Quimy</h1>
+                <p style="font-size: 12px; color: #64748b; margin: 6px 0 0;">Rua Leiria 45, Chácara Cuiabá - Itaquaquecetuba</p>
+                <p style="font-size: 11px; color: #94a3b8; margin: 2px 0 0;">CNPJ: 10.503.834/0001-73</p>
+                <p style="font-size: 14px; font-weight: bold; margin: 10px 0 0;">PEDIDO DE VENDA</p>
+                <p style="font-size: 12px;">Data: {{ dataPedido ? dataPedido.split('-').reverse().join('/') : new Date().toLocaleDateString() }}</p>
+            </div>
         </div>
         <div style="padding: 16px 0; font-size: 14px; text-align: left;">
             <p style="margin: 2px 0;"><strong>Loja:</strong> Tintas Qualy Quimy</p>
@@ -413,7 +434,7 @@
     <footer class="mt-auto py-5 text-center border-t border-slate-100 bg-slate-50">
         <p class="text-[9px] text-slate-500 font-semibold mb-1"><i class="fas fa-lock text-[8px]"></i> Protegido por SSL</p>
         <!-- Troque o href abaixo pelo site/whatsapp da ImpulsoWeb10, se quiser outro link -->
-        <a href="https://avaliar.impulsoweb10.com.br/" target="_blank" class="text-[9px] font-black text-slate-700 uppercase tracking-widest hover:text-blue-600 transition-colors">Desenvolvido por ImpulsoWeb10</a>
+        <a href="https://impulsoweb10.com.br" target="_blank" class="text-[9px] font-black text-slate-700 uppercase tracking-widest hover:text-blue-600 transition-colors">Desenvolvido por ImpulsoWeb10</a>
     </footer>
 </div>
 
@@ -569,6 +590,12 @@ createApp({
             let t = this.totalPedido;
             if (this.pagamento === 'Pix' || this.pagamento === 'Espécie') t *= 0.97;
             return t;
+        },
+        maxParcelasCartao() {
+            const t = this.totalPedido;
+            if (t <= 300) return 1;
+            if (t < 500) return 2;
+            return 3;
         }
     },
     methods: {
@@ -707,12 +734,18 @@ createApp({
         },
         removerItem(idx) { this.carrinho.splice(idx, 1); if (!this.carrinho.length) this.tela = 'home'; },
         zerarPedido() { this.carrinho = []; this.pagamento = ''; this.parcelas = null; this.tela = 'home'; },
-        setPagamento(tipo) { this.pagamento = tipo; this.parcelas = null; },
+        setPagamento(tipo) {
+            this.pagamento = tipo;
+            this.parcelas = null;
+            if (tipo === 'Cartão' && this.maxParcelasCartao === 1) this.parcelas = 1;
+            if (tipo === 'Cheque') this.parcelas = 1;
+        },
         setParcelas(n, dias = '') { this.parcelas = n; this.diasCheque = dias; },
         resetPagamento() { this.pagamento = ''; this.parcelas = null; },
         formatarPagamento() {
-            if (this.pagamento === 'Cartão' && this.parcelas) return `${this.parcelas}x no Cartão (R$ ${(this.totalPedido/this.parcelas).toFixed(2)})`;
-            if (this.pagamento === 'Cheque' && this.parcelas) return `${this.parcelas}x no Cheque ${this.diasCheque} (R$ ${(this.totalPedido/this.parcelas).toFixed(2)})`;
+            if (this.pagamento === 'Cartão' && this.parcelas > 1) return `${this.parcelas}x no Cartão (R$ ${(this.totalPedido/this.parcelas).toFixed(2)})`;
+            if (this.pagamento === 'Cartão') return 'Cartão (1x)';
+            if (this.pagamento === 'Cheque') return 'Cheque (1x)';
             if (this.pagamento === 'Pix') return 'Pix (-3%)';
             if (this.pagamento === 'Espécie') return 'Dinheiro (-3%)';
             return this.pagamento;
