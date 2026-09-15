@@ -1,11 +1,37 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3S6rIlAZNn2FSd1Ld6BaFwDT3VyeAuSPNZNn1TtrHZ1bRzEdPJ5FOHFpvOscr8iz_fA/exec";
 
+// Lista padrão baseada na planilha SERVICOS
+const DEFAULT_SERVICOS = [
+  { NOME_SERVICO: "Troca de óleo", INTERVALO_DIAS: 90, INTERVALO_KM: 3000, VALOR_SUGERIDO: 80 },
+  { NOME_SERVICO: "Troca de filtro de óleo", INTERVALO_DIAS: 90, INTERVALO_KM: 3000 },
+  { NOME_SERVICO: "Troca de filtro de ar" },
+  { NOME_SERVICO: "Troca de vela" },
+  { NOME_SERVICO: "Revisão geral" },
+  { NOME_SERVICO: "Troca de pastilhas de freio" },
+  { NOME_SERVICO: "Troca de lona de freio" },
+  { NOME_SERVICO: "Troca de pneu" },
+  { NOME_SERVICO: "Troca de corrente" },
+  { NOME_SERVICO: "Troca de relação" },
+  { NOME_SERVICO: "Troca de correia" },
+  { NOME_SERVICO: "Troca de correia dentada" },
+  { NOME_SERVICO: "Troca de bateria" },
+  { NOME_SERVICO: "Troca de embreagem" },
+  { NOME_SERVICO: "Troca de cabo" },
+  { NOME_SERVICO: "Troca de lâmpada" },
+  { NOME_SERVICO: "Troca de fluido de freio" },
+  { NOME_SERVICO: "Troca de fluido de suspensão" },
+  { NOME_SERVICO: "Lubrificação" },
+  { NOME_SERVICO: "Limpeza" },
+  { NOME_SERVICO: "Manutenção preventiva" },
+  { NOME_SERVICO: "Manutenção corretiva" }
+];
+
 let state = {
   clientes: [],
   motos: [],
   manutencoes: [],
   retornos: [],
-  servicos: [],
+  servicos: DEFAULT_SERVICOS,
   configuracoes: [],
   soundEnabled: true
 };
@@ -15,17 +41,19 @@ document.addEventListener("DOMContentLoaded", () => {
   registerSW();
 });
 
-// Auxiliar para salvar estado localmente no navegador
 function saveToLocalStorage() {
   localStorage.setItem('oficina_state', JSON.stringify(state));
 }
 
-// Carrega dados do LocalStorage e atualiza do Google Sheets
 async function loadData() {
   const localData = localStorage.getItem('oficina_state');
   if (localData) {
     try {
-      state = { ...state, ...JSON.parse(localData) };
+      const parsed = JSON.parse(localData);
+      state = { ...state, ...parsed };
+      if (!state.servicos || state.servicos.length === 0) {
+        state.servicos = DEFAULT_SERVICOS;
+      }
       renderApp();
     } catch (e) {
       console.error("Erro ao ler cache local:", e);
@@ -38,6 +66,9 @@ async function loadData() {
     const data = await res.json();
     if (data && !data.error) {
       state = { ...state, ...data };
+      if (!state.servicos || state.servicos.length === 0) {
+        state.servicos = DEFAULT_SERVICOS;
+      }
       saveToLocalStorage();
       renderApp();
     }
@@ -136,6 +167,21 @@ function renderRetornos() {
   }).join('');
 }
 
+function populateDropdowns() {
+  const selectCli = document.getElementById('moto_ID_CLIENTE');
+  if (selectCli) {
+    selectCli.innerHTML = '<option value="">Selecione o Cliente</option>' + 
+      state.clientes.map(c => `<option value="${c.ID_CLIENTE}">${c.NOME}</option>`).join('');
+  }
+
+  const selectSrv = document.getElementById('man_SERVICO');
+  if (selectSrv) {
+    const listSrv = state.servicos && state.servicos.length > 0 ? state.servicos : DEFAULT_SERVICOS;
+    selectSrv.innerHTML = '<option value="">Selecione o Serviço</option>' + 
+      listSrv.map(s => `<option value="${s.NOME_SERVICO}">${s.NOME_SERVICO}</option>`).join('');
+  }
+}
+
 function getStatusRetorno(r) {
   if (r.STATUS === 'CONCLUIDO') return 'CONCLUIDO';
   const today = getTodayFormatted();
@@ -146,7 +192,8 @@ function getStatusRetorno(r) {
 }
 
 function onServiceSelect(servicoNome) {
-  const srv = state.servicos.find(s => s.NOME_SERVICO === servicoNome);
+  const listSrv = state.servicos && state.servicos.length > 0 ? state.servicos : DEFAULT_SERVICOS;
+  const srv = listSrv.find(s => s.NOME_SERVICO === servicoNome);
   if (!srv) return;
 
   const kmAtual = parseInt(document.getElementById('man_KM_SERVICO').value) || 0;
@@ -162,7 +209,6 @@ function onServiceSelect(servicoNome) {
   }
 }
 
-// SALVAR CLIENTE
 async function saveCliente(e) {
   e.preventDefault();
   const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -203,7 +249,6 @@ async function saveCliente(e) {
   }
 }
 
-// SALVAR MOTO
 async function saveMoto(e) {
   e.preventDefault();
   const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -241,7 +286,6 @@ async function saveMoto(e) {
   }
 }
 
-// SALVAR MANUTENÇÃO E AGENDAR RETORNO
 async function saveManutencao(e) {
   e.preventDefault();
   const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -297,7 +341,6 @@ async function saveManutencao(e) {
   }
 }
 
-// CONCLUIR RETORNO
 async function concluirRetorno(idRetorno) {
   const ret = state.retornos.find(r => r.ID_RETORNO === idRetorno);
   if (!ret) return;
@@ -314,7 +357,6 @@ async function concluirRetorno(idRetorno) {
   }
 }
 
-// ENVIO POST PARA GOOGLE APPS SCRIPT
 async function apiPost(action, payload) {
   return fetch(APPS_SCRIPT_URL, {
     method: 'POST',
@@ -375,6 +417,7 @@ function navTo(secId) {
 function openModal(id) { 
   const modal = document.getElementById(id);
   if (!modal) return;
+  populateDropdowns();
   const form = modal.querySelector('form');
   if (form) form.reset();
   modal.classList.add('active'); 
@@ -420,20 +463,6 @@ function openNovaManutencao(idMoto) {
   document.getElementById('man_KM_SERVICO').value = moto.KM_ATUAL || '';
   document.getElementById('man_info_moto').innerText = `${moto.MARCA || ''} ${moto.MODELO || ''} - Placa: ${moto.PLACA || ''}`;
   openModal('modal-manutencao');
-}
-
-function populateDropdowns() {
-  const selectCli = document.getElementById('moto_ID_CLIENTE');
-  if (selectCli) {
-    selectCli.innerHTML = '<option value="">Selecione o Cliente</option>' + 
-      state.clientes.map(c => `<option value="${c.ID_CLIENTE}">${c.NOME}</option>`).join('');
-  }
-
-  const selectSrv = document.getElementById('man_SERVICO');
-  if (selectSrv) {
-    selectSrv.innerHTML = '<option value="">Selecione o Serviço</option>' + 
-      state.servicos.map(s => `<option value="${s.NOME_SERVICO}">${s.NOME_SERVICO}</option>`).join('');
-  }
 }
 
 function exportBackup() {
