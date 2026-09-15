@@ -5,14 +5,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oficina de Motos</title>
   <link rel="manifest" href="manifest.json">
+  
+  <!-- Fontes e Ícones Modernos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    /* ESTILOS DE MELHORIA VISUAL E EFEITO FLUTUANTE */
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --secondary: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding-bottom: 90px;
+    }
+
+    /* Efeito de flutuação para botões e cards */
+    .btn-primary, .btn-secondary, .btn-danger, .kpi-card, .card, button {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover, .btn-secondary:hover, .btn-danger:hover, button:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-primary:active, .btn-secondary:active, .btn-danger:active, button:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* Cabeçalho */
+    .app-header {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: white;
+      padding: 16px 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .header-actions input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: #334155;
+      color: white;
+      outline: none;
+    }
+
+    /* Menu de Navegação Rodapé */
+    .bottom-nav {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .bottom-nav .nav-item {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      padding: 6px 12px;
+      border-radius: 16px;
+    }
+
+    .bottom-nav .nav-item i {
+      font-size: 1.4rem; /* Ícones do rodapé maiores */
+    }
+
+    .bottom-nav .nav-item.active {
+      color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .bottom-nav .nav-item:hover {
+      transform: translateY(-4px);
+      color: var(--primary);
+    }
+  </style>
 </head>
 <body>
 
   <header class="app-header">
     <h1 id="oficina-nome">Oficina de Motos</h1>
     <div class="header-actions">
-      <button id="btn-sound" onclick="toggleSound()">🔊 SOM ON</button>
+      <button id="btn-sound" onclick="toggleSound()"><i class="fa-solid fa-volume-high"></i> SOM ON</button>
       <input type="text" id="global-search" placeholder="Buscar placa, cliente, telefone..." oninput="handleSearch(this.value)">
     </div>
   </header>
@@ -35,8 +153,8 @@
     <section id="sec-clientes" class="view-section">
       <h2>Gestão de Clientes</h2>
       <div class="action-bar" style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <button class="btn-primary" onclick="openModal('modal-cliente')">+ Novo Cliente</button>
-        <button class="btn-secondary" onclick="renderClientes()">👥 Clientes Cadastrados</button>
+        <button class="btn-primary" onclick="openModal('modal-cliente')"><i class="fa-solid fa-user-plus"></i> Novo Cliente</button>
+        <button class="btn-secondary" onclick="renderClientes()"><i class="fa-solid fa-users"></i> Clientes Cadastrados</button>
       </div>
       <div id="lista-clientes" class="card-list"></div>
     </section>
@@ -45,8 +163,8 @@
     <section id="sec-motos" class="view-section">
       <h2>Gestão de Motos</h2>
       <div class="action-bar" style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <button class="btn-primary" onclick="openModal('modal-moto')">+ Nova Moto</button>
-        <button class="btn-secondary" onclick="renderMotos()">🏍️ Motos Cadastradas</button>
+        <button class="btn-primary" onclick="openModal('modal-moto')"><i class="fa-solid fa-motorcycle"></i> Nova Moto</button>
+        <button class="btn-secondary" onclick="renderMotos()"><i class="fa-solid fa-list"></i> Motos Cadastradas</button>
       </div>
       <div id="lista-motos" class="card-list"></div>
     </section>
@@ -61,10 +179,10 @@
     <section id="sec-menu" class="view-section">
       <h2>Menu & Backup</h2>
       <div class="menu-actions">
-        <button class="btn-secondary" onclick="exportBackup()">📥 Exportar Backup (JSON)</button>
-        <button class="btn-secondary" onclick="exportCSV()">📊 Exportar CSV</button>
+        <button class="btn-secondary" onclick="exportBackup()"><i class="fa-solid fa-download"></i> Exportar Backup (JSON)</button>
+        <button class="btn-secondary" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button>
         <input type="file" id="import-file" style="display:none" onchange="importBackup(event)">
-        <button class="btn-secondary" onclick="document.getElementById('import-file').click()">📤 Importar Backup</button>
+        <button class="btn-secondary" onclick="document.getElementById('import-file').click()"><i class="fa-solid fa-upload"></i> Importar Backup</button>
       </div>
     </section>
 
@@ -75,13 +193,28 @@
     </section>
   </main>
 
-  <!-- NAVEGAÇÃO MOBILE INFERIOR -->
+  <!-- NAVEGAÇÃO MOBILE INFERIOR (COM ÍCONES MAIORES) -->
   <nav class="bottom-nav">
-    <button onclick="navTo('sec-dashboard')" class="nav-item active">🏠 Início</button>
-    <button onclick="navTo('sec-clientes')" class="nav-item">👤 Clientes</button>
-    <button onclick="navTo('sec-motos')" class="nav-item">🏍️ Motos</button>
-    <button onclick="navTo('sec-retornos')" class="nav-item">🔔 Retornos</button>
-    <button onclick="navTo('sec-menu')" class="nav-item">⚙️ Menu</button>
+    <button onclick="navTo('sec-dashboard')" class="nav-item active">
+      <i class="fa-solid fa-house"></i>
+      <span>Início</span>
+    </button>
+    <button onclick="navTo('sec-clientes')" class="nav-item">
+      <i class="fa-solid fa-user-group"></i>
+      <span>Clientes</span>
+    </button>
+    <button onclick="navTo('sec-motos')" class="nav-item">
+      <i class="fa-solid fa-motorcycle"></i>
+      <span>Motos</span>
+    </button>
+    <button onclick="navTo('sec-retornos')" class="nav-item">
+      <i class="fa-solid fa-bell"></i>
+      <span>Retornos</span>
+    </button>
+    <button onclick="navTo('sec-menu')" class="nav-item">
+      <i class="fa-solid fa-gear"></i>
+      <span>Menu</span>
+    </button>
   </nav>
 
   <!-- MODAL CLIENTE -->
@@ -134,7 +267,7 @@
     </div>
   </div>
 
-  <!-- MODAL MANUTENÇÃO -->
+  <!-- MODAL MANUTENÇÃO COM LISTA COMPLETA DE SERVIÇOS CARREGADA -->
   <div id="modal-manutencao" class="modal">
     <div class="modal-content">
       <h3>Nova Manutenção</h3>
@@ -146,7 +279,29 @@
         
         <label for="man_SERVICO"><strong>Serviço Realizado:</strong></label>
         <select id="man_SERVICO" onchange="onServiceSelect(this.value)" required>
-          <option value="">Carregando serviços...</option>
+          <option value="">Selecione o Serviço...</option>
+          <option value="Troca de óleo">Troca de óleo</option>
+          <option value="Troca de filtro de óleo">Troca de filtro de óleo</option>
+          <option value="Troca de filtro de ar">Troca de filtro de ar</option>
+          <option value="Troca de vela">Troca de vela</option>
+          <option value="Revisão geral">Revisão geral</option>
+          <option value="Troca de pastilhas de freio">Troca de pastilhas de freio</option>
+          <option value="Troca de lona de freio">Troca de lona de freio</option>
+          <option value="Troca de pneu">Troca de pneu</option>
+          <option value="Troca de corrente">Troca de corrente</option>
+          <option value="Troca de relação">Troca de relação</option>
+          <option value="Troca de correia">Troca de correia</option>
+          <option value="Troca de correia dentada">Troca de correia dentada</option>
+          <option value="Troca de bateria">Troca de bateria</option>
+          <option value="Troca de embreagem">Troca de embreagem</option>
+          <option value="Troca de cabo">Troca de cabo</option>
+          <option value="Troca de lâmpada">Troca de lâmpada</option>
+          <option value="Troca de fluido de freio">Troca de fluido de freio</option>
+          <option value="Troca de fluido de suspensão">Troca de fluido de suspensão</option>
+          <option value="Lubrificação">Lubrificação</option>
+          <option value="Limpeza">Limpeza</option>
+          <option value="Manutenção preventiva">Manutenção preventiva</option>
+          <option value="Manutenção corretiva">Manutenção corretiva</option>
         </select>
 
         <label for="man_TIPO_MANUTENCAO"><strong>Tipo de Manutenção:</strong></label>
