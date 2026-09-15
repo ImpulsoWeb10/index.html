@@ -1,5 +1,5 @@
 
-const APPS_SCRIPT_URL = "SUA_URL_DO_APPS_SCRIPT_AQUI";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdA_m_8TkJ64LHnwizwBWBhfdBFcHquE4d2TNirlKMb8w00LOMIbDQAf7y26RmzKVu/exec";
 
 let state = {
   clientes: [],
