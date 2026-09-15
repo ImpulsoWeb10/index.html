@@ -1,1 +1,16 @@
 
+{
+  "name": "Oficina de Motos App",
+  "short_name": "Oficina",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a252f",
+  "theme_color": "#1a252f",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3198/3198344.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
