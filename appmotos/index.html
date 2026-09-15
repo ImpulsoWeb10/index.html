@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -87,7 +86,7 @@
         <input type="text" id="cli_NOME" placeholder="Nome completo" required>
         <input type="text" id="cli_CPF_CNPJ" placeholder="CPF/CNPJ">
         <input type="tel" id="cli_TELEFONE" placeholder="Telefone">
-        <input type="tel" id="cli_WHATSAPP" placeholder="WhatsApp (ex: 5511999999999)" required>
+        <input type="tel" id="cli_WHATSAPP" placeholder="WhatsApp (ex: 5511999999999)">
         <input type="email" id="cli_EMAIL" placeholder="E-mail">
         <input type="text" id="cli_CEP" placeholder="CEP">
         <input type="text" id="cli_ENDERECO" placeholder="Endereço">
@@ -96,7 +95,9 @@
         <input type="text" id="cli_CIDADE" placeholder="Cidade">
         <input type="text" id="cli_UF" placeholder="UF" maxlength="2">
         <textarea id="cli_OBSERVACOES" placeholder="Observações"></textarea>
+        
         <button type="submit" class="btn-primary">Salvar Cliente</button>
+        <button type="reset" class="btn-secondary">🧹 Limpar Campos</button>
         <button type="button" class="btn-danger" onclick="closeModal('modal-cliente')">Cancelar</button>
       </form>
     </div>
@@ -107,19 +108,21 @@
     <div class="modal-content">
       <h3>Nova Moto</h3>
       <form id="form-moto" onsubmit="saveMoto(event)">
-        <select id="moto_ID_CLIENTE" required>
+        <select id="moto_ID_CLIENTE">
           <option value="">Selecione o Cliente</option>
         </select>
-        <input type="text" id="moto_MARCA" placeholder="Marca (ex: Honda)" required>
-        <input type="text" id="moto_MODELO" placeholder="Modelo (ex: CG 160)" required>
+        <input type="text" id="moto_MARCA" placeholder="Marca (ex: Honda)">
+        <input type="text" id="moto_MODELO" placeholder="Modelo (ex: CG 160)">
         <input type="number" id="moto_ANO" placeholder="Ano">
         <input type="text" id="moto_COR" placeholder="Cor">
-        <input type="text" id="moto_PLACA" placeholder="Placa" required>
+        <input type="text" id="moto_PLACA" placeholder="Placa">
         <input type="text" id="moto_CHASSI" placeholder="Chassi">
         <input type="text" id="moto_RENAVAM" placeholder="Renavam">
-        <input type="number" id="moto_KM_ATUAL" placeholder="KM Atual" required>
+        <input type="number" id="moto_KM_ATUAL" placeholder="KM Atual">
         <textarea id="moto_OBSERVACOES" placeholder="Observações"></textarea>
+        
         <button type="submit" class="btn-primary">Salvar Moto</button>
+        <button type="reset" class="btn-secondary">🧹 Limpar Campos</button>
         <button type="button" class="btn-danger" onclick="closeModal('modal-moto')">Cancelar</button>
       </form>
     </div>
@@ -135,15 +138,15 @@
         
         <p><strong id="man_info_moto"></strong></p>
         
-        <select id="man_SERVICO" onchange="onServiceSelect(this.value)" required>
+        <select id="man_SERVICO" onchange="onServiceSelect(this.value)">
           <option value="">Selecione o Serviço</option>
         </select>
         <select id="man_TIPO_MANUTENCAO">
           <option value="Preventiva">Preventiva</option>
           <option value="Corretiva">Corretiva</option>
         </select>
-        <input type="number" id="man_KM_SERVICO" placeholder="KM Atual do Serviço" required>
-        <input type="number" step="0.01" id="man_VALOR" placeholder="Valor (R$)" required>
+        <input type="number" id="man_KM_SERVICO" placeholder="KM Atual do Serviço">
+        <input type="number" step="0.01" id="man_VALOR" placeholder="Valor (R$)">
         <input type="text" id="man_PECAS_UTILIZADAS" placeholder="Peças Utilizadas">
         <input type="text" id="man_MECANICO" placeholder="Mecânico responsável">
         <textarea id="man_OBSERVACOES" placeholder="Observações"></textarea>
@@ -156,6 +159,7 @@
         <input type="number" id="man_PROXIMA_KM_SUGERIDA">
 
         <button type="submit" class="btn-primary">Confirmar e Salvar</button>
+        <button type="reset" class="btn-secondary">🧹 Limpar Campos</button>
         <button type="button" class="btn-danger" onclick="closeModal('modal-manutencao')">Cancelar</button>
       </form>
     </div>
