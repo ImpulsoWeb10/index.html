@@ -1,1 +1,46 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oficina de Motos - Teste API</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Oficina de Motos — Teste da API</h1>
+
+    <!-- PAINEL DE LEITURA -->
+    <section class="card">
+      <h2>1. Testes de Leitura (GET)</h2>
+      <div class="button-group">
+        <button id="btnPing">Testar PING</button>
+        <button id="btnClientes">Listar Clientes</button>
+        <button id="btnMotos">Listar Motos</button>
+        <button id="btnServicos">Listar Serviços</button>
+      </div>
+    </section>
+
+    <!-- PAINEL DE GRAVAÇÃO -->
+    <section class="card">
+      <h2>2. Teste de Cadastro de Cliente (POST)</h2>
+      <form id="formCliente">
+        <input type="text" id="nomeCliente" placeholder="Nome Completo *" required>
+        <input type="text" id="cpfCliente" placeholder="CPF/CNPJ">
+        <input type="tel" id="telCliente" placeholder="Telefone / WhatsApp">
+        <input type="email" id="emailCliente" placeholder="E-mail">
+        <button type="submit">Cadastrar Cliente na Planilha</button>
+      </form>
+    </section>
+
+    <!-- PAINEL DE RESPOSTA -->
+    <section class="card">
+      <h2>Resposta da API:</h2>
+      <pre id="output">Aguardando ação...</pre>
+    </section>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
