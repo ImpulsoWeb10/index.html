@@ -2,7 +2,7 @@
 // CONFIGURAÇÃO E ESTADO DA APLICAÇÃO
 // ==========================================
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3S6rIlAZNn2FSd1Ld6BaFwDT3VyeAuSPNZNn1TtrHZ1bRzEdPJ5FOHFpvOscr8iz_fA/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRVwQYCAFaxcqTLhQwLPzXgJGwOWNslWgMUd7sz53nX9DYblu0XiMKNlJxodhLFbYkjA/exec";
 
 const DEFAULT_SERVICOS = [
   { NOME_SERVICO: "Troca de óleo", INTERVALO_DIAS: 90, INTERVALO_KM: 3000, VALOR_SUGERIDO: 80 },
