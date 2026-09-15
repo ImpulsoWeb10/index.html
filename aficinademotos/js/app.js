@@ -1,3 +1,4 @@
+// URL da API publicada no Google Apps Script
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfnoPvMwYaBIVFKUeP13u0bWtY7oIMPzB51NC4cdBX6pwWQXESwG1fiJ36G0Z01t43pA/exec";
 
 const output = document.getElementById("output");
@@ -8,14 +9,18 @@ function showOutput(data) {
   }
 }
 
-// Requisição GET (Leitura)
+// Requisição GET (Leitura) - Com suporte a redirecionamento do Apps Script
 async function apiGet(action, table = "") {
   showOutput("Consultando API...");
   try {
     let url = `${APPS_SCRIPT_URL}?action=${action}`;
     if (table) url += `&table=${table}`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: "GET",
+      redirect: "follow"
+    });
+
     const data = await response.json();
     showOutput(data);
   } catch (error) {
@@ -44,7 +49,7 @@ async function apiPost(action, table, payload) {
   }
 }
 
-// Mapeamento dos Botões de Leitura
+// Mapeamento dos Botões e Formulários
 document.addEventListener("DOMContentLoaded", () => {
   const btnPing = document.getElementById("btnPing");
   const btnClientes = document.getElementById("btnClientes");
