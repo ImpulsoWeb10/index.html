@@ -114,7 +114,7 @@
     <div class="modal-content">
       <h3>Nova Moto</h3>
       <form id="form-moto" onsubmit="saveMoto(event)">
-        <select id="moto_ID_CLIENTE">
+        <select id="moto_ID_CLIENTE" required>
           <option value="">Selecione o Cliente</option>
         </select>
         <input type="text" id="moto_MARCA" placeholder="Marca (ex: Honda)">
@@ -144,13 +144,17 @@
         
         <p><strong id="man_info_moto"></strong></p>
         
-        <select id="man_SERVICO" onchange="onServiceSelect(this.value)">
-          <option value="">Selecione o Serviço</option>
+        <label for="man_SERVICO"><strong>Serviço Realizado:</strong></label>
+        <select id="man_SERVICO" onchange="onServiceSelect(this.value)" required>
+          <option value="">Carregando serviços...</option>
         </select>
+
+        <label for="man_TIPO_MANUTENCAO"><strong>Tipo de Manutenção:</strong></label>
         <select id="man_TIPO_MANUTENCAO">
           <option value="Preventiva">Preventiva</option>
           <option value="Corretiva">Corretiva</option>
         </select>
+
         <input type="number" id="man_KM_SERVICO" placeholder="KM Atual do Serviço">
         <input type="number" step="0.01" id="man_VALOR" placeholder="Valor (R$)">
         <input type="text" id="man_PECAS_UTILIZADAS" placeholder="Peças Utilizadas">
@@ -159,9 +163,9 @@
         
         <hr>
         <h4>Sugestão de Retorno</h4>
-        <label>Próxima Data Sugerida:</label>
+        <label for="man_PROXIMA_DATA_SUGERIDA">Próxima Data Sugerida:</label>
         <input type="date" id="man_PROXIMA_DATA_SUGERIDA">
-        <label>Próxima KM Sugerida:</label>
+        <label for="man_PROXIMA_KM_SUGERIDA">Próxima KM Sugerida:</label>
         <input type="number" id="man_PROXIMA_KM_SUGERIDA">
 
         <button type="submit" class="btn-primary">Confirmar e Salvar</button>
