@@ -1,6 +1,11 @@
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvRD7VEBBi7ID7U6NGI-lDROmvSNNAqVN4fplCrAyWbXykDOazMvEbME2I81HOStPKOA/exec";
+// ==========================================
+// CONFIGURAÇÃO E ESTADO DA APLICAÇÃO
+// ==========================================
 
-// Lista padrão baseada na planilha SERVICOS
+// Substitua pela URL gerada na implantação do Apps Script (terminada em /exec)
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3S6rIlAZNn2FSd1Ld6BaFwDT3VyeAuSPNZNn1TtrHZ1bRzEdPJ5FOHFpvOscr8iz_fA/exec";
+
+// Lista padrão de serviços (Fallback caso o Sheets esteja offline)
 const DEFAULT_SERVICOS = [
   { NOME_SERVICO: "Troca de óleo", INTERVALO_DIAS: 90, INTERVALO_KM: 3000, VALOR_SUGERIDO: 80 },
   { NOME_SERVICO: "Troca de filtro de óleo", INTERVALO_DIAS: 90, INTERVALO_KM: 3000 },
@@ -36,6 +41,10 @@ let state = {
   soundEnabled: true
 };
 
+// ==========================================
+// INICIALIZAÇÃO
+// ==========================================
+
 document.addEventListener("DOMContentLoaded", () => {
   loadData();
   registerSW();
@@ -45,6 +54,7 @@ function saveToLocalStorage() {
   localStorage.setItem('oficina_state', JSON.stringify(state));
 }
 
+// Carrega dados do cache local e sincroniza com o Google Sheets
 async function loadData() {
   const localData = localStorage.getItem('oficina_state');
   if (localData) {
@@ -61,6 +71,7 @@ async function loadData() {
   }
 
   if (!APPS_SCRIPT_URL) return;
+
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getAllData`);
     const data = await res.json();
@@ -77,6 +88,10 @@ async function loadData() {
   }
 }
 
+// ==========================================
+// RENDERIZAÇÃO DA INTERFACE
+// ==========================================
+
 function renderApp() {
   renderDashboard();
   renderClientes();
@@ -87,9 +102,13 @@ function renderApp() {
 }
 
 function renderDashboard() {
-  const configOficina = state.configuracoes.find(c => c.PARAMETRO === 'NOME_OFICINA');
-  if (configOficina && configOficina.VALOR) {
-    document.getElementById('oficina-nome').innerText = configOficina.VALOR;
+  // Atualiza o nome da oficina dinamicamente via aba CONFIGURACOES
+  if (state.configuracoes && state.configuracoes.length > 0) {
+    const configOficina = state.configuracoes.find(c => c.PARAMETRO === 'NOME_OFICINA');
+    if (configOficina && configOficina.VALOR) {
+      const titleElem = document.getElementById('oficina-nome');
+      if (titleElem) titleElem.innerText = configOficina.VALOR;
+    }
   }
 
   document.getElementById('kpi-clientes').innerText = state.clientes.length;
@@ -154,7 +173,7 @@ function renderRetornos() {
     const statusCalculado = getStatusRetorno(r);
 
     return `
-      <div class="card ${statusCalculado}">
+      <div class="card ${statusCalculado.toLowerCase()}">
         <h3>${statusCalculado}: ${cliente.NOME || 'Cliente'}</h3>
         <p><strong>Moto:</strong> ${moto.MARCA || ''} ${moto.MODELO || ''} (${moto.PLACA || ''})</p>
         <p><strong>Serviço:</strong> ${r.SERVICO || ''} | <strong>Data:</strong> ${r.PROXIMO_RETORNO || ''}</p>
@@ -167,6 +186,7 @@ function renderRetornos() {
   }).join('');
 }
 
+// Preenche os Selects do HTML dinamicamente
 function populateDropdowns() {
   const selectCli = document.getElementById('moto_ID_CLIENTE');
   if (selectCli) {
@@ -182,15 +202,7 @@ function populateDropdowns() {
   }
 }
 
-function getStatusRetorno(r) {
-  if (r.STATUS === 'CONCLUIDO') return 'CONCLUIDO';
-  const today = getTodayFormatted();
-  const dateRet = formatDateStandard(r.PROXIMO_RETORNO);
-  if (dateRet === today) return 'HOJE';
-  if (isAtrasado(r.PROXIMO_RETORNO)) return 'ATRASADO';
-  return 'AGENDADO';
-}
-
+// Preenche dados automáticos ao selecionar um serviço (KM e Data recomendada)
 function onServiceSelect(servicoNome) {
   const listSrv = state.servicos && state.servicos.length > 0 ? state.servicos : DEFAULT_SERVICOS;
   const srv = listSrv.find(s => s.NOME_SERVICO === servicoNome);
@@ -206,6 +218,27 @@ function onServiceSelect(servicoNome) {
   }
   if (srv.INTERVALO_KM) {
     document.getElementById('man_PROXIMA_KM_SUGERIDA').value = kmAtual + parseInt(srv.INTERVALO_KM);
+  }
+}
+
+// ==========================================
+// OPERAÇÕES DE SALVAMENTO E API
+// ==========================================
+
+// Envio de dados via POST otimizado para Google Apps Script (sem bloqueio de CORS)
+async function apiPost(action, payload) {
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({ action: action, payload: payload })
+    });
+    console.log(`Enviado para o Sheets: ${action}`);
+  } catch (err) {
+    console.error(`Erro ao enviar ${action} para o Sheets:`, err);
   }
 }
 
@@ -242,8 +275,6 @@ async function saveCliente(e) {
 
   try {
     await apiPost('addCliente', payload);
-  } catch (err) {
-    console.error("Erro ao salvar cliente no Sheets:", err);
   } finally {
     if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = "Salvar Cliente"; }
   }
@@ -279,8 +310,6 @@ async function saveMoto(e) {
 
   try {
     await apiPost('addMoto', payload);
-  } catch (err) {
-    console.error("Erro ao salvar moto no Sheets:", err);
   } finally {
     if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = "Salvar Moto"; }
   }
@@ -334,8 +363,6 @@ async function saveManutencao(e) {
   try {
     await apiPost('addManutencao', manPayload);
     await apiPost('addRetorno', retPayload);
-  } catch (err) {
-    console.error("Erro ao salvar manutenção no Sheets:", err);
   } finally {
     if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = "Confirmar e Salvar"; }
   }
@@ -353,18 +380,13 @@ async function concluirRetorno(idRetorno) {
   try {
     await apiPost('updateRetornoStatus', { ID_RETORNO: idRetorno, STATUS: 'CONCLUIDO', DATA_CONCLUSAO: ret.DATA_CONCLUSAO });
   } catch (err) {
-    console.error("Erro ao atualizar status no Sheets:", err);
+    console.error("Erro ao atualizar status:", err);
   }
 }
 
-async function apiPost(action, payload) {
-  return fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action, payload })
-  });
-}
+// ==========================================
+// FUNÇÕES UTILITÁRIAS E NAVEGAÇÃO
+// ==========================================
 
 function sendWhatsApp(idRetorno) {
   const ret = state.retornos.find(r => r.ID_RETORNO === idRetorno);
@@ -410,8 +432,13 @@ function toggleSound() {
 
 function navTo(secId) {
   document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav .nav-item').forEach(b => b.classList.remove('active'));
+
   const target = document.getElementById(secId);
   if (target) target.classList.add('active');
+
+  const activeBtn = document.querySelector(`.bottom-nav button[onclick="navTo('${secId}')"]`);
+  if (activeBtn) activeBtn.classList.add('active');
 }
 
 function openModal(id) { 
@@ -443,6 +470,15 @@ function formatDateBR(isoDate) {
   if(!isoDate) return '';
   const parts = isoDate.split('-');
   return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+function getStatusRetorno(r) {
+  if (r.STATUS === 'CONCLUIDO') return 'CONCLUIDO';
+  const today = getTodayFormatted();
+  const dateRet = formatDateStandard(r.PROXIMO_RETORNO);
+  if (dateRet === today) return 'HOJE';
+  if (isAtrasado(r.PROXIMO_RETORNO)) return 'ATRASADO';
+  return 'AGENDADO';
 }
 
 function isAtrasado(dateStr) {
