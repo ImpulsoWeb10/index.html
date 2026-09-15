@@ -2,10 +2,8 @@
 // CONFIGURAÇÃO E ESTADO DA APLICAÇÃO
 // ==========================================
 
-// Substitua pela URL gerada na implantação do Apps Script (terminada em /exec)
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3S6rIlAZNn2FSd1Ld6BaFwDT3VyeAuSPNZNn1TtrHZ1bRzEdPJ5FOHFpvOscr8iz_fA/exec";
 
-// Lista padrão de serviços (Fallback caso o Sheets esteja offline)
 const DEFAULT_SERVICOS = [
   { NOME_SERVICO: "Troca de óleo", INTERVALO_DIAS: 90, INTERVALO_KM: 3000, VALOR_SUGERIDO: 80 },
   { NOME_SERVICO: "Troca de filtro de óleo", INTERVALO_DIAS: 90, INTERVALO_KM: 3000 },
@@ -42,7 +40,7 @@ let state = {
 };
 
 // ==========================================
-// INICIALIZAÇÃO
+// INICIALIZAÇÃO E CARREGAMENTO
 // ==========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -54,7 +52,6 @@ function saveToLocalStorage() {
   localStorage.setItem('oficina_state', JSON.stringify(state));
 }
 
-// Carrega dados do cache local e sincroniza com o Google Sheets
 async function loadData() {
   const localData = localStorage.getItem('oficina_state');
   if (localData) {
@@ -102,7 +99,6 @@ function renderApp() {
 }
 
 function renderDashboard() {
-  // Atualiza o nome da oficina dinamicamente via aba CONFIGURACOES
   if (state.configuracoes && state.configuracoes.length > 0) {
     const configOficina = state.configuracoes.find(c => c.PARAMETRO === 'NOME_OFICINA');
     if (configOficina && configOficina.VALOR) {
@@ -186,23 +182,25 @@ function renderRetornos() {
   }).join('');
 }
 
-// Preenche os Selects do HTML dinamicamente
 function populateDropdowns() {
   const selectCli = document.getElementById('moto_ID_CLIENTE');
   if (selectCli) {
+    const valAtual = selectCli.value;
     selectCli.innerHTML = '<option value="">Selecione o Cliente</option>' + 
       state.clientes.map(c => `<option value="${c.ID_CLIENTE}">${c.NOME}</option>`).join('');
+    if (valAtual) selectCli.value = valAtual;
   }
 
   const selectSrv = document.getElementById('man_SERVICO');
   if (selectSrv) {
+    const valAtual = selectSrv.value;
     const listSrv = state.servicos && state.servicos.length > 0 ? state.servicos : DEFAULT_SERVICOS;
-    selectSrv.innerHTML = '<option value="">Selecione o Serviço</option>' + 
+    selectSrv.innerHTML = '<option value="">Selecione o Serviço...</option>' + 
       listSrv.map(s => `<option value="${s.NOME_SERVICO}">${s.NOME_SERVICO}</option>`).join('');
+    if (valAtual) selectSrv.value = valAtual;
   }
 }
 
-// Preenche dados automáticos ao selecionar um serviço (KM e Data recomendada)
 function onServiceSelect(servicoNome) {
   const listSrv = state.servicos && state.servicos.length > 0 ? state.servicos : DEFAULT_SERVICOS;
   const srv = listSrv.find(s => s.NOME_SERVICO === servicoNome);
@@ -222,18 +220,43 @@ function onServiceSelect(servicoNome) {
 }
 
 // ==========================================
+// BUSCA GLOBAL (NOVA FUNÇÃO)
+// ==========================================
+
+function handleSearch(term) {
+  const container = document.getElementById('search-results');
+  if (!container) return;
+  
+  if (!term || term.trim() === '') {
+    navTo('sec-dashboard');
+    return;
+  }
+
+  navTo('sec-search');
+  const t = term.toLowerCase();
+
+  const clis = state.clientes.filter(c => (c.NOME && c.NOME.toLowerCase().includes(t)) || (c.TELEFONE && c.TELEFONE.includes(t)) || (c.WHATSAPP && c.WHATSAPP.includes(t)));
+  const mts = state.motos.filter(m => (m.PLACA && m.PLACA.toLowerCase().includes(t)) || (m.MODELO && m.MODELO.toLowerCase().includes(t)) || (m.MARCA && m.MARCA.toLowerCase().includes(t)));
+
+  let html = '<h3>Clientes Encontrados</h3>';
+  html += clis.length ? clis.map(c => `<div class="card"><p><strong>${c.NOME}</strong> - Tel: ${c.WHATSAPP || c.TELEFONE}</p></div>`).join('') : '<p>Nenhum cliente.</p>';
+
+  html += '<h3>Motos Encontradas</h3>';
+  html += mts.length ? mts.map(m => `<div class="card"><p><strong>${m.MARCA} ${m.MODELO}</strong> - Placa: ${m.PLACA}</p><button class="btn-primary" onclick="openNovaManutencao('${m.ID_MOTO}')">+ Manutenção</button></div>`).join('') : '<p>Nenhuma moto.</p>';
+
+  container.innerHTML = html;
+}
+
+// ==========================================
 // OPERAÇÕES DE SALVAMENTO E API
 // ==========================================
 
-// Envio de dados via POST otimizado para Google Apps Script (sem bloqueio de CORS)
 async function apiPost(action, payload) {
   try {
     await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
-      },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: action, payload: payload })
     });
     console.log(`Enviado para o Sheets: ${action}`);
@@ -385,6 +408,54 @@ async function concluirRetorno(idRetorno) {
 }
 
 // ==========================================
+// EXPORTAÇÃO E IMPORTAÇÃO (NOVAS FUNÇÕES)
+// ==========================================
+
+function exportBackup() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+  const dlAnchor = document.createElement('a');
+  dlAnchor.setAttribute("href", dataStr);
+  dlAnchor.setAttribute("download", `backup_oficina_${getTodayFormatted().replace(/\//g,'-')}.json`);
+  dlAnchor.click();
+}
+
+function exportCSV() {
+  if (!state.manutencoes.length) {
+    alert("Não há dados de manutenções para exportar.");
+    return;
+  }
+  const headers = Object.keys(state.manutencoes[0]).join(",");
+  const rows = state.manutencoes.map(m => Object.values(m).map(v => `"${v}"`).join(","));
+  const csvContent = "data:text/csv;charset=utf-8," + [headers, ...rows].join("\n");
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `manutencoes_${getTodayFormatted().replace(/\//g,'-')}.csv`);
+  document.body.appendChild(link);
+  link.click();
+}
+
+function importBackup(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      const imported = JSON.parse(evt.target.result);
+      if (imported.clientes) {
+        state = { ...state, ...imported };
+        saveToLocalStorage();
+        renderApp();
+        alert("Backup restaurado com sucesso!");
+      }
+    } catch (err) {
+      alert("Arquivo de backup inválido.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ==========================================
 // FUNÇÕES UTILITÁRIAS E NAVEGAÇÃO
 // ==========================================
 
@@ -499,14 +570,6 @@ function openNovaManutencao(idMoto) {
   document.getElementById('man_KM_SERVICO').value = moto.KM_ATUAL || '';
   document.getElementById('man_info_moto').innerText = `${moto.MARCA || ''} ${moto.MODELO || ''} - Placa: ${moto.PLACA || ''}`;
   openModal('modal-manutencao');
-}
-
-function exportBackup() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
-  const dlAnchor = document.createElement('a');
-  dlAnchor.setAttribute("href", dataStr);
-  dlAnchor.setAttribute("download", `backup_oficina_${getTodayFormatted().replace(/\//g,'-')}.json`);
-  dlAnchor.click();
 }
 
 function registerSW() {
