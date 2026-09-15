@@ -15,15 +15,34 @@ document.addEventListener("DOMContentLoaded", () => {
   registerSW();
 });
 
+// Auxiliar para salvar estado localmente no navegador
+function saveToLocalStorage() {
+  localStorage.setItem('oficina_state', JSON.stringify(state));
+}
+
+// Carrega dados do LocalStorage e atualiza do Google Sheets
 async function loadData() {
+  const localData = localStorage.getItem('oficina_state');
+  if (localData) {
+    try {
+      state = { ...state, ...JSON.parse(localData) };
+      renderApp();
+    } catch (e) {
+      console.error("Erro ao ler cache local:", e);
+    }
+  }
+
   if (!APPS_SCRIPT_URL) return;
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=getAllData`);
     const data = await res.json();
-    state = { ...state, ...data };
-    renderApp();
+    if (data && !data.error) {
+      state = { ...state, ...data };
+      saveToLocalStorage();
+      renderApp();
+    }
   } catch (err) {
-    console.error("Erro ao carregar dados:", err);
+    console.error("Erro ao carregar dados do Sheets:", err);
   }
 }
 
@@ -59,11 +78,15 @@ function renderDashboard() {
 function renderClientes() {
   const container = document.getElementById('lista-clientes');
   if (!container) return;
+  if (state.clientes.length === 0) {
+    container.innerHTML = '<p style="padding: 10px; color: #666;">Nenhum cliente cadastrado.</p>';
+    return;
+  }
   container.innerHTML = state.clientes.map(c => `
     <div class="card">
       <h3>${c.NOME || 'Sem Nome'} (${c.ID_CLIENTE})</h3>
-      <p>Tel/Whats: ${c.WHATSAPP || c.TELEFONE || 'N/A'}</p>
-      <button class="btn-secondary" onclick="viewClienteHistory('${c.ID_CLIENTE}')">Ver Histórico</button>
+      <p><strong>Tel/Whats:</strong> ${c.WHATSAPP || c.TELEFONE || 'N/A'}</p>
+      <p><strong>Cidade:</strong> ${c.CIDADE || 'N/A'} - ${c.UF || ''}</p>
     </div>
   `).join('');
 }
@@ -71,14 +94,17 @@ function renderClientes() {
 function renderMotos() {
   const container = document.getElementById('lista-motos');
   if (!container) return;
+  if (state.motos.length === 0) {
+    container.innerHTML = '<p style="padding: 10px; color: #666;">Nenhuma moto cadastrada.</p>';
+    return;
+  }
   container.innerHTML = state.motos.map(m => {
     const cliente = state.clientes.find(c => c.ID_CLIENTE === m.ID_CLIENTE) || {};
     return `
       <div class="card">
-        <h3>${m.MARCA || ''} ${m.MODELO || ''} - Placa: ${m.PLACA || ''}</h3>
-        <p>Cliente: ${cliente.NOME || 'N/A'} | KM: ${m.KM_ATUAL || 0}</p>
+        <h3>${m.MARCA || ''} ${m.MODELO || ''} - Placa: ${m.PLACA || 'N/A'}</h3>
+        <p><strong>Cliente:</strong> ${cliente.NOME || 'N/A'} | <strong>KM:</strong> ${m.KM_ATUAL || 0}</p>
         <button class="btn-primary" onclick="openNovaManutencao('${m.ID_MOTO}')">+ Manutenção</button>
-        <button class="btn-secondary" onclick="viewMotoHistory('${m.ID_MOTO}')">Histórico Moto</button>
       </div>
     `;
   }).join('');
@@ -87,6 +113,10 @@ function renderMotos() {
 function renderRetornos() {
   const container = document.getElementById('lista-retornos');
   if (!container) return;
+  if (state.retornos.length === 0) {
+    container.innerHTML = '<p style="padding: 10px; color: #666;">Nenhum retorno agendado.</p>';
+    return;
+  }
   container.innerHTML = state.retornos.map(r => {
     const cliente = state.clientes.find(c => c.ID_CLIENTE === r.ID_CLIENTE) || {};
     const moto = state.motos.find(m => m.ID_MOTO === r.ID_MOTO) || {};
@@ -94,9 +124,9 @@ function renderRetornos() {
 
     return `
       <div class="card ${statusCalculado}">
-        <h3>${statusCalculado}: ${cliente.NOME || ''}</h3>
-        <p>Moto: ${moto.MARCA || ''} ${moto.MODELO || ''} (${moto.PLACA || ''})</p>
-        <p>Serviço: ${r.SERVICO || ''} | Data: ${r.PROXIMO_RETORNO || ''}</p>
+        <h3>${statusCalculado}: ${cliente.NOME || 'Cliente'}</h3>
+        <p><strong>Moto:</strong> ${moto.MARCA || ''} ${moto.MODELO || ''} (${moto.PLACA || ''})</p>
+        <p><strong>Serviço:</strong> ${r.SERVICO || ''} | <strong>Data:</strong> ${r.PROXIMO_RETORNO || ''}</p>
         <div style="display:flex; gap:6px; margin-top:8px;">
           <button class="btn-whatsapp" onclick="sendWhatsApp('${r.ID_RETORNO}')">📲 WhatsApp</button>
           <button class="btn-primary" onclick="concluirRetorno('${r.ID_RETORNO}')">✔️ Concluir</button>
@@ -132,14 +162,11 @@ function onServiceSelect(servicoNome) {
   }
 }
 
-// SALVAR CLIENTE (CORRIGIDO)
+// SALVAR CLIENTE
 async function saveCliente(e) {
   e.preventDefault();
   const submitBtn = e.target.querySelector('button[type="submit"]');
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Salvando...";
-  }
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = "Salvando..."; }
 
   const nextId = `CLI-${String(state.clientes.length + 1).padStart(4, '0')}`;
   const payload = {
@@ -160,19 +187,19 @@ async function saveCliente(e) {
     STATUS: 'ATIVO'
   };
 
+  state.clientes.push(payload);
+  saveToLocalStorage();
+  renderApp();
+
+  closeModal('modal-cliente');
+  document.getElementById('form-cliente').reset();
+
   try {
     await apiPost('addCliente', payload);
-    state.clientes.push(payload);
-    closeModal('modal-cliente');
-    document.getElementById('form-cliente').reset();
-    renderApp();
   } catch (err) {
-    console.error("Erro ao salvar cliente:", err);
+    console.error("Erro ao salvar cliente no Sheets:", err);
   } finally {
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Salvar Cliente";
-    }
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = "Salvar Cliente"; }
   }
 }
 
@@ -180,10 +207,7 @@ async function saveCliente(e) {
 async function saveMoto(e) {
   e.preventDefault();
   const submitBtn = e.target.querySelector('button[type="submit"]');
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Salvando...";
-  }
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = "Salvando..."; }
 
   const nextId = `MOT-${String(state.motos.length + 1).padStart(4, '0')}`;
   const payload = {
@@ -201,30 +225,27 @@ async function saveMoto(e) {
     STATUS: 'ATIVA'
   };
 
+  state.motos.push(payload);
+  saveToLocalStorage();
+  renderApp();
+
+  closeModal('modal-moto');
+  document.getElementById('form-moto').reset();
+
   try {
     await apiPost('addMoto', payload);
-    state.motos.push(payload);
-    closeModal('modal-moto');
-    document.getElementById('form-moto').reset();
-    renderApp();
   } catch (err) {
-    console.error("Erro ao salvar moto:", err);
+    console.error("Erro ao salvar moto no Sheets:", err);
   } finally {
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Salvar Moto";
-    }
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = "Salvar Moto"; }
   }
 }
 
-// SALVAR MANUTENÇÃO
+// SALVAR MANUTENÇÃO E AGENDAR RETORNO
 async function saveManutencao(e) {
   e.preventDefault();
   const submitBtn = e.target.querySelector('button[type="submit"]');
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Salvando...";
-  }
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = "Salvando..."; }
 
   const nextManId = `MAN-${String(state.manutencoes.length + 1).padStart(4, '0')}`;
   const nextRetId = `RET-${String(state.retornos.length + 1).padStart(4, '0')}`;
@@ -258,27 +279,42 @@ async function saveManutencao(e) {
     CLIENTE_AVISADO: 'NAO'
   };
 
+  state.manutencoes.push(manPayload);
+  state.retornos.push(retPayload);
+  saveToLocalStorage();
+  renderApp();
+
+  closeModal('modal-manutencao');
+  document.getElementById('form-manutencao').reset();
+
   try {
     await apiPost('addManutencao', manPayload);
     await apiPost('addRetorno', retPayload);
-
-    state.manutencoes.push(manPayload);
-    state.retornos.push(retPayload);
-
-    closeModal('modal-manutencao');
-    document.getElementById('form-manutencao').reset();
-    renderApp();
   } catch (err) {
-    console.error("Erro ao salvar manutenção:", err);
+    console.error("Erro ao salvar manutenção no Sheets:", err);
   } finally {
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Confirmar e Salvar";
-    }
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = "Confirmar e Salvar"; }
   }
 }
 
-// ENVIO DE DADOS (COM SUPORTE NO-CORS CORRIGIDO)
+// CONCLUIR RETORNO
+async function concluirRetorno(idRetorno) {
+  const ret = state.retornos.find(r => r.ID_RETORNO === idRetorno);
+  if (!ret) return;
+
+  ret.STATUS = 'CONCLUIDO';
+  ret.DATA_CONCLUSAO = getTodayFormatted();
+  saveToLocalStorage();
+  renderApp();
+
+  try {
+    await apiPost('updateRetornoStatus', { ID_RETORNO: idRetorno, STATUS: 'CONCLUIDO', DATA_CONCLUSAO: ret.DATA_CONCLUSAO });
+  } catch (err) {
+    console.error("Erro ao atualizar status no Sheets:", err);
+  }
+}
+
+// ENVIO POST PARA GOOGLE APPS SCRIPT
 async function apiPost(action, payload) {
   return fetch(APPS_SCRIPT_URL, {
     method: 'POST',
