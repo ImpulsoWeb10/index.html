@@ -33,21 +33,27 @@
 
     <!-- CLIENTES -->
     <section id="sec-clientes" class="view-section">
-      <h2>Clientes</h2>
-      <button class="btn-primary" onclick="openModal('modal-cliente')">+ Novo Cliente</button>
+      <h2>Gestão de Clientes</h2>
+      <div class="action-bar" style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <button class="btn-primary" onclick="openModal('modal-cliente')">+ Novo Cliente</button>
+        <button class="btn-secondary" onclick="renderClientes()">👥 Clientes Cadastrados</button>
+      </div>
       <div id="lista-clientes" class="card-list"></div>
     </section>
 
     <!-- MOTOS -->
     <section id="sec-motos" class="view-section">
-      <h2>Motos</h2>
-      <button class="btn-primary" onclick="openModal('modal-moto')">+ Nova Moto</button>
+      <h2>Gestão de Motos</h2>
+      <div class="action-bar" style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <button class="btn-primary" onclick="openModal('modal-moto')">+ Nova Moto</button>
+        <button class="btn-secondary" onclick="renderMotos()">🏍️ Motos Cadastradas</button>
+      </div>
       <div id="lista-motos" class="card-list"></div>
     </section>
 
     <!-- RETORNOS / ALERTAS -->
     <section id="sec-retornos" class="view-section">
-      <h2>Retornos / Alertas</h2>
+      <h2>Retornos / Alertas Cadastrados</h2>
       <div id="lista-retornos" class="card-list"></div>
     </section>
 
