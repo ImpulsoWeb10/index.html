@@ -1,4 +1,4 @@
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3S6rIlAZNn2FSd1Ld6BaFwDT3VyeAuSPNZNn1TtrHZ1bRzEdPJ5FOHFpvOscr8iz_fA/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvRD7VEBBi7ID7U6NGI-lDROmvSNNAqVN4fplCrAyWbXykDOazMvEbME2I81HOStPKOA/exec";
 
 // Lista padrão baseada na planilha SERVICOS
 const DEFAULT_SERVICOS = [
