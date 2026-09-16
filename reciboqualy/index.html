@@ -4,154 +4,180 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recibo — Qualyquimy Comércio de Tintas</title>
+<!-- Biblioteca para Geração Automática de PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   :root{
-    --paper:#fdfcf9;
-    --paper-dark:#141312;
+    --paper:#ffffff;
+    --bg-page:#f0f2f5;
     --ink:#1c1a17;
-    --ink-dark:#eae6df;
-    --line:#c9c2b4;
-    --line-dark:#4a463e;
+    --line:#b8b0a0;
     --accent:#7a3b2e;
-    --accent-soft:#f1e4d8;
-    --accent-soft-dark:#2c2119;
-    --muted:#8a8272;
-    --good:#3f6b4a;
-    --good-soft:#e6efe6;
-    --good-soft-dark:#1c2a1f;
-    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --paper:var(--paper-dark);
-      --ink:var(--ink-dark);
-      --line:var(--line-dark);
-      --accent:#d99a7d;
-      --accent-soft:var(--accent-soft-dark);
-      --muted:#a39c8c;
-      --good:#8fc79c;
-      --good-soft:var(--good-soft-dark);
-    }
-  }
-  :root[data-theme="dark"]{
-    --paper:var(--paper-dark);
-    --ink:var(--ink-dark);
-    --line:var(--line-dark);
-    --accent:#d99a7d;
-    --accent-soft:var(--accent-soft-dark);
-    --muted:#a39c8c;
-    --good:#8fc79c;
-    --good-soft:var(--good-soft-dark);
+    --accent-hover:#5c2c22;
+    --accent-soft:#f8f4f0;
+    --muted:#555555;
+    --good:#2e6b38;
+    --good-soft:#eef6f0;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
 
-  *{box-sizing:border-box;}
-  html{ font-size:15px; }
+  *{ box-sizing:border-box; }
+  
   body{
     margin:0;
-    background:var(--paper);
+    background:var(--bg-page);
     color:var(--ink);
     font-family:var(--sans);
-    padding:20px 14px 60px;
+    padding:20px 10px 60px;
     min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
   }
+
+  /* Barra de Botões Elegantes */
+  .toolbar{
+    width:100%;
+    max-width:680px;
+    margin-bottom:16px;
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  
+  .btn{
+    font-family:var(--sans);
+    font-size:12px;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:6px;
+    border:1px solid #d0d5dd;
+    background:#ffffff;
+    color:#344054;
+    cursor:pointer;
+    box-shadow:0 1px 2px rgba(0,0,0,0.05);
+    transition:all 0.2s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .btn:hover{ background:#f9fafb; border-color:#b8b0a0; }
+  
+  .btn.primary{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#ffffff;
+  }
+  .btn.primary:hover{ background:var(--accent-hover); }
+
+  .btn.whatsapp{
+    background:#25d366;
+    border-color:#25d366;
+    color:#ffffff;
+  }
+  .btn.whatsapp:hover{ background:#1ebe57; }
+
+  /* Moldura Estruturada do Recibo */
+  .receipt-frame {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 680px;
+  }
+
   .sheet{
-    max-width:560px;
-    margin:0 auto;
     background:var(--paper);
   }
 
-  /* Header */
+  /* Header e Logo Ampliada */
   .letterhead{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:16px;
     border-bottom:2px double var(--ink);
-    padding-bottom:10px;
+    padding-bottom:12px;
     margin-bottom:12px;
   }
-  .brand-mark{
-    flex-shrink:0;
-  }
+  .brand-mark{ flex-shrink:0; }
   .brand-mark img{
     display:block;
-    height:48px;
+    height:75px; /* Logo maior */
     width:auto;
-    max-width:150px;
+    max-width:220px;
     object-fit:contain;
   }
   .brand-mark .brand-fallback{
     display:none;
-    font-family:var(--serif);
-    font-style:italic;
-    font-size:26px;
-    font-weight:700;
+    font-size:28px;
+    font-weight:800;
     color:var(--accent);
-    letter-spacing:-1px;
-    white-space:nowrap;
   }
-  .brand-mark .brand-fallback span{ font-style:normal; font-size:10px; display:block; letter-spacing:2px; color:var(--muted); font-family:var(--sans); margin-top:-4px;}
   .company-info{ flex:1; text-align:right;}
   .company-info h1{
-    font-family:var(--serif);
-    font-size:14px;
+    font-size:13px;
+    font-weight:700;
     margin:0 0 3px;
-    letter-spacing:0.3px;
+    color:#000;
   }
-  .company-info p{ margin:1px 0; font-size:9px; color:var(--muted); }
-  .company-info .sac{ font-weight:700; color:var(--ink); font-size:10px; }
+  .company-info p{ margin:1px 0; font-size:9.5px; color:#333; font-weight:500; }
+  .company-info .sac{ font-weight:700; color:#000; font-size:10.5px; }
 
-  /* Meta row: dates/pedido */
+  /* Formulários Compactos e Alta Visibilidade */
   .meta-row{
     display:grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap:6px;
-    margin-bottom:8px;
+    margin-bottom:6px;
   }
   .field{
     border:1px solid var(--line);
     border-radius:3px;
-    padding:3px 6px;
-    background:transparent;
+    padding:2px 5px;
+    background:#ffffff;
   }
   .field label{
     display:block;
     font-size:8px;
+    font-weight:700;
     text-transform:uppercase;
-    letter-spacing:0.5px;
-    color:var(--muted);
-    margin-bottom:1px;
+    color:#222222;
+    margin-bottom:0px;
   }
   .field input, .field select{
     width:100%;
     border:none;
     background:transparent;
-    color:var(--ink);
+    color:#000000;
     font-family:var(--sans);
     font-size:11px;
+    font-weight:600;
     padding:1px 0;
     outline:none;
+    height:18px;
   }
-  .field select{ cursor:pointer; }
+  .field select{ cursor:pointer; height:20px; }
 
   .grid2{ display:grid; grid-template-columns: 2fr 1fr; gap:6px; margin-bottom:6px;}
   .grid4{ display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap:6px; margin-bottom:6px;}
-  .grid3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:6px; margin-bottom:6px;}
 
-  /* Items table */
+  /* Tabela Compacta */
   table{
     width:100%;
     border-collapse:collapse;
-    margin-top:4px;
+    margin-top:6px;
   }
   thead th{
     background:var(--accent-soft);
-    color:var(--ink);
+    color:#000000;
     font-size:9px;
+    font-weight:700;
     text-transform:uppercase;
-    letter-spacing:0.4px;
     text-align:left;
-    padding:4px 5px;
+    padding:4px 6px;
     border:1px solid var(--line);
   }
   thead th.num{ text-align:right; }
@@ -164,39 +190,40 @@
     width:100%;
     border:none;
     background:transparent;
-    color:var(--ink);
+    color:#000000;
     font-size:11px;
-    padding:3px 2px;
+    font-weight:500;
+    padding:2px;
     outline:none;
     font-family:var(--sans);
   }
   tbody input.num{ text-align:right; }
-  td.valor-cell{ text-align:right; font-variant-numeric:tabular-nums; padding-right:6px; white-space:nowrap; font-size:11px;}
-  td.rm-cell{ width:22px; text-align:center; border:none; padding:0;}
+  td.valor-cell{ text-align:right; font-weight:600; padding-right:6px; white-space:nowrap; font-size:11px;}
+  td.rm-cell{ width:20px; text-align:center; border:none; padding:0;}
   .rm-btn{
-    border:none; background:none; color:var(--muted); cursor:pointer; font-size:13px; line-height:1;
-    padding:3px;
+    border:none; background:none; color:#888; cursor:pointer; font-size:12px; font-weight:bold;
+    padding:2px;
   }
   .rm-btn:hover{ color:#b64c3a; }
 
   .add-row-btn{
-    margin-top:8px;
+    margin-top:6px;
     border:1px dashed var(--line);
     background:transparent;
-    color:var(--muted);
-    padding:6px 12px;
+    color:#444;
+    font-weight:600;
+    padding:4px 10px;
     border-radius:4px;
     cursor:pointer;
-    font-size:12px;
-    font-family:var(--sans);
+    font-size:11px;
   }
   .add-row-btn:hover{ border-color:var(--accent); color:var(--accent); }
 
-  /* Totals */
+  /* Totais */
   .totals-wrap{
     display:flex;
     justify-content:flex-end;
-    margin-top:10px;
+    margin-top:8px;
   }
   .totals{
     width:100%;
@@ -208,7 +235,7 @@
   .totals-row{
     display:flex;
     justify-content:space-between;
-    padding:5px 10px;
+    padding:4px 8px;
     font-size:11px;
     border-bottom:1px solid var(--line);
   }
@@ -216,218 +243,173 @@
   .totals-row.discount{ color:var(--good); background:var(--good-soft); }
   .totals-row.final{
     font-weight:700;
-    font-size:13px;
+    font-size:12px;
     background:var(--accent-soft);
-    color:var(--ink);
+    color:#000;
   }
-  .totals-row .lbl{ color:inherit; }
 
-  /* Payment note badge */
   .discount-note{
-    font-size:10px;
+    font-size:9px;
+    font-weight:600;
     color:var(--good);
-    margin-top:4px;
+    margin-top:2px;
     text-align:right;
   }
 
-  /* signature */
+  /* Assinaturas */
   .sign-row{
     display:grid;
     grid-template-columns: 1fr 1fr;
     gap:16px;
-    margin-top:24px;
+    margin-top:20px;
   }
   .sign-line{
-    border-top:1px solid var(--ink);
-    padding-top:4px;
+    border-top:1px solid #000;
+    padding-top:3px;
     font-size:9px;
-    color:var(--muted);
+    font-weight:600;
+    color:#333;
     text-align:center;
   }
 
-  /* toolbar */
-  .toolbar{
-    max-width:560px;
-    margin:0 auto 12px;
-    display:flex;
-    justify-content:flex-end;
-    gap:8px;
-  }
-  .btn{
-    font-family:var(--sans);
-    font-size:13px;
-    padding:8px 16px;
-    border-radius:5px;
-    border:1px solid var(--line);
-    background:transparent;
-    color:var(--ink);
-    cursor:pointer;
-  }
-  .btn.primary{
-    background:var(--accent);
-    border-color:var(--accent);
-    color:#fff;
-  }
-  .btn:hover{ opacity:0.85; }
-
   h2.section-title{
-    font-family:var(--serif);
-    font-size:11px;
-    color:var(--muted);
-    margin:10px 0 4px;
-    font-weight:normal;
-    font-style:italic;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    color:#333;
+    margin:8px 0 3px;
   }
 
-  /* ===== Impressão em A5 (148 x 210 mm) ===== */
-  @page{
-    size: 148mm 210mm;
-    margin: 8mm;
-  }
+  /* Estilos de Impressão */
   @media print{
-    html{ font-size:10px; }
-    body{
-      padding:0;
-      background:#fff;
-      color:#000;
-      min-height:auto;
-    }
-    .sheet{
-      max-width:none;
-      width:100%;
-      margin:0;
-    }
-    .toolbar, .add-row-btn, .rm-btn, td.rm-cell{ display:none !important; }
-    .field, table, td, th, .totals{ border-color:#000 !important; }
-    .letterhead{ margin-bottom:8px; padding-bottom:6px; }
-    .brand-mark img{ height:34px; }
-    .sign-row{ margin-top:16px; }
-    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  }
-
-  @media (max-width:640px){
-    .letterhead{ flex-direction:column; align-items:flex-start; gap:8px;}
-    .company-info{ text-align:left; }
-    .grid2, .grid3, .grid4, .meta-row{ grid-template-columns: 1fr 1fr; }
-    .sign-row{ grid-template-columns:1fr; gap:24px;}
-    thead th:nth-child(1){ width:44px; }
+    body{ padding:0; background:#fff; }
+    .toolbar{ display:none !important; }
+    .receipt-frame{ border:none; box-shadow:none; padding:0; max-width:100%; }
+    .add-row-btn, .rm-btn, td.rm-cell{ display:none !important; }
   }
 </style>
 </head>
 <body>
 
+<!-- Barra de Ações com 3 Botões Principais Modais -->
 <div class="toolbar">
   <button class="btn" id="clearBtn">Limpar</button>
-  <button class="btn primary" id="printBtn">Imprimir / Salvar PDF</button>
+  <button class="btn" id="pdfBtn">📄 Baixar em PDF</button>
+  <button class="btn primary" id="printBtn">🖨️ Imprimir</button>
+  <button class="btn whatsapp" id="sendClientBtn">💬 Enviar Cliente (WhatsApp)</button>
 </div>
 
-<div class="sheet" id="sheet">
+<!-- Moldura do Recibo -->
+<div class="receipt-frame">
+  <div class="sheet" id="sheet">
 
-  <div class="letterhead">
-    <div class="brand-mark">
-      <img src="logoqualyquimy.jpg" alt="Qualyquimy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-      <div class="brand-fallback">Qualy<span>QUIMY</span></div>
-    </div>
-    <div class="company-info">
-      <h1>QUALYQUIMY COMÉRCIO DE TINTAS LTDA</h1>
-      <p>C.N.P.J. 10.503.834/0001-73 &nbsp;·&nbsp; Inscr. Est. 379.177.721.112</p>
-      <p class="sac">Sac: 11 4643-2301</p>
-      <p>www.tintasqualyquimy.com.br</p>
-      <p>Rua Leiria, 45 - Scaffidi - Cep 08587-100 - Itaquaquecetuba - SP</p>
-    </div>
-  </div>
-
-  <div class="meta-row">
-    <div class="field"><label>Data da emissão</label><input type="date" id="dataEmissao"></div>
-    <div class="field"><label>Data entrega</label><input type="date" id="dataEntrega"></div>
-    <div class="field"><label>Pedido</label><input type="text" id="pedido" placeholder="Nº do pedido"></div>
-  </div>
-
-  <div class="field" style="margin-bottom:12px;">
-    <label>Nome/Razão Social</label>
-    <input type="text" id="nome">
-  </div>
-
-  <div class="field" style="margin-bottom:12px;">
-    <label>End.</label>
-    <input type="text" id="endereco">
-  </div>
-
-  <div class="grid4">
-    <div class="field">
-      <label>Cep</label>
-      <input type="text" id="cep" placeholder="00000-000" inputmode="numeric" maxlength="9">
-      <div id="cepStatus" style="font-size:10px; color:var(--muted); margin-top:2px; min-height:12px;"></div>
-    </div>
-    <div class="field"><label>Cid.</label><input type="text" id="cidade"></div>
-    <div class="field"><label>Est.</label><input type="text" id="estado" maxlength="2"></div>
-    <div class="field"><label>Fone</label><input type="text" id="fone"></div>
-  </div>
-
-  <div class="grid2">
-    <div class="field"><label>I.E./RG</label><input type="text" id="ierg"></div>
-    <div class="field"><label>CNPJ/CPF</label><input type="text" id="cnpjcpf"></div>
-  </div>
-
-  <div class="field" style="margin-bottom:6px;">
-    <label>Cond. Pagto</label>
-    <select id="condPagto">
-      <option value="outro">Outro / a combinar</option>
-      <option value="especie">Espécie (dinheiro) — 5% desconto</option>
-      <option value="pix">Pix — 5% desconto</option>
-      <option value="cartao">Cartão</option>
-      <option value="boleto">Boleto</option>
-    </select>
-  </div>
-  <div class="discount-note" id="discountNote" style="visibility:hidden;">Desconto de 5% aplicado no valor total.</div>
-
-  <h2 class="section-title">Descrição dos produtos</h2>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Quant.</th>
-        <th>Descrição dos produtos</th>
-        <th class="num">V.Unit.</th>
-        <th class="num">Valor</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="itemsBody"></tbody>
-  </table>
-
-  <button class="add-row-btn" id="addRowBtn">+ Adicionar item</button>
-
-  <div class="totals-wrap">
-    <div class="totals">
-      <div class="totals-row"><span class="lbl">Subtotal</span><span id="subtotalVal">R$ 0,00</span></div>
-      <div class="totals-row discount" id="discountRow" style="display:none;">
-        <span class="lbl">Desconto (5%)</span><span id="discountVal">- R$ 0,00</span>
+    <div class="letterhead">
+      <div class="brand-mark">
+        <img src="logoqualyquimy.jpg" alt="Qualyquimy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="brand-fallback">QUALYQUIMY</div>
       </div>
-      <div class="totals-row final"><span class="lbl">Valor total</span><span id="totalVal">R$ 0,00</span></div>
+      <div class="company-info">
+        <h1>QUALYQUIMY COMÉRCIO DE TINTAS LTDA</h1>
+        <p>C.N.P.J. 10.503.834/0001-73 &nbsp;·&nbsp; Inscr. Est. 379.177.721.112</p>
+        <p class="sac">Sac: 11 4643-2301</p>
+        <p>www.tintasqualyquimy.com.br</p>
+        <p>Rua Leiria, 45 - Scaffidi - Cep 08587-100 - Itaquaquecetuba - SP</p>
+      </div>
     </div>
-  </div>
 
-  <div class="sign-row">
-    <div class="sign-line">Assinatura do Cliente/Responsável</div>
-    <div class="sign-line">Qualyquimy Comércio de Tintas Ltda</div>
-  </div>
+    <div class="meta-row">
+      <div class="field"><label>Data da emissão</label><input type="date" id="dataEmissao"></div>
+      <div class="field"><label>Data entrega</label><input type="date" id="dataEntrega"></div>
+      <div class="field"><label>Pedido</label><input type="text" id="pedido" placeholder="Nº pedido"></div>
+    </div>
 
+    <div class="field" style="margin-bottom:6px;">
+      <label>Nome/Razão Social</label>
+      <input type="text" id="nome">
+    </div>
+
+    <div class="field" style="margin-bottom:6px;">
+      <label>Endereço</label>
+      <input type="text" id="endereco">
+    </div>
+
+    <div class="grid4">
+      <div class="field">
+        <label>CEP</label>
+        <input type="text" id="cep" placeholder="00000-000" inputmode="numeric" maxlength="9">
+      </div>
+      <div class="field"><label>Cidade</label><input type="text" id="cidade"></div>
+      <div class="field"><label>Estado</label><input type="text" id="estado" maxlength="2"></div>
+      <div class="field"><label>Telefone / Celular</label><input type="text" id="fone" placeholder="(11) 99999-9999"></div>
+    </div>
+
+    <div class="grid2">
+      <div class="field"><label>I.E. / RG</label><input type="text" id="ierg"></div>
+      <div class="field"><label>CNPJ / CPF</label><input type="text" id="cnpjcpf"></div>
+    </div>
+
+    <div class="field" style="margin-bottom:4px;">
+      <label>Condição de Pagamento</label>
+      <select id="condPagto">
+        <option value="outro">Outro / A combinar</option>
+        <option value="especie">Espécie (dinheiro) — 5% desconto</option>
+        <option value="pix">Pix — 5% desconto</option>
+        <option value="cartao">Cartão</option>
+        <option value="boleto">Boleto</option>
+      </select>
+    </div>
+    <div class="discount-note" id="discountNote" style="visibility:hidden;">Desconto de 5% aplicado no valor total.</div>
+
+    <h2 class="section-title">Descrição dos Produtos</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 60px;">Quant.</th>
+          <th>Descrição dos produtos</th>
+          <th class="num" style="width: 90px;">V.Unit.</th>
+          <th class="num" style="width: 100px;">Valor</th>
+          <th class="rm-cell"></th>
+        </tr>
+      </thead>
+      <tbody id="itemsBody"></tbody>
+    </table>
+
+    <button class="add-row-btn" id="addRowBtn">+ Adicionar Item</button>
+
+    <div class="totals-wrap">
+      <div class="totals">
+        <div class="totals-row"><span class="lbl">Subtotal</span><span id="subtotalVal">R$ 0,00</span></div>
+        <div class="totals-row discount" id="discountRow" style="display:none;">
+          <span class="lbl">Desconto (5%)</span><span id="discountVal">- R$ 0,00</span>
+        </div>
+        <div class="totals-row final"><span class="lbl">Valor Total</span><span id="totalVal">R$ 0,00</span></div>
+      </div>
+    </div>
+
+    <div class="sign-row">
+      <div class="sign-line">Assinatura do Cliente / Responsável</div>
+      <div class="sign-line">Qualyquimy Comércio de Tintas Ltda</div>
+    </div>
+
+  </div>
 </div>
 
 <script>
 (function(){
-  const STORAGE_KEY = 'qualyquimy_recibo_draft_v1';
+  const STORAGE_KEY = 'qualyquimy_recibo_draft_v2';
   const PEDIDO_COUNTER_KEY = 'qualyquimy_pedido_counter';
   const cepInput = document.getElementById('cep');
-  const cepStatus = document.getElementById('cepStatus');
   const enderecoInput = document.getElementById('endereco');
   const cidadeInput = document.getElementById('cidade');
   const estadoInput = document.getElementById('estado');
+  const foneInput = document.getElementById('fone');
   const pedidoInput = document.getElementById('pedido');
   const itemsBody = document.getElementById('itemsBody');
   const addRowBtn = document.getElementById('addRowBtn');
   const printBtn = document.getElementById('printBtn');
+  const pdfBtn = document.getElementById('pdfBtn');
+  const sendClientBtn = document.getElementById('sendClientBtn');
   const clearBtn = document.getElementById('clearBtn');
   const condPagto = document.getElementById('condPagto');
   const discountNote = document.getElementById('discountNote');
@@ -526,11 +508,7 @@
 
   function buscarEnderecoPorCep(){
     const digits = (cepInput.value || '').replace(/\D/g, '');
-    if(digits.length !== 8){
-      cepStatus.textContent = '';
-      return;
-    }
-    cepStatus.textContent = 'Buscando endereço...';
+    if(digits.length !== 8) return;
     fetch('https://viacep.com.br/ws/' + digits + '/json/')
       .then(res => res.json())
       .then(data => {
@@ -539,22 +517,16 @@
           if(partes) enderecoInput.value = partes;
           if(data.localidade) cidadeInput.value = data.localidade;
           if(data.uf) estadoInput.value = data.uf;
-          cepStatus.textContent = 'Endereço preenchido automaticamente.';
           save();
-        } else {
-          cepStatus.textContent = 'CEP não encontrado — preencha o endereço manualmente.';
         }
-      })
-      .catch(() => {
-        cepStatus.textContent = 'Não foi possível buscar o CEP agora — preencha manualmente.';
-      });
+      }).catch(()=>{});
   }
 
   function save(){
     try{
       const state = collectState();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }catch(e){ /* storage unavailable, ignore */ }
+    }catch(e){}
   }
 
   function load(){
@@ -562,7 +534,7 @@
     try{
       const raw = localStorage.getItem(STORAGE_KEY);
       if(raw) state = JSON.parse(raw);
-    }catch(e){ state = null; }
+    }catch(e){}
 
     if(state && state.header){
       headerFieldIds.forEach(id => {
@@ -575,7 +547,7 @@
     if(state && state.items && state.items.length){
       state.items.forEach(makeRow);
     } else {
-      for(let i=0;i<5;i++) makeRow();
+      for(let i=0;i<4;i++) makeRow();
     }
 
     if(!pedidoInput.value){
@@ -585,38 +557,74 @@
     const dataEmissaoInput = document.getElementById('dataEmissao');
     if(!dataEmissaoInput.value){
       const hoje = new Date();
-      const yyyy = hoje.getFullYear();
-      const mm = String(hoje.getMonth() + 1).padStart(2, '0');
-      const dd = String(hoje.getDate()).padStart(2, '0');
-      dataEmissaoInput.value = `${yyyy}-${mm}-${dd}`;
+      dataEmissaoInput.value = hoje.toISOString().split('T')[0];
       save();
     }
   }
 
-  cepInput.addEventListener('blur', buscarEnderecoPorCep);
-  cepInput.addEventListener('input', () => {
-    const digits = (cepInput.value || '').replace(/\D/g, '');
-    if(digits.length === 8) buscarEnderecoPorCep();
-  });
+  function generatePDFOptions(){
+    const element = document.getElementById('sheet');
+    const numPedido = pedidoInput.value || 'recibo';
+    return {
+      element: element,
+      opt: {
+        margin:       10,
+        filename:     `Recibo_Qualyquimy_${numPedido}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }
+    };
+  }
 
-  addRowBtn.addEventListener('click', () => { makeRow(); save(); });
-  condPagto.addEventListener('change', () => { recalcTotals(); save(); });
-  headerFieldIds.filter(id => id !== 'condPagto').forEach(id => {
-    document.getElementById(id).addEventListener('input', save);
+  // Ações dos Botões
+  pdfBtn.addEventListener('click', () => {
+    const { element, opt } = generatePDFOptions();
+    html2pdf().set(opt).from(element).save();
   });
 
   printBtn.addEventListener('click', () => window.print());
+
+  sendClientBtn.addEventListener('click', () => {
+    let rawFone = foneInput.value.replace(/\D/g, '');
+    if(!rawFone){
+      alert('Por favor, informe um número de telefone/celular no cadastro.');
+      foneInput.focus();
+      return;
+    }
+
+    // Formatar número para padrão internacional (DDI + DDD + número)
+    if(rawFone.length <= 11 && !rawFone.startsWith('55')){
+      rawFone = '55' + rawFone;
+    }
+
+    // Gerar e baixar o PDF para o usuário anexar
+    const { element, opt } = generatePDFOptions();
+    html2pdf().set(opt).from(element).save().then(() => {
+      const nomeCliente = document.getElementById('nome').value || 'Cliente';
+      const numPedido = pedidoInput.value || '';
+      const mensagem = encodeURIComponent(`Olá ${nomeCliente}, segue o seu recibo referente ao pedido #${numPedido} da Qualyquimy Tintas.`);
+      
+      const whatsappUrl = `https://api.whatsapp.com/send?phone=${rawFone}&text=${mensagem}`;
+      window.open(whatsappUrl, '_blank');
+    });
+  });
+
+  cepInput.addEventListener('blur', buscarEnderecoPorCep);
+  addRowBtn.addEventListener('click', () => { makeRow(); save(); });
+  condPagto.addEventListener('change', () => { recalcTotals(); save(); });
+  headerFieldIds.forEach(id => {
+    document.getElementById(id).addEventListener('input', save);
+  });
+
   clearBtn.addEventListener('click', () => {
-    if(confirm('Limpar todos os dados do recibo?')){
+    if(confirm('Deseja limpar todos os campos do recibo?')){
       try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
       headerFieldIds.forEach(id => { document.getElementById(id).value = ''; });
       itemsBody.innerHTML = '';
-      for(let i=0;i<5;i++) makeRow();
+      for(let i=0;i<4;i++) makeRow();
       pedidoInput.value = nextPedidoNumero();
-      const hoje = new Date();
-      document.getElementById('dataEmissao').value =
-        `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}-${String(hoje.getDate()).padStart(2,'0')}`;
-      cepStatus.textContent = '';
+      document.getElementById('dataEmissao').value = new Date().toISOString().split('T')[0];
       recalcTotals();
       save();
     }
@@ -626,6 +634,5 @@
   recalcTotals();
 })();
 </script>
-
 </body>
 </html>
