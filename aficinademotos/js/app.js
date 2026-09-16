@@ -1,5 +1,5 @@
 // URL da API publicada no Google Apps Script
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfnoPvMwYaBIVFKUeP13u0bWtY7oIMPzB51NC4cdBX6pwWQXESwG1fiJ36G0Z01t43pA/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/library/d/1KMCvkgj-VKSAdtYzW6uh1je3w_ShBfUfrJc_W1CcgC4hP0GQIxtaWqVA/4";
 
 const output = document.getElementById("output");
 let osAtual = null; // Armazena a O.S. aberta no momento
