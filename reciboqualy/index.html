@@ -38,11 +38,11 @@
   /* Barra de Botões Elegantes */
   .toolbar{
     width:100%;
-    max-width:680px;
+    max-width:620px;
     margin-bottom:16px;
     display:flex;
     justify-content:flex-end;
-    gap:10px;
+    gap:8px;
     flex-wrap:wrap;
   }
   
@@ -50,7 +50,7 @@
     font-family:var(--sans);
     font-size:12px;
     font-weight:600;
-    padding:9px 16px;
+    padding:9px 14px;
     border-radius:6px;
     border:1px solid #d0d5dd;
     background:#ffffff;
@@ -78,53 +78,54 @@
   }
   .btn.whatsapp:hover{ background:#1ebe57; }
 
-  /* Moldura Estruturada do Recibo */
+  /* Moldura Estruturada do Recibo (Ajustada para proporção A5) */
   .receipt-frame {
     background: #ffffff;
-    padding: 24px;
+    padding: 20px;
     border-radius: 8px;
     border: 1px solid #d1d5db;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
     width: 100%;
-    max-width: 680px;
+    max-width: 620px;
   }
 
   .sheet{
     background:var(--paper);
+    width: 100%;
   }
 
   /* Header e Logo Ampliada */
   .letterhead{
     display:flex;
     align-items:center;
-    gap:16px;
+    gap:14px;
     border-bottom:2px double var(--ink);
-    padding-bottom:12px;
-    margin-bottom:12px;
+    padding-bottom:10px;
+    margin-bottom:10px;
   }
   .brand-mark{ flex-shrink:0; }
   .brand-mark img{
     display:block;
-    height:75px; /* Logo maior */
+    height:70px;
     width:auto;
-    max-width:220px;
+    max-width:200px;
     object-fit:contain;
   }
   .brand-mark .brand-fallback{
     display:none;
-    font-size:28px;
+    font-size:26px;
     font-weight:800;
     color:var(--accent);
   }
   .company-info{ flex:1; text-align:right;}
   .company-info h1{
-    font-size:13px;
+    font-size:12px;
     font-weight:700;
-    margin:0 0 3px;
+    margin:0 0 2px;
     color:#000;
   }
-  .company-info p{ margin:1px 0; font-size:9.5px; color:#333; font-weight:500; }
-  .company-info .sac{ font-weight:700; color:#000; font-size:10.5px; }
+  .company-info p{ margin:1px 0; font-size:9px; color:#333; font-weight:500; }
+  .company-info .sac{ font-weight:700; color:#000; font-size:10px; }
 
   /* Formulários Compactos e Alta Visibilidade */
   .meta-row{
@@ -161,6 +162,7 @@
   }
   .field select{ cursor:pointer; height:20px; }
 
+  .grid-end{ display:grid; grid-template-columns: 3fr 1fr; gap:6px; margin-bottom:6px; }
   .grid2{ display:grid; grid-template-columns: 2fr 1fr; gap:6px; margin-bottom:6px;}
   .grid4{ display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap:6px; margin-bottom:6px;}
 
@@ -227,7 +229,7 @@
   }
   .totals{
     width:100%;
-    max-width:240px;
+    max-width:220px;
     border:1px solid var(--line);
     border-radius:4px;
     overflow:hidden;
@@ -280,21 +282,26 @@
     margin:8px 0 3px;
   }
 
-  /* Estilos de Impressão */
+  /* Configuração para Impressão e PDF A5 Centralizado */
+  @page {
+    size: A5 portrait;
+    margin: 5mm;
+  }
+
   @media print{
-    body{ padding:0; background:#fff; }
+    body{ padding:0; background:#fff; min-height:auto; display:block; }
     .toolbar{ display:none !important; }
-    .receipt-frame{ border:none; box-shadow:none; padding:0; max-width:100%; }
+    .receipt-frame{ border:none; box-shadow:none; padding:0; max-width:100%; width:100%; }
     .add-row-btn, .rm-btn, td.rm-cell{ display:none !important; }
   }
 </style>
 </head>
 <body>
 
-<!-- Barra de Ações com 3 Botões Principais Modais -->
+<!-- Barra de Ações -->
 <div class="toolbar">
-  <button class="btn" id="clearBtn">Limpar</button>
-  <button class="btn" id="pdfBtn">📄 Baixar em PDF</button>
+  <button class="btn" id="clearBtn">Limpar / Novo Pedido</button>
+  <button class="btn" id="pdfBtn">📄 Baixar PDF (A5)</button>
   <button class="btn primary" id="printBtn">🖨️ Imprimir</button>
   <button class="btn whatsapp" id="sendClientBtn">💬 Enviar Cliente (WhatsApp)</button>
 </div>
@@ -320,17 +327,12 @@
     <div class="meta-row">
       <div class="field"><label>Data da emissão</label><input type="date" id="dataEmissao"></div>
       <div class="field"><label>Data entrega</label><input type="date" id="dataEntrega"></div>
-      <div class="field"><label>Pedido</label><input type="text" id="pedido" placeholder="Nº pedido"></div>
+      <div class="field"><label>Pedido</label><input type="text" id="pedido" readonly style="font-weight:700; color:var(--accent);"></div>
     </div>
 
     <div class="field" style="margin-bottom:6px;">
-      <label>Nome/Razão Social</label>
-      <input type="text" id="nome">
-    </div>
-
-    <div class="field" style="margin-bottom:6px;">
-      <label>Endereço</label>
-      <input type="text" id="endereco">
+      <label>Nome / Razão Social</label>
+      <input type="text" id="nome" placeholder="Digite o nome ou razão social livremente">
     </div>
 
     <div class="grid4">
@@ -341,6 +343,17 @@
       <div class="field"><label>Cidade</label><input type="text" id="cidade"></div>
       <div class="field"><label>Estado</label><input type="text" id="estado" maxlength="2"></div>
       <div class="field"><label>Telefone / Celular</label><input type="text" id="fone" placeholder="(11) 99999-9999"></div>
+    </div>
+
+    <div class="grid-end">
+      <div class="field">
+        <label>Endereço / Logradouro</label>
+        <input type="text" id="endereco" placeholder="Rua, Avenida, Bairro...">
+      </div>
+      <div class="field">
+        <label>Número</label>
+        <input type="text" id="numEndereco" placeholder="Nº">
+      </div>
     </div>
 
     <div class="grid2">
@@ -365,10 +378,10 @@
     <table>
       <thead>
         <tr>
-          <th style="width: 60px;">Quant.</th>
+          <th style="width: 55px;">Quant.</th>
           <th>Descrição dos produtos</th>
-          <th class="num" style="width: 90px;">V.Unit.</th>
-          <th class="num" style="width: 100px;">Valor</th>
+          <th class="num" style="width: 85px;">V.Unit.</th>
+          <th class="num" style="width: 95px;">Valor</th>
           <th class="rm-cell"></th>
         </tr>
       </thead>
@@ -397,10 +410,11 @@
 
 <script>
 (function(){
-  const STORAGE_KEY = 'qualyquimy_recibo_draft_v2';
-  const PEDIDO_COUNTER_KEY = 'qualyquimy_pedido_counter';
+  const STORAGE_KEY = 'qualyquimy_recibo_draft_v3';
+  const PEDIDO_COUNTER_KEY = 'qualyquimy_pedido_counter_v3';
   const cepInput = document.getElementById('cep');
   const enderecoInput = document.getElementById('endereco');
+  const numEnderecoInput = document.getElementById('numEndereco');
   const cidadeInput = document.getElementById('cidade');
   const estadoInput = document.getElementById('estado');
   const foneInput = document.getElementById('fone');
@@ -418,7 +432,7 @@
   const discountVal = document.getElementById('discountVal');
   const totalVal = document.getElementById('totalVal');
 
-  const headerFieldIds = ['dataEmissao','dataEntrega','pedido','nome','endereco','cep','cidade','estado','fone','ierg','cnpjcpf','condPagto'];
+  const headerFieldIds = ['dataEmissao','dataEntrega','pedido','nome','endereco','numEndereco','cep','cidade','estado','fone','ierg','cnpjcpf','condPagto'];
 
   function brl(n){
     return n.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
@@ -496,19 +510,30 @@
     return {header, items};
   }
 
-  function nextPedidoNumero(){
-    let n = 1;
+  // Gera número do pedido e salva contador
+  function getNextPedidoNumero(){
+    let n = 1001;
+    try{
+      const stored = parseInt(localStorage.getItem(PEDIDO_COUNTER_KEY), 10);
+      if(!isNaN(stored)) n = stored;
+    }catch(e){}
+    return String(n).padStart(5, '0');
+  }
+
+  function incrementPedidoNumero(){
+    let n = 1001;
     try{
       const stored = parseInt(localStorage.getItem(PEDIDO_COUNTER_KEY), 10);
       if(!isNaN(stored)) n = stored;
     }catch(e){}
     try{ localStorage.setItem(PEDIDO_COUNTER_KEY, String(n + 1)); }catch(e){}
-    return String(n).padStart(4, '0');
   }
 
+  // Busca do CEP via ViaCEP
   function buscarEnderecoPorCep(){
     const digits = (cepInput.value || '').replace(/\D/g, '');
     if(digits.length !== 8) return;
+    
     fetch('https://viacep.com.br/ws/' + digits + '/json/')
       .then(res => res.json())
       .then(data => {
@@ -517,6 +542,7 @@
           if(partes) enderecoInput.value = partes;
           if(data.localidade) cidadeInput.value = data.localidade;
           if(data.uf) estadoInput.value = data.uf;
+          numEnderecoInput.focus();
           save();
         }
       }).catch(()=>{});
@@ -551,7 +577,7 @@
     }
 
     if(!pedidoInput.value){
-      pedidoInput.value = nextPedidoNumero();
+      pedidoInput.value = getNextPedidoNumero();
     }
 
     const dataEmissaoInput = document.getElementById('dataEmissao');
@@ -562,17 +588,18 @@
     }
   }
 
+  // Configuração para PDF A5 Centralizado
   function generatePDFOptions(){
     const element = document.getElementById('sheet');
     const numPedido = pedidoInput.value || 'recibo';
     return {
       element: element,
       opt: {
-        margin:       10,
+        margin:       [6, 6, 6, 6], // Margens equilibradas
         filename:     `Recibo_Qualyquimy_${numPedido}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas:  { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a5', orientation: 'portrait' }
       }
     };
   }
@@ -588,17 +615,15 @@
   sendClientBtn.addEventListener('click', () => {
     let rawFone = foneInput.value.replace(/\D/g, '');
     if(!rawFone){
-      alert('Por favor, informe um número de telefone/celular no cadastro.');
+      alert('Por favor, informe o número de telefone do cliente.');
       foneInput.focus();
       return;
     }
 
-    // Formatar número para padrão internacional (DDI + DDD + número)
     if(rawFone.length <= 11 && !rawFone.startsWith('55')){
       rawFone = '55' + rawFone;
     }
 
-    // Gerar e baixar o PDF para o usuário anexar
     const { element, opt } = generatePDFOptions();
     html2pdf().set(opt).from(element).save().then(() => {
       const nomeCliente = document.getElementById('nome').value || 'Cliente';
@@ -611,6 +636,12 @@
   });
 
   cepInput.addEventListener('blur', buscarEnderecoPorCep);
+  cepInput.addEventListener('input', () => {
+    if((cepInput.value || '').replace(/\D/g, '').length === 8){
+      buscarEnderecoPorCep();
+    }
+  });
+
   addRowBtn.addEventListener('click', () => { makeRow(); save(); });
   condPagto.addEventListener('change', () => { recalcTotals(); save(); });
   headerFieldIds.forEach(id => {
@@ -618,12 +649,13 @@
   });
 
   clearBtn.addEventListener('click', () => {
-    if(confirm('Deseja limpar todos os campos do recibo?')){
+    if(confirm('Deseja gerar um NOVO pedido? Os dados atuais serão limpos e o número do pedido será incrementado.')){
+      incrementPedidoNumero();
       try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
       headerFieldIds.forEach(id => { document.getElementById(id).value = ''; });
       itemsBody.innerHTML = '';
       for(let i=0;i<4;i++) makeRow();
-      pedidoInput.value = nextPedidoNumero();
+      pedidoInput.value = getNextPedidoNumero();
       document.getElementById('dataEmissao').value = new Date().toISOString().split('T')[0];
       recalcTotals();
       save();
