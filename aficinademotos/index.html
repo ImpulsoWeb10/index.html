@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oficina de Motos - Gestão Profissional</title>
   <style>
-    /* RESET E VARIÁVEIS GLOW NEON */
     :root {
       --bg-color: #0b0f19;
       --card-bg: rgba(18, 26, 43, 0.75);
       --neon-blue: #00f0ff;
       --neon-purple: #7000ff;
+      --neon-green: #00ff66;
+      --neon-yellow: #ffcc00;
       --text-color: #f0f4f8;
       --text-dim: #94a3b8;
       --radius: 16px;
@@ -35,14 +36,10 @@
       position: relative;
     }
 
-    /* MOLDURA NEON ANIMADA NAS BORDAS DA TELA */
     body::before {
       content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       border: 3px solid transparent;
       border-image: linear-gradient(135deg, var(--neon-blue), var(--neon-purple), var(--neon-blue)) 1;
       pointer-events: none;
@@ -56,7 +53,6 @@
       100% { filter: hue-rotate(360deg); }
     }
 
-    /* CABEÇALHO */
     header {
       text-align: center;
       margin-top: 10px;
@@ -81,7 +77,6 @@
       margin-top: 5px;
     }
 
-    /* CONTAINER PRINCIPAL (CARDS E GLASSMORPHISM) */
     .main-container {
       width: 100%;
       max-width: 500px;
@@ -109,7 +104,6 @@
       gap: 8px;
     }
 
-    /* BOTÕES ESTILIZADOS NEON */
     .btn-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -142,13 +136,18 @@
       box-shadow: 0 0 10px rgba(0, 240, 255, 0.15);
     }
 
-    /* CAIXA DE RESPOSTA DO TERMINAL DA API */
+    .btn-success {
+      background: linear-gradient(135deg, rgba(0, 255, 102, 0.2), rgba(0, 240, 255, 0.2));
+      border: 1px solid var(--neon-green);
+      box-shadow: 0 0 10px rgba(0, 255, 102, 0.15);
+    }
+
     pre#output {
       background: #05070c;
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 10px;
       padding: 12px;
-      color: #00ff66;
+      color: var(--neon-green);
       font-family: 'Courier New', monospace;
       font-size: 0.8rem;
       max-height: 180px;
@@ -157,7 +156,6 @@
       word-wrap: break-word;
     }
 
-    /* NAVEGAÇÃO INFERIOR FLUTUANTE (MOBILE FIRST) */
     .floating-nav {
       position: fixed;
       bottom: 15px;
@@ -201,13 +199,9 @@
       margin-bottom: 2px;
     }
 
-    /* ESTRUTURA DOS MODAIS */
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(5px);
       display: flex;
@@ -231,11 +225,13 @@
       box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
       border-radius: var(--radius);
       width: 100%;
-      max-width: 420px;
+      max-width: 480px;
       padding: 25px;
       position: relative;
       transform: translateY(20px);
       transition: transform 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .modal-overlay.active .modal-content {
@@ -264,7 +260,6 @@
       cursor: pointer;
     }
 
-    /* FORMULÁRIOS ESTILIZADOS NEON */
     form {
       display: flex;
       flex-direction: column;
@@ -287,23 +282,46 @@
       box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
     }
 
-    form button {
-      margin-top: 8px;
+    table.items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.85rem;
     }
+
+    table.items-table th, table.items-table td {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px;
+      text-align: left;
+    }
+
+    table.items-table th {
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--neon-blue);
+    }
+
+    .badge-status {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.75rem;
+      display: inline-block;
+    }
+
+    .status-aberto { background: rgba(255, 204, 0, 0.2); color: var(--neon-yellow); border: 1px solid var(--neon-yellow); }
+    .status-andamento { background: rgba(0, 240, 255, 0.2); color: var(--neon-blue); border: 1px solid var(--neon-blue); }
+    .status-concluido { background: rgba(0, 255, 102, 0.2); color: var(--neon-green); border: 1px solid var(--neon-green); }
   </style>
 </head>
 <body>
 
-  <!-- CABEÇALHO -->
   <header>
     <h1>OFICINA DE MOTOS</h1>
-    <p>Painel Integrado de Alta Performance</p>
+    <p>Painel Integrado & Gestão de O.S.</p>
   </header>
 
-  <!-- CONTEÚDO PRINCIPAL DA PÁGINA -->
   <main class="main-container">
 
-    <!-- CARD: TESTES DA API (GET) -->
     <section class="card">
       <h2>⚡ Consultas da API (GET)</h2>
       <div class="btn-grid">
@@ -314,25 +332,24 @@
       </div>
     </section>
 
-    <!-- CARD: AÇÕES RÁPIDAS (MODAIS) -->
     <section class="card">
-      <h2>➕ Ações Rápidas</h2>
+      <h2>➕ Gestão & Ordens de Serviço</h2>
       <div class="btn-grid">
         <button class="btn btn-primary" onclick="openModal('modalCliente')">⚡ Novo Cliente</button>
         <button class="btn btn-primary" onclick="openModal('modalMoto')">🏍️ Nova Moto</button>
-        <button class="btn btn-primary" onclick="openModal('modalOS')" style="grid-column: span 2;">📝 Nova Ordem de Serviço (O.S.)</button>
+        <button class="btn btn-primary" onclick="openModal('modalOS')" style="grid-column: span 2;">📝 Criar Nova O.S.</button>
+        <button class="btn btn-success" onclick="openModal('modalGerenciarOS')" style="grid-column: span 2;">🛠️ Gerenciar / Imprimir O.S.</button>
       </div>
     </section>
 
-    <!-- CARD: TERMINAL DE RESPOSTA DAS REQUISIÇÕES -->
     <section class="card">
-      <h2>📟 Resposta da API / Banco de Dados</h2>
+      <h2>📟 Terminal de Saída</h2>
       <pre id="output">Aguardando comando...</pre>
     </section>
 
   </main>
 
-  <!-- MÓDULO 1: MODAL NOVO CLIENTE -->
+  <!-- MODAL 1: CLIENTE -->
   <div class="modal-overlay" id="modalCliente">
     <div class="modal-content">
       <div class="modal-header">
@@ -349,7 +366,7 @@
     </div>
   </div>
 
-  <!-- MÓDULO 2: MODAL NOVA MOTO -->
+  <!-- MODAL 2: MOTO -->
   <div class="modal-overlay" id="modalMoto">
     <div class="modal-content">
       <div class="modal-header">
@@ -364,12 +381,12 @@
         <input type="text" id="modeloMoto" placeholder="Modelo (ex: CG 160) *" required>
         <input type="text" id="placaMoto" placeholder="Placa *" required>
         <input type="number" id="kmMoto" placeholder="KM Atual">
-        <button type="submit" class="btn btn-primary">Salvar Moto na Planilha</button>
+        <button type="submit" class="btn btn-primary">Salvar Moto</button>
       </form>
     </div>
   </div>
 
-  <!-- MÓDULO 3: MODAL NOVA ORDEM DE SERVIÇO (O.S.) -->
+  <!-- MODAL 3: NOVA O.S. -->
   <div class="modal-overlay" id="modalOS">
     <div class="modal-content">
       <div class="modal-header">
@@ -389,7 +406,89 @@
     </div>
   </div>
 
-  <!-- NAVEGAÇÃO FLUTUANTE DE MENU (MOBILE FIRST) -->
+  <!-- MODAL 4: SELEÇÃO DE O.S. PARA GERENCIAR -->
+  <div class="modal-overlay" id="modalGerenciarOS">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Gerenciar Ordens de Serviço</h3>
+        <button class="close-modal" onclick="closeModal('modalGerenciarOS')">&times;</button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <select id="selectListaOS">
+          <option value="">Buscando Ordens de Serviço...</option>
+        </select>
+        <button class="btn btn-primary" onclick="abrirDetalhesOS()">Abrir Detalhes da O.S.</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: DETALHES, ITENS, STATUS E IMPRESSÃO DA O.S. -->
+  <div class="modal-overlay" id="modalDetalhesOS">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Detalhes da O.S.</h3>
+        <button class="close-modal" onclick="closeModal('modalDetalhesOS')">&times;</button>
+      </div>
+
+      <!-- Área Impressa -->
+      <div id="printArea" style="padding: 5px; color: var(--text-color);">
+        <div style="text-align: center; margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 8px;">
+          <h2 style="color: var(--neon-blue); font-size: 1.3rem;">MOTO PRECISION</h2>
+          <p style="font-size: 0.8rem; color: var(--text-dim);">Comprovante de Ordem de Serviço</p>
+        </div>
+
+        <div id="infoOSHeader"></div>
+
+        <div style="margin-top: 15px;">
+          <h4 style="color: var(--neon-blue); font-size: 0.9rem; margin-bottom: 8px;">Peças e Serviços Lançados:</h4>
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Qtd</th>
+                <th>V. Unit (R$)</th>
+                <th>Total (R$)</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyItensOS">
+              <tr><td colspan="4" style="text-align:center;">Nenhum item adicionado.</td></tr>
+            </tbody>
+          </table>
+          <div style="text-align: right; margin-top: 10px; font-weight: bold; font-size: 1rem; color: var(--neon-green);" id="valorTotalOS">
+            Total: R$ 0,00
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulário para adicionar peça/serviço à O.S. -->
+      <form id="formAdicionarItem" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">
+        <h4 style="color: var(--neon-blue); font-size: 0.85rem;">Adicionar Item / Serviço à O.S.</h4>
+        <input type="text" id="descItem" placeholder="Descrição do Item / Peça *" required>
+        <div style="display: flex; gap: 8px;">
+          <input type="number" id="qtdItem" placeholder="Qtd" value="1" min="1" required style="width: 35%;">
+          <input type="number" step="0.01" id="valorItem" placeholder="Valor Unit. R$ *" required style="width: 65%;">
+        </div>
+        <button type="submit" class="btn btn-primary">+ Adicionar Item</button>
+      </form>
+
+      <!-- Alteração de Status da O.S. -->
+      <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; display: flex; gap: 8px; align-items: center;">
+        <select id="novoStatusOS" style="flex: 1;">
+          <option value="EM ABERTO">EM ABERTO</option>
+          <option value="EM ANDAMENTO">EM ANDAMENTO</option>
+          <option value="CONCLUIDO">CONCLUIDO</option>
+          <option value="ENTREGUE">ENTREGUE</option>
+        </select>
+        <button class="btn btn-primary" onclick="salvarStatusOS()">Atualizar Status</button>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <button class="btn btn-success" onclick="imprimirOS()" style="flex: 1;">🖨️ Imprimir / PDF</button>
+        <button class="btn" onclick="closeModal('modalDetalhesOS')" style="flex: 1;">Fechar</button>
+      </div>
+    </div>
+  </div>
+
   <nav class="floating-nav">
     <button class="nav-item active" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -409,7 +508,6 @@
     </button>
   </nav>
 
-  <!-- LÓGICA DOS MODAIS NO HTML -->
   <script>
     function openModal(id) {
       document.getElementById(id).classList.add('active');
@@ -422,7 +520,6 @@
     }
   </script>
 
-  <!-- CARREGAMENTO DO SCRIPT DE LÓGICA -->
   <script src="js/app.js"></script>
 </body>
 </html>
