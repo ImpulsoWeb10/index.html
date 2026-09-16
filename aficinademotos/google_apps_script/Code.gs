@@ -1,4 +1,3 @@
-
 /**
  * API Google Apps Script - Oficina de Motos
  */
@@ -58,6 +57,17 @@ function doGet(e) {
       return responseJSON({ success: true, table: table, total: data.length, data: data });
     }
 
+    if (action === "get") {
+      const id = e.parameter.id;
+      if (!table || !VALID_TABLES.includes(table) || !id) {
+        return responseJSON({ success: false, message: "Tabela ou ID não informado" });
+      }
+      const idKey = TABLE_ID_KEYS[table];
+      const allData = getTableData(table);
+      const record = allData.find(item => String(item[idKey]) === String(id));
+      return responseJSON({ success: true, data: record || null });
+    }
+
     return responseJSON({ success: false, message: "Ação GET não reconhecida" });
   } catch (error) {
     return responseJSON({ success: false, message: error.toString() });
@@ -65,7 +75,7 @@ function doGet(e) {
 }
 
 /**
- * Tratamento de requisições POST (Inserção e Gravação)
+ * Tratamento de requisições POST (Inserção, Atualização e Gravação)
  */
 function doPost(e) {
   try {
@@ -80,6 +90,14 @@ function doPost(e) {
       }
       const newRecord = insertRecord(table, data);
       return responseJSON({ success: true, message: "Registro inserido com sucesso", record: newRecord });
+    }
+
+    if (action === "update") {
+      if (!table || !VALID_TABLES.includes(table)) {
+        return responseJSON({ success: false, message: "Tabela inválida para atualização" });
+      }
+      const updatedRecord = updateRecord(table, data);
+      return responseJSON({ success: true, message: "Registro atualizado com sucesso", record: updatedRecord });
     }
 
     return responseJSON({ success: false, message: "Ação POST não reconhecida" });
@@ -136,9 +154,9 @@ function insertRecord(tableName, recordData) {
     recordData["DATA_CADASTRO"] = Utilities.formatDate(new Date(), "GMT-3", "yyyy-MM-dd");
   }
 
-  // Preenche o status como ATIVO se não for enviado
+  // Preenche o status inicial das ordens ou registros se não for enviado
   if (headers.includes("STATUS") && !recordData["STATUS"]) {
-    recordData["STATUS"] = "ATIVO";
+    recordData["STATUS"] = tableName === "ORDENS" ? "EM ABERTO" : "ATIVO";
   }
 
   // Mapeia os dados na ordem exata das colunas do cabeçalho
@@ -146,6 +164,42 @@ function insertRecord(tableName, recordData) {
 
   sheet.appendRow(newRow);
   return recordData;
+}
+
+/**
+ * Atualiza um registro existente com base na chave primária
+ */
+function updateRecord(tableName, recordData) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = ss.getSheetByName(tableName);
+
+  if (!sheet) throw new Error("Aba não encontrada: " + tableName);
+
+  const values = sheet.getDataRange().getValues();
+  if (values.length <= 1) throw new Error("Nenhum dado encontrado na aba " + tableName);
+
+  const headers = values[0];
+  const idKey = TABLE_ID_KEYS[tableName];
+  const recordId = recordData[idKey];
+
+  if (!recordId) throw new Error("Chave primária " + idKey + " não fornecida para atualização.");
+
+  const idIndex = headers.indexOf(idKey);
+  if (idIndex === -1) throw new Error("Coluna ID " + idKey + " não encontrada na tabela.");
+
+  // Encontra a linha do registro a ser atualizado
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][idIndex]) === String(recordId)) {
+      headers.forEach((header, colIdx) => {
+        if (recordData[header] !== undefined) {
+          sheet.getRange(i + 1, colIdx + 1).setValue(recordData[header]);
+        }
+      });
+      return recordData;
+    }
+  }
+
+  throw new Error("Registro com " + idKey + " = " + recordId + " não foi encontrado.");
 }
 
 /**
