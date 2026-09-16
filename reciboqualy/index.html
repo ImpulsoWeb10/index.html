@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recibo — Qualyquimy Comércio de Tintas</title>
+<style>
+  :root{
+    --paper:#fdfcf9;
+    --paper-dark:#141312;
+    --ink:#1c1a17;
+    --ink-dark:#eae6df;
+    --line:#c9c2b4;
+    --line-dark:#4a463e;
+    --accent:#7a3b2e;
+    --accent-soft:#f1e4d8;
+    --accent-soft-dark:#2c2119;
+    --muted:#8a8272;
+    --good:#3f6b4a;
+    --good-soft:#e6efe6;
+    --good-soft-dark:#1c2a1f;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:var(--paper-dark);
+      --ink:var(--ink-dark);
+      --line:var(--line-dark);
+      --accent:#d99a7d;
+      --accent-soft:var(--accent-soft-dark);
+      --muted:#a39c8c;
+      --good:#8fc79c;
+      --good-soft:var(--good-soft-dark);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:var(--paper-dark);
+    --ink:var(--ink-dark);
+    --line:var(--line-dark);
+    --accent:#d99a7d;
+    --accent-soft:var(--accent-soft-dark);
+    --muted:#a39c8c;
+    --good:#8fc79c;
+    --good-soft:var(--good-soft-dark);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    padding:28px 16px 80px;
+    min-height:100vh;
+  }
+  .sheet{
+    max-width:900px;
+    margin:0 auto;
+    background:var(--paper);
+  }
+
+  /* Header */
+  .letterhead{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    border-bottom:3px double var(--ink);
+    padding-bottom:16px;
+    margin-bottom:18px;
+  }
+  .brand-mark{
+    flex-shrink:0;
+  }
+  .brand-mark img{
+    display:block;
+    height:64px;
+    width:auto;
+    max-width:180px;
+    object-fit:contain;
+  }
+  .brand-mark .brand-fallback{
+    display:none;
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:34px;
+    font-weight:700;
+    color:var(--accent);
+    letter-spacing:-1px;
+    white-space:nowrap;
+  }
+  .brand-mark .brand-fallback span{ font-style:normal; font-size:13px; display:block; letter-spacing:2px; color:var(--muted); font-family:var(--sans); margin-top:-4px;}
+  .company-info{ flex:1; text-align:right;}
+  .company-info h1{
+    font-family:var(--serif);
+    font-size:20px;
+    margin:0 0 4px;
+    letter-spacing:0.5px;
+  }
+  .company-info p{ margin:1px 0; font-size:12px; color:var(--muted); }
+  .company-info .sac{ font-weight:700; color:var(--ink); font-size:13px; }
+
+  /* Meta row: dates/pedido */
+  .meta-row{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:12px;
+    margin-bottom:14px;
+  }
+  .field{
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:6px 10px;
+    background:transparent;
+  }
+  .field label{
+    display:block;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+    color:var(--muted);
+    margin-bottom:2px;
+  }
+  .field input, .field select{
+    width:100%;
+    border:none;
+    background:transparent;
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:14px;
+    padding:2px 0;
+    outline:none;
+  }
+  .field select{ cursor:pointer; }
+
+  .grid2{ display:grid; grid-template-columns: 2fr 1fr; gap:12px; margin-bottom:12px;}
+  .grid4{ display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap:12px; margin-bottom:12px;}
+  .grid3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; margin-bottom:12px;}
+
+  /* Items table */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:8px;
+  }
+  thead th{
+    background:var(--accent-soft);
+    color:var(--ink);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    text-align:left;
+    padding:8px 8px;
+    border:1px solid var(--line);
+  }
+  thead th.num{ text-align:right; }
+  tbody td{
+    border:1px solid var(--line);
+    padding:4px 6px;
+    vertical-align:middle;
+  }
+  tbody input{
+    width:100%;
+    border:none;
+    background:transparent;
+    color:var(--ink);
+    font-size:14px;
+    padding:6px 2px;
+    outline:none;
+    font-family:var(--sans);
+  }
+  tbody input.num{ text-align:right; }
+  td.valor-cell{ text-align:right; font-variant-numeric:tabular-nums; padding-right:10px; white-space:nowrap;}
+  td.rm-cell{ width:34px; text-align:center; border:none; padding:0;}
+  .rm-btn{
+    border:none; background:none; color:var(--muted); cursor:pointer; font-size:16px; line-height:1;
+    padding:6px;
+  }
+  .rm-btn:hover{ color:#b64c3a; }
+
+  .add-row-btn{
+    margin-top:10px;
+    border:1px dashed var(--line);
+    background:transparent;
+    color:var(--muted);
+    padding:8px 14px;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:13px;
+    font-family:var(--sans);
+  }
+  .add-row-btn:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* Totals */
+  .totals-wrap{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:18px;
+  }
+  .totals{
+    width:100%;
+    max-width:320px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .totals-row{
+    display:flex;
+    justify-content:space-between;
+    padding:9px 14px;
+    font-size:14px;
+    border-bottom:1px solid var(--line);
+  }
+  .totals-row:last-child{ border-bottom:none; }
+  .totals-row.discount{ color:var(--good); background:var(--good-soft); }
+  .totals-row.final{
+    font-weight:700;
+    font-size:17px;
+    background:var(--accent-soft);
+    color:var(--ink);
+  }
+  .totals-row .lbl{ color:inherit; }
+
+  /* Payment note badge */
+  .discount-note{
+    font-size:12px;
+    color:var(--good);
+    margin-top:6px;
+    text-align:right;
+  }
+
+  /* signature */
+  .sign-row{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:24px;
+    margin-top:46px;
+  }
+  .sign-line{
+    border-top:1px solid var(--ink);
+    padding-top:6px;
+    font-size:12px;
+    color:var(--muted);
+    text-align:center;
+  }
+
+  /* toolbar */
+  .toolbar{
+    max-width:900px;
+    margin:0 auto 16px;
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+  }
+  .btn{
+    font-family:var(--sans);
+    font-size:13px;
+    padding:8px 16px;
+    border-radius:5px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .btn.primary{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+  .btn:hover{ opacity:0.85; }
+
+  h2.section-title{
+    font-family:var(--serif);
+    font-size:15px;
+    color:var(--muted);
+    margin:20px 0 8px;
+    font-weight:normal;
+    font-style:italic;
+  }
+
+  @media print{
+    body{ padding:0; background:#fff; color:#000; }
+    .toolbar, .add-row-btn, .rm-btn{ display:none !important; }
+    .field, table, td, th, .totals{ border-color:#000 !important; }
+  }
+
+  @media (max-width:640px){
+    .letterhead{ flex-direction:column; align-items:flex-start; gap:8px;}
+    .company-info{ text-align:left; }
+    .grid2, .grid3, .grid4, .meta-row{ grid-template-columns: 1fr 1fr; }
+    .sign-row{ grid-template-columns:1fr; gap:36px;}
+    thead th:nth-child(1){ width:44px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="btn" id="clearBtn">Limpar</button>
+  <button class="btn primary" id="printBtn">Imprimir / Salvar PDF</button>
+</div>
+
+<div class="sheet" id="sheet">
+
+  <div class="letterhead">
+    <div class="brand-mark">
+      <img src="qualy.png" alt="Qualyquimy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <div class="brand-fallback">Qualy<span>QUIMY</span></div>
+    </div>
+    <div class="company-info">
+      <h1>QUALYQUIMY COMÉRCIO DE TINTAS LTDA</h1>
+      <p>C.N.P.J. 10.503.834/0001-73 &nbsp;·&nbsp; Inscr. Est. 379.177.721.112</p>
+      <p class="sac">Sac: 11 4643-2301</p>
+      <p>www.tintasqualyquimy.com.br</p>
+      <p>Rua Leiria, 45 - Scaffidi - Cep 08587-100 - Itaquaquecetuba - SP</p>
+    </div>
+  </div>
+
+  <div class="meta-row">
+    <div class="field"><label>Data da emissão</label><input type="date" id="dataEmissao"></div>
+    <div class="field"><label>Data entrega</label><input type="date" id="dataEntrega"></div>
+    <div class="field"><label>Pedido</label><input type="text" id="pedido" placeholder="Nº do pedido"></div>
+  </div>
+
+  <div class="field" style="margin-bottom:12px;">
+    <label>Nome/Razão Social</label>
+    <input type="text" id="nome">
+  </div>
+
+  <div class="field" style="margin-bottom:12px;">
+    <label>End.</label>
+    <input type="text" id="endereco">
+  </div>
+
+  <div class="grid4">
+    <div class="field">
+      <label>Cep</label>
+      <input type="text" id="cep" placeholder="00000-000" inputmode="numeric" maxlength="9">
+      <div id="cepStatus" style="font-size:10px; color:var(--muted); margin-top:2px; min-height:12px;"></div>
+    </div>
+    <div class="field"><label>Cid.</label><input type="text" id="cidade"></div>
+    <div class="field"><label>Est.</label><input type="text" id="estado" maxlength="2"></div>
+    <div class="field"><label>Fone</label><input type="text" id="fone"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="field"><label>I.E./RG</label><input type="text" id="ierg"></div>
+    <div class="field"><label>CNPJ/CPF</label><input type="text" id="cnpjcpf"></div>
+  </div>
+
+  <div class="field" style="margin-bottom:6px;">
+    <label>Cond. Pagto</label>
+    <select id="condPagto">
+      <option value="outro">Outro / a combinar</option>
+      <option value="especie">Espécie (dinheiro) — 5% desconto</option>
+      <option value="pix">Pix — 5% desconto</option>
+      <option value="cartao">Cartão</option>
+      <option value="boleto">Boleto</option>
+    </select>
+  </div>
+  <div class="discount-note" id="discountNote" style="visibility:hidden;">Desconto de 5% aplicado no valor total.</div>
+
+  <h2 class="section-title">Descrição dos produtos</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Quant.</th>
+        <th>Descrição dos produtos</th>
+        <th class="num">V.Unit.</th>
+        <th class="num">Valor</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="itemsBody"></tbody>
+  </table>
+
+  <button class="add-row-btn" id="addRowBtn">+ Adicionar item</button>
+
+  <div class="totals-wrap">
+    <div class="totals">
+      <div class="totals-row"><span class="lbl">Subtotal</span><span id="subtotalVal">R$ 0,00</span></div>
+      <div class="totals-row discount" id="discountRow" style="display:none;">
+        <span class="lbl">Desconto (5%)</span><span id="discountVal">- R$ 0,00</span>
+      </div>
+      <div class="totals-row final"><span class="lbl">Valor total</span><span id="totalVal">R$ 0,00</span></div>
+    </div>
+  </div>
+
+  <div class="sign-row">
+    <div class="sign-line">Assinatura do Cliente/Responsável</div>
+    <div class="sign-line">Qualyquimy Comércio de Tintas Ltda</div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'qualyquimy_recibo_draft_v1';
+  const PEDIDO_COUNTER_KEY = 'qualyquimy_pedido_counter';
+  const cepInput = document.getElementById('cep');
+  const cepStatus = document.getElementById('cepStatus');
+  const enderecoInput = document.getElementById('endereco');
+  const cidadeInput = document.getElementById('cidade');
+  const estadoInput = document.getElementById('estado');
+  const pedidoInput = document.getElementById('pedido');
+  const itemsBody = document.getElementById('itemsBody');
+  const addRowBtn = document.getElementById('addRowBtn');
+  const printBtn = document.getElementById('printBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const condPagto = document.getElementById('condPagto');
+  const discountNote = document.getElementById('discountNote');
+  const discountRow = document.getElementById('discountRow');
+  const subtotalVal = document.getElementById('subtotalVal');
+  const discountVal = document.getElementById('discountVal');
+  const totalVal = document.getElementById('totalVal');
+
+  const headerFieldIds = ['dataEmissao','dataEntrega','pedido','nome','endereco','cep','cidade','estado','fone','ierg','cnpjcpf','condPagto'];
+
+  function brl(n){
+    return n.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+  }
+
+  function makeRow(data){
+    data = data || {qtd:'', desc:'', unit:''};
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="number" class="qtd" min="0" step="1" value="${data.qtd}" placeholder="0"></td>
+      <td><input type="text" class="desc" value="${data.desc}" placeholder="Descrição do produto"></td>
+      <td><input type="number" class="unit num" min="0" step="0.01" value="${data.unit}" placeholder="0,00"></td>
+      <td class="valor-cell"><span class="linha-valor">R$ 0,00</span></td>
+      <td class="rm-cell"><button class="rm-btn" title="Remover item">✕</button></td>
+    `;
+    itemsBody.appendChild(tr);
+    wireRow(tr);
+    updateRow(tr);
+  }
+
+  function wireRow(tr){
+    tr.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('input', () => { updateRow(tr); recalcTotals(); save(); });
+    });
+    tr.querySelector('.rm-btn').addEventListener('click', () => {
+      tr.remove();
+      recalcTotals();
+      save();
+    });
+  }
+
+  function updateRow(tr){
+    const qtd = parseFloat(tr.querySelector('.qtd').value) || 0;
+    const unit = parseFloat(tr.querySelector('.unit').value) || 0;
+    const valor = qtd * unit;
+    tr.querySelector('.linha-valor').textContent = brl(valor);
+    tr.dataset.valor = valor;
+  }
+
+  function recalcTotals(){
+    let subtotal = 0;
+    itemsBody.querySelectorAll('tr').forEach(tr => {
+      subtotal += parseFloat(tr.dataset.valor) || 0;
+    });
+
+    const isDiscountable = condPagto.value === 'especie' || condPagto.value === 'pix';
+    discountNote.style.visibility = isDiscountable ? 'visible' : 'hidden';
+
+    let discount = 0;
+    if(isDiscountable){
+      discount = subtotal * 0.05;
+      discountRow.style.display = 'flex';
+    } else {
+      discountRow.style.display = 'none';
+    }
+
+    const total = subtotal - discount;
+
+    subtotalVal.textContent = brl(subtotal);
+    discountVal.textContent = '- ' + brl(discount);
+    totalVal.textContent = brl(total);
+  }
+
+  function collectState(){
+    const header = {};
+    headerFieldIds.forEach(id => { header[id] = document.getElementById(id).value; });
+    const items = [];
+    itemsBody.querySelectorAll('tr').forEach(tr => {
+      items.push({
+        qtd: tr.querySelector('.qtd').value,
+        desc: tr.querySelector('.desc').value,
+        unit: tr.querySelector('.unit').value
+      });
+    });
+    return {header, items};
+  }
+
+  function nextPedidoNumero(){
+    let n = 1;
+    try{
+      const stored = parseInt(localStorage.getItem(PEDIDO_COUNTER_KEY), 10);
+      if(!isNaN(stored)) n = stored;
+    }catch(e){}
+    try{ localStorage.setItem(PEDIDO_COUNTER_KEY, String(n + 1)); }catch(e){}
+    return String(n).padStart(4, '0');
+  }
+
+  function buscarEnderecoPorCep(){
+    const digits = (cepInput.value || '').replace(/\D/g, '');
+    if(digits.length !== 8){
+      cepStatus.textContent = '';
+      return;
+    }
+    cepStatus.textContent = 'Buscando endereço...';
+    fetch('https://viacep.com.br/ws/' + digits + '/json/')
+      .then(res => res.json())
+      .then(data => {
+        if(data && !data.erro){
+          const partes = [data.logradouro, data.bairro].filter(Boolean).join(', ');
+          if(partes) enderecoInput.value = partes;
+          if(data.localidade) cidadeInput.value = data.localidade;
+          if(data.uf) estadoInput.value = data.uf;
+          cepStatus.textContent = 'Endereço preenchido automaticamente.';
+          save();
+        } else {
+          cepStatus.textContent = 'CEP não encontrado — preencha o endereço manualmente.';
+        }
+      })
+      .catch(() => {
+        cepStatus.textContent = 'Não foi possível buscar o CEP agora — preencha manualmente.';
+      });
+  }
+
+  function save(){
+    try{
+      const state = collectState();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }catch(e){ /* storage unavailable, ignore */ }
+  }
+
+  function load(){
+    let state = null;
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(raw) state = JSON.parse(raw);
+    }catch(e){ state = null; }
+
+    if(state && state.header){
+      headerFieldIds.forEach(id => {
+        if(state.header[id] !== undefined){
+          document.getElementById(id).value = state.header[id];
+        }
+      });
+    }
+
+    if(state && state.items && state.items.length){
+      state.items.forEach(makeRow);
+    } else {
+      for(let i=0;i<5;i++) makeRow();
+    }
+
+    if(!pedidoInput.value){
+      pedidoInput.value = nextPedidoNumero();
+    }
+  }
+
+  cepInput.addEventListener('blur', buscarEnderecoPorCep);
+  cepInput.addEventListener('input', () => {
+    const digits = (cepInput.value || '').replace(/\D/g, '');
+    if(digits.length === 8) buscarEnderecoPorCep();
+  });
+
+  addRowBtn.addEventListener('click', () => { makeRow(); save(); });
+  condPagto.addEventListener('change', () => { recalcTotals(); save(); });
+  headerFieldIds.filter(id => id !== 'condPagto').forEach(id => {
+    document.getElementById(id).addEventListener('input', save);
+  });
+
+  printBtn.addEventListener('click', () => window.print());
+  clearBtn.addEventListener('click', () => {
+    if(confirm('Limpar todos os dados do recibo?')){
+      try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+      headerFieldIds.forEach(id => { document.getElementById(id).value = ''; });
+      itemsBody.innerHTML = '';
+      for(let i=0;i<5;i++) makeRow();
+      pedidoInput.value = nextPedidoNumero();
+      cepStatus.textContent = '';
+      recalcTotals();
+      save();
+    }
+  });
+
+  load();
+  recalcTotals();
+})();
+</script>
+
+</body>
+</html>
