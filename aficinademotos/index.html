@@ -3,54 +3,340 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Gestão de Oficina - Moto Precision</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Oficina de Motos - Gestão Profissional</title>
+  <style>
+    /* RESET E VARIÁVEIS GLOW NEON */
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(18, 26, 43, 0.75);
+      --neon-blue: #00f0ff;
+      --neon-purple: #7000ff;
+      --text-color: #f0f4f8;
+      --text-dim: #94a3b8;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 15px 90px 15px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* MOLDURA NEON ANIMADA NAS BORDAS DA TELA */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 3px solid transparent;
+      border-image: linear-gradient(135deg, var(--neon-blue), var(--neon-purple), var(--neon-blue)) 1;
+      pointer-events: none;
+      z-index: 9999;
+      box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.3), 0 0 15px rgba(112, 0, 255, 0.3);
+      animation: neonGlow 4s infinite alternate;
+    }
+
+    @keyframes neonGlow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    /* CABEÇALHO */
+    header {
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 25px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    }
+
+    header p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    /* CONTAINER PRINCIPAL (CARDS E GLASSMORPHISM) */
+    .main-container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      color: var(--neon-blue);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* BOTÕES ESTILIZADOS NEON */
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      color: var(--text-color);
+      padding: 12px 15px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(112, 0, 255, 0.2));
+      border: 1px solid var(--neon-blue);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.15);
+    }
+
+    /* CAIXA DE RESPOSTA DO TERMINAL DA API */
+    pre#output {
+      background: #05070c;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 12px;
+      color: #00ff66;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      max-height: 180px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    /* NAVEGAÇÃO INFERIOR FLUTUANTE (MOBILE FIRST) */
+    .floating-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      max-width: 450px;
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 25px;
+      padding: 8px 15px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 240, 255, 0.2);
+      z-index: 1000;
+    }
+
+    .nav-item {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .nav-item.active, .nav-item:hover {
+      color: var(--neon-blue);
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+      margin-bottom: 2px;
+    }
+
+    /* ESTRUTURA DOS MODAIS */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: #121a2b;
+      border: 1px solid var(--neon-blue);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 420px;
+      padding: 25px;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+    }
+
+    .modal-header h3 {
+      color: var(--neon-blue);
+      font-size: 1.2rem;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* FORMULÁRIOS ESTILIZADOS NEON */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input, select, textarea {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-color);
+      padding: 12px;
+      border-radius: 8px;
+      outline: none;
+      font-size: 0.9rem;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--neon-blue);
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+    }
+
+    form button {
+      margin-top: 8px;
+    }
+  </style>
 </head>
 <body>
 
-  <header class="app-header">
-    <div class="logo-container">
-      <div class="logo-icon">🛠️</div>
-      <h1>Moto Precision <span class="badge">PRO</span></h1>
-    </div>
-    <div class="header-actions">
-      <button class="btn btn-secondary" onclick="openModal('modalCliente')">+ Cliente</button>
-      <button class="btn btn-secondary" onclick="openModal('modalMoto')">+ Moto</button>
-      <button class="btn btn-primary" onclick="openModal('modalOS')">+ Nova O.S.</button>
-    </div>
+  <!-- CABEÇALHO -->
+  <header>
+    <h1>OFICINA DE MOTOS</h1>
+    <p>Painel Integrado de Alta Performance</p>
   </header>
 
-  <main class="container">
-    <!-- Painel de Ações e Testes -->
-    <section class="card">
-      <h2>Painel de Controle & Consultas API</h2>
-      <p class="subtitle">Clique nos botões abaixo para testar a comunicação em tempo real com a planilha Google Sheets.</p>
-      
-      <div class="button-group">
-        <button id="btnPing" class="btn btn-outline">Testar Conexão (Ping)</button>
-        <button id="btnClientes" class="btn btn-outline">Listar Clientes</button>
-        <button id="btnMotos" class="btn btn-outline">Listar Motos</button>
-        <button id="btnServicos" class="btn btn-outline">Listar Serviços</button>
-      </div>
+  <!-- CONTEÚDO PRINCIPAL DA PÁGINA -->
+  <main class="main-container">
 
-      <div class="console-box">
-        <div class="console-header">
-          <span>Console de Resposta da API</span>
-          <span class="status-indicator"></span>
-        </div>
-        <pre id="output">Aguardando ação...</pre>
+    <!-- CARD: TESTES DA API (GET) -->
+    <section class="card">
+      <h2>⚡ Consultas da API (GET)</h2>
+      <div class="btn-grid">
+        <button class="btn" id="btnPing">📡 Testar PING</button>
+        <button class="btn" id="btnClientes">👥 Clientes</button>
+        <button class="btn" id="btnMotos">🏍️ Motos</button>
+        <button class="btn" id="btnServicos">🛠️ Serviços</button>
       </div>
     </section>
+
+    <!-- CARD: AÇÕES RÁPIDAS (MODAIS) -->
+    <section class="card">
+      <h2>➕ Ações Rápidas</h2>
+      <div class="btn-grid">
+        <button class="btn btn-primary" onclick="openModal('modalCliente')">⚡ Novo Cliente</button>
+        <button class="btn btn-primary" onclick="openModal('modalMoto')">🏍️ Nova Moto</button>
+        <button class="btn btn-primary" onclick="openModal('modalOS')" style="grid-column: span 2;">📝 Nova Ordem de Serviço (O.S.)</button>
+      </div>
+    </section>
+
+    <!-- CARD: TERMINAL DE RESPOSTA DAS REQUISIÇÕES -->
+    <section class="card">
+      <h2>📟 Resposta da API / Banco de Dados</h2>
+      <pre id="output">Aguardando comando...</pre>
+    </section>
+
   </main>
 
   <!-- MÓDULO 1: MODAL NOVO CLIENTE -->
   <div class="modal-overlay" id="modalCliente">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Cadastrar Novo Cliente</h3>
+        <h3>Cadastrar Cliente</h3>
         <button class="close-modal" onclick="closeModal('modalCliente')">&times;</button>
       </div>
       <form id="formCliente">
@@ -58,7 +344,7 @@
         <input type="text" id="cpfCliente" placeholder="CPF / CNPJ">
         <input type="tel" id="telCliente" placeholder="Telefone / WhatsApp *" required>
         <input type="email" id="emailCliente" placeholder="E-mail">
-        <button type="submit" class="btn btn-primary">Salvar Cliente na Planilha</button>
+        <button type="submit" class="btn btn-primary">Salvar no Google Sheets</button>
       </form>
     </div>
   </div>
@@ -71,7 +357,7 @@
         <button class="close-modal" onclick="closeModal('modalMoto')">&times;</button>
       </div>
       <form id="formMoto">
-        <select id="idClienteMoto" required style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--text-color, #ffffff); padding: 12px; border-radius: 8px; outline: none; font-size: 0.9rem;">
+        <select id="idClienteMoto" required>
           <option value="">Carregando clientes...</option>
         </select>
         <input type="text" id="marcaMoto" placeholder="Marca (ex: Honda) *" required>
@@ -87,22 +373,56 @@
   <div class="modal-overlay" id="modalOS">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Abertura de Ordem de Serviço</h3>
+        <h3>Nova Ordem de Serviço</h3>
         <button class="close-modal" onclick="closeModal('modalOS')">&times;</button>
       </div>
       <form id="formOS">
-        <select id="idClienteOS" required style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--text-color, #ffffff); padding: 12px; border-radius: 8px; outline: none; font-size: 0.9rem;">
+        <select id="idClienteOS" required>
           <option value="">Selecione o Cliente *</option>
         </select>
-        <select id="idMotoOS" required style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--text-color, #ffffff); padding: 12px; border-radius: 8px; outline: none; font-size: 0.9rem;">
+        <select id="idMotoOS" required>
           <option value="">Selecione primeiro o cliente...</option>
         </select>
-        <textarea id="defeitoOS" placeholder="Descrição do Defeito / Solicitação *" rows="3" required style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--text-color, #ffffff); padding: 12px; border-radius: 8px; outline: none; font-size: 0.9rem; resize: vertical;"></textarea>
+        <textarea id="defeitoOS" placeholder="Descrição do Defeito / Serviço *" rows="3" required></textarea>
         <button type="submit" class="btn btn-primary">Gerar Ordem de Serviço</button>
       </form>
     </div>
   </div>
 
+  <!-- NAVEGAÇÃO FLUTUANTE DE MENU (MOBILE FIRST) -->
+  <nav class="floating-nav">
+    <button class="nav-item active" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Início
+    </button>
+    <button class="nav-item" onclick="openModal('modalCliente')">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      Cliente
+    </button>
+    <button class="nav-item" onclick="openModal('modalMoto')">
+      <svg viewBox="0 0 24 24"><path d="M19.44 9.03L15.4 5.01L12 8.41L8.6 5.01L4.56 9.03l3.4 3.4L12 8.41l4.04 4.02z"/></svg>
+      Moto
+    </button>
+    <button class="nav-item" onclick="openModal('modalOS')">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+      O.S.
+    </button>
+  </nav>
+
+  <!-- LÓGICA DOS MODAIS NO HTML -->
+  <script>
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+      if (typeof window.onModalOpen === 'function') {
+        window.onModalOpen(id);
+      }
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+  </script>
+
+  <!-- CARREGAMENTO DO SCRIPT DE LÓGICA -->
   <script src="js/app.js"></script>
 </body>
 </html>
