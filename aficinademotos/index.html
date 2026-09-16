@@ -3,296 +3,563 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerenciador do Sistema</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Oficina de Motos - Gestão Profissional</title>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(18, 26, 43, 0.75);
+      --neon-blue: #00f0ff;
+      --neon-purple: #7000ff;
+      --neon-green: #00ff66;
+      --neon-yellow: #ffcc00;
+      --text-color: #f0f4f8;
+      --text-dim: #94a3b8;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 15px 90px 15px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Moldura Neon Externa */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border: 3px solid transparent;
+      border-image: linear-gradient(135deg, var(--neon-blue), var(--neon-purple), var(--neon-blue)) 1;
+      pointer-events: none;
+      z-index: 9999;
+      box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.3), 0 0 15px rgba(112, 0, 255, 0.3);
+      animation: neonGlow 4s infinite alternate;
+    }
+
+    @keyframes neonGlow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    header {
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 25px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    }
+
+    header p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    .main-container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* Botões Grandes e Elegantes na Tela Principal */
+    .btn-main {
+      width: 100%;
+      padding: 18px 20px;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--neon-blue);
+      border-radius: var(--radius);
+      color: var(--text-color);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .btn-main:active {
+      transform: scale(0.97);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+    }
+
+    .btn-main-purple {
+      border-color: var(--neon-purple);
+      box-shadow: 0 0 15px rgba(112, 0, 255, 0.15);
+    }
+
+    .btn-main-purple:active {
+      box-shadow: 0 0 25px rgba(112, 0, 255, 0.4);
+    }
+
+    /* Modais com Estilo Neon */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: #121a2b;
+      border: 1px solid var(--neon-blue);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 480px;
+      padding: 20px;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+    }
+
+    .modal-header h3 {
+      color: var(--neon-blue);
+      font-size: 1.2rem;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Grid das Opções GET */
+    .api-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .btn-opt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: var(--text-color);
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-opt:active {
+      background: rgba(0, 240, 255, 0.2);
+    }
+
+    /* Terminal Neon Integrado */
+    .terminal-container {
+      background: #05070c;
+      border: 1px solid rgba(0, 255, 102, 0.3);
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 4px;
+    }
+
+    pre#api-terminal-output {
+      color: var(--neon-green);
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      max-height: 160px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    /* Abas de Navegação nos Modais */
+    .tab-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-dim);
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--neon-blue);
+      color: var(--neon-blue);
+    }
+
+    /* Formulários e Inputs */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input, select, textarea {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-color);
+      padding: 12px;
+      border-radius: 8px;
+      outline: none;
+      font-size: 0.9rem;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--neon-blue);
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(112, 0, 255, 0.3));
+      border: 1px solid var(--neon-blue);
+      color: var(--text-color);
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Lista de Clientes e Cards */
+    .cliente-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge-cli {
+      background: rgba(112, 0, 255, 0.2);
+      border: 1px solid var(--neon-purple);
+      color: var(--neon-purple);
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    /* Barra Flutuante de Navegação Inferior */
+    .floating-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      max-width: 450px;
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 25px;
+      padding: 8px 15px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 240, 255, 0.2);
+      z-index: 1000;
+    }
+
+    .nav-item {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+
+    .nav-item.active, .nav-item:hover {
+      color: var(--neon-blue);
+    }
+  </style>
 </head>
 <body>
 
-  <main class="app-container">
-    <header class="app-header">
-      <h1>Painel de Controle</h1>
-    </header>
+  <header>
+    <h1>OFICINA DE MOTOS</h1>
+    <p>Painel Integrado & Gestão de O.S.</p>
+  </header>
 
-    <!-- PAINEL PRINCIPAL DE BOTOES ELEGANTES PARA CELULAR -->
-    <section class="action-buttons-grid">
-      <!-- Botão para abrir o Modal de Consultas da API -->
-      <button type="button" class="btn-elegant" onclick="openModal('modal-api-get')">
-        <span class="btn-icon">⚡</span>
-        <span class="btn-text">Consultas da API (GET)</span>
-      </button>
+  <main class="main-container">
 
-      <!-- Botão Cadastrados / Novo Cliente (Interligados) -->
-      <button type="button" class="btn-elegant btn-primary-custom" onclick="openModal('modal-clientes')">
-        <span class="btn-icon">👥</span>
-        <span class="btn-text">Cadastrados / Novo Cliente</span>
-      </button>
-    </section>
+    <!-- BOTÕES GRANDES E ELEGANTES DA TELA PRINCIPAL -->
+    <button class="btn-main" onclick="openModal('modalApi')">
+      <span>⚡ Consultas da API (GET)</span>
+      <span style="color: var(--neon-blue);">➔</span>
+    </button>
+
+    <button class="btn-main btn-main-purple" onclick="openModal('modalClientes')">
+      <span>👥 Cadastrados / Novo Cliente</span>
+      <span style="color: var(--neon-purple);">➔</span>
+    </button>
+
   </main>
 
-
-  <!-- ========================================== -->
-  <!-- MODAL 1: CONSULTAS DA API (GET) + TERMINAL -->
-  <!-- ========================================== -->
-  <div id="modal-api-get" class="modal">
+  <!-- MODAL 1: CONSULTAS DA API (GET) + TERMINAL INTEGRADO -->
+  <div class="modal-overlay" id="modalApi">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Consultas da API (GET)</h2>
-        <button type="button" class="close-btn" onclick="closeModal('modal-api-get')">&times;</button>
+        <h3>Consultas da API (GET)</h3>
+        <button class="close-modal" onclick="closeModal('modalApi')">&times;</button>
       </div>
-      
-      <div class="modal-body">
-        <!-- As 4 Opções de Consulta -->
-        <div class="api-options-grid">
-          <button type="button" class="btn-api-opt" onclick="executarConsultaGET(1)">1. Listar Clientes</button>
-          <button type="button" class="btn-api-opt" onclick="executarConsultaGET(2)">2. Listar Ordens de Serviço</button>
-          <button type="button" class="btn-api-opt" onclick="executarConsultaGET(3)">3. Status dos Serviços</button>
-          <button type="button" class="btn-api-opt" onclick="executarConsultaGET(4)">4. Logs do Sistema</button>
-        </div>
 
-        <!-- Terminal de Saída de Dados -->
-        <div class="terminal-container">
-          <div class="terminal-header">
-            <span>Terminal de Saída (JSON)</span>
-            <button type="button" class="btn-copy" onclick="copiarTerminal()">Copiar</button>
-          </div>
-          <pre id="api-terminal-output">// Selecione uma opção acima para exibir o retorno da API...</pre>
+      <div class="api-options-grid">
+        <button class="btn-opt" onclick="executarGet('ping')">📡 Testar PING</button>
+        <button class="btn-opt" onclick="executarGet('CLIENTES')">👥 Clientes</button>
+        <button class="btn-opt" onclick="executarGet('MOTOS')">🏍️ Motos</button>
+        <button class="btn-opt" onclick="executarGet('ORDENS')">📝 Ordens (OS)</button>
+      </div>
+
+      <div class="terminal-container">
+        <div class="terminal-header">
+          <span>Terminal de Saída</span>
+          <span style="color: var(--neon-green);">API status: pronto</span>
         </div>
+        <pre id="api-terminal-output">// Selecione uma opção acima para testar a requisição...</pre>
       </div>
     </div>
   </div>
 
-
-  <!-- ========================================== -->
-  <!-- MODAL 2: CADASTRADOS E NOVO CLIENTE        -->
-  <!-- ========================================== -->
-  <div id="modal-clientes" class="modal">
+  <!-- MODAL 2: CADASTRADOS / NOVO CLIENTE -->
+  <div class="modal-overlay" id="modalClientes">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Clientes Cadastrados</h2>
-        <button type="button" class="close-btn" onclick="closeModal('modal-clientes')">&times;</button>
+        <h3>Gestão de Clientes</h3>
+        <button class="close-modal" onclick="closeModal('modalClientes')">&times;</button>
       </div>
 
-      <div class="modal-body">
-        <!-- Alternar entre Lista de Cadastrados e Novo Cadastro -->
-        <div class="tabs-container">
-          <button type="button" class="tab-btn active" id="tab-btn-lista" onclick="alternarAbaClientes('lista')">Lista de Clientes</button>
-          <button type="button" class="tab-btn" id="tab-btn-novo" onclick="alternarAbaClientes('novo')">+ Novo Cliente</button>
-        </div>
-
-        <!-- Conteúdo da Aba 1: Lista de Clientes -->
-        <div id="aba-lista-clientes" class="tab-content active">
-          <div class="clientes-list" id="container-lista-clientes">
-            <!-- Renderizado Dinamicamente via JS -->
-          </div>
-        </div>
-
-        <!-- Conteúdo da Aba 2: Novo Cliente -->
-        <div id="aba-novo-cliente" class="tab-content">
-          <form id="form-novo-cliente" onsubmit="salvarNovoCliente(event)">
-            <div class="form-group">
-              <label for="novo-nome">Nome do Cliente:</label>
-              <input type="text" id="novo-nome" class="form-input" placeholder="Ex: Maria Oliveira" required>
-            </div>
-            <div class="form-group">
-              <label for="novo-telefone">Telefone / WhatsApp:</label>
-              <input type="tel" id="novo-telefone" class="form-input" placeholder="(00) 00000-0000">
-            </div>
-            <button type="submit" class="btn-elegant btn-success">Salvar Cadastro</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ========================================== -->
-  <!-- MODAL 3: GERENCIAR ORDEM DE SERVIÇO (OS)   -->
-  <!-- ========================================== -->
-  <div id="modal-os" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Gerenciar Ordem de Serviço</h2>
-        <button type="button" class="close-btn" onclick="closeModal('modal-os')">&times;</button>
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tabLista" onclick="alternarAba('lista')">Cadastrados</button>
+        <button class="tab-btn" id="tabNovo" onclick="alternarAba('novo')">+ Novo Cliente</button>
       </div>
 
-      <div class="modal-body">
-        <!-- Cartão Informativo: Nome do Cliente + CLI-ID -->
-        <div class="client-info-card">
-          <div class="info-group">
-            <span class="info-label">Cliente:</span>
-            <span id="os-cliente-nome" class="info-value-bold">--</span>
-          </div>
-          <div class="info-group">
-            <span class="info-label">CLI-ID:</span>
-            <span id="os-cliente-id" class="badge-cli-id">CLI-0000</span>
-          </div>
+      <!-- Aba 1: Lista de Clientes -->
+      <div id="abaConteudoLista">
+        <div id="listaClientesContainer">
+          <p style="text-align: center; color: var(--text-dim);">Buscando clientes...</p>
         </div>
+      </div>
 
-        <!-- Formulário da Ordem de Serviço -->
-        <form id="form-os" onsubmit="salvarOrdemServico(event)">
-          <div class="form-group">
-            <label for="os-descricao">Descrição do Serviço:</label>
-            <textarea id="os-descricao" class="form-input" rows="4" placeholder="Descreva o problema ou a manutenção necessária..." required></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="os-status">Status Inicial:</label>
-            <select id="os-status" class="form-input">
-              <option value="Aberto">Aberto</option>
-              <option value="Em Andamento">Em Andamento</option>
-              <option value="Aguardando Peça">Aguardando Peça</option>
-              <option value="Concluído">Concluído</option>
-            </select>
-          </div>
-
-          <button type="submit" class="btn-elegant btn-primary-custom">Criar Ordem de Serviço</button>
+      <!-- Aba 2: Novo Cliente -->
+      <div id="abaConteudoNovo" style="display: none;">
+        <form id="formNovoCliente">
+          <input type="text" id="nomeCliente" placeholder="Nome Completo *" required>
+          <input type="text" id="cpfCliente" placeholder="CPF / CNPJ">
+          <input type="tel" id="telCliente" placeholder="Telefone / WhatsApp *" required>
+          <input type="email" id="emailCliente" placeholder="E-mail">
+          <button type="submit" class="btn-submit">Salvar Cliente</button>
         </form>
       </div>
     </div>
   </div>
 
+  <!-- MODAL 3: GERENCIAR ORDEM DE SERVIÇO (VINCULADO AO CLI-ID) -->
+  <div class="modal-overlay" id="modalGerenciarOS">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Gerenciar Ordem de Serviço</h3>
+        <button class="close-modal" onclick="closeModal('modalGerenciarOS')">&times;</button>
+      </div>
 
-  <!-- ========================================== -->
-  <!-- LÓGICA JAVASCRIPT                          -->
-  <!-- ========================================== -->
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(0,240,255,0.2); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
+        <p style="font-size: 0.85rem; color: var(--text-dim);">Cliente Selecionado:</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+          <strong id="osNomeClienteDisplay" style="color: var(--neon-blue); font-size: 1.1rem;">-</strong>
+          <span id="osCliIdDisplay" class="badge-cli">CLI-0000</span>
+        </div>
+      </div>
+
+      <form id="formCriarOSParaCliente">
+        <select id="osMotoSelect" required>
+          <option value="">Selecione a Moto do Cliente *</option>
+        </select>
+        <textarea id="osDefeitoText" placeholder="Descrição do Defeito / Serviço Solicitado *" rows="3" required></textarea>
+        <button type="submit" class="btn-submit">Gerar Nova O.S.</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- BARRA DE NAVEGAÇÃO FLUTUANTE -->
+  <nav class="floating-nav">
+    <button class="nav-item active" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+      🏠 Início
+    </button>
+    <button class="nav-item" onclick="openModal('modalApi')">
+      ⚡ API (GET)
+    </button>
+    <button class="nav-item" onclick="openModal('modalClientes')">
+      👥 Clientes
+    </button>
+  </nav>
+
   <script>
-    // Base de dados simulada para testes
-    let clientesCadastrados = [
-      { id: 'CLI-0042', nome: 'João Silva', telefone: '(11) 98765-4321' },
-      { id: 'CLI-0043', nome: 'Maria Oliveira', telefone: '(21) 99887-6655' },
-      { id: 'CLI-0044', nome: 'Carlos Eduardo', telefone: '(31) 97123-4455' }
-    ];
-
-    // --- CONTROLE DOS MODAIS ---
-    function openModal(modalId) {
-      document.getElementById(modalId).classList.add('active');
-      if (modalId === 'modal-clientes') {
-        renderizarListaClientes();
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+      if (id === 'modalClientes') {
+        carregarClientesELista();
       }
     }
 
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.remove('active');
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
     }
 
-    // Fechar ao clicar fora do conteúdo
-    window.onclick = function(event) {
-      if (event.target.classList.contains('modal')) {
-        event.target.classList.remove('active');
-      }
-    };
-
-    // --- CONSULTAS DA API (GET) + TERMINAL ---
-    function executarConsultaGET(opcao) {
-      const output = document.getElementById('api-terminal-output');
-      output.innerText = `[GET] Enviando requisição para opção ${opcao}...`;
-
-      // Simulação de resposta da API
-      setTimeout(() => {
-        let dados;
-        switch(opcao) {
-          case 1:
-            dados = { status: 200, endpoint: "/api/v1/clientes", total: clientesCadastrados.length, data: clientesCadastrados };
-            break;
-          case 2:
-            dados = { status: 200, endpoint: "/api/v1/ordens-servico", total: 1, data: [{ os_id: "OS-1001", cli_id: "CLI-0042", status: "Em Andamento" }] };
-            break;
-          case 3:
-            dados = { status: 200, endpoint: "/api/v1/servicos/status", servidor: "Online", conexao_db: "OK" };
-            break;
-          case 4:
-            dados = { status: 200, endpoint: "/api/v1/logs", logs: ["10:00 - GET /clientes 200 OK", "10:02 - POST /os 201 Created"] };
-            break;
-        }
-        output.innerText = JSON.stringify(dados, null, 2);
-      }, 400);
-    }
-
-    function copiarTerminal() {
-      const texto = document.getElementById('api-terminal-output').innerText;
-      navigator.clipboard.writeText(texto).then(() => {
-        alert("Conteúdo do terminal copiado!");
-      });
-    }
-
-    // --- CADASTRADOS / NOVO CLIENTE ---
-    function alternarAbaClientes(aba) {
-      const tabLista = document.getElementById('tab-btn-lista');
-      const tabNovo = document.getElementById('tab-btn-novo');
-      const conteudoLista = document.getElementById('aba-lista-clientes');
-      const conteudoNovo = document.getElementById('aba-novo-cliente');
+    function alternarAba(aba) {
+      const tabLista = document.getElementById('tabLista');
+      const tabNovo = document.getElementById('tabNovo');
+      const conteudolista = document.getElementById('abaConteudoLista');
+      const conteudoNovo = document.getElementById('abaConteudoNovo');
 
       if (aba === 'lista') {
         tabLista.classList.add('active');
         tabNovo.classList.remove('active');
-        conteudoLista.classList.add('active');
-        conteudoNovo.classList.remove('active');
+        conteudolista.style.display = 'block';
+        conteudoNovo.style.display = 'none';
       } else {
         tabNovo.classList.add('active');
         tabLista.classList.remove('active');
-        conteudoNovo.classList.add('active');
-        conteudoLista.classList.remove('active');
+        conteudolista.style.display = 'none';
+        conteudoNovo.style.display = 'block';
       }
     }
 
-    function renderizarListaClientes() {
-      const container = document.getElementById('container-lista-clientes');
-      container.innerHTML = '';
-
-      if (clientesCadastrados.length === 0) {
-        container.innerHTML = '<p class="empty-msg">Nenhum cliente cadastrado.</p>';
-        return;
+    // Função auxiliar para o Terminal no Modal GET
+    async function executarGet(tipo) {
+      const terminal = document.getElementById('api-terminal-output');
+      terminal.textContent = `[GET] Consultando ${tipo}...`;
+      
+      try {
+        let res;
+        if (tipo === 'ping') {
+          res = await apiGet('ping');
+        } else {
+          res = await apiGet('list', tipo);
+        }
+        terminal.textContent = JSON.stringify(res, null, 2);
+      } catch (e) {
+        terminal.textContent = "Erro ao conectar com o script: " + e.message;
       }
-
-      clientesCadastrados.forEach(cliente => {
-        const item = document.createElement('div');
-        item.className = 'cliente-item';
-        item.innerHTML = `
-          <div class="cliente-item-info">
-            <strong>${cliente.nome}</strong>
-            <span class="badge-cli-id-sm">${cliente.id}</span>
-          </div>
-          <button type="button" class="btn-action-sm" onclick="abrirGerenciadorOS('${cliente.nome}', '${cliente.id}')">
-            Abrir OS
-          </button>
-        `;
-        container.appendChild(item);
-      });
     }
 
-    function salvarNovoCliente(e) {
-      e.preventDefault();
-      const nome = document.getElementById('novo-nome').value;
-      const telefone = document.getElementById('novo-telefone').value;
-      
-      const novoId = `CLI-00${clientesCadastrados.length + 43}`;
-      
-      const novoCliente = { id: novoId, nome: nome, telefone: telefone };
-      clientesCadastrados.push(novoCliente);
+    // Renderiza a lista de cadastrados com suporte ao CLI-ID e criação de OS
+    async function carregarClientesELista() {
+      const container = document.getElementById('listaClientesContainer');
+      container.innerHTML = '<p style="text-align: center; color: var(--text-dim);">Carregando da planilha...</p>';
 
-      document.getElementById('form-novo-cliente').reset();
-      renderizarListaClientes();
-      alternarAbaClientes('lista');
+      const res = await apiGet('list', 'CLIENTES');
+      if (res && res.data && res.data.length > 0) {
+        container.innerHTML = '';
+        res.data.forEach(cliente => {
+          const card = document.createElement('div');
+          card.className = 'cliente-card';
+          card.innerHTML = `
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <strong>${cliente.NOME}</strong>
+                <span class="badge-cli">${cliente.ID_CLIENTE || 'CLI-----'}</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 3px;">📞 ${cliente.TELEFONE || cliente.WHATSAPP || '-'}</p>
+            </div>
+            <button onclick="prepararGerenciarOS('${cliente.NOME}', '${cliente.ID_CLIENTE}')" style="background: rgba(0, 240, 255, 0.15); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer;">
+              Abrir OS
+            </button>
+          `;
+          container.appendChild(card);
+        });
+      } else {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-dim);">Nenhum cliente cadastrado.</p>';
+      }
     }
 
-    // --- GERENCIAR ORDEM DE SERVIÇO (OS) ---
-    function abrirGerenciadorOS(nomeCliente, idCliente) {
-      closeModal('modal-clientes');
-      document.getElementById('os-cliente-nome').innerText = nomeCliente;
-      document.getElementById('os-cliente-id').innerText = idCliente;
-      openModal('modal-os');
-    }
-
-    function salvarOrdemServico(e) {
-      e.preventDefault();
-      const cliId = document.getElementById('os-cliente-id').innerText;
-      const descricao = document.getElementById('os-descricao').value;
-      const status = document.getElementById('os-status').value;
-
-      alert(`Ordem de serviço criada com sucesso!\nCliente: ${cliId}\nStatus: ${status}`);
-      document.getElementById('form-os').reset();
-      closeModal('modal-os');
+    // Prepara a tela de Gerenciar OS trazendo Nome e ID (CLI-)
+    function prepararGerenciarOS(nome, idCliente) {
+      closeModal('modalClientes');
+      document.getElementById('osNomeClienteDisplay').textContent = nome;
+      document.getElementById('osCliIdDisplay').textContent = idCliente;
+      openModal('modalGerenciarOS');
     }
   </script>
+
+  <script src="js/app.js"></script>
 </body>
 </html>
