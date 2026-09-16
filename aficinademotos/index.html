@@ -86,50 +86,64 @@
       gap: 15px;
     }
 
-    /* Botões Grandes e Elegantes na Tela Principal */
-    .btn-main {
+    /* Grid do Menu Principal */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
       width: 100%;
-      padding: 18px 20px;
+    }
+
+    .btn-card {
       background: var(--card-bg);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--neon-blue);
+      border: 1px solid rgba(0, 240, 255, 0.2);
       border-radius: var(--radius);
-      color: var(--text-color);
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
+      padding: 20px 15px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .btn-card:active {
+      transform: scale(0.96);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+    }
+
+    .btn-card-icon {
+      font-size: 1.8rem;
+    }
+
+    .btn-card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    /* Botão Destaque da API (Largura Total) */
+    .btn-card-full {
+      grid-column: span 2;
+      border-color: var(--neon-blue);
       box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
-      transition: all 0.3s ease;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(112, 0, 255, 0.1));
     }
 
-    .btn-main:active {
-      transform: scale(0.97);
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
-    }
-
-    .btn-main-purple {
-      border-color: var(--neon-purple);
-      box-shadow: 0 0 15px rgba(112, 0, 255, 0.15);
-    }
-
-    .btn-main-purple:active {
-      box-shadow: 0 0 25px rgba(112, 0, 255, 0.4);
-    }
-
-    /* Modais com Estilo Neon */
+    /* Modais */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(8px);
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 15px;
       z-index: 2000;
       opacity: 0;
       pointer-events: none;
@@ -152,7 +166,7 @@
       position: relative;
       transform: translateY(20px);
       transition: transform 0.3s ease;
-      max-height: 85vh;
+      max-height: 90vh;
       overflow-y: auto;
     }
 
@@ -194,7 +208,7 @@
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(0, 240, 255, 0.3);
       color: var(--text-color);
-      padding: 12px;
+      padding: 12px 8px;
       border-radius: 10px;
       font-weight: 600;
       font-size: 0.85rem;
@@ -203,16 +217,18 @@
     }
 
     .btn-opt:active {
-      background: rgba(0, 240, 255, 0.2);
+      background: rgba(0, 0, 240, 0.3);
+      border-color: var(--neon-blue);
     }
 
-    /* Terminal Neon Integrado */
+    /* Terminal de Saída Expandido */
     .terminal-container {
       background: #05070c;
-      border: 1px solid rgba(0, 255, 102, 0.3);
+      border: 1px solid rgba(0, 255, 102, 0.4);
       border-radius: 10px;
       padding: 12px;
       margin-top: 10px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
     }
 
     .terminal-header {
@@ -222,21 +238,21 @@
       font-size: 0.75rem;
       color: var(--text-dim);
       margin-bottom: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 6px;
     }
 
     pre#api-terminal-output {
       color: var(--neon-green);
       font-family: 'Courier New', monospace;
-      font-size: 0.8rem;
-      max-height: 160px;
+      font-size: 0.82rem;
+      height: 260px; /* Terminal Maior */
       overflow-y: auto;
       white-space: pre-wrap;
       word-wrap: break-word;
     }
 
-    /* Abas de Navegação nos Modais */
+    /* Abas nos Modais Internos */
     .tab-bar {
       display: flex;
       gap: 10px;
@@ -295,8 +311,8 @@
       cursor: pointer;
     }
 
-    /* Lista de Clientes e Cards */
-    .cliente-card {
+    /* Cards e Badges */
+    .item-card {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 10px;
@@ -307,7 +323,7 @@
       align-items: center;
     }
 
-    .badge-cli {
+    .badge-id {
       background: rgba(112, 0, 255, 0.2);
       border: 1px solid var(--neon-purple);
       color: var(--neon-purple);
@@ -317,19 +333,19 @@
       font-weight: bold;
     }
 
-    /* Barra Flutuante de Navegação Inferior */
+    /* Barra Flutuante Inferior */
     .floating-nav {
       position: fixed;
       bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
-      width: calc(100% - 40px);
+      width: calc(100% - 30px);
       max-width: 450px;
       background: rgba(11, 15, 25, 0.85);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(0, 240, 255, 0.3);
       border-radius: 25px;
-      padding: 8px 15px;
+      padding: 10px 15px;
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -344,8 +360,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       cursor: pointer;
+      gap: 2px;
     }
 
     .nav-item.active, .nav-item:hover {
@@ -357,25 +374,52 @@
 
   <header>
     <h1>OFICINA DE MOTOS</h1>
-    <p>Painel Integrado & Gestão de O.S.</p>
+    <p>Painel Integrado de Gestão</p>
   </header>
 
   <main class="main-container">
 
-    <!-- BOTÕES GRANDES E ELEGANTES DA TELA PRINCIPAL -->
-    <button class="btn-main" onclick="openModal('modalApi')">
-      <span>⚡ Consultas da API (GET)</span>
-      <span style="color: var(--neon-blue);">➔</span>
-    </button>
+    <!-- MENU PRINCIPAL COM OS BOTÕES ANTERIORES -->
+    <div class="menu-grid">
+      
+      <!-- BOTÃO MODIFICADO: CONSULTAS DA API -->
+      <button class="btn-card btn-card-full" onclick="openModal('modalApi')">
+        <span class="btn-card-icon">⚡</span>
+        <span class="btn-card-title">Consultas da API (GET)</span>
+      </button>
 
-    <button class="btn-main btn-main-purple" onclick="openModal('modalClientes')">
-      <span>👥 Cadastrados / Novo Cliente</span>
-      <span style="color: var(--neon-purple);">➔</span>
-    </button>
+      <!-- CLIENTES (Abre Lista / Novo Cadastro) -->
+      <button class="btn-card" onclick="openModal('modalClientes')">
+        <span class="btn-card-icon">👥</span>
+        <span class="btn-card-title">Clientes</span>
+      </button>
+
+      <!-- MOTOS -->
+      <button class="btn-card" onclick="openModal('modalMotos')">
+        <span class="btn-card-icon">🏍️</span>
+        <span class="btn-card-title">Motos</span>
+      </button>
+
+      <!-- GERENCIAR ORDEM DE SERVIÇO -->
+      <button class="btn-card" onclick="openModal('modalOS')">
+        <span class="btn-card-icon">📝</span>
+        <span class="btn-card-title">Ordem de Serviço</span>
+      </button>
+
+      <!-- PEÇAS / ESTOQUE -->
+      <button class="btn-card" onclick="openModal('modalEstoque')">
+        <span class="btn-card-icon">⚙️</span>
+        <span class="btn-card-title">Estoque</span>
+      </button>
+
+    </div>
 
   </main>
 
-  <!-- MODAL 1: CONSULTAS DA API (GET) + TERMINAL INTEGRADO -->
+
+  <!-- ========================================== -->
+  <!-- MODAL: CONSULTAS DA API (GET) + TERMINAL   -->
+  <!-- ========================================== -->
   <div class="modal-overlay" id="modalApi">
     <div class="modal-content">
       <div class="modal-header">
@@ -383,24 +427,29 @@
         <button class="close-modal" onclick="closeModal('modalApi')">&times;</button>
       </div>
 
+      <!-- As 4 Opções -->
       <div class="api-options-grid">
-        <button class="btn-opt" onclick="executarGet('ping')">📡 Testar PING</button>
-        <button class="btn-opt" onclick="executarGet('CLIENTES')">👥 Clientes</button>
-        <button class="btn-opt" onclick="executarGet('MOTOS')">🏍️ Motos</button>
-        <button class="btn-opt" onclick="executarGet('ORDENS')">📝 Ordens (OS)</button>
+        <button class="btn-opt" onclick="executarGet('clientes')">1. Listar Clientes</button>
+        <button class="btn-opt" onclick="executarGet('ordens')">2. Listar Ordens (OS)</button>
+        <button class="btn-opt" onclick="executarGet('status')">3. Status dos Serviços</button>
+        <button class="btn-opt" onclick="executarGet('logs')">4. Logs / Dispositivos</button>
       </div>
 
+      <!-- Terminal de Saída Ampliado -->
       <div class="terminal-container">
         <div class="terminal-header">
           <span>Terminal de Saída</span>
-          <span style="color: var(--neon-green);">API status: pronto</span>
+          <span style="color: var(--neon-green);">Status: Pronto</span>
         </div>
         <pre id="api-terminal-output">// Selecione uma opção acima para testar a requisição...</pre>
       </div>
     </div>
   </div>
 
-  <!-- MODAL 2: CADASTRADOS / NOVO CLIENTE -->
+
+  <!-- ========================================== -->
+  <!-- MODAL: CLIENTES (Cadastrados e Novo)       -->
+  <!-- ========================================== -->
   <div class="modal-overlay" id="modalClientes">
     <div class="modal-content">
       <div class="modal-header">
@@ -409,157 +458,171 @@
       </div>
 
       <div class="tab-bar">
-        <button class="tab-btn active" id="tabLista" onclick="alternarAba('lista')">Cadastrados</button>
-        <button class="tab-btn" id="tabNovo" onclick="alternarAba('novo')">+ Novo Cliente</button>
+        <button class="tab-btn active" id="tabClienteLista" onclick="alternarAbaCliente('lista')">Cadastrados</button>
+        <button class="tab-btn" id="tabClienteNovo" onclick="alternarAbaCliente('novo')">+ Novo Cliente</button>
       </div>
 
-      <!-- Aba 1: Lista de Clientes -->
-      <div id="abaConteudoLista">
-        <div id="listaClientesContainer">
-          <p style="text-align: center; color: var(--text-dim);">Buscando clientes...</p>
+      <!-- Aba 1: Clientes Cadastrados -->
+      <div id="abaClienteLista">
+        <div id="containerListaClientes">
+          <!-- Renderizado Dinamicamente -->
+          <div class="item-card">
+            <div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <strong>João Silva</strong>
+                <span class="badge-id">CLI-0042</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 3px;">📞 (11) 98765-4321</p>
+            </div>
+            <button onclick="abrirOsParaCliente('João Silva', 'CLI-0042')" style="background: rgba(0,240,255,0.15); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 6px 10px; border-radius: 6px; font-weight: 600; cursor: pointer;">Abrir OS</button>
+          </div>
         </div>
       </div>
 
-      <!-- Aba 2: Novo Cliente -->
-      <div id="abaConteudoNovo" style="display: none;">
-        <form id="formNovoCliente">
-          <input type="text" id="nomeCliente" placeholder="Nome Completo *" required>
-          <input type="text" id="cpfCliente" placeholder="CPF / CNPJ">
-          <input type="tel" id="telCliente" placeholder="Telefone / WhatsApp *" required>
-          <input type="email" id="emailCliente" placeholder="E-mail">
-          <button type="submit" class="btn-submit">Salvar Cliente</button>
+      <!-- Aba 2: Novo Cadastro -->
+      <div id="abaClienteNovo" style="display: none;">
+        <form id="formNovoCliente" onsubmit="event.preventDefault(); alert('Cliente cadastrado com sucesso!');">
+          <input type="text" placeholder="Nome Completo *" required>
+          <input type="tel" placeholder="Telefone / WhatsApp *" required>
+          <input type="text" placeholder="CPF / CNPJ">
+          <button type="submit" class="btn-submit">Salvar Cadastro</button>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- MODAL 3: GERENCIAR ORDEM DE SERVIÇO (VINCULADO AO CLI-ID) -->
-  <div class="modal-overlay" id="modalGerenciarOS">
+
+  <!-- ========================================== -->
+  <!-- MODAL: MOTOS                               -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="modalMotos">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Gerenciar Ordem de Serviço</h3>
-        <button class="close-modal" onclick="closeModal('modalGerenciarOS')">&times;</button>
+        <h3>Gestão de Motos</h3>
+        <button class="close-modal" onclick="closeModal('modalMotos')">&times;</button>
       </div>
 
-      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(0,240,255,0.2); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
-        <p style="font-size: 0.85rem; color: var(--text-dim);">Cliente Selecionado:</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
-          <strong id="osNomeClienteDisplay" style="color: var(--neon-blue); font-size: 1.1rem;">-</strong>
-          <span id="osCliIdDisplay" class="badge-cli">CLI-0000</span>
-        </div>
-      </div>
-
-      <form id="formCriarOSParaCliente">
-        <select id="osMotoSelect" required>
-          <option value="">Selecione a Moto do Cliente *</option>
+      <form id="formNovaMoto" onsubmit="event.preventDefault(); alert('Moto cadastrada!');">
+        <select required>
+          <option value="">Selecione o Cliente *</option>
+          <option value="CLI-0042">João Silva (CLI-0042)</option>
         </select>
-        <textarea id="osDefeitoText" placeholder="Descrição do Defeito / Serviço Solicitado *" rows="3" required></textarea>
-        <button type="submit" class="btn-submit">Gerar Nova O.S.</button>
+        <input type="text" placeholder="Modelo da Moto (Ex: CG 160 Titan) *" required>
+        <input type="text" placeholder="Placa *" required>
+        <input type="text" placeholder="Ano / Cor">
+        <button type="submit" class="btn-submit">Cadastrar Moto</button>
       </form>
     </div>
   </div>
 
+
+  <!-- ========================================== -->
+  <!-- MODAL: GERENCIAR ORDEM DE SERVIÇO (OS)     -->
+  <!-- ========================================== -->
+  <div class="modal-overlay" id="modalOS">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Abrir / Gerenciar O.S.</h3>
+        <button class="close-modal" onclick="closeModal('modalOS')">&times;</button>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(0,240,255,0.2); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
+        <p style="font-size: 0.8rem; color: var(--text-dim);">Cliente Vinculado:</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+          <strong id="osNomeCliente" style="color: var(--neon-blue);">Selecione um cliente na lista...</strong>
+          <span id="osIdCliente" class="badge-id">CLI-0000</span>
+        </div>
+      </div>
+
+      <form id="formOS" onsubmit="event.preventDefault(); alert('Ordem de serviço gerada!');">
+        <textarea placeholder="Descrição do Problema / Serviço Solicitado *" rows="3" required></textarea>
+        <select>
+          <option value="Aberto">Status: Aberto</option>
+          <option value="Em Andamento">Status: Em Andamento</option>
+          <option value="Concluído">Status: Concluído</option>
+        </select>
+        <button type="submit" class="btn-submit">Salvar Ordem de Serviço</button>
+      </form>
+    </div>
+  </div>
+
+
   <!-- BARRA DE NAVEGAÇÃO FLUTUANTE -->
   <nav class="floating-nav">
     <button class="nav-item active" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-      🏠 Início
-    </button>
-    <button class="nav-item" onclick="openModal('modalApi')">
-      ⚡ API (GET)
+      <span>🏠</span> Início
     </button>
     <button class="nav-item" onclick="openModal('modalClientes')">
-      👥 Clientes
+      <span>👥</span> Clientes
+    </button>
+    <button class="nav-item" onclick="openModal('modalApi')">
+      <span>⚡</span> API GET
     </button>
   </nav>
 
+
   <script>
+    // Controle dos Modais
     function openModal(id) {
       document.getElementById(id).classList.add('active');
-      if (id === 'modalClientes') {
-        carregarClientesELista();
-      }
     }
 
     function closeModal(id) {
       document.getElementById(id).classList.remove('active');
     }
 
-    function alternarAba(aba) {
-      const tabLista = document.getElementById('tabLista');
-      const tabNovo = document.getElementById('tabNovo');
-      const conteudolista = document.getElementById('abaConteudoLista');
-      const conteudoNovo = document.getElementById('abaConteudoNovo');
+    // Alternar Abas do Modal Clientes
+    function alternarAbaCliente(aba) {
+      const tabLista = document.getElementById('tabClienteLista');
+      const tabNovo = document.getElementById('tabClienteNovo');
+      const conteudoLista = document.getElementById('abaClienteLista');
+      const conteudoNovo = document.getElementById('abaClienteNovo');
 
       if (aba === 'lista') {
         tabLista.classList.add('active');
         tabNovo.classList.remove('active');
-        conteudolista.style.display = 'block';
+        conteudoLista.style.display = 'block';
         conteudoNovo.style.display = 'none';
       } else {
         tabNovo.classList.add('active');
         tabLista.classList.remove('active');
-        conteudolista.style.display = 'none';
+        conteudoLista.style.display = 'none';
         conteudoNovo.style.display = 'block';
       }
     }
 
-    // Função auxiliar para o Terminal no Modal GET
-    async function executarGet(tipo) {
+    // Executar Consulta GET no Terminal
+    function executarGet(opcao) {
       const terminal = document.getElementById('api-terminal-output');
-      terminal.textContent = `[GET] Consultando ${tipo}...`;
-      
-      try {
-        let res;
-        if (tipo === 'ping') {
-          res = await apiGet('ping');
-        } else {
-          res = await apiGet('list', tipo);
+      terminal.textContent = `[GET] Processando requisição para: ${opcao}...`;
+
+      setTimeout(() => {
+        let retorno;
+        switch(opcao) {
+          case 'clientes':
+            retorno = { status: 200, endpoint: "/api/clientes", total: 1, data: [{ id: "CLI-0042", nome: "João Silva", telefone: "(11) 98765-4321" }] };
+            break;
+          case 'ordens':
+            retorno = { status: 200, endpoint: "/api/ordens", total: 1, data: [{ os_id: "OS-1001", cli_id: "CLI-0042", status: "Em Andamento" }] };
+            break;
+          case 'status':
+            retorno = { status: 200, endpoint: "/api/status", servidor: "Online", db: "Conectado" };
+            break;
+          case 'logs':
+            retorno = { status: 200, endpoint: "/api/logs", logs: ["10:00:02 GET /clientes OK", "10:04:15 GET /os 200 OK"] };
+            break;
         }
-        terminal.textContent = JSON.stringify(res, null, 2);
-      } catch (e) {
-        terminal.textContent = "Erro ao conectar com o script: " + e.message;
-      }
+        terminal.textContent = JSON.stringify(retorno, null, 2);
+      }, 300);
     }
 
-    // Renderiza a lista de cadastrados com suporte ao CLI-ID e criação de OS
-    async function carregarClientesELista() {
-      const container = document.getElementById('listaClientesContainer');
-      container.innerHTML = '<p style="text-align: center; color: var(--text-dim);">Carregando da planilha...</p>';
-
-      const res = await apiGet('list', 'CLIENTES');
-      if (res && res.data && res.data.length > 0) {
-        container.innerHTML = '';
-        res.data.forEach(cliente => {
-          const card = document.createElement('div');
-          card.className = 'cliente-card';
-          card.innerHTML = `
-            <div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <strong>${cliente.NOME}</strong>
-                <span class="badge-cli">${cliente.ID_CLIENTE || 'CLI-----'}</span>
-              </div>
-              <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 3px;">📞 ${cliente.TELEFONE || cliente.WHATSAPP || '-'}</p>
-            </div>
-            <button onclick="prepararGerenciarOS('${cliente.NOME}', '${cliente.ID_CLIENTE}')" style="background: rgba(0, 240, 255, 0.15); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer;">
-              Abrir OS
-            </button>
-          `;
-          container.appendChild(card);
-        });
-      } else {
-        container.innerHTML = '<p style="text-align: center; color: var(--text-dim);">Nenhum cliente cadastrado.</p>';
-      }
-    }
-
-    // Prepara a tela de Gerenciar OS trazendo Nome e ID (CLI-)
-    function prepararGerenciarOS(nome, idCliente) {
+    // Vincula o Cliente selecionado diretamente na tela de O.S.
+    function abrirOsParaCliente(nome, id) {
       closeModal('modalClientes');
-      document.getElementById('osNomeClienteDisplay').textContent = nome;
-      document.getElementById('osCliIdDisplay').textContent = idCliente;
-      openModal('modalGerenciarOS');
+      document.getElementById('osNomeCliente').textContent = nome;
+      document.getElementById('osIdCliente').textContent = id;
+      openModal('modalOS');
     }
   </script>
-
-  <script src="js/app.js"></script>
 </body>
 </html>
