@@ -38,7 +38,7 @@
   /* Barra de Botões Elegantes */
   .toolbar{
     width:100%;
-    max-width:560px;
+    max-width:520px;
     margin-bottom:12px;
     display:flex;
     justify-content:flex-end;
@@ -81,20 +81,20 @@
   /* Moldura Exterior do Recibo */
   .receipt-frame {
     background: #ffffff;
-    padding: 12px;
+    padding: 8px;
     border-radius: 6px;
     border: 1px solid #d1d5db;
     box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 560px;
+    width: 520px; /* Largura fixa garantida no PDF */
+    max-width: 100%;
   }
 
-  /* Folha do Recibo com Linha de Contorno em Volta */
+  /* Folha do Recibo com Linha de Contorno em Volta Completa */
   .sheet{
     background:var(--paper);
     width: 100%;
-    border: 1.5px solid var(--ink); /* Linha em volta de todo o recibo */
-    padding: 12px;
+    border: 1.5px solid var(--ink);
+    padding: 10px;
     box-sizing: border-box;
   }
 
@@ -103,7 +103,7 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:10px;
+    gap:8px;
     border-bottom:2px double var(--ink);
     padding-bottom:8px;
     margin-bottom:8px;
@@ -111,33 +111,32 @@
   .brand-mark{ flex-shrink:0; }
   .brand-mark img{
     display:block;
-    height:55px;
+    height:50px;
     width:auto;
-    max-width:160px;
+    max-width:140px;
     object-fit:contain;
   }
   .brand-mark .brand-fallback{
     display:none;
-    font-size:22px;
+    font-size:20px;
     font-weight:800;
     color:var(--accent);
   }
 
-  /* Dados da empresa ajustados mais para a esquerda */
   .company-info{ 
     flex:1; 
     text-align:right;
-    padding-right: 4px; /* Move o conteúdo mais para a esquerda prevenindo cortes */
+    padding-right: 2px;
   }
   .company-info h1{
-    font-size:11px;
+    font-size:10.5px;
     font-weight:700;
     margin:0 0 2px;
     color:#000;
     letter-spacing: -0.2px;
   }
-  .company-info p{ margin:1px 0; font-size:8.5px; color:#222; font-weight:500; }
-  .company-info .sac{ font-weight:700; color:#000; font-size:9.5px; }
+  .company-info p{ margin:1px 0; font-size:8px; color:#222; font-weight:500; }
+  .company-info .sac{ font-weight:700; color:#000; font-size:9px; }
 
   /* Formulários Compactos e Alta Visibilidade */
   .meta-row{
@@ -166,7 +165,7 @@
     background:transparent;
     color:#000000;
     font-family:var(--sans);
-    font-size:10.5px;
+    font-size:10px;
     font-weight:600;
     padding:0;
     outline:none;
@@ -270,13 +269,13 @@
     text-align:right;
   }
 
-  /* Assinaturas ajustadas mais para baixo */
+  /* Assinaturas */
   .sign-row{
     display:grid;
     grid-template-columns: 1fr 1fr;
     gap:20px;
-    margin-top:38px; /* Espaço aumentado para reposicionar mais para baixo */
-    margin-bottom:8px;
+    margin-top:35px;
+    margin-bottom:6px;
   }
   .sign-line{
     border-top:1px solid #000;
@@ -295,16 +294,16 @@
     margin:6px 0 2px;
   }
 
-  /* Configuração para Impressão e PDF */
+  /* Impressão Nativa */
   @page {
     size: A5 portrait;
-    margin: 4mm;
+    margin: 3mm;
   }
 
   @media print{
     body{ padding:0; background:#fff; min-height:auto; display:block; }
     .toolbar{ display:none !important; }
-    .receipt-frame{ border:none; box-shadow:none; padding:0; max-width:100%; width:100%; }
+    .receipt-frame{ border:none; box-shadow:none; padding:0; width:100%; }
     .add-row-btn, .rm-btn, td.rm-cell{ display:none !important; }
   }
 </style>
@@ -321,7 +320,7 @@
 
 <!-- Moldura do Recibo -->
 <div class="receipt-frame">
-  <!-- Folha do Recibo com Linha em Volta -->
+  <!-- Folha do Recibo com Borda em Volta -->
   <div class="sheet" id="sheet">
 
     <div class="letterhead">
@@ -424,8 +423,8 @@
 
 <script>
 (function(){
-  const STORAGE_KEY = 'qualyquimy_recibo_draft_v4';
-  const PEDIDO_COUNTER_KEY = 'qualyquimy_pedido_counter_v4';
+  const STORAGE_KEY = 'qualyquimy_recibo_draft_v5';
+  const PEDIDO_COUNTER_KEY = 'qualyquimy_pedido_counter_v5';
   const cepInput = document.getElementById('cep');
   const enderecoInput = document.getElementById('endereco');
   const numEnderecoInput = document.getElementById('numEndereco');
@@ -600,17 +599,17 @@
     }
   }
 
-  // PDF A5 ajustado para encaixe perfeito
+  // PDF A5 totalmente alinhado sem cortes na borda direita
   function generatePDFOptions(){
     const element = document.getElementById('sheet');
     const numPedido = pedidoInput.value || 'recibo';
     return {
       element: element,
       opt: {
-        margin:       [4, 4, 4, 4],
+        margin:       [3, 3, 3, 3],
         filename:     `Recibo_Qualyquimy_${numPedido}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
+        html2canvas:  { scale: 2, scrollX: 0, scrollY: 0, windowWidth: 540, useCORS: true },
         jsPDF:        { unit: 'mm', format: 'a5', orientation: 'portrait' }
       }
     };
