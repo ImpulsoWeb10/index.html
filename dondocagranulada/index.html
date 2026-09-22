@@ -1,1 +1,666 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SJ9EEX0R5J"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-SJ9EEX0R5J');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="DonDoca Granulada — Doces Gourmet em Buenos Aires. Brigadeiros, docinhos e guloseimas artesanais. Peça já pelo WhatsApp!">
+<meta property="og:title" content="DonDoca Granulada | Doces Gourmet">
+<meta property="og:description" content="Doces e guloseimas gourmet feitos com carinho. Peça o seu combo pelo WhatsApp!">
+<title>DonDoca Granulada | Doces Gourmet</title>
+
+<!-- Configurações PWA (Instalação como App) -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2b160e">
+
+<!-- Ícones para Navegadores e Android -->
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<!-- Ícones e Metas para iOS (iPhone / iPad) -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DonDoca Granulada">
+<meta name="mobile-web-app-capable" content="yes">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;width:100%}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:#170c08;
+  color:#fff8f0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:1.5rem 1rem;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* Fundo com efeito iluminação */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 20%, rgba(244,184,196,0.16) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Frame simulação de tela de smartphone com Luz Neon Rosa */
+.device-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 410px;
+  background: linear-gradient(175deg, #3b1f14 0%, #1c0f09 100%);
+  border: 1.5px solid rgba(244, 184, 196, 0.55);
+  border-radius: 28px;
+  box-shadow: 
+    0 0 15px rgba(244, 184, 196, 0.28),
+    0 0 30px rgba(244, 184, 196, 0.12),
+    inset 0 0 15px rgba(255, 255, 255, 0.08);
+  padding: 2.2rem 1.5rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.page{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:1.3rem;width:100%}
+
+/* Logo Circular com Pulso Neon Rosa */
+.logo-wrap{display:flex;flex-direction:column;align-items:center;gap:0.6rem}
+
+.logo-frame{
+  position:relative;
+  border-radius:50%;
+  overflow:hidden;
+  display:inline-block;
+  animation:logo-pulse 2.6s ease-in-out infinite;
+}
+
+.logo-frame::after{
+  content:'';
+  position:absolute;
+  top:0;left:-110%;
+  width:55%;height:100%;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.7) 50%,transparent 80%);
+  transform:skewX(-18deg);
+  animation:logo-shimmer 2.6s ease-in-out infinite;
+  pointer-events:none;
+  z-index:2;
+}
+
+@keyframes logo-pulse{
+  0%  {box-shadow:0 0 8px rgba(244,184,196,0.5), 0 4px 15px rgba(0,0,0,0.5)}
+  50% {box-shadow:0 0 20px rgba(244,184,196,0.9), 0 4px 20px rgba(244,184,196,0.35)}
+  100%{box-shadow:0 0 8px rgba(244,184,196,0.5), 0 4px 15px rgba(0,0,0,0.5)}
+}
+
+@keyframes logo-shimmer{
+  0%     {left:-110%}
+  45%,100%{left:160%}
+}
+
+.logo-img{
+  display:block;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  border:1.5px solid rgba(244,184,196,0.85);
+  object-fit:cover;
+  background:#3b1f14;
+  position:relative;
+  z-index:1;
+}
+
+.brand{
+  font-family:'Poppins',sans-serif;
+  font-size:1.6rem;font-weight:700;
+  color:#ffffff;letter-spacing:.02em;line-height:1.1;
+  text-shadow: 0 0 10px rgba(244,184,196,0.25);
+}
+.brand em{color:#f4b8c4;font-style:normal}
+.tagline{font-size:.78rem;color:#f4b8c4;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+
+/* Avaliação / Estrelas */
+.stars-row{display:flex;align-items:center;gap:.3rem;justify-content:center}
+.star{font-size:1.15rem;color:#ffb300}
+.rating-text{font-size:.78rem;color:#e8d0c8;margin-top:.15rem}
+
+/* Botão Google Avaliar com Neon sutil */
+.btn-google{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:#FBBC05;
+  color:#2b160e;font-weight:700;
+  padding:.78rem 1.4rem;
+  border-radius:50px;
+  font-size:.85rem;text-decoration:none;
+  font-family:'DM Sans',sans-serif;
+  letter-spacing:.02em;
+  border:none;cursor:pointer;
+  width:100%;max-width:270px;justify-content:center;
+  position:relative;overflow:hidden;
+  animation:pulse-google 2.2s ease-in-out infinite;
+}
+.btn-google::after{
+  content:'';
+  position:absolute;
+  top:0;left:-120%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);
+  transform:skewX(-20deg);
+  animation:shimmer 2.2s ease-in-out infinite;
+}
+@keyframes pulse-google{
+  0%{box-shadow:0 0 0 0 rgba(251,188,5,.5), 0 0 10px rgba(255,255,255,0.2)}
+  60%{box-shadow:0 0 0 12px rgba(251,188,5,0), 0 0 15px rgba(255,255,255,0.4)}
+  100%{box-shadow:0 0 0 0 rgba(251,188,5,0), 0 0 10px rgba(255,255,255,0.2)}
+}
+@keyframes shimmer{
+  0%{left:-120%}
+  55%,100%{left:160%}
+}
+.btn-google svg{width:16px;height:16px;flex-shrink:0}
+.btn-google:hover{background:#fcc419;transform:translateY(-1px)}
+
+/* Grade de Botões de Ação Elegantes */
+.social-row{display:flex;gap:.75rem;justify-content:center;align-items:center;width:100%}
+.social-btn{
+  display:flex;flex-direction:column;align-items:center;gap:.35rem;
+  text-decoration:none;
+  transition:transform .22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.social-btn:hover{transform:translateY(-4px)}
+.social-icon{
+  width:48px;height:48px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:1.5px solid rgba(244,184,196,.45);
+  box-shadow:0 0 10px rgba(244,184,196,0.18), 0 6px 16px rgba(0,0,0,0.4);
+  transition:all .2s ease;
+}
+.social-btn:hover .social-icon{
+  border-color:#f4b8c4;
+  box-shadow:0 0 15px rgba(244,184,196,0.6), 0 8px 20px rgba(244,184,196,.3);
+}
+.social-icon svg{width:22px;height:22px}
+.social-label{font-size:.68rem;color:#e8c9be;font-weight:500;letter-spacing:.02em}
+
+/* FAQ link */
+.faq-link{
+  background:none;border:none;
+  color:#ffffff;
+  font-size:.84rem;font-family:'DM Sans',sans-serif;
+  cursor:pointer;letter-spacing:.03em;
+  display:flex;align-items:center;gap:.35rem;
+  text-decoration:none;
+  transition:all .2s;
+  padding:.3rem .6rem;
+  border-radius:20px;
+  border: 1px solid rgba(244,184,196,0.3);
+}
+.faq-link:hover{
+  border-color:rgba(244,184,196,0.7);
+  box-shadow:0 0 10px rgba(244,184,196,0.25);
+  color:#f4b8c4;
+}
+.faq-link svg{width:14px;height:14px}
+
+/* Endereço */
+.address{font-size:.76rem;color:#c8a89e;line-height:1.5}
+
+/* Footer dentro da moldura */
+.footer{font-size:.66rem;color:#8a6258;margin-top:0.2rem;display:flex;flex-direction:column;align-items:center;gap:.45rem;width:100%;border-top:1px solid rgba(244,184,196,0.12);padding-top:1rem}
+.footer-promo{font-size:.72rem;color:#b98f84;line-height:1.4;text-align:center}
+.footer-promo a{color:#f4b8c4;text-decoration:none;font-weight:500;border-bottom:1px solid rgba(244,184,196,.35);padding-bottom:1px;transition:color .2s}
+.footer-promo a:hover{color:#ffd9e0}
+.footer-ssl{display:flex;align-items:center;gap:.35rem;font-size:.64rem;color:#7a534a}
+.footer-ssl svg{width:10px;height:10px;flex-shrink:0;opacity:.65}
+.footer-dev{font-size:.64rem;color:#7a534a}
+.footer-dev a{color:#9c6e64;text-decoration:none;transition:color .2s}
+.footer-dev a:hover{color:#c99a8f}
+
+/* ===== MODAL OVERLAY ===== */
+.overlay{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(12,4,2,.88);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:0;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s ease;
+}
+.overlay.open{opacity:1;pointer-events:all}
+
+.sheet{
+  background:linear-gradient(175deg,#2b160e 0%,#160b06 100%);
+  border:1.5px solid rgba(244,184,196,0.6);
+  border-bottom:none;
+  border-radius:24px 24px 0 0;
+  width:100%;max-width:410px;
+  padding:0;
+  transform:translateY(100%);
+  transition:transform .4s cubic-bezier(.32,1,.36,1);
+  max-height:85vh;
+  position:relative;
+  box-shadow: 0 -5px 25px rgba(244,184,196,0.2);
+  display: flex;
+  flex-direction: column;
+}
+.overlay.open .sheet{transform:translateY(0)}
+
+.sheet-handle{width:40px;height:4px;background:rgba(244,184,196,0.4);border-radius:2px;margin:12px auto 4px;flex-shrink: 0;}
+
+.sheet-inner{
+  position:relative;
+  width:100%;
+  overflow-y:auto;
+  padding-bottom: 1.5rem;
+}
+
+.panel{
+  display: none;
+  flex-direction: column;
+  width: 100%;
+}
+.panel.visible{
+  display: flex;
+}
+
+/* Cabeçalho do Modal */
+.sheet-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.8rem 1.4rem;
+  border-bottom:1px solid rgba(244,184,196,0.1);
+  background: rgba(0,0,0,0.2);
+}
+.sheet-title{
+  font-family:'Poppins',sans-serif;
+  font-size:1.05rem;font-weight:600;color:#ffffff;
+  text-shadow: 0 0 8px rgba(244,184,196,0.3);
+}
+.btn-close{
+  background:rgba(244,184,196,.1);border:1px solid rgba(244,184,196,.3);
+  color:#ffffff;cursor:pointer;
+  width:30px;height:30px;border-radius:50%;
+  font-size:.9rem;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;flex-shrink:0;
+}
+.btn-close:hover{background:rgba(244,184,196,.25);box-shadow:0 0 8px rgba(244,184,196,0.5)}
+
+/* Lista de Perguntas */
+.faq-list{padding:1rem 1.2rem;display:flex;flex-direction:column;gap:.6rem}
+
+.faq-item-btn{
+  width:100%;background:rgba(244,184,196,.05);
+  border:1px solid rgba(244,184,196,.15);
+  border-radius:12px;
+  padding:.9rem 1rem;
+  color:#f0d8d0;font-size:.85rem;
+  font-family:'DM Sans',sans-serif;
+  text-align:left;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:.8rem;
+  transition:all .22s;
+  line-height:1.35;
+}
+.faq-item-btn:hover{
+  background:rgba(244,184,196,.12);
+  border-color:rgba(244,184,196,.5);
+  color:#ffffff;
+  box-shadow:0 0 10px rgba(244,184,196,0.15);
+  transform:translateX(3px);
+}
+.faq-item-btn svg{flex-shrink:0;opacity:.6;width:14px;height:14px}
+.faq-item-btn:hover svg{opacity:1}
+
+/* Segunda camada (Resposta do Modal) */
+.answer-head{
+  display:flex;align-items:center;gap:.7rem;
+  padding:0.8rem 1.2rem;
+  border-bottom:1px solid rgba(244,184,196,0.1);
+  background: rgba(0,0,0,0.2);
+}
+.btn-back{
+  background:rgba(244,184,196,.1);border:1px solid rgba(244,184,196,.3);
+  color:#f4b8c4;cursor:pointer;
+  width:32px;height:32px;border-radius:50%;
+  font-size:.9rem;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;flex-shrink:0;
+}
+.btn-back:hover{background:rgba(244,184,196,.25);box-shadow:0 0 8px rgba(244,184,196,0.4)}
+.answer-title{
+  font-family:'Poppins',sans-serif;
+  font-size:0.95rem;font-weight:600;color:#ffffff;
+  line-height:1.3;flex:1;
+}
+
+.answer-body{padding:1.4rem 1.4rem 0.5rem;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.answer-icon{font-size:2.4rem;margin-bottom:.6rem;display:block}
+.answer-text{
+  font-size:.88rem;color:#e8d0c8;line-height:1.6;
+  margin-bottom:1.4rem;
+  word-break: break-word;
+}
+.answer-cta{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  width:100%;
+  background:linear-gradient(135deg,#25d366,#1aab55);
+  color:#fff;font-weight:700;font-size:.88rem;
+  padding:.9rem;border-radius:50px;
+  text-decoration:none;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  box-shadow:0 4px 16px rgba(37,211,102,.3);
+  transition:transform .2s,box-shadow .2s;
+}
+.answer-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,211,102,.5)}
+.answer-cta svg{width:18px;height:18px}
+
+</style>
+</head>
+<body>
+
+<div class="device-frame">
+  <div class="page">
+
+    <div class="logo-wrap">
+      <div class="logo-frame">
+        <img class="logo-img" src="dondocagranulada.png" alt="Logo DonDoca Granulada"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="logo-img-fallback" style="display:none; width:120px; height:120px; border-radius:50%; border:1.5px solid rgba(244,184,196,.85); background:#3b1f14; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-size:1rem; color:#f4b8c4; font-weight:700;">DonDoca<br>Granulada</div>
+      </div>
+      <div>
+        <div class="brand">DonDoca <em>Granulada</em></div>
+        <div class="tagline">Doces Gourmet · Buenos Aires</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="stars-row" aria-label="Avaliação 5 estrelas">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <div class="rating-text">Sua nota 5 estrelas é a nossa maior alegria!</div>
+    </div>
+
+    <button class="btn-google" onclick="openThanksModal()" aria-label="Avaliar no Google">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Avaliar no Google ⭐⭐⭐⭐⭐
+    </button>
+
+    <div class="social-row" aria-label="Redes sociais e contato">
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/5511964554785?text=Ol%C3%A1!%20Vim%20pelo%20link%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20doces%20da%20DonDoca%20Granulada!" class="social-btn" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <div class="social-icon" style="background: linear-gradient(135deg, #25d366, #128c7e);">
+          <svg viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 23.057a.75.75 0 0 0 .916.927l5.358-1.476A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+        </div>
+        <span class="social-label">WhatsApp</span>
+      </a>
+
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/dondocagranulada/" class="social-btn" target="_blank" rel="noopener" aria-label="Instagram">
+        <div class="social-icon" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5" stroke="#ffffff" stroke-width="1.8"/>
+            <circle cx="12" cy="12" r="4.5" stroke="#ffffff" stroke-width="1.8"/>
+            <circle cx="17.5" cy="6.5" r="1.2" fill="#ffffff"/>
+          </svg>
+        </div>
+        <span class="social-label">Instagram</span>
+      </a>
+
+      <!-- Maps -->
+      <a href="https://www.google.com/maps/place/?q=place_id:ChIJvQz5TjvKvJURh47oiC6Bs6A" class="social-btn" target="_blank" rel="noopener" aria-label="Como chegar no Google Maps">
+        <div class="social-icon" style="background: linear-gradient(135deg, #ea4335, #c5221f);">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#ffffff"/>
+            <circle cx="12" cy="9" r="2.5" fill="#ea4335"/>
+          </svg>
+        </div>
+        <span class="social-label">Maps</span>
+      </a>
+
+      <!-- Cardápio (em breve) -->
+      <a href="https://wa.me/5511964554785?text=Ol%C3%A1!%20Gostaria%20de%20ver%20o%20card%C3%A1pio%20de%20doces%20da%20DonDoca%20Granulada." class="social-btn" target="_blank" rel="noopener" aria-label="Cardápio de Doces">
+        <div class="social-icon" style="background: linear-gradient(135deg, #f4b8c4, #c97b8a);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            <path d="M12 2v2"/>
+          </svg>
+        </div>
+        <span class="social-label">Cardápio</span>
+      </a>
+
+    </div>
+
+    <button class="faq-link" onclick="openFaq()" aria-label="Abrir perguntas frequentes" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Tire suas dúvidas
+    </button>
+
+    <div class="address" itemscope itemtype="https://schema.org/PostalAddress">
+      <span itemprop="addressLocality">Buenos Aires</span>, <span itemprop="addressCountry">Argentina</span><br>
+      Doces Gourmet · Atendimento Brasil e Argentina
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p class="footer-promo">Deseja um link personalizado assim para o seu negócio?<br>
+      <a href="https://wa.me/5511954950044?text=Ol%C3%A1!%20Vi%20o%20link%20da%20DonDoca%20Granulada%20e%20quero%20um%20projeto%20assim." target="_blank" rel="noopener">👉 Saiba mais aqui</a>
+    </p>
+    <div class="footer-ssl">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Protegido por SSL
+    </div>
+    <p class="footer-dev">Desenvolvido por <a href="https://avaliar.impulsoweb10.com.br" target="_blank" rel="noopener">ImpulsoWeb10</a></p>
+  </div>
+</div>
+
+
+<!-- Estrutura do Modal Organizada -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Perguntas frequentes e Informações">
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle" aria-hidden="true"></div>
+
+    <div class="sheet-inner" id="sheetInner">
+
+      <!-- Painel 1: Lista de FAQs -->
+      <div class="panel visible" id="panelList">
+        <div class="sheet-head">
+          <span class="sheet-title">Tire suas dúvidas</span>
+          <button class="btn-close" onclick="closeFaq()" aria-label="Fechar">✕</button>
+        </div>
+        <div class="faq-list" role="list"></div>
+      </div>
+
+      <!-- Painel 2: Resposta do FAQ -->
+      <div class="panel" id="panelAnswer">
+        <div class="answer-head">
+          <button class="btn-back" onclick="backToList()" aria-label="Voltar">←</button>
+          <div class="answer-title" id="answerTitle"></div>
+          <button class="btn-close" onclick="closeFaq()" aria-label="Fechar">✕</button>
+        </div>
+        <div class="answer-body">
+          <span class="answer-icon" id="answerIcon"></span>
+          <p class="answer-text" id="answerText"></p>
+          <a
+            id="answerCta"
+            href="https://wa.me/5511964554785"
+            class="answer-cta"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 23.057a.75.75 0 0 0 .916.927l5.358-1.476A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+            <span id="answerCtaText">Pedir pelo WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Painel 3: Agradecimento Avaliação -->
+      <div class="panel" id="panelThanks">
+        <div class="sheet-head">
+          <span class="sheet-title">Sua opinião vale muito!</span>
+          <button class="btn-close" onclick="closeFaq()" aria-label="Fechar">✕</button>
+        </div>
+        <div class="answer-body">
+          <span class="answer-icon">💛</span>
+          <p class="answer-text">
+            Ficamos muito felizes pelo seu carinho! Sua avaliação no Google nos ajuda a levar doces gourmet para cada vez mais pessoas.
+          </p>
+          <a
+            href="https://search.google.com/local/writereview?placeid=ChIJvQz5TjvKvJURh47oiC6Bs6A"
+            class="answer-cta"
+            target="_blank"
+            rel="noopener"
+            onclick="closeFaq()"
+          >
+            ⭐ Deixar Avaliação Agora
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+const faqs = [
+  {
+    q: 'Como posso fazer meu pedido?',
+    icon: '🍫',
+    a: 'Você pode fazer seu pedido diretamente pelo nosso WhatsApp! É só clicar no botão, escolher os sabores e combinar a entrega ou retirada.',
+    cta: 'Pedir pelo WhatsApp',
+    msg: 'Olá! Gostaria de fazer um pedido de doces com vocês.'
+  },
+  {
+    q: 'Quais doces e guloseimas vocês vendem?',
+    icon: '🍬',
+    a: 'Temos brigadeiros gourmet, docinhos finos, guloseimas artesanais e opções para presentear ou montar sua própria caixinha personalizada!',
+    cta: 'Ver Sabores Disponíveis',
+    msg: 'Olá! Gostaria de saber os sabores de doces disponíveis.'
+  },
+  {
+    q: 'Vocês entregam no Brasil e na Argentina?',
+    icon: '🌎',
+    a: 'Sim! Atendemos clientes no Brasil e na Argentina. Entre em contato pelo WhatsApp informando sua cidade para consultar disponibilidade e prazo de entrega.',
+    cta: 'Consultar entrega',
+    msg: 'Olá! Gostaria de saber se vocês entregam na minha cidade.'
+  },
+  {
+    q: 'Aceitam encomendas para festas e eventos?',
+    icon: '🎉',
+    a: 'Sim! Fazemos caixinhas e combos personalizados para aniversários, casamentos e eventos especiais. Faça seu orçamento com antecedência.',
+    cta: 'Solicitar Orçamento de Festa',
+    msg: 'Olá! Gostaria de fazer um orçamento de doces para evento/festa.'
+  },
+  {
+    q: 'Como funciona o cardápio e os preços?',
+    icon: '📋',
+    a: 'Nosso cardápio completo está sendo finalizado! Por enquanto, fale direto com a gente pelo WhatsApp que te passamos os sabores e valores atualizados.',
+    cta: 'Falar sobre o Cardápio',
+    msg: 'Olá! Gostaria de ver o cardápio de doces da DonDoca Granulada.'
+  },
+  {
+    q: 'Quais são as formas de pagamento?',
+    icon: '💳',
+    a: 'Aceitamos PIX, transferência e outras formas combinadas diretamente pelo WhatsApp, com total praticidade no momento do pedido.',
+    cta: 'Fazer Pedido',
+    msg: 'Olá! Quero tirar dúvidas sobre o pagamento e fazer um pedido.'
+  }
+];
+
+const overlay = document.getElementById('overlay');
+const panelList = document.getElementById('panelList');
+const panelAnswer = document.getElementById('panelAnswer');
+const panelThanks = document.getElementById('panelThanks');
+
+const list = document.querySelector('.faq-list');
+faqs.forEach((faq, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'faq-item-btn';
+  btn.setAttribute('role', 'listitem');
+  btn.setAttribute('aria-label', faq.q);
+  btn.innerHTML = `
+    <span>${faq.q}</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+  `;
+  btn.onclick = () => showAnswer(i);
+  list.appendChild(btn);
+});
+
+function openFaq() {
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  showList();
+}
+
+function openThanksModal() {
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  panelList.classList.remove('visible');
+  panelAnswer.classList.remove('visible');
+  panelThanks.classList.add('visible');
+}
+
+function closeFaq() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => showList(), 300);
+}
+
+function showList() {
+  panelAnswer.classList.remove('visible');
+  panelThanks.classList.remove('visible');
+  panelList.classList.add('visible');
+}
+
+function showAnswer(i) {
+  const faq = faqs[i];
+  document.getElementById('answerTitle').textContent = faq.q;
+  document.getElementById('answerIcon').textContent = faq.icon;
+  document.getElementById('answerText').innerHTML = faq.a.replace(/\n/g,'<br>');
+  document.getElementById('answerCtaText').textContent = faq.cta;
+  const ctaEl = document.getElementById('answerCta');
+  ctaEl.href = `https://wa.me/5511964554785?text=${encodeURIComponent(faq.msg)}`;
+
+  panelList.classList.remove('visible');
+  panelThanks.classList.remove('visible');
+  panelAnswer.classList.add('visible');
+}
+
+function backToList() {
+  showList();
+}
+
+overlay.addEventListener('click', e => { if (e.target === overlay) closeFaq(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFaq(); });
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>
