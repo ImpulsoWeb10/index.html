@@ -3,100 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0a0a0a">
-<title>Planejador de Eventos | Academia Spartan Fight Fit</title>
+<meta name="theme-color" content="#2b160e">
+<title>Calculadora de Festa | DonDoca Granulada</title>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;margin:0;overflow:hidden;background:#0a0a0a;color:#fff;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+html,body{height:100%;margin:0;overflow:hidden;background:#120a06;color:#fff;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
 h1,h3,h4,.nb b{font-family:'Oswald',Impact,sans-serif;letter-spacing:.06em}
-#app{height:100dvh;max-width:440px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 14px max(10px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px;background:radial-gradient(ellipse at 50% -10%,#3a0a14 0,#0a0a0a 62%)}
-header{text-align:center;position:relative}
-.logo{font-size:30px;filter:drop-shadow(0 0 10px #ff2d55)}
-h1{margin:0;font-size:24px;text-transform:uppercase;text-shadow:0 0 12px #ff2d55}
-h1 i{color:#ff2d55;font-style:normal}
-header p{margin:2px 0 0;font-size:11px;color:#9a9a9a;letter-spacing:.12em;text-transform:uppercase}
-#rs{position:absolute;right:0;top:0;width:34px;height:34px;border-radius:50%;background:none;color:#fff;border:1.5px solid #555;font-size:16px;cursor:pointer}
-.nb{--c:#ff2d55;background:rgba(255,255,255,.02);color:#fff;border:1.5px solid var(--c);border-radius:14px;padding:12px;font:inherit;cursor:pointer;text-align:center;box-shadow:0 0 10px color-mix(in srgb,var(--c) 50%,transparent),inset 0 0 10px color-mix(in srgb,var(--c) 22%,transparent);transition:transform .12s,box-shadow .2s}
+#app{height:100dvh;max-width:440px;margin:0 auto;padding:max(14px,env(safe-area-inset-top)) 14px max(10px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px;background:radial-gradient(ellipse at 50% -10%,#4a2416 0,#2b160e 45%,#120a06 100%)}
+header{text-align:center;position:relative;padding-top:8px}
+/* Logo com moldura neon */
+.lg{width:86px;height:86px;margin:0 auto 10px;border-radius:50%;padding:5px;position:relative;background:#2b160e;border:2px solid #ffc233;box-shadow:0 0 6px #ffc233,0 0 18px rgba(255,194,51,.7),0 0 34px rgba(255,79,163,.45),inset 0 0 12px rgba(255,194,51,.5);animation:pulse 2.8s ease-in-out infinite}
+.lg::before{content:'';position:absolute;inset:-9px;border-radius:50%;border:1.5px solid #ff4fa3;box-shadow:0 0 10px #ff4fa3,inset 0 0 8px rgba(255,79,163,.6)}
+.lg img{width:100%;height:100%;border-radius:50%;object-fit:contain;display:block}
+.lg b{display:flex;align-items:center;justify-content:center;height:100%;font-size:38px}
+@keyframes pulse{50%{box-shadow:0 0 8px #ffc233,0 0 26px rgba(255,194,51,.95),0 0 46px rgba(255,79,163,.7),inset 0 0 16px rgba(255,194,51,.7)}}
+h1{margin:0;font-size:24px;text-transform:uppercase;text-shadow:0 0 10px rgba(255,255,255,.35)}
+h1 i{color:#ffc233;font-style:normal;text-shadow:0 0 12px #ffc233}
+header p{margin:2px 0 0;font-size:11px;color:#c9a99a;letter-spacing:.12em;text-transform:uppercase}
+#rs{position:absolute;right:0;top:0;width:34px;height:34px;border-radius:50%;background:none;color:#fff;border:1.5px solid #7a5a4a;font-size:16px;cursor:pointer}
+.nb{--c:#ffc233;background:rgba(255,255,255,.03);color:#fff;border:1.5px solid var(--c);border-radius:14px;padding:12px;font:inherit;cursor:pointer;text-align:center;box-shadow:0 0 10px color-mix(in srgb,var(--c) 50%,transparent),inset 0 0 10px color-mix(in srgb,var(--c) 22%,transparent);transition:transform .12s,box-shadow .2s}
 .nb:hover{box-shadow:0 0 18px var(--c),inset 0 0 14px color-mix(in srgb,var(--c) 35%,transparent)}
 .nb:active{transform:scale(.97)}
 .nb.sel{background:color-mix(in srgb,var(--c) 22%,transparent);box-shadow:0 0 16px var(--c),inset 0 0 12px var(--c)}
 .cfg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .sq{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px}
-.sq span{font-size:22px}.sq b{font-size:12px}.sq small{font-size:10px;color:#cfcfcf;line-height:1.2}
+.sq span{font-size:22px}.sq b{font-size:12px}.sq small{font-size:10px;color:#e0cfc6;line-height:1.2}
 .res{flex:1;min-height:0;max-height:150px;display:flex;flex-direction:column;justify-content:center;gap:8px;text-align:left}
 .rt{display:flex;align-items:center;gap:8px}.rt span{font-size:26px}.rt b{font-size:18px;flex:1}
 .rt em{font-style:normal;font-weight:700;color:var(--c);text-shadow:0 0 8px var(--c)}
-.bar{height:8px;background:#1c1c1c;border-radius:9px;overflow:hidden}
-.bar i{display:block;height:100%;width:0;background:var(--c,#ff2d55);box-shadow:0 0 8px var(--c,#ff2d55);transition:width .3s}
+.bar{height:8px;background:#2a1912;border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--c,#ffc233);box-shadow:0 0 8px var(--c,#ffc233);transition:width .3s}
 .bar i.ok{background:#39ff14;box-shadow:0 0 8px #39ff14}
-.res small{font-size:11px;color:#bbb}
+.res small{font-size:11px;color:#cdb8ad}
 .act{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .act .nb{font-weight:700;font-size:13px;padding:13px 6px}
-footer{text-align:center;font-size:10px;color:#666}
-#ov{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:14px;z-index:9}
+footer{text-align:center;font-size:10px;color:#8a6d5f}
+#ov{position:fixed;inset:0;background:rgba(18,8,4,.82);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:14px;z-index:9}
 #ov.on{display:flex}
-#pn{width:100%;max-width:400px;max-height:86dvh;overflow:auto;background:#0f0f12;border:1.5px solid #ff2d55;border-radius:22px;padding:14px;box-shadow:0 0 28px rgba(255,45,85,.5),inset 0 0 18px rgba(255,45,85,.12);animation:up .22s ease-out}
+#pn{width:100%;max-width:400px;max-height:86dvh;overflow:auto;background:#1a0e09;border:1.5px solid #ffc233;border-radius:22px;padding:14px;box-shadow:0 0 28px rgba(255,194,51,.5),inset 0 0 18px rgba(255,194,51,.1);animation:up .22s ease-out}
 @keyframes up{from{transform:scale(.92);opacity:0}}
-@media(max-height:640px){h1{font-size:20px}.logo{font-size:24px}.res{max-height:120px}}
+@media(max-height:700px){h1{font-size:19px}.lg{width:62px;height:62px;margin-bottom:8px}.lg b{font-size:28px}.res{max-height:105px}}
 .mh{display:flex;align-items:center;gap:8px;margin-bottom:12px}
 .mh h3{flex:1;margin:0;font-size:18px;text-align:center;text-transform:uppercase}
-.mh button{width:38px;height:38px;border-radius:50%;background:none;color:#fff;border:1.5px solid #ff2d55;font-size:16px;cursor:pointer;box-shadow:0 0 8px rgba(255,45,85,.6)}
+.mh button{width:38px;height:38px;border-radius:50%;background:none;color:#fff;border:1.5px solid #ffc233;font-size:16px;cursor:pointer;box-shadow:0 0 8px rgba(255,194,51,.6)}
 .grid1{display:grid;gap:8px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .opt{font-weight:700;padding:14px;font-size:15px}
 .it{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;font-weight:600;padding:10px 6px}
-.it span{font-size:24px}.it em{font-style:normal;font-size:11px;color:var(--c);font-weight:700}
+.it span{font-size:24px}
 .pl{padding:9px 4px;font-size:12px;font-weight:600}
 .pc{display:flex;flex-direction:column;gap:6px;padding:6px 6px 8px;font-size:11px;font-weight:600;line-height:1.15}
-.ph{position:relative;display:block;width:100%;height:74px;overflow:hidden;border-radius:10px;background:#1a1a1f}
+.ph{position:relative;display:block;width:100%;height:74px;overflow:hidden;border-radius:10px;background:#2a1912}
+.grid2 .pc .ph{height:96px}.grid2 .pc{font-size:13px}
 .ph img{width:100%;height:100%;object-fit:cover;display:block}
 .ph b{display:flex;align-items:center;justify-content:center;height:100%;font-size:30px;letter-spacing:0}
 .ph i{position:absolute;top:4px;right:4px;background:var(--c);color:#000;font:700 10px system-ui,sans-serif;padding:2px 6px;border-radius:9px;box-shadow:0 0 8px var(--c)}
-.ban{height:125px;border-radius:14px;border:1.5px solid #333;margin-bottom:2px}
+.ban{height:125px;border-radius:14px;border:1.5px solid #4a3327;margin-bottom:2px}
 .th{width:44px;height:44px;flex:none;border-radius:10px}
 .rw{display:flex;align-items:center;gap:10px;text-align:left}
-.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #222;font-size:14px}
-.row small{display:block;color:#888;font-size:11px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #33221a;font-size:14px}
+.row small{display:block;color:#9c8577;font-size:11px}
 .ck input{accent-color:#39ff14;width:18px;height:18px;margin-right:8px}.ck{justify-content:flex-start}
 .ct,.qty{display:flex;align-items:center;gap:8px;justify-content:center}
-.ct button,.qty button,.rm{min-width:40px;height:40px;border-radius:12px;background:#17171b;border:1.5px solid #39ff14;color:#fff;font-size:15px;font-weight:700;box-shadow:0 0 8px rgba(57,255,20,.4);cursor:pointer}
-.rm{border-color:#ff2d55;box-shadow:0 0 8px rgba(255,45,85,.5);min-width:34px;height:34px}
-input[type=number]{width:62px;height:40px;text-align:center;background:#0a0a0a;border:1.5px solid #333;border-radius:12px;color:#fff;font-size:18px;font-weight:700}
-.hint{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.1em;margin:12px 0 8px;text-align:center}
-.tot{text-align:center;font-weight:700;color:#00e5ff;margin:8px 0 0;font-size:13px}
+.ct button,.qty button,.rm{min-width:40px;height:40px;border-radius:12px;background:#24140d;border:1.5px solid #39ff14;color:#fff;font-size:15px;font-weight:700;box-shadow:0 0 8px rgba(57,255,20,.4);cursor:pointer}
+.rm{border-color:#ff4fa3;box-shadow:0 0 8px rgba(255,79,163,.5);min-width:34px;height:34px}
+input[type=number]{width:62px;height:40px;text-align:center;background:#120a06;border:1.5px solid #4a3327;border-radius:12px;color:#fff;font-size:18px;font-weight:700}
+.hint{font-size:11px;color:#a58f82;text-transform:uppercase;letter-spacing:.1em;margin:12px 0 8px;text-align:center}
+.tot{text-align:center;font-weight:700;color:#38e8ff;margin:8px 0 0;font-size:13px}
 h4{margin:14px 0 4px;font-size:15px;text-transform:uppercase}
 #mb>.nb{width:100%;margin-top:14px;font-weight:700}
-#tt{position:fixed;top:14px;left:50%;transform:translate(-50%,-30px);background:#111;border:1.5px solid #39ff14;color:#fff;padding:9px 16px;border-radius:14px;font-size:13px;box-shadow:0 0 14px rgba(57,255,20,.5);opacity:0;pointer-events:none;transition:.3s;z-index:20;max-width:90vw;text-align:center}
+#tt{position:fixed;top:14px;left:50%;transform:translate(-50%,-30px);background:#1a0e09;border:1.5px solid #39ff14;color:#fff;padding:9px 16px;border-radius:14px;font-size:13px;box-shadow:0 0 14px rgba(57,255,20,.5);opacity:0;pointer-events:none;transition:.3s;z-index:20;max-width:90vw;text-align:center}
 #tt.on{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <div class="logo">🥊</div>
-    <h1>Spartan <i>Fight Fit</i></h1>
-    <p>Planejador de Eventos · Jd. Caiubi</p>
-    <button id="rs" aria-label="Novo evento" onclick="A.reset()">⟲</button>
+    <div class="lg"><img src="dondocagranulada.png" alt="DonDoca Granulada" data-i="0" onerror="lgErr(this)"></div>
+    <h1>DonDoca <i>Granulada</i></h1>
+    <p>Doces Gourmet · Calculadora de Festa</p>
+    <button id="rs" aria-label="Nova festa" onclick="A.reset()">⟲</button>
   </header>
 
   <div class="cfg">
-    <button class="nb sq" style="--c:#ff2d55" onclick="A.o('Participantes',vPart)"><span>👥</span><b>PARTICIPANTES</b><small id="v-part"></small></button>
-    <button class="nb sq" style="--c:#ffb300" onclick="A.o('Duração',vDur)"><span>⏱️</span><b>DURAÇÃO</b><small id="v-dur"></small></button>
-    <button class="nb sq" style="--c:#b967ff" onclick="A.o('Tipo de evento',vEv)"><span>🏆</span><b>EVENTO</b><small id="v-ev"></small></button>
+    <button class="nb sq" style="--c:#ff4fa3" onclick="A.o('Convidados',vPart)"><span>👥</span><b>CONVIDADOS</b><small id="v-part"></small></button>
+    <button class="nb sq" style="--c:#ffc233" onclick="A.o('Duração',vDur)"><span>⏱️</span><b>DURAÇÃO</b><small id="v-dur"></small></button>
+    <button class="nb sq" style="--c:#c77dff" onclick="A.o('Tipo de festa',vEv)"><span>🎉</span><b>FESTA</b><small id="v-ev"></small></button>
   </div>
 
-  <button class="nb res" style="--c:#ff2d55" onclick="A.o('Lanches',vLan)">
-    <div class="rt"><span>🥪</span><b>LANCHES</b><em id="v-l"></em></div>
+  <button class="nb res" style="--c:#ffa62b" onclick="A.o('Salgados',vSal)">
+    <div class="rt"><span>🥟</span><b>SALGADOS</b><em id="v-l"></em></div>
     <div class="bar"><i id="b-l"></i></div><small id="s-l"></small>
   </button>
-  <button class="nb res" style="--c:#00e5ff" onclick="A.o('Bebidas',vBeb)">
+  <button class="nb res" style="--c:#38e8ff" onclick="A.o('Bebidas',vBeb)">
     <div class="rt"><span>🥤</span><b>BEBIDAS</b><em id="v-b"></em></div>
     <div class="bar"><i id="b-b"></i></div><small id="s-b"></small>
   </button>
 
   <div class="act">
     <button class="nb" style="--c:#39ff14" onclick="A.o('Lista de compras',vLista)">📋 LISTA</button>
-    <button class="nb" style="--c:#25d366" onclick="A.wa()">📱 WHATSAPP</button>
+    <button class="nb" style="--c:#25d366" onclick="A.wa()">📱 PEDIR NO WHATSAPP</button>
   </div>
   <footer>Desenvolvido por ImpulsoWeb10</footer>
 </div>
@@ -109,50 +115,72 @@ h4{margin:14px 0 4px;font-size:15px;text-transform:uppercase}
 
 <script>
 const $=s=>document.querySelector(s);
+const ZAP='5511964554785'; // WhatsApp da DonDoca que recebe o pedido (troque aqui se precisar)
+const LOGO_ONLINE='https://impulsoweb10.com.br/dondocagranulada/dondocagranulada.png';
+
+/* Logo: tenta o arquivo local, depois o link online, depois um emoji */
+function lgErr(im){
+  if(im.dataset.i==='0'){im.dataset.i='1';im.src=LOGO_ONLINE;}
+  else im.replaceWith(Object.assign(document.createElement('b'),{textContent:'🍫'}));
+}
+
 const EVENTOS={
-  treino:{n:'Treinão / Aulão',e:'🏋️',p:[3,2,1.2,.8]},
-  luta:{n:'Campeonato de Luta',e:'🥊',p:[4,3,1.5,1]},
-  grad:{n:'Graduação de Faixa',e:'🥋',p:[6,5,.8,.6]},
-  confra:{n:'Confraternização',e:'🎉',p:[8,5,1,.7]},
-  exp:{n:'Aula Experimental',e:'🎯',p:[2,2,.8,.6]}
-}; // p = [lanches adulto, lanches criança, litros adulto, litros criança]
-const DURS={curta:{n:'Até 2h',m:.8},media:{n:'2 a 4h',m:1},longa:{n:'Mais de 4h',m:1.3}};
-const LANCHES=[
-  {id:'sand',n:'Sanduíche Natural',e:'🥪'},{id:'wrap',n:'Wrap de Frango',e:'🌯'},
-  {id:'pao',n:'Pão de Queijo',e:'🧀'},{id:'barra',n:'Barra de Proteína',e:'🍫'},
-  {id:'fruta',n:'Frutas',e:'🍌'},{id:'bolo',n:'Bolo Fit',e:'🍰'},
-  {id:'tapi',n:'Tapioca',e:'🥞'},{id:'salg',n:'Salgado Assado',e:'🥟'}
+  aniversario:{n:'Aniversário',e:'🎂',p:[12,8,.8,.5]},
+  infantil:{n:'Festa Infantil',e:'🎈',p:[10,10,.7,.6]},
+  evento:{n:'Evento / Churrasco',e:'🥳',p:[15,10,1,.7]},
+  familiar:{n:'Reunião Familiar',e:'🏠',p:[12,8,.8,.5]}
+}; // p = [salgados adulto, salgados criança, litros adulto, litros criança]
+const DURS={curta:{n:'Até 3h',m:.85},media:{n:'3 a 5h',m:1},longa:{n:'Mais de 5h',m:1.25}};
+const SALG=[
+  {id:'coxinha',n:'Coxinha',e:'🥟'},{id:'bolinha',n:'Bolinha de Queijo',e:'🧀'},{id:'kibe',n:'Kibe',e:'🥩'},
+  {id:'risole',n:'Risole',e:'🍖'},{id:'pizza',n:'Mini Pizza',e:'🍕'},{id:'enrol',n:'Enroladinho de Salsicha',e:'🌭'},
+  {id:'empada',n:'Empadinha',e:'🍗'},{id:'esfiha',n:'Esfiha',e:'🥙'},{id:'pao',n:'Pão de Queijo',e:'🧀'}
 ];
 const BEBIDAS=[
-  {id:'agua',n:'Água Mineral',e:'💧',t:['Sem Gás','Com Gás'],s:[['500 ml',.5],['1,5 L',1.5]]},
-  {id:'iso',n:'Isotônico',e:'⚡',t:['Laranja','Limão','Tangerina','Uva'],s:[['500 ml',.5],['1 L',1]]},
-  {id:'suco',n:'Suco Natural',e:'🧃',t:['Laranja','Uva','Maracujá','Limão'],s:[['300 ml',.3],['1 L',1],['2 L',2]]},
-  {id:'shake',n:'Shake / Whey',e:'🥛',t:['Chocolate','Morango','Baunilha'],s:[['250 ml',.25],['400 ml',.4]]},
-  {id:'coco',n:'Água de Coco',e:'🥥',t:['Natural'],s:[['200 ml',.2],['1 L',1]]}
+  {id:'refri',n:'Refrigerante',e:'🥤',t:['Coca-Cola','Guaraná','Laranja','Cola Zero','Limão','Outros'],s:[['350 ml (lata)',.35],['600 ml',.6],['1 L',1],['2 L',2]]},
+  {id:'agua',n:'Água Mineral',e:'💧',t:['Sem Gás','Com Gás'],s:[['300 ml',.3],['500 ml',.5],['1,5 L',1.5]]},
+  {id:'suco',n:'Suco / Caixa',e:'🧃',t:['Laranja','Uva','Maracujá','Limão','Outros'],s:[['300 ml',.3],['1 L',1],['2 L',2]]},
+  {id:'outras',n:'Outras Bebidas',e:'🍹',t:['Chá Gelado','Água de Coco','Energético','Outros'],s:[['350 ml',.35],['1 L',1],['2 L',2]]}
 ];
 
-/* Fotos gratuitas. Troque qualquer link aqui (Wikimedia Commons e LoremFlickr).
-   Se uma imagem falhar, aparece o emoji no lugar. */
-const LF=(t,n)=>`https://loremflickr.com/300/220/${t}?lock=${n}`;
-const WM=f=>`https://commons.wikimedia.org/wiki/Special:FilePath/${f}?width=300`;
+/* ---------- Fotos gratuitas ----------
+   Cada item tem uma lista de links: se o primeiro falhar, tenta o próximo,
+   e no fim mostra o emoji. Para trocar uma foto, ponha o seu link na frente da lista. */
+const LF=(t,n)=>`https://loremflickr.com/300/220/${t}?lock=${n}`;          // fotos do Flickr (licença Creative Commons) por palavra-chave
+const WM=f=>`https://commons.wikimedia.org/wiki/Special:FilePath/${f}?width=300`; // Wikimedia Commons
 const IMG={
-  sand:LF('sandwich',11), wrap:LF('burrito',12), pao:WM('Pao_de_queijo.jpg'), barra:LF('granola',14),
-  fruta:LF('fruit',15), bolo:LF('cake',16), tapi:LF('crepe',17), salg:LF('pastry',18),
-  agua:LF('waterbottle',21), iso:LF('sportsdrink',22), suco:WM('Orange_juice_1.jpg'), shake:LF('milkshake',24), coco:LF('coconut',25)
+  coxinha:[LF('coxinha',31),LF('salgados',32)],
+  bolinha:[LF('bolinhadequeijo',33),LF('cheeseball',34),LF('salgados',35)],
+  kibe:[LF('kibe',36),LF('kibbeh',37)],
+  risole:[LF('risole',38),LF('rissole',39)],
+  pizza:[LF('minipizza',40),LF('pizza',41)],
+  enrol:[LF('enroladinho',42),LF('sausageroll',43),LF('hotdog',44)],
+  empada:[LF('empada',45),LF('empadinha',46),LF('savorypie',47)],
+  esfiha:[LF('esfiha',48),LF('sfiha',49)],
+  pao:[WM('Pao_de_queijo.jpg'),LF('paodequeijo',50),LF('cheesebread',51)],
+  refri:[LF('refrigerante',52),LF('soda',53),LF('softdrink',54)],
+  agua:[LF('waterbottle',55),LF('mineralwater',56)],
+  suco:[WM('Orange_juice_1.jpg'),LF('orangejuice',57),LF('juice',58)],
+  outras:[LF('icedtea',59),LF('coconutwater',60),LF('drink',61)]
 };
-const ALL=[...LANCHES,...BEBIDAS];
+const ALL=[...SALG,...BEBIDAS];
+function nx(im){
+  const l=IMG[im.dataset.id],i=+im.dataset.i+1;
+  if(l&&i<l.length){im.dataset.i=i;im.src=l[i];}
+  else im.replaceWith(Object.assign(document.createElement('b'),{textContent:im.dataset.e}));
+}
 const ph=(id,c='',b='')=>{const e=(ALL.find(x=>x.id==id)||{}).e||'🍽️';
-  return `<span class="ph ${c}"><img src="${IMG[id]}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'${e}'}))">${b}</span>`;};
+  return `<span class="ph ${c}"><img src="${IMG[id][0]}" data-id="${id}" data-i="0" data-e="${e}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="nx(this)">${b}</span>`;};
 const ban=id=>ph(id,'ban');
 
-const K='spartan_evento_v1';
-const S={ad:20,kd:5,dur:'media',ev:'treino',lan:{},beb:{}};
+const K='dondoca_festa_v1';
+const S={ad:20,kd:5,dur:'media',ev:'aniversario',sal:{},beb:{}};
 try{Object.assign(S,JSON.parse(localStorage.getItem(K)||'{}'))}catch(e){}
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
 
 const meta=()=>{const[sa,sk,la,lk]=EVENTOS[S.ev].p,m=DURS[S.dur].m;
-  return{l:Math.max(10,Math.round((S.ad*sa+S.kd*sk)*m/5)*5),b:Math.max(2,Math.round((S.ad*la+S.kd*lk)*m*2)/2)}};
-const totL=()=>Object.values(S.lan).reduce((a,x)=>a+x.q,0);
+  return{l:Math.max(10,Math.round((S.ad*sa+S.kd*sk)*m/10)*10),b:Math.max(2,Math.round((S.ad*la+S.kd*lk)*m*2)/2)}};
+const totS=()=>Object.values(S.sal).reduce((a,x)=>a+x.q,0);
 const totB=()=>Object.values(S.beb).reduce((a,x)=>a+x.q*x.v,0);
 
 /* ---------- Tela principal ---------- */
@@ -166,7 +194,7 @@ function render(){
   $('#v-part').textContent=`${S.ad} adultos · ${S.kd} crianças`;
   $('#v-dur').textContent=DURS[S.dur].n;
   $('#v-ev').textContent=EVENTOS[S.ev].n;
-  fill('l',totL(),m.l,' un',0);fill('b',totB(),m.b,' L',1);
+  fill('l',totS(),m.l,' un',0);fill('b',totB(),m.b,' L',1);
 }
 
 /* ---------- Sistema de modais (pilha: voltar / fechar) ---------- */
@@ -180,40 +208,40 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&stack.length)A.clos
 function toast(m){const t=$('#tt');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200);}
 const pg=(t,m,u,d)=>`<div class="bar"><i class="${t>=m?'ok':''}" style="width:${Math.min(100,t/m*100)}%"></i></div><p class="tot">${t.toFixed(d)} / ${m}${u}</p>`;
 
-/* ---------- Participantes ---------- */
+/* ---------- Convidados ---------- */
 const cnt=(l,k,s)=>`<div class="row"><div><b>${l}</b><small>${s}</small></div><div class="ct"><button onclick="A.adj('${k}',-1)">−</button><input type="number" min="0" inputmode="numeric" value="${S[k]}" onchange="A.setN('${k}',this.value)"><button onclick="A.adj('${k}',1)">+</button></div></div>`;
-function vPart(){$('#mb').innerHTML=cnt('Adultos','ad','Alunos e acompanhantes')+cnt('Crianças / Teens','kd','Turma kids e juvenil')+`<button class="nb" style="--c:#39ff14" onclick="A.close()">CONFIRMAR</button>`;}
+function vPart(){$('#mb').innerHTML=cnt('Adultos','ad','Consumo padrão')+cnt('Crianças','kd','Consumo reduzido')+`<button class="nb" style="--c:#39ff14" onclick="A.close()">CONFIRMAR</button>`;}
 A.adj=(k,d)=>{S[k]=Math.max(0,S[k]+d);save();draw();};
 A.setN=(k,v)=>{S[k]=Math.max(0,parseInt(v)||0);save();draw();};
 
-/* ---------- Duração e Evento ---------- */
-function vDur(){$('#mb').innerHTML=`<div class="grid1">${Object.entries(DURS).map(([k,d])=>`<button class="nb opt ${S.dur==k?'sel':''}" style="--c:#ffb300" onclick="A.pick('dur','${k}')">⏱️ ${d.n}</button>`).join('')}</div>`;}
-function vEv(){$('#mb').innerHTML=`<div class="grid2">${Object.entries(EVENTOS).map(([k,d])=>`<button class="nb it ${S.ev==k?'sel':''}" style="--c:#b967ff" onclick="A.pick('ev','${k}')"><span>${d.e}</span>${d.n}</button>`).join('')}</div>`;}
+/* ---------- Duração e Tipo de festa ---------- */
+function vDur(){$('#mb').innerHTML=`<div class="grid1">${Object.entries(DURS).map(([k,d])=>`<button class="nb opt ${S.dur==k?'sel':''}" style="--c:#ffc233" onclick="A.pick('dur','${k}')">⏱️ ${d.n}</button>`).join('')}</div>`;}
+function vEv(){$('#mb').innerHTML=`<div class="grid2">${Object.entries(EVENTOS).map(([k,d])=>`<button class="nb it ${S.ev==k?'sel':''}" style="--c:#c77dff" onclick="A.pick('ev','${k}')"><span>${d.e}</span>${d.n}</button>`).join('')}</div>`;}
 A.pick=(k,v)=>{S[k]=v;save();A.close();};
 
-/* ---------- Lanches ---------- */
-function vLan(){
-  $('#mb').innerHTML=pg(totL(),meta().l,' un',0)+`<p class="hint">Toque para adicionar</p><div class="grid3">${LANCHES.map(i=>`<button class="nb pc" style="--c:#ff2d55" onclick="A.qL('${i.id}')">${ph(i.id,'',S.lan[i.id]?`<i>${S.lan[i.id].q} un</i>`:'')}${i.n}</button>`).join('')}</div>`;
+/* ---------- Salgados ---------- */
+function vSal(){
+  $('#mb').innerHTML=pg(totS(),meta().l,' un',0)+`<p class="hint">Toque para adicionar</p><div class="grid3">${SALG.map(i=>`<button class="nb pc" style="--c:#ffa62b" onclick="A.qS('${i.id}')">${ph(i.id,'',S.sal[i.id]?`<i>${S.sal[i.id].q} un</i>`:'')}${i.n}</button>`).join('')}</div>`;
 }
-A.qL=id=>{
-  const i=LANCHES.find(x=>x.id==id);A.t={q:S.lan[id]?S.lan[id].q:20};
-  A.o(i.e+' '+i.n,()=>{$('#mb').innerHTML=`${ban(id)}<p class="hint">Quantas unidades?</p><div class="qty">${[-10,-1].map(d=>`<button onclick="A.tq(${d})">${d}</button>`).join('')}<input id="tq" type="number" min="1" inputmode="numeric" value="${A.t.q}" oninput="A.t.q=Math.max(1,parseInt(this.value)||1)">${[1,10].map(d=>`<button onclick="A.tq(${d})">+${d}</button>`).join('')}</div><button class="nb" style="--c:#39ff14" onclick="A.addL('${id}')">ADICIONAR</button>${S.lan[id]?`<button class="nb" style="--c:#ff2d55" onclick="A.remL('${id}')">REMOVER</button>`:''}`;});
+A.qS=id=>{
+  const i=SALG.find(x=>x.id==id);A.t={q:S.sal[id]?S.sal[id].q:25};
+  A.o(i.e+' '+i.n,()=>{$('#mb').innerHTML=`${ban(id)}<p class="hint">Quantas unidades?</p><div class="qty">${[-10,-1].map(d=>`<button onclick="A.tq(${d})">${d}</button>`).join('')}<input id="tq" type="number" min="1" inputmode="numeric" value="${A.t.q}" oninput="A.t.q=Math.max(1,parseInt(this.value)||1)">${[1,10].map(d=>`<button onclick="A.tq(${d})">+${d}</button>`).join('')}</div><button class="nb" style="--c:#39ff14" onclick="A.addS('${id}')">ADICIONAR</button>${S.sal[id]?`<button class="nb" style="--c:#ff4fa3" onclick="A.remS('${id}')">REMOVER</button>`:''}`;});
 };
 A.tq=d=>{A.t.q=Math.max(1,(parseInt($('#tq').value)||0)+d);$('#tq').value=A.t.q;};
-A.addL=id=>{const i=LANCHES.find(x=>x.id==id);S.lan[id]={n:i.n,e:i.e,q:A.t.q};save();toast(`✅ ${i.n} (${A.t.q} un) adicionado`);A.back();};
-A.remL=id=>{delete S.lan[id];save();A.back();};
+A.addS=id=>{const i=SALG.find(x=>x.id==id);S.sal[id]={n:i.n,e:i.e,q:A.t.q};save();toast(`✅ ${i.n} (${A.t.q} un) adicionado`);A.back();};
+A.remS=id=>{delete S.sal[id];save();A.back();};
 
 /* ---------- Bebidas ---------- */
 function vBeb(){
   const sel=Object.entries(S.beb);
-  $('#mb').innerHTML=pg(totB(),meta().b,' L',1)+`<p class="hint">Toque para configurar</p><div class="grid3">${BEBIDAS.map(i=>{const l=Object.values(S.beb).filter(x=>x.id==i.id).reduce((a,x)=>a+x.q*x.v,0);return `<button class="nb pc" style="--c:#00e5ff" onclick="A.qB('${i.id}')">${ph(i.id,'',l?`<i>${l.toFixed(1)} L</i>`:'')}${i.n}</button>`}).join('')}</div>`+
+  $('#mb').innerHTML=pg(totB(),meta().b,' L',1)+`<p class="hint">Toque para configurar</p><div class="grid2">${BEBIDAS.map(i=>{const l=Object.values(S.beb).filter(x=>x.id==i.id).reduce((a,x)=>a+x.q*x.v,0);return `<button class="nb pc" style="--c:#38e8ff" onclick="A.qB('${i.id}')">${ph(i.id,'',l?`<i>${l.toFixed(1)} L</i>`:'')}${i.n}</button>`}).join('')}</div>`+
   (sel.length?`<p class="hint">Selecionadas</p>${sel.map(([k,x])=>`<div class="row"><span class="rw">${ph(x.id,'th')}<span>${x.n} · ${x.sub} · ${x.z}<small>${x.q}x = ${(x.q*x.v).toFixed(1)} L</small></span></span><button class="rm" onclick="A.rmB('${k}')" aria-label="Remover">✕</button></div>`).join('')}`:'');
 }
 A.rmB=k=>{delete S.beb[k];save();draw();};
 A.qB=id=>{const i=BEBIDAS.find(x=>x.id==id);A.t={i,s:0,z:i.s.length-1,q:2};A.o(i.e+' '+i.n,vB);};
 function vB(){
   const{i,s,z,q}=A.t;
-  const pill=(a,k,c)=>a.map((x,n)=>`<button class="nb pl ${n==c?'sel':''}" style="--c:#00e5ff" onclick="A.tb('${k}',${n})">${x}</button>`).join('');
+  const pill=(a,k,c)=>a.map((x,n)=>`<button class="nb pl ${n==c?'sel':''}" style="--c:#38e8ff" onclick="A.tb('${k}',${n})">${x}</button>`).join('');
   $('#mb').innerHTML=`${ban(i.id)}<p class="hint">Sabor / tipo</p><div class="grid3">${pill(i.t,'s',s)}</div><p class="hint">Embalagem</p><div class="grid3">${pill(i.s.map(x=>x[0]),'z',z)}</div><p class="hint">Quantidade</p><div class="qty"><button onclick="A.tb('q',${q-1})">−</button><input type="number" min="1" inputmode="numeric" value="${q}" onchange="A.tb('q',this.value)"><button onclick="A.tb('q',${q+1})">+</button></div><p class="tot">Total: ${(q*i.s[z][1]).toFixed(1)} L</p><button class="nb" style="--c:#39ff14" onclick="A.addB()">ADICIONAR BEBIDA</button>`;
 }
 A.tb=(k,v)=>{A.t[k]=k=='q'?Math.max(1,parseInt(v)||1):+v;draw();};
@@ -222,19 +250,19 @@ A.addB=()=>{const{i,s,z,q}=A.t;S.beb[`${i.id}_${s}_${z}`]={id:i.id,n:i.n,e:i.e,s
 /* ---------- Lista, WhatsApp e reset ---------- */
 const chk=h=>`<label class="row ck"><input type="checkbox"><span>${h}</span></label>`;
 function vLista(){
-  const L=Object.values(S.lan),B=Object.values(S.beb);
-  $('#mb').innerHTML=`<p class="hint" style="margin-top:0">${S.ad} adultos · ${S.kd} crianças · ${EVENTOS[S.ev].n} · ${DURS[S.dur].n}</p><h4 style="color:#ff2d55">🥪 Lanches</h4>${L.length?L.map(x=>chk(`<b>${x.q}x</b> ${x.e} ${x.n}`)).join(''):'<small style="color:#888">Nenhum ainda.</small>'}<h4 style="color:#00e5ff">🥤 Bebidas</h4>${B.length?B.map(x=>chk(`<b>${x.q}x</b> ${x.e} ${x.n} (${x.sub} · ${x.z})`)).join(''):'<small style="color:#888">Nenhuma ainda.</small>'}<button class="nb" style="--c:#25d366" onclick="A.wa()">📱 ENVIAR NO WHATSAPP</button>`;
+  const L=Object.values(S.sal),B=Object.values(S.beb);
+  $('#mb').innerHTML=`<p class="hint" style="margin-top:0">${S.ad} adultos · ${S.kd} crianças · ${EVENTOS[S.ev].n} · ${DURS[S.dur].n}</p><h4 style="color:#ffa62b">🥟 Salgados</h4>${L.length?L.map(x=>chk(`<b>${x.q}x</b> ${x.e} ${x.n}`)).join(''):'<small style="color:#9c8577">Nenhum ainda.</small>'}<h4 style="color:#38e8ff">🥤 Bebidas</h4>${B.length?B.map(x=>chk(`<b>${x.q}x</b> ${x.e} ${x.n} (${x.sub} · ${x.z})`)).join(''):'<small style="color:#9c8577">Nenhuma ainda.</small>'}<button class="nb" style="--c:#25d366" onclick="A.wa()">📱 ENVIAR PEDIDO NO WHATSAPP</button>`;
 }
 A.wa=()=>{
-  const m=meta();let t=`🥊 *Spartan Fight Fit — ${EVENTOS[S.ev].n}* 🥊\n\n👥 ${S.ad} adultos e ${S.kd} crianças · ⏱️ ${DURS[S.dur].n}\n\n🥪 *Lanches (meta ${m.l} un):*\n`;
-  const L=Object.values(S.lan),B=Object.values(S.beb);
+  const m=meta();let t=`🍫 *DonDoca Granulada — ${EVENTOS[S.ev].n}* 🍫\n\n👥 ${S.ad} adultos e ${S.kd} crianças · ⏱️ ${DURS[S.dur].n}\n\n🥟 *Salgados (meta ${m.l} un):*\n`;
+  const L=Object.values(S.sal),B=Object.values(S.beb);
   t+=L.length?L.map(x=>`• ${x.q}x ${x.n}`).join('\n'):'Nenhum selecionado ainda.';
   t+=`\n\n🥤 *Bebidas (meta ${m.b} L):*\n`;
   t+=B.length?B.map(x=>`• ${x.q}x ${x.n} (${x.sub} - ${x.z})`).join('\n'):'Nenhuma selecionada ainda.';
-  window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(t),'_blank');
+  window.open(`https://wa.me/${ZAP}?text=`+encodeURIComponent(t),'_blank');
 };
-A.reset=()=>A.o('Novo evento?',()=>{$('#mb').innerHTML=`<p class="hint" style="font-size:13px;text-transform:none">Apagar tudo e começar um novo planejamento?</p><div class="act"><button class="nb" style="--c:#888" onclick="A.back()">CANCELAR</button><button class="nb" style="--c:#ff2d55" onclick="A.doReset()">SIM, LIMPAR</button></div>`;});
-A.doReset=()=>{Object.assign(S,{ad:20,kd:5,dur:'media',ev:'treino',lan:{},beb:{}});save();A.close();toast('🔄 Novo evento iniciado');};
+A.reset=()=>A.o('Nova festa?',()=>{$('#mb').innerHTML=`<p class="hint" style="font-size:13px;text-transform:none">Apagar tudo e começar um novo planejamento?</p><div class="act"><button class="nb" style="--c:#8a6d5f" onclick="A.back()">CANCELAR</button><button class="nb" style="--c:#ff4fa3" onclick="A.doReset()">SIM, LIMPAR</button></div>`;});
+A.doReset=()=>{Object.assign(S,{ad:20,kd:5,dur:'media',ev:'aniversario',sal:{},beb:{}});save();A.close();toast('🔄 Nova festa iniciada');};
 
 render();
 </script>
