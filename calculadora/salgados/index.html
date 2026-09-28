@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f7f5ff">
-<title>Calculadora de Festa</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#d9381e">
+<title>Calculadora de Salgados e Bebidas para Festa</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f5ff;--ink:#231942;--mut:#7a7594;--line:#e6e2f5;--card:#fff;--br:#ff6b2c;--brs:#fff0e8;--teal:#0e9f9a;--tls:#e3f6f5;--ok:#16a34a;--warn:#d97706;--sh:0 8px 24px rgba(35,25,66,.14)}
+:root{--bg:#fff7e6;--ink:#3a1d0b;--mut:#8a6a4f;--line:#f0dfc2;--card:#fffdf8;--br:#d9381e;--brs:#fde8e2;--gold:#f2a51a;--teal:#0e8f8f;--tls:#dff3f1;--ok:#16a34a;--warn:#d97706;--sh:0 8px 24px rgba(58,29,11,.16)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100dvh;display:flex;justify-content:center}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100dvh;display:flex;justify-content:center}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:3px solid var(--br);outline-offset:2px}
 #app{width:100%;max-width:440px;padding:28px 18px 130px}
-h1{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+h1,h2,.rec b,.pill{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
 h2{font-size:22px;font-weight:800;letter-spacing:-.01em}
 .sub{color:var(--mut);font-size:14px;margin-top:6px;line-height:1.4}
 .lab{font-size:13px;font-weight:700;color:var(--mut);margin:22px 0 8px}
@@ -24,9 +25,9 @@ h2{font-size:22px;font-weight:800;letter-spacing:-.01em}
 .step button{width:40px;height:40px;border-radius:12px;background:var(--bg);font-size:20px;font-weight:700}
 .step button:active{transform:scale(.92)}
 .step input{width:46px;text-align:center;font:800 20px inherit;font-family:inherit;border:0;background:none;color:var(--ink)}
-.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#ece8fa;padding:4px;border-radius:14px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#f3e2bf;padding:4px;border-radius:14px}
 .seg button,.chip{padding:11px 6px;border-radius:11px;font-size:13px;font-weight:700;color:var(--mut)}
-.seg .on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(35,25,66,.12)}
+.seg .on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(58,29,11,.12)}
 .chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .chip{background:#fff;border:1.5px solid var(--line);text-align:left;padding:13px 12px}
 .chip.on{border-color:var(--br);background:var(--brs);color:var(--ink)}
@@ -39,19 +40,35 @@ h2{font-size:22px;font-weight:800;letter-spacing:-.01em}
 .banner div{display:flex;gap:8px;margin-top:10px}
 .banner button{flex:1;padding:10px;border-radius:12px;font-size:13px;font-weight:700;background:#fff}
 .banner button:first-child{background:var(--br);color:#fff}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#ece8fa;padding:4px;border-radius:16px;margin:18px 0 14px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#f3e2bf;padding:4px;border-radius:16px;margin:18px 0 14px}
 .tabs button{padding:12px 6px;border-radius:12px;font-size:14px;font-weight:700;color:var(--mut)}
-.tabs .on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(35,25,66,.12)}
+.tabs .on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(58,29,11,.12)}
 .tabs small{display:block;font-size:11px;font-weight:600;margin-top:1px}
 .ph{display:flex;justify-content:space-between;font-size:13px;color:var(--mut);margin-bottom:8px}
 .ph b{color:var(--ink)}
-.bar{height:9px;border-radius:9px;background:#ece8fa;overflow:hidden}
-.bar i{display:block;height:100%;border-radius:9px;background:var(--br);transition:width .3s}
+.bar{height:9px;border-radius:9px;background:#f3e2bf;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:9px;background:var(--gold);transition:width .3s}
 .bar i.teal{background:var(--teal)}.bar i.ok{background:var(--ok)}.bar i.warn{background:var(--warn)}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.item{position:relative;background:#fff;border:1.5px solid var(--line);border-radius:18px;padding:14px;text-align:left;min-height:88px;display:flex;flex-direction:column;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;line-height:1.2}
-.item span{font-size:26px}
+.item{position:relative;display:block;background:#fff;border:1.5px solid var(--line);border-radius:18px;overflow:hidden;text-align:left;font-size:14px;font-weight:700;line-height:1.2;padding:0}
+.item b{display:block;padding:10px 12px 12px}
 .item:active{transform:scale(.96)}
+.pic{position:relative;background:linear-gradient(135deg,#ffe2a3,#ffc15a);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pic span{font-size:34px}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.item .pic{height:96px}
+.t .pic{background:linear-gradient(135deg,#d3f2ef,#8fdcd8)}
+.sh .pic{width:56px;height:56px;border-radius:16px;flex:none}.sh .pic span{font-size:28px}
+.li .pic{width:42px;height:42px;border-radius:12px;flex:none}.li .pic span{font-size:20px}
+.lt{display:flex;align-items:center;gap:10px;min-width:0}
+.awning{height:34px;margin:-28px -18px 22px;background:repeating-linear-gradient(90deg,var(--br) 0 32px,#ffe6b0 32px 64px);position:relative}
+.awning::after{content:"";position:absolute;left:0;right:0;top:100%;height:16px;background:radial-gradient(circle at 16px 0,var(--br) 15.5px,transparent 16px),radial-gradient(circle at 48px 0,#ffe6b0 15.5px,transparent 16px);background-size:64px 16px}
+.hero{position:relative;border-radius:24px;overflow:hidden;color:#fff;padding:20px;min-height:170px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(135deg,#f2a51a,#d9381e)}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 20%,rgba(58,29,11,.78))}
+.hero>*{position:relative;z-index:1}
+.hero .sub{color:rgba(255,255,255,.92);margin-top:4px}
+.hero .em{position:absolute;top:14px;right:16px;font-size:28px;letter-spacing:4px}
 .item.on{border-color:var(--br);background:var(--brs)}
 .item.on.t{border-color:var(--teal);background:var(--tls)}
 .item em{position:absolute;top:10px;right:10px;font-style:normal;font-size:12px;font-weight:800;background:var(--br);color:#fff;border-radius:20px;padding:2px 8px}
@@ -73,13 +90,13 @@ h2{font-size:22px;font-weight:800;letter-spacing:-.01em}
 .st b.ok{color:var(--ok)}.st b.warn{color:var(--warn)}
 .dock{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:0 18px calc(env(safe-area-inset-bottom) + 16px);pointer-events:none;z-index:20;background:linear-gradient(transparent,var(--bg) 70%)}
 .dock>div{display:flex;gap:10px;width:100%;max-width:404px;pointer-events:auto;padding-top:24px}
-.pill{flex:1;height:56px;border-radius:28px;background:var(--br);color:#fff;font-weight:800;font-size:16px;box-shadow:0 10px 24px rgba(255,107,44,.4);display:flex;align-items:center;justify-content:center;gap:8px}
+.pill{flex:1;height:56px;border-radius:28px;background:var(--br);color:#fff;font-weight:800;font-size:16px;box-shadow:0 10px 24px rgba(217,56,30,.4);display:flex;align-items:center;justify-content:center;gap:8px}
 .pill.dark{background:var(--ink);box-shadow:var(--sh)}.pill.wa{background:#1fa855;box-shadow:0 10px 24px rgba(31,168,85,.38)}
 .pill:active,.fab:active{transform:scale(.96)}
 .fab{width:56px;height:56px;border-radius:50%;background:#fff;box-shadow:var(--sh);display:flex;align-items:center;justify-content:center;flex:none}
 .fab.red{color:#dc2626}
 svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.ov{position:fixed;inset:0;background:rgba(35,25,66,.5);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;z-index:50}
+.ov{position:fixed;inset:0;background:rgba(58,29,11,.5);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;z-index:50}
 .ov.on{display:flex}
 .sheet{background:#fff;width:100%;max-width:440px;border-radius:28px 28px 0 0;padding:20px 20px calc(22px + env(safe-area-inset-bottom));max-height:90dvh;overflow:auto;animation:up .25s ease}
 @keyframes up{from{transform:translateY(40px);opacity:0}}
@@ -123,6 +140,10 @@ const BEB=[
  {id:"agua",nome:"Água mineral",emoji:"💧",subtypes:["Com gás","Sem gás"],sizes:[["300 ml",.3],["500 ml",.5],["1.5 Litros",1.5]]},
  {id:"suco",nome:"Suco natural / caixa",emoji:"🧃",subtypes:["Laranja","Uva","Maracujá","Limão","Outros"],sizes:[["300 ml",.3],["1 Litro",1],["2 Litros",2]]},
  {id:"outras_bebidas",nome:"Outras bebidas",emoji:"🍹",subtypes:["Chá gelado","Água de coco","Energético","Outros"],sizes:[["350 ml",.35],["1 Litro",1],["2 Litros",2]]}];
+/* FOTOS: coloque suas imagens na pasta fotos/ (ex.: fotos/coxinha.jpg) ou cole links aqui: FOTOS.coxinha='https://...' */
+const FOTOS={};
+const foto=id=>FOTOS[id]||`fotos/${id}.jpg`;
+const pic=(it,cls='')=>`<div class="pic ${cls}"><span>${it.emoji}</span><img src="${foto(it.id)}" alt="" loading="lazy" onerror="this.remove()"></div>`;
 const KEY='party_calculator_state';
 const fresh=()=>({adults:20,kids:5,duration:'short',partyType:'aniversario',recommendedSalgados:300,recommendedBebidasLiters:20,salgadosSelecionados:{},bebidasSelecionadas:{}});
 let S=fresh(),screen='setup',tab='salgados',sheet=null,saved=null,tt;
@@ -154,7 +175,7 @@ function prog(got,meta,unit,c,strict){
 function setupView(){
  const t=(l,s,k)=>`<div class="card row"><div><b>${l}</b><small>${s}</small></div><div class="step"><button onclick="adj('${k}',-1)" aria-label="Diminuir ${l}">−</button><input type="number" min="0" inputmode="numeric" value="${S[k]}" onchange="setG('${k}',this.value)" aria-label="${l}"><button onclick="adj('${k}',1)" aria-label="Aumentar ${l}">+</button></div></div>`;
  return `${saved?`<div class="banner">Você tem uma festa salva.<div><button onclick="resume()">Continuar</button><button onclick="saved=null;render()">Começar nova</button></div></div>`:''}
- <h1>Calculadora de festa</h1><p class="sub">Descubra quantos salgados e bebidas comprar, sem desperdício.</p>
+ <div class="hero"><img src="fotos/capa.jpg" alt="" onerror="this.remove()"><div class="em">🥟🧀🥤</div><h1>Quantos salgados pra festa?</h1><p class="sub">Calcule salgados e bebidas sem sobra e sem faltar.</p></div>
  <p class="lab">Convidados</p>${t('Adultos','Consumo padrão','adults')}${t('Crianças','Consumo reduzido','kids')}
  <p class="lab">Duração</p><div class="seg">${DUR.map(d=>`<button class="${S.duration===d[0]?'on':''}" onclick="setDur('${d[0]}')">${d[1]}</button>`).join('')}</div>
  <p class="lab">Tipo de festa</p><div class="chips">${TYPES.map(t=>`<button class="chip ${S.partyType===t[0]?'on':''}" onclick="setType('${t[0]}')">${t[1]} ${t[2]}</button>`).join('')}</div>
@@ -163,10 +184,10 @@ function setupView(){
 function menuView(){
  const sal=tab==='salgados',sel=Object.values(sal?S.salgadosSelecionados:S.bebidasSelecionadas),cat=sal?SAL:BEB;
  const grid=cat.map(it=>{const s=sal?S.salgadosSelecionados[it.id]:null,n=sal?0:sel.filter(x=>x.id===it.id).length,on=s||n;
-  return `<button class="item ${on?'on':''} ${sal?'':'t'}" onclick="${sal?'openSal':'openBeb'}('${it.id}')"><span>${it.emoji}</span>${it.nome}${on?`<em>${sal?s.quantidade:n}</em>`:''}</button>`}).join('');
+  return `<button class="item ${on?'on':''} ${sal?'':'t'}" onclick="${sal?'openSal':'openBeb'}('${it.id}')">${pic(it)}<b>${it.nome}</b>${on?`<em>${sal?s.quantidade:n}</em>`:''}</button>`}).join('');
  const list=sel.length?`<div class="sec"><h3>Selecionados</h3><div class="card" style="padding:4px 16px">${sel.map(x=>sal?
-  `<div class="li"><span>${x.emoji} ${x.nome}</span><div class="mini"><button onclick="adjSal('${x.id}',-5)">−</button><b>${x.quantidade}</b><button onclick="adjSal('${x.id}',5)">+</button><button class="del" onclick="delSal('${x.id}')" aria-label="Remover">✕</button></div></div>`:
-  `<div class="li"><span>${x.emoji} ${x.nome} (${x.subtype})<small>${x.sizeLabel} · ${fmt(x.totalLiters)} L</small></span><div class="mini"><button onclick="adjBeb('${x.key}',-1)">−</button><b>${x.quantidade}</b><button onclick="adjBeb('${x.key}',1)">+</button><button class="del" onclick="delBeb('${x.key}')" aria-label="Remover">✕</button></div></div>`).join('')}</div></div>`:'';
+  `<div class="li"><div class="lt">${pic(x)}<span>${x.nome}</span></div><div class="mini"><button onclick="adjSal('${x.id}',-5)">−</button><b>${x.quantidade}</b><button onclick="adjSal('${x.id}',5)">+</button><button class="del" onclick="delSal('${x.id}')" aria-label="Remover">✕</button></div></div>`:
+  `<div class="li"><div class="lt">${pic(x,'t')}<span>${x.nome} (${x.subtype})<small>${x.sizeLabel} · ${fmt(x.totalLiters)} L</small></span></div><div class="mini"><button onclick="adjBeb('${x.key}',-1)">−</button><b>${x.quantidade}</b><button onclick="adjBeb('${x.key}',1)">+</button><button class="del" onclick="delBeb('${x.key}')" aria-label="Remover">✕</button></div></div>`).join('')}</div></div>`:'';
  return `<h2>Monte o cardápio</h2><p class="sub">Toque num item para adicionar.</p>
  <div class="tabs"><button class="${sal?'on':''}" onclick="tab='salgados';render()">🥟 Salgados<small>${tS()} de ${S.recommendedSalgados}</small></button><button class="${sal?'':'on'}" onclick="tab='bebidas';render()">🥤 Bebidas<small>${fmt(tB())} de ${fmt(S.recommendedBebidasLiters)} L</small></button></div>
  ${sal?prog(tS(),S.recommendedSalgados,'un','',true):prog(tB(),S.recommendedBebidasLiters,'L','teal',false)}
@@ -183,7 +204,7 @@ function summaryView(){
  <div class="sec"><h3><span>🥤 Bebidas</span><span>${fmt(tb)} L</span></h3><div class="card" style="padding:4px 16px">${be.length?be.map(b=>chk(b.quantidade+'x',`${b.emoji} ${b.nome} (${b.subtype} · ${b.sizeLabel})`)).join(''):'<p class="empty">Nenhuma bebida selecionada.</p>'}</div></div>`}
 
 function render(){
- $('app').innerHTML=screen==='setup'?setupView():screen==='menu'?menuView():summaryView();
+ $('app').innerHTML='<div class="awning"></div>'+(screen==='setup'?setupView():screen==='menu'?menuView():summaryView());
  $('dock').innerHTML=screen==='setup'?`<button class="pill" onclick="go('menu')">Escolher cardápio</button>`:
   screen==='menu'?`<button class="fab" onclick="go('setup')" aria-label="Voltar">${ic.back}</button><button class="pill dark" onclick="go('summary')">Ver resumo</button>`:
   `<button class="fab" onclick="go('menu')" aria-label="Voltar">${ic.back}</button><button class="pill wa" onclick="share()">${ic.wa}Enviar no WhatsApp</button><button class="fab red" onclick="openReset()" aria-label="Nova festa">${ic.reset}</button>`}
@@ -208,7 +229,7 @@ function drawSheet(){
  const it=sheet.it;let h='';
  if(sheet.t==='reset')h=`<div class="sh"><span>⚠️</span><h3>Começar nova festa?</h3></div><p class="sub">Todos os dados atuais serão apagados.</p><div class="qty" style="margin-bottom:0"><button style="flex:1" onclick="closeSheet()">Cancelar</button><button style="flex:1;background:#dc2626;color:#fff" onclick="doReset()">Sim, apagar</button></div>`;
  else{
-  h=`<div class="sh"><span>${it.emoji}</span><h3>${it.nome}</h3><button class="x" onclick="closeSheet()" aria-label="Fechar">✕</button></div>`;
+  h=`<div class="sh">${pic(it,sheet.t==='beb'?'t':'')}<h3>${it.nome}</h3><button class="x" onclick="closeSheet()" aria-label="Fechar">✕</button></div>`;
   if(sheet.t==='sal')h+=`<p class="sub">Quantas unidades?</p><div class="qty"><button onclick="qAdj(-10)">−10</button><button onclick="qAdj(-1)">−1</button><input id="q" type="number" min="1" inputmode="numeric" value="${sheet.q}" oninput="qSet(this.value)"><button onclick="qAdj(1)">+1</button><button onclick="qAdj(10)">+10</button></div><button class="pill w" onclick="addSal()">Adicionar</button>`;
   else h+=`<p class="lab">Sabor / tipo</p><div class="pills">${it.subtypes.map((s,i)=>`<button class="${i===sheet.si?'on':''}" onclick="pick('si',${i})">${s}</button>`).join('')}</div>
    <p class="lab">Embalagem</p><div class="pills">${it.sizes.map((s,i)=>`<button class="${i===sheet.zi?'on':''}" onclick="pick('zi',${i})">${s[0]}</button>`).join('')}</div>
