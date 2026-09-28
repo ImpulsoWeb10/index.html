@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora de Salgados e Bebidas para Festas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fdf4f2',
+                            100: '#fbe8e5',
+                            500: '#ff5722',
+                            600: '#f4511e',
+                            700: '#d84315',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scaleUp {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .animate-scale-up {
+            animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        /* Custom scrollbar for sleek look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Prevent body scroll when modal is active */
+        body.modal-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-brand-50 via-slate-50 to-orange-50 text-slate-800 h-full font-sans antialiased selection:bg-brand-500 selection:text-white flex justify-center items-center">
+
+    <div id="app-container" class="w-full max-w-md h-full sm:h-[90vh] sm:max-h-[880px] bg-white sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden relative border border-slate-100">
+
+        <!-- Top Notification Toast -->
+        <div id="toast" class="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-4 py-2.5 rounded-2xl shadow-xl text-sm font-medium flex items-center space-x-2 transition-all duration-300 pointer-events-none opacity-0 translate-y-[-20px]">
+            <span id="toast-icon">✨</span>
+            <span id="toast-message">Mensagem de aviso</span>
+        </div>
+
+        <!-- ==================== TELA 1: INÍCIO ==================== -->
+        <div id="screen-welcome" class="screen flex-1 flex flex-col justify-between p-6 sm:p-8 overflow-y-auto">
+            <div class="pt-6 text-center">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-brand-100 text-brand-600 rounded-3xl mb-6 shadow-inner text-4xl animate-bounce">
+                    🎉
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+                    Calculadora de Festa
+                </h1>
+                <p class="text-slate-500 text-sm sm:text-base max-w-xs mx-auto leading-relaxed">
+                    Descubra a quantidade ideal de salgados e bebidas para o seu evento sem desperdícios.
+                </p>
+            </div>
+
+            <!-- Visual Highlights -->
+            <div class="grid grid-cols-3 gap-3 my-6">
+                <div class="bg-brand-50/70 border border-brand-100 p-4 rounded-2xl text-center">
+                    <span class="text-2xl block mb-1">🥟</span>
+                    <span class="text-xs font-semibold text-brand-700">Salgados</span>
+                </div>
+                <div class="bg-orange-50 border border-orange-100 p-4 rounded-2xl text-center">
+                    <span class="text-2xl block mb-1">🥤</span>
+                    <span class="text-xs font-semibold text-orange-700">Bebidas</span>
+                </div>
+                <div class="bg-amber-50 border border-amber-100 p-4 rounded-2xl text-center">
+                    <span class="text-2xl block mb-1">✨</span>
+                    <span class="text-xs font-semibold text-amber-700">Perfeito</span>
+                </div>
+            </div>
+
+            <div class="space-y-3 pb-4">
+                <button onclick="app.nextScreen('guests')" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-brand-500/30 transition-all flex items-center justify-center space-x-2 text-base">
+                    <span>COMEÇAR</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+                <div id="welcome-resume-btn-container" class="hidden">
+                    <button onclick="app.checkSavedSession(true)" class="w-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-semibold py-3 px-6 rounded-2xl transition-all text-sm flex items-center justify-center space-x-2">
+                        <span>🔄 Continuar Festa Anterior</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TELA 2: CONVIDADOS E PARÂMETROS ==================== -->
+        <div id="screen-guests" class="screen hidden flex-1 flex flex-col justify-between p-6 overflow-y-auto">
+            <div>
+                <!-- Header with back button -->
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="app.prevScreen('welcome')" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <span class="text-xs font-bold tracking-wider uppercase text-brand-600 bg-brand-50 px-3 py-1 rounded-full">Passo 1 de 3</span>
+                    <div class="w-10"></div>
+                </div>
+
+                <h2 class="text-2xl font-bold text-slate-900 mb-1">Quem vai à festa?</h2>
+                <p class="text-slate-500 text-sm mb-6">Informe os detalhes para calcularmos as quantidades.</p>
+
+                <!-- Guest Counters -->
+                <div class="space-y-4 mb-6">
+                    <!-- Adultos -->
+                    <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl flex items-center justify-between">
+                        <div>
+                            <span class="block font-semibold text-slate-800 text-base">Adultos</span>
+                            <span class="text-xs text-slate-500">Consumo padrão</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="app.adjustGuest('adults', -1)" aria-label="Diminuir adultos" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 font-bold shadow-sm hover:bg-slate-50 active:scale-95 transition-all">-</button>
+                            <input type="number" id="input-adults" min="0" value="20" onchange="app.updateGuestManual()" class="w-12 text-center font-bold text-lg bg-transparent focus:outline-none">
+                            <button onclick="app.adjustGuest('adults', 1)" aria-label="Aumentar adultos" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 font-bold shadow-sm hover:bg-slate-50 active:scale-95 transition-all">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Crianças -->
+                    <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl flex items-center justify-between">
+                        <div>
+                            <span class="block font-semibold text-slate-800 text-base">Crianças</span>
+                            <span class="text-xs text-slate-500">Consumo reduzido</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="app.adjustGuest('kids', -1)" aria-label="Diminuir crianças" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 font-bold shadow-sm hover:bg-slate-50 active:scale-95 transition-all">-</button>
+                            <input type="number" id="input-kids" min="0" value="5" onchange="app.updateGuestManual()" class="w-12 text-center font-bold text-lg bg-transparent focus:outline-none">
+                            <button onclick="app.adjustGuest('kids', 1)" aria-label="Aumentar crianças" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 font-bold shadow-sm hover:bg-slate-50 active:scale-95 transition-all">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Party Duration -->
+                <div class="mb-6">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Duração da Festa</label>
+                    <div class="grid grid-cols-3 gap-2" id="duration-selector">
+                        <button onclick="app.setDuration('short')" data-duration="short" class="duration-btn py-3 px-2 rounded-xl text-xs font-semibold border transition-all text-center bg-brand-50 border-brand-500 text-brand-700">Até 3h</button>
+                        <button onclick="app.setDuration('medium')" data-duration="medium" class="duration-btn py-3 px-2 rounded-xl text-xs font-semibold border transition-all text-center bg-white border-slate-200 text-slate-600 hover:bg-slate-50">3 a 5h</button>
+                        <button onclick="app.setDuration('long')" data-duration="long" class="duration-btn py-3 px-2 rounded-xl text-xs font-semibold border transition-all text-center bg-white border-slate-200 text-slate-600 hover:bg-slate-50">Mais de 5h</button>
+                    </div>
+                </div>
+
+                <!-- Party Type -->
+                <div class="mb-4">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Tipo de Festa</label>
+                    <div class="grid grid-cols-2 gap-2" id="party-type-selector">
+                        <button onclick="app.setPartyType('aniversario')" data-type="aniversario" class="party-type-btn p-3 rounded-xl text-xs font-semibold border transition-all text-left flex items-center space-x-2 bg-brand-50 border-brand-500 text-brand-700">
+                            <span>🎂</span><span>Aniversário</span>
+                        </button>
+                        <button onclick="app.setPartyType('infantil')" data-type="infantil" class="party-type-btn p-3 rounded-xl text-xs font-semibold border transition-all text-left flex items-center space-x-2 bg-white border-slate-200 text-slate-600 hover:bg-slate-50">
+                            <span>🎉</span><span>Festa Infantil</span>
+                        </button>
+                        <button onclick="app.setPartyType('evento')" data-type="evento" class="party-type-btn p-3 rounded-xl text-xs font-semibold border transition-all text-left flex items-center space-x-2 bg-white border-slate-200 text-slate-600 hover:bg-slate-50">
+                            <span>🥳</span><span>Evento / Churrasco</span>
+                        </button>
+                        <button onclick="app.setPartyType('familiar')" data-type="familiar" class="party-type-btn p-3 rounded-xl text-xs font-semibold border transition-all text-left flex items-center space-x-2 bg-white border-slate-200 text-slate-600 hover:bg-slate-50">
+                            <span>🏠</span><span>Reunião Familiar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button onclick="app.calculateAndProceed()" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-brand-500/30 transition-all flex items-center justify-center space-x-2 text-base">
+                    <span>CALCULAR QUANTIDADES</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== TELA 3: RESULTADO DO CÁLCULO ==================== -->
+        <div id="screen-result" class="screen hidden flex-1 flex flex-col justify-between p-6 overflow-y-auto">
+            <div>
+                <!-- Top navigation -->
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="app.prevScreen('guests')" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <span class="text-xs font-bold tracking-wider uppercase text-brand-600 bg-brand-50 px-3 py-1 rounded-full">Resumo Recomendado</span>
+                    <div class="w-10"></div>
+                </div>
+
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-14 h-14 bg-amber-100 text-amber-700 rounded-2xl mb-2 text-2xl">
+                        🎯
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-900">Planejamento Ideal</h2>
+                    <p class="text-slate-500 text-sm">Baseado em <span id="summary-adults-count" class="font-semibold text-slate-700">20</span> adultos e <span id="summary-kids-count" class="font-semibold text-slate-700">5</span> crianças.</p>
+                </div>
+
+                <!-- Recommendation Cards -->
+                <div class="space-y-3 mb-6">
+                    <div class="bg-gradient-to-r from-brand-50 to-orange-50 border border-brand-100 p-4 rounded-2xl flex items-center justify-between shadow-sm">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🥟</span>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base">Salgados</h3>
+                                <p class="text-xs text-slate-600">Total recomendado</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span id="rec-salgados-val" class="text-2xl font-black text-brand-600">300</span>
+                            <span class="block text-xs font-medium text-slate-500">unidades</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-sky-50 to-blue-50 border border-sky-100 p-4 rounded-2xl flex items-center justify-between shadow-sm">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🥤</span>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base">Bebidas & Líquidos</h3>
+                                <p class="text-xs text-slate-600">Refrigerante, suco e água</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span id="rec-bebidas-val" class="text-2xl font-black text-sky-600">20</span>
+                            <span class="block text-xs font-medium text-slate-500">litros</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-600 space-y-1.5">
+                    <p class="font-semibold text-slate-700 flex items-center space-x-1.5">
+                        <span>💡</span><span>Dica do Organizador:</span>
+                    </p>
+                    <p>Agora você poderá escolher exatamente quais sabores de salgados e tipos de bebidas quer incluir na sua lista!</p>
+                </div>
+            </div>
+
+            <div class="pt-4 space-y-2">
+                <button onclick="app.goToSalgados()" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-brand-500/30 transition-all flex items-center justify-center space-x-2 text-base">
+                    <span>ESCOLHER SALGADOS</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== TELA 4: ESCOLHA DE SALGADOS ==================== -->
+        <div id="screen-salgados" class="screen hidden flex-1 flex flex-col h-full overflow-hidden">
+            <!-- Fixed Header & Progress Bar -->
+            <div class="bg-white border-b border-slate-100 p-4 shadow-sm z-10 flex-shrink-0">
+                <div class="flex items-center justify-between mb-3">
+                    <button onclick="app.goToResultScreen()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <h2 class="font-bold text-slate-900 text-base">🥟 Escolha seus Salgados</h2>
+                    <button onclick="app.goToBebidas()" class="text-xs font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-2 rounded-xl transition-all flex items-center space-x-1">
+                        <span>Bebidas</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Counter Status Panel -->
+                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-slate-500 block font-medium">Progresso de Salgados</span>
+                        <div class="flex items-baseline space-x-1">
+                            <span id="salgados-escolhidos-count" class="text-xl font-extrabold text-slate-900">0</span>
+                            <span class="text-sm font-bold text-slate-400">/ <span id="salgados-meta-count">300</span></span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-500 block font-medium" id="salgados-status-label">Ainda faltam</span>
+                        <span id="salgados-restante-count" class="text-base font-bold text-brand-600">300 salgados</span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mt-3 w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                    <div id="salgados-progress-bar" class="bg-brand-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Scrollable Content: Categories & Added Items -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                <!-- Grid of available salgados -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Toque para adicionar</h3>
+                    <div id="salgados-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Added salgados list summary -->
+                <div id="salgados-added-section" class="pt-2 hidden">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Salgados Selecionados</h3>
+                    <div id="salgados-added-list" class="space-y-2">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Floating Action -->
+            <div class="p-4 bg-white border-t border-slate-100 flex-shrink-0">
+                <button onclick="app.goToBebidas()" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-brand-500/30 transition-all flex items-center justify-center space-x-2 text-sm">
+                    <span>IR PARA BEBIDAS</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== TELA 5: ESCOLHA DE BEBIDAS ==================== -->
+        <div id="screen-bebidas" class="screen hidden flex-1 flex flex-col h-full overflow-hidden">
+            <!-- Fixed Header & Progress Bar -->
+            <div class="bg-white border-b border-slate-100 p-4 shadow-sm z-10 flex-shrink-0">
+                <div class="flex items-center justify-between mb-3">
+                    <button onclick="app.goToSalgados()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <h2 class="font-bold text-slate-900 text-base">🥤 Escolha suas Bebidas</h2>
+                    <button onclick="app.goToFinalSummary()" class="text-xs font-bold text-sky-600 bg-sky-50 hover:bg-sky-100 px-3 py-2 rounded-xl transition-all flex items-center space-x-1">
+                        <span>Resumo</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Counter Status Panel -->
+                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-slate-500 block font-medium">Líquidos Escolhidos</span>
+                        <div class="flex items-baseline space-x-1">
+                            <span id="bebidas-escolhidas-count" class="text-xl font-extrabold text-slate-900">0</span>
+                            <span class="text-sm font-bold text-slate-400">/ <span id="bebidas-meta-count">20</span> L</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-500 block font-medium" id="bebidas-status-label">Ainda faltam</span>
+                        <span id="bebidas-restante-count" class="text-base font-bold text-sky-600">20 litros</span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mt-3 w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                    <div id="bebidas-progress-bar" class="bg-sky-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Toque para adicionar bebida</h3>
+                    <div id="bebidas-grid" class="grid grid-cols-2 gap-2.5">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Added beverages list summary -->
+                <div id="bebidas-added-section" class="pt-2 hidden">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Bebidas Selecionadas</h3>
+                    <div id="bebidas-added-list" class="space-y-2">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Floating Action -->
+            <div class="p-4 bg-white border-t border-slate-100 flex-shrink-0">
+                <button onclick="app.goToFinalSummary()" class="w-full bg-sky-600 hover:bg-sky-700 active:scale-[0.98] text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-sky-500/30 transition-all flex items-center justify-center space-x-2 text-sm">
+                    <span>VER RESUMO FINAL DA FESTA</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== TELA 6: RESUMO FINAL DA FESTA ==================== -->
+        <div id="screen-final" class="screen hidden flex-1 flex flex-col justify-between p-6 overflow-y-auto">
+            <div>
+                <!-- Top navigation -->
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="app.goToBebidas()" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <span class="text-xs font-bold tracking-wider uppercase text-brand-600 bg-brand-50 px-3 py-1 rounded-full">Planejamento Concluído</span>
+                    <button onclick="app.confirmReset()" class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-600 hover:bg-red-100 transition-all" title="Reiniciar festa">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </button>
+                </div>
+
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 text-emerald-700 rounded-3xl mb-3 text-3xl animate-bounce">
+                        🎉
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-900">Sua festa está planejada!</h2>
+                    <p class="text-slate-500 text-sm">Confira abaixo todos os detalhes e sua lista de compras.</p>
+                </div>
+
+                <!-- Summary Status Card -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-4 space-y-3">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="font-medium text-slate-600">👥 Convidados:</span>
+                        <span id="final-guests-text" class="font-bold text-slate-800">20 adultos, 5 crianças</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="font-medium text-slate-600">🥟 Salgados:</span>
+                        <span id="final-salgados-status" class="font-bold text-emerald-600">✅ 300 / 300</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="font-medium text-slate-600">🥤 Bebidas:</span>
+                        <span id="final-bebidas-status" class="font-bold text-emerald-600">✅ 20L / 20L</span>
+                    </div>
+                </div>
+
+                <!-- Detailed Breakdown Accordion / Boxes -->
+                <div class="space-y-3 mb-6">
+                    <!-- Salgados Breakdown -->
+                    <div class="border border-slate-200 rounded-2xl p-4 bg-white">
+                        <h3 class="font-bold text-slate-800 text-sm mb-2 flex items-center justify-between">
+                            <span>🥟 Salgados Escolhidos</span>
+                            <span id="final-salgados-total-badge" class="text-xs bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded-full font-semibold">0 un</span>
+                        </h3>
+                        <div id="final-salgados-list-view" class="space-y-1.5 text-sm text-slate-600 divide-y divide-slate-100">
+                            <!-- Populated -->
+                        </div>
+                    </div>
+
+                    <!-- Bebidas Breakdown -->
+                    <div class="border border-slate-200 rounded-2xl p-4 bg-white">
+                        <h3 class="font-bold text-slate-800 text-sm mb-2 flex items-center justify-between">
+                            <span>🥤 Bebidas Escolhidas</span>
+                            <span id="final-bebidas-total-badge" class="text-xs bg-sky-50 text-sky-700 px-2.5 py-0.5 rounded-full font-semibold">0 L</span>
+                        </h3>
+                        <div id="final-bebidas-list-view" class="space-y-1.5 text-sm text-slate-600 divide-y divide-slate-100">
+                            <!-- Populated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-3 pt-2">
+                <button onclick="app.openShoppingListModal()" class="w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-2 text-base">
+                    <span>📋 VER LISTA DE COMPRAS</span>
+                </button>
+                <button onclick="app.shareWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center space-x-2 text-base">
+                    <span>📱 COMPARTILHAR NO WHATSAPP</span>
+                </button>
+            </div>
+        </div>
+
+    </div> <!-- End App Container -->
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Modal: Adicionar Salgado -->
+    <div id="modal-salgado" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all opacity-0">
+        <div class="bg-white w-full max-w-sm sm:rounded-3xl rounded-t-3xl p-6 shadow-2xl transform translate-y-full sm:translate-y-0 transition-transform duration-300">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <span id="modal-salgado-emoji" class="text-3xl">🥟</span>
+                    <h3 id="modal-salgado-title" class="text-xl font-bold text-slate-900">Coxinha</h3>
+                </div>
+                <button onclick="app.closeModals()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200">✕</button>
+            </div>
+
+            <p class="text-slate-500 text-sm mb-6">Quantas unidades deseja adicionar?</p>
+
+            <div class="flex items-center justify-center space-x-4 mb-6">
+                <button onclick="app.adjustModalSalgadoQty(-10)" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-lg active:scale-95 transition-all">-10</button>
+                <button onclick="app.adjustModalSalgadoQty(-1)" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-lg active:scale-95 transition-all">-1</button>
+                <input type="number" id="modal-salgado-input" min="1" value="25" class="w-20 text-center font-black text-2xl text-slate-900 bg-slate-50 border border-slate-200 rounded-2xl py-2 focus:outline-none focus:border-brand-500">
+                <button onclick="app.adjustModalSalgadoQty(1)" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-lg active:scale-95 transition-all">+1</button>
+                <button onclick="app.adjustModalSalgadoQty(10)" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-lg active:scale-95 transition-all">+10</button>
+            </div>
+
+            <div class="space-y-2">
+                <button onclick="app.confirmAddSalgado()" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white font-bold py-4 rounded-2xl shadow-lg shadow-brand-500/30 transition-all text-base">
+                    ADICIONAR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Adicionar Bebida -->
+    <div id="modal-bebida" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all opacity-0">
+        <div class="bg-white w-full max-w-sm sm:rounded-3xl rounded-t-3xl p-6 shadow-2xl transform translate-y-full sm:translate-y-0 transition-transform duration-300 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <span id="modal-bebida-emoji" class="text-3xl">🥤</span>
+                    <h3 id="modal-bebida-title" class="text-xl font-bold text-slate-900">Refrigerante</h3>
+                </div>
+                <button onclick="app.closeModals()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200">✕</button>
+            </div>
+
+            <!-- Subtype / Sabor selector if applicable -->
+            <div id="modal-bebida-subtype-container" class="mb-4">
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Sabor / Tipo</label>
+                <div id="modal-bebida-subtypes" class="grid grid-cols-3 gap-2">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Size selector -->
+            <div class="mb-4">
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Tamanho da Embalagem</label>
+                <div id="modal-bebida-sizes" class="grid grid-cols-3 gap-2">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Quantity counter -->
+            <div class="mb-6">
+                <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Quantidade</label>
+                <div class="flex items-center justify-center space-x-4">
+                    <button onclick="app.adjustModalBebidaQty(-1)" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-lg active:scale-95 transition-all">-</button>
+                    <input type="number" id="modal-bebida-input" min="1" value="2" class="w-20 text-center font-black text-2xl text-slate-900 bg-slate-50 border border-slate-200 rounded-2xl py-2 focus:outline-none focus:border-sky-500">
+                    <button onclick="app.adjustModalBebidaQty(1)" class="w-12 h-12 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-lg active:scale-95 transition-all">+</button>
+                </div>
+                <p id="modal-bebida-total-liters-preview" class="text-center text-xs font-semibold text-sky-600 mt-2">Total: 4.0 Litros</p>
+            </div>
+
+            <div class="space-y-2">
+                <button onclick="app.confirmAddBebida()" class="w-full bg-sky-600 hover:bg-sky-700 active:scale-[0.98] text-white font-bold py-4 rounded-2xl shadow-lg shadow-sky-500/30 transition-all text-base">
+                    ADICIONAR BEBIDA
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Lista de Compras -->
+    <div id="modal-shopping" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all opacity-0">
+        <div class="bg-white w-full max-w-md sm:rounded-3xl rounded-t-3xl p-6 shadow-2xl transform translate-y-full sm:translate-y-0 transition-transform duration-300 max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between mb-4 flex-shrink-0">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">🛒</span>
+                    <h3 class="text-xl font-bold text-slate-900">Lista de Compras</h3>
+                </div>
+                <button onclick="app.closeModals()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200">✕</button>
+            </div>
+
+            <div id="shopping-list-content" class="flex-1 overflow-y-auto space-y-4 pr-1 mb-4">
+                <!-- Populated dynamically -->
+            </div>
+
+            <div class="flex-shrink-0 space-y-2 pt-2 border-t border-slate-100">
+                <button onclick="app.shareWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center space-x-2 text-sm">
+                    <span>📱 COMPARTILHAR NO WHATSAPP</span>
+                </button>
+                <button onclick="app.closeModals()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-2xl transition-all text-sm">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmação de Reset -->
+    <div id="modal-reset" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 transition-all opacity-0">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 text-red-600 rounded-3xl mb-4 text-3xl">
+                ⚠️
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Nova Festa?</h3>
+            <p class="text-slate-500 text-sm mb-6">Tem certeza que deseja começar uma nova festa? Todos os dados atuais serão apagados.</p>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="app.closeModals()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3.5 rounded-2xl transition-all text-sm">
+                    Cancelar
+                </button>
+                <button onclick="app.executeReset()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-red-500/30 transition-all text-sm">
+                    Sim, Começar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Recuperar Sessão do LocalStorage -->
+    <div id="modal-resume" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 transition-all opacity-0">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-100 text-brand-600 rounded-3xl mb-4 text-3xl">
+                ✨
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Continuar Festa?</h3>
+            <p class="text-slate-500 text-sm mb-6">Encontramos uma festa salva anteriormente. Deseja continuar de onde parou?</p>
+
+            <div class="space-y-2">
+                <button onclick="app.loadSavedSession()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-brand-500/30 transition-all text-sm">
+                    CONTINUAR FESTA
+                </button>
+                <button onclick="app.dismissResumeModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-2xl transition-all text-sm">
+                    COMEÇAR NOVA
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * CONFIGURATIONS & CONSTANTS
+         * Central configuration object for party calculation parameters.
+         */
+        const CONFIG = {
+            parameters: {
+                aniversario: { salgadosAdulto: 12, salgadosCrianca: 8, litrosAdulto: 0.8, litrosCrianca: 0.5 },
+                infantil: { salgadosAdulto: 10, salgadosCrianca: 10, litrosAdulto: 0.7, litrosCrianca: 0.6 },
+                evento: { salgadosAdulto: 15, salgadosCrianca: 10, litrosAdulto: 1.0, litrosCrianca: 0.7 },
+                familiar: { salgadosAdulto: 12, salgadosCrianca: 8, litrosAdulto: 0.8, litrosCrianca: 0.5 }
+            },
+            durationMultipliers: {
+                short: 0.85,  // Até 3 horas
+                medium: 1.0,  // 3 a 5 horas
+                long: 1.25    // Mais de 5 horas
+            }
+        };
+
+        /**
+         * PRODUCTS CATALOG
+         * Complete and easily extendable catalog of snacks and drinks.
+         */
+        const CATALOGO_SALGADOS = [
+            { id: "coxinha", nome: "Coxinha", emoji: "🥟" },
+            { id: "bolinha_queijo", nome: "Bolinha de Queijo", emoji: "🧀" },
+            { id: "kibe", nome: "Kibe", emoji: "🥩" },
+            { id: "risole_carne", nome: "Risole de Carne", emoji: "🍖" },
+            { id: "risole_milho", nome: "Risole de Milho", emoji: "🌽" },
+            { id: "mini_pizza", nome: "Mini Pizza", emoji: "🍕" },
+            { id: "enroladinho", nome: "Enroladinho de Salsicha", emoji: "🌭" },
+            { id: "croquete", nome: "Croquete", emoji: "🧀" },
+            { id: "presunto_queijo", nome: "Bolinho Presunto & Queijo", emoji: "🥓" },
+            { id: "empadinha", nome: "Empadinha de Frango", emoji: "🍗" },
+            { id: "esfiha", nome: "Esfiha", emoji: "🥩" },
+            { id: "outros_salgado", nome: "Outros Salgados", emoji: "🍤" }
+        ];
+
+        const CATALOGO_BEBIDAS = [
+            { 
+                id: "refrigerante", 
+                nome: "Refrigerante", 
+                emoji: "🥤",
+                subtypes: ["Coca-Cola", "Guaraná", "Laranja", "Cola Zero", "Limão", "Outros"],
+                sizes: [
+                    { label: "350 ml (Lata)", value: 0.35 },
+                    { label: "600 ml", value: 0.6 },
+                    { label: "1 Litro", value: 1.0 },
+                    { label: "2 Litros", value: 2.0 }
+                ]
+            },
+            { 
+                id: "agua", 
+                nome: "Água Mineral", 
+                emoji: "💧",
+                subtypes: ["Com Gás", "Sem Gás"],
+                sizes: [
+                    { label: "300 ml", value: 0.3 },
+                    { label: "500 ml", value: 0.5 },
+                    { label: "1.5 Litros", value: 1.5 }
+                ]
+            },
+            { 
+                id: "suco", 
+                nome: "Suco Natural / Caixa", 
+                emoji: "🧃",
+                subtypes: ["Laranja", "Uva", "Maracujá", "Limão", "Outros"],
+                sizes: [
+                    { label: "300 ml", value: 0.3 },
+                    { label: "1 Litro", value: 1.0 },
+                    { label: "2 Litros", value: 2.0 }
+                ]
+            },
+            { 
+                id: "outras_bebidas", 
+                nome: "Outras Bebidas", 
+                emoji: "🍹",
+                subtypes: ["Chá Gelado", "Água de Coco", "Energético", "Outros"],
+                sizes: [
+                    { label: "350 ml", value: 0.35 },
+                    { label: "1 Litro", value: 1.0 },
+                    { label: "2 Litros", value: 2.0 }
+                ]
+            }
+        ];
+
+        /**
+         * APP STATE MANAGEMENT
+         */
+        class PartyCalculatorApp {
+            constructor() {
+                this.state = {
+                    adults: 20,
+                    kids: 5,
+                    duration: 'short',
+                    partyType: 'aniversario',
+                    recommendedSalgados: 300,
+                    recommendedBebidasLiters: 20,
+                    salgadosSelecionados: {}, // { id: { id, nome, emoji, quantidade } }
+                    bebidasSelecionadas: {}    // { uniqueKey: { id, nome, subtype, sizeLabel, sizeValue, quantidade, totalLiters } }
+                };
+
+                this.currentModalData = null;
+            }
+
+            init() {
+                this.renderSalgadosGrid();
+                this.renderBebidasGrid();
+                this.updateGuestInputsUI();
+                this.checkSavedSession(false);
+            }
+
+            /**
+             * Screen Navigation
+             */
+            showScreen(screenId) {
+                document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
+                const target = document.getElementById(`screen-${screenId}`);
+                if (target) {
+                    target.classList.remove('hidden');
+                    target.classList.add('animate-fade-in');
+                }
+                window.scrollTo(0, 0);
+            }
+
+            nextScreen(screenName) {
+                if (screenName === 'guests') this.showScreen('guests');
+            }
+
+            prevScreen(screenName) {
+                if (screenName === 'welcome') this.showScreen('welcome');
+                if (screenName === 'guests') this.showScreen('guests');
+                if (screenName === 'salgados') this.goToSalgados();
+            }
+
+            goToResultScreen() {
+                this.calculateRecs();
+                this.showScreen('result');
+                this.updateResultScreenUI();
+            }
+
+            goToSalgados() {
+                this.calculateRecs();
+                this.showScreen('salgados');
+                this.atualizarResumoSalgados();
+            }
+
+            goToBebidas() {
+                this.showScreen('bebidas');
+                this.atualizarResumoBebidas();
+            }
+
+            goToFinalSummary() {
+                this.showScreen('final');
+                this.updateFinalSummaryUI();
+            }
+
+            /**
+             * Guest & Calculation Logic
+             */
+            adjustGuest(type, delta) {
+                if (type === 'adults') {
+                    this.state.adults = Math.max(0, this.state.adults + delta);
+                } else if (type === 'kids') {
+                    this.state.kids = Math.max(0, this.state.kids + delta);
+                }
+                this.updateGuestInputsUI();
+            }
+
+            updateGuestManual() {
+                const aVal = parseInt(document.getElementById('input-adults').value);
+                const kVal = parseInt(document.getElementById('input-kids').value);
+                this.state.adults = isNaN(aVal) ? 0 : Math.max(0, aVal);
+                this.state.kids = isNaN(kVal) ? 0 : Math.max(0, kVal);
+                this.updateGuestInputsUI();
+            }
+
+            updateGuestInputsUI() {
+                document.getElementById('input-adults').value = this.state.adults;
+                document.getElementById('input-kids').value = this.state.kids;
+            }
+
+            setDuration(durationKey) {
+                this.state.duration = durationKey;
+                document.querySelectorAll('.duration-btn').forEach(btn => {
+                    if (btn.dataset.duration === durationKey) {
+                        btn.className = "duration-btn py-3 px-2 rounded-xl text-xs font-semibold border transition-all text-center bg-brand-50 border-brand-500 text-brand-700";
+                    } else {
+                        btn.className = "duration-btn py-3 px-2 rounded-xl text-xs font-semibold border transition-all text-center bg-white border-slate-200 text-slate-600 hover:bg-slate-50";
+                    }
+                });
+            }
+
+            setPartyType(typeKey) {
+                this.state.partyType = typeKey;
+                document.querySelectorAll('.party-type-btn').forEach(btn => {
+                    if (btn.dataset.type === typeKey) {
+                        btn.className = "party-type-btn p-3 rounded-xl text-xs font-semibold border transition-all text-left flex items-center space-x-2 bg-brand-50 border-brand-500 text-brand-700";
+                    } else {
+                        btn.className = "party-type-btn p-3 rounded-xl text-xs font-semibold border transition-all text-left flex items-center space-x-2 bg-white border-slate-200 text-slate-600 hover:bg-slate-50";
+                    }
+                });
+            }
+
+            calculateRecs() {
+                const params = CONFIG.parameters[this.state.partyType] || CONFIG.parameters.aniversario;
+                const multiplier = CONFIG.durationMultipliers[this.state.duration] || 1.0;
+
+                const rawSalgados = (this.state.adults * params.salgadosAdulto + this.state.kids * params.salgadosCrianca) * multiplier;
+                const rawLiters = (this.state.adults * params.litrosAdulto + this.state.kids * params.litrosCrianca) * multiplier;
+
+                this.state.recommendedSalgados = Math.max(10, Math.round(rawSalgados / 10) * 10); // Arredonda para dezena mais próxima
+                this.state.recommendedBebidasLiters = Math.max(2, Math.round(rawLiters * 2) / 2); // Arredonda para 0.5L
+
+                this.saveToLocalStorage();
+            }
+
+            calculateAndProceed() {
+                this.calculateRecs();
+                this.goToResultScreen();
+            }
+
+            updateResultScreenUI() {
+                document.getElementById('summary-adults-count').textContent = this.state.adults;
+                document.getElementById('summary-kids-count').textContent = this.state.kids;
+                document.getElementById('rec-salgados-val').textContent = this.state.recommendedSalgados;
+                document.getElementById('rec-bebidas-val').textContent = this.state.recommendedBebidasLiters;
+            }
+
+            /**
+             * Salgados Management & Rendering
+             */
+            renderSalgadosGrid() {
+                const grid = document.getElementById('salgados-grid');
+                grid.innerHTML = CATALOGO_SALGADOS.map(item => `
+                    <button onclick="app.openSalgadoModal('${item.id}')" class="bg-slate-50 hover:bg-brand-50/50 border border-slate-200/80 hover:border-brand-200 p-3.5 rounded-2xl text-left transition-all flex flex-col justify-between group active:scale-95">
+                        <span class="text-2xl mb-1">${item.emoji}</span>
+                        <div>
+                            <span class="block font-semibold text-slate-800 text-xs sm:text-sm group-hover:text-brand-700 leading-tight">${item.nome}</span>
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">+ Adicionar</span>
+                        </div>
+                    </button>
+                `).join('');
+            }
+
+            openSalgadoModal(id) {
+                const item = CATALOGO_SALGADOS.find(s => s.id === id);
+                if (!item) return;
+
+                this.currentModalData = { type: 'salgado', item };
+                document.getElementById('modal-salgado-emoji').textContent = item.emoji;
+                document.getElementById('modal-salgado-title').textContent = item.nome;
+                
+                const existingQty = this.state.salgadosSelecionados[id] ? this.state.salgadosSelecionados[id].quantidade : 25;
+                document.getElementById('modal-salgado-input').value = existingQty;
+
+                const modal = document.getElementById('modal-salgado');
+                modal.classList.remove('hidden');
+                document.body.classList.add('modal-open');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('div > div').classList.remove('translate-y-full');
+                }, 10);
+            }
+
+            adjustModalSalgadoQty(delta) {
+                const input = document.getElementById('modal-salgado-input');
+                let val = parseInt(input.value) || 0;
+                val = Math.max(1, val + delta);
+                input.value = val;
+            }
+
+            confirmAddSalgado() {
+                const inputVal = parseInt(document.getElementById('modal-salgado-input').value);
+                const qty = isNaN(inputVal) || inputVal < 1 ? 1 : inputVal;
+                const { item } = this.currentModalData;
+
+                this.state.salgadosSelecionados[item.id] = {
+                    id: item.id,
+                    nome: item.nome,
+                    emoji: item.emoji,
+                    quantidade: qty
+                };
+
+                this.closeModals();
+                this.atualizarResumoSalgados();
+                this.saveToLocalStorage();
+                this.showToast(`✅ ${item.nome} (${qty} un) adicionado!`);
+            }
+
+            removeSalgado(id) {
+                delete this.state.salgadosSelecionados[id];
+                this.atualizarResumoSalgados();
+                this.saveToLocalStorage();
+            }
+
+            adjustAddedSalgado(id, delta) {
+                if (this.state.salgadosSelecionados[id]) {
+                    this.state.salgadosSelecionados[id].quantidade += delta;
+                    if (this.state.salgadosSelecionados[id].quantidade <= 0) {
+                        delete this.state.salgadosSelecionados[id];
+                    }
+                    this.atualizarResumoSalgados();
+                    this.saveToLocalStorage();
+                }
+            }
+
+            atualizarResumoSalgados() {
+                const meta = this.state.recommendedSalgados;
+                let totalEscolhido = 0;
+                Object.values(this.state.salgadosSelecionados).forEach(s => {
+                    totalEscolhido += s.quantidade;
+                });
+
+                const restante = meta - totalEscolhido;
+                const percent = Math.min(100, Math.round((totalEscolhido / meta) * 100));
+
+                document.getElementById('salgados-escolhidos-count').textContent = totalEscolhido;
+                document.getElementById('salgados-meta-count').textContent = meta;
+
+                const restLabel = document.getElementById('salgados-restante-count');
+                const statusLabel = document.getElementById('salgados-status-label');
+                const progressBar = document.getElementById('salgados-progress-bar');
+
+                progressBar.style.width = `${percent}%`;
+
+                if (totalEscolhido === 0) {
+                    statusLabel.textContent = "Ainda faltam";
+                    restLabel.textContent = `${meta} salgados`;
+                    progressBar.className = "bg-brand-500 h-2.5 rounded-full transition-all duration-300";
+                } else if (totalEscolhido === meta) {
+                    statusLabel.textContent = "Perfeito!";
+                    restLabel.textContent = "🎉 Meta atingida!";
+                    progressBar.className = "bg-emerald-500 h-2.5 rounded-full transition-all duration-300";
+                } else if (totalEscolhido > meta) {
+                    statusLabel.textContent = "Atenção:";
+                    restLabel.textContent = `⚠️ +${totalEscolhido - meta} acima`;
+                    progressBar.className = "bg-amber-500 h-2.5 rounded-full transition-all duration-300";
+                } else {
+                    statusLabel.textContent = "Ainda faltam";
+                    restLabel.textContent = `${rest} salgados`;
+                    progressBar.className = "bg-brand-500 h-2.5 rounded-full transition-all duration-300";
+                }
+
+                // Render Added List
+                const addedSection = document.getElementById('salgados-added-section');
+                const addedList = document.getElementById('salgados-added-list');
+                const items = Object.values(this.state.salgadosSelecionados);
+
+                if (items.length === 0) {
+                    addedSection.classList.add('hidden');
+                } else {
+                    addedSection.classList.remove('hidden');
+                    addedList.innerHTML = items.map(item => `
+                        <div class="bg-white border border-slate-200/80 p-3 rounded-2xl flex items-center justify-between shadow-xs">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">${item.emoji}</span>
+                                <span class="font-semibold text-slate-800 text-sm">${item.nome}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="flex items-center space-x-1 bg-slate-50 border border-slate-200 rounded-xl px-2 py-1">
+                                    <button onclick="app.adjustAddedSalgado('${item.id}', -5)" class="w-6 h-6 rounded-lg bg-white shadow-xs text-xs font-bold text-slate-700 flex items-center justify-center">-</button>
+                                    <span class="w-8 text-center text-xs font-bold text-slate-900">${item.quantidade}</span>
+                                    <button onclick="app.adjustAddedSalgado('${item.id}', 5)" class="w-6 h-6 rounded-lg bg-white shadow-xs text-xs font-bold text-slate-700 flex items-center justify-center">+</button>
+                                </div>
+                                <button onclick="app.removeSalgado('${item.id}')" class="text-slate-400 hover:text-red-500 p-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            /**
+             * Bebidas Management & Rendering
+             */
+            renderBebidasGrid() {
+                const grid = document.getElementById('bebidas-grid');
+                grid.innerHTML = CATALOGO_BEBIDAS.map(item => `
+                    <button onclick="app.openBebidaModal('${item.id}')" class="bg-slate-50 hover:bg-sky-50/50 border border-slate-200/80 hover:border-sky-200 p-3.5 rounded-2xl text-left transition-all flex flex-col justify-between group active:scale-95">
+                        <span class="text-2xl mb-1">${item.emoji}</span>
+                        <div>
+                            <span class="block font-semibold text-slate-800 text-xs sm:text-sm group-hover:text-sky-700 leading-tight">${item.nome}</span>
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">+ Configurar</span>
+                        </div>
+                    </button>
+                `).join('');
+            }
+
+            openBebidaModal(id) {
+                const item = CATALOGO_BEBIDAS.find(b => b.id === id);
+                if (!item) return;
+
+                this.currentModalData = {
+                    type: 'bebida',
+                    item,
+                    selectedSubtype: item.subtypes[0],
+                    selectedSize: item.sizes[item.sizes.length - 1], // Default to largest size or last
+                    quantidade: 2
+                };
+
+                document.getElementById('modal-bebida-emoji').textContent = item.emoji;
+                document.getElementById('modal-bebida-title').textContent = item.nome;
+
+                // Subtypes
+                const subtypeContainer = document.getElementById('modal-bebida-subtype-container');
+                const subtypesDiv = document.getElementById('modal-bebida-subtypes');
+                if (item.subtypes && item.subtypes.length > 0) {
+                    subtypeContainer.classList.remove('hidden');
+                    subtypesDiv.innerHTML = item.subtypes.map((sub, idx) => `
+                        <button onclick="app.selectBebidaSubtype('${sub}')" id="sub-btn-${idx}" class="subtype-pill py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center truncate ${idx === 0 ? 'bg-sky-50 border-sky-500 text-sky-700' : 'bg-white border-slate-200 text-slate-600'}">
+                            ${sub}
+                        </button>
+                    `).join('');
+                } else {
+                    subtypeContainer.classList.add('hidden');
+                }
+
+                // Sizes
+                const sizesDiv = document.getElementById('modal-bebida-sizes');
+                sizesDiv.innerHTML = item.sizes.map((sz, idx) => `
+                    <button onclick="app.selectBebidaSize(${idx})" id="size-btn-${idx}" class="size-pill py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center truncate ${idx === item.sizes.length - 1 ? 'bg-sky-50 border-sky-500 text-sky-700' : 'bg-white border-slate-200 text-slate-600'}">
+                        ${sz.label}
+                    </button>
+                `).join('');
+
+                document.getElementById('modal-bebida-input').value = this.currentModalData.quantidade;
+                this.updateBebidaModalPreview();
+
+                const modal = document.getElementById('modal-bebida');
+                modal.classList.remove('hidden');
+                document.body.classList.add('modal-open');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('div > div').classList.remove('translate-y-full');
+                }, 10);
+            }
+
+            selectBebidaSubtype(sub) {
+                this.currentModalData.selectedSubtype = sub;
+                document.querySelectorAll('.subtype-pill').forEach(btn => {
+                    if (btn.textContent.trim() === sub) {
+                        btn.className = "subtype-pill py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center truncate bg-sky-50 border-sky-500 text-sky-700";
+                    } else {
+                        btn.className = "subtype-pill py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center truncate bg-white border-slate-200 text-slate-600";
+                    }
+                });
+            }
+
+            selectBebidaSize(idx) {
+                const sz = this.currentModalData.item.sizes[idx];
+                this.currentModalData.selectedSize = sz;
+                document.querySelectorAll('.size-pill').forEach((btn, i) => {
+                    if (i === idx) {
+                        btn.className = "size-pill py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center truncate bg-sky-50 border-sky-500 text-sky-700";
+                    } else {
+                        btn.className = "size-pill py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center truncate bg-white border-slate-200 text-slate-600";
+                    }
+                });
+                this.updateBebidaModalPreview();
+            }
+
+            adjustModalBebidaQty(delta) {
+                const input = document.getElementById('modal-bebida-input');
+                let val = parseInt(input.value) || 0;
+                val = Math.max(1, val + delta);
+                input.value = val;
+                this.currentModalData.quantidade = val;
+                this.updateBebidaModalPreview();
+            }
+
+            updateBebidaModalPreview() {
+                const inputVal = parseInt(document.getElementById('modal-bebida-input').value) || 1;
+                this.currentModalData.quantidade = inputVal;
+                const totalL = inputVal * this.currentModalData.selectedSize.value;
+                document.getElementById('modal-bebida-total-liters-preview').textContent = `Total: ${totalL.toFixed(1)} Litros`;
+            }
+
+            confirmAddBebida() {
+                const inputVal = parseInt(document.getElementById('modal-bebida-input').value);
+                const qty = isNaN(inputVal) || inputVal < 1 ? 1 : inputVal;
+                const { item, selectedSubtype, selectedSize } = this.currentModalData;
+
+                const uniqueKey = `${item.id}_${selectedSubtype}_${selectedSize.label}`.replace(/\s+/g, '_');
+                const totalLiters = qty * selectedSize.value;
+
+                this.state.bebidasSelecionadas[uniqueKey] = {
+                    key: uniqueKey,
+                    id: item.id,
+                    nome: item.nome,
+                    emoji: item.emoji,
+                    subtype: selectedSubtype,
+                    sizeLabel: selectedSize.label,
+                    sizeValue: selectedSize.value,
+                    quantidade: qty,
+                    totalLiters: totalLiters
+                };
+
+                this.closeModals();
+                this.atualizarResumoBebidas();
+                this.saveToLocalStorage();
+                this.showToast(`🥤 ${item.nome} (${selectedSubtype} - ${selectedSize.label}) adicionado!`);
+            }
+
+            removeBebida(key) {
+                delete this.state.bebidasSelecionadas[key];
+                this.atualizarResumoBebidas();
+                this.saveToLocalStorage();
+            }
+
+            adjustAddedBebida(key, delta) {
+                if (this.state.bebidasSelecionadas[key]) {
+                    this.state.bebidasSelecionadas[key].quantidade += delta;
+                    if (this.state.bebidasSelecionadas[key].quantidade <= 0) {
+                        delete this.state.bebidasSelecionadas[key];
+                    } else {
+                        this.state.bebidasSelecionadas[key].totalLiters = this.state.bebidasSelecionadas[key].quantidade * this.state.bebidasSelecionadas[key].sizeValue;
+                    }
+                    this.atualizarResumoBebidas();
+                    this.saveToLocalStorage();
+                }
+            }
+
+            atualizarResumoBebidas() {
+                const metaLiters = this.state.recommendedBebidasLiters;
+                let totalLitersChosen = 0;
+                Object.values(this.state.bebidasSelecionadas).forEach(b => {
+                    totalLitersChosen += b.totalLiters;
+                });
+
+                const restante = Math.max(0, metaLiters - totalLitersChosen);
+                const percent = Math.min(100, Math.round((totalLitersChosen / metaLiters) * 100));
+
+                document.getElementById('bebidas-escolhidas-count').textContent = totalLitersChosen.toFixed(1);
+                document.getElementById('bebidas-meta-count').textContent = metaLiters;
+
+                const restLabel = document.getElementById('bebidas-restante-count');
+                const statusLabel = document.getElementById('bebidas-status-label');
+                const progressBar = document.getElementById('bebidas-progress-bar');
+
+                progressBar.style.width = `${percent}%`;
+
+                if (totalLitersChosen === 0) {
+                    statusLabel.textContent = "Ainda faltam";
+                    restLabel.textContent = `${metaLiters} litros`;
+                    progressBar.className = "bg-sky-500 h-2.5 rounded-full transition-all duration-300";
+                } else if (totalLitersChosen >= metaLiters) {
+                    statusLabel.textContent = "Perfeito!";
+                    restLabel.textContent = "🎉 Meta atingida!";
+                    progressBar.className = "bg-emerald-500 h-2.5 rounded-full transition-all duration-300";
+                } else {
+                    statusLabel.textContent = "Ainda faltam";
+                    restLabel.textContent = `${rest.toFixed(1)} litros`;
+                    progressBar.className = "bg-sky-500 h-2.5 rounded-full transition-all duration-300";
+                }
+
+                // Render Added List
+                const addedSection = document.getElementById('bebidas-added-section');
+                const addedList = document.getElementById('bebidas-added-list');
+                const items = Object.values(this.state.bebidasSelecionadas);
+
+                if (items.length === 0) {
+                    addedSection.classList.add('hidden');
+                } else {
+                    addedSection.classList.remove('hidden');
+                    addedList.innerHTML = items.map(item => `
+                        <div class="bg-white border border-slate-200/80 p-3 rounded-2xl flex items-center justify-between shadow-xs">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">${item.emoji}</span>
+                                <div>
+                                    <span class="font-semibold text-slate-800 text-sm block">${item.nome} (${item.subtype})</span>
+                                    <span class="text-xs text-slate-500">${item.sizeLabel} • ${item.totalLiters.toFixed(1)}L</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="flex items-center space-x-1 bg-slate-50 border border-slate-200 rounded-xl px-2 py-1">
+                                    <button onclick="app.adjustAddedBebida('${item.key}', -1)" class="w-6 h-6 rounded-lg bg-white shadow-xs text-xs font-bold text-slate-700 flex items-center justify-center">-</button>
+                                    <span class="w-6 text-center text-xs font-bold text-slate-900">${item.quantidade}</span>
+                                    <button onclick="app.adjustAddedBebida('${item.key}', 1)" class="w-6 h-6 rounded-lg bg-white shadow-xs text-xs font-bold text-slate-700 flex items-center justify-center">+</button>
+                                </div>
+                                <button onclick="app.removeBebida('${item.key}')" class="text-slate-400 hover:text-red-500 p-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            /**
+             * Final Summary UI & Shopping List
+             */
+            updateFinalSummaryUI() {
+                document.getElementById('final-guests-text').textContent = `${this.state.adults} adultos, ${this.state.kids} crianças`;
+
+                // Salgados totals check
+                let totalSalgados = 0;
+                Object.values(this.state.salgadosSelecionados).forEach(s => totalSalgados += s.quantidade);
+                const salgadosMeta = this.state.recommendedSalgados;
+                const salgadosStatusEl = document.getElementById('final-salgados-status');
+                if (totalSalgados >= salgadosMeta) {
+                    salgadosStatusEl.textContent = `✅ ${totalSalgados} / ${salgadosMeta}`;
+                    salgadosStatusEl.className = "font-bold text-emerald-600";
+                } else {
+                    salgadosStatusEl.textContent = `⚠️ Faltam ${salgadosMeta - totalSalgados}`;
+                    salgadosStatusEl.className = "font-bold text-amber-600";
+                }
+                document.getElementById('final-salgados-total-badge').textContent = `${totalSalgados} un`;
+
+                const salgadosListView = document.getElementById('final-salgados-list-view');
+                const salgadosArr = Object.values(this.state.salgadosSelecionados);
+                if (salgadosArr.length === 0) {
+                    salgadosListView.innerHTML = `<p class="text-slate-400 italic text-xs">Nenhum salgado selecionado.</p>`;
+                } else {
+                    salgadosListView.innerHTML = salgadosArr.map(s => `
+                        <div class="flex justify-between py-1 text-xs">
+                            <span class="text-slate-700">${s.emoji} ${s.nome}</span>
+                            <span class="font-semibold text-slate-900">${s.quantidade} unidades</span>
+                        </div>
+                    `).join('');
+                }
+
+                // Bebidas totals check
+                let totalBebidasLiters = 0;
+                Object.values(this.state.bebidasSelecionadas).forEach(b => totalBebidasLiters += b.totalLiters);
+                const bebidasMeta = this.state.recommendedBebidasLiters;
+                const bebidasStatusEl = document.getElementById('final-bebidas-status');
+                if (totalBebidasLiters >= bebidasMeta) {
+                    bebidasStatusEl.textContent = `✅ ${totalBebidasLiters.toFixed(1)}L / ${bebidasMeta}L`;
+                    bebidasStatusEl.className = "font-bold text-emerald-600";
+                } else {
+                    bebidasStatusEl.textContent = `⚠️ Faltam ${(bebidasMeta - totalBebidasLiters).toFixed(1)}L`;
+                    bebidasStatusEl.className = "font-bold text-amber-600";
+                }
+                document.getElementById('final-bebidas-total-badge').textContent = `${totalBebidasLiters.toFixed(1)} L`;
+
+                const bebidasListView = document.getElementById('final-bebidas-list-view');
+                const bebidasArr = Object.values(this.state.bebidasSelecionadas);
+                if (bebidasArr.length === 0) {
+                    bebidasListView.innerHTML = `<p class="text-slate-400 italic text-xs">Nenhuma bebida selecionada.</p>`;
+                } else {
+                    bebidasListView.innerHTML = bebidasArr.map(b => `
+                        <div class="flex justify-between py-1 text-xs">
+                            <span class="text-slate-700">${b.emoji} ${b.nome} (${b.subtype} - ${b.sizeLabel})</span>
+                            <span class="font-semibold text-slate-900">${b.quantidade}x (${b.totalLiters.toFixed(1)}L)</span>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            openShoppingListModal() {
+                const content = document.getElementById('shopping-list-content');
+                const salgadosArr = Object.values(this.state.salgadosSelecionados);
+                const bebidasArr = Object.values(this.state.bebidasSelecionadas);
+
+                content.innerHTML = `
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2 text-brand-600">🥟 Salgados</h4>
+                        <div class="space-y-1.5">
+                            ${salgadosArr.length === 0 ? '<p class="text-xs text-slate-400">Nenhum salgado.</p>' : salgadosArr.map(s => `
+                                <label class="flex items-center space-x-2.5 text-sm text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                    <input type="checkbox" class="w-4 h-4 text-brand-600 rounded focus:ring-brand-500">
+                                    <span><strong>${s.quantidade}x</strong> ${s.emoji} ${s.nome}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider mb-2 text-sky-600">🥤 Bebidas</h4>
+                        <div class="space-y-1.5">
+                            ${bebidasArr.length === 0 ? '<p class="text-xs text-slate-400">Nenhuma bebida.</p>' : bebidasArr.map(b => `
+                                <label class="flex items-center space-x-2.5 text-sm text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                    <input type="checkbox" class="w-4 h-4 text-sky-600 rounded focus:ring-sky-500">
+                                    <span><strong>${b.quantidade}x</strong> ${b.emoji} ${b.nome} (${b.subtype} - ${b.sizeLabel})</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+                const modal = document.getElementById('modal-shopping');
+                modal.classList.remove('hidden');
+                document.body.classList.add('modal-open');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('div > div').classList.remove('translate-y-full');
+                }, 10);
+            }
+
+            shareWhatsApp() {
+                let text = `🎉 *Planejamento da Festa* 🎉\n\n`;
+                text += `👥 *Convidados:* ${this.state.adults} adultos e ${this.state.kids} crianças\n\n`;
+                
+                text += `🥟 *Salgados (${this.state.recommendedSalgados} recomendados):*\n`;
+                const salgadosArr = Object.values(this.state.salgadosSelecionados);
+                if (salgadosArr.length === 0) text += `Nenhum selecionado ainda.\n`;
+                salgadosArr.forEach(s => {
+                    text += `• ${s.quantidade}x ${s.nome}\n`;
+                });
+
+                text += `\n🥤 *Bebidas (${this.state.recommendedBebidasLiters}L recomendados):*\n`;
+                const bebidasArr = Object.values(this.state.bebidasSelecionadas);
+                if (bebidasArr.length === 0) text += `Nenhuma selecionada ainda.\n`;
+                bebidasArr.forEach(b => {
+                    text += `• ${b.quantidade}x ${b.nome} (${b.subtype} - ${b.sizeLabel})\n`;
+                });
+
+                text += `\n_Calculado via App Calculadora de Festa_`;
+
+                const encoded = encodeURIComponent(text);
+                window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
+            }
+
+            /**
+             * Reset & LocalStorage
+             */
+            confirmReset() {
+                const modal = document.getElementById('modal-reset');
+                modal.classList.remove('hidden');
+                document.body.classList.add('modal-open');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            }
+
+            executeReset() {
+                localStorage.removeItem('party_calculator_state');
+                this.state = {
+                    adults: 20,
+                    kids: 5,
+                    duration: 'short',
+                    partyType: 'aniversario',
+                    recommendedSalgados: 300,
+                    recommendedBebidasLiters: 20,
+                    salgadosSelecionados: {},
+                    bebidasSelecionadas: {}
+                };
+                this.closeModals();
+                this.init();
+                this.showScreen('welcome');
+                this.showToast('🔄 Festa reiniciada com sucesso!');
+            }
+
+            saveToLocalStorage() {
+                try {
+                    localStorage.setItem('party_calculator_state', JSON.stringify(this.state));
+                } catch (e) {
+                    console.error('Erro ao salvar no localStorage', e);
+                }
+            }
+
+            checkSavedSession(manualTrigger = false) {
+                try {
+                    const saved = localStorage.getItem('party_calculator_state');
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        if (parsed && (Object.keys(parsed.salgadosSelecionados || {}).length > 0 || Object.keys(parsed.bebidasSelecionadas || {}).length > 0)) {
+                            if (manualTrigger) {
+                                this.loadSavedSession();
+                            } else {
+                                document.getElementById('welcome-resume-btn-container').classList.remove('hidden');
+                                const modal = document.getElementById('modal-resume');
+                                modal.classList.remove('hidden');
+                                document.body.classList.add('modal-open');
+                                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error('Erro ao carregar localStorage', e);
+                }
+            }
+
+            loadSavedSession() {
+                try {
+                    const saved = localStorage.getItem('party_calculator_state');
+                    if (saved) {
+                        this.state = JSON.parse(saved);
+                        this.updateGuestInputsUI();
+                        this.setDuration(this.state.duration);
+                        this.setPartyType(this.state.partyType);
+                        this.closeModals();
+                        this.goToFinalSummary();
+                        this.showToast('✨ Festa anterior recuperada!');
+                    }
+                } catch (e) {
+                    this.dismissResumeModal();
+                }
+            }
+
+            dismissResumeModal() {
+                this.closeModals();
+            }
+
+            /**
+             * Modals utility
+             */
+            closeModals() {
+                document.querySelectorAll('.fixed.inset-0').forEach(modal => {
+                    modal.classList.add('opacity-0');
+                    const inner = modal.querySelector('div > div');
+                    if (inner) inner.classList.add('translate-y-full');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                    }, 300);
+                });
+                document.body.classList.remove('modal-open');
+            }
+
+            /**
+             * Toast notification
+             */
+            showToast(msg) {
+                const toast = document.getElementById('toast');
+                document.getElementById('toast-message').textContent = msg;
+                toast.classList.remove('opacity-0', 'translate-y-[-20px]');
+                toast.classList.add('opacity-100', 'translate-y-0');
+
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100', 'translate-y-0');
+                    toast.classList.add('opacity-0', 'translate-y-[-20px]');
+                }, 2500);
+            }
+        }
+
+        // Initialize App on load
+        const app = new PartyCalculatorApp();
+        window.onload = function() {
+            app.init();
+        };
+    </script>
+</body>
+</html>
