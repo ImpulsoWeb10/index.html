@@ -34,11 +34,10 @@ header p{margin:2px 0 0;font-size:11px;color:#9a9a9a;letter-spacing:.12em;text-t
 .act{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .act .nb{font-weight:700;font-size:13px;padding:13px 6px}
 footer{text-align:center;font-size:10px;color:#666}
-#ov{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;z-index:9}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:14px;z-index:9}
 #ov.on{display:flex}
-#pn{width:100%;max-width:440px;max-height:88dvh;overflow:auto;background:#0f0f12;border:1.5px solid #ff2d55;border-bottom:0;border-radius:22px 22px 0 0;padding:14px 14px max(14px,env(safe-area-inset-bottom));box-shadow:0 0 24px rgba(255,45,85,.45);animation:up .25s ease-out}
-@keyframes up{from{transform:translateY(30px);opacity:0}}
-@media(min-width:600px){#ov{align-items:center}#pn{border-radius:22px;border-bottom:1.5px solid #ff2d55}}
+#pn{width:100%;max-width:400px;max-height:86dvh;overflow:auto;background:#0f0f12;border:1.5px solid #ff2d55;border-radius:22px;padding:14px;box-shadow:0 0 28px rgba(255,45,85,.5),inset 0 0 18px rgba(255,45,85,.12);animation:up .22s ease-out}
+@keyframes up{from{transform:scale(.92);opacity:0}}
 @media(max-height:640px){h1{font-size:20px}.logo{font-size:24px}.res{max-height:120px}}
 .mh{display:flex;align-items:center;gap:8px;margin-bottom:12px}
 .mh h3{flex:1;margin:0;font-size:18px;text-align:center;text-transform:uppercase}
@@ -48,6 +47,14 @@ footer{text-align:center;font-size:10px;color:#666}
 .it{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;font-weight:600;padding:10px 6px}
 .it span{font-size:24px}.it em{font-style:normal;font-size:11px;color:var(--c);font-weight:700}
 .pl{padding:9px 4px;font-size:12px;font-weight:600}
+.pc{display:flex;flex-direction:column;gap:6px;padding:6px 6px 8px;font-size:11px;font-weight:600;line-height:1.15}
+.ph{position:relative;display:block;width:100%;height:74px;overflow:hidden;border-radius:10px;background:#1a1a1f}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph b{display:flex;align-items:center;justify-content:center;height:100%;font-size:30px;letter-spacing:0}
+.ph i{position:absolute;top:4px;right:4px;background:var(--c);color:#000;font:700 10px system-ui,sans-serif;padding:2px 6px;border-radius:9px;box-shadow:0 0 8px var(--c)}
+.ban{height:125px;border-radius:14px;border:1.5px solid #333;margin-bottom:2px}
+.th{width:44px;height:44px;flex:none;border-radius:10px}
+.rw{display:flex;align-items:center;gap:10px;text-align:left}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #222;font-size:14px}
 .row small{display:block;color:#888;font-size:11px}
 .ck input{accent-color:#39ff14;width:18px;height:18px;margin-right:8px}.ck{justify-content:flex-start}
@@ -124,6 +131,20 @@ const BEBIDAS=[
   {id:'coco',n:'Água de Coco',e:'🥥',t:['Natural'],s:[['200 ml',.2],['1 L',1]]}
 ];
 
+/* Fotos gratuitas. Troque qualquer link aqui (Wikimedia Commons e LoremFlickr).
+   Se uma imagem falhar, aparece o emoji no lugar. */
+const LF=(t,n)=>`https://loremflickr.com/300/220/${t}?lock=${n}`;
+const WM=f=>`https://commons.wikimedia.org/wiki/Special:FilePath/${f}?width=300`;
+const IMG={
+  sand:LF('sandwich',11), wrap:LF('burrito',12), pao:WM('Pao_de_queijo.jpg'), barra:LF('granola',14),
+  fruta:LF('fruit',15), bolo:LF('cake',16), tapi:LF('crepe',17), salg:LF('pastry',18),
+  agua:LF('waterbottle',21), iso:LF('sportsdrink',22), suco:WM('Orange_juice_1.jpg'), shake:LF('milkshake',24), coco:LF('coconut',25)
+};
+const ALL=[...LANCHES,...BEBIDAS];
+const ph=(id,c='',b='')=>{const e=(ALL.find(x=>x.id==id)||{}).e||'🍽️';
+  return `<span class="ph ${c}"><img src="${IMG[id]}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('b'),{textContent:'${e}'}))">${b}</span>`;};
+const ban=id=>ph(id,'ban');
+
 const K='spartan_evento_v1';
 const S={ad:20,kd:5,dur:'media',ev:'treino',lan:{},beb:{}};
 try{Object.assign(S,JSON.parse(localStorage.getItem(K)||'{}'))}catch(e){}
@@ -172,11 +193,11 @@ A.pick=(k,v)=>{S[k]=v;save();A.close();};
 
 /* ---------- Lanches ---------- */
 function vLan(){
-  $('#mb').innerHTML=pg(totL(),meta().l,' un',0)+`<p class="hint">Toque para adicionar</p><div class="grid2">${LANCHES.map(i=>`<button class="nb it" style="--c:#ff2d55" onclick="A.qL('${i.id}')"><span>${i.e}</span>${i.n}${S.lan[i.id]?`<em>${S.lan[i.id].q} un</em>`:''}</button>`).join('')}</div>`;
+  $('#mb').innerHTML=pg(totL(),meta().l,' un',0)+`<p class="hint">Toque para adicionar</p><div class="grid3">${LANCHES.map(i=>`<button class="nb pc" style="--c:#ff2d55" onclick="A.qL('${i.id}')">${ph(i.id,'',S.lan[i.id]?`<i>${S.lan[i.id].q} un</i>`:'')}${i.n}</button>`).join('')}</div>`;
 }
 A.qL=id=>{
   const i=LANCHES.find(x=>x.id==id);A.t={q:S.lan[id]?S.lan[id].q:20};
-  A.o(i.e+' '+i.n,()=>{$('#mb').innerHTML=`<p class="hint">Quantas unidades?</p><div class="qty">${[-10,-1].map(d=>`<button onclick="A.tq(${d})">${d}</button>`).join('')}<input id="tq" type="number" min="1" inputmode="numeric" value="${A.t.q}" oninput="A.t.q=Math.max(1,parseInt(this.value)||1)">${[1,10].map(d=>`<button onclick="A.tq(${d})">+${d}</button>`).join('')}</div><button class="nb" style="--c:#39ff14" onclick="A.addL('${id}')">ADICIONAR</button>${S.lan[id]?`<button class="nb" style="--c:#ff2d55" onclick="A.remL('${id}')">REMOVER</button>`:''}`;});
+  A.o(i.e+' '+i.n,()=>{$('#mb').innerHTML=`${ban(id)}<p class="hint">Quantas unidades?</p><div class="qty">${[-10,-1].map(d=>`<button onclick="A.tq(${d})">${d}</button>`).join('')}<input id="tq" type="number" min="1" inputmode="numeric" value="${A.t.q}" oninput="A.t.q=Math.max(1,parseInt(this.value)||1)">${[1,10].map(d=>`<button onclick="A.tq(${d})">+${d}</button>`).join('')}</div><button class="nb" style="--c:#39ff14" onclick="A.addL('${id}')">ADICIONAR</button>${S.lan[id]?`<button class="nb" style="--c:#ff2d55" onclick="A.remL('${id}')">REMOVER</button>`:''}`;});
 };
 A.tq=d=>{A.t.q=Math.max(1,(parseInt($('#tq').value)||0)+d);$('#tq').value=A.t.q;};
 A.addL=id=>{const i=LANCHES.find(x=>x.id==id);S.lan[id]={n:i.n,e:i.e,q:A.t.q};save();toast(`✅ ${i.n} (${A.t.q} un) adicionado`);A.back();};
@@ -185,15 +206,15 @@ A.remL=id=>{delete S.lan[id];save();A.back();};
 /* ---------- Bebidas ---------- */
 function vBeb(){
   const sel=Object.entries(S.beb);
-  $('#mb').innerHTML=pg(totB(),meta().b,' L',1)+`<p class="hint">Toque para configurar</p><div class="grid2">${BEBIDAS.map(i=>{const l=Object.values(S.beb).filter(x=>x.id==i.id).reduce((a,x)=>a+x.q*x.v,0);return `<button class="nb it" style="--c:#00e5ff" onclick="A.qB('${i.id}')"><span>${i.e}</span>${i.n}${l?`<em>${l.toFixed(1)} L</em>`:''}</button>`}).join('')}</div>`+
-  (sel.length?`<p class="hint">Selecionadas</p>${sel.map(([k,x])=>`<div class="row"><span>${x.e} ${x.n} · ${x.sub} · ${x.z}<small>${x.q}x = ${(x.q*x.v).toFixed(1)} L</small></span><button class="rm" onclick="A.rmB('${k}')" aria-label="Remover">✕</button></div>`).join('')}`:'');
+  $('#mb').innerHTML=pg(totB(),meta().b,' L',1)+`<p class="hint">Toque para configurar</p><div class="grid3">${BEBIDAS.map(i=>{const l=Object.values(S.beb).filter(x=>x.id==i.id).reduce((a,x)=>a+x.q*x.v,0);return `<button class="nb pc" style="--c:#00e5ff" onclick="A.qB('${i.id}')">${ph(i.id,'',l?`<i>${l.toFixed(1)} L</i>`:'')}${i.n}</button>`}).join('')}</div>`+
+  (sel.length?`<p class="hint">Selecionadas</p>${sel.map(([k,x])=>`<div class="row"><span class="rw">${ph(x.id,'th')}<span>${x.n} · ${x.sub} · ${x.z}<small>${x.q}x = ${(x.q*x.v).toFixed(1)} L</small></span></span><button class="rm" onclick="A.rmB('${k}')" aria-label="Remover">✕</button></div>`).join('')}`:'');
 }
 A.rmB=k=>{delete S.beb[k];save();draw();};
 A.qB=id=>{const i=BEBIDAS.find(x=>x.id==id);A.t={i,s:0,z:i.s.length-1,q:2};A.o(i.e+' '+i.n,vB);};
 function vB(){
   const{i,s,z,q}=A.t;
   const pill=(a,k,c)=>a.map((x,n)=>`<button class="nb pl ${n==c?'sel':''}" style="--c:#00e5ff" onclick="A.tb('${k}',${n})">${x}</button>`).join('');
-  $('#mb').innerHTML=`<p class="hint">Sabor / tipo</p><div class="grid3">${pill(i.t,'s',s)}</div><p class="hint">Embalagem</p><div class="grid3">${pill(i.s.map(x=>x[0]),'z',z)}</div><p class="hint">Quantidade</p><div class="qty"><button onclick="A.tb('q',${q-1})">−</button><input type="number" min="1" inputmode="numeric" value="${q}" onchange="A.tb('q',this.value)"><button onclick="A.tb('q',${q+1})">+</button></div><p class="tot">Total: ${(q*i.s[z][1]).toFixed(1)} L</p><button class="nb" style="--c:#39ff14" onclick="A.addB()">ADICIONAR BEBIDA</button>`;
+  $('#mb').innerHTML=`${ban(i.id)}<p class="hint">Sabor / tipo</p><div class="grid3">${pill(i.t,'s',s)}</div><p class="hint">Embalagem</p><div class="grid3">${pill(i.s.map(x=>x[0]),'z',z)}</div><p class="hint">Quantidade</p><div class="qty"><button onclick="A.tb('q',${q-1})">−</button><input type="number" min="1" inputmode="numeric" value="${q}" onchange="A.tb('q',this.value)"><button onclick="A.tb('q',${q+1})">+</button></div><p class="tot">Total: ${(q*i.s[z][1]).toFixed(1)} L</p><button class="nb" style="--c:#39ff14" onclick="A.addB()">ADICIONAR BEBIDA</button>`;
 }
 A.tb=(k,v)=>{A.t[k]=k=='q'?Math.max(1,parseInt(v)||1):+v;draw();};
 A.addB=()=>{const{i,s,z,q}=A.t;S.beb[`${i.id}_${s}_${z}`]={id:i.id,n:i.n,e:i.e,sub:i.t[s],z:i.s[z][0],v:i.s[z][1],q};save();toast(`🥤 ${i.n} (${i.t[s]}) adicionado`);A.back();};
