@@ -1,172 +1,193 @@
 :root {
-    --bg-app: #f7f4ef;
-    --primary-red: #b71c1c;
-    --card-red: #9c27b0;
-    --card-orange: #d84315;
-    --card-green: #1b5e20;
-    --dark: #222;
-    --white: #fff;
+    --bg-app: #f9f6f0;
+    --red-card: #b71c1c;
+    --orange-card: #d84315;
+    --green-card: #1b5e20;
+    --text-dark: #222;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
     background-color: var(--bg-app);
-    color: var(--dark);
-    padding-bottom: 130px; /* Espaço para a barra inferior e rodapé */
+    color: var(--text-dark);
+    padding-bottom: 140px; /* Evita que o conteúdo fique escondido pelo menu inferior e rodapé */
 }
 
 /* Header */
 .app-header {
-    background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
-    color: var(--white);
+    background: linear-gradient(135deg, #111, #252525);
+    color: white;
     padding: 15px 20px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-.header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-.logo-area {
+.header-logo-area {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
-.logo-topo {
-    width: 60px;
-    height: 60px;
+.logo-img {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ff9800;
 }
 
-.titulo-area h1 {
-    font-size: 1.2rem;
+.header-text h2 {
+    font-size: 1.1rem;
     color: #ff9800;
 }
 
-.titulo-area p {
-    font-size: 0.75rem;
+.header-text p {
+    font-size: 0.7rem;
     color: #ccc;
 }
 
-.menu-hamburguer {
+.menu-btn {
     background: none;
     border: none;
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     cursor: pointer;
 }
 
 /* Container Principal */
-.main-container {
-    padding: 20px;
-    max-width: 600px;
+.app-main {
+    padding: 16px;
+    max-width: 500px;
     margin: 0 auto;
 }
 
-/* Cards de Categorias (Estilo da Imagem de Referência) */
-.cards-grid {
+.hidden {
+    display: none !important;
+}
+
+/* Cards Estilo Aplicativo (Pizzas, Esfihas, Bebidas) */
+.cards-container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
 }
 
-.card-categoria {
-    border-radius: 16px;
+.app-card {
+    border-radius: 20px;
     padding: 20px;
     color: white;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Cores customizadas inspiradas na imagem */
+.card-theme-1 { background: linear-gradient(135deg, #d32f2f, #9c0000); }
+.card-theme-2 { background: linear-gradient(135deg, #f57c00, #d84315); }
+.card-theme-3 { background: linear-gradient(135deg, #2e7d32, #1b5e20); }
+
+.card-top-content {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-}
-
-.card-categoria:active {
-    transform: scale(0.98);
-}
-
-.card-pizzas { background: linear-gradient(135deg, #d32f2f, #b71c1c); }
-.card-esfihas { background: linear-gradient(135deg, #ef6c00, #e65100); }
-.card-bebidas { background: linear-gradient(135deg, #2e7d32, #1b5e20); }
-
-.card-info h3 {
-    font-size: 1.4rem;
-    margin-bottom: 5px;
-}
-
-.card-info p {
-    font-size: 0.85rem;
-    opacity: 0.9;
-    margin-bottom: 12px;
-}
-
-.badge-botoes {
-    display: flex;
-    gap: 8px;
-}
-
-.badge-subcat {
-    background: rgba(255, 255, 255, 0.25);
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: bold;
-}
-
-.card-seta {
-    font-size: 1.5rem;
-    opacity: 0.8;
-}
-
-/* Seção de Produtos */
-.produtos-secao.hidden {
-    display: none;
-}
-
-.btn-voltar {
-    background: #ddd;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
+    align-items: flex-start;
     margin-bottom: 15px;
 }
 
-.cardapio-grid {
-    display: grid;
-    grid-template-columns: 1fr;
+.card-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.card-info p {
+    font-size: 0.8rem;
+    opacity: 0.9;
+    max-width: 200px;
+}
+
+.card-icon-circle {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+/* Botões de Subcategorias dentro do Card */
+.card-subcategorias {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.subcat-btn {
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.subcat-btn:hover, .subcat-btn:active {
+    background: rgba(255, 255, 255, 0.45);
+}
+
+/* Tela de Produtos */
+.btn-voltar-home {
+    background: #e0e0e0;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+}
+
+.secao-titulo {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.produtos-grid {
+    display: flex;
+    flex-direction: column;
     gap: 12px;
 }
 
-.produto-card {
+.produto-item-card {
     background: white;
     border-radius: 12px;
     padding: 12px;
     display: flex;
     gap: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .produto-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
+    width: 75px;
+    height: 75px;
+    border-radius: 10px;
     object-fit: cover;
 }
 
@@ -175,34 +196,35 @@ body {
 }
 
 .produto-detalhes h4 {
-    font-size: 1rem;
-    margin-bottom: 4px;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
 }
 
 .produto-detalhes p {
     font-size: 0.75rem;
     color: #666;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
-.produto-preco-acao {
+.preco-e-botao {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.preco {
+.preco-prod {
     font-weight: bold;
-    color: var(--primary-red);
+    color: #b71c1c;
+    font-size: 0.95rem;
 }
 
-.btn-add-prod {
+.btn-add {
     background: #2e7d32;
     color: white;
     border: none;
     padding: 6px 12px;
     border-radius: 6px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: bold;
     cursor: pointer;
 }
@@ -210,21 +232,17 @@ body {
 /* Rodapé Desenvolvido por ImpulsoWeb10 */
 .app-footer-dev {
     text-align: center;
-    padding: 15px;
-    font-size: 0.8rem;
+    padding: 12px;
+    font-size: 0.75rem;
     color: #555;
-    background: #eee;
-    border-top: 1px solid #ddd;
+    background: #eae5dc;
+    border-top: 1px solid #dcd6ce;
 }
 
 .app-footer-dev a {
     color: #0d6efd;
     text-decoration: none;
     font-weight: bold;
-}
-
-.app-footer-dev a:hover {
-    text-decoration: underline;
 }
 
 /* Barra de Navegação Inferior */
@@ -237,10 +255,10 @@ body {
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 -3px 12px rgba(0,0,0,0.08);
     z-index: 1000;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
 }
 
 .nav-item {
@@ -249,12 +267,12 @@ body {
     align-items: center;
     text-decoration: none;
     color: #888;
-    font-size: 0.75rem;
-    gap: 4px;
+    font-size: 0.7rem;
+    gap: 3px;
 }
 
 .nav-item i {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
 }
 
 .nav-item.active, .nav-item:hover {
@@ -264,32 +282,29 @@ body {
 /* Carrinho Flutuante */
 .carrinho-flutuante {
     position: fixed;
-    bottom: 70px;
+    bottom: 68px;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
-    max-width: 500px;
+    max-width: 450px;
     background: #111;
     color: white;
-    padding: 12px 20px;
-    border-radius: 30px;
+    padding: 10px 18px;
+    border-radius: 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     z-index: 1001;
-}
-
-.carrinho-flutuante.hidden {
-    display: none;
+    font-size: 0.85rem;
 }
 
 .carrinho-flutuante button {
     background: #2e7d32;
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
+    padding: 6px 14px;
+    border-radius: 15px;
     font-weight: bold;
     cursor: pointer;
 }
