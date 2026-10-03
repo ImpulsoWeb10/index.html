@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Esfiraria Juliana</title>
     <link rel="stylesheet" href="style.css">
-    <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- Topo / Header Estilo App -->
+    <!-- Header com Logo Limpo (Sem bordas, círculos ou fundos) -->
     <header class="app-header">
         <div class="header-logo-area">
-            <img src="Logo.png" alt="Logo" class="logo-img">
+            <img src="Logotipo 3D Favorita Pizzaria.png" alt="Logo" class="logo-limpo">
             <div class="header-text">
                 <h2>Esfiraria Juliana</h2>
                 <p>O verdadeiro sabor em cada mordida!</p>
@@ -24,17 +23,15 @@
         </button>
     </header>
 
-    <!-- Conteúdo Principal -->
     <main class="app-main">
-        
-        <!-- Tela Inicial: Cards Principais com Subbotões (Idêntico à referência) -->
+        <!-- Tela Inicial: Cards Principais com Subbotões -->
         <div id="view-home" class="view-section">
             <div class="cards-container" id="cards-principais-container">
-                <!-- Os cards principais serão renderizados dinamicamente aqui baseados nas categorias e subcategorias do Google Sheets -->
+                <!-- Renderizado via JS -->
             </div>
         </div>
 
-        <!-- Tela de Listagem de Produtos de uma Subcategoria -->
+        <!-- Tela de Listagem de Produtos -->
         <div id="view-produtos" class="view-section hidden">
             <button class="btn-voltar-home" onclick="voltarParaHome()">
                 <i class="fa-solid fa-arrow-left"></i> Voltar ao Início
@@ -44,10 +41,9 @@
                 <!-- Produtos carregados do Google Sheets -->
             </div>
         </div>
-
     </main>
 
-    <!-- Rodapé Personalizado (Solicitado) -->
+    <!-- Rodapé Personalizado -->
     <footer class="app-footer-dev">
         <p>Desenvolvido por <strong>ImpulsoWeb10</strong></p>
         <p>
@@ -57,7 +53,7 @@
         </p>
     </footer>
 
-    <!-- Barra de Navegação Inferior (Fixa igual à imagem de referência) -->
+    <!-- Barra de Navegação Inferior -->
     <nav class="bottom-nav">
         <a href="#" class="nav-item active" onclick="voltarParaHome()">
             <i class="fa-solid fa-house"></i>
@@ -67,11 +63,11 @@
             <i class="fa-solid fa-clipboard-list"></i>
             <span>Pedidos</span>
         </a>
-        <a href="https://wa.me/5511954950044?text=Olá!%20Gostaria%20de%20deixar%20uma%20avaliação%20para%20o%20app." target="_blank" class="nav-item">
+        <a href="https://wa.me/5511954950044?text=Olá!%20Gostaria%20de%20deixar%20uma%20avaliação." target="_blank" class="nav-item">
             <i class="fa-solid fa-star"></i>
             <span>Avaliações</span>
         </a>
-        <a href="https://wa.me/5511954950044?text=Olá!%20Preciso%20de%20suporte%20sobre%20o%20app." target="_blank" class="nav-item">
+        <a href="https://wa.me/5511954950044?text=Olá!%20Preciso%20de%20suporte." target="_blank" class="nav-item">
             <i class="fa-solid fa-phone"></i>
             <span>Contato</span>
         </a>
