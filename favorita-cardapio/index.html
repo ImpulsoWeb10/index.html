@@ -3,34 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esfiraria Juliana / Favorita</title>
+    <title>Esfiraria Juliana</title>
     <link rel="stylesheet" href="style.css">
     <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <header>
-        <div class="logo-container">
-            <!-- Usando a referência da imagem enviada -->
-            <img src="Logotipo 3D Favorita Pizzaria.png" alt="Logo Esfiraria" class="logo">
+    <!-- Header / Topo -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo-area">
+                <img src="Logotipo 3D Favorita Pizzaria.png" alt="Logo" class="logo-topo">
+                <div class="titulo-area">
+                    <h1>Esfiraria Juliana</h1>
+                    <p>O verdadeiro sabor em cada mordida!</p>
+                </div>
+            </div>
+            <button class="menu-hamburguer" onclick="abrirMenuLateral()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
-        <h1>Esfiraria Juliana</h1>
-        <p>Peça suas esfirras favoritas direto pelo WhatsApp!</p>
     </header>
 
-    <main>
-        <!-- Navegação de Categorias -->
-        <section id="categorias-container" class="categorias-nav">
-            <!-- Gerado via JS -->
-        </section>
+    <!-- Conteúdo Principal com Cards Estilo App -->
+    <main class="main-container">
+        
+        <!-- Seção Dinâmica de Cards / Categorias vindas do Google Sheets -->
+        <div id="cards-categorias-container" class="cards-grid">
+            <!-- Os cards principais (Pizzas, Esfihas, Bebidas) serão injetados ou organizados aqui -->
+        </div>
 
-        <!-- Lista de Produtos -->
-        <section id="cardapio-container" class="cardapio-grid">
-            <!-- Produtos injetados dinamicamente via JavaScript -->
-            <p class="loading">Carregando cardápio...</p>
-        </section>
+        <!-- Container para exibição dos produtos de uma categoria selecionada -->
+        <div id="produtos-secao" class="produtos-secao hidden">
+            <button class="btn-voltar" onclick="voltarParaInicio()"><i class="fa-solid fa-arrow-left"></i> Voltar às Categorias</button>
+            <h2 id="titulo-categoria-atual">Produtos</h2>
+            <div id="cardapio-grid" class="cardapio-grid">
+                <!-- Produtos da planilha aparecem aqui -->
+            </div>
+        </div>
+
     </main>
+
+    <!-- Rodapé Personalizado solicitado -->
+    <footer class="app-footer-dev">
+        <p>Desenvolvido por <strong>ImpulsoWeb10</strong></p>
+        <p>
+            <a href="https://wa.me/5511954950044?text=Olá!%20Quero%20saber%20mais%20sobre%20esse%20app%20Favorita" target="_blank">
+                ( Crie seu app ou link de Avaliação - Saiba Mais )
+            </a>
+        </p>
+    </footer>
+
+    <!-- Barra de Navegação Inferior (Estilo App Nativo) -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="voltarParaInicio()">
+            <i class="fa-solid fa-house"></i>
+            <span>Início</span>
+        </a>
+        <a href="#" class="nav-item" onclick="mostrarPedidos()">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <span>Pedidos</span>
+        </a>
+        <a href="https://wa.me/5511954950044?text=Olá!%20Gostaria%20de%20deixar%20uma%20avaliação." target="_blank" class="nav-item">
+            <i class="fa-solid fa-star"></i>
+            <span>Avaliações</span>
+        </a>
+        <a href="https://wa.me/5511954950044?text=Olá!%20Preciso%20de%20suporte." target="_blank" class="nav-item">
+            <i class="fa-solid fa-phone"></i>
+            <span>Contato</span>
+        </a>
+    </nav>
 
     <!-- Carrinho Flutuante -->
     <div id="carrinho-flutuante" class="carrinho-flutuante hidden">
@@ -38,7 +81,7 @@
             <i class="fa-solid fa-cart-shopping"></i>
             <span id="contador-carrinho">0</span> itens | Total: <span id="valor-total">R$ 0,00</span>
         </div>
-        <button onclick="finalizarPedido()">Ver Carrinho / Pedir</button>
+        <button onclick="finalizarPedidoWhatsapp()">Pedir no WhatsApp</button>
     </div>
 
     <script src="app.js"></script>
