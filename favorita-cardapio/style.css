@@ -1,0 +1,295 @@
+:root {
+    --bg-app: #f7f4ef;
+    --primary-red: #b71c1c;
+    --card-red: #9c27b0;
+    --card-orange: #d84315;
+    --card-green: #1b5e20;
+    --dark: #222;
+    --white: #fff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-app);
+    color: var(--dark);
+    padding-bottom: 130px; /* Espaço para a barra inferior e rodapé */
+}
+
+/* Header */
+.app-header {
+    background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+    color: var(--white);
+    padding: 15px 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-topo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ff9800;
+}
+
+.titulo-area h1 {
+    font-size: 1.2rem;
+    color: #ff9800;
+}
+
+.titulo-area p {
+    font-size: 0.75rem;
+    color: #ccc;
+}
+
+.menu-hamburguer {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Container Principal */
+.main-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Cards de Categorias (Estilo da Imagem de Referência) */
+.cards-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card-categoria {
+    border-radius: 16px;
+    padding: 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.card-categoria:active {
+    transform: scale(0.98);
+}
+
+.card-pizzas { background: linear-gradient(135deg, #d32f2f, #b71c1c); }
+.card-esfihas { background: linear-gradient(135deg, #ef6c00, #e65100); }
+.card-bebidas { background: linear-gradient(135deg, #2e7d32, #1b5e20); }
+
+.card-info h3 {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.card-info p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-bottom: 12px;
+}
+
+.badge-botoes {
+    display: flex;
+    gap: 8px;
+}
+
+.badge-subcat {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.card-seta {
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+/* Seção de Produtos */
+.produtos-secao.hidden {
+    display: none;
+}
+
+.btn-voltar {
+    background: #ddd;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.cardapio-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.produto-card {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    align-items: center;
+}
+
+.produto-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.produto-detalhes {
+    flex: 1;
+}
+
+.produto-detalhes h4 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.produto-detalhes p {
+    font-size: 0.75rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.produto-preco-acao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preco {
+    font-weight: bold;
+    color: var(--primary-red);
+}
+
+.btn-add-prod {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Rodapé Desenvolvido por ImpulsoWeb10 */
+.app-footer-dev {
+    text-align: center;
+    padding: 15px;
+    font-size: 0.8rem;
+    color: #555;
+    background: #eee;
+    border-top: 1px solid #ddd;
+}
+
+.app-footer-dev a {
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.app-footer-dev a:hover {
+    text-decoration: underline;
+}
+
+/* Barra de Navegação Inferior */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+    z-index: 1000;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #888;
+    font-size: 0.75rem;
+    gap: 4px;
+}
+
+.nav-item i {
+    font-size: 1.2rem;
+}
+
+.nav-item.active, .nav-item:hover {
+    color: #b71c1c;
+}
+
+/* Carrinho Flutuante */
+.carrinho-flutuante {
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    background: #111;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 1001;
+}
+
+.carrinho-flutuante.hidden {
+    display: none;
+}
+
+.carrinho-flutuante button {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
