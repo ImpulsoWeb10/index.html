@@ -1,4 +1,4 @@
-// Substitua pela URL gerada no seu Google Apps Script (Conforme instrução anterior)
+// Substitua pela URL da sua API do Google Apps Script
 const SHEET_URL = 'SUA_URL_DE_API_DO_GOOGLE_SHEETS_AQUI';
 
 let produtosGlobal = [];
@@ -13,68 +13,108 @@ async function carregarCardapio() {
         produtosGlobal = dados.filter(p => String(p.disponivel).toUpperCase() === 'SIM');
         produtosGlobal.sort((a, b) => parseInt(a.ordem || 0) - parseInt(b.ordem || 0));
 
-        renderizarCardsCategorias(produtosGlobal);
+        renderizarCardsHome(produtosGlobal);
     } catch (error) {
-        console.error("Erro ao carregar dados do Google Sheets:", error);
-        document.getElementById('cards-categorias-container').innerHTML = 
-            '<p style="text-align:center; color: #666;">Carregando cardápio ou verifique a conexão com a planilha...</p>';
+        console.error("Erro ao carregar dados:", error);
+        document.getElementById('cards-principais-container').innerHTML = 
+            '<p style="text-align:center; color:#666; padding: 20px;">Carregando cardápio ou configure a URL da planilha...</p>';
     }
 }
 
-function renderizarCardsCategorias(produtos) {
-    const container = document.getElementById('cards-categorias-container');
-    const categoriasUnicas = [...new Set(produtos.map(p => p.categoria))];
+function renderizarCardsHome(produtos) {
+    const container = document.getElementById('cards-principais-container');
     
-    // Classes de cores customizadas para simular o design de aplicativo elegante
-    const estilosCards = ['card-pizzas', 'card-esfihas', 'card-bebidas'];
+    // Agrupa produtos por categoria e suas subcategorias
+    const categoriasMap = {};
+    produtos.forEach(p => {
+        if (!categoriasMap[p.categoria]) {
+            categoriasMap[p.categoria] = new Set();
+        }
+        if (p.subcategoria) {
+            categoriasMap[p.categoria].add(p.subcategoria);
+        }
+    });
 
-    container.innerHTML = categoriasUnicas.map((cat, index) => {
-        const estilo = estilosCards[index % estilosCards.length];
-        return `
-            <div class="card-categoria ${estilo}" onclick="abrirCategoria('${cat}')">
-                <div class="card-info">
-                    <h3>${cat}</h3>
-                    <p>Toque para ver as opções disponíveis</p>
-                    <div class="badge-botoes">
-                        <span class="badge-subcat">Ver Cardápio</span>
+    const temasCards = ['card-theme-1', 'card-theme-2', 'card-theme-3'];
+    const iconesCards = {
+        'Pizzas': 'fa-pizza-slice',
+        'Esfihas': 'fa-bread-slice',
+        'Bedidas': 'fa-cup-straw',
+        'Bebidas': 'fa-wine-glass'
+    };
+
+    let htmlCards = '';
+    let index = 0;
+
+    for (const [categoria, subcategorias] of Object.entries(categoriasMap)) {
+        const temaCls = temasCards[index % temasCards.length];
+        const iconeCls = iconesCards[categoria] || 'fa-utensils';
+
+        let subBotoesHtml = '';
+        subcategorias.forEach(sub => {
+            subBotoesHtml += `<button class="subcat-btn" onclick="abrirSubcategoria('${categoria}', '${sub}')">${sub}</button>`;
+        });
+
+        // Se não houver subcategorias cadastradas, cria um botão padrão para abrir a categoria inteira
+        if (subcategorias.size === 0) {
+            subBotoesHtml = `<button class="subcat-btn" onclick="abrirSubcategoria('${categoria}', '')">Ver Todos</button>`;
+        }
+
+        htmlCards += `
+            <div class="app-card ${temaCls}">
+                <div class="card-top-content">
+                    <div class="card-info">
+                        <h3>${categoria}</h3>
+                        <p>Escolha entre nossas opções exclusivas.</p>
+                    </div>
+                    <div class="card-icon-circle">
+                        <i class="fa-solid ${iconeCls}"></i>
                     </div>
                 </div>
-                <div class="card-seta">
-                    <i class="fa-solid fa-arrow-right"></i>
+                <div class="card-subcategorias">
+                    ${subBotoesHtml}
                 </div>
             </div>
         `;
-    }).join('');
+        index++;
+    }
+
+    container.innerHTML = htmlCards;
 }
 
-function abrirCategoria(categoriaNome) {
-    document.getElementById('cards-categorias-container').style.display = 'none';
-    const secaoProdutos = document.getElementById('produtos-secao');
-    secaoProdutos.classList.remove('hidden');
-    
-    document.getElementById('titulo-categoria-atual').innerText = categoriaNome;
+function abrirSubcategoria(categoria, subcategoria) {
+    document.getElementById('view-home').classList.add('hidden');
+    document.getElementById('view-produtos').classList.remove('hidden');
 
-    const produtosFiltrados = produtosGlobal.filter(p => p.categoria === categoriaNome);
-    const grid = document.getElementById('cardapio-grid');
+    const titulo = subcategoria ? `${categoria} - ${subcategoria}` : categoria;
+    document.getElementById('titulo-secao-produtos').innerText = titulo;
 
-    grid.innerHTML = produtosFiltrados.map(p => `
-        <div class="produto-card">
+    const filtrados = produtosGlobal.filter(p => {
+        if (subcategoria) {
+            return p.categoria === categoria && p.subcategoria === subcategoria;
+        }
+        return p.categoria === categoria;
+    });
+
+    const listaDiv = document.getElementById('lista-produtos');
+    listaDiv.innerHTML = filtrados.map(p => `
+        <div class="produto-item-card">
             <img src="${p.foto}" alt="${p.nome}" class="produto-img">
             <div class="produto-detalhes">
                 <h4>${p.nome}</h4>
                 <p>${p.descricao}</p>
-                <div class="produto-preco-acao">
-                    <span class="preco">R$ ${parseFloat(p.preco).toFixed(2)}</span>
-                    <button class="btn-add-prod" onclick="adicionarCarrinho('${p.id}')">Adicionar</button>
+                <div class="preco-e-botao">
+                    <span class="preco-prod">R$ ${parseFloat(p.preco).toFixed(2)}</span>
+                    <button class="btn-add" onclick="adicionarCarrinho('${p.id}')">Adicionar</button>
                 </div>
             </div>
         </div>
     `).join('');
 }
 
-function voltarParaInicio() {
-    document.getElementById('produtos-secao').classList.add('hidden');
-    document.getElementById('cards-categorias-container').style.display = 'flex';
+function voltarParaHome() {
+    document.getElementById('view-produtos').classList.add('hidden');
+    document.getElementById('view-home').classList.remove('hidden');
 }
 
 function adicionarCarrinho(id) {
@@ -100,6 +140,14 @@ function atualizarCarrinhoUI() {
     }
 }
 
+function verPedidosCarrinho() {
+    if (carrinho.length === 0) {
+        alert("Seu carrinho está vazio. Escolha alguns produtos no cardápio!");
+    } else {
+        finalizarPedidoWhatsapp();
+    }
+}
+
 function finalizarPedidoWhatsapp() {
     let texto = "Olá! Gostaria de fazer o seguinte pedido:%0A%0A";
     let total = 0;
@@ -109,16 +157,12 @@ function finalizarPedidoWhatsapp() {
         total += parseFloat(item.preco);
     });
 
-    texto += `%0A*Total do Pedido: R$ ${total.toFixed(2)}*`;
+    texto += `%0A*Total: R$ ${total.toFixed(2)}*`;
 
-    // Número do WhatsApp oficial fornecido
+    // Número do WhatsApp oficial fornecido por você
     const telefone = "5511954950044";
     window.open(`https://wa.me/${telefone}?text=${texto}`, '_blank');
 }
 
-function mostrarPedidos() {
-    alert("Seu carrinho atual possui " + carrinho.length + " item(ns). Clique no botão flutuante para enviar ao WhatsApp!");
-}
-
-// Inicializa o app carregando da planilha
+// Inicializa a aplicação buscando os dados do Google Sheets
 carregarCardapio();
