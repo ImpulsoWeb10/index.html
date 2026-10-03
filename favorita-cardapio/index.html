@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esfiraria Juliana / Favorita</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <!-- Usando a referência da imagem enviada -->
+            <img src="Logotipo 3D Favorita Pizzaria.png" alt="Logo Esfiraria" class="logo">
+        </div>
+        <h1>Esfiraria Juliana</h1>
+        <p>Peça suas esfirras favoritas direto pelo WhatsApp!</p>
+    </header>
+
+    <main>
+        <!-- Navegação de Categorias -->
+        <section id="categorias-container" class="categorias-nav">
+            <!-- Gerado via JS -->
+        </section>
+
+        <!-- Lista de Produtos -->
+        <section id="cardapio-container" class="cardapio-grid">
+            <!-- Produtos injetados dinamicamente via JavaScript -->
+            <p class="loading">Carregando cardápio...</p>
+        </section>
+    </main>
+
+    <!-- Carrinho Flutuante -->
+    <div id="carrinho-flutuante" class="carrinho-flutuante hidden">
+        <div class="carrinho-info">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span id="contador-carrinho">0</span> itens | Total: <span id="valor-total">R$ 0,00</span>
+        </div>
+        <button onclick="finalizarPedido()">Ver Carrinho / Pedir</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
