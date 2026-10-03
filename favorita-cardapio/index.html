@@ -10,42 +10,44 @@
 </head>
 <body>
 
-    <!-- Header / Topo -->
+    <!-- Topo / Header Estilo App -->
     <header class="app-header">
-        <div class="header-content">
-            <div class="logo-area">
-                <img src="Logo.png" alt="Logo" class="logo-topo">
-                <div class="titulo-area">
-                    <h1>Esfiraria Juliana</h1>
-                    <p>O verdadeiro sabor em cada mordida!</p>
-                </div>
+        <div class="header-logo-area">
+            <img src="Logotipo 3D Favorita Pizzaria.png" alt="Logo" class="logo-img">
+            <div class="header-text">
+                <h2>Esfiraria Juliana</h2>
+                <p>O verdadeiro sabor em cada mordida!</p>
             </div>
-            <button class="menu-hamburguer" onclick="abrirMenuLateral()">
-                <i class="fa-solid fa-bars"></i>
-            </button>
         </div>
+        <button class="menu-btn" onclick="abrirMenuLateral()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     </header>
 
-    <!-- Conteúdo Principal com Cards Estilo App -->
-    <main class="main-container">
+    <!-- Conteúdo Principal -->
+    <main class="app-main">
         
-        <!-- Seção Dinâmica de Cards / Categorias vindas do Google Sheets -->
-        <div id="cards-categorias-container" class="cards-grid">
-            <!-- Os cards principais (Pizzas, Esfihas, Bebidas) serão injetados ou organizados aqui -->
+        <!-- Tela Inicial: Cards Principais com Subbotões (Idêntico à referência) -->
+        <div id="view-home" class="view-section">
+            <div class="cards-container" id="cards-principais-container">
+                <!-- Os cards principais serão renderizados dinamicamente aqui baseados nas categorias e subcategorias do Google Sheets -->
+            </div>
         </div>
 
-        <!-- Container para exibição dos produtos de uma categoria selecionada -->
-        <div id="produtos-secao" class="produtos-secao hidden">
-            <button class="btn-voltar" onclick="voltarParaInicio()"><i class="fa-solid fa-arrow-left"></i> Voltar às Categorias</button>
-            <h2 id="titulo-categoria-atual">Produtos</h2>
-            <div id="cardapio-grid" class="cardapio-grid">
-                <!-- Produtos da planilha aparecem aqui -->
+        <!-- Tela de Listagem de Produtos de uma Subcategoria -->
+        <div id="view-produtos" class="view-section hidden">
+            <button class="btn-voltar-home" onclick="voltarParaHome()">
+                <i class="fa-solid fa-arrow-left"></i> Voltar ao Início
+            </button>
+            <h3 id="titulo-secao-produtos" class="secao-titulo">Produtos</h3>
+            <div id="lista-produtos" class="produtos-grid">
+                <!-- Produtos carregados do Google Sheets -->
             </div>
         </div>
 
     </main>
 
-    <!-- Rodapé Personalizado solicitado -->
+    <!-- Rodapé Personalizado (Solicitado) -->
     <footer class="app-footer-dev">
         <p>Desenvolvido por <strong>ImpulsoWeb10</strong></p>
         <p>
@@ -55,21 +57,21 @@
         </p>
     </footer>
 
-    <!-- Barra de Navegação Inferior (Estilo App Nativo) -->
+    <!-- Barra de Navegação Inferior (Fixa igual à imagem de referência) -->
     <nav class="bottom-nav">
-        <a href="#" class="nav-item active" onclick="voltarParaInicio()">
+        <a href="#" class="nav-item active" onclick="voltarParaHome()">
             <i class="fa-solid fa-house"></i>
             <span>Início</span>
         </a>
-        <a href="#" class="nav-item" onclick="mostrarPedidos()">
+        <a href="#" class="nav-item" onclick="verPedidosCarrinho()">
             <i class="fa-solid fa-clipboard-list"></i>
             <span>Pedidos</span>
         </a>
-        <a href="https://wa.me/5511954950044?text=Olá!%20Gostaria%20de%20deixar%20uma%20avaliação." target="_blank" class="nav-item">
+        <a href="https://wa.me/5511954950044?text=Olá!%20Gostaria%20de%20deixar%20uma%20avaliação%20para%20o%20app." target="_blank" class="nav-item">
             <i class="fa-solid fa-star"></i>
             <span>Avaliações</span>
         </a>
-        <a href="https://wa.me/5511954950044?text=Olá!%20Preciso%20de%20suporte." target="_blank" class="nav-item">
+        <a href="https://wa.me/5511954950044?text=Olá!%20Preciso%20de%20suporte%20sobre%20o%20app." target="_blank" class="nav-item">
             <i class="fa-solid fa-phone"></i>
             <span>Contato</span>
         </a>
@@ -79,9 +81,9 @@
     <div id="carrinho-flutuante" class="carrinho-flutuante hidden">
         <div class="carrinho-info">
             <i class="fa-solid fa-cart-shopping"></i>
-            <span id="contador-carrinho">0</span> itens | Total: <span id="valor-total">R$ 0,00</span>
+            <span id="contador-carrinho">0</span> itens | <span id="valor-total">R$ 0,00</span>
         </div>
-        <button onclick="finalizarPedidoWhatsapp()">Pedir no WhatsApp</button>
+        <button onclick="finalizarPedidoWhatsapp()">Pedir WhatsApp</button>
     </div>
 
     <script src="app.js"></script>
