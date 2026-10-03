@@ -1,74 +1,421 @@
-<!-- Header com Imagem de Fundo (app.png) e Menu Hambúrguer -->
-<header class="app-header-banner" style="background-image: url('logo.jpg');">
-    <div class="header-overlay"></div>
-    <div class="header-top-content">
-        <div class="header-titles">
-            <h1>Esfiraria Juliana</h1>
-            <p>O verdadeiro sabor em cada mordida!</p>
-        </div>
-        <button class="menu-btn" onclick="abrirMenuLateral()">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esfiraria Juliana</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos específicos para o novo layout inspirado na referência */
+        :root {
+            --bg-app: #f9f9f9;
+            --text-dark: #111;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-dark);
+            padding-bottom: 110px;
+        }
+
+        /* Topo com a imagem app.png como fundo/banner */
+        .app-header-hero {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            background-image: url('logo.jpg');
+            background-size: cover;
+            background-position: center;
+            border-bottom-left-radius: 35px;
+            border-bottom-right-radius: 35px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding: 16px;
+        }
+
+        /* Camada escura opcional sobre o banner para destacar o botão se necessário */
+        .app-header-hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), transparent 60%);
+            border-bottom-left-radius: 35px;
+            border-bottom-right-radius: 35px;
+            z-index: 1;
+        }
+
+        .menu-btn-hero {
+            position: relative;
+            z-index: 2;
+            background: #d32f2f;
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Container Principal */
+        .app-main {
+            padding: 20px 16px;
+            max-width: 480px;
+            margin: -25px auto 0 auto; /* Sobrepõe levemente o banner */
+            position: relative;
+            z-index: 3;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Cards Principais Estilo App */
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .app-card-ref {
+            border-radius: 20px;
+            padding: 22px 20px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .app-card-ref:active {
+            transform: scale(0.98);
+        }
+
+        .card-theme-pizzas { background: linear-gradient(135deg, #c62828, #b71c1c); }
+        .card-theme-esfihas { background: linear-gradient(135deg, #ef6c00, #d84315); }
+        .card-theme-bebidas { background: linear-gradient(135deg, #1b5e20, #004d40); }
+
+        .card-left-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .card-icon-circle-ref {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .card-text-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .card-text-info p {
+            font-size: 0.8rem;
+            opacity: 0.92;
+            line-height: 1.2;
+        }
+
+        .card-arrow {
+            font-size: 1.3rem;
+            opacity: 0.85;
+            padding-left: 10px;
+        }
+
+        /* Tela de Listagem de Produtos */
+        .btn-voltar-home {
+            background: #e0e0e0;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 14px;
+            font-size: 0.85rem;
+        }
+
+        .secao-titulo {
+            font-size: 1.3rem;
+            margin-bottom: 14px;
+            color: #222;
+        }
+
+        .produtos-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .produto-item-card {
+            background: white;
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        }
+
+        .produto-img {
+            width: 75px;
+            height: 75px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .produto-detalhes {
+            flex: 1;
+        }
+
+        .produto-detalhes h4 {
+            font-size: 0.98rem;
+            margin-bottom: 3px;
+            color: #111;
+        }
+
+        .produto-detalhes p {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .preco-e-botao {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preco-prod {
+            font-weight: bold;
+            color: #b71c1c;
+            font-size: 1rem;
+        }
+
+        .btn-add {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Barra de Navegação Inferior (Estilo exato da referência) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 14px 0;
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+            z-index: 1000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 0.7rem;
+            gap: 4px;
+        }
+
+        .nav-item i {
+            font-size: 1.35rem;
+        }
+
+        .nav-item.active, .nav-item:hover {
+            color: #c62828;
+        }
+
+        /* Carrinho Flutuante */
+        .carrinho-flutuante {
+            position: fixed;
+            bottom: 78px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 440px;
+            background: #111;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+            z-index: 1001;
+            font-size: 0.9rem;
+        }
+
+        .carrinho-flutuante button {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header com a logo.jpg como Imagem de Fundo Completa -->
+    <header class="app-header-hero">
+        <button class="menu-btn-hero" onclick="abrirMenuLateral()">
             <i class="fa-solid fa-bars"></i>
         </button>
-    </div>
-</header>
+    </header>
 
-<main class="app-main">
-    <!-- Tela Inicial: Cards Principais Estilo App Moderno -->
-    <div id="view-home" class="view-section">
-        <div class="cards-container" id="cards-principais-container">
-            <!-- Renderizado dinamicamente via app.js -->
+    <main class="app-main">
+        <!-- Tela Inicial: Cards Principais Estilizados -->
+        <div id="view-home" class="view-section">
+            <div class="cards-container" id="cards-principais-container">
+                <!-- Renderizado dinamicamente via app.js -->
+            </div>
         </div>
-    </div>
 
-    <!-- Tela de Listagem de Produtos -->
-    <div id="view-produtos" class="view-section hidden">
-        <button class="btn-voltar-home" onclick="voltarParaHome()">
-            <i class="fa-solid fa-arrow-left"></i> Voltar ao Início
-        </button>
-        <h3 id="titulo-secao-produtos" class="secao-titulo">Produtos</h3>
-        <div id="lista-produtos" class="produtos-grid">
-            <!-- Produtos carregados do Google Sheets -->
+        <!-- Tela de Listagem de Produtos por Categoria -->
+        <div id="view-produtos" class="view-section hidden">
+            <button class="btn-voltar-home" onclick="voltarParaHome()">
+                <i class="fa-solid fa-arrow-left"></i> Voltar ao Início
+            </button>
+            <h3 id="titulo-secao-produtos" class="secao-titulo">Produtos</h3>
+            <div id="lista-produtos" class="produtos-grid">
+                <!-- Produtos carregados do Google Sheets -->
+            </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<!-- Rodapé Personalizado -->
-<footer class="app-footer-dev">
-    <p>Desenvolvido por <strong>ImpulsoWeb10</strong></p>
-    <p>
-        <a href="https://wa.me/5511954950044?text=Olá!%20Quero%20saber%20mais%20sobre%20esse%20app" target="_blank">
-            ( Crie seu app ou link de Avaliação - Saiba Mais )
+    <!-- Barra de Navegação Inferior (Início, Pedidos, Avaliações, Contato) -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="voltarParaHome()">
+            <i class="fa-solid fa-house"></i>
+            <span>Início</span>
         </a>
-    </p>
-</footer>
+        <a href="#" class="nav-item" onclick="verPedidosCarrinho()">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <span>Pedidos</span>
+        </a>
+        <a href="https://wa.me/5511954950044?text=Olá!%20Gostaria%20de%20deixar%20uma%20avaliação." target="_blank" class="nav-item">
+            <i class="fa-regular fa-star"></i>
+            <span>Avaliações</span>
+        </a>
+        <a href="https://wa.me/5511954950044?text=Olá!%20Preciso%20de%20suporte." target="_blank" class="nav-item">
+            <i class="fa-solid fa-phone"></i>
+            <span>Contato</span>
+        </a>
+    </nav>
 
-<!-- Barra de Navegação Inferior -->
-<nav class="bottom-nav">
-    <a href="#" class="nav-item active" onclick="voltarParaHome()">
-        <i class="fa-solid fa-house"></i>
-        <span>Início</span>
-    </a>
-    <a href="#" class="nav-item" onclick="verPedidosCarrinho()">
-        <i class="fa-solid fa-clipboard-list"></i>
-        <span>Pedidos</span>
-    </a>
-    <a href="https://wa.me/5511954950044?text=Olá!%20Gostaria%20de%20deixar%20uma%20avaliação." target="_blank" class="nav-item">
-        <i class="fa-solid fa-star"></i>
-        <span>Avaliações</span>
-    </a>
-    <a href="https://wa.me/5511954950044?text=Olá!%20Preciso%20de%20suporte." target="_blank" class="nav-item">
-        <i class="fa-solid fa-phone"></i>
-        <span>Contato</span>
-    </a>
-</nav>
-
-<!-- Carrinho Flutuante -->
-<div id="carrinho-flutuante" class="carrinho-flutuante hidden">
-    <div class="carrinho-info">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span id="contador-carrinho">0</span> itens | <span id="valor-total">R$ 0,00</span>
+    <!-- Carrinho Flutuante de Pedidos -->
+    <div id="carrinho-flutuante" class="carrinho-flutuante hidden">
+        <div class="carrinho-info">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span id="contador-carrinho">0</span> itens | <span id="valor-total">R$ 0,00</span>
+        </div>
+        <button onclick="finalizarPedidoWhatsapp()">Pedir WhatsApp</button>
     </div>
-    <button onclick="finalizarPedidoWhatsapp()">Pedir WhatsApp</button>
-</div>
 
-<script src="app.js"></script>
+    <!-- Script de Integração -->
+    <script src="app.js"></script>
+    <script>
+        // Função auxiliar para adaptar a renderização dos cards com os ícones circulares e setas da referência
+        window.addEventListener('DOMContentLoaded', () => {
+            const originalRender = window.renderizarCardsHome;
+            // Caso queira customizar a exibição dos cards na home com os ícones e setas idênticos ao modelo:
+            window.renderizarCardsHome = function(produtos) {
+                const container = document.getElementById('cards-principais-container');
+                const categoriasMap = {};
+                
+                produtos.forEach(p => {
+                    if (!categoriasMap[p.categoria]) {
+                        categoriasMap[p.categoria] = [];
+                    }
+                    categoriasMap[p.categoria].push(p);
+                });
+
+                const temasCards = ['card-theme-pizzas', 'card-theme-esfihas', 'card-theme-bebidas'];
+                const iconesCards = {
+                    'Pizzas': 'fa-pizza-slice',
+                    'Esfihas': 'fa-bread-slice',
+                    'Bebidas': 'fa-wine-glass'
+                };
+                const descricoesPadrao = {
+                    'Pizzas': 'Escolha entre nossas opções doces ou salgadas.',
+                    'Esfihas': 'Tradicionais e irresistíveis, com muito sabor.',
+                    'Bebidas': 'Refresque seu momento com nossas opções.'
+                };
+
+                let htmlCards = '';
+                let index = 0;
+
+                for (const [categoria, itens] of Object.entries(categoriasMap)) {
+                    const temaCls = temasCards[index % temasCards.length];
+                    const iconeCls = iconesCards[categoria] || 'fa-utensils';
+                    const desc = descricoesPadrao[categoria] || 'Confira nossas delícias exclusivas.';
+
+                    htmlCards += `
+                        <div class="app-card-ref ${temaCls}" onclick="abrirSubcategoria('${categoria}', '')">
+                            <div class="card-left-content">
+                                <div class="card-icon-circle-ref">
+                                    <i class="fa-solid ${iconeCls}"></i>
+                                </div>
+                                <div class="card-text-info">
+                                    <h3>${categoria}</h3>
+                                    <p>${desc}</p>
+                                </div>
+                            </div>
+                            <div class="card-arrow">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    `;
+                    index++;
+                }
+
+                container.innerHTML = htmlCards;
+            };
+        });
+    </script>
+</body>
+</html>
