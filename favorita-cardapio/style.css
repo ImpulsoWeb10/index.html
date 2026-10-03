@@ -1,8 +1,5 @@
 :root {
     --bg-app: #f9f6f0;
-    --red-card: #b71c1c;
-    --orange-card: #d84315;
-    --green-card: #1b5e20;
     --text-dark: #222;
 }
 
@@ -16,10 +13,10 @@
 body {
     background-color: var(--bg-app);
     color: var(--text-dark);
-    padding-bottom: 140px; /* Evita que o conteúdo fique escondido pelo menu inferior e rodapé */
+    padding-bottom: 140px;
 }
 
-/* Header */
+/* Header com Logo Livre (Sem bordas, sem círculos, sem retângulos) */
 .app-header {
     background: linear-gradient(135deg, #111, #252525);
     color: white;
@@ -38,12 +35,13 @@ body {
     gap: 12px;
 }
 
-.logo-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ff9800;
+.logo-limpo {
+    width: 55px;
+    height: 55px;
+    object-fit: contain; /* Mantém o formato original sem cortes ou molduras */
+    border: none;
+    background: transparent;
+    box-shadow: none;
 }
 
 .header-text h2 {
@@ -75,7 +73,7 @@ body {
     display: none !important;
 }
 
-/* Cards Estilo Aplicativo (Pizzas, Esfihas, Bebidas) */
+/* Cards Estilo Aplicativo */
 .cards-container {
     display: flex;
     flex-direction: column;
@@ -87,11 +85,8 @@ body {
     padding: 20px;
     color: white;
     box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    position: relative;
-    overflow: hidden;
 }
 
-/* Cores customizadas inspiradas na imagem */
 .card-theme-1 { background: linear-gradient(135deg, #d32f2f, #9c0000); }
 .card-theme-2 { background: linear-gradient(135deg, #f57c00, #d84315); }
 .card-theme-3 { background: linear-gradient(135deg, #2e7d32, #1b5e20); }
@@ -127,7 +122,7 @@ body {
     font-size: 1.3rem;
 }
 
-/* Botões de Subcategorias dentro do Card */
+/* Botões de Subcategorias */
 .card-subcategorias {
     display: flex;
     gap: 8px;
@@ -143,14 +138,13 @@ body {
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
 }
 
-.subcat-btn:hover, .subcat-btn:active {
+.subcat-btn:hover {
     background: rgba(255, 255, 255, 0.45);
 }
 
-/* Tela de Produtos */
+/* Produtos */
 .btn-voltar-home {
     background: #e0e0e0;
     border: none;
@@ -229,7 +223,7 @@ body {
     cursor: pointer;
 }
 
-/* Rodapé Desenvolvido por ImpulsoWeb10 */
+/* Rodapé */
 .app-footer-dev {
     text-align: center;
     padding: 12px;
@@ -245,7 +239,7 @@ body {
     font-weight: bold;
 }
 
-/* Barra de Navegação Inferior */
+/* Barra Inferior */
 .bottom-nav {
     position: fixed;
     bottom: 0;
