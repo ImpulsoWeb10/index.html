@@ -1,4 +1,3 @@
-// Substitua pela URL da sua API do Google Apps Script
 const SHEET_URL = 'SUA_URL_DE_API_DO_GOOGLE_SHEETS_AQUI';
 
 let produtosGlobal = [];
@@ -9,7 +8,6 @@ async function carregarCardapio() {
         const resposta = await fetch(SHEET_URL);
         const dados = await resposta.json();
         
-        // Filtra apenas disponíveis e ordena
         produtosGlobal = dados.filter(p => String(p.disponivel).toUpperCase() === 'SIM');
         produtosGlobal.sort((a, b) => parseInt(a.ordem || 0) - parseInt(b.ordem || 0));
 
@@ -23,9 +21,8 @@ async function carregarCardapio() {
 
 function renderizarCardsHome(produtos) {
     const container = document.getElementById('cards-principais-container');
-    
-    // Agrupa produtos por categoria e suas subcategorias
     const categoriasMap = {};
+    
     produtos.forEach(p => {
         if (!categoriasMap[p.categoria]) {
             categoriasMap[p.categoria] = new Set();
@@ -39,7 +36,6 @@ function renderizarCardsHome(produtos) {
     const iconesCards = {
         'Pizzas': 'fa-pizza-slice',
         'Esfihas': 'fa-bread-slice',
-        'Bedidas': 'fa-cup-straw',
         'Bebidas': 'fa-wine-glass'
     };
 
@@ -55,7 +51,6 @@ function renderizarCardsHome(produtos) {
             subBotoesHtml += `<button class="subcat-btn" onclick="abrirSubcategoria('${categoria}', '${sub}')">${sub}</button>`;
         });
 
-        // Se não houver subcategorias cadastradas, cria um botão padrão para abrir a categoria inteira
         if (subcategorias.size === 0) {
             subBotoesHtml = `<button class="subcat-btn" onclick="abrirSubcategoria('${categoria}', '')">Ver Todos</button>`;
         }
@@ -159,10 +154,8 @@ function finalizarPedidoWhatsapp() {
 
     texto += `%0A*Total: R$ ${total.toFixed(2)}*`;
 
-    // Número do WhatsApp oficial fornecido por você
     const telefone = "5511954950044";
     window.open(`https://wa.me/${telefone}?text=${texto}`, '_blank');
 }
 
-// Inicializa a aplicação buscando os dados do Google Sheets
 carregarCardapio();
