@@ -1,87 +1,74 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esfiraria Juliana</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-
-    <!-- Header com Logo Limpo (Sem bordas, círculos ou fundos) -->
-    <header class="app-header">
-        <div class="header-logo-area">
-           <img src="<a href="https://postimg.cc/9RcLzxnV" target="_blank"><img src="https://i.postimg.cc/9RcLzxnV/logo.jpg" alt="logo"></a>">
-            <div class="header-text">
-                <h2>Esfiraria Juliana</h2>
-                <p>O verdadeiro sabor em cada mordida!</p>
-            </div>
+<!-- Header com Imagem de Fundo (app.png) e Menu Hambúrguer -->
+<header class="app-header-banner" style="background-image: url('logo.png');">
+    <div class="header-overlay"></div>
+    <div class="header-top-content">
+        <div class="header-titles">
+            <h1>Esfiraria Juliana</h1>
+            <p>O verdadeiro sabor em cada mordida!</p>
         </div>
         <button class="menu-btn" onclick="abrirMenuLateral()">
             <i class="fa-solid fa-bars"></i>
         </button>
-    </header>
+    </div>
+</header>
 
-    <main class="app-main">
-        <!-- Tela Inicial: Cards Principais com Subbotões -->
-        <div id="view-home" class="view-section">
-            <div class="cards-container" id="cards-principais-container">
-                <!-- Renderizado via JS -->
-            </div>
+<main class="app-main">
+    <!-- Tela Inicial: Cards Principais Estilo App Moderno -->
+    <div id="view-home" class="view-section">
+        <div class="cards-container" id="cards-principais-container">
+            <!-- Renderizado dinamicamente via app.js -->
         </div>
-
-        <!-- Tela de Listagem de Produtos -->
-        <div id="view-produtos" class="view-section hidden">
-            <button class="btn-voltar-home" onclick="voltarParaHome()">
-                <i class="fa-solid fa-arrow-left"></i> Voltar ao Início
-            </button>
-            <h3 id="titulo-secao-produtos" class="secao-titulo">Produtos</h3>
-            <div id="lista-produtos" class="produtos-grid">
-                <!-- Produtos carregados do Google Sheets -->
-            </div>
-        </div>
-    </main>
-
-    <!-- Rodapé Personalizado -->
-    <footer class="app-footer-dev">
-        <p>Desenvolvido por <strong>ImpulsoWeb10</strong></p>
-        <p>
-            <a href="https://wa.me/5511954950044?text=Olá!%20Quero%20saber%20mais%20sobre%20esse%20app%20Favorita" target="_blank">
-                ( Crie seu app ou link de Avaliação - Saiba Mais )
-            </a>
-        </p>
-    </footer>
-
-    <!-- Barra de Navegação Inferior -->
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item active" onclick="voltarParaHome()">
-            <i class="fa-solid fa-house"></i>
-            <span>Início</span>
-        </a>
-        <a href="#" class="nav-item" onclick="verPedidosCarrinho()">
-            <i class="fa-solid fa-clipboard-list"></i>
-            <span>Pedidos</span>
-        </a>
-        <a href="https://wa.me/5511954950044?text=Olá!%20Gostaria%20de%20deixar%20uma%20avaliação." target="_blank" class="nav-item">
-            <i class="fa-solid fa-star"></i>
-            <span>Avaliações</span>
-        </a>
-        <a href="https://wa.me/5511954950044?text=Olá!%20Preciso%20de%20suporte." target="_blank" class="nav-item">
-            <i class="fa-solid fa-phone"></i>
-            <span>Contato</span>
-        </a>
-    </nav>
-
-    <!-- Carrinho Flutuante -->
-    <div id="carrinho-flutuante" class="carrinho-flutuante hidden">
-        <div class="carrinho-info">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <span id="contador-carrinho">0</span> itens | <span id="valor-total">R$ 0,00</span>
-        </div>
-        <button onclick="finalizarPedidoWhatsapp()">Pedir WhatsApp</button>
     </div>
 
-    <script src="app.js"></script>
-</body>
-</html>
+    <!-- Tela de Listagem de Produtos -->
+    <div id="view-produtos" class="view-section hidden">
+        <button class="btn-voltar-home" onclick="voltarParaHome()">
+            <i class="fa-solid fa-arrow-left"></i> Voltar ao Início
+        </button>
+        <h3 id="titulo-secao-produtos" class="secao-titulo">Produtos</h3>
+        <div id="lista-produtos" class="produtos-grid">
+            <!-- Produtos carregados do Google Sheets -->
+        </div>
+    </div>
+</main>
+
+<!-- Rodapé Personalizado -->
+<footer class="app-footer-dev">
+    <p>Desenvolvido por <strong>ImpulsoWeb10</strong></p>
+    <p>
+        <a href="https://wa.me/5511954950044?text=Olá!%20Quero%20saber%20mais%20sobre%20esse%20app" target="_blank">
+            ( Crie seu app ou link de Avaliação - Saiba Mais )
+        </a>
+    </p>
+</footer>
+
+<!-- Barra de Navegação Inferior -->
+<nav class="bottom-nav">
+    <a href="#" class="nav-item active" onclick="voltarParaHome()">
+        <i class="fa-solid fa-house"></i>
+        <span>Início</span>
+    </a>
+    <a href="#" class="nav-item" onclick="verPedidosCarrinho()">
+        <i class="fa-solid fa-clipboard-list"></i>
+        <span>Pedidos</span>
+    </a>
+    <a href="https://wa.me/5511954950044?text=Olá!%20Gostaria%20de%20deixar%20uma%20avaliação." target="_blank" class="nav-item">
+        <i class="fa-solid fa-star"></i>
+        <span>Avaliações</span>
+    </a>
+    <a href="https://wa.me/5511954950044?text=Olá!%20Preciso%20de%20suporte." target="_blank" class="nav-item">
+        <i class="fa-solid fa-phone"></i>
+        <span>Contato</span>
+    </a>
+</nav>
+
+<!-- Carrinho Flutuante -->
+<div id="carrinho-flutuante" class="carrinho-flutuante hidden">
+    <div class="carrinho-info">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="contador-carrinho">0</span> itens | <span id="valor-total">R$ 0,00</span>
+    </div>
+    <button onclick="finalizarPedidoWhatsapp()">Pedir WhatsApp</button>
+</div>
+
+<script src="app.js"></script>
