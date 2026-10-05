@@ -1,412 +1,441 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juliana Pizzaria e Esfiharia</title>
+    <title>Pizzaria Juliana & Favorita</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        pizzaRed: '#e63946',
+                        pizzaDark: '#0f172a',
+                        pizzaCard: '#1e293b',
+                        neonGold: '#fbbf24',
+                        neonOrange: '#f97316'
+                    },
+                    boxShadow: {
+                        'neon-glow': '0 0 20px rgba(251, 191, 36, 0.4), inset 0 0 15px rgba(230, 57, 70, 0.2)',
+                        'neon-card': '0 0 15px rgba(249, 115, 22, 0.25)',
+                        'neon-button': '0 0 12px rgba(230, 57, 70, 0.6)'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary-color: #e63946;
-            --secondary-color: #f1faee;
-            --dark-color: #1d3557;
-            --accent-color: #ffb703;
-            --bg-color: #f8f9fa;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         body {
-            background-color: var(--bg-color);
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background-color: #0b0f19;
+            color: #f8fafc;
         }
-
-        header {
-            background-color: var(--dark-color);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        .neon-text-gold {
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.6), 0 0 20px rgba(251, 191, 36, 0.3);
         }
-
-        .logo-container {
-            margin-bottom: 10px;
+        .neon-text-red {
+            text-shadow: 0 0 10px rgba(230, 57, 70, 0.8), 0 0 20px rgba(230, 57, 70, 0.4);
         }
-
-        .logo-container img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--accent-color);
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-
-        header h1 {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
+        /* Custom Scrollbar for Modals */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-
-        header p {
-            font-size: 0.95rem;
-            color: #adb5bd;
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
         }
-
-        .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 0 20px;
-            flex: 1;
-            width: 100%;
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
         }
-
-        .menu-title {
-            text-align: center;
-            margin-bottom: 25px;
-            color: var(--dark-color);
-            font-size: 1.5rem;
-        }
-
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-        }
-
-        .category-card {
-            background: white;
-            border-radius: 12px;
-            padding: 25px 15px;
-            text-align: center;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            border-bottom: 4px solid var(--primary-color);
-        }
-
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-        }
-
-        .category-card span {
-            font-size: 2.5rem;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .category-card h3 {
-            font-size: 1.1rem;
-            color: var(--dark-color);
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 500px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            animation: fadeIn 0.3s ease;
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .modal-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h2 {
-            font-size: 1.3rem;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .product-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .product-item:last-child {
-            border-bottom: none;
-        }
-
-        .product-info h4 {
-            font-size: 1rem;
-            color: var(--dark-color);
-            margin-bottom: 3px;
-        }
-
-        .product-info p {
-            font-size: 0.85rem;
-            color: #6c757d;
-        }
-
-        .product-price {
-            font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #e9ecef;
-            color: #6c757d;
-            font-size: 0.9rem;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e63946;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between bg-gradient-to-b from-[#0b0f19] via-[#111827] to-[#0f172a]">
 
-    <header>
-        <div class="logo-container">
-            <!-- Certifique-se de ter uma imagem chamada 'logo.png' na mesma pasta -->
-            <img src="logo.png" alt="Logo Juliana Pizzaria" onerror="this.src='https://via.placeholder.com/100?text=Logo'">
+    <header class="w-full py-8 px-4 text-center relative overflow-hidden border-b border-gray-800 bg-[#0f172a]/80 shadow-lg">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#e63946_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        
+        <div class="max-w-4xl mx-auto relative z-10 flex flex-col items-center">
+            <!-- Logo with Neon Glow -->
+            <div class="relative mb-4 group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-pizzaRed via-neonOrange to-neonGold rounded-full blur-md opacity-75 group-hover:opacity-100 transition duration-300 animate-pulse"></div>
+                <div class="relative w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-neonGold bg-gray-900 shadow-xl flex items-center justify-center">
+                    <img src="logo.png" alt="Pizzaria Juliana & Favorita Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/200x200/1e293b/fbbf24?text=🍕+Juliana';">
+                </div>
+            </div>
+
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide neon-text-gold mb-2">
+                Pizzaria Juliana & Favorita
+            </h1>
+            <p class="text-sm md:text-base text-gray-300 italic font-medium neon-text-red mb-4">
+                "Sabor e Qualidade em Cada Fatia!"
+            </p>
+
+            <!-- Contact & Address Pills -->
+            <div class="flex flex-wrap justify-center items-center gap-3 text-xs md:text-sm text-gray-300 mt-2">
+                <a href="tel:11958338379" class="glass-panel px-4 py-2 rounded-full flex items-center gap-2 hover:border-neonGold transition shadow-md">
+                    <span class="text-neonGold">📞</span> (11) 95833-8379
+                </a>
+                <a href="tel:1120116404" class="glass-panel px-4 py-2 rounded-full flex items-center gap-2 hover:border-neonGold transition shadow-md">
+                    <span class="text-neonGold">📞</span> (11) 2011-6404
+                </a>
+                <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-2 shadow-md">
+                    <span class="text-pizzaRed">📍</span> Estrada da Promissão, nº 8 – Jardim Carolina – Itaquaquecetuba
+                </div>
+            </div>
         </div>
-        <h1>Juliana Pizzaria e Esfiharia</h1>
-        <p>As melhores pizzas e esfihas da região!</p>
     </header>
 
-    <div class="container">
-        <h2 class="menu-title">Nosso Cardápio</h2>
-        
-        <div class="categories-grid">
-            <div class="category-card" onclick="openModal('modal-salgada')">
-                <span>🍕</span>
-                <h3>Pizza Salgada</h3>
-            </div>
-            <div class="category-card" onclick="openModal('modal-doce')">
-                <span>🍫</span>
-                <h3>Pizza Doce</h3>
-            </div>
-            <div class="category-card" onclick="openModal('modal-esfiha')">
-                <span>🥟</span>
-                <h3>Esfiha</h3>
-            </div>
-            <div class="category-card" onclick="openModal('modal-bebida')">
-                <span>🥤</span>
-                <h3>Bebidas</h3>
-            </div>
+    <main class="max-w-5xl w-full mx-auto px-4 py-10 flex-grow">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold tracking-wider text-gray-100 uppercase border-b-2 border-pizzaRed inline-block pb-1">
+                Cardápio Digital
+            </h2>
+            <p class="text-gray-400 text-sm mt-2">Toque em uma categoria abaixo para abrir e ver os produtos e valores:</p>
         </div>
-    </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Pizza Salgada -->
+            <button onclick="openModal('modal-salgada')" class="glass-panel rounded-2xl p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-neon-card hover:border-pizzaRed group cursor-pointer flex flex-col items-center justify-center">
+                <div class="w-20 h-20 rounded-full bg-pizzaRed/10 border border-pizzaRed/30 flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition duration-300 shadow-inner">
+                    🍕
+                </div>
+                <h3 class="text-lg font-bold text-gray-100 group-hover:text-neonGold transition">Pizza Salgada</h3>
+                <p class="text-xs text-gray-400 mt-1">Tradicionais e Especiais</p>
+                <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-pizzaRed/20 text-pizzaRed border border-pizzaRed/30 group-hover:bg-pizzaRed group-hover:text-white transition">Ver Opções</span>
+            </button>
+
+            <!-- Pizza Doce -->
+            <button onclick="openModal('modal-doce')" class="glass-panel rounded-2xl p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-neon-card hover:border-neonGold group cursor-pointer flex flex-col items-center justify-center">
+                <div class="w-20 h-20 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition duration-300 shadow-inner">
+                    🍫
+                </div>
+                <h3 class="text-lg font-bold text-gray-100 group-hover:text-neonGold transition">Pizza Doce</h3>
+                <p class="text-xs text-gray-400 mt-1">Sobremesas Irresistíveis</p>
+                <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 group-hover:bg-amber-500 group-hover:text-gray-950 transition">Ver Opções</span>
+            </button>
+
+            <!-- Esfiha -->
+            <button onclick="openModal('modal-esfiha')" class="glass-panel rounded-2xl p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-neon-card hover:border-orange-500 group cursor-pointer flex flex-col items-center justify-center">
+                <div class="w-20 h-20 rounded-full bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition duration-300 shadow-inner">
+                    🥟
+                </div>
+                <h3 class="text-lg font-bold text-gray-100 group-hover:text-neonGold transition">Esfiha</h3>
+                <p class="text-xs text-gray-400 mt-1">Salgadas, Doces e Especiais</p>
+                <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 group-hover:bg-orange-500 group-hover:text-white transition">Ver Opções</span>
+            </button>
+
+            <!-- Bebidas -->
+            <button onclick="openModal('modal-bebida')" class="glass-panel rounded-2xl p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-neon-card hover:border-blue-500 group cursor-pointer flex flex-col items-center justify-center">
+                <div class="w-20 h-20 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition duration-300 shadow-inner">
+                    🥤
+                </div>
+                <h3 class="text-lg font-bold text-gray-100 group-hover:text-neonGold transition">Bebidas</h3>
+                <p class="text-xs text-gray-400 mt-1">Refrigerantes e Sucos</p>
+                <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 group-hover:bg-blue-500 group-hover:text-white transition">Ver Opções</span>
+            </button>
+        </div>
+    </main>
 
     <!-- MODAL: Pizza Salgada -->
-    <div id="modal-salgada" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Pizza Salgada</h2>
-                <button class="close-btn" onclick="closeModal('modal-salgada')">&times;</button>
+    <div id="modal-salgada" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="glass-panel w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-pizzaRed/50 flex flex-col max-h-[85vh]">
+            <div class="bg-gradient-to-r from-pizzaRed to-orange-600 px-6 py-4 flex justify-between items-center text-white">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🍕</span>
+                    <h3 class="text-lg font-bold tracking-wide">Pizzas Salgadas</h3>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="closeModal('modal-salgada')" class="px-3 py-1 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold transition border border-white/25">Voltar</button>
+                    <button onclick="closeModal('modal-salgada')" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Mussarela</h4>
-                        <p>Molho de tomate, mussarela e orégano</p>
+            <div class="p-6 overflow-y-auto space-y-4 divide-y divide-gray-800/60">
+                <div class="pt-3 first:pt-0 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Mussarela</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Molho de tomate especial, mussarela selecionada, rodelas de tomate fresco e orégano.</p>
                     </div>
-                    <div class="product-price">R$ 45,00</div>
-                </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Calabresa</h4>
-                        <p>Molho, calabresa fatiada e cebola</p>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 48,00</span>
                     </div>
-                    <div class="product-price">R$ 48,00</div>
                 </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Frango com Catupiry</h4>
-                        <p>Frango desfiado temperado e catupiry original</p>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Calabresa</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Molho de tomate, finas fatias de calabresa artesanal, cebolas recheadas e orégano.</p>
                     </div>
-                    <div class="product-price">R$ 55,00</div>
-                </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Portuguesa</h4>
-                        <p>Mussarela, presunto, ovos, cebola, azeitona e ervilha</p>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 49,00</span>
                     </div>
-                    <div class="product-price">R$ 58,00</div>
                 </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Frango com Catupiry</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Frango desfiado temperado ao molho da casa, generosas camadas de Catupiry original e orégano.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 56,00</span>
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Portuguesa</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Mussarela, presunto cozido, ovos cozidos picados, cebola, azeitonas pretas e ervilha fresca.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 58,00</span>
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Marguerita</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Mussarela, rodelas de tomate, folhas de manjericão fresco colhido e fio de azeite extra virgem.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 50,00</span>
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Bacon com Cheddar</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Cremoso queijo cheddar cremoso coberto com crocantes cubos de bacon defumado.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 60,00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-900/90 border-t border-gray-800 text-center">
+                <button onclick="closeModal('modal-salgada')" class="w-full py-2.5 rounded-xl bg-pizzaRed text-white font-bold hover:bg-red-600 transition shadow-neon-button text-sm">Voltar ao Cardápio</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: Pizza Doce -->
-    <div id="modal-doce" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Pizza Doce</h2>
-                <button class="close-btn" onclick="closeModal('modal-doce')">&times;</button>
+    <div id="modal-doce" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="glass-panel w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-amber-500/50 flex flex-col max-h-[85vh]">
+            <div class="bg-gradient-to-r from-amber-600 to-yellow-600 px-6 py-4 flex justify-between items-center text-gray-950 font-semibold">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🍫</span>
+                    <h3 class="text-lg font-bold tracking-wide text-white">Pizzas Doces</h3>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="closeModal('modal-doce')" class="px-3 py-1 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold text-white transition border border-white/25">Voltar</button>
+                    <button onclick="closeModal('modal-doce')" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>チョコレート Chocolate</h4>
-                        <p>Chocolate cremoso ao leite com granulado</p>
+            <div class="p-6 overflow-y-auto space-y-4 divide-y divide-gray-800/60">
+                <div class="pt-3 first:pt-0 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Chocolate ao Leite</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Deliciosa cobertura de chocolate cremoso ao leite artesanal com granulado selecionado.</p>
                     </div>
-                    <div class="product-price">R$ 45,00</div>
-                </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Prestígio</h4>
-                        <p>Chocolate com cobertura de coco ralado</p>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 48,00</span>
                     </div>
-                    <div class="product-price">R$ 48,00</div>
                 </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Romeu e Julieta</h4>
-                        <p>Goiabada cremosa com catupiry ou mussarela</p>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Prestígio</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Camada generosa de chocolate cremoso coberto com coco ralado fresco e adocicado.</p>
                     </div>
-                    <div class="product-price">R$ 45,00</div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 52,00</span>
+                    </div>
                 </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Romeu e Julieta</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Suave goiabada cremosa espalhada com porções de mussarela ou catupiry especial.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 48,00</span>
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Banana com Canela</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Fatias de banana fresca caramelizadas com açúcar refinado, toque de leite condensado e canela em pó.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 49,00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-900/90 border-t border-gray-800 text-center">
+                <button onclick="closeModal('modal-doce')" class="w-full py-2.5 rounded-xl bg-amber-500 text-gray-950 font-bold hover:bg-amber-400 transition shadow-lg text-sm">Voltar ao Cardápio</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: Esfiha -->
-    <div id="modal-esfiha" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Esfihas</h2>
-                <button class="close-btn" onclick="closeModal('modal-esfiha')">&times;</button>
+    <div id="modal-esfiha" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="glass-panel w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-orange-500/50 flex flex-col max-h-[85vh]">
+            <div class="bg-gradient-to-r from-orange-600 to-amber-600 px-6 py-4 flex justify-between items-center text-white">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🥟</span>
+                    <h3 class="text-lg font-bold tracking-wide">Esfihas (Salgadas, Doces e Especiais)</h3>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="closeModal('modal-esfiha')" class="px-3 py-1 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold transition border border-white/25">Voltar</button>
+                    <button onclick="closeModal('modal-esfiha')" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Esfiha de Carne</h4>
-                        <p>Carne temperada com especiarias</p>
+            <div class="p-6 overflow-y-auto space-y-4 divide-y divide-gray-800/60">
+                <div class="pt-3 first:pt-0 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Esfiha de Carne</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Massa artesanal macia recheada com carne moída temperada com especiarias e limão.</p>
                     </div>
-                    <div class="product-price">R$ 6,00</div>
-                </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Esfiha de Frango</h4>
-                        <p>Frango desfiado cremoso</p>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 6,50</span>
                     </div>
-                    <div class="product-price">R$ 6,00</div>
                 </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Esfiha de Queijo</h4>
-                        <p>Mix de queijos selecionados</p>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Esfiha de Frango com Catupiry</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Frango desfiado suculento misturado com autêntico catupiry cremoso.</p>
                     </div>
-                    <div class="product-price">R$ 6,50</div>
-                </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Esfiha de Calabresa com Catupiry</h4>
-                        <p>Calabresa moída com catupiry</p>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 7,00</span>
                     </div>
-                    <div class="product-price">R$ 7,00</div>
                 </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Esfiha de Queijo</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Mix selecionado de queijos derretidos de sabor marcante e irresistível.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 7,00</span>
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Esfiha de Calabresa com Queijo</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Calabresa moída fina refogada coberta com cobertura de queijo derretido.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 7,50</span>
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Esfiha Doce de Chocolate</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Recheio caprichado de creme de chocolate ao leite com granulado especial.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 8,00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-900/90 border-t border-gray-800 text-center">
+                <button onclick="closeModal('modal-esfiha')" class="w-full py-2.5 rounded-xl bg-orange-600 text-white font-bold hover:bg-orange-500 transition shadow-lg text-sm">Voltar ao Cardápio</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: Bebidas -->
-    <div id="modal-bebida" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Bebidas</h2>
-                <button class="close-btn" onclick="closeModal('modal-bebida')">&times;</button>
+    <div id="modal-bebida" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="glass-panel w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-blue-500/50 flex flex-col max-h-[85vh]">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 flex justify-between items-center text-white">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🥤</span>
+                    <h3 class="text-lg font-bold tracking-wide">Bebidas Geladas</h3>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="closeModal('modal-bebida')" class="px-3 py-1 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold transition border border-white/25">Voltar</button>
+                    <button onclick="closeModal('modal-bebida')" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Refrigerante 2 Litros</h4>
-                        <p>Coca-Cola, Guaraná Antarctica, Fanta</p>
+            <div class="p-6 overflow-y-auto space-y-4 divide-y divide-gray-800/60">
+                <div class="pt-3 first:pt-0 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Refrigerante 2 Litros</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Coca-Cola, Guaraná Antarctica, Fanta Laranja ou Soda Limonada.</p>
                     </div>
-                    <div class="product-price">R$ 14,00</div>
-                </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Refrigerante Lata (350ml)</h4>
-                        <p>Diversos sabores</p>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 15,00</span>
                     </div>
-                    <div class="product-price">R$ 6,00</div>
                 </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Água Mineral (500ml)</h4>
-                        <p>Com ou sem gás</p>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Refrigerante Lata (350ml)</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Diversos sabores gelados à sua escolha.</p>
                     </div>
-                    <div class="product-price">R$ 4,00</div>
-                </div>
-                <div class="product-item">
-                    <div class="product-info">
-                        <h4>Cerveja Long Neck</h4>
-                        <p>Heineken ou Stella Artois</p>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 6,50</span>
                     </div>
-                    <div class="product-price">R$ 9,00</div>
                 </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Água Mineral (500ml)</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Com gás ou sem gás.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 4,50</span>
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-between items-start gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-100">Suco Natural (Laranja ou Limonada - 500ml)</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Feito na hora com frutas frescas selecionadas.</p>
+                    </div>
+                    <div class="text-right whitespace-nowrap">
+                        <span class="text-neonGold font-extrabold text-sm">R$ 9,00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-900/90 border-t border-gray-800 text-center">
+                <button onclick="closeModal('modal-bebida')" class="w-full py-2.5 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-500 transition shadow-lg text-sm">Voltar ao Cardápio</button>
             </div>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 Juliana Pizzaria e Esfiharia - Todos os direitos reservados.</p>
+    <footer class="w-full py-6 text-center text-xs text-gray-400 border-t border-gray-800 bg-[#0b0f19]">
+        <p class="neon-text-gold font-medium mb-1">Pizzaria Juliana & Favorita &copy; 2026 - Todos os direitos reservados</p>
+        <p>Qualidade, tradição e carinho em cada fornada.</p>
     </footer>
 
     <script>
+        // Function to open specific modal
         function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
         }
 
+        // Function to close specific modal
         function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // Restore scrolling
+            }
         }
 
-        // Fechar o modal ao clicar fora da caixa de conteúdo
+        // Close modal when clicking outside the modal box content
         window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
+            if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
+                event.target.classList.remove('flex');
+                event.target.classList.add('hidden');
+                document.body.style.overflow = 'auto';
             }
         }
     </script>
