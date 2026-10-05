@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juliana Pizzaria e Esfiharia</title>
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #f1faee;
+            --dark-color: #1d3557;
+            --accent-color: #ffb703;
+            --bg-color: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            margin-bottom: 10px;
+        }
+
+        .logo-container img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            color: #adb5bd;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .menu-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--dark-color);
+            font-size: 1.5rem;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-bottom: 4px solid var(--primary-color);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .category-card span {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .category-card h3 {
+            font-size: 1.1rem;
+            color: var(--dark-color);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-info h4 {
+            font-size: 1rem;
+            color: var(--dark-color);
+            margin-bottom: 3px;
+        }
+
+        .product-info p {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .product-price {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #e9ecef;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <!-- Certifique-se de ter uma imagem chamada 'logo.png' na mesma pasta -->
+            <img src="logo.png" alt="Logo Juliana Pizzaria" onerror="this.src='https://via.placeholder.com/100?text=Logo'">
+        </div>
+        <h1>Juliana Pizzaria e Esfiharia</h1>
+        <p>As melhores pizzas e esfihas da região!</p>
+    </header>
+
+    <div class="container">
+        <h2 class="menu-title">Nosso Cardápio</h2>
+        
+        <div class="categories-grid">
+            <div class="category-card" onclick="openModal('modal-salgada')">
+                <span>🍕</span>
+                <h3>Pizza Salgada</h3>
+            </div>
+            <div class="category-card" onclick="openModal('modal-doce')">
+                <span>🍫</span>
+                <h3>Pizza Doce</h3>
+            </div>
+            <div class="category-card" onclick="openModal('modal-esfiha')">
+                <span>🥟</span>
+                <h3>Esfiha</h3>
+            </div>
+            <div class="category-card" onclick="openModal('modal-bebida')">
+                <span>🥤</span>
+                <h3>Bebidas</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Pizza Salgada -->
+    <div id="modal-salgada" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Pizza Salgada</h2>
+                <button class="close-btn" onclick="closeModal('modal-salgada')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Mussarela</h4>
+                        <p>Molho de tomate, mussarela e orégano</p>
+                    </div>
+                    <div class="product-price">R$ 45,00</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Calabresa</h4>
+                        <p>Molho, calabresa fatiada e cebola</p>
+                    </div>
+                    <div class="product-price">R$ 48,00</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Frango com Catupiry</h4>
+                        <p>Frango desfiado temperado e catupiry original</p>
+                    </div>
+                    <div class="product-price">R$ 55,00</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Portuguesa</h4>
+                        <p>Mussarela, presunto, ovos, cebola, azeitona e ervilha</p>
+                    </div>
+                    <div class="product-price">R$ 58,00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Pizza Doce -->
+    <div id="modal-doce" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Pizza Doce</h2>
+                <button class="close-btn" onclick="closeModal('modal-doce')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>チョコレート Chocolate</h4>
+                        <p>Chocolate cremoso ao leite com granulado</p>
+                    </div>
+                    <div class="product-price">R$ 45,00</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Prestígio</h4>
+                        <p>Chocolate com cobertura de coco ralado</p>
+                    </div>
+                    <div class="product-price">R$ 48,00</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Romeu e Julieta</h4>
+                        <p>Goiabada cremosa com catupiry ou mussarela</p>
+                    </div>
+                    <div class="product-price">R$ 45,00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Esfiha -->
+    <div id="modal-esfiha" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Esfihas</h2>
+                <button class="close-btn" onclick="closeModal('modal-esfiha')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Esfiha de Carne</h4>
+                        <p>Carne temperada com especiarias</p>
+                    </div>
+                    <div class="product-price">R$ 6,00</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Esfiha de Frango</h4>
+                        <p>Frango desfiado cremoso</p>
+                    </div>
+                    <div class="product-price">R$ 6,00</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Esfiha de Queijo</h4>
+                        <p>Mix de queijos selecionados</p>
+                    </div>
+                    <div class="product-price">R$ 6,50</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Esfiha de Calabresa com Catupiry</h4>
+                        <p>Calabresa moída com catupiry</p>
+                    </div>
+                    <div class="product-price">R$ 7,00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Bebidas -->
+    <div id="modal-bebida" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Bebidas</h2>
+                <button class="close-btn" onclick="closeModal('modal-bebida')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Refrigerante 2 Litros</h4>
+                        <p>Coca-Cola, Guaraná Antarctica, Fanta</p>
+                    </div>
+                    <div class="product-price">R$ 14,00</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Refrigerante Lata (350ml)</h4>
+                        <p>Diversos sabores</p>
+                    </div>
+                    <div class="product-price">R$ 6,00</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Água Mineral (500ml)</h4>
+                        <p>Com ou sem gás</p>
+                    </div>
+                    <div class="product-price">R$ 4,00</div>
+                </div>
+                <div class="product-item">
+                    <div class="product-info">
+                        <h4>Cerveja Long Neck</h4>
+                        <p>Heineken ou Stella Artois</p>
+                    </div>
+                    <div class="product-price">R$ 9,00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Juliana Pizzaria e Esfiharia - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Fechar o modal ao clicar fora da caixa de conteúdo
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
