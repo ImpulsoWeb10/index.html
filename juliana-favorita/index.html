@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pizzaria Juliana & Favorita</title>
+    <title>Pizzaria Juliana & Esfiharia</title>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -13,25 +14,37 @@
                 extend: {
                     colors: {
                         pizzaRed: '#e63946',
-                        pizzaDark: '#0f172a',
+                        pizzaDark: '#0b0f19',
                         pizzaCard: '#1e293b',
                         neonGold: '#fbbf24',
                         neonOrange: '#f97316'
                     },
                     boxShadow: {
-                        'neon-glow': '0 0 20px rgba(251, 191, 36, 0.4), inset 0 0 15px rgba(230, 57, 70, 0.2)',
-                        'neon-card': '0 0 15px rgba(249, 115, 22, 0.25)',
-                        'neon-button': '0 0 12px rgba(230, 57, 70, 0.6)'
+                        'neon-glow': '0 0 25px rgba(251, 191, 36, 0.4), inset 0 0 15px rgba(230, 57, 70, 0.3)',
+                        'neon-card': '0 0 20px rgba(249, 115, 22, 0.3)',
+                        'neon-button': '0 0 15px rgba(230, 57, 70, 0.7)'
                     }
                 }
             }
         }
     </script>
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- html2pdf for receipt generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #0b0f19;
+            background-color: #07090e;
             color: #f8fafc;
         }
         .neon-text-gold {
@@ -41,17 +54,17 @@
             text-shadow: 0 0 10px rgba(230, 57, 70, 0.8), 0 0 20px rgba(230, 57, 70, 0.4);
         }
         .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        /* Custom Scrollbar for Modals */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #0f172a;
+            background: #0b0f19;
         }
         ::-webkit-scrollbar-thumb {
             background: #334155;
@@ -60,384 +73,624 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #e63946;
         }
+        .mobile-frame {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(230, 57, 70, 0.15);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between bg-gradient-to-b from-[#0b0f19] via-[#111827] to-[#0f172a]">
+<body class="bg-gray-950 flex justify-center">
 
-    <header class="w-full py-8 px-4 text-center relative overflow-hidden border-b border-gray-800 bg-[#0f172a]/80 shadow-lg">
-        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#e63946_1px,transparent_1px)] [background-size:16px_16px]"></div>
-        
-        <div class="max-w-4xl mx-auto relative z-10 flex flex-col items-center">
-            <!-- Logo with Neon Glow -->
-            <div class="relative mb-4 group">
-                <div class="absolute -inset-1 bg-gradient-to-r from-pizzaRed via-neonOrange to-neonGold rounded-full blur-md opacity-75 group-hover:opacity-100 transition duration-300 animate-pulse"></div>
-                <div class="relative w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-neonGold bg-gray-900 shadow-xl flex items-center justify-center">
-                    <img src="logo.png" alt="Pizzaria Juliana & Favorita Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/200x200/1e293b/fbbf24?text=🍕+Juliana';">
+    <div id="app" class="mobile-frame w-full flex flex-col justify-between relative bg-gradient-to-b from-[#0b0f19] via-[#111827] to-[#0b0f19]">
+
+        <!-- HEADER -->
+        <header class="w-full py-6 px-4 text-center relative overflow-hidden border-b border-gray-800/80 bg-[#0f172a]/90 shadow-lg">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#e63946_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            
+            <div class="relative z-10 flex flex-col items-center">
+                <!-- Pulsing Logo Frame -->
+                <div class="relative mb-3 group">
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-pizzaRed via-neonOrange to-neonGold rounded-full blur-md opacity-80 animate-pulse"></div>
+                    <div class="relative w-24 h-24 rounded-full overflow-hidden border-3 border-neonGold bg-gray-900 shadow-xl flex items-center justify-center">
+                        <img src="logo.png" alt="Pizzaria Juliana & Esfiharia Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/200x200/1e293b/fbbf24?text=🍕+Juliana';">
+                    </div>
+                </div>
+
+                <h1 class="text-2xl font-extrabold tracking-wide neon-text-gold mb-1">
+                    Pizzaria Juliana & Esfiharia
+                </h1>
+                <p class="text-xs text-gray-300 italic font-medium neon-text-red mb-3">
+                    "Sabor e Qualidade em Cada Fatia!"
+                </p>
+
+                <!-- Contact & Address Info -->
+                <div class="flex flex-wrap justify-center items-center gap-2 text-xs text-gray-300">
+                    <a href="tel:11958338379" class="glass-panel px-3 py-1.5 rounded-full flex items-center gap-1.5 hover:border-neonGold transition shadow-md">
+                        <span class="text-neonGold"><i class="fa-solid fa-phone"></i></span> (11) 95833-8379
+                    </a>
+                    <a href="tel:1120116404" class="glass-panel px-3 py-1.5 rounded-full flex items-center gap-1.5 hover:border-neonGold transition shadow-md">
+                        <span class="text-neonGold"><i class="fa-solid fa-phone"></i></span> (11) 2011-6404
+                    </a>
+                </div>
+                <div class="mt-2 text-[11px] text-gray-400 glass-panel px-3 py-1 rounded-full flex items-center gap-1.5">
+                    <span class="text-pizzaRed"><i class="fa-solid fa-location-dot"></i></span> Estrada da Promissão, nº 8 – Jardim Carolina – Itaquaquecetuba
                 </div>
             </div>
+        </header>
 
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide neon-text-gold mb-2">
-                Pizzaria Juliana & Favorita
-            </h1>
-            <p class="text-sm md:text-base text-gray-300 italic font-medium neon-text-red mb-4">
-                "Sabor e Qualidade em Cada Fatia!"
-            </p>
+        <!-- MAIN CONTENT AREA -->
+        <main class="px-4 py-6 flex-grow pb-24">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-xl font-bold tracking-wider text-gray-100 uppercase border-b-2 border-pizzaRed pb-1">
+                        Cardápio Digital
+                    </h2>
+                    <p class="text-xs text-gray-400 mt-1">Selecione uma categoria para montar seu pedido:</p>
+                </div>
+                <button @click="openCart" class="relative bg-pizzaRed hover:bg-red-600 text-white p-3 rounded-2xl shadow-neon-button transition flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span v-if="cartItemCount > 0" class="absolute -top-2 -right-2 bg-neonGold text-gray-950 font-extrabold text-xs w-6 h-6 rounded-full flex items-center justify-center shadow-md animate-bounce">
+                        {{ cartItemCount }}
+                    </span>
+                </button>
+            </div>
 
-            <!-- Contact & Address Pills -->
-            <div class="flex flex-wrap justify-center items-center gap-3 text-xs md:text-sm text-gray-300 mt-2">
-                <a href="tel:11958338379" class="glass-panel px-4 py-2 rounded-full flex items-center gap-2 hover:border-neonGold transition shadow-md">
-                    <span class="text-neonGold">📞</span> (11) 95833-8379
-                </a>
-                <a href="tel:1120116404" class="glass-panel px-4 py-2 rounded-full flex items-center gap-2 hover:border-neonGold transition shadow-md">
-                    <span class="text-neonGold">📞</span> (11) 2011-6404
-                </a>
-                <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-2 shadow-md">
-                    <span class="text-pizzaRed">📍</span> Estrada da Promissão, nº 8 – Jardim Carolina – Itaquaquecetuba
+            <!-- Categories Grid -->
+            <div class="grid grid-cols-2 gap-4">
+                <button v-for="cat in categories" :key="cat.id" @click="selectCategory(cat)" class="glass-panel rounded-2xl p-4 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-neon-card hover:border-pizzaRed group cursor-pointer flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 rounded-full bg-pizzaRed/10 border border-pizzaRed/30 flex items-center justify-center text-3xl mb-3 group-hover:scale-110 transition duration-300 shadow-inner">
+                        {{ cat.icon }}
+                    </div>
+                    <h3 class="text-sm font-bold text-gray-100 group-hover:text-neonGold transition">{{ cat.name }}</h3>
+                    <p class="text-[10px] text-gray-400 mt-0.5">{{ cat.desc }}</p>
+                    <span class="mt-3 text-[10px] font-semibold px-2.5 py-1 rounded-full bg-pizzaRed/20 text-pizzaRed border border-pizzaRed/30 group-hover:bg-pizzaRed group-hover:text-white transition">Ver Opções</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- CATEGORY PRODUCTS MODAL -->
+        <div v-if="activeCategory" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+            <div class="glass-panel w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl border border-pizzaRed/50 flex flex-col max-h-[90vh] animate-in slide-in-from-bottom duration-300">
+                <div class="bg-gradient-to-r from-pizzaRed to-orange-600 px-5 py-4 flex justify-between items-center text-white">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">{{ activeCategory.icon }}</span>
+                        <div>
+                            <h3 class="text-base font-bold tracking-wide">{{ activeCategory.name }}</h3>
+                            <p class="text-[10px] text-white/80">Escolha seus itens favoritos</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button @click="closeCategoryModal" class="px-3 py-1.5 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold transition border border-white/20">Voltar</button>
+                        <button @click="closeCategoryModal" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
+                    </div>
+                </div>
+
+                <div class="p-4 overflow-y-auto space-y-4 flex-grow divide-y divide-gray-800/60">
+                    <div v-for="product in activeCategory.products" :key="product.id" class="pt-3 first:pt-0 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-gray-100 text-sm">{{ product.name }}</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5 leading-relaxed">{{ product.description }}</p>
+                            <div class="text-neonGold font-extrabold text-sm mt-1">R$ {{ product.price.toFixed(2) }}</div>
+                        </div>
+                        <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                            <div class="flex items-center bg-gray-900 border border-gray-700 rounded-xl overflow-hidden">
+                                <button @click="decrementQty(product)" class="px-2.5 py-1.5 text-gray-300 hover:bg-gray-800 transition">-</button>
+                                <span class="px-3 text-xs font-bold text-white">{{ product.qty || 1 }}</span>
+                                <button @click="incrementQty(product)" class="px-2.5 py-1.5 text-gray-300 hover:bg-gray-800 transition">+</button>
+                            </div>
+                            <button @click="addToCart(product)" class="bg-pizzaRed hover:bg-red-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-neon-button transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-gray-900/90 border-t border-gray-800 flex gap-3">
+                    <button @click="closeCategoryModal" class="w-1/2 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs transition border border-gray-700">Continuar Comprando</button>
+                    <button @click="closeCategoryModal(); openCart();" class="w-1/2 py-2.5 rounded-xl bg-pizzaRed text-white font-bold hover:bg-red-600 transition shadow-neon-button text-xs flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-cart-shopping"></i> Ver Carrinho ({{ cartItemCount }})
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CART MODAL / DRAWER -->
+        <div v-if="isCartOpen" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+            <div class="glass-panel w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl border border-neonGold/50 flex flex-col max-h-[90vh]">
+                <div class="bg-gradient-to-r from-amber-600 to-pizzaRed px-5 py-4 flex justify-between items-center text-white">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🛒</span>
+                        <div>
+                            <h3 class="text-base font-bold tracking-wide">Seu Carrinho</h3>
+                            <p class="text-[10px] text-white/90">Confira seus itens antes de fechar o pedido</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button @click="closeCart" class="px-3 py-1.5 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold transition border border-white/20">Voltar</button>
+                        <button @click="closeCart" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
+                    </div>
+                </div>
+
+                <div class="p-4 overflow-y-auto space-y-3 flex-grow divide-y divide-gray-800/60">
+                    <div v-if="cart.length === 0" class="text-center py-12">
+                        <div class="text-4xl mb-3">🍕</div>
+                        <p class="text-gray-400 text-sm">Seu carrinho está vazio.</p>
+                        <button @click="closeCart" class="mt-4 px-5 py-2 rounded-xl bg-pizzaRed text-white text-xs font-bold shadow-neon-button">Escolher Delícias</button>
+                    </div>
+
+                    <div v-for="(item, index) in cart" :key="index" class="pt-3 first:pt-0 flex justify-between items-center gap-3">
+                        <div>
+                            <h4 class="font-bold text-gray-100 text-sm">{{ item.name }}</h4>
+                            <p class="text-[11px] text-neonGold font-semibold">R$ {{ item.price.toFixed(2) }} x {{ item.qty }}</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-gray-200">R$ {{ (item.price * item.qty).toFixed(2) }}</span>
+                            <button @click="removeFromCart(index)" class="text-red-400 hover:text-red-300 p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="cart.length > 0" class="p-4 bg-gray-900/90 border-t border-gray-800 space-y-3">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-400">Subtotal:</span>
+                        <span class="font-bold text-gray-100">R$ {{ cartSubtotal.toFixed(2) }}</span>
+                    </div>
+                    <div class="flex justify-between items-center text-base font-extrabold pt-2 border-t border-gray-800">
+                        <span class="text-neonGold">Total a Pagar:</span>
+                        <span class="text-neonGold text-lg">R$ {{ cartSubtotal.toFixed(2) }}</span>
+                    </div>
+
+                    <button @click="proceedToCheckout" class="w-full py-3 rounded-xl bg-gradient-to-r from-neonGold to-orange-500 text-gray-950 font-bold hover:brightness-110 transition shadow-lg text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-check-circle"></i> Avançar para Identificação & Pagamento
+                    </button>
                 </div>
             </div>
         </div>
-    </header>
 
-    <main class="max-w-5xl w-full mx-auto px-4 py-10 flex-grow">
-        <div class="text-center mb-8">
-            <h2 class="text-2xl font-bold tracking-wider text-gray-100 uppercase border-b-2 border-pizzaRed inline-block pb-1">
-                Cardápio Digital
-            </h2>
-            <p class="text-gray-400 text-sm mt-2">Toque em uma categoria abaixo para abrir e ver os produtos e valores:</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Pizza Salgada -->
-            <button onclick="openModal('modal-salgada')" class="glass-panel rounded-2xl p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-neon-card hover:border-pizzaRed group cursor-pointer flex flex-col items-center justify-center">
-                <div class="w-20 h-20 rounded-full bg-pizzaRed/10 border border-pizzaRed/30 flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition duration-300 shadow-inner">
-                    🍕
+        <!-- CHECKOUT MODAL -->
+        <div v-if="isCheckoutOpen" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+            <div class="glass-panel w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl border border-neonGold/50 flex flex-col max-h-[92vh]">
+                <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-4 flex justify-between items-center text-white">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">📋</span>
+                        <div>
+                            <h3 class="text-base font-bold tracking-wide">Finalizar Pedido</h3>
+                            <p class="text-[10px] text-white/90">Informe seus dados e forma de pagamento</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button @click="closeCheckout" class="px-3 py-1.5 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold transition border border-white/20">Voltar</button>
+                        <button @click="closeCheckout" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
+                    </div>
                 </div>
-                <h3 class="text-lg font-bold text-gray-100 group-hover:text-neonGold transition">Pizza Salgada</h3>
-                <p class="text-xs text-gray-400 mt-1">Tradicionais e Especiais</p>
-                <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-pizzaRed/20 text-pizzaRed border border-pizzaRed/30 group-hover:bg-pizzaRed group-hover:text-white transition">Ver Opções</span>
-            </button>
 
-            <!-- Pizza Doce -->
-            <button onclick="openModal('modal-doce')" class="glass-panel rounded-2xl p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-neon-card hover:border-neonGold group cursor-pointer flex flex-col items-center justify-center">
-                <div class="w-20 h-20 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition duration-300 shadow-inner">
-                    🍫
-                </div>
-                <h3 class="text-lg font-bold text-gray-100 group-hover:text-neonGold transition">Pizza Doce</h3>
-                <p class="text-xs text-gray-400 mt-1">Sobremesas Irresistíveis</p>
-                <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 group-hover:bg-amber-500 group-hover:text-gray-950 transition">Ver Opções</span>
-            </button>
+                <div class="p-5 overflow-y-auto space-y-4 flex-grow">
+                    <!-- Client Data Form -->
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold text-neonGold uppercase tracking-wider">1. Dados do Cliente</h4>
+                        <div>
+                            <label class="block text-[11px] text-gray-300 mb-1">Nome Completo *</label>
+                            <input v-model="client.name" type="text" placeholder="Seu nome completo" class="w-full px-3 py-2 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white focus:border-neonGold outline-none">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] text-gray-300 mb-1">Telefone / WhatsApp *</label>
+                                <input v-model="client.phone" type="text" placeholder="(11) 99999-9999" class="w-full px-3 py-2 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white focus:border-neonGold outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] text-gray-300 mb-1">Tipo de Pedido *</label>
+                                <select v-model="client.orderType" class="w-full px-3 py-2 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white focus:border-neonGold outline-none">
+                                    <option value="Entrega">Delivery (Entrega)</option>
+                                    <option value="Retirada">Retirar no Balcão</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div v-if="client.orderType === 'Entrega'">
+                            <label class="block text-[11px] text-gray-300 mb-1">Endereço de Entrega (Rua, Nº, Bairro, Cidade) *</label>
+                            <input v-model="client.address" type="text" placeholder="Ex: Rua das Flores, 123 - Jardim Carolina" class="w-full px-3 py-2 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white focus:border-neonGold outline-none">
+                        </div>
+                    </div>
 
-            <!-- Esfiha -->
-            <button onclick="openModal('modal-esfiha')" class="glass-panel rounded-2xl p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-neon-card hover:border-orange-500 group cursor-pointer flex flex-col items-center justify-center">
-                <div class="w-20 h-20 rounded-full bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition duration-300 shadow-inner">
-                    🥟
-                </div>
-                <h3 class="text-lg font-bold text-gray-100 group-hover:text-neonGold transition">Esfiha</h3>
-                <p class="text-xs text-gray-400 mt-1">Salgadas, Doces e Especiais</p>
-                <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 group-hover:bg-orange-500 group-hover:text-white transition">Ver Opções</span>
-            </button>
+                    <!-- Payment Method Section -->
+                    <div class="space-y-3 pt-3 border-t border-gray-800">
+                        <h4 class="text-xs font-bold text-neonGold uppercase tracking-wider">2. Forma de Pagamento</h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button @click="payment.method = 'Pix'" :class="payment.method === 'Pix' ? 'border-neonGold bg-neonGold/10 text-neonGold' : 'border-gray-700 bg-gray-900 text-gray-300'" class="p-3 rounded-xl border text-xs font-bold transition flex flex-col items-center gap-1">
+                                <i class="fa-solid fa-qrcode text-lg"></i> Pix (3% Desc.)
+                            </button>
+                            <button @click="payment.method = 'Especie'" :class="payment.method === 'Especie' ? 'border-neonGold bg-neonGold/10 text-neonGold' : 'border-gray-700 bg-gray-900 text-gray-300'" class="p-3 rounded-xl border text-xs font-bold transition flex flex-col items-center gap-1">
+                                <i class="fa-solid fa-money-bill-wave text-lg"></i> Espécie (3% Desc.)
+                            </button>
+                            <button @click="payment.method = 'Cartao'" :class="payment.method === 'Cartao' ? 'border-neonGold bg-neonGold/10 text-neonGold' : 'border-gray-700 bg-gray-900 text-gray-300'" class="p-3 rounded-xl border text-xs font-bold transition flex flex-col items-center gap-1">
+                                <i class="fa-solid fa-credit-card text-lg"></i> Cartão
+                            </button>
+                            <button @click="payment.method = 'Cheque'" :class="payment.method === 'Cheque' ? 'border-neonGold bg-neonGold/10 text-neonGold' : 'border-gray-700 bg-gray-900 text-gray-300'" class="p-3 rounded-xl border text-xs font-bold transition flex flex-col items-center gap-1">
+                                <i class="fa-solid fa-file-invoice-dollar text-lg"></i> Cheque
+                            </button>
+                        </div>
 
-            <!-- Bebidas -->
-            <button onclick="openModal('modal-bebida')" class="glass-panel rounded-2xl p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-neon-card hover:border-blue-500 group cursor-pointer flex flex-col items-center justify-center">
-                <div class="w-20 h-20 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition duration-300 shadow-inner">
-                    🥤
-                </div>
-                <h3 class="text-lg font-bold text-gray-100 group-hover:text-neonGold transition">Bebidas</h3>
-                <p class="text-xs text-gray-400 mt-1">Refrigerantes e Sucos</p>
-                <span class="mt-4 text-xs font-semibold px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 group-hover:bg-blue-500 group-hover:text-white transition">Ver Opções</span>
-            </button>
-        </div>
-    </main>
+                        <!-- Cash change info -->
+                        <div v-if="payment.method === 'Especie'" class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
+                            <label class="block text-[11px] text-gray-300">Precisa de troco para quanto?</label>
+                            <input v-model="payment.trocoPara" type="text" placeholder="Ex: R$ 100,00 ou Não preciso" class="w-full px-3 py-2 rounded-xl bg-gray-800 border border-gray-700 text-xs text-white focus:border-neonGold outline-none">
+                        </div>
 
-    <!-- MODAL: Pizza Salgada -->
-    <div id="modal-salgada" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
-        <div class="glass-panel w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-pizzaRed/50 flex flex-col max-h-[85vh]">
-            <div class="bg-gradient-to-r from-pizzaRed to-orange-600 px-6 py-4 flex justify-between items-center text-white">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">🍕</span>
-                    <h3 class="text-lg font-bold tracking-wide">Pizzas Salgadas</h3>
+                        <!-- Card Installments -->
+                        <div v-if="payment.method === 'Cartao'" class="bg-gray-900 p-3 rounded-xl border border-gray-800 space-y-2">
+                            <label class="block text-[11px] text-gray-300">Parcelamento Automático</label>
+                            <select v-model="payment.installments" class="w-full px-3 py-2 rounded-xl bg-gray-800 border border-gray-700 text-xs text-white focus:border-neonGold outline-none">
+                                <option value="1">À vista (Crédito / Débito)</option>
+                                <option value="2">2x de R$ {{ (finalTotal / 2).toFixed(2) }} (Sem juros)</option>
+                                <option value="3">3x de R$ {{ (finalTotal / 3).toFixed(2) }} (Sem juros)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary Box -->
+                    <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 space-y-2 text-xs">
+                        <div class="flex justify-between text-gray-400">
+                            <span>Subtotal:</span>
+                            <span>R$ {{ cartSubtotal.toFixed(2) }}</span>
+                        </div>
+                        <div v-if="payment.method === 'Pix' || payment.method === 'Especie'" class="flex justify-between text-emerald-400 font-semibold">
+                            <span>Desconto Promocional (3%):</span>
+                            <span>- R$ {{ discountAmount.toFixed(2) }}</span>
+                        </div>
+                        <div class="flex justify-between text-base font-extrabold pt-2 border-t border-gray-800 text-neonGold">
+                            <span>Total Final:</span>
+                            <span>R$ {{ finalTotal.toFixed(2) }}</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="closeModal('modal-salgada')" class="px-3 py-1 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold transition border border-white/25">Voltar</button>
-                    <button onclick="closeModal('modal-salgada')" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
+
+                <div class="p-4 bg-gray-900/90 border-t border-gray-800 flex gap-3">
+                    <button @click="closeCheckout" class="w-1/2 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs transition border border-gray-700">Voltar</button>
+                    <button @click="finalizeOrder" class="w-1/2 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition shadow-lg text-xs flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Finalizar Pedido
+                    </button>
                 </div>
             </div>
-            <div class="p-6 overflow-y-auto space-y-4 divide-y divide-gray-800/60">
-                <div class="pt-3 first:pt-0 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Mussarela</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Molho de tomate especial, mussarela selecionada, rodelas de tomate fresco e orégano.</p>
+        </div>
+
+        <!-- SUCCESS / RECEIPT MODAL -->
+        <div v-if="isSuccessOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+            <div class="glass-panel w-full sm:max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-neonGold flex flex-col max-h-[92vh]">
+                <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-4 flex justify-between items-center text-white">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🎉</span>
+                        <div>
+                            <h3 class="text-base font-bold tracking-wide">Pedido Concluído com Sucesso!</h3>
+                            <p class="text-[10px] text-white/90">Obrigado pela preferência!</p>
+                        </div>
                     </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 48,00</span>
+                    <button @click="closeSuccessModal" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
+                </div>
+
+                <!-- Printable Receipt Content -->
+                <div id="receipt-content" class="p-6 overflow-y-auto space-y-4 bg-slate-950 text-slate-200 text-xs flex-grow">
+                    <div class="text-center pb-3 border-b border-gray-800">
+                        <h2 class="font-extrabold text-sm text-amber-400">Pizzaria Juliana & Esfiharia</h2>
+                        <p class="text-[10px] text-gray-400">Estrada da Promissão, nº 8 – Jardim Carolina</p>
+                        <p class="text-[10px] text-gray-400">Tel: (11) 95833-8379 / (11) 2011-6404</p>
+                    </div>
+
+                    <div class="space-y-1">
+                        <p><strong class="text-gray-400">Cliente:</strong> {{ client.name }}</p>
+                        <p><strong class="text-gray-400">Telefone:</strong> {{ client.phone }}</p>
+                        <p><strong class="text-gray-400">Tipo:</strong> {{ client.orderType }}</p>
+                        <p v-if="client.orderType === 'Entrega'"><strong class="text-gray-400">Endereço:</strong> {{ client.address }}</p>
+                        <p><strong class="text-gray-400">Pagamento:</strong> {{ payment.method }} <span v-if="payment.method === 'Cartao'">({{ payment.installments }}x)</span></p>
+                        <p v-if="payment.method === 'Especie' && payment.trocoPara"><strong class="text-gray-400">Troco para:</strong> {{ payment.trocoPara }}</p>
+                    </div>
+
+                    <div class="border-t border-b border-gray-800 py-3 space-y-2">
+                        <h4 class="font-bold text-amber-400 uppercase tracking-wider text-[11px]">Itens do Pedido:</h4>
+                        <div v-for="(item, i) in cart" :key="i" class="flex justify-between text-[11px]">
+                            <span>{{ item.qty }}x {{ item.name }}</span>
+                            <span class="font-semibold">R$ {{ (item.price * item.qty).toFixed(2) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1 pt-1 text-right">
+                        <p class="text-gray-400">Subtotal: R$ {{ cartSubtotal.toFixed(2) }}</p>
+                        <p v-if="discountAmount > 0" class="text-emerald-400 font-semibold">Desconto (3%): - R$ {{ discountAmount.toFixed(2) }}</p>
+                        <p class="text-sm font-extrabold text-amber-400 pt-1">Total Final: R$ {{ finalTotal.toFixed(2) }}</p>
+                    </div>
+
+                    <div class="text-center pt-3 border-t border-gray-800 text-[10px] text-gray-400 italic">
+                        "Sabor e Qualidade em Cada Fatia!"
                     </div>
                 </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Calabresa</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Molho de tomate, finas fatias de calabresa artesanal, cebolas recheadas e orégano.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 49,00</span>
-                    </div>
+
+                <div class="p-4 bg-gray-900 border-t border-gray-800 flex flex-col sm:flex-row gap-3">
+                    <button @click="downloadPDF" class="w-full sm:w-1/2 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-file-pdf"></i> Baixar Comprovante (PDF)
+                    </button>
+                    <button @click="sendWhatsApp" class="w-full sm:w-1/2 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> Enviar Pedido via WhatsApp
+                    </button>
                 </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Frango com Catupiry</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Frango desfiado temperado ao molho da casa, generosas camadas de Catupiry original e orégano.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 56,00</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Portuguesa</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Mussarela, presunto cozido, ovos cozidos picados, cebola, azeitonas pretas e ervilha fresca.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 58,00</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Marguerita</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Mussarela, rodelas de tomate, folhas de manjericão fresco colhido e fio de azeite extra virgem.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 50,00</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Bacon com Cheddar</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Cremoso queijo cheddar cremoso coberto com crocantes cubos de bacon defumado.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 60,00</span>
-                    </div>
-                </div>
-            </div>
-            <div class="p-4 bg-gray-900/90 border-t border-gray-800 text-center">
-                <button onclick="closeModal('modal-salgada')" class="w-full py-2.5 rounded-xl bg-pizzaRed text-white font-bold hover:bg-red-600 transition shadow-neon-button text-sm">Voltar ao Cardápio</button>
             </div>
         </div>
+
+        <!-- FOOTER -->
+        <footer class="w-full py-5 text-center text-[11px] text-gray-400 border-t border-gray-800 bg-[#07090e] mt-auto">
+            <p class="neon-text-gold font-medium mb-0.5">Pizzaria Juliana & Esfiharia &copy; 2026 - Todos os direitos reservados</p>
+            <p>Qualidade, tradição e carinho em cada fornada.</p>
+        </footer>
+
     </div>
-
-    <!-- MODAL: Pizza Doce -->
-    <div id="modal-doce" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
-        <div class="glass-panel w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-amber-500/50 flex flex-col max-h-[85vh]">
-            <div class="bg-gradient-to-r from-amber-600 to-yellow-600 px-6 py-4 flex justify-between items-center text-gray-950 font-semibold">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">🍫</span>
-                    <h3 class="text-lg font-bold tracking-wide text-white">Pizzas Doces</h3>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="closeModal('modal-doce')" class="px-3 py-1 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold text-white transition border border-white/25">Voltar</button>
-                    <button onclick="closeModal('modal-doce')" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
-                </div>
-            </div>
-            <div class="p-6 overflow-y-auto space-y-4 divide-y divide-gray-800/60">
-                <div class="pt-3 first:pt-0 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Chocolate ao Leite</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Deliciosa cobertura de chocolate cremoso ao leite artesanal com granulado selecionado.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 48,00</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Prestígio</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Camada generosa de chocolate cremoso coberto com coco ralado fresco e adocicado.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 52,00</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Romeu e Julieta</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Suave goiabada cremosa espalhada com porções de mussarela ou catupiry especial.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 48,00</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Banana com Canela</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Fatias de banana fresca caramelizadas com açúcar refinado, toque de leite condensado e canela em pó.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 49,00</span>
-                    </div>
-                </div>
-            </div>
-            <div class="p-4 bg-gray-900/90 border-t border-gray-800 text-center">
-                <button onclick="closeModal('modal-doce')" class="w-full py-2.5 rounded-xl bg-amber-500 text-gray-950 font-bold hover:bg-amber-400 transition shadow-lg text-sm">Voltar ao Cardápio</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: Esfiha -->
-    <div id="modal-esfiha" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
-        <div class="glass-panel w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-orange-500/50 flex flex-col max-h-[85vh]">
-            <div class="bg-gradient-to-r from-orange-600 to-amber-600 px-6 py-4 flex justify-between items-center text-white">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">🥟</span>
-                    <h3 class="text-lg font-bold tracking-wide">Esfihas (Salgadas, Doces e Especiais)</h3>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="closeModal('modal-esfiha')" class="px-3 py-1 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold transition border border-white/25">Voltar</button>
-                    <button onclick="closeModal('modal-esfiha')" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
-                </div>
-            </div>
-            <div class="p-6 overflow-y-auto space-y-4 divide-y divide-gray-800/60">
-                <div class="pt-3 first:pt-0 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Esfiha de Carne</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Massa artesanal macia recheada com carne moída temperada com especiarias e limão.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 6,50</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Esfiha de Frango com Catupiry</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Frango desfiado suculento misturado com autêntico catupiry cremoso.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 7,00</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Esfiha de Queijo</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Mix selecionado de queijos derretidos de sabor marcante e irresistível.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 7,00</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Esfiha de Calabresa com Queijo</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Calabresa moída fina refogada coberta com cobertura de queijo derretido.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 7,50</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Esfiha Doce de Chocolate</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Recheio caprichado de creme de chocolate ao leite com granulado especial.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 8,00</span>
-                    </div>
-                </div>
-            </div>
-            <div class="p-4 bg-gray-900/90 border-t border-gray-800 text-center">
-                <button onclick="closeModal('modal-esfiha')" class="w-full py-2.5 rounded-xl bg-orange-600 text-white font-bold hover:bg-orange-500 transition shadow-lg text-sm">Voltar ao Cardápio</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: Bebidas -->
-    <div id="modal-bebida" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
-        <div class="glass-panel w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl border border-blue-500/50 flex flex-col max-h-[85vh]">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 flex justify-between items-center text-white">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">🥤</span>
-                    <h3 class="text-lg font-bold tracking-wide">Bebidas Geladas</h3>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="closeModal('modal-bebida')" class="px-3 py-1 rounded-lg bg-black/20 hover:bg-black/40 text-xs font-semibold transition border border-white/25">Voltar</button>
-                    <button onclick="closeModal('modal-bebida')" class="w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white font-bold text-lg transition">&times;</button>
-                </div>
-            </div>
-            <div class="p-6 overflow-y-auto space-y-4 divide-y divide-gray-800/60">
-                <div class="pt-3 first:pt-0 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Refrigerante 2 Litros</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Coca-Cola, Guaraná Antarctica, Fanta Laranja ou Soda Limonada.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 15,00</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Refrigerante Lata (350ml)</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Diversos sabores gelados à sua escolha.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 6,50</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Água Mineral (500ml)</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Com gás ou sem gás.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 4,50</span>
-                    </div>
-                </div>
-                <div class="pt-3 flex justify-between items-start gap-4">
-                    <div>
-                        <h4 class="font-bold text-gray-100">Suco Natural (Laranja ou Limonada - 500ml)</h4>
-                        <p class="text-xs text-gray-400 mt-0.5">Feito na hora com frutas frescas selecionadas.</p>
-                    </div>
-                    <div class="text-right whitespace-nowrap">
-                        <span class="text-neonGold font-extrabold text-sm">R$ 9,00</span>
-                    </div>
-                </div>
-            </div>
-            <div class="p-4 bg-gray-900/90 border-t border-gray-800 text-center">
-                <button onclick="closeModal('modal-bebida')" class="w-full py-2.5 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-500 transition shadow-lg text-sm">Voltar ao Cardápio</button>
-            </div>
-        </div>
-    </div>
-
-    <footer class="w-full py-6 text-center text-xs text-gray-400 border-t border-gray-800 bg-[#0b0f19]">
-        <p class="neon-text-gold font-medium mb-1">Pizzaria Juliana & Favorita &copy; 2026 - Todos os direitos reservados</p>
-        <p>Qualidade, tradição e carinho em cada fornada.</p>
-    </footer>
 
     <script>
-        // Function to open specific modal
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
-            }
-        }
+        const { createApp, ref, computed } = Vue;
 
-        // Function to close specific modal
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('flex');
-                modal.classList.add('hidden');
-                document.body.style.overflow = 'auto'; // Restore scrolling
-            }
-        }
+        createApp({
+            setup() {
+                // Categories & Products Data based on official menu
+                const categories = ref([
+                    {
+                        id: 'pizza-salgada',
+                        name: 'Pizza Salgada',
+                        icon: '🍕',
+                        desc: 'Tradicionais e Especiais',
+                        products: [
+                            { id: 1, name: 'Mussarela', description: 'Molho especial, mussarela selecionada, rodelas de tomate fresco e orégano.', price: 48.00, qty: 1 },
+                            { id: 2, name: 'Calabresa', description: 'Molho de tomate, finas fatias de calabresa artesanal, cebolas e orégano.', price: 49.00, qty: 1 },
+                            { id: 3, name: 'Frango com Catupiry', description: 'Frango desfiado temperado, generosas camadas de Catupiry original e orégano.', price: 56.00, qty: 1 },
+                            { id: 4, name: 'Portuguesa', description: 'Mussarela, presunto cozido, ovos cozidos picados, cebola, azeitonas pretas e ervilha.', price: 58.00, qty: 1 },
+                            { id: 5, name: 'Marguerita', description: 'Mussarela, rodelas de tomate, folhas de manjericão fresco e azeite extra virgem.', price: 50.00, qty: 1 },
+                            { id: 6, name: 'Bacon com Cheddar', description: 'Cremoso queijo cheddar coberto com crocantes cubos de bacon defumado.', price: 60.00, qty: 1 }
+                        ]
+                    },
+                    {
+                        id: 'esfiha-salgada',
+                        name: 'Esfiha Salgada',
+                        icon: '🥟',
+                        desc: 'Saborosas e recheadas',
+                        products: [
+                            { id: 7, name: 'Esfiha de Carne', description: 'Massa artesanal macia recheada com carne moída temperada com especiarias e limão.', price: 6.50, qty: 1 },
+                            { id: 8, name: 'Esfiha de Frango com Catupiry', description: 'Frango desfiado suculento misturado com autêntico catupiry cremoso.', price: 7.00, qty: 1 },
+                            { id: 9, name: 'Esfiha de Queijo', description: 'Mix selecionado de queijos derretidos de sabor marcante e irresistível.', price: 7.00, qty: 1 },
+                            { id: 10, name: 'Esfiha de Calabresa com Queijo', description: 'Calabresa moída fina refogada coberta com queijo derretido.', price: 7.50, qty: 1 }
+                        ]
+                    },
+                    {
+                        id: 'esfiha-doce',
+                        name: 'Esfiha Doce',
+                        icon: '🍯',
+                        desc: 'Sobremesas irresistíveis',
+                        products: [
+                            { id: 11, name: 'Esfiha de Chocolate', description: 'Recheio caprichado de creme de chocolate ao leite com granulado especial.', price: 8.00, qty: 1 },
+                            { id: 12, name: 'Esfiha de Doce de Leite', description: 'Cremoso doce de leite argentino artesanal espalhado na massa assada.', price: 8.50, qty: 1 },
+                            { id: 13, name: 'Esfiha Romeu e Julieta', description: 'Goiabada cremosa suave combinada com queijo derretido.', price: 8.00, qty: 1 }
+                        ]
+                    },
+                    {
+                        id: 'esfiha-especial',
+                        name: 'Esfiha Especial',
+                        icon: '⭐',
+                        desc: 'Receitas exclusivas da casa',
+                        products: [
+                            { id: 14, name: 'Esfiha Especial Juliana', description: 'Carne temperada especial com bacon crocante, catupiry e ervas finas.', price: 9.50, qty: 1 },
+                            { id: 15, name: 'Esfiha Especial 4 Queijos', description: 'Mussarela, provolone, gorgonzola e catupiry de primeira qualidade.', price: 9.50, qty: 1 }
+                        ]
+                    },
+                    {
+                        id: 'pizza-doce',
+                        name: 'Pizza Doce',
+                        icon: '🍫',
+                        desc: 'Para finalizar com doçura',
+                        products: [
+                            { id: 16, name: 'Chocolate ao Leite', description: 'Cobertura de chocolate cremoso ao leite artesanal com granulado selecionado.', price: 48.00, qty: 1 },
+                            { id: 17, name: 'Prestígio', description: 'Camada generosa de chocolate coberto com coco ralado fresco.', price: 52.00, qty: 1 },
+                            { id: 18, name: 'Romeu e Julieta', description: 'Goiabada cremosa espalhada com porções de mussarela ou catupiry especial.', price: 48.00, qty: 1 },
+                            { id: 19, name: 'Banana com Canela', description: 'Fatias de banana caramelizadas com açúcar, leite condensado e canela em pó.', price: 49.00, qty: 1 }
+                        ]
+                    },
+                    {
+                        id: 'bebida',
+                        name: 'Bebida',
+                        icon: '🥤',
+                        desc: 'Refrigerantes e Sucos',
+                        products: [
+                            { id: 20, name: 'Refrigerante 2 Litros', description: 'Coca-Cola, Guaraná Antarctica, Fanta Laranja ou Soda.', price: 15.00, qty: 1 },
+                            { id: 21, name: 'Refrigerante Lata (350ml)', description: 'Diversos sabores gelados à sua escolha.', price: 6.50, qty: 1 },
+                            { id: 22, name: 'Água Mineral (500ml)', description: 'Com gás ou sem gás.', price: 4.50, qty: 1 },
+                            { id: 23, name: 'Suco Natural (Laranja ou Limonada - 500ml)', description: 'Feito na hora com frutas frescas selecionadas.', price: 9.00, qty: 1 }
+                        ]
+                    }
+                ]);
 
-        // Close modal when clicking outside the modal box content
-        window.onclick = function(event) {
-            if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
-                event.target.classList.remove('flex');
-                event.target.classList.add('hidden');
-                document.body.style.overflow = 'auto';
+                // Active Category Modal state
+                const activeCategory = ref(null);
+
+                // Cart state
+                const cart = ref([]);
+                const isCartOpen = ref(false);
+
+                // Checkout state
+                const isCheckoutOpen = ref(false);
+                const client = ref({
+                    name: '',
+                    phone: '',
+                    orderType: 'Entrega',
+                    address: ''
+                });
+                const payment = ref({
+                    method: 'Pix',
+                    trocoPara: '',
+                    installments: '1'
+                });
+
+                // Success modal state
+                const isSuccessOpen = ref(false);
+
+                // Methods for quantity adjustment
+                const incrementQty = (product) => {
+                    product.qty = (product.qty || 1) + 1;
+                };
+
+                const decrementQty = (product) => {
+                    if ((product.qty || 1) > 1) {
+                        product.qty--;
+                    }
+                };
+
+                const selectCategory = (cat) => {
+                    activeCategory.value = cat;
+                };
+
+                const closeCategoryModal = () => {
+                    activeCategory.value = null;
+                };
+
+                // Cart operations
+                const addToCart = (product) => {
+                    const quantity = product.qty || 1;
+                    const existingIndex = cart.value.findIndex(item => item.id === product.id);
+                    if (existingIndex > -1) {
+                        cart.value[existingIndex].qty += quantity;
+                    } else {
+                        cart.value.push({ ...product, qty: quantity });
+                    }
+                    product.qty = 1; // reset default
+                };
+
+                const removeFromCart = (index) => {
+                    cart.value.splice(index, 1);
+                };
+
+                const openCart = () => {
+                    isCartOpen.value = true;
+                };
+
+                const closeCart = () => {
+                    isCartOpen.value = false;
+                };
+
+                const cartItemCount = computed(() => {
+                    return cart.value.reduce((total, item) => total + item.qty, 0);
+                });
+
+                const cartSubtotal = computed(() => {
+                    return cart.value.reduce((total, item) => total + (item.price * item.qty), 0);
+                });
+
+                const discountAmount = computed(() => {
+                    if (payment.value.method === 'Pix' || payment.value.method === 'Especie') {
+                        return cartSubtotal.value * 0.03;
+                    }
+                    return 0;
+                });
+
+                const finalTotal = computed(() => {
+                    return cartSubtotal.value - discountAmount.value;
+                });
+
+                // Checkout navigation
+                const proceedToCheckout = () => {
+                    closeCart();
+                    isCheckoutOpen.value = true;
+                };
+
+                const closeCheckout = () => {
+                    isCheckoutOpen.value = false;
+                };
+
+                const finalizeOrder = () => {
+                    if (!client.value.name || !client.value.phone) {
+                        alert('Por favor, preencha seu Nome e Telefone/WhatsApp.');
+                        return;
+                    }
+                    if (client.value.orderType === 'Entrega' && !client.value.address) {
+                        alert('Por favor, informe o endereço de entrega.');
+                        return;
+                    }
+                    isCheckoutOpen.value = false;
+                    isSuccessOpen.value = true;
+                };
+
+                const closeSuccessModal = () => {
+                    isSuccessOpen.value = false;
+                };
+
+                // PDF generation using html2pdf
+                const downloadPDF = () => {
+                    const element = document.getElementById('receipt-content');
+                    const opt = {
+                        margin:       10,
+                        filename:     `Pedido_JulianaPizzaria_${Date.now()}.pdf`,
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { scale: 2, useCORS: true },
+                        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    };
+                    html2pdf().from(element).set(opt).save();
+                };
+
+                // WhatsApp order submission
+                const sendWhatsApp = () => {
+                    let msg = `*NOVO PEDIDO - PIZZARIA JULIANA & ESFIHARIA*%0A%0A`;
+                    msg += `*Cliente:* ${client.value.name}%0A`;
+                    msg += `*Telefone:* ${client.value.phone}%0A`;
+                    msg += `*Tipo:* ${client.value.orderType}%0A`;
+                    if (client.value.orderType === 'Entrega') {
+                        msg += `*Endereço:* ${client.value.address}%0A`;
+                    }
+                    msg += `*Pagamento:* ${payment.value.method}`;
+                    if (payment.value.method === 'Cartao') msg += ` (${payment.value.installments}x)`;
+                    if (payment.value.method === 'Especie' && payment.value.trocoPara) msg += ` (Troco para: ${payment.value.trocoPara})`;
+                    msg += `%0A%0A*ITENS:%0A`;
+                    
+                    cart.value.forEach(item => {
+                        msg += `- ${item.qty}x ${item.name} (R$ ${(item.price * item.qty).toFixed(2)})%0A`;
+                    });
+
+                    msg += `%0A*Subtotal:* R$ ${cartSubtotal.value.toFixed(2)}`;
+                    if (discountAmount.value > 0) {
+                        msg += `%0A*Desconto (3%):* - R$ ${discountAmount.value.toFixed(2)}`;
+                    }
+                    msg += `%0A*TOTAL FINAL:* R$ ${finalTotal.value.toFixed(2)}%0A%0A_Pedido gerado pelo Cardápio Digital._`;
+
+                    const phoneNumber = '5511958338379'; // Pizzaria WhatsApp
+                    window.open(`https://wa.me/${phoneNumber}?text=${msg}`, '_blank');
+                };
+
+                return {
+                    categories,
+                    activeCategory,
+                    cart,
+                    isCartOpen,
+                    isCheckoutOpen,
+                    client,
+                    payment,
+                    isSuccessOpen,
+                    incrementQty,
+                    decrementQty,
+                    selectCategory,
+                    closeCategoryModal,
+                    addToCart,
+                    removeFromCart,
+                    openCart,
+                    closeCart,
+                    cartItemCount,
+                    cartSubtotal,
+                    discountAmount,
+                    finalTotal,
+                    proceedToCheckout,
+                    closeCheckout,
+                    finalizeOrder,
+                    closeSuccessModal,
+                    downloadPDF,
+                    sendWhatsApp
+                };
             }
-        }
+        }).mount('#app');
     </script>
 </body>
 </html>
