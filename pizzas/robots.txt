@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pizzasitaquaquecetuba.com.br/sitemap.xml
+Sitemap: https://impulsoweb10.com.br/pizzas/sitemap.xml
