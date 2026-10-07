@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzarias em Itaquaquecetuba | Cardápios, Descontos e WhatsApp</title>
+    <meta name="description" content="Encontre as melhores pizzarias de Itaquaquecetuba. Peça pizza pelo WhatsApp com entrega grátis no Centro, Vila Virgínia, Cayuby e mais!">
+    <style>
+        :root {
+            --primary: #e63946;
+            --dark: #1d3557;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #25d366;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--light); color: #333; line-height: 1.6; }
+        header { background: var(--dark); color: #fff; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; }
+        header a { color: #fff; text-decoration: none; font-weight: bold; }
+        .hero { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=80') center/cover; color: #fff; text-align: center; padding: 4rem 1rem; }
+        .hero h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        h2 { color: var(--dark); margin-bottom: 1rem; border-bottom: 3rem; border-left: 4px solid var(--primary); padding-left: 0.5rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; height: 180px; object-fit: cover; }
+        .card-body { padding: 1rem; }
+        .card-tag { display: inline-block; background: #ffe3e3; color: var(--primary); font-size: 0.8rem; font-weight: bold; padding: 0.2rem 0.5rem; border-radius: 4px; margin-bottom: 0.5rem; }
+        .btn-wa { display: block; text-align: center; background: var(--success); color: #fff; text-decoration: none; padding: 0.7rem; border-radius: 5px; font-weight: bold; margin-top: 1rem; }
+        .btn-link { display: block; text-align: center; background: var(--dark); color: #fff; text-decoration: none; padding: 0.7rem; border-radius: 5px; font-weight: bold; margin-top: 0.5rem; }
+        .badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 2rem; justify-content: center; }
+        .badge { background: #fff; padding: 0.8rem 1.2rem; border-radius: 20px; text-decoration: none; color: var(--dark); font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+        footer { background: var(--dark); color: #fff; text-align: center; padding: 2rem; margin-top: 3rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/">🍕 Pizzas Itaquá</a>
+        <a href="#cadastre">Cadastrar Pizzaria</a>
+    </header>
+
+    <section class="hero">
+        <h1>As Melhores Pizzarias de Itaquaquecetuba</h1>
+        <p>Compare cardápios, veja bairros de entrega e peça direto no WhatsApp sem taxas!</p>
+    </section>
+
+    <div class="container">
+        <h2>🔥 Destaques da Semana em Itaquá</h2>
+        <div class="grid">
+            
+            <!-- Card Pizzaria 1 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80" alt="Pizzaria Bella Napoli Itaquá">
+                <div class="card-body">
+                    <span class="card-tag">Centro • Entrega Grátis</span>
+                    <h3>Pizzaria Bella Napoli</h3>
+                    <p>Pizzas tradicionais no forno a lenha. Bordas recheadas grátis às terças!</p>
+                    <a href="https://wa.me/5511999999999?text=Vim%20pelo%20pizzasitaquaquecetuba.com.br" class="btn-wa" target="_blank">Pedir pelo WhatsApp</a>
+                    <a href="/pizzarias/pizzaria-bella-napoli.html" class="btn-link">Ver Cardápio Completo</a>
+                </div>
+            </div>
+
+            <!-- Card Pizzaria 2 -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80" alt="Pizzaria Don Matteo Vila Virginia">
+                <div class="card-body">
+                    <span class="card-tag">Vila Virgínia • Borda Vulcão</span>
+                    <h3>Pizzaria Don Matteo</h3>
+                    <p>Especialista em pizzas doces e combinações artesanais com massa fina.</p>
+                    <a href="https://wa.me/5511999999999?text=Vim%20pelo%20pizzasitaquaquecetuba.com.br" class="btn-wa" target="_blank">Pedir pelo WhatsApp</a>
+                    <a href="/pizzarias/pizzaria-don-matteo.html" class="btn-link">Ver Cardápio Completo</a>
+                </div>
+            </div>
+
+        </div>
+
+        <h2>📍 Pizzarias por Bairro</h2>
+        <div class="badges">
+            <a href="/bairros/centro.html" class="badge">Centro</a>
+            <a href="/bairros/vila-virginia.html" class="badge">Vila Virgínia</a>
+            <a href="/bairros/jardim-cayuby.html" class="badge">Jardim Cayuby</a>
+            <a href="/bairros/paineira.html" class="badge">Jardim Paineira</a>
+            <a href="/bairros/moraes.html" class="badge">Parque Mambucaba / Moraes</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; pizzasitaquaquecetuba.com.br — O Guia Oficial da Pizza em Itaquá</p>
+    </footer>
+
+</body>
+</html>
