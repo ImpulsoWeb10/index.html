@@ -35,7 +35,6 @@ input:focus{border-color:var(--b)}
 .btn-dl:hover{background:#2e9648}
 #qrbox{display:inline-block;padding:.8rem;background:#fff;border-radius:10px;margin:1rem 0}
 
-/* Caixa de Configuração e Validação do GitHub */
 .box-gh-config { background: rgba(26, 115, 232, 0.08); border: 1px solid rgba(26, 115, 232, 0.3); padding: 1.2rem; border-radius: 12px; margin-bottom: 0.5rem; }
 .btn-valida-token { background: #34A853; color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.82rem; }
 .btn-valida-token:hover { opacity: 0.9; }
@@ -43,7 +42,6 @@ input:focus{border-color:var(--b)}
 .badge-off { background: rgba(234, 67, 53, 0.2); color: #ea4335; border: 1px solid #ea4335; }
 .badge-on { background: rgba(52, 168, 83, 0.2); color: #34a853; border: 1px solid #34a853; }
 
-/* Card do Link Final */
 .link-final-card { background: #0d1117; border: 1px solid #1a73e8; border-radius: 12px; padding: 1rem; text-align: center; margin-top: 1rem; }
 .link-final-badge { display: inline-block; background: #1a73e8; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 20px; margin-bottom: 0.5rem; text-transform: uppercase; }
 .link-final-url { font-size: 1.05rem; font-weight: 700; color: #34a853; word-break: break-all; }
@@ -61,12 +59,11 @@ input:focus{border-color:var(--b)}
 <main>
   <div class="hero">
     <h1>Gerador de Cartão <em>3D + Avaliação</em></h1>
-    <p>Valide a sua ligação e crie automaticamente na pasta <code>clientes/</code> do seu GitHub.</p>
+    <p>Gere e salve automaticamente dentro da pasta <code>clientes/</code> do GitHub.</p>
   </div>
 
   <div class="form-card">
     
-    <!-- Validador de Token GitHub -->
     <div class="box-gh-config">
       <div class="section-title" style="margin-top:0; color:#4285F4;">1. Configuração e Validação da API do GitHub</div>
       <div class="grid-2" style="margin-top:0.8rem;">
@@ -82,8 +79,8 @@ input:focus{border-color:var(--b)}
       <div class="field-grp" style="margin-top:0.8rem;">
         <label>GitHub Personal Access Token (PAT) *</label>
         <div style="display:flex; gap:0.5rem;">
-          <input type="password" id="ghToken" placeholder="ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" style="flex:1;"/>
-          <button type="button" class="btn-valida-token" onclick="validarTokenGitHub()">🔍 VERIFICAR CONEXÃO</button>
+          <input type="password" id="ghToken" placeholder="ghp_... ou github_pat_..." style="flex:1;"/>
+          <button type="button" class="btn-valida-token" onclick="validarTokenGitHub()">🔍 TESTAR CONEXÃO</button>
         </div>
         <div id="statusTokenDisplay" class="status-badge badge-off">Status: Não Conectado</div>
       </div>
@@ -200,22 +197,26 @@ async function validarTokenGitHub() {
 
   try {
     const res = await fetch(`https://api.github.com/repos/${user}/${repo}`, {
-      headers: { 'Authorization': `token ${token}` }
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
     });
 
     if (res.ok) {
       badge.className = 'status-badge badge-on';
-      badge.textContent = '✓ Conectado ao Repositório GitHub com Sucesso!';
+      badge.textContent = '✓ Conectado ao GitHub com Sucesso!';
       localStorage.setItem('impulso_gh_token', token);
       tokenValidado = true;
     } else {
+      const errData = await res.json().catch(() => ({}));
       badge.className = 'status-badge badge-off';
-      badge.textContent = '❌ Token Inválido ou sem acesso ao Repositório';
+      badge.textContent = `❌ Erro (${res.status}): Verifique permissões do Token`;
       tokenValidado = false;
     }
   } catch (e) {
     badge.className = 'status-badge badge-off';
-    badge.textContent = '❌ Erro de Conexão com o GitHub';
+    badge.textContent = '❌ Erro de Rede / CORS ao conectar';
     tokenValidado = false;
   }
 }
@@ -236,15 +237,21 @@ async function publicarNoGithub(slug, conteudoHtml) {
   const repo = document.getElementById('ghRepo').value.trim();
   const token = document.getElementById('ghToken').value.trim();
 
-  // Salva especificamente dentro da pasta clientes/
   const filePath = `clientes/${slug}/index.html`;
   const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/${filePath}`;
   
+  // Codificação segura em Base64 para UTF-8 completo
   const contentBase64 = btoa(unescape(encodeURIComponent(conteudoHtml)));
 
   try {
     let sha = '';
-    const checkRes = await fetch(apiUrl, { headers: { 'Authorization': `token ${token}` } });
+    const checkRes = await fetch(apiUrl, { 
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      } 
+    });
+    
     if (checkRes.ok) {
       const data = await checkRes.json();
       sha = data.sha;
@@ -259,8 +266,9 @@ async function publicarNoGithub(slug, conteudoHtml) {
     const response = await fetch(apiUrl, {
       method: 'PUT',
       headers: {
-        'Authorization': `token ${token}`,
-        'Content-Type': 'application/json'
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
       },
       body: JSON.stringify(payload)
     });
