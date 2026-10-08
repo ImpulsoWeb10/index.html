@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{NOME_EMPRESA}} | {{SEGMENTO}}</title>
+    <meta name="description" content="{{FRASE_SEO}}">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{NOME_EMPRESA}}">
+    <meta property="og:description" content="{{FRASE_SEO}}">
+    <meta property="og:image" content="{{LOGO}}">
+    <meta property="og:type" content="business.business">
+
+    <!-- Estilos Premium Dark + Dynamic Accent -->
+    <style>
+        :root {
+            --primary: {{COR_PRINCIPAL}};
+            --bg: #0b0f17;
+            --card-bg: #111827;
+            --text: #ffffff;
+            --text-muted: #9ca3af;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            margin-bottom: 16px;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; }
+        .segmento { color: var(--primary); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .stars { color: #f59e0b; font-size: 1.2rem; margin-bottom: 24px; }
+
+        .btn-main {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: #000;
+            font-weight: 800;
+            text-decoration: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            transition: transform 0.2s, filter 0.2s;
+        }
+        .btn-main:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        .social-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.2s;
+        }
+        .btn:hover { background: rgba(255, 255, 255, 0.1); }
+
+        .info-box { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .footer { margin-top: 20px; font-size: 0.75rem; color: #4b5563; }
+        .footer a { color: var(--primary); text-decoration: none; }
+    </style>
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "{{NOME_EMPRESA}}",
+      "image": "{{LOGO}}",
+      "telephone": "{{TELEFONE}}",
+      "description": "{{FRASE_SEO}}"
+    }
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <img src="{{LOGO}}" alt="Logo {{NOME_EMPRESA}}" class="logo">
+    <h1>{{NOME_EMPRESA}}</h1>
+    <div class="segmento">{{SEGMENTO}}</div>
+    <div class="stars">★ ★ ★ ★ ★</div>
+
+    <a href="{{GOOGLE_REVIEW}}" target="_blank" class="btn-main">⭐ AVALIAR NO GOOGLE</a>
+
+    <div class="social-grid">
+        {{BOTONES_SOCIAIS}}
+    </div>
+
+    <div class="info-box">
+        <p><strong>Endereço:</strong> {{ENDERECO_COMPLETO}}</p>
+        <p style="margin-top: 8px;">{{FRASE_SEO}}</p>
+    </div>
+
+    <div class="footer">
+        Desenvolvido por <a href="https://impulsoweb10.com.br" target="_blank">ImpulsoWeb10</a>
+    </div>
+</div>
+
+</body>
+</html>
