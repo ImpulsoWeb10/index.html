@@ -35,6 +35,33 @@ input:focus{border-color:var(--b)}
 .btn-dl:hover{background:#2e9648}
 #qrbox{display:inline-block;padding:.8rem;background:#fff;border-radius:10px;margin:1rem 0}
 .box-gh-config { background: rgba(26, 115, 232, 0.08); border: 1px solid rgba(26, 115, 232, 0.3); padding: 1rem; border-radius: 12px; margin-bottom: 0.5rem; }
+
+/* Estilo do Card do Link Final estilo Fluxo */
+.link-final-card {
+    background: #0d1117;
+    border: 1px solid #1a73e8;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+.link-final-badge {
+    display: inline-block;
+    background: #1a73e8;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+.link-final-url {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #34a853;
+    word-break: break-all;
+}
 </style>
 </head>
 <body>
@@ -49,12 +76,12 @@ input:focus{border-color:var(--b)}
 <main>
   <div class="hero">
     <h1>Gerador de Cartão <em>3D + Avaliação</em></h1>
-    <p>Preencha as informações para preencher o modelo e publicar automaticamente no GitHub.</p>
+    <p>Preencha as informações para gerar o QR Code, Link e publicar no GitHub.</p>
   </div>
 
   <div class="form-card">
     <div class="box-gh-config">
-      <div class="section-title" style="margin-top:0; color:#4285F4;">Configuração do GitHub (Publicação Automática)</div>
+      <div class="section-title" style="margin-top:0; color:#4285F4;">Configuração do GitHub (Opcional para envio direto)</div>
       <div class="grid-2" style="margin-top:0.8rem;">
         <div class="field-grp">
           <label>Usuário / Organização GitHub</label>
@@ -66,7 +93,7 @@ input:focus{border-color:var(--b)}
         </div>
       </div>
       <div class="field-grp" style="margin-top:0.8rem;">
-        <label>GitHub Personal Access Token (PAT) *</label>
+        <label>GitHub Personal Access Token (PAT)</label>
         <input type="password" id="ghToken" placeholder="ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"/>
       </div>
     </div>
@@ -119,30 +146,34 @@ input:focus{border-color:var(--b)}
       </div>
     </div>
 
-    <button class="btn-gen" id="btnGerar" onclick="gerarTudo()">🚀 Publicar Automático no GitHub</button>
+    <button class="btn-gen" id="btnGerar" onclick="gerarTudo()">🚀 Gerar Cliente Completo</button>
   </div>
 
   <div class="results" id="resBox">
-    <div style="color:var(--g);font-weight:700;font-size:1rem;margin-bottom:.5rem;" id="txtStatusMsg">✓ Dados Processados e Publicados com Sucesso!</div>
+    <div style="color:var(--g);font-weight:700;font-size:1.1rem;margin-bottom:.5rem;" id="txtStatusMsg">✓ Cliente Gerado com Sucesso!</div>
     
-    <label style="font-size:.78rem;color:var(--muted2);">Link da Página do Cliente (GitHub Pages):</label>
-    <input type="text" id="outLinkCliente" style="width:100%;margin-top:.3rem;margin-bottom:1rem;" readonly/>
+    <!-- Link Final Estilo Fluxo -->
+    <div class="link-final-card">
+        <span class="link-final-badge">LINK FINAL DO CLIENTE</span>
+        <div class="link-final-url" id="outLinkCliente">https://impulsoweb10.com.br/cliente/empresa/</div>
+    </div>
 
-    <label style="font-size:.78rem;color:var(--muted2);">Link Direto de Avaliação Google (Inserido no botão do HTML):</label>
-    <input type="text" id="outLinkGoogle" style="width:100%;margin-top:.3rem;margin-bottom:1rem;" readonly/>
+    <div style="margin-top:1.2rem;">
+      <label style="font-size:.78rem;color:var(--muted2);">Link Direto de Avaliação do Google (Botão interno):</label>
+      <input type="text" id="outLinkGoogle" style="width:100%;margin-top:.3rem;" readonly/>
+    </div>
 
-    <div style="text-align:center;margin:1rem 0;">
-      <div style="font-size:.85rem;color:var(--muted2);margin-bottom:.2rem;">QR Code Gerado (Aponta para a Página do Cliente):</div>
+    <div style="text-align:center;margin:1.5rem 0;">
+      <div style="font-size:.85rem;color:var(--muted2);margin-bottom:.4rem;">QR Code com Link de Avaliação + Identidade:</div>
       <div id="qrbox"></div>
     </div>
 
     <div class="action-box">
-      <h3 style="color:#fff;font-size:1.1rem;">Ficheiro Publicado com Sucesso!</h3>
-      <p style="color:var(--muted2);font-size:.85rem;margin-top:.4rem;line-height:1.5;">
-        A pasta foi criada e o ficheiro <code>index.html</code> publicado no GitHub Pages em:<br>
-        <strong style="color:var(--y);" id="txtCaminhoGithub">https://impulsoweb10.com.br/cliente/nome-da-empresa/index.html</strong>
+      <h3 style="color:#fff;font-size:1.1rem;" id="txtGithubStatus">Pasta e Arquivo index.html Prontos!</h3>
+      <p style="color:var(--muted2);font-size:.85rem;margin-top:.4rem;line-height:1.5;" id="txtCaminhoGithub">
+        Endereço da publicação no GitHub Pages: <strong>https://impulsoweb10.com.br/cliente/nome-da-empresa/index.html</strong>
       </p>
-      <button class="btn-dl" onclick="baixarHTML()">📥 Baixar index.html (Cópia Local)</button>
+      <button class="btn-dl" onclick="baixarHTML()">📥 Baixar index.html do Cliente</button>
     </div>
   </div>
 </main>
@@ -150,7 +181,6 @@ input:focus{border-color:var(--b)}
 <script>
 let htmlFinal = "";
 
-// Carregar e salvar Token automaticamente no navegador (localStorage)
 document.addEventListener('DOMContentLoaded', () => {
   const savedToken = localStorage.getItem('impulso_gh_token');
   if (savedToken) {
@@ -176,10 +206,7 @@ async function publicarNoGithub(slug, conteudoHtml) {
   const repo = document.getElementById('ghRepo').value.trim();
   const token = document.getElementById('ghToken').value.trim();
 
-  if(!token) {
-    alert("Por favor, preencha o seu GitHub Personal Access Token (PAT) para publicar automaticamente.");
-    return false;
-  }
+  if(!token) return false;
 
   const filePath = `cliente/${slug}/index.html`;
   const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/${filePath}`;
@@ -198,15 +225,8 @@ async function publicarNoGithub(slug, conteudoHtml) {
       })
     });
 
-    if(response.ok) {
-      return true;
-    } else {
-      const err = await response.json();
-      alert("Erro ao enviar para o GitHub: " + (err.message || "Verifique as permissões do Token"));
-      return false;
-    }
+    return response.ok;
   } catch(e) {
-    alert("Erro de conexão ao comunicar com a API do GitHub.");
     return false;
   }
 }
@@ -227,41 +247,40 @@ async function gerarTudo() {
   }
 
   const btn = document.getElementById('btnGerar');
-  btn.innerText = '⌛ Processando e Publicando no GitHub...';
+  btn.innerText = '⌛ Gerando Cliente...';
   btn.disabled = true;
 
-  // 1. Link Direto do Google para o botão interno do HTML
+  // 1. Link do Google de Avaliação
   const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
   document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
 
-  // 2. Link do Endereço do Cliente no seu site
+  // 2. Link Final do Cliente
   const slugEmpresa = formatarSlug(nome);
   const linkPaginaCliente = `https://impulsoweb10.com.br/cliente/${slugEmpresa}/`;
-  document.getElementById('outLinkCliente').value = linkPaginaCliente;
-  document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
+  document.getElementById('outLinkCliente').textContent = linkPaginaCliente;
 
-  // 3. Gerar QR Code apontando para o Endereço do Cliente
+  // 3. Gerar QR Code visível
   const qrDiv = document.getElementById('qrbox');
   qrDiv.innerHTML = '';
-  new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
+  new QRCode(qrDiv, { text: linkPaginaCliente, width: 180, height: 180 });
 
-  // 4. Modelo HTML montado com o link do Google no botão
+  // 4. Montar HTML Completo do Modelo
   htmlFinal = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="${nome} — ${segmento}.${servicos}.">
-<meta name="keywords" content="${segmento}, ${cidade},${nome}">
+<meta name="description" content="${nome} — ${segmento}. ${servicos}.">
+<meta name="keywords" content="${segmento}, ${cidade}, ${nome}">
 <meta name="author" content="ImpulsoWeb10">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="${linkPaginaCliente}">
-<meta property="og:title" content="${nome} \vert{}${cidade}">
+<meta property="og:title" content="${nome} | ${cidade}">
 <meta property="og:description" content="Avalie nosso atendimento e fale conosco no WhatsApp.">
 <meta property="og:locale" content="pt_BR">
 
-<title>${nome} \vert{}${cidade}</title>
+<title>${nome} | ${cidade}</title>
 
 <script type="application/ld+json">
 {
@@ -625,4 +644,236 @@ body::before{
       linear-gradient(260deg,rgba(150,88,62,.42) 0%,rgba(150,88,62,0) 28%),
       linear-gradient(115deg,transparent 40%,rgba(201,169,110,.05) 50%,transparent 60%),
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .012' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .5
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .012' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .5  0 0 0 0 .62  0 0 0 1.1 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='.35'/%3E%3C/svg%3E"),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 1px,transparent 1px 7px),
+      linear-gradient(135deg,#0a1830 0%,#07101e 50%,#0d1c30 100%);
+    background-size:auto,auto,auto,auto,auto,260px 260px,900px 900px,auto,auto;
+  }
+  .bg-seo{display:flex;justify-content:space-between;align-items:stretch;position:absolute;top:2rem;left:0;right:0;height:calc(100vh - 4rem);overflow:hidden;padding:0 3vw;z-index:0;pointer-events:none;font-family:'DM Sans',sans-serif;color:rgba(232,226,216,.6)}
+  .bg-seo>div{width:clamp(190px,calc((100vw - 480px)/2 - 7vw),380px);display:flex;flex-direction:column;justify-content:space-between;gap:1rem}
+  .bg-seo>div:last-child{text-align:right}
+  .bg-seo h1,.bg-seo h2,.bg-seo p{margin:0}
+  .bg-seo h1{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;letter-spacing:.06em;line-height:1.15;color:rgba(201,169,110,.85)}
+  .bg-seo h2{margin-top:1.1rem;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.4;color:rgba(201,169,110,.7)}
+  .bg-seo h1+h2{margin-top:.5rem}
+  .bg-seo p{margin-top:.4rem;font-size:.74rem;line-height:1.6;letter-spacing:.01em}
+  .bg-seo .fotos{display:flex;gap:.6rem}
+  .bg-seo .fotos img{flex:1 1 0;min-width:0;width:50%;height:auto;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid rgba(201,169,110,.5);border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.45);opacity:.94}
+}
+</style>
+</head>
+<body>
+
+<div class="app-wrapper">
+  
+  <div class="device-frame" id="deviceFrame">
+    
+    <div class="secret-back">
+      <img src="fundo.png" alt="Cenário de Fundo" class="back-layer back-layer-fundo">
+      <img src="mago.png" alt="Ilustração de Destaque" class="back-layer back-layer-mago">
+      <img src="moldura.png" alt="Moldura Decorativa" class="back-layer back-layer-moldura">
+    </div>
+
+    <div class="page">
+
+      <div class="logo-wrap layer-mid">
+        <div class="logo-frame">
+          <img class="logo-img" src="logo.png" alt="Logo ${nome}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="logo-img-fallback" style="display:none;">${nome}</div>
+        </div>
+        <div>
+          <div class="brand">${nome}</div>
+          <div class="tagline">${segmento} · COMPROMISSO · QUALIDADE</div>
+        </div>
+      </div>
+
+      <div class="layer-back">
+        <div class="stars-row" aria-label="Avaliação 5 estrelas">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <div class="rating-text">Sua nota 5 estrelas é a nossa maior recompensa!</div>
+      </div>
+
+      <div class="layer-pop" style="width: 100%; display: flex; justify-content: center;">
+        <a href="${linkGoogleAvaliacao}" class="btn-google" target="_blank" rel="noopener" aria-label="Avaliar no Google">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Avaliar no Google ⭐⭐⭐⭐⭐
+        </a>
+      </div>
+
+      <div class="social-row layer-front">
+        <a href="https://wa.me/${wa}?text=Olá!%20Vim%20pelo%20site%20e%20quero%20mais%20informações." class="social-btn" target="_blank" rel="noopener">
+          <div class="social-icon" style="background:#1a2e1a;">
+            <svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 23.057a.75.75 0 0 0 .916.927l5.358-1.476A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+          </div>
+          <span class="social-label">WhatsApp</span>
+        </a>
+
+        <a href="https://www.instagram.com/${ig}" class="social-btn" target="_blank" rel="noopener">
+          <div class="social-icon" style="background:#2a1a2e;">
+            <svg viewBox="0 0 24 24" fill="none">
+              <defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/><stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs>
+              <rect x="2" y="2" width="20" height="20" rx="5" stroke="url(#ig)" stroke-width="1.8"/>
+              <circle cx="12" cy="12" r="4.5" stroke="url(#ig)" stroke-width="1.8"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="#dc2743"/>
+            </svg>
+          </div>
+          <span class="social-label">Instagram</span>
+        </a>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco + ' ' + cidade)}" class="social-btn" target="_blank" rel="noopener">
+          <div class="social-icon" style="background:#1a2030;">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335"/>
+              <circle cx="12" cy="9" r="2.5" fill="#fff"/>
+            </svg>
+          </div>
+          <span class="social-label">Maps</span>
+        </a>
+
+        <a href="tel:+${wa}" class="social-btn">
+          <div class="social-icon" style="background:#1a2a1a;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.4 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.31 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.59a16 16 0 0 0 6 6l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/></svg>
+          </div>
+          <span class="social-label">Ligar</span>
+        </a>
+      </div>
+
+      <div class="address layer-back">
+        ${endereco}<br>
+        ${cidade}
+      </div>
+
+      <div class="ticker-banner layer-mid">
+        <div class="ticker-track">
+          <span class="ticker-item">${nome} • ${segmento} • ${servicos} • ${cidade}.</span>
+          <span class="ticker-item">QUALIDADE E MELHOR ATENDIMENTO NA REGIÃO.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="footer layer-back">
+      <p class="footer-seo-text">Referência em <span>${segmento}</span> em ${cidade} e região.</p>
+      <p class="footer-promo">Deseja um link como este para sua empresa?<br>
+        <a href="https://wa.me/5511954950044?text=Olá!%20Vi%20este%20modelo%20e%20quero%20um%20assim%20para%20minha%20empresa." target="_blank" rel="noopener">👉 Saiba mais aqui</a>
+      </p>
+      <div class="footer-ssl">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Protegido por SSL
+      </div>
+      <p class="footer-dev">
+        Desenvolvido por <a href="https://wa.me/5511954950044?text=Olá%20vim%20pelo%20site" target="_blank" rel="noopener">ImpulsoWeb10</a>
+        <button class="btn-gyro" id="toggleGyro" onclick="alternarGiroscopio()">Giroscópio: OFF</button>
+      </p>
+    </footer>
+  </div>
+
+</div>
+
+<aside class="bg-seo">
+  <div>
+    <div class="txt">
+      <h1>${nome}</h1>
+      <h2>${segmento} em ${cidade}</h2>
+      <p>A ${nome} é referência em ${segmento} na cidade de ${cidade}.</p>
+    </div>
+    <div class="fotos">
+      <img src="imagem_01.png" alt="${nome}" width="400" height="400">
+      <img src="imagem_02.png" alt="${segmento}" width="400" height="400">
+    </div>
+  </div>
+  <div>
+    <div class="txt">
+      <h2>Atendimento na Região</h2>
+      <p>${endereco} — ${cidade}.</p>
+    </div>
+    <div class="fotos">
+      <img src="imagem_03.png" alt="${cidade}" width="400" height="400">
+      <img src="imagem_04.png" alt="${servicos}" width="400" height="400">
+    </div>
+  </div>
+</aside>
+
+<script>
+  const frame = document.getElementById('deviceFrame');
+  const btnGyro = document.getElementById('toggleGyro');
+  let giroscopioAtivo = false;
+  const configNivel1_5 = { intensidadeCelular: 1.5, intensidadeMouse: 60, anguloMax: 60 };
+
+  function handleOrientation(e) {
+    if (!giroscopioAtivo || e.gamma === null || e.beta === null) return;
+    let x = Math.min(Math.max(e.gamma, -configNivel1_5.anguloMax), configNivel1_5.anguloMax);
+    let y = Math.min(Math.max(e.beta - 45, -configNivel1_5.anguloMax), configNivel1_5.anguloMax);
+    frame.style.transform = \`rotateY(\${x * configNivel1_5.intensidadeCelular}deg) rotateX(\${-y * configNivel1_5.intensidadeCelular}deg)\`;
+  }
+
+  function ativandoOorientacao() {
+    window.addEventListener('deviceorientation', handleOrientation);
+    giroscopioAtivo = true;
+    btnGyro.innerText = 'Giroscópio: ON';
+    btnGyro.classList.add('active');
+  }
+
+  function desativarGiroscopio() {
+    window.removeEventListener('deviceorientation', handleOrientation);
+    giroscopioAtivo = false;
+    btnGyro.innerText = 'Giroscópio: OFF';
+    btnGyro.classList.remove('active');
+    frame.style.transform = 'rotateY(0deg) rotateX(0deg)';
+  }
+
+  function alternarGiroscopio() {
+    if (giroscopioAtivo) { desativarGiroscopio(); return; }
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().then(state => {
+        if (state === 'granted') { ativandoOorientacao(); } else { alert('Permissão de orientação negada.'); }
+      }).catch(() => { ativandoOorientacao(); });
+    } else { ativandoOorientacao(); }
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    if (!giroscopioAtivo) return;
+    const { innerWidth, innerHeight } = window;
+    const x = (e.clientX - innerWidth / 2) / (innerWidth / 2);
+    const y = (e.clientY - innerHeight / 2) / (innerHeight / 2);
+    frame.style.transform = \`rotateY(\${x * configNivel1_5.intensidadeMouse}deg) rotateX(\${-y * configNivel1_5.intensidadeMouse}deg)\`;
+  });
+
+  document.addEventListener('mouseleave', () => {
+    if (giroscopioAtivo) { frame.style.transform = 'rotateY(0deg) rotateX(0deg)'; }
+  });
+<\/script>
+
+</body>
+</html>`;
+
+  // Exibir a caixa de resultados primeiro
+  document.getElementById('resBox').classList.add('show');
+  document.getElementById('resBox').scrollIntoView({ behavior: 'smooth' });
+
+  // Tentar publicar no GitHub caso o token esteja preenchido
+  const publicadoComSucesso = await publicarNoGithub(slugEmpresa, htmlFinal);
+
+  if (publicadoComSucesso) {
+    document.getElementById('txtStatusMsg').textContent = "✓ Cliente Gerado e Publicado com Sucesso no GitHub!";
+    document.getElementById('txtGithubStatus').textContent = "Publicado no GitHub Pages!";
+  } else {
+    document.getElementById('txtStatusMsg').textContent = "✓ Cliente Gerado com Sucesso!";
+    document.getElementById('txtGithubStatus').textContent = "Baixe o arquivo para colocar na pasta do cliente:";
+  }
+
+  btn.innerText = '🚀 Gerar Cliente Completo';
+  btn.disabled = false;
+}
+
+function baixarHTML() {
+  const blob = new Blob([htmlFinal], { type: "text/html;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "index.html";
+  a.click();
+}
+</script>
+</body>
+</html>
