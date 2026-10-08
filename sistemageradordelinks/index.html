@@ -121,7 +121,7 @@ input:focus{border-color:var(--b)}
       <h3 style="color:#fff;font-size:1.1rem;">Ficheiro index.html Pronto!</h3>
       <p style="color:var(--muted2);font-size:.85rem;margin-top:.4rem;line-height:1.5;">
         Clique no botão abaixo para baixar o ficheiro <code>index.html</code>. Guarde-o na pasta do GitHub Pages em:<br>
-        <strong style="color:var(--y);" id="txtCaminhoGithub">https://impulsoweb10.com.br/cliente/nome-da-empresa/index.html</strong>
+        <strong style="color:var(--y);" id="txtCaminhoGithub">https://avaliar.impulsoweb10.com.br/cliente/nome-da-empresa/index.html</strong>
       </p>
       <button class="btn-dl" onclick="baixarHTML()">📥 Baixar index.html do Cliente</button>
     </div>
@@ -161,7 +161,7 @@ function gerarTudo() {
 
   // 2. Link do Endereço do Cliente no seu site
   const slugEmpresa = formatarSlug(nome);
-  const linkPaginaCliente = `https://impulsoweb10.com.br/cliente/${slugEmpresa}/`;
+  const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${slugEmpresa}/`;
   document.getElementById('outLinkCliente').value = linkPaginaCliente;
   document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
 
