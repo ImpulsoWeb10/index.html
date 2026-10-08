@@ -1,15 +1,18 @@
 {
   "name": "impulsoweb10-gerador",
-  "version": "1.0.0",
-  "description": "Gerador Automático de Links Personalizados e QR Codes para Avaliações no Google",
+  "version": "1.1.0",
+  "description": "Gerador Automático de Links Personalizados com Extrator de Dados Web",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
+    "axios": "^1.6.8",
     "canvas": "^2.11.2",
+    "cheerio": "^1.0.0-rc.12",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "fs-extra": "^11.2.0",
     "multer": "^1.4.5-lts.1",
     "qrcode": "^1.5.3"
   }
