@@ -34,10 +34,6 @@ input:focus{border-color:var(--b)}
 .btn-dl{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.6rem;background:var(--g);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:.95rem;margin-top:1rem;text-decoration:none}
 .btn-dl:hover{background:#2e9648}
 #qrbox{display:inline-block;padding:.8rem;background:#fff;border-radius:10px;margin:1rem 0}
-
-.link-final-card { background: #0d1117; border: 1px solid #1a73e8; border-radius: 12px; padding: 1rem; text-align: center; margin-top: 1rem; }
-.link-final-badge { display: inline-block; background: #1a73e8; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 20px; margin-bottom: 0.5rem; text-transform: uppercase; }
-.link-final-url { font-size: 1.05rem; font-weight: 700; color: #34a853; word-break: break-all; }
 </style>
 </head>
 <body>
@@ -52,19 +48,19 @@ input:focus{border-color:var(--b)}
 <main>
   <div class="hero">
     <h1>Gerador de Cartão <em>3D + Avaliação</em></h1>
-    <p>Preencha os dados abaixo para gerar instantaneamente o QR Code e o ficheiro do cliente.</p>
+    <p>Preencha as informações para preencher o modelo e baixar o ficheiro HTML do cliente.</p>
   </div>
 
   <div class="form-card">
-    <div class="section-title">1. Dados Principais da Empresa</div>
+    <div class="section-title">1. Dados Principais do Google</div>
     <div class="grid-2">
       <div class="field-grp">
-        <label>Place ID ou Link do Google Maps *</label>
-        <input type="text" id="inPid" placeholder="Ex: ChIJN1t_... ou https://maps.app.goo.gl/..."/>
+        <label>Place ID do Negócio no Google *</label>
+        <input type="text" id="inPid" placeholder="Ex: ChIJN1t_tDeuEmsRUsoyG83frY4"/>
       </div>
       <div class="field-grp">
         <label>Nome da Empresa *</label>
-        <input type="text" id="inNome" placeholder="Ex: Tintas Qualy Quimy"/>
+        <input type="text" id="inNome" placeholder="Ex: Dep Cuiabá"/>
       </div>
     </div>
 
@@ -75,8 +71,8 @@ input:focus{border-color:var(--b)}
         <input type="text" id="inWa" placeholder="Ex: 5511999999999"/>
       </div>
       <div class="field-grp">
-        <label>Instagram (Utilizador sem @)</label>
-        <input type="text" id="inIg" placeholder="Ex: tintasqualy"/>
+        <label>Instagram (Nome do utilizador sem @)</label>
+        <input type="text" id="inIg" placeholder="Ex: dep_cuiaba"/>
       </div>
     </div>
 
@@ -84,11 +80,11 @@ input:focus{border-color:var(--b)}
     <div class="grid-2">
       <div class="field-grp">
         <label>Cidade / Estado</label>
-        <input type="text" id="inCidade" placeholder="Ex: Itaquaquecetuba SP"/>
+        <input type="text" id="inCidade" placeholder="Ex: Cuiabá MT"/>
       </div>
       <div class="field-grp">
         <label>Endereço Completo</label>
-        <input type="text" id="inEndereco" placeholder="Ex: Rua Leiria, 45 - Bairro"/>
+        <input type="text" id="inEndereco" placeholder="Ex: Rua Exemplo, 123 - Bairro"/>
       </div>
     </div>
 
@@ -96,39 +92,36 @@ input:focus{border-color:var(--b)}
     <div class="grid-2">
       <div class="field-grp">
         <label>Segmento de Atuação</label>
-        <input type="text" id="inSegmento" placeholder="Ex: Tintas e Revestimentos"/>
+        <input type="text" id="inSegmento" placeholder="Ex: Depósito de Bebidas"/>
       </div>
       <div class="field-grp">
         <label>Produtos / Serviços Principais</label>
-        <input type="text" id="inServicos" placeholder="Ex: Tintas, Massas e Texturas"/>
+        <input type="text" id="inServicos" placeholder="Ex: Bebidas em Geral • Entrega Rápida"/>
       </div>
     </div>
 
-    <button class="btn-gen" id="btnGerar" onclick="gerarTudo()">🚀 GERAR FICHEIRO DO CLIENTE</button>
+    <button class="btn-gen" onclick="gerarTudo()">🚀 Gerar Link, QR Code & Baixar HTML</button>
   </div>
 
   <div class="results" id="resBox">
-    <div style="color:var(--g);font-weight:700;font-size:1.1rem;margin-bottom:.5rem;">✓ Cliente Gerado com Sucesso!</div>
+    <div style="color:var(--g);font-weight:700;font-size:1rem;margin-bottom:.5rem;">✓ Dados Processados com Sucesso!</div>
     
-    <div class="link-final-card">
-        <span class="link-final-badge">LINK FINAL DO CLIENTE</span>
-        <div class="link-final-url" id="outLinkCliente">https://impulsoweb10.com.br/clientes/empresa/</div>
-    </div>
+    <label style="font-size:.78rem;color:var(--muted2);">Link da Página do Cliente:</label>
+    <input type="text" id="outLinkCliente" style="width:100%;margin-top:.3rem;margin-bottom:1rem;" readonly/>
 
-    <div style="margin-top:1.2rem;">
-      <label style="font-size:.78rem;color:var(--muted2);">Link Direto de Avaliação do Google:</label>
-      <input type="text" id="outLinkGoogle" style="width:100%;margin-top:.3rem;" readonly/>
-    </div>
+    <label style="font-size:.78rem;color:var(--muted2);">Link Direto de Avaliação Google (Inserido no botão do HTML):</label>
+    <input type="text" id="outLinkGoogle" style="width:100%;margin-top:.3rem;margin-bottom:1rem;" readonly/>
 
-    <div style="text-align:center;margin:1.5rem 0;">
-      <div style="font-size:.85rem;color:var(--muted2);margin-bottom:.4rem;">QR Code com o Link do Cliente:</div>
+    <div style="text-align:center;margin:1rem 0;">
+      <div style="font-size:.85rem;color:var(--muted2);margin-bottom:.2rem;">QR Code Gerado (Aponta para a Página do Cliente):</div>
       <div id="qrbox"></div>
     </div>
 
     <div class="action-box">
-      <h3 style="color:#fff;font-size:1.1rem;">Pronto para Publicar!</h3>
+      <h3 style="color:#fff;font-size:1.1rem;">Ficheiro index.html Pronto!</h3>
       <p style="color:var(--muted2);font-size:.85rem;margin-top:.4rem;line-height:1.5;">
-        Clique abaixo para baixar o <code>index.html</code>. No GitHub, crie a pasta <code id="txtCaminhoGithub">clientes/nome-da-empresa/</code> e envie o arquivo para dentro dela.
+        Clique no botão abaixo para baixar o ficheiro <code>index.html</code>. Guarde-o na pasta do GitHub Pages em:<br>
+        <strong style="color:var(--y);" id="txtCaminhoGithub">https://impulsoweb10.com.br/cliente/nome-da-empresa/index.html</strong>
       </p>
       <button class="btn-dl" onclick="baixarHTML()">📥 Baixar index.html do Cliente</button>
     </div>
@@ -158,25 +151,26 @@ function gerarTudo() {
   const servicos = document.getElementById('inServicos').value.trim() || 'Atendimento de Qualidade';
 
   if(!pid || !nome) {
-    alert("Por favor, preencha o Place ID / Link e o Nome da Empresa.");
+    alert("Por favor, preencha o Place ID e o Nome da Empresa.");
     return;
   }
 
-  let linkGoogleAvaliacao = pid;
-  if(!pid.startsWith('http')) {
-    linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
-  }
+  // 1. Link Direto do Google para o botão interno do HTML
+  const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
   document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
 
+  // 2. Link do Endereço do Cliente no seu site
   const slugEmpresa = formatarSlug(nome);
-  const linkPaginaCliente = `https://impulsoweb10.com.br/clientes/${slugEmpresa}/`;
-  document.getElementById('outLinkCliente').textContent = linkPaginaCliente;
-  document.getElementById('txtCaminhoGithub').textContent = `clientes/${slugEmpresa}/index.html`;
+  const linkPaginaCliente = `https://impulsoweb10.com.br/cliente/${slugEmpresa}/`;
+  document.getElementById('outLinkCliente').value = linkPaginaCliente;
+  document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
 
+  // 3. Gerar QR Code apontando para o Endereço do Cliente
   const qrDiv = document.getElementById('qrbox');
   qrDiv.innerHTML = '';
-  new QRCode(qrDiv, { text: linkPaginaCliente, width: 180, height: 180 });
+  new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
 
+  // 4. Modelo HTML montado com o link do Google no botão
   htmlFinal = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -745,7 +739,7 @@ body::before{
   }
 
   document.addEventListener('mousemove', (e) => {
-    if (!giroscopioArivo) return;
+    if (!giroscopioAtivo) return;
     const { innerWidth, innerHeight } = window;
     const x = (e.clientX - innerWidth / 2) / (innerWidth / 2);
     const y = (e.clientY - innerHeight / 2) / (innerHeight / 2);
