@@ -19,14 +19,23 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Servir arquivos estáticos
-app.use('/admin', express.static(path.join(__dirname, 'admin')));
+// Servir arquivos estáticos da raiz, clientes e uploads
+app.use(express.static(__dirname));
 app.use('/clientes', express.static(path.join(__dirname, 'clientes')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Rota principal servindo o index.html da raiz
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // Configuração Upload Logo
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/logos/'),
+    destination: (req, file, cb) => {
+        const dir = path.join(__dirname, 'uploads', 'logos');
+        fs.ensureDirSync(dir);
+        cb(null, dir);
+    },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
         cb(null, `logo_${Date.now()}${ext}`);
@@ -34,7 +43,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Função Helper: Slugify
+// Helper: Slugify
 function slugify(text) {
     return text.toString().toLowerCase()
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -50,24 +59,6 @@ if (!fs.existsSync(DB_FILE)) {
     fs.ensureDirSync(path.join(__dirname, 'database'));
     fs.writeFileSync(DB_FILE, JSON.stringify([]));
 }
-
-// Middleware de Autenticação Admin
-function authAdmin(req, res, next) {
-    if (req.session && req.session.authenticated) {
-        return next();
-    }
-    return res.status(401).json({ error: 'Acesso não autorizado' });
-}
-
-// Rota Login
-app.post('/api/login', (req, res) => {
-    const { usuario, senha } = req.body;
-    if (usuario === 'admin' && senha === 'impulso102026') {
-        req.session.authenticated = true;
-        return res.json({ success: true });
-    }
-    res.status(400).json({ error: 'Usuário ou senha incorretos.' });
-});
 
 // Rota Gerar Frase SEO
 app.post('/api/gerar-seo', (req, res) => {
@@ -86,28 +77,27 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
         await fs.ensureDir(clienteDir);
 
         // Processar Logo
-        let logoPath = data.logo_url || '';
+        let logoFileName = 'logo.png';
         if (req.file) {
             const ext = path.extname(req.file.originalname);
-            const newLogoName = `logo${ext}`;
-            const destPath = path.join(clienteDir, newLogoName);
+            logoFileName = `logo${ext}`;
+            const destPath = path.join(clienteDir, logoFileName);
             await fs.copy(req.file.path, destPath);
-            logoPath = `/clientes/${slug}/${newLogoName}`;
         }
 
-        // WhatsApp Link Auto
+        // WhatsApp Link
         const cleanPhone = (data.whatsapp || '').replace(/\D/g, '');
         const waMsg = encodeURIComponent(data.mensagem_whatsapp || "Olá! Vim pelo link da empresa.");
         const waLink = cleanPhone ? `https://wa.me/${cleanPhone}?text=${waMsg}` : '#';
 
-        // Google Maps Auto
+        // Google Maps Link
         let mapsLink = data.google_maps;
         if (!mapsLink && data.endereco) {
-            const query = encodeURIComponent(`${data.endereco}, ${data.numero || ''}, ${data.bairro || ''}, ${data.cidade || ''} ${data.cep || ''}`);
+            const query = encodeURIComponent(`${data.endereco}, ${data.cidade || ''} ${data.estado || ''}`);
             mapsLink = `https://www.google.com/maps/search/?api=1&query=${query}`;
         }
 
-        // 1. Gerar QR Code isolado
+        // 1. Gerar QR Code
         const qrPath = path.join(clienteDir, 'qr-code.png');
         await QRCode.toFile(qrPath, data.google_review, {
             width: 500,
@@ -115,45 +105,37 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
             color: { dark: data.cor_principal || '#10b981', light: '#ffffff' }
         });
 
-        // 2. Gerar Plaquinha Visual (Canvas)
+        // 2. Gerar Plaquinha Visual
         const canvas = createCanvas(800, 1200);
         const ctx = canvas.getContext('2d');
 
-        // Background
         ctx.fillStyle = '#111827';
         ctx.fillRect(0, 0, 800, 1200);
 
-        // Moldura Neon
         ctx.strokeStyle = data.cor_principal || '#10b981';
         ctx.lineWidth = 10;
         ctx.strokeRect(30, 30, 740, 1140);
 
-        // Nome da Empresa
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 38px Sans-Serif';
         ctx.textAlign = 'center';
         ctx.fillText(data.nome_empresa.toUpperCase(), 400, 120);
 
-        // Subtítulo
         ctx.fillStyle = '#9ca3af';
         ctx.font = '22px Sans-Serif';
         ctx.fillText('Sua opinião é muito importante para nós!', 400, 170);
 
-        // Estrelas
         ctx.fillStyle = '#f59e0b';
         ctx.font = '40px Sans-Serif';
         ctx.fillText('★ ★ ★ ★ ★', 400, 230);
 
-        // Chamada
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 28px Sans-Serif';
         ctx.fillText('Avalie nossa empresa no Google', 400, 300);
 
-        // Renderizar QR Code no Canvas
         const qrImage = await loadImage(qrPath);
         ctx.drawImage(qrImage, 200, 350, 400, 400);
 
-        // Instruções
         ctx.fillStyle = '#10b981';
         ctx.font = 'bold 24px Sans-Serif';
         ctx.fillText('Aponte a câmera do celular para o QR Code', 400, 820);
@@ -162,7 +144,6 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
         ctx.font = '18px Sans-Serif';
         ctx.fillText('Obrigado pela sua preferência e confiança!', 400, 870);
 
-        // Salvar Plaquinha
         const plaquinhaPath = path.join(clienteDir, 'plaquinha.png');
         const buffer = canvas.toBuffer('image/png');
         await fs.writeFile(plaquinhaPath, buffer);
@@ -175,19 +156,15 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
         if (data.instagram) socialButtons.push(`<a href="${data.instagram}" class="btn btn-ig" target="_blank">📸 Instagram</a>`);
         if (data.facebook) socialButtons.push(`<a href="${data.facebook}" class="btn btn-fb" target="_blank">📘 Facebook</a>`);
         if (mapsLink) socialButtons.push(`<a href="${mapsLink}" class="btn btn-maps" target="_blank">📍 Como Chegar</a>`);
-        if (data.telefone) socialButtons.push(`<a href="tel:${data.telefone.replace(/\D/g, '')}" class="btn btn-tel" target="_blank">📞 Ligar</a>`);
 
         const replacements = {
             '{{NOME_EMPRESA}}': data.nome_empresa || '',
-            '{{NOME_MARCA}}': data.nome_marca || data.nome_empresa,
             '{{SEGMENTO}}': data.segmento || '',
-            '{{DESCRICAO}}': data.descricao_empresa || '',
             '{{FRASE_SEO}}': data.frase_seo || '',
-            '{{LOGO}}': `./logo${path.extname(req.file ? req.file.originalname : '.png')}`,
+            '{{LOGO}}': `./${logoFileName}`,
             '{{GOOGLE_REVIEW}}': data.google_review || '#',
             '{{BOTONES_SOCIAIS}}': socialButtons.join('\n'),
-            '{{ENDERECO_COMPLETO}}': `${data.endereco || ''}, ${data.numero || ''} - ${data.bairro || ''}, ${data.cidade || ''} - ${data.estado || ''}`,
-            '{{TELEFONE}}': data.telefone || '',
+            '{{ENDERECO_COMPLETO}}': `${data.endereco || ''}, ${data.cidade || ''} - ${data.estado || ''}`,
             '{{COR_PRINCIPAL}}': data.cor_principal || '#10b981'
         };
 
@@ -204,7 +181,6 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
             id: Date.now(),
             slug,
             ...data,
-            logo: logoPath,
             url: `/clientes/${slug}/`,
             createdAt: new Date().toISOString()
         };
@@ -228,8 +204,12 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
 
 // API Lista de Clientes
 app.get('/api/clientes', (req, res) => {
-    const clientes = JSON.parse(fs.readFileSync(DB_FILE, 'utf-8'));
-    res.json(clientes);
+    try {
+        const clientes = JSON.parse(fs.readFileSync(DB_FILE, 'utf-8'));
+        res.json(clientes);
+    } catch (err) {
+        res.json([]);
+    }
 });
 
-app.listen(PORT, () => console.log(`🚀 ImpulsoWeb10 rodando em http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 ImpulsoWeb10 rodando na porta ${PORT}`));
