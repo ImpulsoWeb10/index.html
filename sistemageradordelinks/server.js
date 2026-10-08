@@ -5,6 +5,8 @@ const QRCode = require('qrcode');
 const { createCanvas, loadImage } = require('canvas');
 const fs = require('fs-extra');
 const path = require('path');
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,12 +21,10 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Servir arquivos estáticos da raiz, clientes e uploads
 app.use(express.static(__dirname));
 app.use('/clientes', express.static(path.join(__dirname, 'clientes')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Rota principal servindo o index.html da raiz
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -43,7 +43,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Helper: Slugify
 function slugify(text) {
     return text.toString().toLowerCase()
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -54,11 +53,60 @@ function slugify(text) {
         .replace(/-+$/, '');
 }
 
-// Inicializar banco JSON
 if (!fs.existsSync(DB_FILE)) {
     fs.ensureDirSync(path.join(__dirname, 'database'));
     fs.writeFileSync(DB_FILE, JSON.stringify([]));
 }
+
+// 🔍 NOVA ROTA: Extrair dados de um link do Google ou Site
+app.post('/api/extrair-link', async (req, res) => {
+    try {
+        const { url } = req.body;
+        if (!url) return res.status(400).json({ error: 'URL é obrigatória' });
+
+        const response = await axios.get(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            },
+            timeout: 8000
+        });
+
+        const $ = cheerio.load(response.data);
+
+        // Capturar Título/Nome
+        let title = $('meta[property="og:title"]').attr('content') || 
+                    $('meta[name="twitter:title"]').attr('content') || 
+                    $('title').text() || '';
+        title = title.split('-')[0].split('|')[0].trim();
+
+        // Capturar Descrição/Segmento
+        let description = $('meta[property="og:description"]').attr('content') || 
+                          $('meta[name="description"]').attr('content') || '';
+
+        // Capturar Imagem/Logo
+        let image = $('meta[property="og:image"]').attr('content') || 
+                    $('meta[name="twitter:image"]').attr('content') || '';
+
+        // Tentar extrair telefone do texto
+        const phoneMatch = response.data.match(/(\(?\d{2}\)?\s?)?(9?\d{4}[-\s]?\d{4})/);
+        const telefone = phoneMatch ? phoneMatch[0] : '';
+
+        res.json({
+            success: true,
+            dados: {
+                nome_empresa: title,
+                segmento: description.length > 50 ? description.substring(0, 50) + '...' : description,
+                descricao_empresa: description,
+                whatsapp: telefone,
+                logo_url: image
+            }
+        });
+
+    } catch (error) {
+        console.error('Erro na extração:', error.message);
+        res.status(500).json({ error: 'Não foi possível ler as informações desse link automaticamente. Preencha manualmente.' });
+    }
+});
 
 // Rota Gerar Frase SEO
 app.post('/api/gerar-seo', (req, res) => {
@@ -76,7 +124,6 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
         const clienteDir = path.join(__dirname, 'clientes', slug);
         await fs.ensureDir(clienteDir);
 
-        // Processar Logo
         let logoFileName = 'logo.png';
         if (req.file) {
             const ext = path.extname(req.file.originalname);
@@ -85,12 +132,10 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
             await fs.copy(req.file.path, destPath);
         }
 
-        // WhatsApp Link
         const cleanPhone = (data.whatsapp || '').replace(/\D/g, '');
         const waMsg = encodeURIComponent(data.mensagem_whatsapp || "Olá! Vim pelo link da empresa.");
         const waLink = cleanPhone ? `https://wa.me/${cleanPhone}?text=${waMsg}` : '#';
 
-        // Google Maps Link
         let mapsLink = data.google_maps;
         if (!mapsLink && data.endereco) {
             const query = encodeURIComponent(`${data.endereco}, ${data.cidade || ''} ${data.estado || ''}`);
@@ -105,7 +150,7 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
             color: { dark: data.cor_principal || '#10b981', light: '#ffffff' }
         });
 
-        // 2. Gerar Plaquinha Visual
+        // 2. Gerar Plaquinha
         const canvas = createCanvas(800, 1200);
         const ctx = canvas.getContext('2d');
 
@@ -175,7 +220,6 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
 
         await fs.writeFile(path.join(clienteDir, 'index.html'), template);
 
-        // Atualizar Banco JSON
         const clientes = JSON.parse(await fs.readFile(DB_FILE, 'utf-8'));
         const newClient = {
             id: Date.now(),
@@ -202,7 +246,6 @@ app.post('/api/clientes/gerar', upload.single('logo_file'), async (req, res) => 
     }
 });
 
-// API Lista de Clientes
 app.get('/api/clientes', (req, res) => {
     try {
         const clientes = JSON.parse(fs.readFileSync(DB_FILE, 'utf-8'));
