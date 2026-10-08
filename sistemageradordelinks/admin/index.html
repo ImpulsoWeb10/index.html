@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImpulsoWeb10 — Painel Administrativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #090d16;
+            --card: #111827;
+            --accent: #10b981;
+            --text: #f9fafb;
+            --border: #1f2937;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 30px; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .logo-title { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+
+        .grid-dash { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .card-stat { background: var(--card); padding: 20px; border-radius: 16px; border: 1px solid var(--border); }
+        .card-stat h3 { font-size: 0.85rem; color: #9ca3af; margin-bottom: 8px; }
+        .card-stat .value { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+
+        .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; }
+
+        form { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .full { grid-column: span 2; }
+
+        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: #d1d5db; }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 16px;
+            background: #1f2937;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: #fff;
+            outline: none;
+        }
+        input:focus { border-color: var(--accent); }
+
+        .btn-submit {
+            grid-column: span 2;
+            padding: 16px;
+            background: var(--accent);
+            color: #000;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-submit:hover { filter: brightness(1.1); }
+
+        /* Modal Resultado */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; border: 1px solid var(--accent); }
+        .btn-action { display: block; width: 100%; padding: 12px; margin-top: 10px; background: #374151; color: #fff; text-align: center; text-decoration: none; border-radius: 8px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo-title">ImpulsoWeb10</div>
+    <div>Painel de Controle v1.0</div>
+</div>
+
+<div class="grid-dash">
+    <div class="card-stat">
+        <h3>Total Clientes</h3>
+        <div class="value" id="stat-clientes">0</div>
+    </div>
+    <div class="card-stat">
+        <h3>Links Ativos</h3>
+        <div class="value" id="stat-links">0</div>
+    </div>
+</div>
+
+<div class="section-title">Cadastrar Novo Cliente</div>
+
+<form id="form-cliente" enctype="multipart/form-data">
+    <div>
+        <label>Nome da Empresa *</label>
+        <input type="text" name="nome_empresa" id="nome_empresa" required>
+    </div>
+    <div>
+        <label>Segmento *</label>
+        <input type="text" name="segmento" id="segmento" required>
+    </div>
+    <div>
+        <label>Cidade *</label>
+        <input type="text" name="cidade" id="cidade" required>
+    </div>
+    <div>
+        <label>Estado</label>
+        <input type="text" name="estado" value="SP">
+    </div>
+    <div>
+        <label>Endereço / Bairro</label>
+        <input type="text" name="endereco">
+    </div>
+    <div>
+        <label>Telefone / WhatsApp</label>
+        <input type="text" name="whatsapp" placeholder="11999999999">
+    </div>
+    <div class="full">
+        <label>Link de Avaliação Google ⭐ *</label>
+        <input type="url" name="google_review" required placeholder="https://g.page/r/...">
+    </div>
+    <div class="full">
+        <label>Logo da Empresa *</label>
+        <input type="file" name="logo_file" accept="image/*" required>
+    </div>
+    <div class="full">
+        <label>Frase Comercial / SEO</label>
+        <textarea name="frase_seo" id="frase_seo" rows="3"></textarea>
+        <button type="button" onclick="gerarFraseAI()" style="margin-top: 5px; background: #374151; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;">✨ Gerar com IA</button>
+    </div>
+
+    <button type="submit" class="btn-submit">🚀 GERAR TUDO AUTOMATICAMENTE</button>
+</form>
+
+<div class="modal" id="modal-result">
+    <div class="modal-content">
+        <h2>🎉 Cliente Criado com Sucesso!</h2>
+        <p style="margin: 15px 0; color: #9ca3af;">Todos os recursos e arquivos foram gerados.</p>
+        <a id="btn-open" class="btn-action" style="background: var(--accent); color: #000;" target="_blank">🔗 Abrir Página Criada</a>
+        <a id="btn-qr" class="btn-action" download>📥 Baixar QR Code</a>
+        <a id="btn-plaquinha" class="btn-action" download>🖼️ Baixar Plaquinha de Impressão</a>
+        <button onclick="document.getElementById('modal-result').style.display='none'" class="btn-action" style="background: transparent; border: 1px solid var(--border);">Fechar</button>
+    </div>
+</div>
+
+<script>
+async function gerarFraseAI() {
+    const nome = document.getElementById('nome_empresa').value;
+    const seg = document.getElementById('segmento').value;
+    const cid = document.getElementById('cidade').value;
+    
+    if(!nome || !seg || !cid) return alert('Preencha Nome, Segmento e Cidade primeiro.');
+
+    const res = await fetch('/api/gerar-seo', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ nome_empresa: nome, segmento: seg, cidade: cid })
+    });
+    const data = await res.json();
+    document.getElementById('frase_seo').value = data.frase;
+}
+
+document.getElementById('form-cliente').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const res = await fetch('/api/clientes/gerar', {
+        method: 'POST',
+        body: formData
+    });
+
+    const data = await res.json();
+    if(data.success) {
+        document.getElementById('btn-open').href = data.url;
+        document.getElementById('btn-qr').href = data.qrDownload;
+        document.getElementById('btn-plaquinha').href = data.plaquinhaDownload;
+        document.getElementById('modal-result').style.display = 'flex';
+        carregarStats();
+    }
+});
+
+async function carregarStats() {
+    const res = await fetch('/api/clientes');
+    const clientes = await res.json();
+    document.getElementById('stat-clientes').innerText = clientes.length;
+    document.getElementById('stat-links').innerText = clientes.length;
+}
+
+carregarStats();
+</script>
+
+</body>
+</html>
