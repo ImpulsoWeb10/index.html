@@ -1,166 +1,1307 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ImpulsoWeb10 — Gerador de Links (GitHub Pages)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Biblioteca QR Code para Navegador -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        :root { --bg: #090d16; --card: #111827; --accent: #10b981; --text: #f9fafb; --border: #1f2937; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); padding: 30px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .logo-title { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
-        .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; }
-        form { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .full { grid-column: span 2; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: #d1d5db; }
-        input, textarea { width: 100%; padding: 12px 16px; background: #1f2937; border: 1px solid var(--border); border-radius: 10px; color: #fff; outline: none; }
-        input:focus { border-color: var(--accent); }
-        .btn-submit { grid-column: span 2; padding: 16px; background: var(--accent); color: #000; font-weight: 800; font-size: 1.1rem; border: none; border-radius: 12px; cursor: pointer; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 10; }
-        .modal-content { background: var(--card); padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; border: 1px solid var(--accent); text-align: center; }
-        .btn-action { display: block; width: 100%; padding: 12px; margin-top: 10px; background: #374151; color: #fff; text-align: center; text-decoration: none; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; }
-        #qrcode-hidden { display: none; }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avalia — Mais avaliações de 5 Estrelas no Google</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Syne:wght@400..800&display=swap" rel="stylesheet"/>
+  <!-- QRCode.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --y: #FBBC04;
+      --b: #1A73E8;
+      --r: #EA4335;
+      --g: #34A853;
+      --wa: #25D366;
+      --dark: #09090B;
+      --card: #18181B;
+      --surface: #27272A;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.18);
+      --text: #FAFAFA;
+      --muted: #71717A;
+      --muted2: #A1A1AA;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Ambient Background Mesh */
+    .bg-mesh {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: 
+        radial-gradient(ellipse 70% 50% at 50% -5%, rgba(26, 115, 232, 0.15) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 40% at 85% 75%, rgba(251, 188, 4, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 35% at 10% 80%, rgba(52, 168, 83, 0.06) 0%, transparent 60%);
+    }
+
+    /* Navigation Header */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 1.5rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .ld {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .ld-b { background: var(--b); }
+    .ld-r { background: var(--r); }
+    .ld-y { background: var(--y); }
+    .ld-g { background: var(--g); }
+
+    .logo-txt {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .github-badge {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted2);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.3rem 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .github-badge:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+
+    /* MAIN CONTAINER */
+    main {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 1.25rem 5rem;
+      flex: 1;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      text-align: center;
+      padding: 3.5rem 1rem 2.5rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--y);
+      padding: 0.4rem 0.95rem;
+      border: 1px solid rgba(251, 188, 4, 0.25);
+      border-radius: 100px;
+      background: rgba(251, 188, 4, 0.06);
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 5.5vw, 3.4rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #4285F4, #6BA8FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 0.98rem;
+      color: var(--muted2);
+      font-weight: 400;
+      line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* CARD CONTAINER */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    }
+
+    .slbl {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sbadge {
+      width: 20px;
+      height: 20px;
+      background: var(--surface);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--b);
+      border: 1px solid rgba(26, 115, 232, 0.3);
+    }
+
+    .igrp {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.2s;
+      margin-bottom: 0.5rem;
+    }
+
+    .igrp:focus-within {
+      border-color: var(--b);
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+    }
+
+    .igrp input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0.85rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .igrp input::placeholder {
+      color: var(--muted);
+    }
+
+    .igrp-ic {
+      padding: 0 0.9rem;
+      display: flex;
+      align-items: center;
+      color: var(--muted2);
+    }
+
+    /* HINT & HELPER ROWS */
+    .hint-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .hint {
+      font-size: 0.76rem;
+      color: var(--muted2);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .hint a {
+      color: var(--b);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .hint a:hover {
+      text-decoration: underline;
+    }
+
+    .btn-gmn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.38rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted2);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-gmn:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* LIVE PREVIEW URL */
+    .url-preview {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(26, 115, 232, 0.08);
+      border: 1px solid rgba(26, 115, 232, 0.2);
+      border-radius: 10px;
+      padding: 0.6rem 0.9rem;
+      font-family: monospace;
+      font-size: 0.8rem;
+      margin-bottom: 1.25rem;
+      word-break: break-all;
+    }
+
+    .url-prev-domain { color: var(--muted2); }
+    .url-prev-slug { color: var(--b); font-weight: 600; }
+
+    /* GENERATE BUTTON */
+    .btn-gen {
+      width: 100%;
+      padding: 0.95rem;
+      background: var(--b);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.98rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 16px rgba(26, 115, 232, 0.3);
+    }
+
+    .btn-gen:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(26, 115, 232, 0.45);
+      background: #1865d1;
+    }
+
+    .btn-gen:active {
+      transform: translateY(0);
+    }
+
+    /* RESULTS SECTION */
+    .result-wrap {
+      margin-top: 1.75rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      display: none;
+    }
+
+    .result-wrap.show {
+      display: block;
+      animation: fadeUp 0.35s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .link-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .link-url {
+      flex: 1;
+      font-size: 0.82rem;
+      color: #6BA8FF;
+      word-break: break-all;
+      font-family: monospace;
+      line-height: 1.4;
+    }
+
+    .btn-copy {
+      flex-shrink: 0;
+      background: rgba(26, 115, 232, 0.15);
+      border: 1px solid rgba(26, 115, 232, 0.3);
+      color: #6BA8FF;
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-copy:hover {
+      background: rgba(26, 115, 232, 0.25);
+      color: #fff;
+    }
+
+    .btn-copy.ok {
+      background: rgba(52, 168, 83, 0.15);
+      border-color: rgba(52, 168, 83, 0.35);
+      color: var(--g);
+    }
+
+    .row-lbl {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .ag2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .ag3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.6rem;
+    }
+
+    @media (max-width: 480px) {
+      .ag3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .abtn {
+      padding: 0.75rem 0.5rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .abtn:hover {
+      border-color: var(--border-hover);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .abtn.g {
+      color: var(--g);
+      border-color: rgba(52, 168, 83, 0.25);
+      background: rgba(52, 168, 83, 0.06);
+    }
+    .abtn.g:hover { background: rgba(52, 168, 83, 0.12); }
+
+    .abtn.wa {
+      color: var(--wa);
+      border-color: rgba(37, 211, 102, 0.25);
+      background: rgba(37, 211, 102, 0.06);
+    }
+    .abtn.wa:hover { background: rgba(37, 211, 102, 0.12); }
+
+    .abtn.ig {
+      color: #E1306C;
+      border-color: rgba(225, 48, 108, 0.25);
+      background: rgba(225, 48, 108, 0.06);
+    }
+    .abtn.ig:hover { background: rgba(225, 48, 108, 0.12); }
+
+    /* QR CODE DISPLAY BOX */
+    .qr-sec {
+      display: none;
+      text-align: center;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1.25rem;
+    }
+
+    .qr-sec.show { display: block; animation: fadeUp 0.3s ease; }
+
+    .qr-lbl {
+      font-size: 0.78rem;
+      color: var(--muted2);
+      margin-bottom: 0.8rem;
+    }
+
+    #qrbox {
+      display: inline-block;
+      padding: 1rem;
+      background: #FFFFFF;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      margin-bottom: 0.8rem;
+    }
+
+    #qrbox img, #qrbox canvas {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .btn-dl {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted2);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-dl:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* MODALS & OVERLAYS */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-bg.open {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      max-width: 480px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: fadeUp 0.3s ease;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+    }
+
+    .modal-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+
+    .modal-ttl {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover { color: var(--text); border-color: var(--border-hover); }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      background: var(--surface);
+      padding: 4px;
+      border-radius: 10px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: var(--muted2);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .tab.on {
+      background: var(--card);
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .cvs-wrap {
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .cvs-wrap canvas {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    .modal-acts {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .mbtn {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: 10px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .mbtn.p { background: var(--b); color: #fff; border: none; }
+    .mbtn.p:hover { background: #1865d1; }
+    .mbtn.s { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .mbtn.s:hover { border-color: var(--border-hover); }
+
+    /* TOAST NOTIFICATION */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: var(--g);
+      color: #fff;
+      padding: 0.7rem 1.4rem;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      white-space: nowrap;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.wa-t { background: var(--wa); }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+  </style>
 </head>
 <body>
 
-<div class="header">
-    <div class="logo-title">ImpulsoWeb10</div>
-    <div>Gerador GitHub Pages (Sem Servidor)</div>
-</div>
+  <!-- Background mesh overlay -->
+  <div class="bg-mesh"></div>
 
-<div class="section-title">Cadastrar Novo Cliente</div>
+  <!-- Navigation -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="logo-dots">
+        <div class="ld ld-b"></div>
+        <div class="ld ld-r"></div>
+        <div class="ld ld-y"></div>
+        <div class="ld ld-g"></div>
+      </div>
+      <span class="logo-txt">Avalia</span>
+    </a>
+    <a href="https://github.com" target="_blank" class="github-badge">
+      <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub Pages Ready
+    </a>
+  </nav>
 
-<form id="form-cliente">
-    <div>
-        <label>Nome da Empresa *</label>
-        <input type="text" id="nome_empresa" required placeholder="Ex: Tintas Qualy Quimy">
-    </div>
-    <div>
-        <label>Segmento *</label>
-        <input type="text" id="segmento" required placeholder="Ex: Tintas e Materiais">
-    </div>
-    <div>
-        <label>Cidade *</label>
-        <input type="text" id="cidade" required placeholder="Ex: Itaquaquecetuba">
-    </div>
-    <div>
-        <label>Estado</label>
-        <input type="text" id="estado" value="SP">
-    </div>
-    <div>
-        <label>Endereço / Bairro</label>
-        <input type="text" id="endereco" placeholder="Rua Leiria, 45">
-    </div>
-    <div>
-        <label>WhatsApp / Telefone</label>
-        <input type="text" id="whatsapp" placeholder="11954950044">
-    </div>
-    <div class="full">
-        <label>Link de Avaliação Google ⭐ *</label>
-        <input type="url" id="google_review" required placeholder="https://g.page/r/...">
-    </div>
-    <div class="full">
-        <label>Nome do Ficheiro da Logo (Carregada na pasta do cliente)</label>
-        <input type="text" id="logo_name" value="logo.png">
-    </div>
-    <div class="full">
-        <label>Frase Comercial / SEO</label>
-        <textarea id="frase_seo" rows="3" placeholder="Frase para meta description e rodapé..."></textarea>
+  <!-- Main Content Area -->
+  <main>
+    <div class="hero">
+      <div class="pill">⭐ 100% Gratuito & Offline</div>
+      <h1>Mais 5 estrelas<br/>para o seu <em>negócio</em></h1>
+      <p class="hero-sub">Gere um link direto para a página de avaliação do Google e compartilhe com seus clientes via WhatsApp, Instagram e QR Code.</p>
     </div>
 
-    <button type="submit" class="btn-submit">🚀 GERAR FICHEIROS DO CLIENTE</button>
-</form>
+    <div class="card">
+      
+      <!-- STEP 1: Place ID -->
+      <div class="slbl">
+        <div class="sbadge">1</div>
+        Place ID do Negócio no Google
+      </div>
+      <div class="igrp" id="grpPid">
+        <div class="igrp-ic">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <input type="text" id="inPid" placeholder="Cole aqui seu Place ID (Ex: ChIJN1t_tDeuEmsRUsoyG83frY4)" oninput="updateLivePreview()"/>
+      </div>
 
-<div id="qrcode-hidden"></div>
+      <div class="hint-row">
+        <div class="hint">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 8v4m0 4h.01"/></svg>
+          Não sabe seu Place ID? <a href="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" target="_blank" rel="noopener">Encontrar no Mapa →</a>
+        </div>
+        <a class="btn-gmn" href="https://business.google.com/create" target="_blank" rel="noopener">
+          <svg width="11" height="11" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Google Meu Negócio
+        </a>
+      </div>
 
-<div class="modal" id="modal-result">
-    <div class="modal-content">
-        <h2>🎉 Ficheiros Gerados!</h2>
-        <p style="margin: 15px 0; color: #9ca3af; font-size: 0.9rem;">
-            Faça o download dos ficheiros abaixo e coloque dentro da pasta do cliente no GitHub (ex: <code>/clientes/nome-da-empresa/</code>).
-        </p>
-        <button id="btn-download-html" class="btn-action" style="background: var(--accent); color: #000;">📥 Baixar index.html do Cliente</button>
-        <a id="btn-download-qr" class="btn-action" download="qr-code.png">📥 Baixar QR Code</a>
-        <button onclick="document.getElementById('modal-result').style.display='none'" class="btn-action" style="background: transparent; border: 1px solid var(--border);">Fechar</button>
+      <!-- STEP 2: Business Name -->
+      <div class="slbl" style="margin-top:1.2rem">
+        <div class="sbadge">2</div>
+        Nome da sua Empresa ou Estabelecimento
+      </div>
+      <div class="igrp" id="grpBiz">
+        <div class="igrp-ic">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        </div>
+        <input type="text" id="inBiz" placeholder="Ex: Barbearia Silva ou Restaurante Sabor" oninput="updateLivePreview()"/>
+      </div>
+
+      <!-- Live URL Preview -->
+      <div class="url-preview" id="urlPreview">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 015.656 0l4-4a4 4 0 01-5.656-5.656l-1.1 1.1"/></svg>
+        <span class="url-prev-domain">google.com/...writereview?placeid=</span><span class="url-prev-slug" id="urlPrevSlug">SUA_PLACE_ID</span>
+      </div>
+
+      <button class="btn-gen" onclick="generate()">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Gerar Link & QR Code
+      </button>
+
+      <!-- RESULTS SECTION -->
+      <div class="result-wrap" id="resultWrap">
+        <div class="slbl" style="margin-bottom:.7rem">
+          <div class="sbadge" style="background:rgba(52,168,83,.15);color:var(--g);border-color:rgba(52,168,83,.3)">✓</div>
+          Link Gerado com Sucesso!
+        </div>
+        
+        <div class="link-row">
+          <span class="link-url" id="outLink"></span>
+          <button class="btn-copy" id="copyBtn" onclick="copyMain()">Copiar</button>
+        </div>
+
+        <div class="row-lbl">Ações Rápidas</div>
+        <div class="ag2">
+          <button class="abtn g" onclick="openLink()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            Testar Link
+          </button>
+          <button class="abtn" onclick="toggleQR()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path stroke-linecap="round" d="M14 14h3v3m0 4h4m-4 0v-4m-3 0h3"/></svg>
+            Mostrar QR Code
+          </button>
+        </div>
+
+        <div class="row-lbl">Compartilhamento e Arte</div>
+        <div class="ag3">
+          <button class="abtn wa" onclick="shareWA()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </button>
+          <button class="abtn ig" onclick="openImgModal('instagram')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            Instagram
+          </button>
+          <button class="abtn" onclick="openImgModal('card')">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path stroke-linecap="round" d="M8 21h8M12 17v4"/></svg>
+            Cartão WA
+          </button>
+        </div>
+
+        <!-- QR DISPLAY AREA -->
+        <div class="qr-sec" id="qrSec">
+          <div class="qr-lbl">Escaneie a imagem abaixo com a câmera do celular para testar:</div>
+          <div id="qrbox"></div>
+          <br/>
+          <button class="btn-dl" onclick="downloadQR()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 4v11"/></svg>
+            Baixar QR Code Alta Resolução
+          </button>
+        </div>
+
+      </div>
     </div>
-</div>
+  </main>
 
-<script>
-let templateContent = '';
+  <footer>
+    <p>© 2026 Avalia — Gerador de Avaliações para Google Meu Negócio. 100% Client-Side.</p>
+  </footer>
 
-// Carregar o modelo HTML
-fetch('./templates/template.html')
-    .then(res => res.text())
-    .then(text => templateContent = text)
-    .catch(() => console.log('Aguardando template...'));
+  <!-- IMAGE GENERATOR MODAL -->
+  <div class="modal-bg" id="imgModal" onclick="if(event.target.id==='imgModal') closeImgModal()">
+    <div class="modal-box">
+      <div class="modal-hdr">
+        <div class="modal-ttl" id="imgTitle">Gerar Imagem Promocional</div>
+        <button class="modal-close" onclick="closeImgModal()">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
 
-document.getElementById('form-cliente').addEventListener('submit', async (e) => {
-    e.preventDefault();
+      <div class="tabs">
+        <button class="tab on" id="tabDk" onclick="setImgTheme('dark')">🌙 Tema Escuro</button>
+        <button class="tab" id="tabLt" onclick="setImgTheme('light')">☀️ Tema Claro</button>
+      </div>
 
-    const nome = document.getElementById('nome_empresa').value;
-    const segmento = document.getElementById('segmento').value;
-    const cidade = document.getElementById('cidade').value;
-    const estado = document.getElementById('estado').value;
-    const endereco = document.getElementById('endereco').value;
-    const whatsapp = document.getElementById('whatsapp').value;
-    const review = document.getElementById('google_review').value;
-    const logoName = document.getElementById('logo_name').value || 'logo.png';
-    const seo = document.getElementById('frase_seo').value || `${nome} em ${cidade} - ${segmento}.`;
+      <div class="cvs-wrap">
+        <canvas id="promoCanvas"></canvas>
+      </div>
 
-    // 1. Gerar Botões Sociais
-    const cleanPhone = whatsapp.replace(/\D/g, '');
-    let socialButtons = '';
-    if(cleanPhone) {
-        socialButtons += `
-        <a href="https://wa.me/${cleanPhone}?text=Olá!%20Vim%20pelo%20site" class="social-btn" target="_blank">
-            <div class="social-icon"><svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 23.057a.75.75 0 0 0 .916.927l5.358-1.476A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg></div>
-            <span class="social-label">WhatsApp</span>
-        </a>`;
+      <div class="modal-acts">
+        <button class="mbtn p" onclick="downloadCanvasImg()">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 4v11"/></svg>
+          Baixar Imagem PNG
+        </button>
+        <button class="mbtn s" onclick="closeImgModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    <span id="toastTxt">Copiado para a área de transferência!</span>
+  </div>
+
+  <!-- Hidden QR Container for rendering image assets -->
+  <div id="qr-hidden" style="position:fixed; left:-9999px; top:-9999px; opacity:0; pointer-events:none;"></div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // State variables
+    let currentLink = '';
+    let currentPlaceId = '';
+    let currentBizName = '';
+    let qrBoxGenerated = false;
+    let qrImageObj = null;
+    let modalMode = 'instagram'; // 'instagram' or 'card'
+    let modalTheme = 'dark'; // 'dark' or 'light'
+
+    function updateLivePreview() {
+      const pid = document.getElementById('inPid').value.trim();
+      const slugElement = document.getElementById('urlPrevSlug');
+      if (pid) {
+        slugElement.textContent = pid;
+      } else {
+        slugElement.textContent = 'SUA_PLACE_ID';
+      }
     }
 
-    // 2. Substituir Variáveis no Template
-    let finalHtml = templateContent
-        .replace(/{{NOME_EMPRESA}}/g, nome)
-        .replace(/{{SEGMENTO}}/g, segmento)
-        .replace(/{{CIDADE}}/g, cidade)
-        .replace(/{{ESTADO}}/g, estado)
-        .replace(/{{ENDERECO}}/g, endereco)
-        .replace(/{{ENDERECO_COMPLETO}}/g, `${endereco} - ${cidade} / ${estado}`)
-        .replace(/{{TELEFONE}}/g, whatsapp)
-        .replace(/{{FRASE_SEO}}/g, seo)
-        .replace(/{{LOGO}}/g, `./${logoName}`)
-        .replace(/{{GOOGLE_REVIEW}}/g, review)
-        .replace(/{{BOTONES_SOCIAIS}}/g, socialButtons)
-        .replace(/{{COR_PRINCIPAL}}/g, '#10b981');
+    function generate() {
+      const pidInput = document.getElementById('inPid');
+      const pid = pidInput.value.trim();
 
-    // 3. Configurar Download do HTML
-    document.getElementById('btn-download-html').onclick = () => {
-        const blob = new Blob([finalHtml], { type: 'text/html' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'index.html';
-        a.click();
-    };
+      if (!pid) {
+        const group = document.getElementById('grpPid');
+        group.style.borderColor = 'rgba(234, 67, 53, 0.8)';
+        setTimeout(() => group.style.borderColor = '', 2000);
+        showToast('Por favor, digite ou cole o Place ID!');
+        return;
+      }
 
-    // 4. Gerar QR Code para Download
-    const qrDiv = document.getElementById('qrcode-hidden');
-    qrDiv.innerHTML = '';
-    new QRCode(qrDiv, { text: review, width: 300, height: 300 });
+      currentPlaceId = pid;
+      currentBizName = document.getElementById('inBiz').value.trim() || 'Nosso Estabelecimento';
+      currentLink = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
 
-    setTimeout(() => {
-        const qrImg = qrDiv.querySelector('img');
-        if(qrImg) {
-            document.getElementById('btn-download-qr').href = qrImg.src;
+      // Display main link
+      document.getElementById('outLink').textContent = currentLink;
+      document.getElementById('resultWrap').classList.add('show');
+
+      // Reset QR elements
+      qrBoxGenerated = false;
+      document.getElementById('qrSec').classList.remove('show');
+      document.getElementById('qrbox').innerHTML = '';
+      
+      // Render background QR image for Canvas processing
+      renderHiddenQR();
+
+      // Smooth scroll to results
+      setTimeout(() => {
+        document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+
+    function renderHiddenQR() {
+      const hiddenBox = document.getElementById('qr-hidden');
+      hiddenBox.innerHTML = '';
+      
+      new QRCode(hiddenBox, {
+        text: currentLink,
+        width: 320,
+        height: 320,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      setTimeout(() => {
+        const canvas = hiddenBox.querySelector('canvas');
+        if (canvas) {
+          const img = new Image();
+          img.onload = () => { qrImageObj = img; };
+          img.src = canvas.toDataURL("image/png");
         }
-        document.getElementById('modal-result').style.display = 'flex';
-    }, 300);
-});
-</script>
+      }, 300);
+    }
 
+    function copyMain() {
+      if (!currentLink) return;
+      copyToClipboard(currentLink);
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✓ Copiado';
+      btn.classList.add('ok');
+      showToast('Link de avaliação copiado!');
+      setTimeout(() => {
+        btn.textContent = 'Copiar';
+        btn.classList.remove('ok');
+      }, 2500);
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand('copy');
+        } catch (err) {
+          console.error('Falha ao copiar:', err);
+        }
+        document.body.removeChild(textArea);
+      }
+    }
+
+    function openLink() {
+      if (currentLink) {
+        window.open(currentLink, '_blank', 'noopener,noreferrer');
+      }
+    }
+
+    function shareWA() {
+      if (!currentLink) return;
+      const biz = currentBizName ? `*${currentBizName}*` : 'nosso negócio';
+      const text = `⭐ *Sua opinião é muito importante para nós!*\n\nOlá! Poderia nos ajudar deixando uma avaliação de 5 estrelas para ${biz} no Google? Leva menos de 1 minuto!\n\n👉 ${currentLink}\n\nMuito obrigado pelo apoio! 🙏`;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+      showToast('Abrindo WhatsApp...', 'wa-t');
+    }
+
+    function toggleQR() {
+      const qrSec = document.getElementById('qrSec');
+      if (qrSec.classList.contains('show')) {
+        qrSec.classList.remove('show');
+        return;
+      }
+      
+      qrSec.classList.add('show');
+      if (!qrBoxGenerated) {
+        const box = document.getElementById('qrbox');
+        box.innerHTML = '';
+        new QRCode(box, {
+          text: currentLink,
+          width: 200,
+          height: 200,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+        qrBoxGenerated = true;
+      }
+    }
+
+    function downloadQR() {
+      const box = document.getElementById('qrbox');
+      const canvas = box.querySelector('canvas');
+      if (canvas) {
+        const a = document.createElement('a');
+        a.download = `qr-code-${slugify(currentBizName)}.png`;
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+        return;
+      }
+
+      const img = box.querySelector('img');
+      if (img && img.src) {
+        const a = document.createElement('a');
+        a.download = `qr-code-${slugify(currentBizName)}.png`;
+        a.href = img.src;
+        a.click();
+        return;
+      }
+
+      if (!document.getElementById('qrSec').classList.contains('show')) {
+        toggleQR();
+        setTimeout(downloadQR, 400);
+      }
+    }
+
+    // SLUG HELPER
+    function slugify(text) {
+      return text.toString().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '') || 'avaliacao';
+    }
+
+    // MODAL & CANVAS GENERATOR
+    function openImgModal(type) {
+      modalMode = type;
+      modalTheme = 'dark';
+      
+      document.getElementById('tabDk').classList.add('on');
+      document.getElementById('tabLt').classList.remove('on');
+      document.getElementById('imgTitle').textContent = type === 'instagram' ? '📸 Imagem para Instagram (Quadrada)' : '💬 Cartão de Avaliação WhatsApp';
+      
+      document.getElementById('imgModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+
+      if (!qrImageObj) {
+        renderHiddenQR();
+        setTimeout(drawCanvas, 500);
+      } else {
+        setTimeout(drawCanvas, 50);
+      }
+    }
+
+    function closeImgModal() {
+      document.getElementById('imgModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function setImgTheme(theme) {
+      modalTheme = theme;
+      document.getElementById('tabDk').classList.toggle('on', theme === 'dark');
+      document.getElementById('tabLt').classList.toggle('on', theme === 'light');
+      drawCanvas();
+    }
+
+    function drawCanvas() {
+      const canvas = document.getElementById('promoCanvas');
+      const ctx = canvas.getContext('2d');
+      const isInsta = modalMode === 'instagram';
+      
+      // Dimensions
+      const width = isInsta ? 1080 : 1000;
+      const height = isInsta ? 1080 : 1250;
+      
+      canvas.width = width;
+      canvas.height = height;
+
+      const isDark = modalTheme === 'dark';
+      
+      // Background colors
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+      if (isDark) {
+        bgGrad.addColorStop(0, '#09090B');
+        bgGrad.addColorStop(1, '#18181B');
+      } else {
+        bgGrad.addColorStop(0, '#FFFFFF');
+        bgGrad.addColorStop(1, '#F4F5F7');
+      }
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Ambient radial glow
+      const glow = ctx.createRadialGradient(width/2, height*0.3, 20, width/2, height*0.3, width*0.6);
+      if (isDark) {
+        glow.addColorStop(0, 'rgba(26, 115, 232, 0.2)');
+        glow.addColorStop(1, 'rgba(0,0,0,0)');
+      } else {
+        glow.addColorStop(0, 'rgba(26, 115, 232, 0.08)');
+        glow.addColorStop(1, 'rgba(255,255,255,0)');
+      }
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, width, height);
+
+      // Decorative top bar (Google Brand Colors)
+      const barHeight = 12;
+      const segmentWidth = width / 4;
+      ctx.fillStyle = '#1A73E8'; ctx.fillRect(0, 0, segmentWidth, barHeight);
+      ctx.fillStyle = '#EA4335'; ctx.fillRect(segmentWidth, 0, segmentWidth, barHeight);
+      ctx.fillStyle = '#FBBC04'; ctx.fillRect(segmentWidth * 2, 0, segmentWidth, barHeight);
+      ctx.fillStyle = '#34A853'; ctx.fillRect(segmentWidth * 3, 0, segmentWidth, barHeight);
+
+      // Business Name Header
+      ctx.textAlign = 'center';
+      ctx.fillStyle = isDark ? '#FFFFFF' : '#111827';
+      ctx.font = 'bold 52px "Syne", sans-serif';
+      
+      const titleText = currentBizName || 'Sua Empresa';
+      ctx.fillText(titleText, width / 2, 140);
+
+      // Subtitle
+      ctx.fillStyle = isDark ? '#A1A1AA' : '#4B5563';
+      ctx.font = '500 30px "DM Sans", sans-serif';
+      ctx.fillText('Sua opinião é muito importante para nós!', width / 2, 195);
+
+      // 5-Star Graphic
+      draw5Stars(ctx, width / 2, 260, 42);
+
+      // QR Code Container Box
+      const qrBoxSize = isInsta ? 460 : 480;
+      const qrBoxX = (width - qrBoxSize) / 2;
+      const qrBoxY = 340;
+
+      ctx.save();
+      ctx.fillStyle = '#FFFFFF';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+      ctx.shadowBlur = 30;
+      ctx.shadowOffsetY = 15;
+      
+      // Rounded rectangle function
+      roundRect(ctx, qrBoxX, qrBoxY, qrBoxSize, qrBoxSize, 28);
+      ctx.fill();
+      ctx.restore();
+
+      // Draw QR Code inside box
+      if (qrImageObj) {
+        const qrPadding = 40;
+        ctx.drawImage(
+          qrImageObj, 
+          qrBoxX + qrPadding, 
+          qrBoxY + qrPadding, 
+          qrBoxSize - (qrPadding * 2), 
+          qrBoxSize - (qrPadding * 2)
+        );
+      }
+
+      // Call-to-action Text Below QR
+      const ctaY = qrBoxY + qrBoxSize + 90;
+      
+      // Phone Camera Icon & Text
+      ctx.fillStyle = '#1A73E8';
+      ctx.font = 'bold 36px "Syne", sans-serif';
+      ctx.fillText('Aponte a câmera do celular', width / 2, ctaY);
+
+      ctx.fillStyle = isDark ? '#D4D4D8' : '#374151';
+      ctx.font = '500 30px "DM Sans", sans-serif';
+      ctx.fillText('e avalie nosso atendimento no Google', width / 2, ctaY + 48);
+
+      // Footer Pill
+      const pillY = ctaY + 120;
+      ctx.save();
+      ctx.fillStyle = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
+      ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)';
+      ctx.lineWidth = 2;
+      roundRect(ctx, (width - 440) / 2, pillY, 440, 60, 100);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.fillStyle = isDark ? '#FAFAFA' : '#1F2937';
+      ctx.font = '600 24px "DM Sans", sans-serif';
+      ctx.fillText('⭐ Leva menos de 1 minuto', width / 2, pillY + 38);
+    }
+
+    function draw5Stars(ctx, centerX, centerY, size) {
+      const gap = 16;
+      const totalWidth = (size * 5) + (gap * 4);
+      let startX = centerX - (totalWidth / 2) + (size / 2);
+
+      for (let i = 0; i < 5; i++) {
+        drawStar(ctx, startX + (i * (size + gap)), centerY, 5, size / 2, size / 4, '#FBBC04');
+      }
+    }
+
+    function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius, color) {
+      let rot = Math.PI / 2 * 3;
+      let x = cx;
+      let y = cy;
+      let step = Math.PI / spikes;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - outerRadius);
+      for (let i = 0; i < spikes; i++) {
+        x = cx + Math.cos(rot) * outerRadius;
+        y = cy + Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+
+        x = cx + Math.cos(rot) * innerRadius;
+        y = cy + Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+      }
+      ctx.lineTo(cx, cy - outerRadius);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    function roundRect(ctx, x, y, w, h, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + w, y, x + w, y + h, radius);
+      ctx.arcTo(x + w, y + h, x, y + h, radius);
+      ctx.arcTo(x, y + h, x, y, radius);
+      ctx.arcTo(x, y, x + w, y, radius);
+      ctx.closePath();
+    }
+
+    function downloadCanvasImg() {
+      const canvas = document.getElementById('promoCanvas');
+      const a = document.createElement('a');
+      a.download = `avaliacao-google-${modalMode}-${slugify(currentBizName)}.png`;
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+      showToast('Imagem baixada com sucesso!');
+    }
+
+    function showToast(msg, type = '') {
+      const toast = document.getElementById('toast');
+      const txt = document.getElementById('toastTxt');
+      txt.textContent = msg;
+      
+      toast.className = 'toast';
+      if (type) toast.classList.add(type);
+      toast.classList.add('show');
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  </script>
 </body>
 </html>
