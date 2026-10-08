@@ -3,248 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ImpulsoWeb10 — Painel Administrativo</title>
+    <title>ImpulsoWeb10 — Gerador de Links (GitHub Pages)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Biblioteca QR Code para Navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        :root {
-            --bg: #090d16;
-            --card: #111827;
-            --accent: #10b981;
-            --text: #f9fafb;
-            --border: #1f2937;
-        }
-
+        :root { --bg: #090d16; --card: #111827; --accent: #10b981; --text: #f9fafb; --border: #1f2937; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: var(--bg); color: var(--text); padding: 30px; }
-
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .logo-title { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
-
-        .grid-dash { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .card-stat { background: var(--card); padding: 20px; border-radius: 16px; border: 1px solid var(--border); }
-        .card-stat h3 { font-size: 0.85rem; color: #9ca3af; margin-bottom: 8px; }
-        .card-stat .value { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
-
         .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; }
-
-        /* Bloco de Extração */
-        .box-autoimport {
-            background: rgba(16, 185, 129, 0.05);
-            border: 1px dashed var(--accent);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        .box-autoimport input { flex: 1; }
-
         form { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
         .full { grid-column: span 2; }
-
         label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: #d1d5db; }
-        input, textarea, select {
-            width: 100%;
-            padding: 12px 16px;
-            background: #1f2937;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: #fff;
-            outline: none;
-        }
+        input, textarea { width: 100%; padding: 12px 16px; background: #1f2937; border: 1px solid var(--border); border-radius: 10px; color: #fff; outline: none; }
         input:focus { border-color: var(--accent); }
-
-        .btn-submit {
-            grid-column: span 2;
-            padding: 16px;
-            background: var(--accent);
-            color: #000;
-            font-weight: 800;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-submit:hover { filter: brightness(1.1); }
-
-        .btn-secondary {
-            background: #374151;
-            color: #fff;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        /* Modal Resultado */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; }
-        .modal-content { background: var(--card); padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; border: 1px solid var(--accent); }
-        .btn-action { display: block; width: 100%; padding: 12px; margin-top: 10px; background: #374151; color: #fff; text-align: center; text-decoration: none; border-radius: 8px; font-weight: 600; }
+        .btn-submit { grid-column: span 2; padding: 16px; background: var(--accent); color: #000; font-weight: 800; font-size: 1.1rem; border: none; border-radius: 12px; cursor: pointer; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 10; }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 20px; max-width: 500px; width: 100%; border: 1px solid var(--accent); text-align: center; }
+        .btn-action { display: block; width: 100%; padding: 12px; margin-top: 10px; background: #374151; color: #fff; text-align: center; text-decoration: none; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; }
+        #qrcode-hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div class="logo-title">ImpulsoWeb10</div>
-    <div>Painel de Controle v1.1</div>
-</div>
-
-<div class="grid-dash">
-    <div class="card-stat">
-        <h3>Total Clientes</h3>
-        <div class="value" id="stat-clientes">0</div>
-    </div>
-    <div class="card-stat">
-        <h3>Links Ativos</h3>
-        <div class="value" id="stat-links">0</div>
-    </div>
-</div>
-
-<div class="section-title">⚡ Autopreenchimento Inteligente</div>
-<div class="box-autoimport">
-    <input type="url" id="link_google" placeholder="Cole aqui o link do Google, Google Maps ou site da empresa...">
-    <button type="button" class="btn-secondary" onclick="extrairDadosLink()">🔍 Extrair Dados</button>
+    <div>Gerador GitHub Pages (Sem Servidor)</div>
 </div>
 
 <div class="section-title">Cadastrar Novo Cliente</div>
 
-<form id="form-cliente" enctype="multipart/form-data">
+<form id="form-cliente">
     <div>
         <label>Nome da Empresa *</label>
-        <input type="text" name="nome_empresa" id="nome_empresa" required>
+        <input type="text" id="nome_empresa" required placeholder="Ex: Tintas Qualy Quimy">
     </div>
     <div>
         <label>Segmento *</label>
-        <input type="text" name="segmento" id="segmento" required>
+        <input type="text" id="segmento" required placeholder="Ex: Tintas e Materiais">
     </div>
     <div>
         <label>Cidade *</label>
-        <input type="text" name="cidade" id="cidade" required>
+        <input type="text" id="cidade" required placeholder="Ex: Itaquaquecetuba">
     </div>
     <div>
         <label>Estado</label>
-        <input type="text" name="estado" id="estado" value="SP">
+        <input type="text" id="estado" value="SP">
     </div>
     <div>
         <label>Endereço / Bairro</label>
-        <input type="text" name="endereco" id="endereco">
+        <input type="text" id="endereco" placeholder="Rua Leiria, 45">
     </div>
     <div>
-        <label>Telefone / WhatsApp</label>
-        <input type="text" name="whatsapp" id="whatsapp" placeholder="11999999999">
+        <label>WhatsApp / Telefone</label>
+        <input type="text" id="whatsapp" placeholder="11954950044">
     </div>
     <div class="full">
         <label>Link de Avaliação Google ⭐ *</label>
-        <input type="url" name="google_review" id="google_review" required placeholder="https://g.page/r/...">
+        <input type="url" id="google_review" required placeholder="https://g.page/r/...">
     </div>
     <div class="full">
-        <label>Logo da Empresa *</label>
-        <input type="file" name="logo_file" accept="image/*" id="logo_file">
+        <label>Nome do Ficheiro da Logo (Carregada na pasta do cliente)</label>
+        <input type="text" id="logo_name" value="logo.png">
     </div>
     <div class="full">
         <label>Frase Comercial / SEO</label>
-        <textarea name="frase_seo" id="frase_seo" rows="3"></textarea>
-        <button type="button" onclick="gerarFraseAI()" style="margin-top: 5px; background: #374151; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;">✨ Gerar SEO com IA</button>
+        <textarea id="frase_seo" rows="3" placeholder="Frase para meta description e rodapé..."></textarea>
     </div>
 
-    <button type="submit" class="btn-submit">🚀 GERAR TUDO AUTOMATICAMENTE</button>
+    <button type="submit" class="btn-submit">🚀 GERAR FICHEIROS DO CLIENTE</button>
 </form>
+
+<div id="qrcode-hidden"></div>
 
 <div class="modal" id="modal-result">
     <div class="modal-content">
-        <h2>🎉 Cliente Criado com Sucesso!</h2>
-        <p style="margin: 15px 0; color: #9ca3af;">Todos os recursos e arquivos foram gerados.</p>
-        <a id="btn-open" class="btn-action" style="background: var(--accent); color: #000;" target="_blank">🔗 Abrir Página Criada</a>
-        <a id="btn-qr" class="btn-action" download>📥 Baixar QR Code</a>
-        <a id="btn-plaquinha" class="btn-action" download>🖼️ Baixar Plaquinha de Impressão</a>
+        <h2>🎉 Ficheiros Gerados!</h2>
+        <p style="margin: 15px 0; color: #9ca3af; font-size: 0.9rem;">
+            Faça o download dos ficheiros abaixo e coloque dentro da pasta do cliente no GitHub (ex: <code>/clientes/nome-da-empresa/</code>).
+        </p>
+        <button id="btn-download-html" class="btn-action" style="background: var(--accent); color: #000;">📥 Baixar index.html do Cliente</button>
+        <a id="btn-download-qr" class="btn-action" download="qr-code.png">📥 Baixar QR Code</a>
         <button onclick="document.getElementById('modal-result').style.display='none'" class="btn-action" style="background: transparent; border: 1px solid var(--border);">Fechar</button>
     </div>
 </div>
 
 <script>
-async function extrairDadosLink() {
-    const link = document.getElementById('link_google').value;
-    if(!link) return alert('Por favor, cole um link válido.');
+let templateContent = '';
 
-    const btn = event.target;
-    btn.innerText = '⌛ Extraindo...';
-
-    try {
-        const res = await fetch('/api/extrair-link', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ url: link })
-        });
-        const data = await res.json();
-
-        if(data.success && data.dados) {
-            if(data.dados.nome_empresa) document.getElementById('nome_empresa').value = data.dados.nome_empresa;
-            if(data.dados.segmento) document.getElementById('segmento').value = data.dados.segmento;
-            if(data.dados.whatsapp) document.getElementById('whatsapp').value = data.dados.whatsapp;
-            
-            // Se o link for de avaliação do Google, coloca no campo correspondente
-            if(link.includes('g.page') || link.includes('google.com')) {
-                document.getElementById('google_review').value = link;
-            }
-
-            alert('Dados extraídos com sucesso! Confira e preencha os campos que faltarem.');
-        } else {
-            alert(data.error || 'Não foi possível extrair os dados automaticamente.');
-        }
-    } catch (e) {
-        alert('Erro ao conectar com o servidor para extração.');
-    } finally {
-        btn.innerText = '🔍 Extrair Dados';
-    }
-}
-
-async function gerarFraseAI() {
-    const nome = document.getElementById('nome_empresa').value;
-    const seg = document.getElementById('segmento').value;
-    const cid = document.getElementById('cidade').value;
-    
-    if(!nome || !seg || !cid) return alert('Preencha Nome, Segmento e Cidade primeiro.');
-
-    const res = await fetch('/api/gerar-seo', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ nome_empresa: nome, segmento: seg, cidade: cid })
-    });
-    const data = await res.json();
-    document.getElementById('frase_seo').value = data.frase;
-}
+// Carregar o modelo HTML
+fetch('./templates/template.html')
+    .then(res => res.text())
+    .then(text => templateContent = text)
+    .catch(() => console.log('Aguardando template...'));
 
 document.getElementById('form-cliente').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
 
-    const res = await fetch('/api/clientes/gerar', {
-        method: 'POST',
-        body: formData
-    });
+    const nome = document.getElementById('nome_empresa').value;
+    const segmento = document.getElementById('segmento').value;
+    const cidade = document.getElementById('cidade').value;
+    const estado = document.getElementById('estado').value;
+    const endereco = document.getElementById('endereco').value;
+    const whatsapp = document.getElementById('whatsapp').value;
+    const review = document.getElementById('google_review').value;
+    const logoName = document.getElementById('logo_name').value || 'logo.png';
+    const seo = document.getElementById('frase_seo').value || `${nome} em ${cidade} - ${segmento}.`;
 
-    const data = await res.json();
-    if(data.success) {
-        document.getElementById('btn-open').href = data.url;
-        document.getElementById('btn-qr').href = data.qrDownload;
-        document.getElementById('btn-plaquinha').href = data.plaquinhaDownload;
-        document.getElementById('modal-result').style.display = 'flex';
-        carregarStats();
+    // 1. Gerar Botões Sociais
+    const cleanPhone = whatsapp.replace(/\D/g, '');
+    let socialButtons = '';
+    if(cleanPhone) {
+        socialButtons += `
+        <a href="https://wa.me/${cleanPhone}?text=Olá!%20Vim%20pelo%20site" class="social-btn" target="_blank">
+            <div class="social-icon"><svg viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 23.057a.75.75 0 0 0 .916.927l5.358-1.476A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg></div>
+            <span class="social-label">WhatsApp</span>
+        </a>`;
     }
+
+    // 2. Substituir Variáveis no Template
+    let finalHtml = templateContent
+        .replace(/{{NOME_EMPRESA}}/g, nome)
+        .replace(/{{SEGMENTO}}/g, segmento)
+        .replace(/{{CIDADE}}/g, cidade)
+        .replace(/{{ESTADO}}/g, estado)
+        .replace(/{{ENDERECO}}/g, endereco)
+        .replace(/{{ENDERECO_COMPLETO}}/g, `${endereco} - ${cidade} / ${estado}`)
+        .replace(/{{TELEFONE}}/g, whatsapp)
+        .replace(/{{FRASE_SEO}}/g, seo)
+        .replace(/{{LOGO}}/g, `./${logoName}`)
+        .replace(/{{GOOGLE_REVIEW}}/g, review)
+        .replace(/{{BOTONES_SOCIAIS}}/g, socialButtons)
+        .replace(/{{COR_PRINCIPAL}}/g, '#10b981');
+
+    // 3. Configurar Download do HTML
+    document.getElementById('btn-download-html').onclick = () => {
+        const blob = new Blob([finalHtml], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'index.html';
+        a.click();
+    };
+
+    // 4. Gerar QR Code para Download
+    const qrDiv = document.getElementById('qrcode-hidden');
+    qrDiv.innerHTML = '';
+    new QRCode(qrDiv, { text: review, width: 300, height: 300 });
+
+    setTimeout(() => {
+        const qrImg = qrDiv.querySelector('img');
+        if(qrImg) {
+            document.getElementById('btn-download-qr').href = qrImg.src;
+        }
+        document.getElementById('modal-result').style.display = 'flex';
+    }, 300);
 });
-
-async function carregarStats() {
-    const res = await fetch('/api/clientes');
-    const clientes = await res.json();
-    document.getElementById('stat-clientes').innerText = clientes.length;
-    document.getElementById('stat-links').innerText = clientes.length;
-}
-
-carregarStats();
 </script>
 
 </body>
