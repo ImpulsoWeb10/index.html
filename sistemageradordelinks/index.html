@@ -46,7 +46,7 @@ input:focus{border-color:var(--b)}
 .btn-dl:hover{background:#2e9648}
 #qrbox{display:inline-block;padding:.8rem;background:#fff;border-radius:10px;margin:1rem 0}
 
-/* Estilos de Modais (Limpar e Place ID) */
+/* Estilo do Modal de Limpar */
 .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px);
     display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1rem;
@@ -64,15 +64,6 @@ input:focus{border-color:var(--b)}
 .modal-btn-cancel:hover { background: #3f3f46; }
 .modal-btn-confirm { background: var(--r); color: #fff; }
 .modal-btn-confirm:hover { opacity: .9; }
-
-/* Modal Largo para o Place ID Finder do Google */
-.modal-card-wide {
-    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-    padding: 1.5rem; max-width: 750px; width: 100%; height: 80vh; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-}
-.modal-header-wide { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-.modal-close-btn { background: none; border: none; color: var(--text); font-size: 1.2rem; cursor: pointer; padding: 0.3rem 0.6rem; border-radius: 6px; }
-.modal-close-btn:hover { background: var(--surface); }
 </style>
 </head>
 <body>
@@ -97,22 +88,6 @@ input:focus{border-color:var(--b)}
   </div>
 </div>
 
-<!-- Modal para Encontrar o Place ID -->
-<div class="modal-overlay" id="modalPlaceId">
-  <div class="modal-card-wide">
-    <div class="modal-header-wide">
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;">Encontrar Place ID no Google Maps</div>
-      <button class="modal-close-btn" onclick="fecharModalPlaceId()">✕</button>
-    </div>
-    <div style="font-size:0.8rem;color:var(--muted2);margin-bottom:0.8rem;text-align:left;">
-      Pesquise a sua empresa no mapa abaixo, clique no marcador correspondente e copie o código <strong>Place ID</strong> que aparecerá no balão.
-    </div>
-    <div style="flex:1; width:100%; border-radius:10px; overflow:hidden; border:1px solid var(--border);">
-      <iframe src="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" style="width:100%; height:100%; border:none; background:#fff;"></iframe>
-    </div>
-  </div>
-</div>
-
 <main>
   <div class="hero">
     <h1>Gerador de Cartão <em>3D + Avaliação</em></h1>
@@ -125,7 +100,7 @@ input:focus{border-color:var(--b)}
       <div class="field-grp">
         <label>Place ID do Negócio no Google *</label>
         <input type="text" id="inPid" placeholder="Ex: ChIJN1t_tDeuEmsRUsoyG83frY4"/>
-        <a href="javascript:void(0)" class="help-placeid" onclick="abrirModalPlaceId()">Não sabe o Place ID? Encontrar →[cite: 1]</a>
+        <a href="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" target="_blank" rel="noopener" class="help-placeid">Não sabe o Place ID? Encontrar →</a>
       </div>
       <div class="field-grp">
         <label>Nome da Empresa *</label>
@@ -215,14 +190,6 @@ function abrirModalLimpar() {
 
 function fecharModalLimpar() {
   document.getElementById('modalLimpar').classList.remove('active');
-}
-
-function abrirModalPlaceId() {
-  document.getElementById('modalPlaceId').classList.add('active');
-}
-
-function fecharModalPlaceId() {
-  document.getElementById('modalPlaceId').classList.remove('active');
 }
 
 function executarLimpeza() {
