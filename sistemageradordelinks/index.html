@@ -44,6 +44,9 @@ input:focus{border-color:var(--b)}
 .action-box{background:rgba(52,168,83,0.08);border:1px solid rgba(52,168,83,0.3);border-radius:12px;padding:1.4rem;text-align:center;margin-top:1.2rem}
 .btn-dl{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.6rem;background:var(--g);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:.95rem;margin-top:1rem;text-decoration:none}
 .btn-dl:hover{background:#2e9648}
+.btn-dl-qr{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:6px;font-weight:600;cursor:pointer;font-size:.78rem;margin-top:.8rem;transition:all .2s}
+.btn-dl-qr:hover{background:#3f3f46;color:#fff}
+
 #qrbox{display:inline-block;padding:.8rem;background:#fff;border-radius:10px;margin:1rem 0}
 
 /* Estilo do Modal de Limpar */
@@ -100,7 +103,7 @@ input:focus{border-color:var(--b)}
       <div class="field-grp">
         <label>Place ID do Negócio no Google *</label>
         <input type="text" id="inPid" placeholder="Ex: ChIJN1t_tDeuEmsRUsoyG83frY4"/>
-        <a href="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" target="_blank" rel="noopener" class="help-placeid">Não sabe o Place ID? Encontrar →</a>
+        <a href="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" target="_blank" rel="noopener" class="help-placeid">Não sabe o Place ID? Encontrar →[cite: 1]</a>
       </div>
       <div class="field-grp">
         <label>Nome da Empresa *</label>
@@ -159,6 +162,9 @@ input:focus{border-color:var(--b)}
     <div style="text-align:center;margin:1rem 0;">
       <div style="font-size:.85rem;color:var(--muted2);margin-bottom:.2rem;">QR Code Gerado (Aponta para a Página do Cliente):</div>
       <div id="qrbox"></div>
+      <div>
+        <button class="btn-dl-qr" onclick="baixarQRCode()">📥 Baixar Imagem do QR Code</button>
+      </div>
     </div>
 
     <div class="action-box">
@@ -174,6 +180,7 @@ input:focus{border-color:var(--b)}
 
 <script>
 let htmlFinal = "";
+let nomeEmpresaSlug = "cliente";
 
 function formatarSlug(texto) {
   return texto
@@ -205,6 +212,7 @@ function executarLimpeza() {
   document.getElementById('resBox').classList.remove('show');
   document.getElementById('qrbox').innerHTML = '';
   htmlFinal = '';
+  nomeEmpresaSlug = "cliente";
 
   fecharModalLimpar();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -228,8 +236,8 @@ function gerarTudo() {
   const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
   document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
 
-  const slugEmpresa = formatarSlug(nome);
-  const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${slugEmpresa}/`;
+  nomeEmpresaSlug = formatarSlug(nome);
+  const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
   document.getElementById('outLinkCliente').value = linkPaginaCliente;
   document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
 
@@ -822,6 +830,28 @@ body::before{
 
   document.getElementById('resBox').classList.add('show');
   document.getElementById('resBox').scrollIntoView({ behavior: 'smooth' });
+}
+
+function baixarQRCode() {
+  const qrImg = document.querySelector('#qrbox img');
+  const qrCanvas = document.querySelector('#qrbox canvas');
+  
+  let imageUrl = "";
+  if (qrImg) {
+    imageUrl = qrImg.src;
+  } else if (qrCanvas) {
+    imageUrl = qrCanvas.toDataURL("image/png");
+  }
+
+  if (!imageUrl) {
+    alert("Gerencie o QR Code primeiro!");
+    return;
+  }
+
+  const a = document.createElement("a");
+  a.href = imageUrl;
+  a.download = `qrcode-${nomeEmpresaSlug}.png`;
+  a.click();
 }
 
 function baixarHTML() {
