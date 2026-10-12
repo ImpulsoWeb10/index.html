@@ -1,35 +1,426 @@
 <!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerador Profissional — ImpulsoWeb10 (Versão 3D)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            darkbg: '#09090b',
+            cardbg: '#18181b',
+            surface: '#27272a',
+            bordercol: 'rgba(255, 255, 255, 0.08)'
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts & QRCode.js -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    h1, h2, h3, .font-syne { font-family: 'Syne', sans-serif; }
+  </style>
+</head>
+<body class="bg-darkbg text-zinc-100 min-h-screen pb-20 selection:bg-blue-600 selection:text-white">
+
+  <!-- TOPO / HEADER -->
+  <nav class="sticky top-0 z-50 px-6 h-16 flex items-center justify-between bg-darkbg/90 backdrop-blur-md border-b border-bordercol">
+    <div class="flex items-center gap-3 font-syne font-bold text-lg">
+      <div class="flex gap-1">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+      </div>
+      <span>ImpulsoWeb10 <span class="text-blue-500">— Gerador 3D</span></span>
+    </div>
+    <button onclick="abrirModalLimpar()" class="bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/30 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all">
+      🗑️ Limpar Tudo
+    </button>
+  </nav>
+
+  <!-- MODAL DE CONFIRMAÇÃO DE LIMPEZA -->
+  <div id="modalLimpar" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-cardbg border border-bordercol rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
+      <h3 class="font-syne font-bold text-lg mb-2 text-white">Deseja limpar todos os campos?</h3>
+      <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Todas as informações preenchidas e resultados gerados serão apagados permanentemente.</p>
+      <div class="flex gap-3 justify-center">
+        <button onclick="fecharModalLimpar()" class="bg-surface hover:bg-zinc-700 text-zinc-200 px-4 py-2 rounded-xl text-xs font-bold transition-all">Cancelar</button>
+        <button onclick="executarLimpeza()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all">Sim, limpar tudo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-3xl mx-auto px-4 pt-8">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-syne font-extrabold mb-2 tracking-tight">Gerador de Cartão <span class="text-blue-500">3D + SEO IA</span></h1>
+      <p class="text-sm text-zinc-400">Cole o JSON gerado pela IA ou preencha manualmente para estruturar o site de alta conversão.</p>
+    </div>
+
+    <div class="bg-cardbg border border-bordercol rounded-2xl p-6 md:p-8 flex flex-col gap-6 shadow-xl">
+      
+      <!-- CAIXA DE IMPORTAÇÃO DE IA (JSON) -->
+      <div class="bg-blue-600/5 border border-blue-500/30 rounded-xl p-4">
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-blue-400 uppercase tracking-wider">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
+          <textarea id="jsonAiInput" rows="3" placeholder='Cole aqui o JSON gerado pela IA (dados_formulario_base + conteudo_enriquecido_desktop)...' class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500 transition-all resize-y"></textarea>
+          <button type="button" onclick="processarJsonAi()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/20">
+            ✨ Processar e Preencher Campos
+          </button>
+        </div>
+      </div>
+
+      <!-- CAMPOS HIDDEN PARA DADOS DE SEO E CONFIGURAÇÃO -->
+      <input type="hidden" id="hidden_canonical" />
+      <input type="hidden" id="hidden_h1" />
+      <input type="hidden" id="hidden_meta_description" />
+      <input type="hidden" id="hidden_lista_beneficios" />
+      <input type="hidden" id="hidden_faq_perguntas" />
+      <input type="hidden" id="hidden_intro" />
+      <input type="hidden" id="hidden_produtos" />
+      <input type="hidden" id="hidden_local" />
+      <input type="hidden" id="hidden_img1_url" /><input type="hidden" id="hidden_img1_name" /><input type="hidden" id="hidden_img1_alt" />
+      <input type="hidden" id="hidden_img2_url" /><input type="hidden" id="hidden_img2_name" /><input type="hidden" id="hidden_img2_alt" />
+      <input type="hidden" id="hidden_img3_url" /><input type="hidden" id="hidden_img3_name" /><input type="hidden" id="hidden_img3_alt" />
+      <input type="hidden" id="hidden_img4_url" /><input type="hidden" id="hidden_img4_name" /><input type="hidden" id="hidden_img4_alt" />
+
+      <!-- CAMPOS DO FORMULÁRIO -->
+      <div>
+        <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">1. Bloco de Configuração & Links</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Place ID do Google *</label>
+            <input type="text" id="inPid" placeholder="Ex: ChIJN1t_tDeuEmsRUsoyG83frY4" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+            <a href="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" target="_blank" rel="noopener" class="text-[11px] text-blue-400 hover:underline font-medium">Não sabe o Place ID? Encontrar →</a>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">WhatsApp (com DDD) *</label>
+            <input type="text" id="inWa" placeholder="Ex: 551146432301" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">2. Bloco de Dados Principais</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Nome da Empresa *</label>
+            <input type="text" id="inNome" placeholder="Ex: Tintas Qualy Quimy" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Instagram (sem @)</label>
+            <input type="text" id="inIg" placeholder="Ex: tintasqualyquimy" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Cidade / Estado</label>
+            <input type="text" id="inCidade" placeholder="Ex: Itaquaquecetuba - SP" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Endereço Completo</label>
+            <input type="text" id="inEndereco" placeholder="Ex: Rua Leiria, 45" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">3. Bloco Avançado & SEO</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Segmento de Atuação</label>
+            <input type="text" id="inSegmento" placeholder="Ex: Tintas, Massas e Texturas" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Produtos / Serviços Principais</label>
+            <input type="text" id="inServicos" placeholder="Ex: Tintas, Texturas, Massas" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="gerarTudo()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-syne font-bold py-4 px-6 rounded-xl text-sm transition-all shadow-lg shadow-blue-600/30">
+        🚀 Gerar Link, QR Code & Baixar HTML Desktop/Mobile
+      </button>
+    </div>
+
+    <!-- ÁREA DE RESULTADOS -->
+    <div id="resBox" class="hidden mt-6 bg-cardbg border border-bordercol rounded-2xl p-6 md:p-8 shadow-xl">
+      <div class="text-green-400 font-bold text-sm mb-4">✓ Dados Processados com Sucesso!</div>
+      
+      <div class="mb-4">
+        <label class="text-xs text-zinc-400 block mb-1">Link da Página do Cliente:</label>
+        <input type="text" id="outLinkCliente" readonly class="w-full bg-surface border border-bordercol rounded-xl p-3 text-xs text-zinc-300 font-mono select-all"/>
+      </div>
+
+      <div class="mb-6">
+        <label class="text-xs text-zinc-400 block mb-1">Link Direto de Avaliação Google:</label>
+        <input type="text" id="outLinkGoogle" readonly class="w-full bg-surface border border-bordercol rounded-xl p-3 text-xs text-zinc-300 font-mono select-all"/>
+      </div>
+
+      <div class="text-center my-6 p-4 bg-surface/50 rounded-xl border border-bordercol">
+        <div class="text-xs text-zinc-400 mb-3">QR Code Gerado (Aponta para a Página do Cliente):</div>
+        <div id="qrbox" class="inline-block p-3 bg-white rounded-xl shadow-md"></div>
+        <div class="mt-3">
+          <button onclick="baixarQRCode()" class="bg-surface hover:bg-zinc-700 text-zinc-200 border border-bordercol px-4 py-2 rounded-xl text-xs font-bold transition-all">
+            📥 Baixar Imagem do QR Code
+          </button>
+        </div>
+      </div>
+
+      <div id="imgListBox" class="hidden mb-6 p-4 bg-surface border border-bordercol rounded-xl text-xs">
+        <div class="font-bold text-yellow-400 mb-2">🖼️ Imagens otimizadas (.webp) configuradas:</div>
+        <div id="imgListContent" class="text-zinc-400 space-y-1"></div>
+      </div>
+
+      <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-5 text-center">
+        <h4 class="text-white font-bold text-sm mb-1">Ficheiro index.html Pronto para Produção!</h4>
+        <p class="text-xs text-zinc-400 mb-4">O código está totalmente otimizado com Schema.org, Open Graph e efeito 3D interativo.</p>
+        <button onclick="baixarHTML()" class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-6 rounded-xl text-sm transition-all shadow-lg shadow-green-600/20 inline-flex items-center gap-2">
+          📥 Baixar index.html Completo
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- JAVASCRIPT DO SISTEMA E DO NOVO MODELO ISOLADO -->
+  <script>
+    let htmlFinal = "";
+    let nomeEmpresaSlug = "cliente";
+
+    function formatarSlug(texto) {
+      return texto
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function setVal(id, valor) {
+      const el = document.getElementById(id);
+      if (el) el.value = (valor === undefined || valor === null) ? '' : valor;
+    }
+
+    function normalizarWhatsapp(numero) {
+      let n = String(numero || '').replace(/\D/g, '');
+      if (n && (n.length === 10 || n.length === 11)) n = '55' + n;
+      return n;
+    }
+
+    function processarJsonAi() {
+      try {
+        let jsonTexto = document.getElementById('jsonAiInput').value.trim();
+        if (!jsonTexto) {
+          alert('⚠️ Por favor, cole o código JSON gerado pela IA antes de processar.');
+          return;
+        }
+        jsonTexto = jsonTexto.replace(/```json/g, '').replace(/```/g, '').trim();
+        const primeiraChave = jsonTexto.indexOf('{');
+        const ultimaChave = jsonTexto.lastIndexOf('}');
+        if (primeiraChave === -1 || ultimaChave === -1) {
+          alert('❌ Erro: Não foi encontrado um objeto JSON válido no texto colado.');
+          return;
+        }
+        jsonTexto = jsonTexto.substring(primeiraChave, ultimaChave + 1);
+        const dados = JSON.parse(jsonTexto);
+
+        const base = dados.dados_formulario_base;
+        if (base) {
+          setVal('inPid', base.placeId);
+          setVal('inNome', base.nomeEmpresa);
+          setVal('inWa', normalizarWhatsapp(base.whatsapp));
+          setVal('inIg', String(base.instagram || '').replace('@', ''));
+          setVal('inCidade', base.cidadeEstado);
+          setVal('inEndereco', base.enderecoCompleto);
+          setVal('inSegmento', base.segmento);
+          setVal('inServicos', base.produtosPrincipais);
+        }
+
+        const pc = dados.conteudo_enriquecido_desktop;
+        if (pc) {
+          setVal('hidden_canonical', pc.seo_tags?.canonical);
+          setVal('hidden_h1', pc.seo_tags?.h1);
+          setVal('hidden_meta_description', pc.seo_tags?.meta_description);
+          setVal('hidden_lista_beneficios', JSON.stringify(pc.lista_beneficios_o_que_encontra || []));
+          setVal('hidden_faq_perguntas', JSON.stringify(pc.faq_perguntas_frequentes || []));
+          setVal('hidden_intro', pc.textos_seo_secoes?.introducao_bloco);
+          setVal('hidden_produtos', pc.textos_seo_secoes?.foco_produtos);
+          setVal('hidden_local', pc.textos_seo_secoes?.chamada_local);
+
+          const imagens = pc.imagens_otimizadas_seo || [];
+          for (let i = 1; i <= 4; i++) {
+            const img = imagens[i - 1] || {};
+            setVal(`hidden_img${i}_url`, img.url_original);
+            setVal(`hidden_img${i}_name`, img.nome_arquivo_webp || `imagem-${i}.webp`);
+            setVal(`hidden_img${i}_alt`, img.alt_descricao);
+          }
+        }
+        alert('🎉 Sucesso! Os dados foram importados e distribuídos para os campos.');
+      } catch (e) {
+        console.error(e);
+        alert('❌ Erro de sintaxe no JSON: ' + e.message);
+      }
+    }
+
+    function abrirModalLimpar() {
+      document.getElementById('modalLimpar').classList.remove('hidden');
+      document.getElementById('modalLimpar').classList.add('flex');
+    }
+
+    function fecharModalLimpar() {
+      document.getElementById('modalLimpar').classList.remove('flex');
+      document.getElementById('modalLimpar').classList.add('hidden');
+    }
+
+    function executarLimpeza() {
+      document.getElementById('jsonAiInput').value = '';
+      document.getElementById('inPid').value = '';
+      document.getElementById('inNome').value = '';
+      document.getElementById('inWa').value = '';
+      document.getElementById('inIg').value = '';
+      document.getElementById('inCidade').value = '';
+      document.getElementById('inEndereco').value = '';
+      document.getElementById('inSegmento').value = '';
+      document.getElementById('inServicos').value = '';
+
+      document.querySelectorAll('input[type="hidden"]').forEach(h => h.value = '');
+
+      document.getElementById('resBox').classList.add('hidden');
+      document.getElementById('qrbox').innerHTML = '';
+      document.getElementById('imgListBox').classList.add('hidden');
+      document.getElementById('imgListContent').innerHTML = '';
+      htmlFinal = '';
+      nomeEmpresaSlug = "cliente";
+
+      fecharModalLimpar();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ==========================================================
+       FUNÇÃO DE GERAÇÃO E DOWNLOAD VIA BLOB (BLINDADA)
+       ========================================================== */
+    function gerarTudo() {
+      const pid = document.getElementById('inPid').value.trim();
+      const nome = document.getElementById('inNome').value.trim();
+      const wa = document.getElementById('inWa').value.trim() || '5511999999999';
+      const ig = document.getElementById('inIg').value.trim().replace('@','');
+      const cidade = document.getElementById('inCidade').value.trim() || 'Sua Cidade';
+      const endereco = document.getElementById('inEndereco').value.trim() || 'Rua Exemplo, 123';
+      const segmento = document.getElementById('inSegmento').value.trim() || 'Serviços';
+      const servicos = document.getElementById('inServicos').value.trim() || 'Atendimento de Qualidade';
+
+      if(!pid || !nome) {
+        alert("Por favor, preencha pelo menos o Place ID e o Nome da Empresa.");
+        return;
+      }
+
+      const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
+      document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
+
+      nomeEmpresaSlug = formatarSlug(nome);
+      const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
+      document.getElementById('outLinkCliente').value = linkPaginaCliente;
+
+      const qrDiv = document.getElementById('qrbox');
+      qrDiv.innerHTML = '';
+      new QRCode(qrDiv, { text: linkPaginaCliente, width: 150, height: 150 });
+
+      const seoCanonical = document.getElementById('hidden_canonical').value.trim() || linkPaginaCliente;
+      const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} — ${cidade}`;
+      const seoMetaDesc = document.getElementById('hidden_meta_description').value.trim() || `${segmento} em ${cidade}. ${servicos}.`;
+      
+      const imgsName = [];
+      const imgsAlt = [];
+      const altPadrao = [`${nome} - Imagem 1`, `${segmento} - Imagem 2`, `${cidade} - Imagem 3`, `${servicos} - Imagem 4`];
+      for (let i = 1; i <= 4; i++) {
+        imgsName.push(document.getElementById(`hidden_img${i}_name`).value.trim() || `imagem_0${i}.webp`);
+        imgsAlt.push(document.getElementById(`hidden_img${i}_alt`).value.trim() || altPadrao[i - 1]);
+      }
+
+      let beneficiosItemsHtml = '';
+      try {
+        const benRaw = document.getElementById('hidden_lista_beneficios').value.trim();
+        if (benRaw) {
+          const benArr = JSON.parse(benRaw);
+          if (Array.isArray(benArr) && benArr.length) {
+            beneficiosItemsHtml = benArr.map(item => `<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${item}</li>`).join('');
+          }
+        }
+      } catch (e) {}
+      if (!beneficiosItemsHtml) {
+        beneficiosItemsHtml = `<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${segmento}</li>`;
+      }
+
+      let faqHtml = '';
+      try {
+        const faqRaw = document.getElementById('hidden_faq_perguntas').value.trim();
+        if (faqRaw) {
+          const faqArr = JSON.parse(faqRaw);
+          if (Array.isArray(faqArr) && faqArr.length) {
+            faqHtml = faqArr.map(f => `
+              <details class="faq-item">
+                <summary class="faq-question">${f.pergunta}</summary>
+                <div class="faq-answer">${f.resposta}</div>
+              </details>
+            `).join('');
+          }
+        }
+      } catch (e) {}
+      if (!faqHtml) {
+        faqHtml = `
+          <details class="faq-item">
+            <summary class="faq-question">Quais formas de pagamento são aceitas?</summary>
+            <div class="faq-answer">Aceitamos dinheiro, PIX e cartões para sua maior comodidade.</div>
+          </details>
+        `;
+      }
+
+      const txtIntro = document.getElementById('hidden_intro').value.trim() || `A ${nome} é referência em ${segmento} em ${cidade}.`;
+
+      const imgListContent = document.getElementById('imgListContent');
+      imgListContent.innerHTML = imgsName.map((n, idx) => `<div>${idx + 1}. Salvar como <strong class="text-white">${n}</strong> (${imgsAlt[idx]})</div>`).join('');
+      document.getElementById('imgListBox').classList.remove('hidden');
+
+      // MODELO DO CLIENTE COM O SCRIPT DE EFEITO 3D COMPLETO INTEGRADO
+      const templateCliente = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#07101e">
-<meta name="description" content="Material de construção em Itaquaquecetuba - SP: cimento, areia, pedra, tijolos, ferragens e acabamentos com bom preço e entrega. Peça seu orçamento na Nova Louzada!">
-<meta name="keywords" content="Loja de Materiais de Construção, Itaquaquecetuba / SP, Nova Louzada Materiais para Construção">
+<meta name="description" content="[SEO_META_DESC]">
+<meta name="keywords" content="[SEO_KEYWORDS]">
 <meta name="author" content="ImpulsoWeb10">
-<link rel="canonical" href="https://impulsoweb10.com.br/nova-louzada/index.html">
+<link rel="canonical" href="[SEO_CANONICAL]">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://avaliar.impulsoweb10.com.br/cliente/nova-louzada-materiais-para-construcao/">
-<meta property="og:title" content="Nova Louzada Materiais para Construção em Itaquaquecetuba - SP">
-<meta property="og:description" content="Material de construção em Itaquaquecetuba - SP: cimento, areia, pedra, tijolos, ferragens e acabamentos com bom preço e entrega. Peça seu orçamento na Nova Louzada!">
-<meta property="og:image" content="https://avaliar.impulsoweb10.com.br/cliente/nova-louzada-materiais-para-construcao/fachada-nova-louzada-materiais-para-construcao-itaquaquecetuba.webp">
+<meta property="og:url" content="[PAGE_URL]">
+<meta property="og:title" content="[SEO_H1]">
+<meta property="og:description" content="[SEO_META_DESC]">
+<meta property="og:image" content="[PAGE_URL][IMG_1]">
 <meta property="og:locale" content="pt_BR">
 <meta name="twitter:card" content="summary">
-<title>Nova Louzada Materiais para Construção em Itaquaquecetuba - SP</title>
+<title>[SEO_H1]</title>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": "Nova Louzada Materiais para Construção",
-  "image": "https://avaliar.impulsoweb10.com.br/cliente/nova-louzada-materiais-para-construcao/fachada-nova-louzada-materiais-para-construcao-itaquaquecetuba.webp",
-  "@id": "https://avaliar.impulsoweb10.com.br/cliente/nova-louzada-materiais-para-construcao/#store",
-  "url": "https://avaliar.impulsoweb10.com.br/cliente/nova-louzada-materiais-para-construcao/",
-  "telephone": "+5511999999999",
+  "name": "[NOME_EMPRESA]",
+  "image": "[PAGE_URL][IMG_1]",
+  "@id": "[PAGE_URL]#store",
+  "url": "[PAGE_URL]",
+  "telephone": "+[WHATSAPP]",
   "priceRange": "$$",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Avenida Turmalinas, 515, Estância Fraternidade, Itaquaquecetuba - SP, CEP 08589-000",
-    "addressLocality": "Itaquaquecetuba / SP",
+    "streetAddress": "[ENDERECO]",
+    "addressLocality": "[CIDADE]",
     "addressCountry": "BR"
   },
   "geo": { "@type": "GeoCoordinates", "latitude": -23.485, "longitude": -46.345 },
@@ -39,9 +430,9 @@
     "opens": "08:00",
     "closes": "18:00"
   },
-  "sameAs": ["https://www.instagram.com/novalouzada"]
+  "sameAs": ["https://www.instagram.com/[INSTAGRAM]"]
 }
-</script>
+<\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -186,34 +577,34 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="page">
       <div class="logo-wrap layer-mid">
         <div class="logo-frame">
-          <img class="logo-img" src="logo.png" alt="Logo Nova Louzada Materiais para Construção" width="160" height="72" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="logo-img-fallback" style="display:none;">Nova Louzada Materiais para Construção</div>
+          <img class="logo-img" src="logo.png" alt="Logo [NOME_EMPRESA]" width="160" height="72" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="logo-img-fallback" style="display:none;">[NOME_EMPRESA]</div>
         </div>
         <div>
-          <div class="brand">Nova Louzada Materiais para Construção</div>
-          <div class="tagline">Loja de Materiais de Construção · Itaquaquecetuba / SP</div>
+          <div class="brand">[NOME_EMPRESA]</div>
+          <div class="tagline">[SEGMENTO] · [CIDADE]</div>
         </div>
       </div>
       <div class="chips layer-back" aria-label="Produtos">
-        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>Cimento, areia, pedra, tijolos, blocos, argamassa, ferragens, hidráulica, elétrica, tintas, pisos e revestimentos, ferramentas, entrega de materiais</span>
+        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>[SERVICOS_RESUMO]</span>
         <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/></svg>Qualidade</span>
       </div>
       <div class="layer-pop" style="width:100%;display:flex;flex-direction:column;align-items:center;">
-        <a href="https://search.google.com/local/writereview?placeid=ChIJ0WGThTN8zpQRNfhm105GasU" class="stars-cta" target="_blank" rel="noopener">
+        <a href="[LINK_AVALIACAO_GOOGLE]" class="stars-cta" target="_blank" rel="noopener">
           <span class="stars-row" aria-hidden="true"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></span>
           <span class="stars-label">Toque nas estrelas e avalie no Google</span>
         </a>
       </div>
       <div class="cta-row layer-front">
-        <a href="tel:+5511999999999" class="btn-act btn-call">Ligar agora</a>
-        <a href="https://wa.me/5511999999999?text=Olá!%20Vim%20pelo%20link." class="btn-act btn-wa" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="tel:+[WHATSAPP]" class="btn-act btn-call">Ligar agora</a>
+        <a href="https://wa.me/[WHATSAPP]?text=Olá!%20Vim%20pelo%20link." class="btn-act btn-wa" target="_blank" rel="noopener">WhatsApp</a>
       </div>
       <div class="social-row layer-front">
-        <a href="https://www.instagram.com/novalouzada" class="social-btn" target="_blank" rel="noopener">
+        <a href="https://www.instagram.com/[INSTAGRAM]" class="social-btn" target="_blank" rel="noopener">
           <div class="social-icon" style="background:#2a1a2e;"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="#cc2366" stroke-width="1.8"/></svg></div>
           <span class="social-label">Instagram</span>
         </a>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Avenida%20Turmalinas%2C%20515%2C%20Est%C3%A2ncia%20Fraternidade%2C%20Itaquaquecetuba%20-%20SP%2C%20CEP%2008589-000%20Itaquaquecetuba%20%2F%20SP" class="social-btn" target="_blank" rel="noopener">
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=[QUERY_MAPS]" class="social-btn" target="_blank" rel="noopener">
           <div class="social-icon" style="background:#1a2030;"><svg viewBox="0 0 24 24" fill="#EA4335"><circle cx="12" cy="12" r="10"/></svg></div>
           <span class="social-label">Maps</span>
         </a>
@@ -228,11 +619,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       </div>
       <div class="hours layer-back" id="hours"><span class="dot"></span><span id="hoursText">Seg a sáb · 8h às 18h</span></div>
       <div class="address layer-back" onclick="copiarEndereco()">
-        <span>Avenida Turmalinas, 515, Estância Fraternidade, Itaquaquecetuba - SP, CEP 08589-000</span><br>Itaquaquecetuba / SP
+        <span>[ENDERECO]</span><br>[CIDADE]
       </div>
       <div class="ticker-banner layer-mid" aria-hidden="true">
         <div class="ticker-track">
-          <span class="ticker-item">Nova Louzada Materiais para Construção • Loja de Materiais de Construção • Cimento, areia, pedra, tijolos, blocos, argamassa, ferragens, hidráulica, elétrica, tintas, pisos e revestimentos, ferramentas, entrega de materiais • Itaquaquecetuba / SP.</span>
+          <span class="ticker-item">[NOME_EMPRESA] • [SEGMENTO] • [SERVICOS_RESUMO] • [CIDADE].</span>
         </div>
       </div>
       <footer class="footer layer-back">
@@ -245,45 +636,30 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <dialog class="sheet" id="sheetMais">
   <div class="sheet-body">
     <div class="sheet-head">
-      <h2>Nova Louzada Materiais para Construção</h2>
+      <h2>[NOME_EMPRESA]</h2>
       <button type="button" class="sheet-close" onclick="fecharMais()">×</button>
     </div>
     <section>
       <h3>O que você encontra</h3>
-      <ul class="svc-list"><li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>Cimento, areia, pedra, tijolos e blocos para a base e a estrutura da sua obra em Itaquaquecetuba</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>Argamassa, ferragens, material hidráulico e elétrico para reformas e acabamentos</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>Tintas, pisos e revestimentos para dar o toque final em casas e comércios da região</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>Atendimento no balcão, orçamento rápido e entrega de materiais de construção</li></ul>
+      <ul class="svc-list">[BENEFICIOS_HTML]</ul>
     </section>
     <section>
       <h3>Endereço e rotas</h3>
-      <p>Avenida Turmalinas, 515, Estância Fraternidade, Itaquaquecetuba - SP, CEP 08589-000<br>Itaquaquecetuba / SP</p>
+      <p>[ENDERECO]<br>[CIDADE]</p>
       <div class="nav-buttons-grid">
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=Avenida%20Turmalinas%2C%20515%2C%20Est%C3%A2ncia%20Fraternidade%2C%20Itaquaquecetuba%20-%20SP%2C%20CEP%2008589-000%20Itaquaquecetuba%20%2F%20SP" class="btn-nav-map" target="_blank" rel="noopener">Abrir no Google</a>
-        <a href="https://waze.com/ul?q=Avenida%20Turmalinas%2C%20515%2C%20Est%C3%A2ncia%20Fraternidade%2C%20Itaquaquecetuba%20-%20SP%2C%20CEP%2008589-000%20Itaquaquecetuba%20%2F%20SP" class="btn-nav-waze" target="_blank" rel="noopener">Abrir no Waze</a>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=[QUERY_MAPS]" class="btn-nav-map" target="_blank" rel="noopener">Abrir no Google</a>
+        <a href="https://waze.com/ul?q=[QUERY_MAPS]" class="btn-nav-waze" target="_blank" rel="noopener">Abrir no Waze</a>
       </div>
     </section>
     <section>
       <h3>Perguntas Frequentes (FAQ)</h3>
-      <div class="faq-container">
-              <details class="faq-item">
-                <summary class="faq-question">Onde fica a Nova Louzada Materiais para Construção em Itaquaquecetuba?</summary>
-                <div class="faq-answer">A loja fica na Avenida Turmalinas, 515, bairro Estância Fraternidade, em Itaquaquecetuba - SP, CEP 08589-000.</div>
-              </details>
-            
-              <details class="faq-item">
-                <summary class="faq-question">A Nova Louzada faz entrega de materiais de construção?</summary>
-                <div class="faq-answer">Sim. A loja oferece entrega como opção. Informe os itens e o endereço da obra ao pedir o orçamento para combinar prazo e forma de entrega.</div>
-              </details>
-            
-              <details class="faq-item">
-                <summary class="faq-question">Quais materiais posso comprar na Nova Louzada?</summary>
-                <div class="faq-answer">Cimento, areia, pedra, tijolos, blocos, argamassa, ferragens, itens hidráulicos e elétricos, tintas, pisos, revestimentos e ferramentas para obras e reformas.</div>
-              </details>
-            </div>
+      <div class="faq-container">[FAQ_HTML]</div>
     </section>
     <section class="gallery">
-      <img src="fachada-nova-louzada-materiais-para-construcao-itaquaquecetuba.webp" alt="Fachada da Nova Louzada Materiais para Construção na Avenida Turmalinas, Estância Fraternidade, Itaquaquecetuba - SP" loading="lazy" decoding="async">
-      <img src="cimento-areia-pedra-material-de-construcao-itaquaquecetuba.webp" alt="Cimento, areia e pedra para obra à venda na loja de material de construção em Itaquaquecetuba - SP" loading="lazy" decoding="async">
-      <img src="tijolos-blocos-argamassa-nova-louzada-itaquaquecetuba.webp" alt="Tijolos, blocos e argamassa para construção e reforma na Nova Louzada em Itaquaquecetuba - SP" loading="lazy" decoding="async">
-      <img src="atendimento-balcao-loja-material-construcao-itaquaquecetuba.webp" alt="Atendimento no balcão da loja de materiais de construção Nova Louzada, em Itaquaquecetuba - SP" loading="lazy" decoding="async">
+      <img src="[IMG_1_NAME]" alt="[IMG_1_ALT]" loading="lazy" decoding="async">
+      <img src="[IMG_2_NAME]" alt="[IMG_2_ALT]" loading="lazy" decoding="async">
+      <img src="[IMG_3_NAME]" alt="[IMG_3_ALT]" loading="lazy" decoding="async">
+      <img src="[IMG_4_NAME]" alt="[IMG_4_ALT]" loading="lazy" decoding="async">
     </section>
     <button type="button" class="btn-share" onclick="compartilhar()">Compartilhar este link</button>
     <p class="toast" id="toast"></p>
@@ -292,32 +668,32 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <aside class="bg-seo">
   <div>
     <div class="txt">
-      <h1>Nova Louzada Materiais para Construção</h1>
-      <h2>Loja de Materiais de Construção em Itaquaquecetuba / SP</h2>
-      <p>A Nova Louzada Materiais para Construção é referência em material de construção na Estância Fraternidade, em Itaquaquecetuba - SP. Quem está começando uma obra, tocando uma reforma ou fazendo um pequeno reparo encontra na loja os itens essenciais, com atendimento de balcão e orientação na hora de escolher.</p>
+      <h1>[NOME_EMPRESA]</h1>
+      <h2>[SEGMENTO] em [CIDADE]</h2>
+      <p>[INTRO_TEXT]</p>
     </div>
     <div class="fotos">
-      <img src="fachada-nova-louzada-materiais-para-construcao-itaquaquecetuba.webp" alt="Fachada da Nova Louzada Materiais para Construção na Avenida Turmalinas, Estância Fraternidade, Itaquaquecetuba - SP" loading="lazy" decoding="async">
-      <img src="cimento-areia-pedra-material-de-construcao-itaquaquecetuba.webp" alt="Cimento, areia e pedra para obra à venda na loja de material de construção em Itaquaquecetuba - SP" loading="lazy" decoding="async">
+      <img src="[IMG_1_NAME]" alt="[IMG_1_ALT]" loading="lazy" decoding="async">
+      <img src="[IMG_2_NAME]" alt="[IMG_2_ALT]" loading="lazy" decoding="async">
     </div>
   </div>
 </aside>
 <script>
   const PAGE_URL = location.href.split('#')[0].split('?')[0];
   async function copiarEndereco() {
-    try { await navigator.clipboard.writeText("Avenida Turmalinas, 515, Estância Fraternidade, Itaquaquecetuba - SP, CEP 08589-000, Itaquaquecetuba / SP"); alert("Endereço copiado!"); } catch (err) {}
+    try { await navigator.clipboard.writeText("[ENDERECO], [CIDADE]"); alert("Endereço copiado!"); } catch (err) {}
   }
   const sheet = document.getElementById('sheetMais');
   function abrirMais(){ if (typeof sheet.showModal === 'function') sheet.showModal(); else sheet.setAttribute('open',''); }
   function fecharMais(){ if (typeof sheet.close === 'function') sheet.close(); else sheet.removeAttribute('open'); }
   sheet.addEventListener('click', function(e){ if (e.target === sheet) fecharMais(); });
   function salvarContato(){
-    const vcard = ['BEGIN:VCARD','VERSION:3.0','FN:Nova Louzada Materiais para Construção','ORG:Nova Louzada Materiais para Construção','TEL;TYPE=WORK,VOICE:+5511999999999','ADR;TYPE=WORK:;;Avenida Turmalinas, 515, Estância Fraternidade, Itaquaquecetuba - SP, CEP 08589-000;Itaquaquecetuba / SP;;Brasil','URL:' + PAGE_URL,'END:VCARD'].join('\r\n');
+    const vcard = ['BEGIN:VCARD','VERSION:3.0','FN:[NOME_EMPRESA]','ORG:[NOME_EMPRESA]','TEL;TYPE=WORK,VOICE:+[WHATSAPP]','ADR;TYPE=WORK:;;[ENDERECO];[CIDADE];;Brasil','URL:' + PAGE_URL,'END:VCARD'].join('\\r\\n');
     const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'nova-louzada-materiais-para-construcao.vcf'; document.body.appendChild(a); a.click(); a.remove();
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '[SLUG].vcf'; document.body.appendChild(a); a.click(); a.remove();
   }
   async function compartilhar(){
-    try { if (navigator.share) { await navigator.share({ title: document.title, text: 'Nova Louzada Materiais para Construção', url: PAGE_URL }); return; } await navigator.clipboard.writeText(PAGE_URL); alert('Link copiado!'); } catch (err) {}
+    try { if (navigator.share) { await navigator.share({ title: document.title, text: '[NOME_EMPRESA]', url: PAGE_URL }); return; } await navigator.clipboard.writeText(PAGE_URL); alert('Link copiado!'); } catch (err) {}
   }
   
   /* CÓDIGO DO EFEITO 3D (MOUSE E GIROSCÓPIO) */
@@ -365,6 +741,70 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   document.addEventListener('mouseleave', function(){
     if (giroscopioAtivo) frame.style.transform = 'rotateY(0deg) rotateX(0deg)';
   });
-</script>
+<\/script>
+</body>
+</html>`;
+
+      // Substituição limpa com .replaceAll()
+      htmlFinal = templateCliente
+        .replaceAll('[NOME_EMPRESA]', nome)
+        .replaceAll('[CIDADE]', cidade)
+        .replaceAll('[SEGMENTO]', segmento)
+        .replaceAll('[SERVICOS_RESUMO]', servicos)
+        .replaceAll('[WHATSAPP]', wa)
+        .replaceAll('[INSTAGRAM]', ig)
+        .replaceAll('[ENDERECO]', endereco)
+        .replaceAll('[QUERY_MAPS]', encodeURIComponent(endereco + ' ' + cidade))
+        .replaceAll('[LINK_AVALIACAO_GOOGLE]', linkGoogleAvaliacao)
+        .replaceAll('[PAGE_URL]', linkPaginaCliente)
+        .replaceAll('[SEO_CANONICAL]', seoCanonical)
+        .replaceAll('[SEO_H1]', seoH1)
+        .replaceAll('[SEO_META_DESC]', seoMetaDesc)
+        .replaceAll('[SEO_KEYWORDS]', `${segmento}, ${cidade}, ${nome}`)
+        .replaceAll('[IMG_1_NAME]', imgsName[0])
+        .replaceAll('[IMG_1_ALT]', imgsAlt[0])
+        .replaceAll('[IMG_2_NAME]', imgsName[1])
+        .replaceAll('[IMG_2_ALT]', imgsAlt[1])
+        .replaceAll('[IMG_3_NAME]', imgsName[2])
+        .replaceAll('[IMG_3_ALT]', imgsAlt[2])
+        .replaceAll('[IMG_4_NAME]', imgsName[3])
+        .replaceAll('[IMG_4_ALT]', imgsAlt[3])
+        .replaceAll('[IMG_1]', imgsName[0])
+        .replaceAll('[BENEFICIOS_HTML]', beneficiosItemsHtml)
+        .replaceAll('[FAQ_HTML]', faqHtml)
+        .replaceAll('[INTRO_TEXT]', txtIntro)
+        .replaceAll('[SLUG]', nomeEmpresaSlug);
+
+      document.getElementById('resBox').classList.remove('hidden');
+      document.getElementById('resBox').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function baixarQRCode() {
+      const qrImg = document.querySelector('#qrbox img');
+      const qrCanvas = document.querySelector('#qrbox canvas');
+      let imageUrl = qrImg ? qrImg.src : (qrCanvas ? qrCanvas.toDataURL("image/png") : "");
+      if (!imageUrl) { alert("Gere o cartão primeiro para obter o QR Code!"); return; }
+      const a = document.createElement("a");
+      a.href = imageUrl;
+      a.download = `qrcode-${nomeEmpresaSlug}.png`;
+      a.click();
+    }
+
+    // DOWNLOAD VIA BLOB BLINDADO CONTRA TRAVAMENTOS
+    function baixarHTML() {
+      if (!htmlFinal) {
+        alert("Por favor, gere o cartão primeiro antes de baixar!");
+        return;
+      }
+      const blob = new Blob([htmlFinal], { type: 'text/html;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'index.html';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }
+  </script>
 </body>
 </html>
