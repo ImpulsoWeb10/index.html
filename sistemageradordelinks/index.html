@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Avalia — ImpulsoWeb10</title>
+<title>Gerador Profissional — ImpulsoWeb10</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
@@ -27,17 +27,22 @@ h1 em{font-style:normal;color:var(--b)}
 @media(max-width:600px){.grid-2{grid-template-columns:1fr}}
 .field-grp{display:flex;flex-direction:column;gap:.4rem}
 label{font-size:.78rem;font-weight:600;color:var(--muted2)}
-input{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.75rem .9rem;color:#fff;font-family:inherit;font-size:.88rem;outline:none}
-input:focus{border-color:var(--b)}
+input, textarea{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.75rem .9rem;color:#fff;font-family:inherit;font-size:.88rem;outline:none}
+input:focus, textarea:focus{border-color:var(--b)}
+textarea{resize:vertical;min-height:100px}
 
-/* Link Place ID */
+/* Caixa de Importação JSON */
+.ai-import-box{background:rgba(26,115,232,0.06);border:1px dashed rgba(26,115,232,0.4);border-radius:12px;padding:1.2rem;margin-bottom:.5rem}
+.btn-ai-import{background:var(--b);color:#fff;border:none;border-radius:8px;padding:.7rem 1.2rem;font-weight:700;cursor:pointer;font-size:.85rem;margin-top:.6rem;width:100%;transition:opacity .2s}
+.btn-ai-import:hover{opacity:.9}
+
 .help-placeid {
     font-size: 0.75rem; color: var(--b); text-decoration: none; font-weight: 600;
     display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 0.2rem; width: fit-content;
 }
 .help-placeid:hover { text-decoration: underline; color: #60a5fa; }
 
-.btn-gen{width:100%;padding:1rem;background:var(--b);color:#fff;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;margin-top:1rem;transition:opacity .2s}
+.btn-gen{width:100%;padding:1.2rem;background:var(--b);color:#fff;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;margin-top:1rem;transition:opacity .2s}
 .btn-gen:hover{opacity:.9}
 .results{display:none;margin-top:2rem;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.8rem}
 .results.show{display:block}
@@ -49,7 +54,6 @@ input:focus{border-color:var(--b)}
 
 #qrbox{display:inline-block;padding:.8rem;background:#fff;border-radius:10px;margin:1rem 0}
 
-/* Estilo do Modal de Limpar */
 .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px);
     display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1rem;
@@ -74,16 +78,15 @@ input:focus{border-color:var(--b)}
 <nav>
   <div class="nav-logo">
     <div class="logo-dots"><div class="ld ld-b"></div><div class="ld ld-r"></div><div class="ld ld-y"></div><div class="ld ld-g"></div></div>
-    <span>Avalia — ImpulsoWeb10</span>
+    <span>ImpulsoWeb10 — Gerador 3D</span>
   </div>
   <button class="btn-limpar-topo" onclick="abrirModalLimpar()">🗑️ Limpar Tudo</button>
 </nav>
 
-<!-- Modal de Confirmação de Limpeza -->
 <div class="modal-overlay" id="modalLimpar">
   <div class="modal-card">
     <div class="modal-title">Deseja limpar todos os campos?</div>
-    <div class="modal-desc">Todas as informações preenchidas e os resultados gerados serão apagados permanentemente.</div>
+    <div class="modal-desc">Todas as informações preenchidas e resultados gerados serão apagados permanentemente.</div>
     <div class="modal-actions">
       <button class="modal-btn modal-btn-cancel" onclick="fecharModalLimpar()">Cancelar</button>
       <button class="modal-btn modal-btn-confirm" onclick="executarLimpeza()">Sim, limpar tudo</button>
@@ -93,11 +96,42 @@ input:focus{border-color:var(--b)}
 
 <main>
   <div class="hero">
-    <h1>Gerador de Cartão <em>3D + Avaliação</em></h1>
-    <p>Preencha as informações para preencher o modelo e baixar o ficheiro HTML do cliente.</p>
+    <h1>Gerador de Cartão <em>3D + SEO IA</em></h1>
+    <p>Cole o JSON gerado pela IA ou preencha manualmente para gerar a página do cliente.</p>
   </div>
 
   <div class="form-card">
+    
+    <!-- CAMPO DE IMPORTAÇÃO VIA IA (NO TOPO) -->
+    <div class="ai-import-box">
+      <div class="field-grp">
+        <label style="color:var(--b);font-weight:700;">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
+        <textarea id="jsonAiInput" placeholder='Cole aqui o JSON gerado pela IA contendo os dados de SEO, FAQ e imagens...'></textarea>
+        <button type="button" class="btn-ai-import" onclick="processarJsonAi()">✨ Processar e Preencher Campos</button>
+      </div>
+    </div>
+
+    <!-- INPUTS HIDDEN EXTRAS PARA DESKTOP E SEO -->
+    <input type="hidden" id="hidden_canonical" />
+    <input type="hidden" id="hidden_h1" />
+    <input type="hidden" id="hidden_meta_description" />
+    <input type="hidden" id="hidden_faq_perguntas" />
+    <input type="hidden" id="hidden_intro" />
+    <input type="hidden" id="hidden_produtos" />
+    <input type="hidden" id="hidden_local" />
+    <input type="hidden" id="hidden_img1_url" />
+    <input type="hidden" id="hidden_img1_name" />
+    <input type="hidden" id="hidden_img1_alt" />
+    <input type="hidden" id="hidden_img2_url" />
+    <input type="hidden" id="hidden_img2_name" />
+    <input type="hidden" id="hidden_img2_alt" />
+    <input type="hidden" id="hidden_img3_url" />
+    <input type="hidden" id="hidden_img3_name" />
+    <input type="hidden" id="hidden_img3_alt" />
+    <input type="hidden" id="hidden_img4_url" />
+    <input type="hidden" id="hidden_img4_name" />
+    <input type="hidden" id="hidden_img4_alt" />
+
     <div class="section-title">1. Dados Principais do Google</div>
     <div class="grid-2">
       <div class="field-grp">
@@ -107,7 +141,7 @@ input:focus{border-color:var(--b)}
       </div>
       <div class="field-grp">
         <label>Nome da Empresa *</label>
-        <input type="text" id="inNome" placeholder="Ex: Dep Cuiabá"/>
+        <input type="text" id="inNome" placeholder="Ex: Tintas Qualy Quimy"/>
       </div>
     </div>
 
@@ -115,11 +149,11 @@ input:focus{border-color:var(--b)}
     <div class="grid-2">
       <div class="field-grp">
         <label>WhatsApp (só números com DDD)</label>
-        <input type="text" id="inWa" placeholder="Ex: 5511999999999"/>
+        <input type="text" id="inWa" placeholder="Ex: 551146432301"/>
       </div>
       <div class="field-grp">
         <label>Instagram (Nome do utilizador sem @)</label>
-        <input type="text" id="inIg" placeholder="Ex: dep_cuiaba"/>
+        <input type="text" id="inIg" placeholder="Ex: tintasqualyquimy"/>
       </div>
     </div>
 
@@ -127,11 +161,11 @@ input:focus{border-color:var(--b)}
     <div class="grid-2">
       <div class="field-grp">
         <label>Cidade / Estado</label>
-        <input type="text" id="inCidade" placeholder="Ex: Cuiabá MT"/>
+        <input type="text" id="inCidade" placeholder="Ex: Itaquaquecetuba - SP"/>
       </div>
       <div class="field-grp">
         <label>Endereço Completo</label>
-        <input type="text" id="inEndereco" placeholder="Ex: Rua Exemplo, 123 - Bairro"/>
+        <input type="text" id="inEndereco" placeholder="Ex: Rua Leiria, 45"/>
       </div>
     </div>
 
@@ -139,15 +173,15 @@ input:focus{border-color:var(--b)}
     <div class="grid-2">
       <div class="field-grp">
         <label>Segmento de Atuação</label>
-        <input type="text" id="inSegmento" placeholder="Ex: Depósito de Bebidas"/>
+        <input type="text" id="inSegmento" placeholder="Ex: Tintas, Massas e Texturas"/>
       </div>
       <div class="field-grp">
         <label>Produtos / Serviços Principais</label>
-        <input type="text" id="inServicos" placeholder="Ex: Bebidas em Geral • Entrega Rápida"/>
+        <input type="text" id="inServicos" placeholder="Ex: Tintas, Texturas, Massas"/>
       </div>
     </div>
 
-    <button class="btn-gen" onclick="gerarTudo()">🚀 Gerar Link, QR Code & Baixar HTML</button>
+    <button class="btn-gen" onclick="gerarTudo()">🚀 Gerar Link, QR Code & Baixar HTML Desktop/Mobile</button>
   </div>
 
   <div class="results" id="resBox">
@@ -170,10 +204,10 @@ input:focus{border-color:var(--b)}
     <div class="action-box">
       <h3 style="color:#fff;font-size:1.1rem;">Ficheiro index.html Pronto!</h3>
       <p style="color:var(--muted2);font-size:.85rem;margin-top:.4rem;line-height:1.5;">
-        Clique no botão abaixo para baixar o ficheiro <code>index.html</code>. Guarde-o na pasta do GitHub Pages em:<br>
+        Clique no botão abaixo para baixar o ficheiro <code>index.html</code> otimizado para Mobile & Desktop:<br>
         <strong style="color:var(--y);" id="txtCaminhoGithub">https://avaliar.impulsoweb10.com.br/cliente/nome-da-empresa/index.html</strong>
       </p>
-      <button class="btn-dl" onclick="baixarHTML()">📥 Baixar index.html do Cliente</button>
+      <button class="btn-dl" onclick="baixarHTML()">📥 Baixar index.html Completo</button>
     </div>
   </div>
 </main>
@@ -191,6 +225,61 @@ function formatarSlug(texto) {
     .replace(/^-+|-+$/g, "");
 }
 
+/* ==========================================================
+   FUNÇÃO DE PROCESSAMENTO DO JSON DA IA (TOP)
+   ========================================================== */
+function processarJsonAi() {
+  const jsonRaw = document.getElementById('jsonAiInput').value.trim();
+  if(!jsonRaw) {
+    alert("Por favor, cole um JSON válido na caixa de texto.");
+    return;
+  }
+
+  try {
+    const data = JSON.parse(jsonRaw);
+
+    // 1. Campos Básicos Visuais
+    if(data.placeId) document.getElementById('inPid').value = data.placeId;
+    if(data.nome) document.getElementById('inNome').value = data.nome;
+    if(data.whatsapp) document.getElementById('inWa').value = data.whatsapp;
+    if(data.instagram) document.getElementById('inIg').value = data.instagram;
+    if(data.cidade) document.getElementById('inCidade').value = data.cidade;
+    if(data.endereco) document.getElementById('inEndereco').value = data.endereco;
+    if(data.segmento) document.getElementById('inSegmento').value = data.segmento;
+    if(data.servicos) document.getElementById('inServicos').value = data.servicos;
+
+    // 2. Campos Hidden (SEO e Ricos)
+    if(data.canonical) document.getElementById('hidden_canonical').value = data.canonical;
+    if(data.h1) document.getElementById('hidden_h1').value = data.h1;
+    if(data.metaDescription) document.getElementById('hidden_meta_description').value = data.metaDescription;
+    
+    // FAQ em JSON string
+    if(data.faq) {
+      document.getElementById('hidden_faq_perguntas').value = typeof data.faq === 'string' ? data.faq : JSON.stringify(data.faq);
+    }
+
+    if(data.intro) document.getElementById('hidden_intro').value = data.intro;
+    if(data.produtosTexto) document.getElementById('hidden_produtos').value = data.produtosTexto;
+    if(data.localTexto) document.getElementById('hidden_local').value = data.localTexto;
+
+    // 3. Imagens WebP (4 imagens)
+    if(data.imagens && Array.isArray(data.imagens)) {
+      data.imagens.forEach((img, idx) => {
+        let i = idx + 1;
+        if(i <= 4) {
+          if(img.url) document.getElementById(`hidden_img${i}_url`).value = img.url;
+          if(img.name) document.getElementById(`hidden_img${i}_name`).value = img.name;
+          if(img.alt) document.getElementById(`hidden_img${i}_alt`).value = img.alt;
+        }
+      });
+    }
+
+    alert("✓ Dados do JSON processados e distribuídos com sucesso para os campos visuais e ocultos!");
+  } catch (e) {
+    alert("Erro ao analisar o JSON. Verifique se a sintaxe está correta: " + e.message);
+  }
+}
+
 function abrirModalLimpar() {
   document.getElementById('modalLimpar').classList.add('active');
 }
@@ -200,6 +289,7 @@ function fecharModalLimpar() {
 }
 
 function executarLimpeza() {
+  document.getElementById('jsonAiInput').value = '';
   document.getElementById('inPid').value = '';
   document.getElementById('inNome').value = '';
   document.getElementById('inWa').value = '';
@@ -208,6 +298,10 @@ function executarLimpeza() {
   document.getElementById('inEndereco').value = '';
   document.getElementById('inSegmento').value = '';
   document.getElementById('inServicos').value = '';
+
+  // Limpar hiddens
+  const hiddens = document.querySelectorAll('input[type="hidden"]');
+  hiddens.forEach(h => h.value = '');
 
   document.getElementById('resBox').classList.remove('show');
   document.getElementById('qrbox').innerHTML = '';
@@ -228,8 +322,62 @@ function gerarTudo() {
   const segmento = document.getElementById('inSegmento').value.trim() || 'Serviços';
   const servicos = document.getElementById('inServicos').value.trim() || 'Atendimento de Qualidade';
 
+  // Leitura dos hiddens avançados
+  const seoCanonical = document.getElementById('hidden_canonical').value.trim() || `https://avaliar.impulsoweb10.com.br/cliente/${formatarSlug(nome)}/`;
+  const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} — ${segmento}`;
+  const seoMetaDesc = document.getElementById('hidden_meta_description').value.trim() || `${nome} em ${cidade}. ${servicos}.`;
+  
+  const txtIntro = document.getElementById('hidden_intro').value.trim() || `A ${nome} é referência em ${segmento} na cidade de ${cidade}.`;
+  const txtProdutos = document.getElementById('hidden_produtos').value.trim() || `Trabalhamos com os melhores produtos e serviços em ${segmento}.`;
+  const txtLocal = document.getElementById('hidden_local').value.trim() || `Localizados em ${endereco}, ${cidade}.`;
+
+  // Imagens WebP
+  const img1Url = document.getElementById('hidden_img1_url').value.trim() || 'imagem_01.webp';
+  const img1Alt = document.getElementById('hidden_img1_alt').value.trim() || `${nome} - Imagem 1`;
+  
+  const img2Url = document.getElementById('hidden_img2_url').value.trim() || 'imagem_02.webp';
+  const img2Alt = document.getElementById('hidden_img2_alt').value.trim() || `${segmento} - Imagem 2`;
+  
+  const img3Url = document.getElementById('hidden_img3_url').value.trim() || 'imagem_03.webp';
+  const img3Alt = document.getElementById('hidden_img3_alt').value.trim() || `${cidade} - Imagem 3`;
+  
+  const img4Url = document.getElementById('hidden_img4_url').value.trim() || 'imagem_04.webp';
+  const img4Alt = document.getElementById('hidden_img4_alt').value.trim() || `${servicos} - Imagem 4`;
+
+  // FAQ JSON
+  let faqHtml = '';
+  const faqRaw = document.getElementById('hidden_faq_perguntas').value.trim();
+  if(faqRaw) {
+    try {
+      const faqArray = JSON.parse(faqRaw);
+      if(Array.isArray(faqArray)) {
+        faqArray.forEach(item => {
+          faqHtml += `
+            <details class="faq-item">
+              <summary class="faq-question">${item.pergunta}</summary>
+              <div class="faq-answer">${item.resposta}</div>
+            </details>
+          `;
+        });
+      }
+    } catch(e) {
+      faqHtml = `<p>Confira nossas dúvidas frequentes.</p>`;
+    }
+  } else {
+    faqHtml = `
+      <details class="faq-item">
+        <summary class="faq-question">Quais formas de pagamento são aceitas?</summary>
+        <div class="faq-answer">Aceitamos diversas formas de pagamento para sua comodidade.</div>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-question">Vocês atendem na região?</summary>
+        <div class="faq-answer">Sim, prestamos atendimento completo em ${cidade} e arredores.</div>
+      </details>
+    `;
+  }
+
   if(!pid || !nome) {
-    alert("Por favor, preencha o Place ID e o Nome da Empresa.");
+    alert("Por favor, preencha pelo menos o Place ID e o Nome da Empresa.");
     return;
   }
 
@@ -245,29 +393,34 @@ function gerarTudo() {
   qrDiv.innerHTML = '';
   new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
 
+  /* ==========================================================
+     MONTAGEM DO TEMPLATE HTML GERADO (COM REGRAS DE SEO,
+     RESPONSIVIDADE DESKTOP EM 2-3 COLUNAS E OCULTAÇÃO MOBILE)
+     ========================================================== */
   htmlFinal = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="${nome} — ${segmento}. ${servicos}.">
+<link rel="canonical" href="${seoCanonical}">
+<meta name="description" content="${seoMetaDesc}">
 <meta name="keywords" content="${segmento}, ${cidade}, ${nome}">
 <meta name="author" content="ImpulsoWeb10">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="${linkPaginaCliente}">
-<meta property="og:title" content="${nome} | ${cidade}">
-<meta property="og:description" content="Avalie nosso atendimento e fale conosco no WhatsApp.">
+<meta property="og:title" content="${seoH1}">
+<meta property="og:description" content="${seoMetaDesc}">
 <meta property="og:locale" content="pt_BR">
 
-<title>${nome} | ${cidade}</title>
+<title>${seoH1}</title>
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "${nome}",
-  "image": "logo.png",
+  "image": "${img1Url}",
   "url": "${linkPaginaCliente}",
   "telephone": "+${wa}",
   "address": {
@@ -613,32 +766,113 @@ body::before{
   animation: none;
 }
 
-.bg-seo{display:none}
-@media (min-width:1024px){
-  html::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1}
-  html::before{
-    background:
-      radial-gradient(ellipse 34% 85% at 50% 50%,rgba(7,16,30,.94) 0%,rgba(7,16,30,.7) 55%,rgba(7,16,30,0) 100%),
-      radial-gradient(ellipse 50% 40% at 50% 0%,rgba(201,169,110,.10) 0%,transparent 70%),
-      linear-gradient(100deg,rgba(58,92,110,.55) 0%,rgba(58,92,110,0) 30%),
-      linear-gradient(260deg,rgba(150,88,62,.42) 0%,rgba(150,88,62,0) 28%),
-      linear-gradient(115deg,transparent 40%,rgba(201,169,110,.05) 50%,transparent 60%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .012' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .5  0 0 0 0 .62  0 0 0 1.1 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='.35'/%3E%3C/svg%3E"),
-      repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 1px,transparent 1px 7px),
-      linear-gradient(135deg,#0a1830 0%,#07101e 50%,#0d1c30 100%);
-    background-size:auto,auto,auto,auto,auto,260px 260px,900px 900px,auto,auto;
+/* ==========================================================
+   REGRAS RESPONSIVAS REQUIRIDAS (CSS)
+   - Mobile: Esconde conteúdo extra (bg-seo)
+   - Desktop (>= 769px): Mostra seções extras em 2 ou 3 colunas
+   ========================================================== */
+.bg-seo { display: none; }
+
+@media (max-width: 768px) {
+  .bg-seo { display: none !important; }
+}
+
+@media (min-width: 769px) {
+  body {
+    justify-content: center;
+    padding: 2rem 1rem;
   }
-  .bg-seo{display:flex;justify-content:space-between;align-items:stretch;position:absolute;top:2rem;left:0;right:0;height:calc(100vh - 4rem);overflow:hidden;padding:0 3vw;z-index:0;pointer-events:none;font-family:'DM Sans',sans-serif;color:rgba(232,226,216,.6)}
-  .bg-seo>div{width:clamp(190px,calc((100vw - 480px)/2 - 7vw),380px);display:flex;flex-direction:column;justify-content:space-between;gap:1rem}
-  .bg-seo>div:last-child{text-align:right}
-  .bg-seo h1,.bg-seo h2,.bg-seo p{margin:0}
-  .bg-seo h1{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;letter-spacing:.06em;line-height:1.15;color:rgba(201,169,110,.85)}
-  .bg-seo h2{margin-top:1.1rem;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.4;color:rgba(201,169,110,.7)}
-  .bg-seo h1+h2{margin-top:.5rem}
-  .bg-seo p{margin-top:.4rem;font-size:.74rem;line-height:1.6;letter-spacing:.01em}
-  .bg-seo .fotos{display:flex;gap:.6rem}
-  .bg-seo .fotos img{flex:1 1 0;min-width:0;width:50%;height:auto;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid rgba(201,169,110,.5);border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.45);opacity:.94}
+  .app-wrapper {
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .device-frame {
+    max-width: 380px;
+  }
+  .bg-seo {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    overflow: visible;
+    padding: 1rem;
+    background: rgba(15, 26, 46, 0.7);
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+  }
+  .desktop-layout-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+  }
+  .desktop-col {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .desktop-col h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: #c9a96e;
+    border-bottom: 1px solid rgba(201, 169, 110, 0.3);
+    padding-bottom: 0.4rem;
+  }
+  .desktop-col p {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: #c9d6e6;
+  }
+  .desktop-images-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .desktop-images-grid img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(201, 169, 110, 0.4);
+    background: #fff;
+  }
+  /* Estilos do FAQ no Desktop */
+  .faq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .faq-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .faq-question {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #f0ece5;
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+  }
+  .faq-answer {
+    font-size: 0.78rem;
+    color: #c9d6e6;
+    padding: 0 0.8rem 0.8rem 0.8rem;
+    line-height: 1.4;
+  }
 }
 </style>
 </head>
@@ -749,31 +983,36 @@ body::before{
     </footer>
   </div>
 
-</div>
+  <!-- SEÇÃO DESKTOP EXTRA (EXIBIDA APENAS EM TELA >= 769px) -->
+  <aside class="bg-seo">
+    <div class="desktop-layout-grid">
+      <div class="desktop-col">
+        <h2>Sobre a Empresa</h2>
+        <p>${txtIntro}</p>
+        <h2>Nossos Produtos</h2>
+        <p>${txtProdutos}</p>
+      </div>
+      <div class="desktop-col">
+        <h2>Galeria em Destaque</h2>
+        <div class="desktop-images-grid">
+          <img src="${img1Url}" alt="${img1Alt}" loading="lazy">
+          <img src="${img2Url}" alt="${img2Alt}" loading="lazy">
+          <img src="${img3Url}" alt="${img3Alt}" loading="lazy">
+          <img src="${img4Url}" alt="${img4Alt}" loading="lazy">
+        </div>
+      </div>
+      <div class="desktop-col">
+        <h2>Perguntas Frequentes (FAQ)</h2>
+        <div class="faq-container">
+          ${faqHtml}
+        </div>
+        <h2>Localização</h2>
+        <p>${txtLocal}</p>
+      </div>
+    </div>
+  </aside>
 
-<aside class="bg-seo">
-  <div>
-    <div class="txt">
-      <h1>${nome}</h1>
-      <h2>${segmento} em ${cidade}</h2>
-      <p>A ${nome} é referência em ${segmento} na cidade de ${cidade}.</p>
-    </div>
-    <div class="fotos">
-      <img src="imagem_01.png" alt="${nome}" width="400" height="400">
-      <img src="imagem_02.png" alt="${segmento}" width="400" height="400">
-    </div>
-  </div>
-  <div>
-    <div class="txt">
-      <h2>Atendimento na Região</h2>
-      <p>${endereco} — ${cidade}.</p>
-    </div>
-    <div class="fotos">
-      <img src="imagem_03.png" alt="${cidade}" width="400" height="400">
-      <img src="imagem_04.png" alt="${servicos}" width="400" height="400">
-    </div>
-  </div>
-</aside>
+</div>
 
 <script>
   const frame = document.getElementById('deviceFrame');
@@ -844,7 +1083,7 @@ function baixarQRCode() {
   }
 
   if (!imageUrl) {
-    alert("Gerencie o QR Code primeiro!");
+    alert("Gere o cartão primeiro para obter o QR Code!");
     return;
   }
 
