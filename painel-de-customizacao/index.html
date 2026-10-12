@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Painel Avançado de Customização V3 — ImpulsoWeb10</title>
+  <title>Painel Avançado de Customização V3 com Paletas — ImpulsoWeb10</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -39,7 +39,7 @@
         <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
         <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
       </div>
-      <span>ImpulsoWeb10 <span class="text-blue-500">— Painel V3 Preview</span></span>
+      <span>ImpulsoWeb10 <span class="text-blue-500">— Painel V3 com Paletas</span></span>
     </div>
     <button onclick="abrirModalLimpar()" class="bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/30 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all">
       🗑️ Limpar Tudo
@@ -50,7 +50,7 @@
   <div id="modalLimpar" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
     <div class="bg-cardbg border border-bordercol rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
       <h3 class="font-syne font-bold text-lg mb-2 text-white">Deseja limpar todos os campos?</h3>
-      <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Todas as informações, códigos e customizações serão redefinidos.</p>
+      <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Todas as informações, códigos e customizações serão redefinidos para o padrão (Paleta 1).</p>
       <div class="flex gap-3 justify-center">
         <button onclick="fecharModalLimpar()" class="bg-surface hover:bg-zinc-700 text-zinc-200 px-4 py-2 rounded-xl text-xs font-bold transition-all">Cancelar</button>
         <button onclick="executarLimpeza()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all">Sim, limpar tudo</button>
@@ -65,7 +65,7 @@
     <div class="lg:col-span-7 flex flex-col gap-6">
       <div class="text-center lg:text-left mb-2">
         <h1 class="text-3xl font-syne font-extrabold mb-2 tracking-tight">Painel Avançado <span class="text-blue-500">V3</span></h1>
-        <p class="text-sm text-zinc-400">Edite dados, ajuste cores estéticas e visualize as alterações em tempo real no simulador lateral.</p>
+        <p class="text-sm text-zinc-400">Escolha uma paleta profissional, ajuste os dados e veja o resultado no simulador instantaneamente.</p>
       </div>
 
       <!-- 1. ENTRADA DE ARQUIVOS (ENGENHARIA REVERSA) -->
@@ -87,25 +87,72 @@
         </button>
       </div>
 
-      <!-- 2. FORMULÁRIO DE EDIÇÃO & CUSTOMIZAÇÃO -->
+      <!-- 2. FORMULÁRIO DE EDIÇÃO & PALETAS DE CORES -->
       <div class="bg-cardbg border border-bordercol rounded-2xl p-6 flex flex-col gap-6 shadow-xl">
-        <h2 class="text-sm font-bold text-yellow-400 uppercase tracking-wider pb-2 border-b border-bordercol">🎨 2. Formulário de Edição & Customização</h2>
+        <h2 class="text-sm font-bold text-yellow-400 uppercase tracking-wider pb-2 border-b border-bordercol">🎨 2. Customização & Paletas Prontas</h2>
 
-        <!-- Card: Estética (3 Cores) -->
-        <div class="bg-surface/50 border border-bordercol rounded-xl p-4 flex flex-col gap-4">
-          <h3 class="text-xs font-bold text-zinc-300 uppercase tracking-wide">Estética Visual (3 Cores)</h3>
+        <!-- 10 Paletas de Cores Exclusivas -->
+        <div class="flex flex-col gap-3">
+          <label class="text-xs font-semibold text-zinc-300">10 Paletas de Cores Prontas de Alta Conversão:</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button type="button" onclick="aplicarPaleta('#000000', '#d4af37', '#121212')" class="text-left bg-surface hover:bg-zinc-700 border border-bordercol rounded-xl p-2.5 text-xs transition-all flex items-center justify-between">
+              <span class="font-bold text-white">1. Dark Premium</span>
+              <span class="flex gap-1"><span class="w-3 h-3 rounded-full bg-black border border-zinc-600"></span><span class="w-3 h-3 rounded-full bg-[#d4af37]"></span><span class="w-3 h-3 rounded-full bg-[#121212]"></span></span>
+            </button>
+            <button type="button" onclick="aplicarPaleta('#120a2a', '#ff007f', '#0f172a')" class="text-left bg-surface hover:bg-zinc-700 border border-bordercol rounded-xl p-2.5 text-xs transition-all flex items-center justify-between">
+              <span class="font-bold text-white">2. Cyber Punk</span>
+              <span class="flex gap-1"><span class="w-3 h-3 rounded-full bg-[#120a2a]"></span><span class="w-3 h-3 rounded-full bg-[#ff007f]"></span><span class="w-3 h-3 rounded-full bg-[#0f172a]"></span></span>
+            </button>
+            <button type="button" onclick="aplicarPaleta('#18181b', '#00e5ff', '#09090b')" class="text-left bg-surface hover:bg-zinc-700 border border-bordercol rounded-xl p-2.5 text-xs transition-all flex items-center justify-between">
+              <span class="font-bold text-white">3. Tech Minimalist</span>
+              <span class="flex gap-1"><span class="w-3 h-3 rounded-full bg-[#18181b]"></span><span class="w-3 h-3 rounded-full bg-[#00e5ff]"></span><span class="w-3 h-3 rounded-full bg-[#09090b]"></span></span>
+            </button>
+            <button type="button" onclick="aplicarPaleta('#061a10', '#00ff66', '#111827')" class="text-left bg-surface hover:bg-zinc-700 border border-bordercol rounded-xl p-2.5 text-xs transition-all flex items-center justify-between">
+              <span class="font-bold text-white">4. Green Energy</span>
+              <span class="flex gap-1"><span class="w-3 h-3 rounded-full bg-[#061a10]"></span><span class="w-3 h-3 rounded-full bg-[#00ff66]"></span><span class="w-3 h-3 rounded-full bg-[#111827]"></span></span>
+            </button>
+            <button type="button" onclick="aplicarPaleta('#1c110a', '#ff2222', '#1f2937')" class="text-left bg-surface hover:bg-zinc-700 border border-bordercol rounded-xl p-2.5 text-xs transition-all flex items-center justify-between">
+              <span class="font-bold text-white">5. Red Urgency</span>
+              <span class="flex gap-1"><span class="w-3 h-3 rounded-full bg-[#1c110a]"></span><span class="w-3 h-3 rounded-full bg-[#ff2222]"></span><span class="w-3 h-3 rounded-full bg-[#1f2937]"></span></span>
+            </button>
+            <button type="button" onclick="aplicarPaleta('#18181b', '#ff6600', '#000000')" class="text-left bg-surface hover:bg-zinc-700 border border-bordercol rounded-xl p-2.5 text-xs transition-all flex items-center justify-between">
+              <span class="font-bold text-white">6. Orange Conversion</span>
+              <span class="flex gap-1"><span class="w-3 h-3 rounded-full bg-[#18181b]"></span><span class="w-3 h-3 rounded-full bg-[#ff6600]"></span><span class="w-3 h-3 rounded-full bg-[#000000]"></span></span>
+            </button>
+            <button type="button" onclick="aplicarPaleta('#070e18', '#2563eb', '#0f172a')" class="text-left bg-surface hover:bg-zinc-700 border border-bordercol rounded-xl p-2.5 text-xs transition-all flex items-center justify-between">
+              <span class="font-bold text-white">7. Neon Eclipse</span>
+              <span class="flex gap-1"><span class="w-3 h-3 rounded-full bg-[#070e18]"></span><span class="w-3 h-3 rounded-full bg-[#2563eb]"></span><span class="w-3 h-3 rounded-full bg-[#0f172a]"></span></span>
+            </button>
+            <button type="button" onclick="aplicarPaleta('#1e0a22', '#a855f7', '#110c1d')" class="text-left bg-surface hover:bg-zinc-700 border border-bordercol rounded-xl p-2.5 text-xs transition-all flex items-center justify-between">
+              <span class="font-bold text-white">8. Purple Velvet</span>
+              <span class="flex gap-1"><span class="w-3 h-3 rounded-full bg-[#1e0a22]"></span><span class="w-3 h-3 rounded-full bg-[#a855f7]"></span><span class="w-3 h-3 rounded-full bg-[#110c1d]"></span></span>
+            </button>
+            <button type="button" onclick="aplicarPaleta('#f8fafc', '#64748b', '#ffffff')" class="text-left bg-surface hover:bg-zinc-700 border border-bordercol rounded-xl p-2.5 text-xs transition-all flex items-center justify-between">
+              <span class="font-bold text-white">9. Clean Stealth</span>
+              <span class="flex gap-1"><span class="w-3 h-3 rounded-full bg-[#f8fafc]"></span><span class="w-3 h-3 rounded-full bg-[#64748b]"></span><span class="w-3 h-3 rounded-full bg-[#ffffff]"></span></span>
+            </button>
+            <button type="button" onclick="aplicarPaleta('#111111', '#facc15', '#18181b')" class="text-left bg-surface hover:bg-zinc-700 border border-bordercol rounded-xl p-2.5 text-xs transition-all flex items-center justify-between">
+              <span class="font-bold text-white">10. Carbon Sport</span>
+              <span class="flex gap-1"><span class="w-3 h-3 rounded-full bg-[#111111]"></span><span class="w-3 h-3 rounded-full bg-[#facc15]"></span><span class="w-3 h-3 rounded-full bg-[#18181b]"></span></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Ajuste Fino Manual (3 Cores) -->
+        <div class="bg-surface/50 border border-bordercol rounded-xl p-4 flex flex-col gap-4 mt-2">
+          <h3 class="text-xs font-bold text-zinc-300 uppercase tracking-wide">Ajuste Fino Manual (Cores)</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="flex flex-col gap-2">
               <label class="text-[11px] font-semibold text-zinc-400">Cor do Fundo Geral</label>
-              <input type="color" id="editCorFundo" value="#07101e" class="w-full h-10 rounded-lg bg-transparent cursor-pointer border border-bordercol"/>
+              <input type="color" id="editCorFundo" value="#000000" class="w-full h-10 rounded-lg bg-transparent cursor-pointer border border-bordercol"/>
             </div>
             <div class="flex flex-col gap-2">
               <label class="text-[11px] font-semibold text-zinc-400">Cor do Neon / Borda</label>
-              <input type="color" id="editCorNeon" value="#ffffff" class="w-full h-10 rounded-lg bg-transparent cursor-pointer border border-bordercol"/>
+              <input type="color" id="editCorNeon" value="#d4af37" class="w-full h-10 rounded-lg bg-transparent cursor-pointer border border-bordercol"/>
             </div>
             <div class="flex flex-col gap-2">
               <label class="text-[11px] font-semibold text-zinc-400">Cor Interna Moldura</label>
-              <input type="color" id="editCorInterna" value="#102040" class="w-full h-10 rounded-lg bg-transparent cursor-pointer border border-bordercol"/>
+              <input type="color" id="editCorInterna" value="#121212" class="w-full h-10 rounded-lg bg-transparent cursor-pointer border border-bordercol"/>
             </div>
           </div>
         </div>
@@ -180,12 +227,12 @@
         </div>
 
         <!-- Moldura de Celular 9:16 com transição de cores em tempo real -->
-        <div id="previewContainer" class="w-full aspect-[9/16] max-w-[320px] rounded-3xl border-4 border-zinc-700 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center p-4 transition-colors duration-300" style="background-color: #07101e;">
+        <div id="previewContainer" class="w-full aspect-[9/16] max-w-[320px] rounded-3xl border-4 border-zinc-700 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center p-4 transition-colors duration-300" style="background-color: #000000;">
           
           <!-- Cartão Central 3D Simulary -->
-          <div id="previewCard" class="w-full max-w-[280px] rounded-2xl p-5 flex flex-col items-center text-center gap-4 shadow-xl transition-all duration-300" style="background: linear-gradient(175deg, #102040 0%, #0b1a2e 100%); border: 2px solid #ffffff; box-shadow: 0 0 15px rgba(255,255,255,0.6);">
+          <div id="previewCard" class="w-full max-w-[280px] rounded-2xl p-5 flex flex-col items-center text-center gap-4 shadow-xl transition-all duration-300" style="background: linear-gradient(175deg, #121212 0%, #050b14 100%); border: 2px solid #d4af37; box-shadow: 0 0 15px #d4af37, 0 10px 25px rgba(0,0,0,0.5);">
             
-            <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center font-syne font-bold text-blue-400 text-lg" id="prevInitial">IE</div>
+            <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center font-syne font-bold text-blue-400 text-lg" id="prevInitial">ME</div>
             
             <div class="flex flex-col gap-1">
               <h3 id="prevH1" class="font-syne font-bold text-base text-white leading-tight">Nome da Empresa</h3>
@@ -200,17 +247,16 @@
           </div>
 
         </div>
-        <span class="text-[11px] text-zinc-500 mt-3">Atualização automática a cada alteração.</span>
+        <span class="text-[11px] text-zinc-500 mt-3">Atualização automática em tempo real.</span>
       </div>
     </div>
 
   </main>
 
-  <!-- JAVASCRIPT DO SISTEMA V3 COM PREVIEW -->
+  <!-- JAVASCRIPT DO SISTEMA COM PALETAS E PREVIEW -->
   <script>
     let dadosJsonGlobais = {};
 
-    // Sincronização em Tempo Real (Listeners nos inputs estéticos e de texto)
     const corFundoInput = document.getElementById('editCorFundo');
     const corNeonInput = document.getElementById('editCorNeon');
     const corInternaInput = document.getElementById('editCorInterna');
@@ -226,8 +272,14 @@
     const editNome = document.getElementById('editNome');
     const editSegmento = document.getElementById('editSegmento');
 
+    function aplicarPaleta(fundo, neon, interna) {
+      corFundoInput.value = fundo;
+      corNeonInput.value = neon;
+      corInternaInput.value = interna;
+      atualizarPreview();
+    }
+
     function atualizarPreview() {
-      // Cores
       const fundo = corFundoInput.value;
       const neon = corNeonInput.value;
       const interna = corInternaInput.value;
@@ -237,7 +289,6 @@
       previewCard.style.borderColor = neon;
       previewCard.style.boxShadow = `0 0 15px ${neon}, 0 10px 25px rgba(0,0,0,0.5)`;
 
-      // Textos
       const nomeVal = editNome.value.trim() || editH1.value.trim() || 'Nome da Empresa';
       const segVal = editSegmento.value.trim() || editH2.value.trim() || 'Segmento e Serviços';
 
@@ -246,7 +297,6 @@
       prevInitial.textContent = nomeVal.substring(0, 2).toUpperCase();
     }
 
-    // Adiciona ouvintes para tempo real
     [corFundoInput, corNeonInput, corInternaInput, editH1, editH2, editNome, editSegmento].forEach(el => {
       el.addEventListener('input', atualizarPreview);
     });
@@ -264,9 +314,7 @@
     function executarLimpeza() {
       document.getElementById('inputJson').value = '';
       document.getElementById('inputHtml').value = '';
-      corFundoInput.value = '#07101e';
-      corNeonInput.value = '#ffffff';
-      corInternaInput.value = '#102040';
+      aplicarPaleta('#000000', '#d4af37', '#121212');
       document.getElementById('editSeoTitle').value = '';
       document.getElementById('editSeoDesc').value = '';
       editH1.value = '';
@@ -281,7 +329,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Mapeamento de Dados do JSON
     function mapearECarregarDados() {
       try {
         let jsonStr = document.getElementById('inputJson').value.trim();
@@ -312,9 +359,9 @@
         if (seo.h2) { editH2.value = seo.h2; }
 
         const custom = dadosJsonGlobais.customizacao || {};
-        if (custom.cor_fundo) corFundoInput.value = custom.cor_fundo;
-        if (custom.cor_neon) corNeonInput.value = custom.cor_neon;
-        if (custom.cor_interna) corInternaInput.value = custom.cor_interna;
+        if (custom.cor_fundo && custom.cor_neon && custom.cor_interna) {
+          aplicarPaleta(custom.cor_fundo, custom.cor_neon, custom.cor_interna);
+        }
 
         atualizarPreview();
         alert('🎉 Sucesso! Dados carregados e visual atualizado no simulador.');
@@ -324,7 +371,6 @@
       }
     }
 
-    // Saída: Baixar Novo JSON via Blob
     function baixarNovoJson() {
       if (!dadosJsonGlobais.dados_formulario_base) dadosJsonGlobais.dados_formulario_base = {};
       dadosJsonGlobais.dados_formulario_base.nomeEmpresa = editNome.value.trim();
@@ -357,7 +403,6 @@
       URL.revokeObjectURL(link.href);
     }
 
-    // Saída: Baixar Novo HTML Modificado via Blob (.replaceAll)
     function baixarNovoHtml() {
       let htmlOriginal = document.getElementById('inputHtml').value.trim();
       if (!htmlOriginal) {
@@ -378,9 +423,9 @@
 
       let htmlModificado = htmlOriginal;
 
-      if (corFundo) htmlModificado = htmlModificado.replaceAll('#07101e', corFundo);
-      if (corNeon) htmlModificado = htmlModificado.replaceAll('#ffffff', corNeon);
-      if (corInterna) htmlModificado = htmlModificado.replaceAll('#102040', corInterna);
+      if (corFundo) htmlModificado = htmlModificado.replaceAll('#07101e', corFundo).replaceAll('#000000', corFundo);
+      if (corNeon) htmlModificado = htmlModificado.replaceAll('#ffffff', corNeon).replaceAll('#d4af37', corNeon);
+      if (corInterna) htmlModificado = htmlModificado.replaceAll('#102040', corInterna).replaceAll('#121212', corInterna);
       if (seoTitle) htmlModificado = htmlModificado.replaceAll('[SEO_TITLE]', seoTitle);
       if (seoDesc) htmlModificado = htmlModificado.replaceAll('[SEO_DESCRIPTION]', seoDesc);
       if (seoH1) htmlModificado = htmlModificado.replaceAll('[SEO_H1]', seoH1).replaceAll('[Nome da Empresa]', seoH1);
