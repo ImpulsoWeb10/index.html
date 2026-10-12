@@ -31,7 +31,6 @@ input, textarea{background:var(--surface);border:1px solid var(--border);border-
 input:focus, textarea:focus{border-color:var(--b)}
 textarea{resize:vertical;min-height:100px}
 
-/* Caixa de Importação JSON */
 .ai-import-box{background:rgba(26,115,232,0.06);border:1px dashed rgba(26,115,232,0.4);border-radius:12px;padding:1.2rem;margin-bottom:.5rem}
 .btn-ai-import{background:var(--b);color:#fff;border:none;border-radius:8px;padding:.7rem 1.2rem;font-weight:700;cursor:pointer;font-size:.85rem;margin-top:.6rem;width:100%;transition:opacity .2s}
 .btn-ai-import:hover{opacity:.9}
@@ -101,8 +100,6 @@ textarea{resize:vertical;min-height:100px}
   </div>
 
   <div class="form-card">
-    
-    <!-- CAMPO DE IMPORTAÇÃO VIA IA (NO TOPO) -->
     <div class="ai-import-box">
       <div class="field-grp">
         <label style="color:var(--b);font-weight:700;">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
@@ -111,7 +108,6 @@ textarea{resize:vertical;min-height:100px}
       </div>
     </div>
 
-    <!-- INPUTS HIDDEN EXTRAS PARA DESKTOP E SEO -->
     <input type="hidden" id="hidden_canonical" />
     <input type="hidden" id="hidden_h1" />
     <input type="hidden" id="hidden_meta_description" />
@@ -231,752 +227,6 @@ function formatarSlug(texto) {
     .replace(/^-+|-+$/g, "");
 }
 
-/* ==========================================================
-   FUNÇÃO DE PROCESSAMENTO DO JSON DA IA
-   ========================================================== */
-function setVal(id, valor) {
-  const el = document.getElementById(id);
-  if (el) el.value = (valor === undefined || valor === null) ? '' : valor;
-}
-
-function normalizarWhatsapp(numero) {
-  let n = String(numero || '').replace(/\D/g, '');
-  if (n && (n.length === 10 || n.length === 11)) n = '55' + n;
-  return n;
-}
-
-function processarJsonAi() {
-  try {
-    let jsonTexto = document.getElementById('jsonAiInput').value.trim();
-
-    if (!jsonTexto) {
-      alert('⚠️ Por favor, cole o código JSON gerado pela IA antes de processar.');
-      return;
-    }
-
-    jsonTexto = jsonTexto.replace(/```json/g, '').replace(/```/g, '').trim();
-    const primeiraChave = jsonTexto.indexOf('{');
-    const ultimaChave = jsonTexto.lastIndexOf('}');
-
-    if (primeiraChave === -1 || ultimaChave === -1) {
-      alert('❌ Erro: Não foi encontrado um objeto JSON válido no texto colado.');
-      return;
-    }
-    jsonTexto = jsonTexto.substring(primeiraChave, ultimaChave + 1);
-
-    const dados = JSON.parse(jsonTexto);
-
-    const base = dados.dados_formulario_base;
-    if (base) {
-      setVal('inPid', base.placeId);
-      setVal('inNome', base.nomeEmpresa);
-      setVal('inWa', normalizarWhatsapp(base.whatsapp));
-      setVal('inIg', String(base.instagram || '').replace('@', ''));
-      setVal('inCidade', base.cidadeEstado);
-      setVal('inEndereco', base.enderecoCompleto);
-      setVal('inSegmento', base.segmento);
-      setVal('inServicos', base.produtosPrincipais);
-    }
-
-    const pc = dados.conteudo_enriquecido_desktop;
-    if (pc) {
-      setVal('hidden_canonical', pc.seo_tags?.canonical);
-      setVal('hidden_h1', pc.seo_tags?.h1);
-      setVal('hidden_meta_description', pc.seo_tags?.meta_description);
-
-      setVal('hidden_lista_beneficios', JSON.stringify(pc.lista_beneficios_o_que_encontra || []));
-      setVal('hidden_faq_perguntas', JSON.stringify(pc.faq_perguntas_frequentes || []));
-
-      setVal('hidden_intro', pc.textos_seo_secoes?.introducao_bloco);
-      setVal('hidden_produtos', pc.textos_seo_secoes?.foco_produtos);
-      setVal('hidden_local', pc.textos_seo_secoes?.chamada_local);
-
-      const imagens = pc.imagens_otimizadas_seo || [];
-      for (let i = 1; i <= 4; i++) {
-        const img = imagens[i - 1] || {};
-        setVal(`hidden_img${i}_url`, img.url_original);
-        setVal(`hidden_img${i}_name`, img.nome_arquivo_webp || `imagem-${i}.webp`);
-        setVal(`hidden_img${i}_alt`, img.alt_descricao);
-      }
-    }
-
-    alert('🎉 Sucesso! Os dados foram importados e distribuídos para os campos.');
-  } catch (e) {
-    console.error(e);
-    alert('❌ Erro de sintaxe no JSON: ' + e.message + '\nCopie o código do começo ao fim.');
-  }
-}
-
-function abrirModalLimpar() {
-  document.getElementById('modalLimpar').classList.add('active');
-}
-
-function fecharModalLimpar() {
-  document.getElementById('modalLimpar').classList.remove('active');
-}
-
-function executarLimpeza() {
-  document.getElementById('jsonAiInput').value = '';
-  document.getElementById('inPid').value = '';
-  document.getElementById('inNome').value = '';
-  document.getElementById('inWa').value = '';
-  document.getElementById('inIg').value = '';
-  document.getElementById('inCidade').value = '';
-  document.getElementById('inEndereco').value = '';
-  document.getElementById('inSegmento').value = '';
-  document.getElementById('inServicos').value = '';
-
-  const hiddens = document.querySelectorAll('input[type="hidden"]');
-  hiddens.forEach(h => h.value = '');
-
-  document.getElementById('resBox').classList.remove('show');
-  document.getElementById('qrbox').innerHTML = '';
-  document.getElementById('imgListBox').style.display = 'none';
-  document.getElementById('imgListContent').innerHTML = '';
-  htmlFinal = '';
-  nomeEmpresaSlug = "cliente";
-
-  fecharModalLimpar();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function gerarTudo() {
-  const pid = document.getElementById('inPid').value.trim();
-  const nome = document.getElementById('inNome').value.trim();
-  const wa = document.getElementById('inWa').value.trim() || '5511999999999';
-  const ig = document.getElementById('inIg').value.trim().replace('@','');
-  const cidade = document.getElementById('inCidade').value.trim() || 'Sua Cidade';
-  const endereco = document.getElementById('inEndereco').value.trim() || 'Rua Exemplo, 123';
-  const segmento = document.getElementById('inSegmento').value.trim() || 'Serviços';
-  const servicos = document.getElementById('inServicos').value.trim() || 'Atendimento de Qualidade';
-
-  if(!pid || !nome) {
-    alert("Por favor, preencha pelo menos o Place ID e o Nome da Empresa.");
-    return;
-  }
-
-  const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
-  document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
-
-  nomeEmpresaSlug = formatarSlug(nome);
-  const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
-  document.getElementById('outLinkCliente').value = linkPaginaCliente;
-  document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
-
-  const qrDiv = document.getElementById('qrbox');
-  qrDiv.innerHTML = '';
-  new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
-
-  // Leitura das tags de SEO e Conteúdo Enriquecido
-  const seoCanonical = document.getElementById('hidden_canonical').value.trim() || linkPaginaCliente;
-  const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} — ${cidade}`;
-  const seoMetaDesc = document.getElementById('hidden_meta_description').value.trim() || `${segmento} em ${cidade}. ${servicos}.`;
-  
-  // Imagens WebP
-  const imgsSrc = [], imgsAlt = [], imgsOrig = [];
-  const altPadrao = [`${nome} - Imagem 1`, `${segmento} - Imagem 2`, `${cidade} - Imagem 3`, `${servicos} - Imagem 4`];
-  for (let i = 1; i <= 4; i++) {
-    imgsSrc.push(document.getElementById(`hidden_img${i}_name`).value.trim() || `imagem_0${i}.webp`);
-    imgsAlt.push(document.getElementById(`hidden_img${i}_alt`).value.trim() || altPadrao[i - 1]);
-    imgsOrig.push(document.getElementById(`hidden_img${i}_url`).value.trim());
-  }
-  const [img1Name, img2Name, img3Name, img4Name] = imgsSrc;
-  const [img1Alt, img2Alt, img3Alt, img4Alt] = imgsAlt;
-
-  // Lista dinâmica "O que você encontra"
-  let beneficiosItemsHtml = '';
-  const benRaw = document.getElementById('hidden_lista_beneficios').value.trim();
-  if (benRaw) {
-    try {
-      const benArr = JSON.parse(benRaw);
-      if (Array.isArray(benArr) && benArr.length) {
-        beneficiosItemsHtml = benArr.map(item => `<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${item}</li>`).join('');
-      }
-    } catch (e) {}
-  }
-  if (!beneficiosItemsHtml) {
-    beneficiosItemsHtml = `
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${segmento}</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/></svg>Qualidade e Garantia</li>
-    `;
-  }
-
-  // FAQ Dinâmico
-  let faqHtml = '';
-  const faqRaw = document.getElementById('hidden_faq_perguntas').value.trim();
-  if (faqRaw) {
-    try {
-      const faqArr = JSON.parse(faqRaw);
-      if (Array.isArray(faqArr) && faqArr.length) {
-        faqHtml = faqArr.map(f => `
-          <details class="faq-item">
-            <summary class="faq-question">${f.pergunta}</summary>
-            <div class="faq-answer">${f.resposta}</div>
-          </details>
-        `).join('');
-      }
-    } catch (e) {}
-  }
-  if (!faqHtml) {
-    faqHtml = `
-      <details class="faq-item">
-        <summary class="faq-question">Quais formas de pagamento são aceitas?</summary>
-        <div class="faq-answer">Aceitamos dinheiro, PIX e cartões para sua maior comodidade.</div>
-      </details>
-      <details class="faq-item">
-        <summary class="faq-question">Vocês atendem na região?</summary>
-        <div class="faq-answer">Sim, realizamos atendimento completo em ${cidade} e arredores.</div>
-      </details>
-    `;
-  }
-
-  // Textos SEO Desktop
-  const txtIntro = document.getElementById('hidden_intro').value.trim() || `A ${nome} é referência em ${segmento} em ${cidade}.`;
-  const txtProd = document.getElementById('hidden_produtos').value.trim() || `Trabalhamos com soluções completas em ${segmento}.`;
-  const txtLocal = document.getElementById('hidden_local').value.trim() || `Atendemos em ${cidade} na ${endereco}.`;
-
-  // Listagem de imagens para conferência no painel
-  const imgListContent = document.getElementById('imgListContent');
-  imgListContent.innerHTML = imgsSrc.map((nomeArq, idx) => {
-    const orig = imgsOrig[idx];
-    const origTxt = orig ? `<a href="${orig}" target="_blank" rel="noopener" style="color:var(--b);">abrir imagem original</a>` : '<span style="color:var(--r);">URL não informada</span>';
-    return `<div>${idx + 1}. salvar como <strong style="color:#fff;">${nomeArq}</strong> — ${origTxt}</div>`;
-  }).join('');
-  document.getElementById('imgListBox').style.display = 'block';
-
-  /* ==========================================================
-     NOVO MODELO HTML INTEGRADO COM SEGURANÇA (TEMPLATE LITERAL)
-     ========================================================== */
-  htmlFinal = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#07101e">
-<meta name="description" content="${seoMetaDesc}">
-<meta name="keywords" content="${segmento}, ${cidade},${nome}">
-<meta name="author" content="ImpulsoWeb10">
-<link rel="canonical" href="${seoCanonical}">
-
-<meta property="og:type" content="website">
-<meta property="og:url" content="${linkPaginaCliente}">
-<meta property="og:title" content="${seoH1}">
-<meta property="og:description" content="${seoMetaDesc}">
-<meta property="og:image" content="${linkPaginaCliente}${img1Name}">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary">
-
-<title>${seoH1}</title>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "${nome}",
-  "image": "${linkPaginaCliente}${img1Name}",
-  "@id": "${linkPaginaCliente}#store",
-  "url": "${linkPaginaCliente}",
-  "telephone": "+${wa}",
-  "priceRange": "$$",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "${endereco}",
-    "addressLocality": "${cidade}",
-    "addressCountry": "BR"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": -23.485,
-    "longitude": -46.345
-  },
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-    "opens": "08:00",
-    "closes": "18:00"
-  },
-  "sameAs": [
-    "https://www.instagram.com/${ig}"
-  ]
-}
-<\/script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{width:100%}
-body{
-  font-family:'DM Sans',sans-serif;
-  background:#07101e;
-  color:#e8e2d8;
-  min-height:100vh;
-  min-height:100dvh;
-  width:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:max(.7rem,env(safe-area-inset-top)) .6rem max(.7rem,env(safe-area-inset-bottom));
-  overflow-x:hidden;
-  position:relative;
-  perspective:1200px;
-}
-a:focus-visible,button:focus-visible{outline:2px solid #ffe082;outline-offset:3px}
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% 20%, rgba(201,169,110,0.07) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(17,40,80,0.6) 0%, transparent 60%);
-  pointer-events:none;
-  z-index:0;
-}
-.app-wrapper{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  width:100%;
-  max-width:480px;
-  margin:auto 0;
-  position:relative;
-  z-index:1;
-}
-.device-frame{
-  position:relative;
-  z-index:1;
-  width:100%;
-  background:linear-gradient(175deg,#102040 0%,#0b1a2e 100%);
-  border:2px solid #ffffff;
-  border-radius:24px;
-  box-shadow:
-    0 0 10px #ffffff,
-    0 0 20px rgba(255,255,255,.8),
-    0 0 30px rgba(255,255,255,.35),
-    0 15px 35px rgba(0,0,0,.6);
-  padding:1.3rem 1.2rem 1.1rem;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  gap:.9rem;
-  transform-style:preserve-3d;
-  transition:transform .6s cubic-bezier(.175,.885,.32,1.275);
-  will-change:transform;
-}
-.secret-back{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  background:#050b14;
-  border-radius:22px;
-  transform:rotateY(180deg);
-  backface-visibility:hidden;
-  z-index:2;
-  transform-style:preserve-3d;
-  overflow:hidden;
-}
-.back-layer{position:absolute;width:100%;height:100%;object-fit:cover;top:0;left:0;border-radius:22px}
-.back-layer-fundo{transform:translateZ(-20px)}
-.back-layer-mago{transform:translateZ(30px)}
-.back-layer-moldura{transform:translateZ(80px);pointer-events:none}
-.page{
-  position:relative;
-  z-index:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:.9rem;
-  width:100%;
-  transform-style:preserve-3d;
-  backface-visibility:hidden;
-}
-.layer-back{transform:translateZ(15px);transform-style:preserve-3d;transition:transform .4s ease}
-.layer-mid{transform:translateZ(35px);transform-style:preserve-3d;transition:transform .4s ease}
-.layer-front{transform:translateZ(55px);transform-style:preserve-3d;filter:drop-shadow(0 10px 15px rgba(0,0,0,.5));transition:transform .4s ease}
-.layer-pop{transform:translateZ(75px);transform-style:preserve-3d;filter:drop-shadow(0 12px 20px rgba(0,0,0,.6));transition:transform .4s ease}
-.logo-wrap{display:flex;flex-direction:column;align-items:center;gap:.4rem}
-.logo-frame{
-  position:relative;
-  border-radius:14px;
-  overflow:hidden;
-  display:inline-block;
-  animation:logo-pulse 2.6s ease-in-out infinite;
-  box-shadow:0 0 0 0 rgba(201,169,110,.5);
-}
-.logo-frame::after{
-  content:'';
-  position:absolute;
-  top:0;left:-110%;
-  width:55%;height:100%;
-  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.55) 50%,transparent 80%);
-  transform:skewX(-18deg);
-  animation:logo-shimmer 2.6s ease-in-out infinite;
-  pointer-events:none;
-  z-index:2;
-}
-@keyframes logo-pulse{
-  0%  {box-shadow:0 0 0 0 rgba(201,169,110,.55),0 6px 20px rgba(201,169,110,.25)}
-  55% {box-shadow:0 0 0 12px rgba(201,169,110,0),0 6px 20px rgba(201,169,110,.1)}
-  100%{box-shadow:0 0 0 0 rgba(201,169,110,0),0 6px 20px rgba(201,169,110,.25)}
-}
-@keyframes logo-shimmer{0%{left:-110%}45%,100%{left:160%}}
-.logo-img{
-  display:block;
-  width:160px;
-  height:auto;
-  max-height:72px;
-  border-radius:12px;
-  border:2px solid rgba(201,169,110,.4);
-  object-fit:contain;
-  background:rgba(201,169,110,.06);
-  position:relative;z-index:1;
-}
-.logo-img-fallback{
-  width:160px;height:66px;
-  border-radius:12px;
-  border:2px solid rgba(201,169,110,.4);
-  background:rgba(201,169,110,.06);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.4rem;color:#c9a96e;font-weight:600;
-  letter-spacing:.08em;
-  position:relative;z-index:1;
-}
-.brand{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:#f0ece5;letter-spacing:.06em;line-height:1.1}
-.brand em{color:#c9a96e;font-style:italic}
-.tagline{margin-top:.25rem;font-size:.78rem;color:#9bb5d4;font-weight:400;letter-spacing:.03em}
-.chips{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center}
-.chip{
-  display:inline-flex;align-items:center;gap:.3rem;
-  font-size:.72rem;color:#d9e4f2;
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:999px;padding:.28rem .65rem;
-}
-.chip svg{width:13px;height:13px;flex-shrink:0;stroke:#c9a96e;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.stars-cta{
-  display:flex;flex-direction:column;align-items:center;gap:.3rem;
-  text-decoration:none;
-  padding:.35rem .9rem .45rem;
-  border-radius:18px;
-  -webkit-tap-highlight-color:transparent;
-  transition:transform .15s;
-}
-.stars-cta:active{transform:scale(.97)}
-.stars-row{display:flex;align-items:center;gap:.3rem;justify-content:center}
-.star{
-  font-size:2.2rem;line-height:1;color:#ffd700;
-  text-shadow:0 0 12px rgba(255,215,0,.5);
-  animation:star-wave 2.6s ease-in-out infinite;
-}
-.star:nth-child(2){animation-delay:.12s}
-.star:nth-child(3){animation-delay:.24s}
-.star:nth-child(4){animation-delay:.36s}
-.star:nth-child(5){animation-delay:.48s}
-@keyframes star-wave{
-  0%,55%,100%{transform:translateY(0) scale(1);filter:brightness(1)}
-  25%{transform:translateY(-5px) scale(1.14);filter:brightness(1.3)}
-}
-.stars-label{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:700;color:#ffffff;letter-spacing:.01em}
-.stars-label svg{width:15px;height:15px;flex-shrink:0}
-.proof{font-size:.76rem;color:#ffe082;font-weight:700}
-.cta-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;width:100%}
-.btn-act{
-  display:flex;align-items:center;justify-content:center;gap:.45rem;
-  min-height:46px;border-radius:50px;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;
-  text-decoration:none;transition:transform .2s;
-}
-.btn-act:hover{transform:translateY(-2px)}
-.btn-act svg{width:18px;height:18px;flex-shrink:0}
-.btn-call{background:#22c55e;color:#04210f}
-.btn-wa{background:#0f2a1c;color:#d9ffe8;border:1.5px solid #25d366}
-.social-row{display:flex;gap:.9rem;justify-content:center;align-items:flex-start}
-.social-btn{
-  display:flex;flex-direction:column;align-items:center;gap:.25rem;
-  text-decoration:none;background:none;border:none;cursor:pointer;
-  font-family:inherit;transition:transform .2s;
-}
-.social-btn:hover{transform:translateY(-3px)}
-.social-icon{
-  width:44px;height:44px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  border:1.5px solid rgba(255,255,255,.3);
-  transition:border-color .2s,box-shadow .2s;
-}
-.social-btn:hover .social-icon{border-color:rgba(255,255,255,.6);box-shadow:0 6px 16px rgba(0,0,0,.35)}
-.social-icon svg{width:20px;height:20px}
-.social-label{font-size:.68rem;color:#9bb5d4;letter-spacing:.03em}
-.hours{display:flex;align-items:center;justify-content:center;gap:.4rem;font-size:.74rem;color:#d0dce8;font-weight:500}
-.hours .dot{width:8px;height:8px;border-radius:50%;background:#8ba4c4;flex-shrink:0}
-.hours.open .dot{background:#4ade80;box-shadow:0 0 8px #4ade80}
-.hours.closed .dot{background:#f87171}
-.address{
-  font-size:.74rem;color:#8ba4c4;line-height:1.4;cursor:pointer;
-  transition:color .2s;position:relative;display:inline-block;
-}
-.address:hover{color:#ffe082}
-.address::after{
-  content:'(Copiar)';display:block;font-size:.6rem;color:#c9a96e;opacity:.8;margin-top:-1px;
-}
-.ticker-banner{
-  width:100%;
-  overflow:hidden;
-  background:rgba(201,169,110,.15);
-  border:1px solid rgba(201,169,110,.35);
-  border-radius:8px;
-  padding:.35rem 0;
-  display:flex;
-}
-.ticker-track{display:flex;width:max-content;animation:infinite-scroll 36s linear infinite}
-.ticker-item{font-size:.76rem;color:#fce8bd;font-weight:500;letter-spacing:.03em;padding-right:2rem;white-space:nowrap}
-@keyframes infinite-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.footer{
-  font-size:.72rem;
-  color:#d0dce8;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:.35rem;
-  width:100%;
-  border-top:1px solid rgba(255,255,255,.15);
-  padding-top:.7rem;
-}
-.footer-promo{font-size:.74rem;color:#ffffff;text-align:center}
-.footer-promo a{color:#ffe082;text-decoration:none;font-weight:700;border-bottom:1px solid #ffe082;padding-bottom:1px}
-.footer-promo a:hover{color:#fff;border-color:#fff}
-.footer-dev{font-size:.7rem;color:#b0c4de;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center}
-.footer-dev a{color:#64b5f6;text-decoration:none;font-weight:700}
-.footer-dev a:hover{color:#90caf9;text-decoration:underline}
-@keyframes neon-pulse {
-  0% { box-shadow: 0 0 5px rgba(201, 169, 110, 0.4); border-color: rgba(201, 169, 110, 0.5); }
-  50% { box-shadow: 0 0 15px rgba(201, 169, 110, 0.8); border-color: #ffe082; }
-  100% { box-shadow: 0 0 5px rgba(201, 169, 110, 0.4); border-color: rgba(201, 169, 110, 0.5); }
-}
-.btn-gyro {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffe082;
-  border: 1px solid rgba(201, 169, 110, 0.4);
-  border-radius: 14px;
-  padding: 0.3rem 0.7rem;
-  font-size: 0.7rem;
-  cursor: pointer;
-  font-family: inherit;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  animation: neon-pulse 2s infinite ease-in-out;
-  opacity: .7;
-}
-.btn-gyro:hover,.btn-gyro.active { background: rgba(201, 169, 110, 0.25); color: #ffffff; opacity: 1; }
-.btn-gyro.active {
-  background: linear-gradient(135deg, #c9a96e 0%, #b89350 100%);
-  color: #ffffff;
-  border-color: #ffe082;
-  box-shadow: 0 0 20px rgba(201, 169, 110, 0.9);
-  animation: none;
-}
-.sheet{
-  position:fixed;
-  inset:auto 0 0 0;
-  margin:0 auto;
-  width:min(520px,100%);
-  max-width:100%;
-  max-height:90vh;
-  max-height:90dvh;
-  overflow-y:auto;
-  border:2px solid #fff;
-  border-bottom:none;
-  border-radius:22px 22px 0 0;
-  background:linear-gradient(175deg,#102040 0%,#0b1a2e 100%);
-  color:#e8e2d8;
-  padding:0;
-  box-shadow:0 -6px 30px rgba(255,255,255,.25);
-  font-family:'DM Sans',sans-serif;
-}
-.sheet::backdrop{background:rgba(3,8,16,.74)}
-.sheet[open]{animation:sheet-up .28s ease-out}
-@keyframes sheet-up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
-.sheet-body{padding:1.1rem 1.2rem calc(1.3rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:1.1rem}
-.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.sheet h2{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:600;color:#f0ece5;letter-spacing:.04em}
-.sheet h3{font-size:.9rem;font-weight:700;color:#c9a96e;margin-bottom:.4rem}
-.sheet p{font-size:.82rem;line-height:1.55;color:#c9d6e6}
-.sheet a.inline{color:#ffe082;font-weight:700;text-decoration:none;border-bottom:1px solid #ffe082}
-.sheet-close{
-  width:40px;height:40px;border-radius:50%;flex-shrink:0;
-  background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.3);
-  color:#fff;font-size:1.3rem;line-height:1;cursor:pointer;font-family:inherit;
-}
-.sheet-close:hover{background:rgba(255,255,255,.18)}
-.svc-list{list-style:none;display:grid;gap:.5rem}
-.svc-list li{display:flex;align-items:center;gap:.6rem;font-size:.84rem;color:#e8e2d8;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:.55rem .75rem}
-.svc-list svg{width:18px;height:18px;flex-shrink:0;stroke:#c9a96e;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-.gallery img{width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border-radius:12px;border:1px solid rgba(201,169,110,.5)}
-.nav-buttons-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:.6rem;
-  margin-top:.5rem;
-}
-.btn-nav-map, .btn-nav-waze{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:.4rem;
-  min-height:42px;
-  border-radius:10px;
-  font-family:'DM Sans',sans-serif;
-  font-weight:700;
-  font-size:.78rem;
-  text-decoration:none;
-  transition:transform .2s, box-shadow .2s;
-  padding:0 .4rem;
-}
-.btn-nav-map:hover, .btn-nav-waze:hover{
-  transform:translateY(-2px);
-  box-shadow:0 4px 12px rgba(0,0,0,.3);
-}
-.btn-nav-map{
-  background:#1a2030;
-  color:#ffffff;
-  border:1.5px solid rgba(66,133,244,.6);
-}
-.btn-nav-waze{
-  background:#10222a;
-  color:#ffffff;
-  border:1.5px solid rgba(51,204,255,.6);
-}
-.btn-nav-map svg, .btn-nav-waze svg{
-  width:16px;
-  height:16px;
-  flex-shrink:0;
-}
-.faq-container{
-  display:flex;
-  flex-direction:column;
-  gap:.45rem;
-}
-.faq-item{
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:10px;
-  overflow:hidden;
-  transition:background .2s, border-color .2s;
-}
-.faq-item[open]{
-  background:rgba(255,255,255,.08);
-  border-color:rgba(201,169,110,.4);
-}
-.faq-question{
-  font-size:.82rem;
-  font-weight:700;
-  color:#f0ece5;
-  padding:.65rem .8rem;
-  cursor:pointer;
-  list-style:none;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  user-select:none;
-}
-.faq-question::-webkit-details-marker{display:none}
-.faq-question::after{
-  content:'+';
-  font-size:1.1rem;
-  color:#c9a96e;
-  font-weight:700;
-  transition:transform .2s;
-}
-.faq-item[open] .faq-question::after{
-  content:'−';
-}
-.faq-answer{
-  font-size:.78rem;
-  line-height:1.5;
-  color:#c9d6e6;
-  padding:0 .8rem .8rem .8rem;
-  border-top:1px solid rgba(255,255,255,.06);
-  margin-top:.1rem;
-  padding-top:.45rem;
-}
-.btn-share{
-  display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;min-height:46px;
-  background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.35);
-  border-radius:50px;font-family:inherit;font-weight:700;font-size:.86rem;cursor:pointer;
-}
-.btn-share:hover{background:rgba(255,255,255,.16)}
-.btn-share svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.toast{min-height:1.1em;text-align:center;font-size:.78rem;color:#4ade80}
-.bg-seo{display:none}
-@media (min-width:1024px){
-  html::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1}
-  html::before{
-    background:
-      radial-gradient(ellipse 34% 85% at 50% 50%,rgba(7,16,30,.94) 0%,rgba(7,16,30,.7) 55%,rgba(7,16,30,0) 100%),
-      radial-gradient(ellipse 50% 40% at 50% 0%,rgba(201,169,110,.10) 0%,transparent 70%),
-      linear-gradient(100deg,rgba(58,92,110,.55) 0%,rgba(58,92,110,0) 30%),
-      linear-gradient(260deg,rgba(150,88,62,.42) 0%,rgba(150,88,62,0) 28%),
-      linear-gradient(115deg,transparent 40%,rgba(201,169,110,.05) 50%,transparent 60%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .012' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .5  0 0 0 0 .62  0 0 0 1.1 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='.35'/%3E%3C/svg%3E"),
-      repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 1px,transparent 1px 7px),
-      linear-gradient(135deg,#0a1830 0%,#07101e 50%,#0d1c30 100%);
-    background-size:auto,auto,auto,auto,auto,260px 260px,900px 900px,auto,auto;
-  }
-  .bg-seo{display:flex;justify-content:space-between;align-items:stretch;position:absolute;top:2rem;left:0;right:0;height:calc(100vh - 4rem);overflow:hidden;padding:0 3vw;z-index:0;pointer-events:none;font-family:'DM Sans',sans-serif;color:rgba(232,226,216,.6)}
-  .bg-seo>div{width:clamp(190px,calc((100vw - 480px)/2 - 7vw),380px);display:flex;flex-direction:column;justify-content:space-between;gap:1rem}
-  .bg-seo>div:last-child{text-align:right}
-  .bg-seo h1, .bg-seo h2, .bg-seo p{margin:0}
-  .bg-seo h1{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;letter-spacing:.06em;line-height:1.15;color:rgba(201,169,110,.85)}
-  .bg-seo h2{margin-top:1.1rem;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.4;color:rgba(201,169,110,.7)}
-  .bg-seo h1+h2{margin-top:.5rem}
-  .bg-seo p{margin-top:.4rem;font-size:.74rem;line-height:1.6;letter-spacing:.01em}
-  .bg-seo .fotos{display:flex;gap:.6rem}
-  .bg-seo .fotos img{flex:1 1 0;min-width:0;width:50%;height:auto;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid rgba(201,169,110,.5);border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.45);opacity:.94}
-  .sheet{inset:0;margin:auto;border-radius:22px;border-bottom:2px solid #fff;max-height:86vh;max-height:86dvh}
-}
-@media (max-height:700px){
-  .device-frame{padding:1rem 1rem .8rem;gap:.65rem}
-  .page{gap:.65rem}
-  .logo-img{width:135px;max-height:56px}
-  .logo-img-fallback{width:135px;height:52px;font-size:1.15rem}
-  .brand{font-size:1.45rem}
-  .star{font-size:1.9rem}
-  .social-icon{width:40px;height:40px}
-}
-@media (max-height:600px){
-  .ticker-banner,.chips{display:none}
-  .address{font-size:.7rem}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-}
-</style>
-</head>
-<body>
-
-<main>
-  <!-- Formulário e Interface do Gerador -->
-</main>
-
-<script>
-let htmlFinal = "";
-let nomeEmpresaSlug = "cliente";
-
-function formatarSlug(texto) {
-  return texto
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
 function setVal(id, valor) {
   const el = document.getElementById(id);
   if (el) el.value = (valor === undefined || valor === null) ? '' : valor;
@@ -1076,138 +326,52 @@ function executarLimpeza() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function gerarTudo() {
-  const pid = document.getElementById('inPid').value.trim();
-  const nome = document.getElementById('inNome').value.trim();
-  const wa = document.getElementById('inWa').value.trim() || '5511999999999';
-  const ig = document.getElementById('inIg').value.trim().replace('@','');
-  const cidade = document.getElementById('inCidade').value.trim() || 'Sua Cidade';
-  const endereco = document.getElementById('inEndereco').value.trim() || 'Rua Exemplo, 123';
-  const segmento = document.getElementById('inSegmento').value.trim() || 'Serviços';
-  const servicos = document.getElementById('inServicos').value.trim() || 'Atendimento de Qualidade';
-
-  if(!pid || !nome) {
-    alert("Por favor, preencha pelo menos o Place ID e o Nome da Empresa.");
-    return;
-  }
-
-  const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
-  document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
-
-  nomeEmpresaSlug = formatarSlug(nome);
-  const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
-  document.getElementById('outLinkCliente').value = linkPaginaCliente;
-  document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
-
-  const qrDiv = document.getElementById('qrbox');
-  qrDiv.innerHTML = '';
-  new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
-
-  const seoCanonical = document.getElementById('hidden_canonical').value.trim() || linkPaginaCliente;
-  const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} — ${cidade}`;
-  const seoMetaDesc = document.getElementById('hidden_meta_description').value.trim() || `${segmento} em ${cidade}. ${servicos}.`;
-  
-  const imgsSrc = [], imgsAlt = [], imgsOrig = [];
-  const altPadrao = [`${nome} - Imagem 1`, `${segmento} - Imagem 2`, `${cidade} - Imagem 3`, `${servicos} - Imagem 4`];
-  for (let i = 1; i <= 4; i++) {
-    imgsSrc.push(document.getElementById(`hidden_img${i}_name`).value.trim() || `imagem_0${i}.webp`);
-    imgsAlt.push(document.getElementById(`hidden_img${i}_alt`).value.trim() || altPadrao[i - 1]);
-    imgsOrig.push(document.getElementById(`hidden_img${i}_url`).value.trim());
-  }
-  const [img1Name, img2Name, img3Name, img4Name] = imgsSrc;
-  const [img1Alt, img2Alt, img3Alt, img4Alt] = imgsAlt;
-
-  let beneficiosItemsHtml = '';
-  const benRaw = document.getElementById('hidden_lista_beneficios').value.trim();
-  if (benRaw) {
-    try {
-      const benArr = JSON.parse(benRaw);
-      if (Array.isArray(benArr) && benArr.length) {
-        beneficiosItemsHtml = benArr.map(item => `<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${item}</li>`).join('');
-      }
-    } catch (e) {}
-  }
-  if (!beneficiosItemsHtml) {
-    beneficiosItemsHtml = `
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${segmento}</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/></svg>Qualidade e Garantia</li>
-    `;
-  }
-
-  let faqHtml = '';
-  const faqRaw = document.getElementById('hidden_faq_perguntas').value.trim();
-  if (faqRaw) {
-    try {
-      const faqArr = JSON.parse(faqRaw);
-      if (Array.isArray(faqArr) && faqArr.length) {
-        faqHtml = faqArr.map(f => `
-          <details class="faq-item">
-            <summary class="faq-question">${f.pergunta}</summary>
-            <div class="faq-answer">${f.resposta}</div>
-          </details>
-        `).join('');
-      }
-    } catch (e) {}
-  }
-  if (!faqHtml) {
-    faqHtml = `
-      <details class="faq-item">
-        <summary class="faq-question">Quais formas de pagamento são aceitas?</summary>
-        <div class="faq-answer">Aceitamos dinheiro, PIX e cartões para sua maior comodidade.</div>
-      </details>
-    `;
-  }
-
-  const txtIntro = document.getElementById('hidden_intro').value.trim() || `A ${nome} é referência em ${segmento} em ${cidade}.`;
-  const txtProd = document.getElementById('hidden_produtos').value.trim() || `Trabalhamos com soluções completas em ${segmento}.`;
-  const txtLocal = document.getElementById('hidden_local').value.trim() || `Atendemos em ${cidade} na ${endereco}.`;
-
-  const imgListContent = document.getElementById('imgListContent');
-  imgListContent.innerHTML = imgsSrc.map((nomeArq, idx) => {
-    const orig = imgsOrig[idx];
-    const origTxt = orig ? `<a href="${orig}" target="_blank" rel="noopener" style="color:var(--b);">abrir imagem original</a>` : '<span style="color:var(--r);">URL não informada</span>';
-    return `<div>${idx + 1}. salvar como <strong style="color:#fff;">${nomeArq}</strong> — ${origTxt}</div>`;
-  }).join('');
-  document.getElementById('imgListBox').style.display = 'block';
-
-  htmlFinal = `<!DOCTYPE html>
+/* ==========================================================
+   NOVO HTML BLINDADO VIA URI ENCODING (Sem erros na linha 998)
+   ========================================================== */
+const htmlCodificado = encodeURIComponent(`<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#07101e">
-<meta name="description" content="${seoMetaDesc}">
-<meta name="keywords" content="${segmento}, ${cidade}, ${nome}">
+<meta name="description" content="[SUA_DESCRICAO_DA_EMPRESA_AQUI]">
+<meta name="keywords" content="[SUAS_PALAVRAS_CHAVE_AQUI]">
 <meta name="author" content="ImpulsoWeb10">
-<link rel="canonical" href="${seoCanonical}">
+<link rel="canonical" href="https://www.suaurl.com.br/">
+
 <meta property="og:type" content="website">
-<meta property="og:url" content="${linkPaginaCliente}">
-<meta property="og:title" content="${seoH1}">
-<meta property="og:description" content="${seoMetaDesc}">
-<meta property="og:image" content="${linkPaginaCliente}${img1Name}">
+<meta property="og:url" content="https://www.suaurl.com.br/">
+<meta property="og:title" content="[Nome da Empresa] | [Cidade UF]">
+<meta property="og:description" content="[SUA_DESCRICAO_OG_AQUI]">
+<meta property="og:image" content="https://www.suaurl.com.br/logo.png">
 <meta property="og:locale" content="pt_BR">
 <meta name="twitter:card" content="summary">
-<title>${seoH1}</title>
+
+<title>[Nome da Empresa] | [Cidade UF]</title>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": "${nome}",
-  "image": "${linkPaginaCliente}${img1Name}",
-  "@id": "${linkPaginaCliente}#store",
-  "url": "${linkPaginaCliente}",
-  "telephone": "+${wa}",
+  "name": "[Nome da Empresa]",
+  "image": "https://www.suaurl.com.br/logo.png",
+  "@id": "https://www.suaurl.com.br/#store",
+  "url": "https://www.suaurl.com.br/",
+  "telephone": "+55[DDD][TELEFONE]",
   "priceRange": "$$",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "${endereco}",
-    "addressLocality": "${cidade}",
+    "streetAddress": "[Rua e Número]",
+    "addressLocality": "[Cidade]",
+    "addressRegion": "[UF]",
+    "postalCode": "[CEP]",
     "addressCountry": "BR"
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": -23.485,
-    "longitude": -46.345
+    "latitude": 0.0000,
+    "longitude": 0.0000
   },
   "openingHoursSpecification": {
     "@type": "OpeningHoursSpecification",
@@ -1216,21 +380,36 @@ function gerarTudo() {
     "closes": "18:00"
   },
   "sameAs": [
-    "https://www.instagram.com/${ig}"
+    "https://www.instagram.com/sua_rede_social"
   ]
 }
 <\/script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{width:100%}
-body{font-family:'DM Sans',sans-serif;background:#07101e;color:#e8e2d8;min-height:100vh;min-height:100dvh;width:100%;display:flex;flex-direction:column;align-items:center;padding:max(.7rem,env(safe-area-inset-top)) .6rem max(.7rem,env(safe-area-inset-bottom));overflow-x:hidden;position:relative;perspective:1200px}
+body{
+  font-family:'DM Sans',sans-serif;background:#07101e;color:#e8e2d8;
+  min-height:100vh;min-height:100dvh;width:100%;display:flex;
+  flex-direction:column;align-items:center;padding:max(.7rem,env(safe-area-inset-top)) .6rem max(.7rem,env(safe-area-inset-bottom));
+  overflow-x:hidden;position:relative;perspective:1200px;
+}
 a:focus-visible,button:focus-visible{outline:2px solid #ffe082;outline-offset:3px}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 20%, rgba(201,169,110,0.07) 0%, transparent 70%),radial-gradient(ellipse 40% 40% at 80% 80%, rgba(17,40,80,0.6) 0%, transparent 60%);pointer-events:none;z-index:0}
+body::before{
+  content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 20%, rgba(201,169,110,0.07) 0%, transparent 70%),radial-gradient(ellipse 40% 40% at 80% 80%, rgba(17,40,80,0.6) 0%, transparent 60%);
+  pointer-events:none;z-index:0;
+}
 .app-wrapper{display:flex;flex-direction:column;align-items:center;width:100%;max-width:480px;margin:auto 0;position:relative;z-index:1}
-.device-frame{position:relative;z-index:1;width:100%;background:linear-gradient(175deg,#102040 0%,#0b1a2e 100%);border:2px solid #ffffff;border-radius:24px;box-shadow:0 0 10px #ffffff,0 0 20px rgba(255,255,255,.8),0 0 30px rgba(255,255,255,.35),0 15px 35px rgba(0,0,0,.6);padding:1.3rem 1.2rem 1.1rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:.9rem;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.175,.885,.32,1.275);will-change:transform}
+.device-frame{
+  position:relative;z-index:1;width:100%;background:linear-gradient(175deg,#102040 0%,#0b1a2e 100%);
+  border:2px solid #ffffff;border-radius:24px;box-shadow:0 0 10px #ffffff,0 0 20px rgba(255,255,255,.8),0 0 30px rgba(255,255,255,.35),0 15px 35px rgba(0,0,0,.6);
+  padding:1.3rem 1.2rem 1.1rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:.9rem;
+  transform-style:preserve-3d;transition:transform .6s cubic-bezier(.175,.885,.32,1.275);will-change:transform;
+}
 .secret-back{position:absolute;inset:0;width:100%;height:100%;background:#050b14;border-radius:22px;transform:rotateY(180deg);backface-visibility:hidden;z-index:2;transform-style:preserve-3d;overflow:hidden}
 .back-layer{position:absolute;width:100%;height:100%;object-fit:cover;top:0;left:0;border-radius:22px}
 .back-layer-fundo{transform:translateZ(-20px)}
@@ -1301,7 +480,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .btn-gyro{background:rgba(255,255,255,.08);color:#ffe082;border:1px solid rgba(201,169,110,.4);border-radius:14px;padding:.3rem .7rem;font-size:.7rem;cursor:pointer;font-family:inherit;font-weight:600;transition:all .3s ease;animation:neon-pulse 2s infinite ease-in-out;opacity:.7}
 .btn-gyro:hover,.btn-gyro.active{background:rgba(201,169,110,.25);color:#ffffff;opacity:1}
 .btn-gyro.active{background:linear-gradient(135deg,#c9a96e 0%,#b89350 100%);color:#ffffff;border-color:#ffe082;box-shadow:0 0 20px rgba(201,169,110,.9);animation:none}
-.sheet{position:fixed;inset:auto 0 0 0;margin:0 auto;width:min(520px,100%);max-width:100%;max-height:90vh;max-height:90dvh;overflow-y:auto;border:2px solid #fff;border-bottom:none;border-radius:22px 22px 0 0;background:linear-gradient(175deg,#102040 0%,#0b1a2e 100%);color:#e8e2d8;padding:0;box-shadow:0 -6px 30px rgba(255,255,255,.25);font-family:'DM Sans',sans-serif}
+.sheet{
+  position:fixed;inset:auto 0 0 0;margin:0 auto;width:min(520px,100%);max-width:100%;max-height:90vh;max-height:90dvh;overflow-y:auto;
+  border:2px solid #fff;border-bottom:none;border-radius:22px 22px 0 0;background:linear-gradient(175deg,#102040 0%,#0b1a2e 100%);
+  color:#e8e2d8;padding:0;box-shadow:0 -6px 30px rgba(255,255,255,.25);font-family:'DM Sans',sans-serif;
+}
 .sheet::backdrop{background:rgba(3,8,16,.74)}
 .sheet[open]{animation:sheet-up .28s ease-out}
 @keyframes sheet-up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
@@ -1365,35 +548,35 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="page">
       <div class="logo-wrap layer-mid">
         <div class="logo-frame">
-          <img class="logo-img" src="logo.png" alt="Logo ${nome}" width="160" height="72" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="logo-img-fallback" style="display:none;">${nome}</div>
+          <img class="logo-img" src="logo.png" alt="Logo [Nome da Empresa]" width="160" height="72" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="logo-img-fallback" style="display:none;">[Nome Curto]</div>
         </div>
         <div>
-          <div class="brand">${nome}</div>
-          <div class="tagline">${segmento} · ${cidade}</div>
+          <div class="brand">[Primeiro Nome] <em>[Destaque Nome]</em></div>
+          <div class="tagline">[Resumo de Produtos/Serviços · Cidade - UF]</div>
         </div>
       </div>
-      <div class="chips layer-back" aria-label="Produtos">
-        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${servicos.split(',')[0] || 'Serviços'}</span>
-        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/></svg>Qualidade</span>
+      <div class="chips layer-back" aria-label="Produtos ou Serviços">
+        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>[Item 1]</span>
+        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/></svg>[Item 2]</span>
       </div>
       <div class="layer-pop" style="width:100%;display:flex;flex-direction:column;align-items:center;">
-        <a href="${linkGoogleAvaliacao}" class="stars-cta" target="_blank" rel="noopener">
+        <a href="[LINK_AVALIACAO_GOOGLE]" class="stars-cta" target="_blank" rel="noopener">
           <span class="stars-row" aria-hidden="true"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></span>
           <span class="stars-label">Toque nas estrelas e avalie no Google</span>
         </a>
         <div class="proof" id="proof" hidden></div>
       </div>
       <div class="cta-row layer-front">
-        <a href="tel:+${wa}" class="btn-act btn-call">Ligar agora</a>
-        <a href="https://wa.me/${wa}?text=Olá!%20Vim%20pelo%20link." class="btn-act btn-wa" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="tel:+55[DDD][TELEFONE]" class="btn-act btn-call">Ligar agora</a>
+        <a href="https://wa.me/55[DDD][WHATSAPP]?text=Ol%C3%A1!%20Vim%20pelo%20link." class="btn-act btn-wa" target="_blank" rel="noopener">WhatsApp</a>
       </div>
       <div class="social-row layer-front">
-        <a href="https://www.instagram.com/${ig}" class="social-btn" target="_blank" rel="noopener">
+        <a href="[LINK_INSTAGRAM]" class="social-btn" target="_blank" rel="noopener">
           <div class="social-icon" style="background:#2a1a2e;"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="#cc2366" stroke-width="1.8"/></svg></div>
           <span class="social-label">Instagram</span>
         </a>
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(endereco + ' ' + cidade)}" class="social-btn" target="_blank" rel="noopener">
+        <a href="[LINK_GOOGLE_MAPS_PESQUISA]" class="social-btn" target="_blank" rel="noopener">
           <div class="social-icon" style="background:#1a2030;"><svg viewBox="0 0 24 24" fill="#EA4335"><circle cx="12" cy="12" r="10"/></svg></div>
           <span class="social-label">Maps</span>
         </a>
@@ -1406,13 +589,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
           <span class="social-label">Ver mais</span>
         </button>
       </div>
-      <div class="hours layer-back" id="hours"><span class="dot"></span><span id="hoursText">Seg a sáb · 8h às 18h</span></div>
+      <div class="hours layer-back" id="hours"><span class="dot"></span><span id="hoursText">[Horário de Funcionamento Resumido]</span></div>
       <div class="address layer-back" onclick="copiarEndereco()">
-        <span>${endereco}</span><br>${cidade}
+        <span>[Rua e Número]</span><br>[Cidade]
       </div>
       <div class="ticker-banner layer-mid" aria-hidden="true">
         <div class="ticker-track">
-          <span class="ticker-item">${nome} • ${segmento} • ${servicos} • ${cidade}.</span>
+          <span class="ticker-item">[Texto em destaque infinito 1]</span>
+          <span class="ticker-item">[Texto em destaque infinito 2]</span>
         </div>
       </div>
       <footer class="footer layer-back">
@@ -1425,30 +609,42 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <dialog class="sheet" id="sheetMais">
   <div class="sheet-body">
     <div class="sheet-head">
-      <h2>${nome}</h2>
+      <h2>[Nome da Empresa]</h2>
       <button type="button" class="sheet-close" onclick="fecharMais()">×</button>
     </div>
     <section>
       <h3>O que você encontra</h3>
-      <ul class="svc-list">${beneficiosItemsHtml}</ul>
+      <ul class="svc-list">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>[Serviço/Produto Detalhado 1]</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/></svg>[Serviço/Produto Detalhado 2]</li>
+      </ul>
     </section>
     <section>
       <h3>Endereço e rotas</h3>
-      <p>${endereco}<br>${cidade}</p>
+      <p>[Rua e Número]<br>[Cidade]</p>
       <div class="nav-buttons-grid">
-        <a href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(endereco + ' ' + cidade)}" class="btn-nav-map" target="_blank" rel="noopener">Abrir no Google</a>
-        <a href="https://waze.com/ul?q=${encodeURIComponent(endereco + ' ' + cidade)}" class="btn-nav-waze" target="_blank" rel="noopener">Abrir no Waze</a>
+        <a href="[LINK_GOOGLE_MAPS_ROTA]" class="btn-nav-map" target="_blank" rel="noopener">Abrir no Google</a>
+        <a href="[LINK_WAZE_ROTA]" class="btn-nav-waze" target="_blank" rel="noopener">Abrir no Waze</a>
       </div>
     </section>
     <section>
       <h3>Perguntas Frequentes (FAQ)</h3>
-      <div class="faq-container">${faqHtml}</div>
+      <div class="faq-container">
+        <details class="faq-item">
+          <summary class="faq-question">[Pergunta 1]</summary>
+          <div class="faq-answer">[Resposta 1]</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-question">[Pergunta 2]</summary>
+          <div class="faq-answer">[Resposta 2]</div>
+        </details>
+      </div>
     </section>
     <section class="gallery">
-      <img src="${img1Name}" alt="${img1Alt}" loading="lazy" decoding="async">
-      <img src="${img2Name}" alt="${img2Alt}" loading="lazy" decoding="async">
-      <img src="${img3Name}" alt="${img3Alt}" loading="lazy" decoding="async">
-      <img src="${img4Name}" alt="${img4Alt}" loading="lazy" decoding="async">
+      <img src="standard.png" alt="[Legenda Foto 1]" loading="lazy" decoding="async">
+      <img src="balde_16lts.jpg" alt="[Legenda Foto 2]" loading="lazy" decoding="async">
+      <img src="galao_3_6lts.jpg" alt="[Legenda Foto 3]" loading="lazy" decoding="async">
+      <img src="barrica.png" alt="[Legenda Foto 4]" loading="lazy" decoding="async">
     </section>
     <button type="button" class="btn-share" onclick="compartilhar()">Compartilhar este link</button>
     <p class="toast" id="toast"></p>
@@ -1457,32 +653,32 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <aside class="bg-seo">
   <div>
     <div class="txt">
-      <h1>${nome}</h1>
-      <h2>${segmento} em ${cidade}</h2>
-      <p>${txtIntro}</p>
+      <h1>[Nome da Empresa]</h1>
+      <h2>[Título de SEO Principal]</h2>
+      <p>[Texto descritivo longo otimizado para SEO parte 1]</p>
     </div>
     <div class="fotos">
-      <img src="${img1Name}" alt="${img1Alt}" loading="lazy" decoding="async">
-      <img src="${img2Name}" alt="${img2Alt}" loading="lazy" decoding="async">
+      <img src="standard.png" alt="[SEO Alt 1]" loading="lazy" decoding="async">
+      <img src="balde_16lts.jpg" alt="[SEO Alt 2]" loading="lazy" decoding="async">
     </div>
   </div>
 </aside>
 <script>
   const PAGE_URL = location.href.split('#')[0].split('?')[0];
   async function copiarEndereco() {
-    try { await navigator.clipboard.writeText("${endereco}, ${cidade}"); alert("Endereço copiado!"); } catch (err) {}
+    try { await navigator.clipboard.writeText("[Rua e Número], [Cidade]"); alert("Endereço copiado!"); } catch (err) {}
   }
   const sheet = document.getElementById('sheetMais');
   function abrirMais(){ if (typeof sheet.showModal === 'function') sheet.showModal(); else sheet.setAttribute('open',''); }
   function fecharMais(){ if (typeof sheet.close === 'function') sheet.close(); else sheet.removeAttribute('open'); }
   sheet.addEventListener('click', function(e){ if (e.target === sheet) fecharMais(); });
   function salvarContato(){
-    const vcard = ['BEGIN:VCARD','VERSION:3.0','FN:${nome}','ORG:${nome}','TEL;TYPE=WORK,VOICE:+${wa}','ADR;TYPE=WORK:;;${endereco};${cidade};;Brasil','URL:' + PAGE_URL,'END:VCARD'].join('\\r\\n');
+    const vcard = ['BEGIN:VCARD','VERSION:3.0','FN:[Nome da Empresa]','ORG:[Nome da Empresa]','TEL;TYPE=WORK,VOICE:+55[DDD][TELEFONE]','ADR;TYPE=WORK:;;[Rua e Número];[Cidade];;Brasil','URL:' + PAGE_URL,'END:VCARD'].join('\\r\\n');
     const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '${nomeEmpresaSlug}.vcf'; document.body.appendChild(a); a.click(); a.remove();
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'contato.vcf'; document.body.appendChild(a); a.click(); a.remove();
   }
   async function compartilhar(){
-    try { if (navigator.share) { await navigator.share({ title: document.title, text: '${nome}', url: PAGE_URL }); return; } await navigator.clipboard.writeText(PAGE_URL); alert('Link copiado!'); } catch (err) {}
+    try { if (navigator.share) { await navigator.share({ title: document.title, text: '[Nome da Empresa]', url: PAGE_URL }); return; } await navigator.clipboard.writeText(PAGE_URL); alert('Link copiado!'); } catch (err) {}
   }
   const frame = document.getElementById('deviceFrame');
   const btnGyro = document.getElementById('toggleGyro');
@@ -1501,7 +697,96 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   });
 <\/script>
 </body>
-</html>`;
+</html>`);
+
+function gerarTudo() {
+  const pid = document.getElementById('inPid').value.trim();
+  const nome = document.getElementById('inNome').value.trim();
+  const wa = document.getElementById('inWa').value.trim() || '5511999999999';
+  const ig = document.getElementById('inIg').value.trim().replace('@','');
+  const cidade = document.getElementById('inCidade').value.trim() || 'Sua Cidade';
+  const endereco = document.getElementById('inEndereco').value.trim() || 'Rua Exemplo, 123';
+  const segmento = document.getElementById('inSegmento').value.trim() || 'Serviços';
+  const servicos = document.getElementById('inServicos').value.trim() || 'Atendimento de Qualidade';
+
+  if(!pid || !nome) {
+    alert("Por favor, preencha pelo menos o Place ID e o Nome da Empresa.");
+    return;
+  }
+
+  const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
+  document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
+
+  nomeEmpresaSlug = formatarSlug(nome);
+  const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
+  document.getElementById('outLinkCliente').value = linkPaginaCliente;
+  document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
+
+  const qrDiv = document.getElementById('qrbox');
+  qrDiv.innerHTML = '';
+  new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
+
+  const seoCanonical = document.getElementById('hidden_canonical').value.trim() || linkPaginaCliente;
+  const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} — ${cidade}`;
+  const seoMetaDesc = document.getElementById('hidden_meta_description').value.trim() || `${segmento} em ${cidade}. ${servicos}.`;
+  
+  const imgsName = [];
+  const imgsAlt = [];
+  const altPadrao = [`${nome} - Imagem 1`, `${segmento} - Imagem 2`, `${cidade} - Imagem 3`, `${servicos} - Imagem 4`];
+  for (let i = 1; i <= 4; i++) {
+    imgsName.push(document.getElementById(`hidden_img${i}_name`).value.trim() || `imagem_0${i}.webp`);
+    imgsAlt.push(document.getElementById(`hidden_img${i}_alt`).value.trim() || altPadrao[i - 1]);
+  }
+
+  // Decodificação e substituição dinâmica dos placeholders
+  let htmlTraduzido = decodeURIComponent(htmlCodificado);
+
+  htmlTraduzido = htmlTraduzido
+    .replace(/[Nome da Empresa]/g, nome)
+    .replace(/[Cidade UF]/g, cidade)
+    .replace(/\[SUA_DESCRICAO_DA_EMPRESA_AQUI\]/g, seoMetaDesc)
+    .replace(/\[SUAS_PALAVRAS_CHAVE_AQUI\]/g, `${segmento}, ${cidade}, ${nome}`)
+    .replace(/\[SUA_DESCRICAO_OG_AQUI\]/g, seoMetaDesc)
+    .replace(/https:\/\/www\.suaurl\.com\.br\//g, linkPaginaCliente)
+    .replace(/\+55[DDD][TELEFONE]/g, wa)
+    .replace(/[DDD][TELEFONE]/g, wa)
+    .replace(/[Rua e Número]/g, endereco)
+    .replace(/[Cidade]/g, cidade)
+    .replace(/[Primeiro Nome]/g, nome.split(' ')[0])
+    .replace(/[Destaque Nome]/g, nome.split(' ').slice(1).join(' ') || segmento)
+    .replace(/\[Resumo de Produtos\/Serviços · Cidade - UF\]/g, `${segmento} · ${cidade}`)
+    .replace(/[Item 1]/g, servicos.split(',')[0] || segmento)
+    .replace(/[Item 2]/g, 'Qualidade')
+    .replace(/\[LINK_AVALIACAO_GOOGLE\]/g, linkGoogleAvaliacao)
+    .replace(/\[LINK_INSTAGRAM\]/g, `https://www.instagram.com/${ig}`)
+    .replace(/\[LINK_GOOGLE_MAPS_PESQUISA\]/g, `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco + ' ' + cidade)}`)
+    .replace(/\[LINK_GOOGLE_MAPS_ROTA\]/g, `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(endereco + ' ' + cidade)}`)
+    .replace(/\[LINK_WAZE_ROTA\]/g, `https://waze.com/ul?q=${encodeURIComponent(endereco + ' ' + cidade)}`)
+    .replace(/[Horário de Funcionamento Resumido]/g, 'Seg a sáb · 8h às 18h')
+    .replace(/[CEP]/g, '00000-000')
+    .replace(/[Texto em destaque infinito 1]/g, `${nome} • ${segmento} • ${servicos} • ${cidade}.`)
+    .replace(/[Texto em destaque infinito 2]/g, `Qualidade, compromisso e excelência é aqui na ${nome}.`)
+    .replace(/\[Serviço\/Produto Detalhado 1\]/g, segmento)
+    .replace(/\[Serviço\/Produto Detalhado 2\]/g, 'Atendimento Especializado')
+    .replace(/[Pergunta 1]/g, 'Quais formas de pagamento são aceitas?')
+    .replace(/[Resposta 1]/g, 'Aceitamos dinheiro, PIX e cartões para sua maior comodidade.')
+    .replace(/[Pergunta 2]/g, 'Vocês atendem na região?')
+    .replace(/[Resposta 2]/g, `Sim, realizamos atendimento completo em ${cidade} e arredores.`)
+    .replace(/standard\.png/g, imgsName[0])
+    .replace(/balde_16lts\.jpg/g, imgsName[1])
+    .replace(/galao_3_6lts\.jpg/g, imgsName[2])
+    .replace(/barrica\.png/g, imgsName[3])
+    .replace(/[Legenda Foto 1]/g, imgsAlt[0])
+    .replace(/[Legenda Foto 2]/g, imgsAlt[1])
+    .replace(/[Legenda Foto 3]/g, imgsAlt[2])
+    .replace(/[Legenda Foto 4]/g, imgsAlt[3])
+    .replace(/[Título de SEO Principal]/g, `${segmento} em ${cidade}`)
+    .replace(/[Texto descritivo longo otimizado para SEO parte 1]/g, `A ${nome} é referência em ${segmento} em ${cidade}.`)
+    .replace(/[SEO Alt 1]/g, imgsAlt[0])
+    .replace(/[SEO Alt 2]/g, imgsAlt[1])
+    .replace(/[Nome Curto]/g, nome);
+
+  htmlFinal = htmlTraduzido;
 
   document.getElementById('resBox').classList.add('show');
   document.getElementById('resBox').scrollIntoView({ behavior: 'smooth' });
