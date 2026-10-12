@@ -39,7 +39,7 @@
         <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
         <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
       </div>
-      <span>ImpulsoWeb10 <span class="text-blue-500">— Painel V3 com Paletas</span></span>
+      <span>ImpulsoWeb10 <span class="text-blue-500">— Painel V3 Corrigido</span></span>
     </div>
     <button onclick="abrirModalLimpar()" class="bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/30 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all">
       🗑️ Limpar Tudo
@@ -58,7 +58,7 @@
     </div>
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL (GRID RESPONSIVO COM PREVIEW 9:16) -->
+  <!-- CONTEÚDO PRINCIPAL -->
   <main class="max-w-7xl mx-auto px-4 pt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
     
     <!-- COLUNA ESQUERDA: FORMULÁRIOS E CONTROLES (7 Colunas) -->
@@ -253,7 +253,7 @@
 
   </main>
 
-  <!-- JAVASCRIPT DO SISTEMA COM PALETAS E PREVIEW -->
+  <!-- JAVASCRIPT DO SISTEMA CORRIGIDO -->
   <script>
     let dadosJsonGlobais = {};
 
@@ -386,11 +386,12 @@
       dadosJsonGlobais.conteudo_enriquecido_desktop.seo_tags.h1 = editH1.value.trim();
       dadosJsonGlobais.conteudo_enriquecido_desktop.seo_tags.h2 = editH2.value.trim();
 
-      dadosJsonGlobais.customizacao = {
+      dadosJsonGradual = {
         cor_fundo: corFundoInput.value,
         cor_neon: corNeonInput.value,
         cor_interna: corInternaInput.value
       };
+      dadosJsonGlobais.customizacao = dadosJsonGradual;
 
       const jsonString = JSON.stringify(dadosJsonGlobais, null, 2);
       const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
@@ -403,6 +404,7 @@
       URL.revokeObjectURL(link.href);
     }
 
+    // CORREÇÃO: Substituição dinâmica e robusta das cores no index.html colado
     function baixarNovoHtml() {
       let htmlOriginal = document.getElementById('inputHtml').value.trim();
       if (!htmlOriginal) {
@@ -423,9 +425,27 @@
 
       let htmlModificado = htmlOriginal;
 
-      if (corFundo) htmlModificado = htmlModificado.replaceAll('#07101e', corFundo).replaceAll('#000000', corFundo);
-      if (corNeon) htmlModificado = htmlModificado.replaceAll('#ffffff', corNeon).replaceAll('#d4af37', corNeon);
-      if (corInterna) htmlModificado = htmlModificado.replaceAll('#102040', corInterna).replaceAll('#121212', corInterna);
+      // Injeta de forma inteligente a cor de fundo geral no body
+      htmlModificado = htmlModificado.replace(/body\s*{([^}]*?)background:[^;]+;/gi, (match, p1) => {
+        return match.replace(/background:[^;]+;/i, `background:${corFundo};`);
+      });
+      if (!htmlModificado.includes(`background:${corFundo}`) && !htmlModificado.includes(`background: ${corFundo}`)) {
+        htmlModificado = htmlModificado.replaceAll('background:#07101e', `background:${corFundo}`)
+                                      .replaceAll('background: #07101e', `background: ${corFundo}`)
+                                      .replaceAll('background:#000000', `background:${corFundo}`)
+                                      .replaceAll('background: #000000', `background: ${corFundo}`);
+      }
+
+      // Injeta a cor do Neon na borda do device-frame
+      htmlModificado = htmlModificado.replace(/(\.device-frame\s*{[^}]*?border:\s*2px\s+solid\s+)[^;]+;/gi, `$1${corNeon};`);
+      htmlModificado = htmlModificado.replaceAll('border:2px solid #ffffff', `border:2px solid ${corNeon}`)
+                                    .replaceAll('border: 2px solid #ffffff', `border: 2px solid ${corNeon}`)
+                                    .replaceAll('border:2px solid #d4af37', `border:2px solid ${corNeon}`);
+
+      // Injeta a cor interna no gradiente do background do device-frame
+      htmlModificado = htmlModificado.replace(/linear-gradient\(175deg,\s*([^,\s]+)/gi, `linear-gradient(175deg, ${corInterna}`);
+
+      // Atualiza textos e tags de SEO/Contato via replaceAll
       if (seoTitle) htmlModificado = htmlModificado.replaceAll('[SEO_TITLE]', seoTitle);
       if (seoDesc) htmlModificado = htmlModificado.replaceAll('[SEO_DESCRIPTION]', seoDesc);
       if (seoH1) htmlModificado = htmlModificado.replaceAll('[SEO_H1]', seoH1).replaceAll('[Nome da Empresa]', seoH1);
