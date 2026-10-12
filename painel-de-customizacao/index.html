@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel Avançado de Customización Visual & SEO — ImpulsoWeb10</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            darkbg: '#09090b',
+            cardbg: '#18181b',
+            surface: '#27272a',
+            bordercol: 'rgba(255, 255, 255, 0.08)'
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    h1, h2, h3, .font-syne { font-family: 'Syne', sans-serif; }
+  </style>
+</head>
+<body class="bg-darkbg text-zinc-100 min-h-screen pb-20 selection:bg-blue-600 selection:text-white">
+
+  <!-- TOPO / HEADER -->
+  <nav class="sticky top-0 z-50 px-6 h-16 flex items-center justify-between bg-darkbg/90 backdrop-blur-md border-b border-bordercol">
+    <div class="flex items-center gap-3 font-syne font-bold text-lg">
+      <div class="flex gap-1">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+      </div>
+      <span>ImpulsoWeb10 <span class="text-blue-500">— Painel de Customização & SEO</span></span>
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-3xl mx-auto px-4 pt-8">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-syne font-extrabold mb-2 tracking-tight">Painel de Customização <span class="text-blue-500">Visual & SEO</span></h1>
+      <p class="text-sm text-zinc-400">Modifique cores, ajuste o brilho do neon, redefina tags semânticas e exporte o site instantaneamente.</p>
+    </div>
+
+    <div class="bg-cardbg border border-bordercol rounded-2xl p-6 md:p-8 flex flex-col gap-6 shadow-xl">
+      
+      <!-- 3. ÁREA DE CARREGAMENTO (ENGENHARIA REVERSA DE JSON) -->
+      <div class="bg-blue-600/5 border border-blue-500/30 rounded-xl p-4">
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-blue-400 uppercase tracking-wider">📥 Cole o JSON existente aqui</label>
+          <textarea id="jsonInput" rows="3" placeholder='Cole aqui o JSON gerado anteriormente para preencher os campos automaticamente...' class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500 transition-all resize-y font-mono"></textarea>
+          <button type="button" onclick="mapearDadosJson()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/25">
+            🔍 Mapear Dados
+          </button>
+        </div>
+      </div>
+
+      <!-- 1. INTERFACE E CONTROLES VISUAIS (COLOR PICKERS) -->
+      <div>
+        <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">🎨 Customização Estética</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex items-center justify-between bg-surface border border-bordercol rounded-xl p-4">
+            <div class="flex flex-col">
+              <label class="text-xs font-semibold text-zinc-200">Cor de Fundo da Página</label>
+              <span class="text-[11px] text-zinc-400">Altera o plano de fundo geral (background)</span>
+            </div>
+            <input type="color" id="corFundo" value="#07101e" class="w-10 h-10 rounded-lg bg-transparent cursor-pointer border border-bordercol"/>
+          </div>
+
+          <div class="flex items-center justify-between bg-surface border border-bordercol rounded-xl p-4">
+            <div class="flex flex-col">
+              <label class="text-xs font-semibold text-zinc-200">Cor do Neon (Borda / Glow)</label>
+              <span class="text-[11px] text-zinc-400">Altera o brilho externo do cartão 3D</span>
+            </div>
+            <input type="color" id="corNeon" value="#ffffff" class="w-10 h-10 rounded-lg bg-transparent cursor-pointer border border-bordercol"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. CONTROLES DE SEO SEMÂNTICO (CAMPOS DE TEXTO) -->
+      <div>
+        <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">🔍 Otimização de SEO Avançado</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5 md:col-span-2">
+            <label class="text-xs font-semibold text-zinc-400">Título da Página (&lt;title&gt;)</label>
+            <input type="text" id="seoTitle" placeholder="Ex: Tintas Qualy Quimy | Itaquaquecetuba - SP" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+
+          <div class="flex flex-col gap-1.5 md:col-span-2">
+            <label class="text-xs font-semibold text-zinc-400">Meta Description</label>
+            <textarea id="seoDesc" rows="2" placeholder="Ex: Referência em tintas, massas e texturas em Itaquaquecetuba..." class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500 resize-y"></textarea>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Tag H1 Principal</label>
+            <input type="text" id="seoH1" placeholder="Ex: Tintas Qualy Quimy — Itaquaquecetuba" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Subtítulo H2</label>
+            <input type="text" id="seoH2" placeholder="Ex: Tintas e Revestimentos de Alta Qualidade" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+
+          <div class="flex flex-col gap-1.5 md:col-span-2">
+            <label class="text-xs font-semibold text-zinc-400">Palavras-chave (Keywords)</label>
+            <input type="text" id="seoKeywords" placeholder="Ex: tintas, texturas, massas, Itaquaquecetuba, SP" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. EXPORTAÇÃO COMPLETA (DOWNLOAD VIA BLOB) -->
+      <div class="pt-4 border-t border-bordercol">
+        <button onclick="salvarEBaixarHtml()" class="w-full bg-green-600 hover:bg-green-500 text-white font-syne font-bold py-4 px-6 rounded-xl text-sm transition-all shadow-lg shadow-green-600/30 inline-flex items-center justify-center gap-2">
+          💾 Salvar e Baixar Código Atualizado
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- JAVASCRIPT DO PAINEL E DO MODELO HTML LIMPO -->
+  <script>
+    // Modelo HTML base limpo com marcações para substituição segura
+    const templateHtmlBase = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="[COR_FUNDO]">
+<meta name="description" content="[SEO_DESCRIPTION]">
+<meta name="keywords" content="[SEO_KEYWORDS]">
+<meta name="author" content="ImpulsoWeb10">
+<link rel="canonical" href="https://www.suaurl.com.br/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.suaurl.com.br/">
+<meta property="og:title" content="[SEO_TITLE]">
+<meta property="og:description" content="[SEO_DESCRIPTION]">
+<meta property="og:image" content="https://www.suaurl.com.br/logo.png">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary">
+<title>[SEO_TITLE]</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "[SEO_H1]",
+  "image": "https://www.suaurl.com.br/logo.png",
+  "@id": "https://www.suaurl.com.br/#store",
+  "url": "https://www.suaurl.com.br/",
+  "telephone": "+5511999999999",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Rua Exemplo, 123",
+    "addressLocality": "São Paulo",
+    "addressRegion": "SP",
+    "addressCountry": "BR"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": 0.0000, "longitude": 0.0000 },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    "opens": "08:00",
+    "closes": "18:00"
+  },
+  "sameAs": ["https://www.instagram.com/sua_rede_social"]
+}
+<\/script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{width:100%}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:[COR_FUNDO];
+  color:#e8e2d8;
+  min-height:100vh;
+  min-height:100dvh;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:max(.7rem,env(safe-area-inset-top)) .6rem max(.7rem,env(safe-area-inset-bottom));
+  overflow-x:hidden;
+  position:relative;
+  perspective:1200px;
+}
+a:focus-visible,button:focus-visible{outline:2px solid #ffe082;outline-offset:3px}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 20%, rgba(201,169,110,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(17,40,80,0.6) 0%, transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
+.app-wrapper{display:flex;flex-direction:column;align-items:center;width:100%;max-width:480px;margin:auto 0;position:relative;z-index:1}
+.device-frame{
+  position:relative;
+  z-index:1;
+  width:100%;
+  background:linear-gradient(175deg,#102040 0%,#0b1a2e 100%);
+  border:2px solid [COR_NEON];
+  border-radius:24px;
+  box-shadow:
+    0 0 10px [COR_NEON],
+    0 0 20px rgba(255,255,255,.5),
+    0 0 30px [COR_NEON],
+    0 15px 35px rgba(0,0,0,.6);
+  padding:1.3rem 1.2rem 1.1rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:.9rem;
+  transform-style:preserve-3d;
+  transition:transform .6s cubic-bezier(.175,.885,.32,1.275);
+  will-change:transform;
+}
+.page{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.9rem;width:100%;transform-style:preserve-3d;backface-visibility:hidden}
+.brand{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:#f0ece5;letter-spacing:.06em;line-height:1.1}
+.brand em{color:#c9a96e;font-style:italic}
+.tagline{margin-top:.25rem;font-size:.78rem;color:#9bb5d4;font-weight:400;letter-spacing:.03em}
+.footer{font-size:.72rem;color:#d0dce8;display:flex;flex-direction:column;align-items:center;gap:.35rem;width:100%;border-top:1px solid rgba(255,255,255,.15);padding-top:.7rem}
+.footer-promo a{color:#ffe082;text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <div class="device-frame">
+    <div class="page">
+      <div class="brand">[SEO_H1]</div>
+      <div class="tagline">[SEO_H2]</div>
+      <footer class="footer">
+        <p class="footer-promo"><a href="https://wa.me/5511954950044" target="_blank" rel="noopener">Desenvolvido por ImpulsoWeb10</a></p>
+      </footer>
+    </div>
+  </div>
+</div>
+</body>
+</html>`;
+
+    // 3. ENGENHARIA REVERSA DE JSON
+    function mapearDadosJson() {
+      try {
+        let jsonTexto = document.getElementById('jsonInput').value.trim();
+        if (!jsonTexto) {
+          alert('⚠️ Por favor, cole um JSON válido na caixa de importação.');
+          return;
+        }
+        jsonTexto = jsonTexto.replace(/```json/g, '').replace(/```/g, '').trim();
+        const pChave = jsonTexto.indexOf('{');
+        const uChave = jsonTexto.lastIndexOf('}');
+        if (pChave !== -1 && uChave !== -1) {
+          jsonTexto = jsonTexto.substring(pChave, uChave + 1);
+        }
+        const dados = JSON.parse(jsonTexto);
+
+        // Extrai propriedades da estrutura de SEO ou base se existirem
+        const seo = dados.conteudo_enriquecido_desktop?.seo_tags || dados.seo || {};
+        if (seo.title) document.getElementById('seoTitle').value = seo.title;
+        if (seo.meta_description) document.getElementById('seoDesc').value = seo.meta_description;
+        if (seo.h1) document.getElementById('seoH1').value = seo.h1;
+        if (seo.keywords) document.getElementById('seoKeywords').value = seo.keywords;
+
+        // Se houver dados visuais salvos no JSON
+        if (dados.customizacao) {
+          if (dados.customizacao.cor_fundo) document.getElementById('corFundo').value = dados.customizacao.cor_fundo;
+          if (dados.customizacao.cor_neon) document.getElementById('corNeon').value = dados.customizacao.cor_neon;
+        } else if (dados.dados_formulario_base?.nomeEmpresa) {
+          document.getElementById('seoH1').value = dados.dados_formulario_base.nomeEmpresa;
+          document.getElementById('seoTitle').value = dados.dados_formulario_base.nomeEmpresa + ' | ' + (dados.dados_formulario_base.cidadeEstado || '');
+        }
+
+        alert('🎉 Sucesso! Os dados do JSON foram mapeados para os campos de customização.');
+      } catch (e) {
+        console.error(e);
+        alert('❌ Erro ao ler o JSON: ' + e.message);
+      }
+    }
+
+    // 4. EXPORTAÇÃO COMPLETA (DOWNLOAD VIA BLOB BLINDADO)
+    function salvarEBaixarHtml() {
+      const corFundo = document.getElementById('corFundo').value;
+      const corNeon = document.getElementById('corNeon').value;
+      const seoTitle = document.getElementById('seoTitle').value.trim() || 'ImpulsoWeb10 — Cartão 3D';
+      const seoDesc = document.getElementById('seoDesc').value.trim() || 'Página profissional de alta conversão.';
+      const seoH1 = document.getElementById('seoH1').value.trim() || 'Empresa em Destaque';
+      const seoH2 = document.getElementById('seoH2').value.trim() || 'Serviços de Qualidade';
+      const seoKeywords = document.getElementById('seoKeywords').value.trim() || 'negocio, servicos, qualidade';
+
+      // Substituição ultra segura via .replaceAll()
+      const htmlFinal = templateHtmlBase
+        .replaceAll('[COR_FUNDO]', corFundo)
+        .replaceAll('[COR_NEON]', corNeon)
+        .replaceAll('[SEO_TITLE]', seoTitle)
+        .replaceAll('[SEO_DESCRIPTION]', seoDesc)
+        .replaceAll('[SEO_KEYWORDS]', seoKeywords)
+        .replaceAll('[SEO_H1]', seoH1)
+        .replaceAll('[SEO_H2]', seoH2);
+
+      // Geração e Download via Blob ultraleve
+      const blob = new Blob([htmlFinal], { type: 'text/html;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'index.html';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }
+  </script>
+</body>
+</html>
