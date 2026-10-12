@@ -1,472 +1,437 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Gerador Profissional — ImpulsoWeb10</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--y:#FBBC04;--b:#1A73E8;--r:#EA4335;--g:#34A853;--wa:#25D366;--dark:#09090B;--card:#18181B;--surface:#27272A;--border:rgba(255,255,255,0.08);--text:#FAFAFA;--muted:#71717A;--muted2:#A1A1AA;}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;padding-bottom:5rem}
-nav{position:sticky;top:0;z-index:100;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(9,9,11,0.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
-.nav-logo{display:flex;align-items:center;gap:.6rem;font-family:'Syne',sans-serif;font-weight:700}
-.logo-dots{display:flex;gap:4px}.ld{width:9px;height:9px;border-radius:50%}.ld-b{background:var(--b)}.ld-r{background:var(--r)}.ld-y{background:var(--y)}.ld-g{background:var(--g)}
-.btn-limpar-topo{background:rgba(234,67,53,0.15);color:#ea4335;border:1px solid rgba(234,67,53,0.4);padding:.4rem .9rem;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s}
-.btn-limpar-topo:hover{background:rgba(234,67,53,0.3);color:#fff}
-
-main{max-width:760px;margin:0 auto;padding:2rem 1.5rem}
-.hero{text-align:center;margin-bottom:2rem}
-h1{font-family:'Syne',sans-serif;font-weight:800;font-size:2.2rem;margin-bottom:.5rem}
-h1 em{font-style:normal;color:var(--b)}
-.form-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.8rem;display:flex;flex-direction:column;gap:1.2rem}
-.section-title{font-size:.85rem;font-weight:700;color:var(--y);text-transform:uppercase;letter-spacing:.08em;margin-top:.5rem;border-bottom:1px solid var(--border);padding-bottom:.4rem}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-@media(max-width:600px){.grid-2{grid-template-columns:1fr}}
-.field-grp{display:flex;flex-direction:column;gap:.4rem}
-label{font-size:.78rem;font-weight:600;color:var(--muted2)}
-input, textarea{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.75rem .9rem;color:#fff;font-family:inherit;font-size:.88rem;outline:none}
-input:focus, textarea:focus{border-color:var(--b)}
-textarea{resize:vertical;min-height:100px}
-
-.ai-import-box{background:rgba(26,115,232,0.06);border:1px dashed rgba(26,115,232,0.4);border-radius:12px;padding:1.2rem;margin-bottom:.5rem}
-.btn-ai-import{background:var(--b);color:#fff;border:none;border-radius:8px;padding:.7rem 1.2rem;font-weight:700;cursor:pointer;font-size:.85rem;margin-top:.6rem;width:100%;transition:opacity .2s}
-.btn-ai-import:hover{opacity:.9}
-
-.help-placeid {
-    font-size: 0.75rem; color: var(--b); text-decoration: none; font-weight: 600;
-    display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 0.2rem; width: fit-content;
-}
-.help-placeid:hover { text-decoration: underline; color: #60a5fa; }
-
-.btn-gen{width:100%;padding:1.2rem;background:var(--b);color:#fff;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;margin-top:1rem;transition:opacity .2s}
-.btn-gen:hover{opacity:.9}
-.results{display:none;margin-top:2rem;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.8rem}
-.results.show{display:block}
-.action-box{background:rgba(52,168,83,0.08);border:1px solid rgba(52,168,83,0.3);border-radius:12px;padding:1.4rem;text-align:center;margin-top:1.2rem}
-.btn-dl{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.6rem;background:var(--g);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:.95rem;margin-top:1rem;text-decoration:none}
-.btn-dl:hover{background:#2e9648}
-.btn-dl-qr{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:6px;font-weight:600;cursor:pointer;font-size:.78rem;margin-top:.8rem;transition:all .2s}
-.btn-dl-qr:hover{background:#3f3f46;color:#fff}
-
-#qrbox{display:inline-block;padding:.8rem;background:#fff;border-radius:10px;margin:1rem 0}
-
-.modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px);
-    display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1rem;
-}
-.modal-overlay.active { display: flex; }
-.modal-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-    padding: 2rem; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-}
-.modal-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; margin-bottom: .6rem; color: #fff; }
-.modal-desc { font-size: .85rem; color: var(--muted2); margin-bottom: 1.5rem; line-height: 1.4; }
-.modal-actions { display: flex; gap: 1rem; justify-content: center; }
-.modal-btn { padding: .7rem 1.4rem; border-radius: 8px; font-weight: 700; font-size: .85rem; cursor: pointer; border: none; }
-.modal-btn-cancel { background: var(--surface); color: var(--text); }
-.modal-btn-cancel:hover { background: #3f3f46; }
-.modal-btn-confirm { background: var(--r); color: #fff; }
-.modal-btn-confirm:hover { opacity: .9; }
-</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerador Profissional — ImpulsoWeb10 (Versão 3D)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            darkbg: '#09090b',
+            cardbg: '#18181b',
+            surface: '#27272a',
+            bordercol: 'rgba(255, 255, 255, 0.08)'
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts & QRCode.js -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    h1, h2, h3, .font-syne { font-family: 'Syne', sans-serif; }
+  </style>
 </head>
-<body>
+<body class="bg-darkbg text-zinc-100 min-h-screen pb-20 selection:bg-blue-600 selection:text-white">
 
-<nav>
-  <div class="nav-logo">
-    <div class="logo-dots"><div class="ld ld-b"></div><div class="ld ld-r"></div><div class="ld ld-y"></div><div class="ld ld-g"></div></div>
-    <span>ImpulsoWeb10 — Gerador 3D</span>
-  </div>
-  <button class="btn-limpar-topo" onclick="abrirModalLimpar()">🗑️ Limpar Tudo</button>
-</nav>
+  <!-- TOPO / HEADER -->
+  <nav class="sticky top-0 z-50 px-6 h-16 flex items-center justify-between bg-darkbg/90 backdrop-blur-md border-b border-bordercol">
+    <div class="flex items-center gap-3 font-syne font-bold text-lg">
+      <div class="flex gap-1">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+      </div>
+      <span>ImpulsoWeb10 <span class="text-blue-500">— Gerador 3D</span></span>
+    </div>
+    <button onclick="abrirModalLimpar()" class="bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/30 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all">
+      🗑️ Limpar Tudo
+    </button>
+  </nav>
 
-<div class="modal-overlay" id="modalLimpar">
-  <div class="modal-card">
-    <div class="modal-title">Deseja limpar todos os campos?</div>
-    <div class="modal-desc">Todas as informações preenchidas e resultados gerados serão apagados permanentemente.</div>
-    <div class="modal-actions">
-      <button class="modal-btn modal-btn-cancel" onclick="fecharModalLimpar()">Cancelar</button>
-      <button class="modal-btn modal-btn-confirm" onclick="executarLimpeza()">Sim, limpar tudo</button>
+  <!-- MODAL DE CONFIRMAÇÃO DE LIMPEZA -->
+  <div id="modalLimpar" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-cardbg border border-bordercol rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
+      <h3 class="font-syne font-bold text-lg mb-2 text-white">Deseja limpar todos os campos?</h3>
+      <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Todas as informações preenchidas e resultados gerados serão apagados permanentemente.</p>
+      <div class="flex gap-3 justify-center">
+        <button onclick="fecharModalLimpar()" class="bg-surface hover:bg-zinc-700 text-zinc-200 px-4 py-2 rounded-xl text-xs font-bold transition-all">Cancelar</button>
+        <button onclick="executarLimpeza()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all">Sim, limpar tudo</button>
+      </div>
     </div>
   </div>
-</div>
 
-<main>
-  <div class="hero">
-    <h1>Gerador de Cartão <em>3D + SEO IA</em></h1>
-    <p>Cole o JSON gerado pela IA ou preencha manualmente para gerar a página do cliente.</p>
-  </div>
-
-  <div class="form-card">
-    <div class="ai-import-box">
-      <div class="field-grp">
-        <label style="color:var(--b);font-weight:700;">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
-        <textarea id="jsonAiInput" placeholder='Cole aqui o JSON gerado pela IA (dados_formulario_base + conteudo_enriquecido_desktop)...'></textarea>
-        <button type="button" class="btn-ai-import" onclick="processarJsonAi()">✨ Processar e Preencher Campos</button>
-      </div>
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-3xl mx-auto px-4 pt-8">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-syne font-extrabold mb-2 tracking-tight">Gerador de Cartão <span class="text-blue-500">3D + SEO IA</span></h1>
+      <p class="text-sm text-zinc-400">Cole o JSON gerado pela IA ou preencha manualmente para estruturar o site de alta conversão.</p>
     </div>
 
-    <input type="hidden" id="hidden_canonical" />
-    <input type="hidden" id="hidden_h1" />
-    <input type="hidden" id="hidden_meta_description" />
-    <input type="hidden" id="hidden_lista_beneficios" />
-    <input type="hidden" id="hidden_faq_perguntas" />
-    <input type="hidden" id="hidden_intro" />
-    <input type="hidden" id="hidden_produtos" />
-    <input type="hidden" id="hidden_local" />
-    <input type="hidden" id="hidden_img1_url" />
-    <input type="hidden" id="hidden_img1_name" />
-    <input type="hidden" id="hidden_img1_alt" />
-    <input type="hidden" id="hidden_img2_url" />
-    <input type="hidden" id="hidden_img2_name" />
-    <input type="hidden" id="hidden_img2_alt" />
-    <input type="hidden" id="hidden_img3_url" />
-    <input type="hidden" id="hidden_img3_name" />
-    <input type="hidden" id="hidden_img3_alt" />
-    <input type="hidden" id="hidden_img4_url" />
-    <input type="hidden" id="hidden_img4_name" />
-    <input type="hidden" id="hidden_img4_alt" />
-
-    <div class="section-title">1. Dados Principais do Google</div>
-    <div class="grid-2">
-      <div class="field-grp">
-        <label>Place ID do Negócio no Google *</label>
-        <input type="text" id="inPid" placeholder="Ex: ChIJN1t_tDeuEmsRUsoyG83frY4"/>
-        <a href="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" target="_blank" rel="noopener" class="help-placeid">Não sabe o Place ID? Encontrar →</a>
+    <div class="bg-cardbg border border-bordercol rounded-2xl p-6 md:p-8 flex flex-col gap-6 shadow-xl">
+      
+      <!-- 3. CAIXA DE IMPORTAÇÃO DE IA (JSON) -->
+      <div class="bg-blue-600/5 border border-blue-500/30 rounded-xl p-4">
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-bold text-blue-400 uppercase tracking-wider">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
+          <textarea id="jsonAiInput" rows="3" placeholder='Cole aqui o JSON gerado pela IA (dados_formulario_base + conteudo_enriquecido_desktop)...' class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500 transition-all resize-y"></textarea>
+          <button type="button" onclick="processarJsonAi()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/20">
+            ✨ Processar e Preencher Campos
+          </button>
+        </div>
       </div>
-      <div class="field-grp">
-        <label>Nome da Empresa *</label>
-        <input type="text" id="inNome" placeholder="Ex: Tintas Qualy Quimy"/>
-      </div>
-    </div>
 
-    <div class="section-title">2. Contactos e Redes Sociais</div>
-    <div class="grid-2">
-      <div class="field-grp">
-        <label>WhatsApp (só números com DDD)</label>
-        <input type="text" id="inWa" placeholder="Ex: 551146432301"/>
-      </div>
-      <div class="field-grp">
-        <label>Instagram (Nome do utilizador sem @)</label>
-        <input type="text" id="inIg" placeholder="Ex: tintasqualyquimy"/>
-      </div>
-    </div>
+      <!-- CAMPOS HIDDEN PARA DADOS DE SEO E CONFIGURAÇÃO -->
+      <input type="hidden" id="hidden_canonical" />
+      <input type="hidden" id="hidden_h1" />
+      <input type="hidden" id="hidden_meta_description" />
+      <input type="hidden" id="hidden_lista_beneficios" />
+      <input type="hidden" id="hidden_faq_perguntas" />
+      <input type="hidden" id="hidden_intro" />
+      <input type="hidden" id="hidden_produtos" />
+      <input type="hidden" id="hidden_local" />
+      <input type="hidden" id="hidden_img1_url" /><input type="hidden" id="hidden_img1_name" /><input type="hidden" id="hidden_img1_alt" />
+      <input type="hidden" id="hidden_img2_url" /><input type="hidden" id="hidden_img2_name" /><input type="hidden" id="hidden_img2_alt" />
+      <input type="hidden" id="hidden_img3_url" /><input type="hidden" id="hidden_img3_name" /><input type="hidden" id="hidden_img3_alt" />
+      <input type="hidden" id="hidden_img4_url" /><input type="hidden" id="hidden_img4_name" /><input type="hidden" id="hidden_img4_alt" />
 
-    <div class="section-title">3. Localização e Endereço</div>
-    <div class="grid-2">
-      <div class="field-grp">
-        <label>Cidade / Estado</label>
-        <input type="text" id="inCidade" placeholder="Ex: Itaquaquecetuba - SP"/>
-      </div>
-      <div class="field-grp">
-        <label>Endereço Completo</label>
-        <input type="text" id="inEndereco" placeholder="Ex: Rua Leiria, 45"/>
-      </div>
-    </div>
-
-    <div class="section-title">4. SEO & Ramo de Atuação</div>
-    <div class="grid-2">
-      <div class="field-grp">
-        <label>Segmento de Atuação</label>
-        <input type="text" id="inSegmento" placeholder="Ex: Tintas, Massas e Texturas"/>
-      </div>
-      <div class="field-grp">
-        <label>Produtos / Serviços Principais</label>
-        <input type="text" id="inServicos" placeholder="Ex: Tintas, Texturas, Massas"/>
-      </div>
-    </div>
-
-    <button class="btn-gen" onclick="gerarTudo()">🚀 Gerar Link, QR Code & Baixar HTML Desktop/Mobile</button>
-  </div>
-
-  <div class="results" id="resBox">
-    <div style="color:var(--g);font-weight:700;font-size:1rem;margin-bottom:.5rem;">✓ Dados Processados com Sucesso!</div>
-    
-    <label style="font-size:.78rem;color:var(--muted2);">Link da Página do Cliente:</label>
-    <input type="text" id="outLinkCliente" style="width:100%;margin-top:.3rem;margin-bottom:1rem;" readonly/>
-
-    <label style="font-size:.78rem;color:var(--muted2);">Link Direto de Avaliação Google (Inserido no botão do HTML):</label>
-    <input type="text" id="outLinkGoogle" style="width:100%;margin-top:.3rem;margin-bottom:1rem;" readonly/>
-
-    <div style="text-align:center;margin:1rem 0;">
-      <div style="font-size:.85rem;color:var(--muted2);margin-bottom:.2rem;">QR Code Gerado (Aponta para a Página do Cliente):</div>
-      <div id="qrbox"></div>
+      <!-- 2. CAMPOS DO FORMULÁRIO -->
       <div>
-        <button class="btn-dl-qr" onclick="baixarQRCode()">📥 Baixar Imagem do QR Code</button>
+        <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">1. Bloco de Configuração & Links</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Place ID do Google *</label>
+            <input type="text" id="inPid" placeholder="Ex: ChIJN1t_tDeuEmsRUsoyG83frY4" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+            <a href="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" target="_blank" rel="noopener" class="text-[11px] text-blue-400 hover:underline font-medium">Não sabe o Place ID? Encontrar →</a>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">WhatsApp (com DDD) *</label>
+            <input type="text" id="inWa" placeholder="Ex: 551146432301" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">2. Bloco de Dados Principais</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Nome da Empresa *</label>
+            <input type="text" id="inNome" placeholder="Ex: Tintas Qualy Quimy" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Instagram (sem @)</label>
+            <input type="text" id="inIg" placeholder="Ex: tintasqualyquimy" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Cidade / Estado</label>
+            <input type="text" id="inCidade" placeholder="Ex: Itaquaquecetuba - SP" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Endereço Completo</label>
+            <input type="text" id="inEndereco" placeholder="Ex: Rua Leiria, 45" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">3. Bloco Avançado & SEO</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Segmento de Atuação</label>
+            <input type="text" id="inSegmento" placeholder="Ex: Tintas, Massas e Texturas" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-zinc-400">Produtos / Serviços Principais</label>
+            <input type="text" id="inServicos" placeholder="Ex: Tintas, Texturas, Massas" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="gerarTudo()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-syne font-bold py-4 px-6 rounded-xl text-sm transition-all shadow-lg shadow-blue-600/30">
+        🚀 Gerar Link, QR Code & Baixar HTML Desktop/Mobile
+      </button>
+    </div>
+
+    <!-- ÁREA DE RESULTADOS -->
+    <div id="resBox" class="hidden mt-6 bg-cardbg border border-bordercol rounded-2xl p-6 md:p-8 shadow-xl">
+      <div class="text-green-400 font-bold text-sm mb-4">✓ Dados Processados com Sucesso!</div>
+      
+      <div class="mb-4">
+        <label class="text-xs text-zinc-400 block mb-1">Link da Página do Cliente:</label>
+        <input type="text" id="outLinkCliente" readonly class="w-full bg-surface border border-bordercol rounded-xl p-3 text-xs text-zinc-300 font-mono select-all"/>
+      </div>
+
+      <div class="mb-6">
+        <label class="text-xs text-zinc-400 block mb-1">Link Direto de Avaliação Google:</label>
+        <input type="text" id="outLinkGoogle" readonly class="w-full bg-surface border border-bordercol rounded-xl p-3 text-xs text-zinc-300 font-mono select-all"/>
+      </div>
+
+      <div class="text-center my-6 p-4 bg-surface/50 rounded-xl border border-bordercol">
+        <div class="text-xs text-zinc-400 mb-3">QR Code Gerado (Aponta para a Página do Cliente):</div>
+        <div id="qrbox" class="inline-block p-3 bg-white rounded-xl shadow-md"></div>
+        <div class="mt-3">
+          <button onclick="baixarQRCode()" class="bg-surface hover:bg-zinc-700 text-zinc-200 border border-bordercol px-4 py-2 rounded-xl text-xs font-bold transition-all">
+            📥 Baixar Imagem do QR Code
+          </button>
+        </div>
+      </div>
+
+      <div id="imgListBox" class="hidden mb-6 p-4 bg-surface border border-bordercol rounded-xl text-xs">
+        <div class="font-bold text-yellow-400 mb-2">🖼️ Imagens otimizadas (.webp) configuradas:</div>
+        <div id="imgListContent" class="text-zinc-400 space-y-1"></div>
+      </div>
+
+      <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-5 text-center">
+        <h4 class="text-white font-bold text-sm mb-1">Ficheiro index.html Pronto para Produção!</h4>
+        <p class="text-xs text-zinc-400 mb-4">O código está totalmente otimizado com Schema.org, Open Graph e efeito 3D interativo.</p>
+        <button onclick="baixarHTML()" class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-6 rounded-xl text-sm transition-all shadow-lg shadow-green-600/20 inline-flex items-center gap-2">
+          📥 Baixar index.html Completo
+        </button>
       </div>
     </div>
+  </main>
 
-    <div id="imgListBox" style="display:none;margin:1rem 0;padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;">
-      <div style="font-size:.85rem;font-weight:700;color:var(--y);margin-bottom:.6rem;">🖼️ Imagens para salvar na pasta do cliente (.webp)</div>
-      <div id="imgListContent" style="font-size:.78rem;color:var(--muted2);line-height:1.6;"></div>
-    </div>
+  <!-- JAVASCRIPT DO SISTEMA E DO NOVO MODELO ISOLADO -->
+  <script>
+    let htmlFinal = "";
+    let nomeEmpresaSlug = "cliente";
 
-    <div class="action-box">
-      <h3 style="color:#fff;font-size:1.1rem;">Ficheiro index.html Pronto!</h3>
-      <p style="color:var(--muted2);font-size:.85rem;margin-top:.4rem;line-height:1.5;">
-        Clique no botão abaixo para baixar o ficheiro <code>index.html</code> otimizado para Mobile & Desktop:<br>
-        <strong style="color:var(--y);" id="txtCaminhoGithub">https://avaliar.impulsoweb10.com.br/cliente/nome-da-empresa/index.html</strong>
-      </p>
-      <button class="btn-dl" onclick="baixarHTML()">📥 Baixar index.html Completo</button>
-    </div>
-  </div>
-</main>
-
-<script>
-let htmlFinal = "";
-let nomeEmpresaSlug = "cliente";
-
-function formatarSlug(texto) {
-  return texto
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-function setVal(id, valor) {
-  const el = document.getElementById(id);
-  if (el) el.value = (valor === undefined || valor === null) ? '' : valor;
-}
-
-function normalizarWhatsapp(numero) {
-  let n = String(numero || '').replace(/\D/g, '');
-  if (n && (n.length === 10 || n.length === 11)) n = '55' + n;
-  return n;
-}
-
-function processarJsonAi() {
-  try {
-    let jsonTexto = document.getElementById('jsonAiInput').value.trim();
-    if (!jsonTexto) {
-      alert('⚠️ Por favor, cole o código JSON gerado pela IA antes de processar.');
-      return;
-    }
-    jsonTexto = jsonTexto.replace(/```json/g, '').replace(/```/g, '').trim();
-    const primeiraChave = jsonTexto.indexOf('{');
-    const ultimaChave = jsonTexto.lastIndexOf('}');
-    if (primeiraChave === -1 || ultimaChave === -1) {
-      alert('❌ Erro: Não foi encontrado um objeto JSON válido no texto colado.');
-      return;
-    }
-    jsonTexto = jsonTexto.substring(primeiraChave, ultimaChave + 1);
-    const dados = JSON.parse(jsonTexto);
-
-    const base = dados.dados_formulario_base;
-    if (base) {
-      setVal('inPid', base.placeId);
-      setVal('inNome', base.nomeEmpresa);
-      setVal('inWa', normalizarWhatsapp(base.whatsapp));
-      setVal('inIg', String(base.instagram || '').replace('@', ''));
-      setVal('inCidade', base.cidadeEstado);
-      setVal('inEndereco', base.enderecoCompleto);
-      setVal('inSegmento', base.segmento);
-      setVal('inServicos', base.produtosPrincipais);
+    function formatarSlug(texto) {
+      return texto
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
     }
 
-    const pc = dados.conteudo_enriquecido_desktop;
-    if (pc) {
-      setVal('hidden_canonical', pc.seo_tags?.canonical);
-      setVal('hidden_h1', pc.seo_tags?.h1);
-      setVal('hidden_meta_description', pc.seo_tags?.meta_description);
-      setVal('hidden_lista_beneficios', JSON.stringify(pc.lista_beneficios_o_que_encontra || []));
-      setVal('hidden_faq_perguntas', JSON.stringify(pc.faq_perguntas_frequentes || []));
-      setVal('hidden_intro', pc.textos_seo_secoes?.introducao_bloco);
-      setVal('hidden_produtos', pc.textos_seo_secoes?.foco_produtos);
-      setVal('hidden_local', pc.textos_seo_secoes?.chamada_local);
+    function setVal(id, valor) {
+      const el = document.getElementById(id);
+      if (el) el.value = (valor === undefined || valor === null) ? '' : valor;
+    }
 
-      const imagens = pc.imagens_otimizadas_seo || [];
+    function normalizarWhatsapp(numero) {
+      let n = String(numero || '').replace(/\D/g, '');
+      if (n && (n.length === 10 || n.length === 11)) n = '55' + n;
+      return n;
+    }
+
+    function processarJsonAi() {
+      try {
+        let jsonTexto = document.getElementById('jsonAiInput').value.trim();
+        if (!jsonTexto) {
+          alert('⚠️ Por favor, cole o código JSON gerado pela IA antes de processar.');
+          return;
+        }
+        jsonTexto = jsonTexto.replace(/```json/g, '').replace(/```/g, '').trim();
+        const primeiraChave = jsonTexto.indexOf('{');
+        const ultimaChave = jsonTexto.lastIndexOf('}');
+        if (primeiraChave === -1 || ultimaChave === -1) {
+          alert('❌ Erro: Não foi encontrado um objeto JSON válido no texto colado.');
+          return;
+        }
+        jsonTexto = jsonTexto.substring(primeiraChave, ultimaChave + 1);
+        const dados = JSON.parse(jsonTexto);
+
+        const base = dados.dados_formulario_base;
+        if (base) {
+          setVal('inPid', base.placeId);
+          setVal('inNome', base.nomeEmpresa);
+          setVal('inWa', normalizarWhatsapp(base.whatsapp));
+          setVal('inIg', String(base.instagram || '').replace('@', ''));
+          setVal('inCidade', base.cidadeEstado);
+          setVal('inEndereco', base.enderecoCompleto);
+          setVal('inSegmento', base.segmento);
+          setVal('inServicos', base.produtosPrincipais);
+        }
+
+        const pc = dados.conteudo_enriquecido_desktop;
+        if (pc) {
+          setVal('hidden_canonical', pc.seo_tags?.canonical);
+          setVal('hidden_h1', pc.seo_tags?.h1);
+          setVal('hidden_meta_description', pc.seo_tags?.meta_description);
+          setVal('hidden_lista_beneficios', JSON.stringify(pc.lista_beneficios_o_que_encontra || []));
+          setVal('hidden_faq_perguntas', JSON.stringify(pc.faq_perguntas_frequentes || []));
+          setVal('hidden_intro', pc.textos_seo_secoes?.introducao_bloco);
+          setVal('hidden_produtos', pc.textos_seo_secoes?.foco_produtos);
+          setVal('hidden_local', pc.textos_seo_secoes?.chamada_local);
+
+          const imagens = pc.imagens_otimizadas_seo || [];
+          for (let i = 1; i <= 4; i++) {
+            const img = imagens[i - 1] || {};
+            setVal(`hidden_img${i}_url`, img.url_original);
+            setVal(`hidden_img${i}_name`, img.nome_arquivo_webp || `imagem-${i}.webp`);
+            setVal(`hidden_img${i}_alt`, img.alt_descricao);
+          }
+        }
+        alert('🎉 Sucesso! Os dados foram importados e distribuídos para os campos.');
+      } catch (e) {
+        console.error(e);
+        alert('❌ Erro de sintaxe no JSON: ' + e.message);
+      }
+    }
+
+    function abrirModalLimpar() {
+      document.getElementById('modalLimpar').classList.remove('hidden');
+      document.getElementById('modalLimpar').classList.add('flex');
+    }
+
+    function fecharModalLimpar() {
+      document.getElementById('modalLimpar').classList.remove('flex');
+      document.getElementById('modalLimpar').classList.add('hidden');
+    }
+
+    function executarLimpeza() {
+      document.getElementById('jsonAiInput').value = '';
+      document.getElementById('inPid').value = '';
+      document.getElementById('inNome').value = '';
+      document.getElementById('inWa').value = '';
+      document.getElementById('inIg').value = '';
+      document.getElementById('inCidade').value = '';
+      document.getElementById('inEndereco').value = '';
+      document.getElementById('inSegmento').value = '';
+      document.getElementById('inServicos').value = '';
+
+      document.querySelectorAll('input[type="hidden"]').forEach(h => h.value = '');
+
+      document.getElementById('resBox').classList.add('hidden');
+      document.getElementById('qrbox').innerHTML = '';
+      document.getElementById('imgListBox').classList.add('hidden');
+      document.getElementById('imgListContent').innerHTML = '';
+      htmlFinal = '';
+      nomeEmpresaSlug = "cliente";
+
+      fecharModalLimpar();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ==========================================================
+       4. FUNÇÃO DE GERAÇÃO E DOWNLOAD VIA BLOB (BLINDADA)
+       ========================================================== */
+    function gerarTudo() {
+      const pid = document.getElementById('inPid').value.trim();
+      const nome = document.getElementById('inNome').value.trim();
+      const wa = document.getElementById('inWa').value.trim() || '5511999999999';
+      const ig = document.getElementById('inIg').value.trim().replace('@','');
+      const cidade = document.getElementById('inCidade').value.trim() || 'Sua Cidade';
+      const endereco = document.getElementById('inEndereco').value.trim() || 'Rua Exemplo, 123';
+      const segmento = document.getElementById('inSegmento').value.trim() || 'Serviços';
+      const servicos = document.getElementById('inServicos').value.trim() || 'Atendimento de Qualidade';
+
+      if(!pid || !nome) {
+        alert("Por favor, preencha pelo menos o Place ID e o Nome da Empresa.");
+        return;
+      }
+
+      const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
+      document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
+
+      nomeEmpresaSlug = formatarSlug(nome);
+      const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
+      document.getElementById('outLinkCliente').value = linkPaginaCliente;
+
+      const qrDiv = document.getElementById('qrbox');
+      qrDiv.innerHTML = '';
+      new QRCode(qrDiv, { text: linkPaginaCliente, width: 150, height: 150 });
+
+      const seoCanonical = document.getElementById('hidden_canonical').value.trim() || linkPaginaCliente;
+      const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} — ${cidade}`;
+      const seoMetaDesc = document.getElementById('hidden_meta_description').value.trim() || `${segmento} em ${cidade}. ${servicos}.`;
+      
+      const imgsName = [];
+      const imgsAlt = [];
+      const altPadrao = [`${nome} - Imagem 1`, `${segmento} - Imagem 2`, `${cidade} - Imagem 3`, `${servicos} - Imagem 4`];
       for (let i = 1; i <= 4; i++) {
-        const img = imagens[i - 1] || {};
-        setVal(`hidden_img${i}_url`, img.url_original);
-        setVal(`hidden_img${i}_name`, img.nome_arquivo_webp || `imagem-${i}.webp`);
-        setVal(`hidden_img${i}_alt`, img.alt_descricao);
+        imgsName.push(document.getElementById(`hidden_img${i}_name`).value.trim() || `imagem_0${i}.webp`);
+        imgsAlt.push(document.getElementById(`hidden_img${i}_alt`).value.trim() || altPadrao[i - 1]);
       }
-    }
-    alert('🎉 Sucesso! Os dados foram importados com sucesso.');
-  } catch (e) {
-    console.error(e);
-    alert('❌ Erro de sintaxe no JSON: ' + e.message);
-  }
-}
 
-function abrirModalLimpar() {
-  document.getElementById('modalLimpar').classList.add('active');
-}
-
-function fecharModalLimpar() {
-  document.getElementById('modalLimpar').classList.remove('active');
-}
-
-function executarLimpeza() {
-  document.getElementById('jsonAiInput').value = '';
-  document.getElementById('inPid').value = '';
-  document.getElementById('inNome').value = '';
-  document.getElementById('inWa').value = '';
-  document.getElementById('inIg').value = '';
-  document.getElementById('inCidade').value = '';
-  document.getElementById('inEndereco').value = '';
-  document.getElementById('inSegmento').value = '';
-  document.getElementById('inServicos').value = '';
-
-  const hiddens = document.querySelectorAll('input[type="hidden"]');
-  hiddens.forEach(h => h.value = '');
-
-  document.getElementById('resBox').classList.remove('show');
-  document.getElementById('qrbox').innerHTML = '';
-  document.getElementById('imgListBox').style.display = 'none';
-  document.getElementById('imgListContent').innerHTML = '';
-  htmlFinal = '';
-  nomeEmpresaSlug = "cliente";
-
-  fecharModalLimpar();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function gerarTudo() {
-  const pid = document.getElementById('inPid').value.trim();
-  const nome = document.getElementById('inNome').value.trim();
-  const wa = document.getElementById('inWa').value.trim() || '5511999999999';
-  const ig = document.getElementById('inIg').value.trim().replace('@','');
-  const cidade = document.getElementById('inCidade').value.trim() || 'Sua Cidade';
-  const endereco = document.getElementById('inEndereco').value.trim() || 'Rua Exemplo, 123';
-  const segmento = document.getElementById('inSegmento').value.trim() || 'Serviços';
-  const servicos = document.getElementById('inServicos').value.trim() || 'Atendimento de Qualidade';
-
-  if(!pid || !nome) {
-    alert("Por favor, preencha pelo menos o Place ID e o Nome da Empresa.");
-    return;
-  }
-
-  const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
-  document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
-
-  nomeEmpresaSlug = formatarSlug(nome);
-  const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
-  document.getElementById('outLinkCliente').value = linkPaginaCliente;
-  document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
-
-  const qrDiv = document.getElementById('qrbox');
-  qrDiv.innerHTML = '';
-  new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
-
-  const seoCanonical = document.getElementById('hidden_canonical').value.trim() || linkPaginaCliente;
-  const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} — ${cidade}`;
-  const seoMetaDesc = document.getElementById('hidden_meta_description').value.trim() || `${segmento} em ${cidade}. ${servicos}.`;
-  
-  const imgsSrc = [], imgsAlt = [], imgsOrig = [];
-  const altPadrao = [`${nome} - Imagem 1`, `${segmento} - Imagem 2`, `${cidade} - Imagem 3`, `${servicos} - Imagem 4`];
-  for (let i = 1; i <= 4; i++) {
-    imgsSrc.push(document.getElementById(`hidden_img${i}_name`).value.trim() || `imagem_0${i}.webp`);
-    imgsAlt.push(document.getElementById(`hidden_img${i}_alt`).value.trim() || altPadrao[i - 1]);
-    imgsOrig.push(document.getElementById(`hidden_img${i}_url`).value.trim());
-  }
-  const [img1Name, img2Name, img3Name, img4Name] = imgsSrc;
-  const [img1Alt, img2Alt, img3Alt, img4Alt] = imgsAlt;
-
-  let beneficiosItemsHtml = '';
-  const benRaw = document.getElementById('hidden_lista_beneficios').value.trim();
-  if (benRaw) {
-    try {
-      const benArr = JSON.parse(benRaw);
-      if (Array.isArray(benArr) && benArr.length) {
-        beneficiosItemsHtml = benArr.map(item => `<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${item}</li>`).join('');
+      let beneficiosItemsHtml = '';
+      try {
+        const benRaw = document.getElementById('hidden_lista_beneficios').value.trim();
+        if (benRaw) {
+          const benArr = JSON.parse(benRaw);
+          if (Array.isArray(benArr) && benArr.length) {
+            beneficiosItemsHtml = benArr.map(item => `<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${item}</li>`).join('');
+          }
+        }
+      } catch (e) {}
+      if (!beneficiosItemsHtml) {
+        beneficiosItemsHtml = `<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${segmento}</li>`;
       }
-    } catch (e) {}
-  }
-  if (!beneficiosItemsHtml) {
-    beneficiosItemsHtml = `
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${segmento}</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/></svg>Qualidade e Garantia</li>
-    `;
-  }
 
-  let faqHtml = '';
-  const faqRaw = document.getElementById('hidden_faq_perguntas').value.trim();
-  if (faqRaw) {
-    try {
-      const faqArr = JSON.parse(faqRaw);
-      if (Array.isArray(faqArr) && faqArr.length) {
-        faqHtml = faqArr.map(f => `
+      let faqHtml = '';
+      try {
+        const faqRaw = document.getElementById('hidden_faq_perguntas').value.trim();
+        if (faqRaw) {
+          const faqArr = JSON.parse(faqRaw);
+          if (Array.isArray(faqArr) && faqArr.length) {
+            faqHtml = faqArr.map(f => `
+              <details class="faq-item">
+                <summary class="faq-question">${f.pergunta}</summary>
+                <div class="faq-answer">${f.resposta}</div>
+              </details>
+            `).join('');
+          }
+        }
+      } catch (e) {}
+      if (!faqHtml) {
+        faqHtml = `
           <details class="faq-item">
-            <summary class="faq-question">${f.pergunta}</summary>
-            <div class="faq-answer">${f.resposta}</div>
+            <summary class="faq-question">Quais formas de pagamento são aceitas?</summary>
+            <div class="faq-answer">Aceitamos dinheiro, PIX e cartões para sua maior comodidade.</div>
           </details>
-        `).join('');
+        `;
       }
-    } catch (e) {}
-  }
-  if (!faqHtml) {
-    faqHtml = `
-      <details class="faq-item">
-        <summary class="faq-question">Quais formas de pagamento são aceitas?</summary>
-        <div class="faq-answer">Aceitamos dinheiro, PIX e cartões para sua maior comodidade.</div>
-      </details>
-    `;
-  }
 
-  const txtIntro = document.getElementById('hidden_intro').value.trim() || `A ${nome} é referência em ${segmento} em ${cidade}.`;
+      const txtIntro = document.getElementById('hidden_intro').value.trim() || `A ${nome} é referência em ${segmento} em ${cidade}.`;
 
-  const imgListContent = document.getElementById('imgListContent');
-  imgListContent.innerHTML = imgsSrc.map((nomeArq, idx) => {
-    const orig = imgsOrig[idx];
-    const origTxt = orig ? `<a href="${orig}" target="_blank" rel="noopener" style="color:var(--b);">abrir imagem original</a>` : '<span style="color:var(--r);">URL não informada</span>';
-    return `<div>${idx + 1}. salvar como <strong style="color:#fff;">${nomeArq}</strong> — ${origTxt}</div>`;
-  }).join('');
-  document.getElementById('imgListBox').style.display = 'block';
+      // Atualiza exibição das imagens no painel
+      const imgListContent = document.getElementById('imgListContent');
+      imgListContent.innerHTML = imgsName.map((n, idx) => `<div>${idx + 1}. Salvar como <strong class="text-white">${n}</strong> (${imgsAlt[idx]})</div>`).join('');
+      document.getElementById('imgListBox').classList.remove('hidden');
 
-  // NOVO MODELO DE HTML LIMPO COM TEMPLATE LITERALS
-  htmlFinal = `<!DOCTYPE html>
+      // NOVO MODELO DE HTML DO CLIENTE ISOLADO EM TEMPLATE LITERAL LEVE
+      const templateCliente = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#07101e">
-<meta name="description" content="${seoMetaDesc}">
-<meta name="keywords" content="${segmento}, ${cidade}, ${nome}">
+<meta name="description" content="[SEO_META_DESC]">
+<meta name="keywords" content="[SEO_KEYWORDS]">
 <meta name="author" content="ImpulsoWeb10">
-<link rel="canonical" href="${seoCanonical}">
+<link rel="canonical" href="[SEO_CANONICAL]">
 <meta property="og:type" content="website">
-<meta property="og:url" content="${linkPaginaCliente}">
-<meta property="og:title" content="${seoH1}">
-<meta property="og:description" content="${seoMetaDesc}">
-<meta property="og:image" content="${linkPaginaCliente}${img1Name}">
+<meta property="og:url" content="[PAGE_URL]">
+<meta property="og:title" content="[SEO_H1]">
+<meta property="og:description" content="[SEO_META_DESC]">
+<meta property="og:image" content="[PAGE_URL][IMG_1]">
 <meta property="og:locale" content="pt_BR">
 <meta name="twitter:card" content="summary">
-<title>${seoH1}</title>
+<title>[SEO_H1]</title>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": "${nome}",
-  "image": "${linkPaginaCliente}${img1Name}",
-  "@id": "${linkPaginaCliente}#store",
-  "url": "${linkPaginaCliente}",
-  "telephone": "+${wa}",
+  "name": "[NOME_EMPRESA]",
+  "image": "[PAGE_URL][IMG_1]",
+  "@id": "[PAGE_URL]#store",
+  "url": "[PAGE_URL]",
+  "telephone": "+[WHATSAPP]",
   "priceRange": "$$",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "${endereco}",
-    "addressLocality": "${cidade}",
+    "streetAddress": "[ENDERECO]",
+    "addressLocality": "[CIDADE]",
     "addressCountry": "BR"
   },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": -23.485,
-    "longitude": -46.345
-  },
+  "geo": { "@type": "GeoCoordinates", "latitude": -23.485, "longitude": -46.345 },
   "openingHoursSpecification": {
     "@type": "OpeningHoursSpecification",
     "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
     "opens": "08:00",
     "closes": "18:00"
   },
-  "sameAs": [
-    "https://www.instagram.com/${ig}"
-  ]
+  "sameAs": ["https://www.instagram.com/[INSTAGRAM]"]
 }
 <\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -603,316 +568,213 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </style>
 </head>
 <body>
-
-<main>
-  <!-- Espaço do Painel Admin -->
-</main>
-
+<div class="app-wrapper">
+  <div class="device-frame" id="deviceFrame">
+    <div class="secret-back" aria-hidden="true">
+      <img src="fundo.png" alt="" class="back-layer back-layer-fundo" loading="lazy" decoding="async">
+      <img src="mago.png" alt="" class="back-layer back-layer-mago" loading="lazy" decoding="async">
+      <img src="moldura.png" alt="" class="back-layer back-layer-moldura" loading="lazy" decoding="async">
+    </div>
+    <div class="page">
+      <div class="logo-wrap layer-mid">
+        <div class="logo-frame">
+          <img class="logo-img" src="logo.png" alt="Logo [NOME_EMPRESA]" width="160" height="72" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="logo-img-fallback" style="display:none;">[NOME_EMPRESA]</div>
+        </div>
+        <div>
+          <div class="brand">[NOME_EMPRESA]</div>
+          <div class="tagline">[SEGMENTO] · [CIDADE]</div>
+        </div>
+      </div>
+      <div class="chips layer-back" aria-label="Produtos">
+        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>[SERVICOS_RESUMO]</span>
+        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/></svg>Qualidade</span>
+      </div>
+      <div class="layer-pop" style="width:100%;display:flex;flex-direction:column;align-items:center;">
+        <a href="[LINK_AVALIACAO_GOOGLE]" class="stars-cta" target="_blank" rel="noopener">
+          <span class="stars-row" aria-hidden="true"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></span>
+          <span class="stars-label">Toque nas estrelas e avalie no Google</span>
+        </a>
+      </div>
+      <div class="cta-row layer-front">
+        <a href="tel:+[WHATSAPP]" class="btn-act btn-call">Ligar agora</a>
+        <a href="https://wa.me/[WHATSAPP]?text=Olá!%20Vim%20pelo%20link." class="btn-act btn-wa" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+      <div class="social-row layer-front">
+        <a href="https://www.instagram.com/[INSTAGRAM]" class="social-btn" target="_blank" rel="noopener">
+          <div class="social-icon" style="background:#2a1a2e;"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="#cc2366" stroke-width="1.8"/></svg></div>
+          <span class="social-label">Instagram</span>
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=[QUERY_MAPS]" class="social-btn" target="_blank" rel="noopener">
+          <div class="social-icon" style="background:#1a2030;"><svg viewBox="0 0 24 24" fill="#EA4335"><circle cx="12" cy="12" r="10"/></svg></div>
+          <span class="social-label">Maps</span>
+        </a>
+        <button type="button" class="social-btn" onclick="salvarContato()">
+          <div class="social-icon" style="background:#1a2a1a;"><svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <span class="social-label">Salvar</span>
+        </button>
+        <button type="button" class="social-btn" onclick="abrirMais()">
+          <div class="social-icon" style="background:#2a2310;"><svg viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg></div>
+          <span class="social-label">Ver mais</span>
+        </button>
+      </div>
+      <div class="hours layer-back" id="hours"><span class="dot"></span><span id="hoursText">Seg a sáb · 8h às 18h</span></div>
+      <div class="address layer-back" onclick="copiarEndereco()">
+        <span>[ENDERECO]</span><br>[CIDADE]
+      </div>
+      <div class="ticker-banner layer-mid" aria-hidden="true">
+        <div class="ticker-track">
+          <span class="ticker-item">[NOME_EMPRESA] • [SEGMENTO] • [SERVICOS_RESUMO] • [CIDADE].</span>
+        </div>
+      </div>
+      <footer class="footer layer-back">
+        <p class="footer-promo">Quer um link como este? <a href="https://wa.me/5511954950044" target="_blank" rel="noopener">Saiba mais</a></p>
+        <p class="footer-dev"><span>Desenvolvido por ImpulsoWeb10</span><button class="btn-gyro" id="toggleGyro" type="button" onclick="alternarGiroscopio()">Efeito 3D: OFF</button></p>
+      </footer>
+    </div>
+  </div>
+</div>
+<dialog class="sheet" id="sheetMais">
+  <div class="sheet-body">
+    <div class="sheet-head">
+      <h2>[NOME_EMPRESA]</h2>
+      <button type="button" class="sheet-close" onclick="fecharMais()">×</button>
+    </div>
+    <section>
+      <h3>O que você encontra</h3>
+      <ul class="svc-list">[BENEFICIOS_HTML]</ul>
+    </section>
+    <section>
+      <h3>Endereço e rotas</h3>
+      <p>[ENDERECO]<br>[CIDADE]</p>
+      <div class="nav-buttons-grid">
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=[QUERY_MAPS]" class="btn-nav-map" target="_blank" rel="noopener">Abrir no Google</a>
+        <a href="https://waze.com/ul?q=[QUERY_MAPS]" class="btn-nav-waze" target="_blank" rel="noopener">Abrir no Waze</a>
+      </div>
+    </section>
+    <section>
+      <h3>Perguntas Frequentes (FAQ)</h3>
+      <div class="faq-container">[FAQ_HTML]</div>
+    </section>
+    <section class="gallery">
+      <img src="[IMG_1_NAME]" alt="[IMG_1_ALT]" loading="lazy" decoding="async">
+      <img src="[IMG_2_NAME]" alt="[IMG_2_ALT]" loading="lazy" decoding="async">
+      <img src="[IMG_3_NAME]" alt="[IMG_3_ALT]" loading="lazy" decoding="async">
+      <img src="[IMG_4_NAME]" alt="[IMG_4_ALT]" loading="lazy" decoding="async">
+    </section>
+    <button type="button" class="btn-share" onclick="compartilhar()">Compartilhar este link</button>
+    <p class="toast" id="toast"></p>
+  </div>
+</dialog>
+<aside class="bg-seo">
+  <div>
+    <div class="txt">
+      <h1>[NOME_EMPRESA]</h1>
+      <h2>[SEGMENTO] em [CIDADE]</h2>
+      <p>[INTRO_TEXT]</p>
+    </div>
+    <div class="fotos">
+      <img src="[IMG_1_NAME]" alt="[IMG_1_ALT]" loading="lazy" decoding="async">
+      <img src="[IMG_2_NAME]" alt="[IMG_2_ALT]" loading="lazy" decoding="async">
+    </div>
+  </div>
+</aside>
 <script>
-let htmlFinal = "";
-let nomeEmpresaSlug = "cliente";
-
-function formatarSlug(texto) {
-  return texto
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-function gerarTudo() {
-  const pid = document.getElementById('inPid').value.trim();
-  const nome = document.getElementById('inNome').value.trim();
-  const wa = document.getElementById('inWa').value.trim() || '5511999999999';
-  const ig = document.getElementById('inIg').value.trim().replace('@','');
-  const cidade = document.getElementById('inCidade').value.trim() || 'Sua Cidade';
-  const endereco = document.getElementById('inEndereco').value.trim() || 'Rua Exemplo, 123';
-  const segmento = document.getElementById('inSegmento').value.trim() || 'Serviços';
-  const servicos = document.getElementById('inServicos').value.trim() || 'Atendimento de Qualidade';
-
-  if(!pid || !nome) {
-    alert("Por favor, preencha pelo menos o Place ID e o Nome da Empresa.");
-    return;
+  const PAGE_URL = location.href.split('#')[0].split('?')[0];
+  async function copiarEndereco() {
+    try { await navigator.clipboard.writeText("[ENDERECO], [CIDADE]"); alert("Endereço copiado!"); } catch (err) {}
   }
-
-  const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
-  document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
-
-  nomeEmpresaSlug = formatarSlug(nome);
-  const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
-  document.getElementById('outLinkCliente').value = linkPaginaCliente;
-  document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
-
-  const qrDiv = document.getElementById('qrbox');
-  qrDiv.innerHTML = '';
-  new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
-
-  const seoCanonical = document.getElementById('hidden_canonical').value.trim() || linkPaginaCliente;
-  const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} —${cidade}`;
-  const seoMetaDesc = document.getElementById('hidden_meta_description').value.trim() || `${segmento} em ${cidade}.${servicos}.`;
-  
-  const imgsName = [];
-  const imgsAlt = [];
-  const altPadrao = [`${nome} - Imagem 1`, `${segmento} - Imagem 2`, `${cidade} - Imagem 3`, `${servicos} - Imagem 4`];
-  for (let i = 1; i <= 4; i++) {
-    imgsName.push(document.getElementById(`hidden_img${i}_name`).value.trim() || `imagem_0${i}.webp`);
-    imgsAlt.push(document.getElementById(`hidden_img${i}_alt`).value.trim() || altPadrao[i - 1]);
+  const sheet = document.getElementById('sheetMais');
+  function abrirMais(){ if (typeof sheet.showModal === 'function') sheet.showModal(); else sheet.setAttribute('open',''); }
+  function fecharMais(){ if (typeof sheet.close === 'function') sheet.close(); else sheet.removeAttribute('open'); }
+  sheet.addEventListener('click', function(e){ if (e.target === sheet) fecharMais(); });
+  function salvarContato(){
+    const vcard = ['BEGIN:VCARD','VERSION:3.0','FN:[NOME_EMPRESA]','ORG:[NOME_EMPRESA]','TEL;TYPE=WORK,VOICE:+[WHATSAPP]','ADR;TYPE=WORK:;;[ENDERECO];[CIDADE];;Brasil','URL:' + PAGE_URL,'END:VCARD'].join('\\r\\n');
+    const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '[SLUG].vcf'; document.body.appendChild(a); a.click(); a.remove();
   }
-
-  let beneficiosItemsHtml = '';
-  try {
-    const benRaw = document.getElementById('hidden_lista_beneficios').value.trim();
-    if (benRaw) {
-      const benArr = JSON.parse(benRaw);
-      if (Array.isArray(benArr) && benArr.length) {
-        beneficiosItemsHtml = benArr.map(item => `<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${item}</li>`).join('');
-      }
-    }
-  } catch (e) {}
-  if (!beneficiosItemsHtml) {
-    beneficiosItemsHtml = `<li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>${segmento}</li>`;
+  async function compartilhar(){
+    try { if (navigator.share) { await navigator.share({ title: document.title, text: '[NOME_EMPRESA]', url: PAGE_URL }); return; } await navigator.clipboard.writeText(PAGE_URL); alert('Link copiado!'); } catch (err) {}
   }
-
-  let faqHtml = '';
-  try {
-    const faqRaw = document.getElementById('hidden_faq_perguntas').value.trim();
-    if (faqRaw) {
-      const faqArr = JSON.parse(faqRaw);
-      if (Array.isArray(faqArr) && faqArr.length) {
-        faqHtml = faqArr.map(f => `
-          <details class="faq-item">
-            <summary class="faq-question">${f.pergunta}</summary>
-            <div class="faq-answer">${f.resposta}</div>
-          </details>
-        `).join('');
-      }
-    }
-  } catch (e) {}
-  if (!faqHtml) {
-    faqHtml = `
-      <details class="faq-item">
-        <summary class="faq-question">Quais formas de pagamento são aceitas?</summary>
-        <div class="faq-answer">Aceitamos dinheiro, PIX e cartões para sua maior comodidade.</div>
-      </details>
-    `;
+  const frame = document.getElementById('deviceFrame');
+  const btnGyro = document.getElementById('toggleGyro');
+  let giroscopioAtivo = false;
+  function alternarGiroscopio(){
+    giroscopioAtivo = !giroscopioAtivo;
+    btnGyro.innerText = giroscopioAtivo ? 'Efeito 3D: ON' : 'Efeito 3D: OFF';
+    btnGyro.classList.toggle('active', giroscopioAtivo);
+    if (!giroscopioAtivo) frame.style.transform = 'rotateY(0deg) rotateX(0deg)';
   }
-
-  const txtIntro = document.getElementById('hidden_intro').value.trim() || `A ${nome} é referência em ${segmento} em${cidade}.`;
-
-  // MONTAGEM LEVE VIA TEMPLATE LITERAL DIRETO
-  htmlFinal = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#07101e">
-<meta name="description" content="${seoMetaDesc}">
-<meta name="keywords" content="${segmento}, ${cidade},${nome}">
-<meta name="author" content="ImpulsoWeb10">
-<link rel="canonical" href="${seoCanonical}">
-<meta property="og:type" content="website">
-<meta property="og:url" content="${linkPaginaCliente}">
-<meta property="og:title" content="${seoH1}">
-<meta property="og:description" content="${seoMetaDesc}">
-<meta property="og:image" content="${linkPaginaCliente}${imgsName[0]}">
-<meta property="og:locale" content="pt_BR">
-<meta name="twitter:card" content="summary">
-<title>${seoH1}</title>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "${nome}",
-  "image": "${linkPaginaCliente}${imgsName[0]}",
-  "@id": "${linkPaginaCliente}#store",
-  "url": "${linkPaginaCliente}",
-  "telephone": "+${wa}",   "priceRange": "$$",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "${endereco}",
-    "addressLocality": "${cidade}",
-    "addressCountry": "BR"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": -23.485,
-    "longitude": -46.345
-  },
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-    "opens": "08:00",
-    "closes": "18:00"
-  },
-  "sameAs": [
-    "https://www.instagram.com/${ig}"
-  ]
-}
+  document.addEventListener('mousemove', function(e){
+    if (!giroscopioAtivo) return;
+    const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+    const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+    frame.style.transform = 'rotateY(' + (x * 60) + 'deg) rotateX(' + (-y * 60) + 'deg)';
+  });
 <\/script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{width:100%}
-body{font-family:'DM Sans',sans-serif;background:#07101e;color:#e8e2d8;min-height:100vh;min-height:100dvh;width:100%;display:flex;flex-direction:column;align-items:center;padding:max(.7rem,env(safe-area-inset-top)) .6rem max(.7rem,env(safe-area-inset-bottom));overflow-x:hidden;position:relative;perspective:1200px}
-a:focus-visible,button:focus-visible{outline:2px solid #ffe082;outline-offset:3px}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 20%, rgba(201,169,110,0.07) 0%, transparent 70%),radial-gradient(ellipse 40% 40% at 80% 80%, rgba(17,40,80,0.6) 0%, transparent 60%);pointer-events:none;z-index:0}
-.app-wrapper{display:flex;flex-direction:column;align-items:center;width:100%;max-width:480px;margin:auto 0;position:relative;z-index:1}
-.device-frame{position:relative;z-index:1;width:100%;background:linear-gradient(175deg,#102040 0%,#0b1a2e 100%);border:2px solid #ffffff;border-radius:24px;box-shadow:0 0 10px #ffffff,0 0 20px rgba(255,255,255,.8),0 0 30px rgba(255,255,255,.35),0 15px 35px rgba(0,0,0,.6);padding:1.3rem 1.2rem 1.1rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:.9rem;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.175,.885,.32,1.275);will-change:transform}
-.secret-back{position:absolute;inset:0;width:100%;height:100%;background:#050b14;border-radius:22px;transform:rotateY(180deg);backface-visibility:hidden;z-index:2;transform-style:preserve-3d;overflow:hidden}
-.back-layer{position:absolute;width:100%;height:100%;object-fit:cover;top:0;left:0;border-radius:22px}
-.back-layer-fundo{transform:translateZ(-20px)}
-.back-layer-mago{transform:translateZ(30px)}
-.back-layer-moldura{transform:translateZ(80px);pointer-events:none}
-.page{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.9rem;width:100%;transform-style:preserve-3d;backface-visibility:hidden}
-.layer-back{transform:translateZ(15px);transform-style:preserve-3d;transition:transform .4s ease}
-.layer-mid{transform:translateZ(35px);transform-style:preserve-3d;transition:transform .4s ease}
-.layer-front{transform:translateZ(55px);transform-style:preserve-3d;filter:drop-shadow(0 10px 15px rgba(0,0,0,.5));transition:transform .4s ease}
-.layer-pop{transform:translateZ(75px);transform-style:preserve-3d;filter:drop-shadow(0 12px 20px rgba(0,0,0,.6));transition:transform .4s ease}
-.logo-wrap{display:flex;flex-direction:column;align-items:center;gap:.4rem}
-.logo-frame{position:relative;border-radius:14px;overflow:hidden;display:inline-block;animation:logo-pulse 2.6s ease-in-out infinite;box-shadow:0 0 0 0 rgba(201,169,110,.5)}
-.logo-frame::after{content:'';position:absolute;top:0;left:-110%;width:55%;height:100%;background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,.55) 50%,transparent 80%);transform:skewX(-18deg);animation:logo-shimmer 2.6s ease-in-out infinite;pointer-events:none;z-index:2}
-@keyframes logo-pulse{0%{box-shadow:0 0 0 0 rgba(201,169,110,.55),0 6px 20px rgba(201,169,110,.25)}55%{box-shadow:0 0 0 12px rgba(201,169,110,0),0 6px 20px rgba(201,169,110,.1)}100%{box-shadow:0 0 0 0 rgba(201,169,110,0),0 6px 20px rgba(201,169,110,.25)}}
-@keyframes logo-shimmer{0%{left:-110%}45%,100%{left:160%}}
-.logo-img{display:block;width:160px;height:auto;max-height:72px;border-radius:12px;border:2px solid rgba(201,169,110,.4);object-fit:contain;background:rgba(201,169,110,.06);position:relative;z-index:1}
-.logo-img-fallback{width:160px;height:66px;border-radius:12px;border:2px solid rgba(201,169,110,.4);background:rgba(201,169,110,.06);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#c9a96e;font-weight:600;letter-spacing:.08em;position:relative;z-index:1}
-.brand{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:#f0ece5;letter-spacing:.06em;line-height:1.1}
-.brand em{color:#c9a96e;font-style:italic}
-.tagline{margin-top:.25rem;font-size:.78rem;color:#9bb5d4;font-weight:400;letter-spacing:.03em}
-.chips{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center}
-.chip{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;color:#d9e4f2;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:.28rem .65rem}
-.chip svg{width:13px;height:13px;flex-shrink:0;stroke:#c9a96e;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.stars-cta{display:flex;flex-direction:column;align-items:center;gap:.3rem;text-decoration:none;padding:.35rem .9rem .45rem;border-radius:18px;-webkit-tap-highlight-color:transparent;transition:transform .15s}
-.stars-cta:active{transform:scale(.97)}
-.stars-row{display:flex;align-items:center;gap:.3rem;justify-content:center}
-.star{font-size:2.2rem;line-height:1;color:#ffd700;text-shadow:0 0 12px rgba(255,215,0,.5);animation:star-wave 2.6s ease-in-out infinite}
-.star:nth-child(2){animation-delay:.12s}
-.star:nth-child(3){animation-delay:.24s}
-.star:nth-child(4){animation-delay:.36s}
-.star:nth-child(5){animation-delay:.48s}
-@keyframes star-wave{0%,55%,100%{transform:translateY(0) scale(1);filter:brightness(1)}25%{transform:translateY(-5px) scale(1.14);filter:brightness(1.3)}}
-.stars-label{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:700;color:#ffffff;letter-spacing:.01em}
-.stars-label svg{width:15px;height:15px;flex-shrink:0}
-.proof{font-size:.76rem;color:#ffe082;font-weight:700}
-.cta-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;width:100%}
-.btn-act{display:flex;align-items:center;justify-content:center;gap:.45rem;min-height:46px;border-radius:50px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;text-decoration:none;transition:transform .2s}
-.btn-act:hover{transform:translateY(-2px)}
-.btn-act svg{width:18px;height:18px;flex-shrink:0}
-.btn-call{background:#22c55e;color:#04210f}
-.btn-wa{background:#0f2a1c;color:#d9ffe8;border:1.5px solid #25d366}
-.social-row{display:flex;gap:.9rem;justify-content:center;align-items:flex-start}
-.social-btn{display:flex;flex-direction:column;align-items:center;gap:.25rem;text-decoration:none;background:none;border:none;cursor:pointer;font-family:inherit;transition:transform .2s}
-.social-btn:hover{transform:translateY(-3px)}
-.social-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,.3);transition:border-color .2s,box-shadow .2s}
-.social-btn:hover .social-icon{border-color:rgba(255,255,255,.6);box-shadow:0 6px 16px rgba(0,0,0,.35)}
-.social-icon svg{width:20px;height:20px}
-.social-label{font-size:.68rem;color:#9bb5d4;letter-spacing:.03em}
-.hours{display:flex;align-items:center;justify-content:center;gap:.4rem;font-size:.74rem;color:#d0dce8;font-weight:500}
-.hours .dot{width:8px;height:8px;border-radius:50%;background:#8ba4c4;flex-shrink:0}
-.hours.open .dot{background:#4ade80;box-shadow:0 0 8px #4ade80}
-.hours.closed .dot{background:#f87171}
-.address{font-size:.74rem;color:#8ba4c4;line-height:1.4;cursor:pointer;transition:color .2s;position:relative;display:inline-block}
-.address:hover{color:#ffe082}
-.address::after{content:'(Copiar)';display:block;font-size:.6rem;color:#c9a96e;opacity:.8;margin-top:-1px}
-.ticker-banner{width:100%;overflow:hidden;background:rgba(201,169,110,.15);border:1px solid rgba(201,169,110,.35);border-radius:8px;padding:.35rem 0;display:flex}
-.ticker-track{display:flex;width:max-content;animation:infinite-scroll 36s linear infinite}
-.ticker-item{font-size:.76rem;color:#fce8bd;font-weight:500;letter-spacing:.03em;padding-right:2rem;white-space:nowrap}
-@keyframes infinite-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.footer{font-size:.72rem;color:#d0dce8;display:flex;flex-direction:column;align-items:center;gap:.35rem;width:100%;border-top:1px solid rgba(255,255,255,.15);padding-top:.7rem}
-.footer-promo{font-size:.74rem;color:#ffffff;text-align:center}
-.footer-promo a{color:#ffe082;text-decoration:none;font-weight:700;border-bottom:1px solid #ffe082;padding-bottom:1px}
-.footer-promo a:hover{color:#fff;border-color:#fff}
-.footer-dev{font-size:.7rem;color:#b0c4de;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center}
-.footer-dev a{color:#64b5f6;text-decoration:none;font-weight:700}
-.footer-dev a:hover{color:#90caf9;text-decoration:underline}
-@keyframes neon-pulse{0%{box-shadow:0 0 5px rgba(201,169,110,.4);border-color:rgba(201,169,110,.5)}50%{box-shadow:0 0 15px rgba(201,169,110,.8);border-color:#ffe082}100%{box-shadow:0 0 5px rgba(201,169,110,.4);border-color:rgba(201,169,110,.5)}}
-.btn-gyro{background:rgba(255,255,255,.08);color:#ffe082;border:1px solid rgba(201,169,110,.4);border-radius:14px;padding:.3rem .7rem;font-size:.7rem;cursor:pointer;font-family:inherit;font-weight:600;transition:all .3s ease;animation:neon-pulse 2s infinite ease-in-out;opacity:.7}
-.btn-gyro:hover,.btn-gyro.active{background:rgba(201,169,110,.25);color:#ffffff;opacity:1}
-.btn-gyro.active{background:linear-gradient(135deg,#c9a96e 0%,#b89350 100%);color:#ffffff;border-color:#ffe082;box-shadow:0 0 20px rgba(201,169,110,.9);animation:none}
-.sheet{position:fixed;inset:auto 0 0 0;margin:0 auto;width:min(520px,100%);max-width:100%;max-height:90vh;max-height:90dvh;overflow-y:auto;border:2px solid #fff;border-bottom:none;border-radius:22px 22px 0 0;background:linear-gradient(175deg,#102040 0%,#0b1a2e 100%);color:#e8e2d8;padding:0;box-shadow:0 -6px 30px rgba(255,255,255,.25);font-family:'DM Sans',sans-serif}
-.sheet::backdrop{background:rgba(3,8,16,.74)}
-.sheet[open]{animation:sheet-up .28s ease-out}
-@keyframes sheet-up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
-.sheet-body{padding:1.1rem 1.2rem calc(1.3rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:1.1rem}
-.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.sheet h2{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:600;color:#f0ece5;letter-spacing:.04em}
-.sheet h3{font-size:.9rem;font-weight:700;color:#c9a96e;margin-bottom:.4rem}
-.sheet p{font-size:.82rem;line-height:1.55;color:#c9d6e6}
-.sheet a.inline{color:#ffe082;font-weight:700;text-decoration:none;border-bottom:1px solid #ffe082}
-.sheet-close{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.3);color:#fff;font-size:1.3rem;line-height:1;cursor:pointer;font-family:inherit}
-.sheet-close:hover{background:rgba(255,255,255,.18)}
-.svc-list{list-style:none;display:grid;gap:.5rem}
-.svc-list li{display:flex;align-items:center;gap:.6rem;font-size:.84rem;color:#e8e2d8;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:.55rem .75rem}
-.svc-list svg{width:18px;height:18px;flex-shrink:0;stroke:#c9a96e;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-.gallery img{width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border-radius:12px;border:1px solid rgba(201,169,110,.5)}
-.nav-buttons-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.5rem}
-.btn-nav-map, .btn-nav-waze{display:flex;align-items:center;justify-content:center;gap:.4rem;min-height:42px;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.78rem;text-decoration:none;transition:transform .2s, box-shadow .2s;padding:0 .4rem}
-.btn-nav-map:hover, .btn-nav-waze:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
-.btn-nav-map{background:#1a2030;color:#ffffff;border:1.5px solid rgba(66,133,244,.6)}
-.btn-nav-waze{background:#10222a;color:#ffffff;border:1.5px solid rgba(51,204,255,.6)}
-.faq-container{display:flex;flex-direction:column;gap:.45rem}
-.faq-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;overflow:hidden;transition:background .2s, border-color .2s}
-.faq-item[open]{background:rgba(255,255,255,.08);border-color:rgba(201,169,110,.4)}
-.faq-question{font-size:.82rem;font-weight:700;color:#f0ece5;padding:.65rem .8rem;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;user-select:none}
-.faq-question::-webkit-details-marker{display:none}
-.faq-question::after{content:'+';font-size:1.1rem;color:#c9a96e;font-weight:700;transition:transform .2s}
-.faq-item[open] .faq-question::after{content:'−'}
-.faq-answer{font-size:.78rem;line-height:1.5;color:#c9d6e6;padding:0 .8rem .8rem .8rem;border-top:1px solid rgba(255,255,255,.06);margin-top:.1rem;padding-top:.45rem}
-.btn-share{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;min-height:46px;background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.35);border-radius:50px;font-family:inherit;font-weight:700;font-size:.86rem;cursor:pointer}
-.btn-share:hover{background:rgba(255,255,255,.16)}
-.btn-share svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.toast{min-height:1.1em;text-align:center;font-size:.78rem;color:#4ade80}
-.bg-seo{display:none}
-@media (min-width:1024px){
-  html::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1}
-  html::before{background:radial-gradient(ellipse 34% 85% at 50% 50%,rgba(7,16,30,.94) 0%,rgba(7,16,30,.7) 55%,rgba(7,16,30,0) 100%),radial-gradient(ellipse 50% 40% at 50% 0%,rgba(201,169,110,.10) 0%,transparent 70%),linear-gradient(100deg,rgba(58,92,110,.55) 0%,rgba(58,92,110,0) 30%),linear-gradient(260deg,rgba(150,88,62,.42) 0%,rgba(150,88,62,0) 28%),linear-gradient(115deg,transparent 40%,rgba(201,169,110,.05) 50%,transparent 60%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .012' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .5  0 0 0 0 .62  0 0 0 1.1 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='.35'/%3E%3C/svg%3E"),repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 1px,transparent 1px 7px),linear-gradient(135deg,#0a1830 0%,#07101e 50%,#0d1c30 100%);background-size:auto,auto,auto,auto,auto,260px 260px,900px 900px,auto,auto}
-  .bg-seo{display:flex;justify-content:space-between;align-items:stretch;position:absolute;top:2rem;left:0;right:0;height:calc(100vh - 4rem);overflow:hidden;padding:0 3vw;z-index:0;pointer-events:none;font-family:'DM Sans',sans-serif;color:rgba(232,226,216,.6)}
-  .bg-seo>div{width:clamp(190px,calc((100vw - 480px)/2 - 7vw),380px);display:flex;flex-direction:column;justify-content:space-between;gap:1rem}
-  .bg-seo>div:last-child{text-align:right}
-  .bg-seo h1, .bg-seo h2, .bg-seo p{margin:0}
-  .bg-seo h1{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;letter-spacing:.06em;line-height:1.15;color:rgba(201,169,110,.85)}
-  .bg-seo h2{margin-top:1.1rem;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.4;color:rgba(201,169,110,.7)}
-  .bg-seo h1+h2{margin-top:.5rem}
-  .bg-seo p{margin-top:.4rem;font-size:.74rem;line-height:1.6;letter-spacing:.01em}
-  .bg-seo .fotos{display:flex;gap:.6rem}
-  .bg-seo .fotos img{flex:1 1 0;min-width:0;width:50%;height:auto;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid rgba(201,169,110,.5);border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.45);opacity:.94}
-  .sheet{inset:0;margin:auto;border-radius:22px;border-bottom:2px solid #fff;max-height:86vh;max-height:86dvh}
-}
-</style>
+</body>
+</html>`;
 
-document.getElementById('resBox').classList.add('show');
-document.getElementById('resBox').scrollIntoView({ behavior: 'smooth' });
-}
+      // Substituição rápida e segura com .replaceAll() sem loops pesados
+      htmlFinal = templateCliente
+        .replaceAll('[NOME_EMPRESA]', nome)
+        .replaceAll('[CIDADE]', cidade)
+        .replaceAll('[SEGMENTO]', segmento)
+        .replaceAll('[SERVICOS_RESUMO]', servicos)
+        .replaceAll('[WHATSAPP]', wa)
+        .replaceAll('[INSTAGRAM]', ig)
+        .replaceAll('[ENDERECO]', endereco)
+        .replaceAll('[QUERY_MAPS]', encodeURIComponent(endereco + ' ' + cidade))
+        .replaceAll('[LINK_AVALIACAO_GOOGLE]', linkGoogleAvaliacao)
+        .replaceAll('[PAGE_URL]', linkPaginaCliente)
+        .replaceAll('[SEO_CANONICAL]', seoCanonical)
+        .replaceAll('[SEO_H1]', seoH1)
+        .replaceAll('[SEO_META_DESC]', seoMetaDesc)
+        .replaceAll('[SEO_KEYWORDS]', `${segmento}, ${cidade}, ${nome}`)
+        .replaceAll('[IMG_1_NAME]', imgsName[0])
+        .replaceAll('[IMG_1_ALT]', imgsAlt[0])
+        .replaceAll('[IMG_2_NAME]', imgsName[1])
+        .replaceAll('[IMG_2_ALT]', imgsAlt[1])
+        .replaceAll('[IMG_3_NAME]', imgsName[2])
+        .replaceAll('[IMG_3_ALT]', imgsAlt[2])
+        .replaceAll('[IMG_4_NAME]', imgsName[3])
+        .replaceAll('[IMG_4_ALT]', imgsAlt[3])
+        .replaceAll('[IMG_1]', imgsName[0])
+        .replaceAll('[BENEFICIOS_HTML]', beneficiosItemsHtml)
+        .replaceAll('[FAQ_HTML]', faqHtml)
+        .replaceAll('[INTRO_TEXT]', txtIntro)
+        .replaceAll('[SLUG]', nomeEmpresaSlug);
 
-function baixarQRCode() {
-  const qrImg = document.querySelector('#qrbox img');
-  const qrCanvas = document.querySelector('#qrbox canvas');
-  let imageUrl = qrImg ? qrImg.src : (qrCanvas ? qrCanvas.toDataURL("image/png") : "");
-  if (!imageUrl) { alert("Gere o cartão primeiro para obter o QR Code!"); return; }
-  const a = document.createElement("a");
-  a.href = imageUrl;
-  a.download = `qrcode-${nomeEmpresaSlug}.png`;
-  a.click();
-}
+      document.getElementById('resBox').classList.remove('hidden');
+      document.getElementById('resBox').scrollIntoView({ behavior: 'smooth' });
+    }
 
-// FUNÇÃO DE DOWNLOAD VIA BLOB OTIMIZADA E LEVE
-function baixarHTML() {
-  if (!htmlFinal) {
-    alert("Por favor, gere o cartão primeiro antes de baixar!");
-    return;
-  }
-  const blob = new Blob([htmlFinal], { type: 'text/html;charset=utf-8' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'index.html';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(link.href);
-}
-</script>
+    function baixarQRCode() {
+      const qrImg = document.querySelector('#qrbox img');
+      const qrCanvas = document.querySelector('#qrbox canvas');
+      let imageUrl = qrImg ? qrImg.src : (qrCanvas ? qrCanvas.toDataURL("image/png") : "");
+      if (!imageUrl) { alert("Gere o cartão primeiro para obter o QR Code!"); return; }
+      const a = document.createElement("a");
+      a.href = imageUrl;
+      a.download = `qrcode-${nomeEmpresaSlug}.png`;
+      a.click();
+    }
+
+    // DOWNLOAD VIA BLOB BLINDADO CONTRA TRAVAMENTOS
+    function baixarHTML() {
+      if (!htmlFinal) {
+        alert("Por favor, gere o cartão primeiro antes de baixar!");
+        return;
+      }
+      const blob = new Blob([htmlFinal], { type: 'text/html;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'index.html';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }
+  </script>
 </body>
 </html>
