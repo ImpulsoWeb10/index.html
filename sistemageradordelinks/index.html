@@ -4,8 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Gerador Profissional — ImpulsoWeb10</title>
-<link href="[https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap](https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap)" rel="stylesheet"/>
-<script src="[https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js](https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js)"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--y:#FBBC04;--b:#1A73E8;--r:#EA4335;--g:#34A853;--wa:#25D366;--dark:#09090B;--card:#18181B;--surface:#27272A;--border:rgba(255,255,255,0.08);--text:#FAFAFA;--muted:#71717A;--muted2:#A1A1AA;}
@@ -98,7 +98,7 @@ textarea{resize:vertical;min-height:100px}
       <div class="field-grp">
         <label style="color:var(--b);font-weight:700;">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
         <textarea id="importarIA" placeholder='Cole aqui o JSON gerado pela IA contendo os dados de SEO, FAQ e imagens...'></textarea>
-        <button type="button" class="btn-ai-import" id="btnImportar">✨ Processar e Preencher Campos</button>
+        <button type="button" class="btn-ai-import" onclick="processarJsonAi()">✨ Processar e Preencher Campos</button>
       </div>
     </div>
 
@@ -110,7 +110,6 @@ textarea{resize:vertical;min-height:100px}
     <input type="hidden" id="hidden_textos_seo_secoes" />
     <input type="hidden" id="hidden_faq_perguntas" />
     
-    <!-- 4 Imagens WebP com url, name, alt -->
     <input type="hidden" id="hidden_img1_url" /> <input type="hidden" id="hidden_img1_name" /> <input type="hidden" id="hidden_img1_alt" />
     <input type="hidden" id="hidden_img2_url" /> <input type="hidden" id="hidden_img2_name" /> <input type="hidden" id="hidden_img2_alt" />
     <input type="hidden" id="hidden_img3_url" /> <input type="hidden" id="hidden_img3_name" /> <input type="hidden" id="hidden_img3_alt" />
@@ -188,7 +187,7 @@ textarea{resize:vertical;min-height:100px}
       <h3 style="color:#fff;font-size:1.1rem;">Ficheiro index.html Pronto!</h3>
       <p style="color:var(--muted2);font-size:.85rem;margin-top:.4rem;line-height:1.5;">
         Clique no botão abaixo para baixar o seu ficheiro atualizado:<br>
-        <strong style="color:var(--y);" id="txtCaminhoGithub">[https://avaliar.impulsoweb10.com.br/cliente/nome/index.html](https://avaliar.impulsoweb10.com.br/cliente/nome/index.html)</strong>
+        <strong style="color:var(--y);" id="txtCaminhoGithub">https://avaliar.impulsoweb10.com.br/cliente/nome/index.html</strong>
       </p>
       <button class="btn-dl" onclick="baixarHTML()">📥 Baixar index.html Limpo</button>
     </div>
@@ -209,9 +208,9 @@ function formatarSlug(texto) {
 }
 
 /* ==========================================================
-   FUNÇÃO DE IMPORTAÇÃO VIA JSON DA IA (ATUALIZADA E CORRIGIDA)
+   FUNÇÃO DE IMPORTAÇÃO VIA JSON DA IA (CORRIGIDA)
    ========================================================== */
-document.getElementById('btnImportar').addEventListener('click', function() {
+function processarJsonAi() {
     try {
         let jsonTexto = document.getElementById('importarIA').value.trim();
         
@@ -278,7 +277,7 @@ document.getElementById('btnImportar').addEventListener('click', function() {
         console.error(erro);
         alert('❌ Erro de Sintaxe: O código colado possui problemas na estrutura JSON. Certifique-se de copiar do começo ao fim.');
     }
-});
+}
 
 function abrirModalLimpar() {
   document.getElementById('modalLimpar').classList.add('active');
@@ -319,7 +318,7 @@ function gerarTudo() {
   const segmento = document.getElementById('id_do_seu_campo_segmento').value.trim() || 'Serviços';
   const servicos = document.getElementById('id_do_seu_campo_produtos').value.trim() || 'Atendimento de Qualidade';
 
-  const seoCanonical = document.getElementById('hidden_canonical').value.trim() || `[https://avaliar.impulsoweb10.com.br/cliente/$](https://avaliar.impulsoweb10.com.br/cliente/$){formatarSlug(nome)}/`;
+  const seoCanonical = document.getElementById('hidden_canonical').value.trim() || `https://avaliar.impulsoweb10.com.br/cliente/${formatarSlug(nome)}/`;
   const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} — ${cidade}`;
   const seoMetaDesc = document.getElementById('hidden_meta_description').value.trim() || `${segmento} em ${cidade}. ${servicos}.`;
   
@@ -362,11 +361,11 @@ function gerarTudo() {
     return;
   }
 
-  const linkGoogleAvaliacao = `[https://search.google.com/local/writereview?placeid=$](https://search.google.com/local/writereview?placeid=$){encodeURIComponent(pid)}`;
+  const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
   document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
 
   nomeEmpresaSlug = formatarSlug(nome);
-  const linkPaginaCliente = `[https://avaliar.impulsoweb10.com.br/cliente/$](https://avaliar.impulsoweb10.com.br/cliente/$){nomeEmpresaSlug}/`;
+  const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
   document.getElementById('outLinkCliente').value = linkPaginaCliente;
   document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
 
@@ -375,7 +374,7 @@ function gerarTudo() {
   new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
 
   /* ==========================================================
-     TEMPLATE HTML LIMPO (INDEX-21) GERADO PARA DOWNLOAD
+     GERADOR DO HTML FINAL (INDEX-21 LIMPO)
      ========================================================== */
   htmlFinal = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -400,7 +399,7 @@ function gerarTudo() {
 
 <script type="application/ld+json">
 {
-  "@context": "[https://schema.org](https://schema.org)",
+  "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "${nome}",
   "image": "${linkPaginaCliente}logo.png",
@@ -415,14 +414,14 @@ function gerarTudo() {
     "addressCountry": "BR"
   },
   "sameAs": [
-    "[https://www.instagram.com/$](https://www.instagram.com/$){ig}"
+    "https://www.instagram.com/${ig}"
   ]
 }
 </script>
 
-<link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-<link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-<link href="[https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap](https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap)" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{width:100%}
@@ -860,8 +859,8 @@ body::before{
       linear-gradient(100deg,rgba(58,92,110,.55) 0%,rgba(58,92,110,0) 30%),
       linear-gradient(260deg,rgba(150,88,62,.42) 0%,rgba(150,88,62,0) 28%),
       linear-gradient(115deg,transparent 40%,rgba(201,169,110,.05) 50%,transparent 60%),
-      url("data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .012' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .5  0 0 0 0 .62  0 0 0 1.1 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='.35'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .012' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .5  0 0 0 0 .62  0 0 0 1.1 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='.35'/%3E%3C/svg%3E"),
       repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 1px,transparent 1px 7px),
       linear-gradient(135deg,#0a1830 0%,#07101e 50%,#0d1c30 100%);
     background-size:auto,auto,auto,auto,auto,260px 260px,900px 900px,auto,auto;
@@ -882,115 +881,6 @@ body::before{
 </head>
 <body>
 
-<div class="app-wrapper" style="display:none"></div>
-
-<main style="max-width:760px;margin:0 auto;padding:2rem 1.5rem">
-  <div class="hero">
-    <h1>Gerador de Cartão <em>3D + SEO IA</em></h1>
-    <p>Cole o JSON gerado pela IA no topo ou preencha os dados abaixo.</p>
-  </div>
-
-  <div class="form-card">
-    <div class="ai-import-box">
-      <div class="field-grp">
-        <label style="color:var(--b);font-weight:700;">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
-        <textarea id="importarIA" placeholder='Cole aqui o JSON gerado pela IA contendo os dados de SEO, FAQ e imagens...'></textarea>
-        <button type="button" class="btn-ai-import" id="btnImportar">✨ Processar e Preencher Campos</button>
-      </div>
-    </div>
-
-    <!-- Inputs ocultos -->
-    <input type="hidden" id="hidden_canonical" />
-    <input type="hidden" id="hidden_h1" />
-    <input type="hidden" id="hidden_meta_description" />
-    <input type="hidden" id="hidden_lista_beneficios" />
-    <input type="hidden" id="hidden_textos_seo_secoes" />
-    <input type="hidden" id="hidden_faq_perguntas" />
-    
-    <input type="hidden" id="hidden_img1_url" /> <input type="hidden" id="hidden_img1_name" /> <input type="hidden" id="hidden_img1_alt" />
-    <input type="hidden" id="hidden_img2_url" /> <input type="hidden" id="hidden_img2_name" /> <input type="hidden" id="hidden_img2_alt" />
-    <input type="hidden" id="hidden_img3_url" /> <input type="hidden" id="hidden_img3_name" /> <input type="hidden" id="hidden_img3_alt" />
-    <input type="hidden" id="hidden_img4_url" /> <input type="hidden" id="hidden_img4_name" /> <input type="hidden" id="hidden_img4_alt" />
-
-    <div class="section-title">1. Dados Principais do Google</div>
-    <div class="grid-2">
-      <div class="field-grp">
-        <label>Place ID do Negócio no Google *</label>
-        <input type="text" id="id_do_seu_campo_placeid" placeholder="Ex: ChIJN1t_tDeuEmsRUsoyG83frY4"/>
-      </div>
-      <div class="field-grp">
-        <label>Nome da Empresa *</label>
-        <input type="text" id="id_do_seu_campo_nome_empresa" placeholder="Ex: Nova Louzada"/>
-      </div>
-    </div>
-
-    <div class="section-title">2. Contactos e Redes Sociais</div>
-    <div class="grid-2">
-      <div class="field-grp">
-        <label>WhatsApp (só números com DDD)</label>
-        <input type="text" id="id_do_seu_campo_whatsapp" placeholder="Ex: 5511999999999"/>
-      </div>
-      <div class="field-grp">
-        <label>Instagram (Nome do utilizador sem @)</label>
-        <input type="text" id="id_do_seu_campo_instagram" placeholder="Ex: novalouzada"/>
-      </div>
-    </div>
-
-    <div class="section-title">3. Localização e Endereço</div>
-    <div class="grid-2">
-      <div class="field-grp">
-        <label>Cidade / Estado</label>
-        <input type="text" id="id_do_seu_campo_cidade_estado" placeholder="Ex: São Paulo - SP"/>
-      </div>
-      <div class="field-grp">
-        <label>Endereço Completo</label>
-        <input type="text" id="id_do_seu_campo_endereco" placeholder="Ex: Rua Exemplo, 123"/>
-      </div>
-    </div>
-
-    <div class="section-title">4. SEO & Ramo de Atuação</div>
-    <div class="grid-2">
-      <div class="field-grp">
-        <label>Segmento de Atuação</label>
-        <input type="text" id="id_do_seu_campo_segmento" placeholder="Ex: Materiais de Construção"/>
-      </div>
-      <div class="field-grp">
-        <label>Produtos / Serviços Principais</label>
-        <input type="text" id="id_do_seu_campo_produtos" placeholder="Ex: Ferramentas, Tintas, Hidráulica"/>
-      </div>
-    </div>
-
-    <button class="btn-gen" onclick="gerarTudo()">🚀 Gerar Link, QR Code & Baixar HTML Completo</button>
-  </div>
-
-  <div class="results" id="resBox">
-    <div style="color:var(--g);font-weight:700;font-size:1rem;margin-bottom:.5rem;">✓ Dados Processados com Sucesso!</div>
-    
-    <label style="font-size:.78rem;color:var(--muted2);">Link da Página do Cliente:</label>
-    <input type="text" id="outLinkCliente" style="width:100%;margin-top:.3rem;margin-bottom:1rem;" readonly/>
-
-    <label style="font-size:.78rem;color:var(--muted2);">Link Direto de Avaliação Google:</label>
-    <input type="text" id="outLinkGoogle" style="width:100%;margin-top:.3rem;margin-bottom:1rem;" readonly/>
-
-    <div style="text-align:center;margin:1rem 0;">
-      <div style="font-size:.85rem;color:var(--muted2);margin-bottom:.2rem;">QR Code Gerado:</div>
-      <div id="qrbox"></div>
-      <div>
-        <button class="btn-dl-qr" onclick="baixarQRCode()">📥 Baixar Imagem do QR Code</button>
-      </div>
-    </div>
-
-    <div class="action-box">
-      <h3 style="color:#fff;font-size:1.1rem;">Ficheiro index.html Pronto!</h3>
-      <p style="color:var(--muted2);font-size:.85rem;margin-top:.4rem;line-height:1.5;">
-        Clique no botão abaixo para baixar o seu ficheiro atualizado:<br>
-        <strong style="color:var(--y);" id="txtCaminhoGithub">[https://avaliar.impulsoweb10.com.br/cliente/nome/index.html](https://avaliar.impulsoweb10.com.br/cliente/nome/index.html)</strong>
-      </p>
-      <button class="btn-dl" onclick="baixarHTML()">📥 Baixar index.html Limpo</button>
-    </div>
-  </div>
-</main>
-
 <script>
 let htmlFinal = "";
 let nomeEmpresaSlug = "cliente";
@@ -1004,10 +894,7 @@ function formatarSlug(texto) {
     .replace(/^-+|-+$/g, "");
 }
 
-/* ==========================================================
-   FUNÇÃO DE IMPORTAÇÃO VIA JSON DA IA (CORRIGIDA)
-   ========================================================== */
-document.getElementById('btnImportar').addEventListener('click', function() {
+function processarJsonAi() {
     try {
         let jsonTexto = document.getElementById('importarIA').value.trim();
         
@@ -1074,7 +961,7 @@ document.getElementById('btnImportar').addEventListener('click', function() {
         console.error(erro);
         alert('❌ Erro de Sintaxe: O código colado possui problemas na estrutura JSON. Certifique-se de copiar do começo ao fim.');
     }
-});
+}
 
 function abrirModalLimpar() {
   document.getElementById('modalLimpar').classList.add('active');
@@ -1115,7 +1002,7 @@ function gerarTudo() {
   const segmento = document.getElementById('id_do_seu_campo_segmento').value.trim() || 'Serviços';
   const servicos = document.getElementById('id_do_seu_campo_produtos').value.trim() || 'Atendimento de Qualidade';
 
-  const seoCanonical = document.getElementById('hidden_canonical').value.trim() || `[https://avaliar.impulsoweb10.com.br/cliente/$](https://avaliar.impulsoweb10.com.br/cliente/$){formatarSlug(nome)}/`;
+  const seoCanonical = document.getElementById('hidden_canonical').value.trim() || `https://avaliar.impulsoweb10.com.br/cliente/${formatarSlug(nome)}/`;
   const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} —${cidade}`;
   const seoMetaDesc = document.getElementById('hidden_meta_description').value.trim() || `${segmento} em ${cidade}.${servicos}.`;
   
@@ -1158,11 +1045,11 @@ function gerarTudo() {
     return;
   }
 
-  const linkGoogleAvaliacao = `[https://search.google.com/local/writereview?placeid=$](https://search.google.com/local/writereview?placeid=$){encodeURIComponent(pid)}`;
+  const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
   document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
 
   nomeEmpresaSlug = formatarSlug(nome);
-  const linkPaginaCliente = `[https://avaliar.impulsoweb10.com.br/cliente/$](https://avaliar.impulsoweb10.com.br/cliente/$){nomeEmpresaSlug}/`;
+  const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
   document.getElementById('outLinkCliente').value = linkPaginaCliente;
   document.getElementById('txtCaminhoGithub').textContent = `${linkPaginaCliente}index.html`;
 
@@ -1170,9 +1057,6 @@ function gerarTudo() {
   qrDiv.innerHTML = '';
   new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
 
-  /* ==========================================================
-     GERADOR DO HTML FINAL (INDEX-21 LIMPO)
-     ========================================================== */
   htmlFinal = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1196,7 +1080,7 @@ function gerarTudo() {
 
 <script type="application/ld+json">
 {
-  "@context": "[https://schema.org](https://schema.org)",
+  "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "${nome}",
   "image": "${linkPaginaCliente}logo.png",
@@ -1210,14 +1094,14 @@ function gerarTudo() {
     "addressCountry": "BR"
   },
   "sameAs": [
-    "[https://www.instagram.com/$](https://www.instagram.com/$){ig}"
+    "https://www.instagram.com/${ig}"
   ]
 }
 </script>
 
-<link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-<link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-<link href="[https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap](https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap)" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{width:100%}
@@ -1655,8 +1539,8 @@ body::before{
       linear-gradient(100deg,rgba(58,92,110,.55) 0%,rgba(58,92,110,0) 30%),
       linear-gradient(260deg,rgba(150,88,62,.42) 0%,rgba(150,88,62,0) 28%),
       linear-gradient(115deg,transparent 40%,rgba(201,169,110,.05) 50%,transparent 60%),
-      url("data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .012' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .5  0 0 0 0 .62  0 0 0 1.1 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='.35'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .012' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .5  0 0 0 0 .62  0 0 0 1.1 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='.35'/%3E%3C/svg%3E"),
       repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 1px,transparent 1px 7px),
       linear-gradient(135deg,#0a1830 0%,#07101e 50%,#0d1c30 100%);
     background-size:auto,auto,auto,auto,auto,260px 260px,900px 900px,auto,auto;
@@ -1678,18 +1562,6 @@ body::before{
 <body>
 
 <script>
-  let htmlFinal = "";
-  let nomeEmpresaSlug = "cliente";
-
-  function formatarSlug(texto) {
-    return texto
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  }
-
   function baixarQRCode() {
     const qrImg = document.querySelector('#qrbox img');
     const qrCanvas = document.querySelector('#qrbox canvas');
