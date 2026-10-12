@@ -106,7 +106,7 @@ textarea{resize:vertical;min-height:100px}
     <div class="ai-import-box">
       <div class="field-grp">
         <label style="color:var(--b);font-weight:700;">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
-        <textarea id="jsonAiInput" placeholder='Cole aqui o JSON gerado pela IA contendo os dados de SEO, FAQ e imagens...'></textarea>
+        <textarea id="jsonAiInput" placeholder='Cole aqui o JSON gerado pela IA (dados_formulario_base + conteudo_enriquecido_desktop)...'></textarea>
         <button type="button" class="btn-ai-import" onclick="processarJsonAi()">✨ Processar e Preencher Campos</button>
       </div>
     </div>
@@ -115,6 +115,7 @@ textarea{resize:vertical;min-height:100px}
     <input type="hidden" id="hidden_canonical" />
     <input type="hidden" id="hidden_h1" />
     <input type="hidden" id="hidden_meta_description" />
+    <input type="hidden" id="hidden_lista_beneficios" />
     <input type="hidden" id="hidden_faq_perguntas" />
     <input type="hidden" id="hidden_intro" />
     <input type="hidden" id="hidden_produtos" />
@@ -201,6 +202,11 @@ textarea{resize:vertical;min-height:100px}
       </div>
     </div>
 
+    <div id="imgListBox" style="display:none;margin:1rem 0;padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;">
+      <div style="font-size:.85rem;font-weight:700;color:var(--y);margin-bottom:.6rem;">🖼️ Imagens para salvar na pasta do cliente (.webp)</div>
+      <div id="imgListContent" style="font-size:.78rem;color:var(--muted2);line-height:1.6;"></div>
+    </div>
+
     <div class="action-box">
       <h3 style="color:#fff;font-size:1.1rem;">Ficheiro index.html Pronto!</h3>
       <p style="color:var(--muted2);font-size:.85rem;margin-top:.4rem;line-height:1.5;">
@@ -227,56 +233,82 @@ function formatarSlug(texto) {
 
 /* ==========================================================
    FUNÇÃO DE PROCESSAMENTO DO JSON DA IA (TOP)
+   Estrutura: { dados_formulario_base, conteudo_enriquecido_desktop }
    ========================================================== */
+function setVal(id, valor) {
+  const el = document.getElementById(id);
+  if (el) el.value = (valor === undefined || valor === null) ? '' : valor;
+}
+
+function normalizarWhatsapp(numero) {
+  let n = String(numero || '').replace(/\D/g, '');
+  if (n && (n.length === 10 || n.length === 11)) n = '55' + n; // DDD + número → adiciona o 55 do Brasil
+  return n;
+}
+
 function processarJsonAi() {
-  const jsonRaw = document.getElementById('jsonAiInput').value.trim();
-  if(!jsonRaw) {
-    alert("Por favor, cole um JSON válido na caixa de texto.");
-    return;
-  }
-
   try {
-    const data = JSON.parse(jsonRaw);
+    let jsonTexto = document.getElementById('jsonAiInput').value.trim();
 
-    // 1. Campos Básicos Visuais
-    if(data.placeId) document.getElementById('inPid').value = data.placeId;
-    if(data.nome) document.getElementById('inNome').value = data.nome;
-    if(data.whatsapp) document.getElementById('inWa').value = data.whatsapp;
-    if(data.instagram) document.getElementById('inIg').value = data.instagram;
-    if(data.cidade) document.getElementById('inCidade').value = data.cidade;
-    if(data.endereco) document.getElementById('inEndereco').value = data.endereco;
-    if(data.segmento) document.getElementById('inSegmento').value = data.segmento;
-    if(data.servicos) document.getElementById('inServicos').value = data.servicos;
-
-    // 2. Campos Hidden (SEO e Ricos)
-    if(data.canonical) document.getElementById('hidden_canonical').value = data.canonical;
-    if(data.h1) document.getElementById('hidden_h1').value = data.h1;
-    if(data.metaDescription) document.getElementById('hidden_meta_description').value = data.metaDescription;
-    
-    // FAQ em JSON string
-    if(data.faq) {
-      document.getElementById('hidden_faq_perguntas').value = typeof data.faq === 'string' ? data.faq : JSON.stringify(data.faq);
+    if (!jsonTexto) {
+      alert('⚠️ Por favor, cole o código JSON gerado pela IA antes de processar.');
+      return;
     }
 
-    if(data.intro) document.getElementById('hidden_intro').value = data.intro;
-    if(data.produtosTexto) document.getElementById('hidden_produtos').value = data.produtosTexto;
-    if(data.localTexto) document.getElementById('hidden_local').value = data.localTexto;
+    // 🛡️ Limpa marcações de chat/markdown e texto fora do objeto JSON
+    jsonTexto = jsonTexto.replace(/```json/g, '').replace(/```/g, '').trim();
+    const primeiraChave = jsonTexto.indexOf('{');
+    const ultimaChave = jsonTexto.lastIndexOf('}');
 
-    // 3. Imagens WebP (4 imagens)
-    if(data.imagens && Array.isArray(data.imagens)) {
-      data.imagens.forEach((img, idx) => {
-        let i = idx + 1;
-        if(i <= 4) {
-          if(img.url) document.getElementById(`hidden_img${i}_url`).value = img.url;
-          if(img.name) document.getElementById(`hidden_img${i}_name`).value = img.name;
-          if(img.alt) document.getElementById(`hidden_img${i}_alt`).value = img.alt;
-        }
-      });
+    if (primeiraChave === -1 || ultimaChave === -1) {
+      alert('❌ Erro: Não foi encontrado um objeto JSON válido no texto colado.');
+      return;
+    }
+    jsonTexto = jsonTexto.substring(primeiraChave, ultimaChave + 1);
+
+    const dados = JSON.parse(jsonTexto);
+
+    // 1. FORMULÁRIO BASE (Celular)
+    const base = dados.dados_formulario_base;
+    if (base) {
+      setVal('inPid', base.placeId);
+      setVal('inNome', base.nomeEmpresa);
+      setVal('inWa', normalizarWhatsapp(base.whatsapp));
+      setVal('inIg', String(base.instagram || '').replace('@', ''));
+      setVal('inCidade', base.cidadeEstado);
+      setVal('inEndereco', base.enderecoCompleto);
+      setVal('inSegmento', base.segmento);
+      setVal('inServicos', base.produtosPrincipais);
     }
 
-    alert("✓ Dados do JSON processados e distribuídos com sucesso para os campos visuais e ocultos!");
+    // 2. CONTEÚDO ENRIQUECIDO (PC / SEO)
+    const pc = dados.conteudo_enriquecido_desktop;
+    if (pc) {
+      setVal('hidden_canonical', pc.seo_tags?.canonical);
+      setVal('hidden_h1', pc.seo_tags?.h1);
+      setVal('hidden_meta_description', pc.seo_tags?.meta_description);
+
+      setVal('hidden_lista_beneficios', JSON.stringify(pc.lista_beneficios_o_que_encontra || []));
+      setVal('hidden_faq_perguntas', JSON.stringify(pc.faq_perguntas_frequentes || []));
+
+      setVal('hidden_intro', pc.textos_seo_secoes?.introducao_bloco);
+      setVal('hidden_produtos', pc.textos_seo_secoes?.foco_produtos);
+      setVal('hidden_local', pc.textos_seo_secoes?.chamada_local);
+
+      // 3. IMAGENS (4 itens)
+      const imagens = pc.imagens_otimizadas_seo || [];
+      for (let i = 1; i <= 4; i++) {
+        const img = imagens[i - 1] || {};
+        setVal(`hidden_img${i}_url`, img.url_original);
+        setVal(`hidden_img${i}_name`, img.nome_arquivo_webp || `imagem-${i}.webp`);
+        setVal(`hidden_img${i}_alt`, img.alt_descricao);
+      }
+    }
+
+    alert('🎉 Sucesso! Os dados foram importados e distribuídos para os campos visíveis e ocultos.');
   } catch (e) {
-    alert("Erro ao analisar o JSON. Verifique se a sintaxe está correta: " + e.message);
+    console.error(e);
+    alert('❌ Erro de sintaxe no JSON: ' + e.message + '\nCopie o código do começo ao fim.');
   }
 }
 
@@ -305,6 +337,8 @@ function executarLimpeza() {
 
   document.getElementById('resBox').classList.remove('show');
   document.getElementById('qrbox').innerHTML = '';
+  document.getElementById('imgListBox').style.display = 'none';
+  document.getElementById('imgListContent').innerHTML = '';
   htmlFinal = '';
   nomeEmpresaSlug = "cliente";
 
@@ -331,18 +365,28 @@ function gerarTudo() {
   const txtProdutos = document.getElementById('hidden_produtos').value.trim() || `Trabalhamos com os melhores produtos e serviços em ${segmento}.`;
   const txtLocal = document.getElementById('hidden_local').value.trim() || `Localizados em ${endereco}, ${cidade}.`;
 
-  // Imagens WebP
-  const img1Url = document.getElementById('hidden_img1_url').value.trim() || 'imagem_01.webp';
-  const img1Alt = document.getElementById('hidden_img1_alt').value.trim() || `${nome} - Imagem 1`;
-  
-  const img2Url = document.getElementById('hidden_img2_url').value.trim() || 'imagem_02.webp';
-  const img2Alt = document.getElementById('hidden_img2_alt').value.trim() || `${segmento} - Imagem 2`;
-  
-  const img3Url = document.getElementById('hidden_img3_url').value.trim() || 'imagem_03.webp';
-  const img3Alt = document.getElementById('hidden_img3_alt').value.trim() || `${cidade} - Imagem 3`;
-  
-  const img4Url = document.getElementById('hidden_img4_url').value.trim() || 'imagem_04.webp';
-  const img4Alt = document.getElementById('hidden_img4_alt').value.trim() || `${servicos} - Imagem 4`;
+  // Imagens WebP (src = nome do arquivo .webp salvo na mesma pasta da página)
+  const imgsSrc = [], imgsAlt = [], imgsOrig = [];
+  const altPadrao = [`${nome} - Imagem 1`, `${segmento} - Imagem 2`, `${cidade} - Imagem 3`, `${servicos} - Imagem 4`];
+  for (let i = 1; i <= 4; i++) {
+    imgsSrc.push(document.getElementById(`hidden_img${i}_name`).value.trim() || `imagem_0${i}.webp`);
+    imgsAlt.push(document.getElementById(`hidden_img${i}_alt`).value.trim() || altPadrao[i - 1]);
+    imgsOrig.push(document.getElementById(`hidden_img${i}_url`).value.trim());
+  }
+  const [img1Url, img2Url, img3Url, img4Url] = imgsSrc;
+  const [img1Alt, img2Alt, img3Alt, img4Alt] = imgsAlt;
+
+  // Lista "O que você encontra"
+  let beneficiosHtml = '';
+  const benRaw = document.getElementById('hidden_lista_beneficios').value.trim();
+  if (benRaw) {
+    try {
+      const benArr = JSON.parse(benRaw);
+      if (Array.isArray(benArr) && benArr.length) {
+        beneficiosHtml = '<ul class="beneficios-list">' + benArr.map(b => `<li>${b}</li>`).join('') + '</ul>';
+      }
+    } catch (e) { beneficiosHtml = ''; }
+  }
 
   // FAQ JSON
   let faqHtml = '';
@@ -393,6 +437,15 @@ function gerarTudo() {
   qrDiv.innerHTML = '';
   new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
 
+  // Caixa com as imagens a salvar (URL original → nome .webp)
+  const imgListContent = document.getElementById('imgListContent');
+  imgListContent.innerHTML = imgsSrc.map((nomeArq, idx) => {
+    const orig = imgsOrig[idx];
+    const origTxt = orig ? `<a href="${orig}" target="_blank" rel="noopener" style="color:var(--b);">abrir imagem original</a>` : '<span style="color:var(--r);">URL não encontrada — adicionar imagem manualmente</span>';
+    return `<div>${idx + 1}. salvar como <strong style="color:#fff;">${nomeArq}</strong> — ${origTxt}</div>`;
+  }).join('');
+  document.getElementById('imgListBox').style.display = 'block';
+
   /* ==========================================================
      MONTAGEM DO TEMPLATE HTML GERADO (COM REGRAS DE SEO,
      RESPONSIVIDADE DESKTOP EM 2-3 COLUNAS E OCULTAÇÃO MOBILE)
@@ -420,7 +473,7 @@ function gerarTudo() {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "${nome}",
-  "image": "${img1Url}",
+  "image": "${linkPaginaCliente}${img1Url}",
   "url": "${linkPaginaCliente}",
   "telephone": "+${wa}",
   "address": {
@@ -848,6 +901,33 @@ body::before{
     border: 1px solid rgba(201, 169, 110, 0.4);
     background: #fff;
   }
+  .seo-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #c9a96e;
+    line-height: 1.2;
+  }
+  .beneficios-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .beneficios-list li {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: #c9d6e6;
+    padding-left: 1.1rem;
+    position: relative;
+  }
+  .beneficios-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #c9a96e;
+    font-weight: 700;
+  }
   /* Estilos do FAQ no Desktop */
   .faq-container {
     display: flex;
@@ -985,12 +1065,14 @@ body::before{
 
   <!-- SEÇÃO DESKTOP EXTRA (EXIBIDA APENAS EM TELA >= 769px) -->
   <aside class="bg-seo">
+    <h1 class="seo-h1">${seoH1}</h1>
     <div class="desktop-layout-grid">
       <div class="desktop-col">
         <h2>Sobre a Empresa</h2>
         <p>${txtIntro}</p>
         <h2>Nossos Produtos</h2>
         <p>${txtProdutos}</p>
+        ${beneficiosHtml ? `<h2>O que você encontra</h2>${beneficiosHtml}` : ''}
       </div>
       <div class="desktop-col">
         <h2>Galeria em Destaque</h2>
