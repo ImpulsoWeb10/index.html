@@ -98,11 +98,11 @@ textarea{resize:vertical;min-height:100px}
       <div class="field-grp">
         <label style="color:var(--b);font-weight:700;">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
         <textarea id="importarIA" placeholder='Cole aqui o JSON gerado pela IA contendo os dados de SEO, FAQ e imagens...'></textarea>
-        <button type="button" class="btn-ai-import" onclick="processarJsonAi()">✨ Processar e Preencher Campos</button>
+        <button type="button" class="btn-ai-import" id="btnImportar">✨ Processar e Preencher Campos</button>
       </div>
     </div>
 
-    <!-- Inputs ocultos para dados avançados -->
+    <!-- Inputs ocultos para dados avançados de SEO e IA -->
     <input type="hidden" id="hidden_canonical" />
     <input type="hidden" id="hidden_h1" />
     <input type="hidden" id="hidden_meta_description" />
@@ -110,6 +110,7 @@ textarea{resize:vertical;min-height:100px}
     <input type="hidden" id="hidden_textos_seo_secoes" />
     <input type="hidden" id="hidden_faq_perguntas" />
     
+    <!-- 4 Imagens Otimizadas WebP -->
     <input type="hidden" id="hidden_img1_url" /> <input type="hidden" id="hidden_img1_name" /> <input type="hidden" id="hidden_img1_alt" />
     <input type="hidden" id="hidden_img2_url" /> <input type="hidden" id="hidden_img2_name" /> <input type="hidden" id="hidden_img2_alt" />
     <input type="hidden" id="hidden_img3_url" /> <input type="hidden" id="hidden_img3_name" /> <input type="hidden" id="hidden_img3_alt" />
@@ -119,11 +120,11 @@ textarea{resize:vertical;min-height:100px}
     <div class="grid-2">
       <div class="field-grp">
         <label>Place ID do Negócio no Google *</label>
-        <input type="text" id="id_do_seu_campo_placeid" placeholder="Ex: ChIJN1t_tDeuEmsRUsoyG83frY4"/>
+        <input type="text" id="placeId" placeholder="Ex: ChIJN1t_tDeuEmsRUsoyG83frY4"/>
       </div>
       <div class="field-grp">
         <label>Nome da Empresa *</label>
-        <input type="text" id="id_do_seu_campo_nome_empresa" placeholder="Ex: Nova Louzada"/>
+        <input type="text" id="nomeEmpresa" placeholder="Ex: Nova Louzada"/>
       </div>
     </div>
 
@@ -131,11 +132,11 @@ textarea{resize:vertical;min-height:100px}
     <div class="grid-2">
       <div class="field-grp">
         <label>WhatsApp (só números com DDD)</label>
-        <input type="text" id="id_do_seu_campo_whatsapp" placeholder="Ex: 5511999999999"/>
+        <input type="text" id="whatsapp" placeholder="Ex: 5511999999999"/>
       </div>
       <div class="field-grp">
         <label>Instagram (Nome do utilizador sem @)</label>
-        <input type="text" id="id_do_seu_campo_instagram" placeholder="Ex: novalouzada"/>
+        <input type="text" id="instagram" placeholder="Ex: novalouzada"/>
       </div>
     </div>
 
@@ -143,11 +144,11 @@ textarea{resize:vertical;min-height:100px}
     <div class="grid-2">
       <div class="field-grp">
         <label>Cidade / Estado</label>
-        <input type="text" id="id_do_seu_campo_cidade_estado" placeholder="Ex: São Paulo - SP"/>
+        <input type="text" id="cidadeEstado" placeholder="Ex: São Paulo - SP"/>
       </div>
       <div class="field-grp">
         <label>Endereço Completo</label>
-        <input type="text" id="id_do_seu_campo_endereco" placeholder="Ex: Rua Exemplo, 123"/>
+        <input type="text" id="enderecoCompleto" placeholder="Ex: Rua Exemplo, 123"/>
       </div>
     </div>
 
@@ -155,11 +156,11 @@ textarea{resize:vertical;min-height:100px}
     <div class="grid-2">
       <div class="field-grp">
         <label>Segmento de Atuação</label>
-        <input type="text" id="id_do_seu_campo_segmento" placeholder="Ex: Materiais de Construção"/>
+        <input type="text" id="segmento" placeholder="Ex: Materiais de Construção"/>
       </div>
       <div class="field-grp">
         <label>Produtos / Serviços Principais</label>
-        <input type="text" id="id_do_seu_campo_produtos" placeholder="Ex: Ferramentas, Tintas, Hidráulica"/>
+        <input type="text" id="produtosPrincipais" placeholder="Ex: Ferramentas, Tintas, Hidráulica"/>
       </div>
     </div>
 
@@ -208,14 +209,14 @@ function formatarSlug(texto) {
 }
 
 /* ==========================================================
-   FUNÇÃO DE IMPORTAÇÃO VIA JSON DA IA (CORRIGIDA)
+   BOTÃO DE IMPORTAÇÃO VIA IA (CONFIGURADO COM O SEU BLOCO)
    ========================================================== */
-function processarJsonAi() {
+document.getElementById('btnImportar').addEventListener('click', function() {
     try {
         let jsonTexto = document.getElementById('importarIA').value.trim();
         
         if (!jsonTexto) {
-            alert('⚠️ Por favor, cole o código JSON gerado pela IA antes de processar.');
+            alert('⚠️ Por favor, cole o código JSON gerado pela IA antes de clicar em processar.');
             return;
         }
 
@@ -225,7 +226,7 @@ function processarJsonAi() {
         const ultimaChave = jsonTexto.lastIndexOf('}');
         
         if (primeiraChave === -1 || ultimaChave === -1) {
-            alert('❌ Erro: Não foi encontrado um objeto JSON válido no texto colado.');
+            alert('❌ Erro: O texto colado não contém um código JSON válido.');
             return;
         }
         
@@ -235,14 +236,14 @@ function processarJsonAi() {
         
         const base = dados.dados_formulario_base;
         if (base) {
-            if(document.getElementById('id_do_seu_campo_placeid')) document.getElementById('id_do_seu_campo_placeid').value = base.placeId || '';
-            if(document.getElementById('id_do_seu_campo_nome_empresa')) document.getElementById('id_do_seu_campo_nome_empresa').value = base.nomeEmpresa || '';
-            if(document.getElementById('id_do_seu_campo_whatsapp')) document.getElementById('id_do_seu_campo_whatsapp').value = base.whatsapp || '';
-            if(document.getElementById('id_do_seu_campo_instagram')) document.getElementById('id_do_seu_campo_instagram').value = base.instagram || '';
-            if(document.getElementById('id_do_seu_campo_cidade_estado')) document.getElementById('id_do_seu_campo_cidade_estado').value = base.cidadeEstado || '';
-            if(document.getElementById('id_do_seu_campo_endereco')) document.getElementById('id_do_seu_campo_endereco').value = base.enderecoCompleto || '';
-            if(document.getElementById('id_do_seu_campo_segmento')) document.getElementById('id_do_seu_campo_segmento').value = base.segmento || '';
-            if(document.getElementById('id_do_seu_campo_produtos')) document.getElementById('id_do_seu_campo_produtos').value = base.produtosPrincipais || '';
+            if(document.getElementById('placeId')) document.getElementById('placeId').value = base.placeId || '';
+            if(document.getElementById('nomeEmpresa')) document.getElementById('nomeEmpresa').value = base.nomeEmpresa || '';
+            if(document.getElementById('whatsapp')) document.getElementById('whatsapp').value = base.whatsapp || '';
+            if(document.getElementById('instagram')) document.getElementById('instagram').value = base.instagram || '';
+            if(document.getElementById('cidadeEstado')) document.getElementById('cidadeEstado').value = base.cidadeEstado || '';
+            if(document.getElementById('enderecoCompleto')) document.getElementById('enderecoCompleto').value = base.enderecoCompleto || '';
+            if(document.getElementById('segmento')) document.getElementById('segmento').value = base.segmento || '';
+            if(document.getElementById('produtosPrincipais')) document.getElementById('produtosPrincipais').value = base.produtosPrincipais || '';
         }
 
         const pc = dados.conteudo_enriquecido_desktop;
@@ -258,26 +259,22 @@ function processarJsonAi() {
             const imagens = pc.imagens_otimizadas_seo;
             if (imagens && imagens.length > 0) {
                 for (let i = 0; i < 4; i++) {
-                    const imgUrlField = document.getElementById(`hidden_img${i+1}_url`);
-                    const imgNameField = document.getElementById(`hidden_img${i+1}_name`);
-                    const imgAltField = document.getElementById(`hidden_img${i+1}_alt`);
-
-                    if (imgUrlField && imgNameField && imgAltField && imagens[i]) {
-                        imgUrlField.value = imagens[i].url_original || '';
-                        imgNameField.value = imagens[i].nome_arquivo_webp || `imagem-${i+1}.webp`;
-                        imgAltField.value = imagens[i].alt_descricao || '';
+                    if (imagens[i]) {
+                        if(document.getElementById(`hidden_img${i+1}_url`)) document.getElementById(`hidden_img${i+1}_url`).value = imagens[i].url_original || '';
+                        if(document.getElementById(`hidden_img${i+1}_name`)) document.getElementById(`hidden_img${i+1}_name`).value = imagens[i].nome_arquivo_webp || '';
+                        if(document.getElementById(`hidden_img${i+1}_alt`)) document.getElementById(`hidden_img${i+1}_alt`).value = imagens[i].alt_descricao || '';
                     }
                 }
             }
         }
         
-        alert('🎉 Sucesso! Os dados foram importados perfeitamente.');
+        alert('🎉 Dados processados com sucesso! Os campos foram preenchidos.');
         
     } catch (erro) {
         console.error(erro);
-        alert('❌ Erro de Sintaxe: O código colado possui problemas na estrutura JSON. Certifique-se de copiar do começo ao fim.');
+        alert('❌ Ocorreu um erro ao processar os dados. Verifique se copiou o JSON completo da IA.');
     }
-}
+});
 
 function abrirModalLimpar() {
   document.getElementById('modalLimpar').classList.add('active');
@@ -289,14 +286,14 @@ function fecharModalLimpar() {
 
 function executarLimpeza() {
   document.getElementById('importarIA').value = '';
-  document.getElementById('id_do_seu_campo_placeid').value = '';
-  document.getElementById('id_do_seu_campo_nome_empresa').value = '';
-  document.getElementById('id_do_seu_campo_whatsapp').value = '';
-  document.getElementById('id_do_seu_campo_instagram').value = '';
-  document.getElementById('id_do_seu_campo_cidade_estado').value = '';
-  document.getElementById('id_do_seu_campo_endereco').value = '';
-  document.getElementById('id_do_seu_campo_segmento').value = '';
-  document.getElementById('id_do_seu_campo_produtos').value = '';
+  document.getElementById('placeId').value = '';
+  document.getElementById('nomeEmpresa').value = '';
+  document.getElementById('whatsapp').value = '';
+  document.getElementById('instagram').value = '';
+  document.getElementById('cidadeEstado').value = '';
+  document.getElementById('enderecoCompleto').value = '';
+  document.getElementById('segmento').value = '';
+  document.getElementById('produtosPrincipais').value = '';
   
   document.querySelectorAll('input[type="hidden"]').forEach(h => h.value = '');
   document.getElementById('resBox').classList.remove('show');
@@ -309,14 +306,14 @@ function executarLimpeza() {
 }
 
 function gerarTudo() {
-  const pid = document.getElementById('id_do_seu_campo_placeid').value.trim();
-  const nome = document.getElementById('id_do_seu_campo_nome_empresa').value.trim();
-  const wa = document.getElementById('id_do_seu_campo_whatsapp').value.trim() || '5511999999999';
-  const ig = document.getElementById('id_do_seu_campo_instagram').value.trim().replace('@','');
-  const cidade = document.getElementById('id_do_seu_campo_cidade_estado').value.trim() || 'Sua Cidade';
-  const endereco = document.getElementById('id_do_seu_campo_endereco').value.trim() || 'Rua Exemplo, 123';
-  const segmento = document.getElementById('id_do_seu_campo_segmento').value.trim() || 'Serviços';
-  const servicos = document.getElementById('id_do_seu_campo_produtos').value.trim() || 'Atendimento de Qualidade';
+  const pid = document.getElementById('placeId').value.trim();
+  const nome = document.getElementById('nomeEmpresa').value.trim();
+  const wa = document.getElementById('whatsapp').value.trim() || '5511999999999';
+  const ig = document.getElementById('instagram').value.trim().replace('@','');
+  const cidade = document.getElementById('cidadeEstado').value.trim() || 'Sua Cidade';
+  const endereco = document.getElementById('enderecoCompleto').value.trim() || 'Rua Exemplo, 123';
+  const segmento = document.getElementById('segmento').value.trim() || 'Serviços';
+  const servicos = document.getElementById('produtosPrincipais').value.trim() || 'Atendimento de Qualidade';
 
   const seoCanonical = document.getElementById('hidden_canonical').value.trim() || `https://avaliar.impulsoweb10.com.br/cliente/${formatarSlug(nome)}/`;
   const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} — ${cidade}`;
@@ -373,9 +370,6 @@ function gerarTudo() {
   qrDiv.innerHTML = '';
   new QRCode(qrDiv, { text: linkPaginaCliente, width: 160, height: 160 });
 
-  /* ==========================================================
-     GERADOR DO HTML FINAL (INDEX-21 LIMPO)
-     ========================================================== */
   htmlFinal = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -894,74 +888,78 @@ function formatarSlug(texto) {
     .replace(/^-+|-+$/g, "");
 }
 
-function processarJsonAi() {
-    try {
-        let jsonTexto = document.getElementById('importarIA').value.trim();
-        
-        if (!jsonTexto) {
-            alert('⚠️ Por favor, cole o código JSON gerado pela IA antes de processar.');
-            return;
-        }
+/* ==========================================================
+   BOTÃO DE IMPORTAÇÃO VIA IA (COM EVENT LISTENER)
+   ========================================================== */
+document.addEventListener('DOMContentLoaded', function() {
+    const btnImportar = document.getElementById('btnImportar');
+    if (btnImportar) {
+        btnImportar.addEventListener('click', function() {
+            try {
+                let jsonTexto = document.getElementById('importarIA').value.trim();
+                
+                if (!jsonTexto) {
+                    alert('⚠️ Por favor, cole o código JSON gerado pela IA antes de clicar em processar.');
+                    return;
+                }
 
-        jsonTexto = jsonTexto.replace(/```json/g, '').replace(/```/g, '').trim();
-        
-        const primeiraChave = jsonTexto.indexOf('{');
-        const ultimaChave = jsonTexto.lastIndexOf('}');
-        
-        if (primeiraChave === -1 || ultimaChave === -1) {
-            alert('❌ Erro: Não foi encontrado um objeto JSON válido no texto colado.');
-            return;
-        }
-        
-        jsonTexto = jsonTexto.substring(primeiraChave, ultimaChave + 1);
+                jsonTexto = jsonTexto.replace(/```json/g, '').replace(/```/g, '').trim();
+                
+                const primeiraChave = jsonTexto.indexOf('{');
+                const ultimaChave = jsonTexto.lastIndexOf('}');
+                
+                if (primeiraChave === -1 || ultimaChave === -1) {
+                    alert('❌ Erro: O texto colado não contém um código JSON válido.');
+                    return;
+                }
+                
+                jsonTexto = jsonTexto.substring(primeiraChave, ultimaChave + 1);
 
-        const dados = JSON.parse(jsonTexto);
-        
-        const base = dados.dados_formulario_base;
-        if (base) {
-            if(document.getElementById('id_do_seu_campo_placeid')) document.getElementById('id_do_seu_campo_placeid').value = base.placeId || '';
-            if(document.getElementById('id_do_seu_campo_nome_empresa')) document.getElementById('id_do_seu_campo_nome_empresa').value = base.nomeEmpresa || '';
-            if(document.getElementById('id_do_seu_campo_whatsapp')) document.getElementById('id_do_seu_campo_whatsapp').value = base.whatsapp || '';
-            if(document.getElementById('id_do_seu_campo_instagram')) document.getElementById('id_do_seu_campo_instagram').value = base.instagram || '';
-            if(document.getElementById('id_do_seu_campo_cidade_estado')) document.getElementById('id_do_seu_campo_cidade_estado').value = base.cidadeEstado || '';
-            if(document.getElementById('id_do_seu_campo_endereco')) document.getElementById('id_do_seu_campo_endereco').value = base.enderecoCompleto || '';
-            if(document.getElementById('id_do_seu_campo_segmento')) document.getElementById('id_do_seu_campo_segmento').value = base.segmento || '';
-            if(document.getElementById('id_do_seu_campo_produtos')) document.getElementById('id_do_seu_campo_produtos').value = base.produtosPrincipais || '';
-        }
+                const dados = JSON.parse(jsonTexto);
+                
+                const base = dados.dados_formulario_base;
+                if (base) {
+                    if(document.getElementById('placeId')) document.getElementById('placeId').value = base.placeId || '';
+                    if(document.getElementById('nomeEmpresa')) document.getElementById('nomeEmpresa').value = base.nomeEmpresa || '';
+                    if(document.getElementById('whatsapp')) document.getElementById('whatsapp').value = base.whatsapp || '';
+                    if(document.getElementById('instagram')) document.getElementById('instagram').value = base.instagram || '';
+                    if(document.getElementById('cidadeEstado')) document.getElementById('cidadeEstado').value = base.cidadeEstado || '';
+                    if(document.getElementById('enderecoCompleto')) document.getElementById('enderecoCompleto').value = base.enderecoCompleto || '';
+                    if(document.getElementById('segmento')) document.getElementById('segmento').value = base.segmento || '';
+                    if(document.getElementById('produtosPrincipais')) document.getElementById('produtosPrincipais').value = base.produtosPrincipais || '';
+                }
 
-        const pc = dados.conteudo_enriquecido_desktop;
-        if (pc) {
-            if(document.getElementById('hidden_canonical')) document.getElementById('hidden_canonical').value = pc.seo_tags?.canonical || '';
-            if(document.getElementById('hidden_h1')) document.getElementById('hidden_h1').value = pc.seo_tags?.h1 || '';
-            if(document.getElementById('hidden_meta_description')) document.getElementById('hidden_meta_description').value = pc.seo_tags?.meta_description || '';
-            
-            if(document.getElementById('hidden_lista_beneficios')) document.getElementById('hidden_lista_beneficios').value = JSON.stringify(pc.lista_beneficios_o_que_encontra || []);
-            if(document.getElementById('hidden_textos_seo_secoes')) document.getElementById('hidden_textos_seo_secoes').value = JSON.stringify(pc.textos_seo_secoes || {});
-            if(document.getElementById('hidden_faq_perguntas')) document.getElementById('hidden_faq_perguntas').value = JSON.stringify(pc.faq_perguntas_frequentes || []);
-            
-            const imagens = pc.imagens_otimizadas_seo;
-            if (imagens && imagens.length > 0) {
-                for (let i = 0; i < 4; i++) {
-                    const imgUrlField = document.getElementById(`hidden_img${i+1}_url`);
-                    const imgNameField = document.getElementById(`hidden_img${i+1}_name`);
-                    const imgAltField = document.getElementById(`hidden_img${i+1}_alt`);
-
-                    if (imgUrlField && imgNameField && imgAltField && imagens[i]) {
-                        imgUrlField.value = imagens[i].url_original || '';
-                        imgNameField.value = imagens[i].nome_arquivo_webp || `imagem-${i+1}.webp`;
-                        imgAltField.value = imagens[i].alt_descricao || '';
+                const pc = dados.conteudo_enriquecido_desktop;
+                if (pc) {
+                    if(document.getElementById('hidden_canonical')) document.getElementById('hidden_canonical').value = pc.seo_tags?.canonical || '';
+                    if(document.getElementById('hidden_h1')) document.getElementById('hidden_h1').value = pc.seo_tags?.h1 || '';
+                    if(document.getElementById('hidden_meta_description')) document.getElementById('hidden_meta_description').value = pc.seo_tags?.meta_description || '';
+                    
+                    if(document.getElementById('hidden_lista_beneficios')) document.getElementById('hidden_lista_beneficios').value = JSON.stringify(pc.lista_beneficios_o_que_encontra || []);
+                    if(document.getElementById('hidden_textos_seo_secoes')) document.getElementById('hidden_textos_seo_secoes').value = JSON.stringify(pc.textos_seo_secoes || {});
+                    if(document.getElementById('hidden_faq_perguntas')) document.getElementById('hidden_faq_perguntas').value = JSON.stringify(pc.faq_perguntas_frequentes || []);
+                    
+                    const imagens = pc.imagens_otimizadas_seo;
+                    if (imagens && imagens.length > 0) {
+                        for (let i = 0; i < 4; i++) {
+                            if (imagens[i]) {
+                                if(document.getElementById(`hidden_img${i+1}_url`)) document.getElementById(`hidden_img${i+1}_url`).value = imagens[i].url_original || '';
+                                if(document.getElementById(`hidden_img${i+1}_name`)) document.getElementById(`hidden_img${i+1}_name`).value = imagens[i].nome_arquivo_webp || '';
+                                if(document.getElementById(`hidden_img${i+1}_alt`)) document.getElementById(`hidden_img${i+1}_alt`).value = imagens[i].alt_descricao || '';
+                            }
+                        }
                     }
                 }
+                
+                alert('🎉 Dados processados com sucesso! Os campos foram preenchidos.');
+                
+            } catch (erro) {
+                console.error(erro);
+                alert('❌ Ocorreu um erro ao processar os dados. Verifique se copiou o JSON completo da IA.');
             }
-        }
-        
-        alert('🎉 Sucesso! Os dados foram importados perfeitamente.');
-        
-    } catch (erro) {
-        console.error(erro);
-        alert('❌ Erro de Sintaxe: O código colado possui problemas na estrutura JSON. Certifique-se de copiar do começo ao fim.');
+        });
     }
-}
+});
 
 function abrirModalLimpar() {
   document.getElementById('modalLimpar').classList.add('active');
@@ -973,14 +971,14 @@ function fecharModalLimpar() {
 
 function executarLimpeza() {
   document.getElementById('importarIA').value = '';
-  document.getElementById('id_do_seu_campo_placeid').value = '';
-  document.getElementById('id_do_seu_campo_nome_empresa').value = '';
-  document.getElementById('id_do_seu_campo_whatsapp').value = '';
-  document.getElementById('id_do_seu_campo_instagram').value = '';
-  document.getElementById('id_do_seu_campo_cidade_estado').value = '';
-  document.getElementById('id_do_seu_campo_endereco').value = '';
-  document.getElementById('id_do_seu_campo_segmento').value = '';
-  document.getElementById('id_do_seu_campo_produtos').value = '';
+  document.getElementById('placeId').value = '';
+  document.getElementById('nomeEmpresa').value = '';
+  document.getElementById('whatsapp').value = '';
+  document.getElementById('instagram').value = '';
+  document.getElementById('cidadeEstado').value = '';
+  document.getElementById('enderecoCompleto').value = '';
+  document.getElementById('segmento').value = '';
+  document.getElementById('produtosPrincipais').value = '';
   
   document.querySelectorAll('input[type="hidden"]').forEach(h => h.value = '');
   document.getElementById('resBox').classList.remove('show');
@@ -993,14 +991,14 @@ function executarLimpeza() {
 }
 
 function gerarTudo() {
-  const pid = document.getElementById('id_do_seu_campo_placeid').value.trim();
-  const nome = document.getElementById('id_do_seu_campo_nome_empresa').value.trim();
-  const wa = document.getElementById('id_do_seu_campo_whatsapp').value.trim() || '5511999999999';
-  const ig = document.getElementById('id_do_seu_campo_instagram').value.trim().replace('@','');
-  const cidade = document.getElementById('id_do_seu_campo_cidade_estado').value.trim() || 'Sua Cidade';
-  const endereco = document.getElementById('id_do_seu_campo_endereco').value.trim() || 'Rua Exemplo, 123';
-  const segmento = document.getElementById('id_do_seu_campo_segmento').value.trim() || 'Serviços';
-  const servicos = document.getElementById('id_do_seu_campo_produtos').value.trim() || 'Atendimento de Qualidade';
+  const pid = document.getElementById('placeId').value.trim();
+  const nome = document.getElementById('nomeEmpresa').value.trim();
+  const wa = document.getElementById('whatsapp').value.trim() || '5511999999999';
+  const ig = document.getElementById('instagram').value.trim().replace('@','');
+  const cidade = document.getElementById('cidadeEstado').value.trim() || 'Sua Cidade';
+  const endereco = document.getElementById('enderecoCompleto').value.trim() || 'Rua Exemplo, 123';
+  const segmento = document.getElementById('segmento').value.trim() || 'Serviços';
+  const servicos = document.getElementById('produtosPrincipais').value.trim() || 'Atendimento de Qualidade';
 
   const seoCanonical = document.getElementById('hidden_canonical').value.trim() || `https://avaliar.impulsoweb10.com.br/cliente/${formatarSlug(nome)}/`;
   const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} —${cidade}`;
