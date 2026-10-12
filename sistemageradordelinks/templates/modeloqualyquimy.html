@@ -71,7 +71,7 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:max(.5rem,env(safe-area-inset-top)) .6rem max(.5rem,env(safe-area-inset-bottom));
+  padding:max(.7rem,env(safe-area-inset-top)) .6rem max(.7rem,env(safe-area-inset-bottom));
   overflow-x:hidden;
   position:relative;
   perspective:1200px;
@@ -102,7 +102,7 @@ body::before{
   z-index:1;
 }
 
-/* Moldura externa (cartão 3D) - Aumentado verticalmente para encaixar melhor na tela */
+/* Moldura externa (cartão 3D) - Leve ajuste vertical */
 .device-frame{
   position:relative;
   z-index:1;
@@ -115,12 +115,12 @@ body::before{
     0 0 20px rgba(255,255,255,.8),
     0 0 30px rgba(255,255,255,.35),
     0 15px 35px rgba(0,0,0,.6);
-  padding:1.4rem 1.2rem 1.2rem;
+  padding:1.3rem 1.2rem 1.1rem;
   display:flex;
   flex-direction:column;
   align-items:center;
   text-align:center;
-  gap:1rem;
+  gap:.9rem;
   transform-style:preserve-3d;
   transition:transform .6s cubic-bezier(.175,.885,.32,1.275);
   will-change:transform;
@@ -152,7 +152,7 @@ body::before{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:1rem;
+  gap:.9rem;
   width:100%;
   transform-style:preserve-3d;
   backface-visibility:hidden;
@@ -386,26 +386,26 @@ body::before{
 .gallery{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
 .gallery img{width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border-radius:12px;border:1px solid rgba(201,169,110,.5)}
 
-/* ===== ESTILO DOS BOTÕES DE NAVEGAÇÃO (MAPS E WAZE) NO MODAL ===== */
+/* ===== BOTÕES DE NAVEGAÇÃO (GOOGLE MAPS & WAZE) NO MODAL ===== */
 .nav-buttons-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:.6rem;
-  margin-top:.4rem;
+  margin-top:.5rem;
 }
 .btn-nav-map, .btn-nav-waze{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:.5rem;
-  min-height:44px;
-  border-radius:12px;
+  gap:.4rem;
+  min-height:42px;
+  border-radius:10px;
   font-family:'DM Sans',sans-serif;
   font-weight:700;
-  font-size:.82rem;
+  font-size:.78rem;
   text-decoration:none;
   transition:transform .2s, box-shadow .2s;
-  padding:0 .5rem;
+  padding:0 .4rem;
 }
 .btn-nav-map:hover, .btn-nav-waze:hover{
   transform:translateY(-2px);
@@ -422,33 +422,33 @@ body::before{
   border:1.5px solid rgba(51,204,255,.6);
 }
 .btn-nav-map svg, .btn-nav-waze svg{
-  width:18px;
-  height:18px;
+  width:16px;
+  height:16px;
   flex-shrink:0;
 }
 
-/* ===== ESTILO DO FAQ (LISTAS SUSPENSAS) ===== */
+/* ===== LISTA SUSPENSA / FAQ ===== */
 .faq-container{
   display:flex;
   flex-direction:column;
-  gap:.5rem;
+  gap:.45rem;
 }
 .faq-item{
   background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.12);
-  border-radius:12px;
+  border-radius:10px;
   overflow:hidden;
-  transition:background .2s;
+  transition:background .2s, border-color .2s;
 }
 .faq-item[open]{
   background:rgba(255,255,255,.08);
   border-color:rgba(201,169,110,.4);
 }
 .faq-question{
-  font-size:.84rem;
+  font-size:.82rem;
   font-weight:700;
   color:#f0ece5;
-  padding:.7rem .85rem;
+  padding:.65rem .8rem;
   cursor:pointer;
   list-style:none;
   display:flex;
@@ -468,13 +468,13 @@ body::before{
   content:'−';
 }
 .faq-answer{
-  font-size:.8rem;
+  font-size:.78rem;
   line-height:1.5;
   color:#c9d6e6;
-  padding:0 .85rem .85rem .85rem;
+  padding:0 .8rem .8rem .8rem;
   border-top:1px solid rgba(255,255,255,.06);
-  margin-top:.2rem;
-  padding-top:.5rem;
+  margin-top:.1rem;
+  padding-top:.45rem;
 }
 
 .btn-share{
@@ -696,12 +696,12 @@ body::before{
     </section>
 
     <section>
-      <h3>Endereço e navegação</h3>
+      <h3>Endereço e rotas</h3>
       <p>Rua Leiria, 45 · Chácara Cuiabá<br>
         Itaquaquecetuba - SP · CEP 08587-100<br>
         Telefone: <a class="inline" href="tel:+551146432301">(11) 4643-2301</a>
       </p>
-      <!-- Dois botões elegantes e profissionais para Google Maps e Waze -->
+      <!-- Dois botões profissionais para navegação -->
       <div class="nav-buttons-grid">
         <a href="https://www.google.com/maps/search/?api=1&amp;query=Rua+Leiria+45+Chacara+Cuiaba+CEP+08587100" class="btn-nav-map" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -729,4 +729,212 @@ body::before{
         </details>
         <details class="faq-item">
           <summary class="faq-question">Vocês fazem entregas na região?</summary>
-          <div class="faq-
+          <div class="faq-answer">Sim! Realizamos entregas em Itaquaquecetuba e em toda a região do Alto Tietê. Consulte taxas e prazos via WhatsApp.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-question">Qual a diferença entre massa PVA e acrílica?</summary>
+          <div class="faq-answer">A massa PVA é indicada exclusivamente para ambientes internos e secos. A massa acrílica possui maior resistência à umidade, ideal para fachadas e áreas externas.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-question">Como saber a quantidade ideal de tinta?</summary>
+          <div class="faq-answer">Basta nos informar as medidas aproximadas (altura e largura) das paredes e nossa equipe calcula a quantidade exata necessária para sua obra.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-question">A loja abre aos sábados?</summary>
+          <div class="faq-answer">Sim, atendemos de segunda a sábado, das 8h às 18h, prontos para te ajudar em qualquer dia útil da semana.</div>
+        </details>
+      </div>
+    </section>
+
+    <section class="gallery" aria-label="Produtos">
+      <img src="imagem_01.png" alt="Lata de Tinta Acrílica Standard Economy Qualy Color - Qualidade em Tintas e Texturas" loading="lazy" decoding="async">
+      <img src="balde_16lts.jpg" alt="Balde de tinta Qualy Quimy Color Linha Premium, hidrorrepelente e de ótimo rendimento" loading="lazy" decoding="async">
+      <img src="galao_3_6lts.jpg" alt="Galão de 3,6 litros Tintas Qualy Quimy Color, para uso exterior e interior" loading="lazy" decoding="async">
+      <img src="barrica.png" alt="Barrica Tintas Qualy Quimy Color, revestimentos acrílicos para paredes e tetos, linha Premium Eco Sustentável" loading="lazy" decoding="async">
+    </section>
+
+    <button type="button" class="btn-share" onclick="compartilhar()">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98"/><path d="M15.41 6.51l-6.82 3.98"/></svg>
+      Compartilhar este link
+    </button>
+    <p class="toast" id="toast" role="status" aria-live="polite"></p>
+  </div>
+</dialog>
+
+<!-- Camada SEO discreta -->
+<aside class="bg-seo">
+  <div>
+    <div class="txt">
+      <h1>Tintas Qualy Quimy</h1>
+      <h2>Tintas, Massas e Texturas em Itaquaquecetuba - SP</h2>
+      <p>Qualidade, confiança e compromisso: é assim que a Qualy Quimy atende pintores, construtores e quem está reformando em Itaquaquecetuba e no Alto Tietê. Em um só lugar você encontra tintas, massas, texturas, seladoras e esmaltes para um acabamento bem feito.</p>
+      <h2>Massa PVA e Massa Acrílica</h2>
+      <p>A massa PVA é indicada para nivelar e corrigir paredes internas antes da pintura. A massa acrílica resiste melhor à umidade e ao tempo, sendo a escolha para fachadas, muros e áreas externas. Com a preparação correta, a tinta rende mais e dura mais.</p>
+    </div>
+    <div class="fotos">
+      <img src="imagem_01.png" alt="Lata de Tinta Acrílica Standard Economy Qualy Color - Qualidade em Tintas e Texturas" width="411" height="410" loading="lazy" decoding="async">
+      <img src="balde_16lts.jpg" alt="Balde de tinta Qualy Quimy Color Linha Premium, hidrorrepelente e de ótimo rendimento" width="640" height="482" loading="lazy" decoding="async">
+    </div>
+  </div>
+  <div>
+    <div class="txt">
+      <h2>Textura e Grafiato</h2>
+      <p>Textura lisa, textura projetada e grafiato dão personalidade a fachadas, muros e paredes decorativas, além de ajudar a disfarçar pequenas imperfeições da superfície.</p>
+      <h2>Seladora, Esmalte e Qualy Color</h2>
+      <p>A seladora uniformiza a absorção da parede e melhora a aderência da tinta. O esmalte protege madeira e metal. Para pinturas de uso interno, a tinta econômica Qualy Color é uma opção.</p>
+      <h2>Atendimento no Alto Tietê</h2>
+      <p>Na Rua Leiria, 45, Chácara Cuiabá, em Itaquaquecetuba - SP. Fale com a loja pelo WhatsApp ou pelo telefone (11) 4643-2301 e tire suas dúvidas sobre o produto certo para cada superfície.</p>
+    </div>
+    <div class="fotos">
+      <img src="galao_3_6lts.jpg" alt="Galão de 3,6 litros Tintas Qualy Quimy Color, para uso exterior e interior" width="640" height="482" loading="lazy" decoding="async">
+      <img src="barrica.png" alt="Barrica Tintas Qualy Quimy Color, revestimentos acrílicos para paredes e tetos, linha Premium Eco Sustentável" width="575" height="431" loading="lazy" decoding="async">
+    </div>
+  </div>
+</aside>
+
+<script>
+  const PAGE_URL = location.href.split('#')[0].split('?')[0];
+  const PROVA = { nota: '', avaliacoes: '' };
+
+  (function(){
+    if (PROVA.nota && PROVA.avaliacoes) {
+      const p = document.getElementById('proof');
+      p.textContent = '★ ' + PROVA.nota + ' · ' + PROVA.avaliacoes + ' avaliações no Google';
+      p.hidden = false;
+    }
+  })();
+
+  /* ===== HORÁRIO ===== */
+  (function(){
+    const box = document.getElementById('hours');
+    const txt = document.getElementById('hoursText');
+    try {
+      const partes = {};
+      new Intl.DateTimeFormat('en-US', { timeZone: 'America/Sao_Paulo', weekday: 'short', hour: 'numeric', hour12: false })
+        .formatToParts(new Date()).forEach(function(p){ partes[p.type] = p.value; });
+      const dia = partes.weekday;
+      const h = parseInt(partes.hour, 10) % 24;
+      const util = ['Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(dia) !== -1;
+      if (util && h >= 8 && h < 18) {
+        box.classList.add('open');
+        txt.textContent = 'Aberto agora · fecha às 18h';
+      } else {
+        box.classList.add('closed');
+        if (util && h < 8) txt.textContent = 'Fechado · abre hoje às 8h';
+        else if (dia === 'Sat') txt.textContent = 'Fechado · abre segunda às 8h';
+        else txt.textContent = 'Fechado · abre amanhã às 8h';
+      }
+    } catch (e) {}
+  })();
+
+  /* ===== COPIAR ENDEREÇO RÁPIDO ===== */
+  async function copiarEndereco() {
+    const endTexto = "Rua Leiria, 45, Chácara Cuiabá, Itaquaquecetuba - SP, CEP 08587-100";
+    try {
+      await navigator.clipboard.writeText(endTexto);
+      alert("Endereço copiado para a área de transferência!");
+    } catch (err) {
+      alert("Não foi possível copiar o endereço automaticamente.");
+    }
+  }
+
+  /* ===== TELA "VER MAIS" ===== */
+  const sheet = document.getElementById('sheetMais');
+  function abrirMais(){
+    if (typeof sheet.showModal === 'function') sheet.showModal();
+    else sheet.setAttribute('open','');
+  }
+  function fecharMais(){
+    if (typeof sheet.close === 'function') sheet.close();
+    else sheet.removeAttribute('open');
+  }
+  sheet.addEventListener('click', function(e){ if (e.target === sheet) fecharMais(); });
+
+  /* ===== SALVAR CONTATO (vCard) ===== */
+  function salvarContato(){
+    const vcard = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'FN:Tintas Qualy Quimy',
+      'ORG:Tintas Qualy Quimy',
+      'TEL;TYPE=WORK,VOICE:+551146432301',
+      'ADR;TYPE=WORK:;;Rua Leiria\\, 45 - Chácara Cuiabá;Itaquaquecetuba;SP;08587-100;Brasil',
+      'URL:' + PAGE_URL,
+      'NOTE:Tintas\\, massas\\, texturas e acabamentos',
+      'END:VCARD'
+    ].join('\r\n');
+    const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'tintas-qualy-quimy.vcf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1500);
+  }
+
+  /* ===== COMPARTILHAR ===== */
+  function aviso(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    setTimeout(function(){ t.textContent = ''; }, 2500);
+  }
+  async function compartilhar(){
+    const dados = { title: document.title, text: 'Tintas Qualy Quimy - Itaquaquecetuba - SP', url: PAGE_URL };
+    try {
+      if (navigator.share) { await navigator.share(dados); return; }
+      await navigator.clipboard.writeText(PAGE_URL);
+      aviso('Link copiado!');
+    } catch (err) {
+      if (err && err.name === 'AbortError') return;
+      aviso('Não foi possível copiar. Copie o link na barra do navegador.');
+    }
+  }
+
+  /* ===== EFEITO 3D (Ativado/Desativado clicando no Logo) ===== */
+  const frame = document.getElementById('deviceFrame');
+  let giroscopioAtivo = false;
+  const configNivel1_5 = { intensidadeCelular: 1.5, intensidadeMouse: 60, anguloMax: 60 };
+
+  function handleOrientation(e){
+    if (!giroscopioAtivo || e.gamma === null || e.beta === null) return;
+    let x = Math.min(Math.max(e.gamma, -configNivel1_5.anguloMax), configNivel1_5.anguloMax);
+    let y = Math.min(Math.max(e.beta - 45, -configNivel1_5.anguloMax), configNivel1_5.anguloMax);
+    frame.style.transform = 'rotateY(' + (x * configNivel1_5.intensidadeCelular) + 'deg) rotateX(' + (-y * configNivel1_5.intensidadeCelular) + 'deg)';
+  }
+  function ativandoOorientacao(){
+    window.addEventListener('deviceorientation', handleOrientation);
+    giroscopioAtivo = true;
+  }
+  function desativarGiroscopio(){
+    window.removeEventListener('deviceorientation', handleOrientation);
+    giroscopioAtivo = false;
+    frame.style.transform = 'rotateY(0deg) rotateX(0deg)';
+  }
+  function alternarGiroscopio(){
+    if (giroscopioAtivo) { 
+      desativarGiroscopio(); 
+      return; 
+    }
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().then(function(state){
+        if (state === 'granted') ativandoOorientacao();
+        else alert('Permissão de orientação negada.');
+      }).catch(function(){ ativandoOorientacao(); });
+    } else {
+      ativandoOorientacao();
+    }
+  }
+  document.addEventListener('mousemove', function(e){
+    if (!giroscopioAtivo) return;
+    const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+    const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+    frame.style.transform = 'rotateY(' + (x * configNivel1_5.intensidadeMouse) + 'deg) rotateX(' + (-y * configNivel1_5.intensidadeMouse) + 'deg)';
+  });
+  document.addEventListener('mouseleave', function(){
+    if (giroscopioAtivo) frame.style.transform = 'rotateY(0deg) rotateX(0deg)';
+  });
+</script>
+
+</body>
+</html>
