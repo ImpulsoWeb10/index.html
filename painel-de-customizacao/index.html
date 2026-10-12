@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Painel Avançado de Customización Visual & SEO — ImpulsoWeb10</title>
+  <title>Painel Avançado de Customização Visual & SEO — ImpulsoWeb10</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -41,18 +41,33 @@
       </div>
       <span>ImpulsoWeb10 <span class="text-blue-500">— Painel de Customização & SEO</span></span>
     </div>
+    <button onclick="abrirModalLimpar()" class="bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/30 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all">
+      🗑️ Limpar Tudo
+    </button>
   </nav>
+
+  <!-- MODAL DE CONFIRMAÇÃO DE LIMPEZA -->
+  <div id="modalLimpar" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-cardbg border border-bordercol rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
+      <h3 class="font-syne font-bold text-lg mb-2 text-white">Deseja limpar todos os campos?</h3>
+      <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Todas as informações preenchidas e customizações serão redefinidas.</p>
+      <div class="flex gap-3 justify-center">
+        <button onclick="fecharModalLimpar()" class="bg-surface hover:bg-zinc-700 text-zinc-200 px-4 py-2 rounded-xl text-xs font-bold transition-all">Cancelar</button>
+        <button onclick="executarLimpeza()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all">Sim, limpar tudo</button>
+      </div>
+    </div>
+  </div>
 
   <!-- CONTEÚDO PRINCIPAL -->
   <main class="max-w-3xl mx-auto px-4 pt-8">
     <div class="text-center mb-8">
       <h1 class="text-3xl font-syne font-extrabold mb-2 tracking-tight">Painel de Customização <span class="text-blue-500">Visual & SEO</span></h1>
-      <p class="text-sm text-zinc-400">Modifique cores, ajuste o brilho do neon, redefina tags semânticas e exporte o site instantaneamente.</p>
+      <p class="text-sm text-zinc-400">Importe seu JSON, modifique cores, ajuste o brilho do neon, redefina tags semânticas e exporte o site atualizado.</p>
     </div>
 
     <div class="bg-cardbg border border-bordercol rounded-2xl p-6 md:p-8 flex flex-col gap-6 shadow-xl">
       
-      <!-- 3. ÁREA DE CARREGAMENTO (ENGENHARIA REVERSA DE JSON) -->
+      <!-- ÁREA DE CARREGAMENTO (ENGENHARIA REVERSA DE JSON) -->
       <div class="bg-blue-600/5 border border-blue-500/30 rounded-xl p-4">
         <div class="flex flex-col gap-2">
           <label class="text-xs font-bold text-blue-400 uppercase tracking-wider">📥 Cole o JSON existente aqui</label>
@@ -63,7 +78,7 @@
         </div>
       </div>
 
-      <!-- 1. INTERFACE E CONTROLES VISUAIS (COLOR PICKERS) -->
+      <!-- INTERFACE E CONTROLES VISUAIS (COLOR PICKERS) -->
       <div>
         <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">🎨 Customização Estética</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -85,7 +100,7 @@
         </div>
       </div>
 
-      <!-- 2. CONTROLES DE SEO SEMÂNTICO (CAMPOS DE TEXTO) -->
+      <!-- CONTROLES DE SEO SEMÂNTICO (CAMPOS DE TEXTO) -->
       <div>
         <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">🔍 Otimização de SEO Avançado</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -116,7 +131,7 @@
         </div>
       </div>
 
-      <!-- 4. EXPORTAÇÃO COMPLETA (DOWNLOAD VIA BLOB) -->
+      <!-- EXPORTAÇÃO COMPLETA (DOWNLOAD VIA BLOB) -->
       <div class="pt-4 border-t border-bordercol">
         <button onclick="salvarEBaixarHtml()" class="w-full bg-green-600 hover:bg-green-500 text-white font-syne font-bold py-4 px-6 rounded-xl text-sm transition-all shadow-lg shadow-green-600/30 inline-flex items-center justify-center gap-2">
           💾 Salvar e Baixar Código Atualizado
@@ -126,9 +141,8 @@
     </div>
   </main>
 
-  <!-- JAVASCRIPT DO PAINEL E DO MODELO HTML LIMPO -->
+  <!-- JAVASCRIPT DO PAINEL -->
   <script>
-    // Modelo HTML base limpo com marcações para substituição segura
     const templateHtmlBase = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -252,7 +266,29 @@ body::before{
 </body>
 </html>`;
 
-    // 3. ENGENHARIA REVERSA DE JSON
+    function abrirModalLimpar() {
+      document.getElementById('modalLimpar').classList.remove('hidden');
+      document.getElementById('modalLimpar').classList.add('flex');
+    }
+
+    function fecharModalLimpar() {
+      document.getElementById('modalLimpar').classList.remove('flex');
+      document.getElementById('modalLimpar').classList.add('hidden');
+    }
+
+    function executarLimpeza() {
+      document.getElementById('jsonInput').value = '';
+      document.getElementById('corFundo').value = '#07101e';
+      document.getElementById('corNeon').value = '#ffffff';
+      document.getElementById('seoTitle').value = '';
+      document.getElementById('seoDesc').value = '';
+      document.getElementById('seoH1').value = '';
+      document.getElementById('seoH2').value = '';
+      document.getElementById('seoKeywords').value = '';
+      fecharModalLimpar();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function mapearDadosJson() {
       try {
         let jsonTexto = document.getElementById('jsonInput').value.trim();
@@ -268,14 +304,12 @@ body::before{
         }
         const dados = JSON.parse(jsonTexto);
 
-        // Extrai propriedades da estrutura de SEO ou base se existirem
         const seo = dados.conteudo_enriquecido_desktop?.seo_tags || dados.seo || {};
         if (seo.title) document.getElementById('seoTitle').value = seo.title;
         if (seo.meta_description) document.getElementById('seoDesc').value = seo.meta_description;
         if (seo.h1) document.getElementById('seoH1').value = seo.h1;
         if (seo.keywords) document.getElementById('seoKeywords').value = seo.keywords;
 
-        // Se houver dados visuais salvos no JSON
         if (dados.customizacao) {
           if (dados.customizacao.cor_fundo) document.getElementById('corFundo').value = dados.customizacao.cor_fundo;
           if (dados.customizacao.cor_neon) document.getElementById('corNeon').value = dados.customizacao.cor_neon;
@@ -291,7 +325,6 @@ body::before{
       }
     }
 
-    // 4. EXPORTAÇÃO COMPLETA (DOWNLOAD VIA BLOB BLINDADO)
     function salvarEBaixarHtml() {
       const corFundo = document.getElementById('corFundo').value;
       const corNeon = document.getElementById('corNeon').value;
@@ -301,7 +334,6 @@ body::before{
       const seoH2 = document.getElementById('seoH2').value.trim() || 'Serviços de Qualidade';
       const seoKeywords = document.getElementById('seoKeywords').value.trim() || 'negocio, servicos, qualidade';
 
-      // Substituição ultra segura via .replaceAll()
       const htmlFinal = templateHtmlBase
         .replaceAll('[COR_FUNDO]', corFundo)
         .replaceAll('[COR_NEON]', corNeon)
@@ -311,7 +343,6 @@ body::before{
         .replaceAll('[SEO_H1]', seoH1)
         .replaceAll('[SEO_H2]', seoH2);
 
-      // Geração e Download via Blob ultraleve
       const blob = new Blob([htmlFinal], { type: 'text/html;charset=utf-8' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
