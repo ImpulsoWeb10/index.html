@@ -327,7 +327,7 @@ function executarLimpeza() {
 }
 
 /* ==========================================================
-   NOVO HTML BLINDADO VIA URI ENCODING (Sem erros na linha 998)
+   NOVO HTML ISOLADO VIA URI ENCODING (Sem afetar o painel)
    ========================================================== */
 const htmlCodificado = encodeURIComponent(`<!DOCTYPE html>
 <html lang="pt-BR">
@@ -536,133 +536,6 @@ body::before{
   .sheet{inset:0;margin:auto;border-radius:22px;border-bottom:2px solid #fff;max-height:86vh;max-height:86dvh}
 }
 </style>
-</head>
-<body>
-<div class="app-wrapper">
-  <div class="device-frame" id="deviceFrame">
-    <div class="secret-back" aria-hidden="true">
-      <img src="fundo.png" alt="" class="back-layer back-layer-fundo" loading="lazy" decoding="async">
-      <img src="mago.png" alt="" class="back-layer back-layer-mago" loading="lazy" decoding="async">
-      <img src="moldura.png" alt="" class="back-layer back-layer-moldura" loading="lazy" decoding="async">
-    </div>
-    <div class="page">
-      <div class="logo-wrap layer-mid">
-        <div class="logo-frame">
-          <img class="logo-img" src="logo.png" alt="Logo [Nome da Empresa]" width="160" height="72" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="logo-img-fallback" style="display:none;">[Nome Curto]</div>
-        </div>
-        <div>
-          <div class="brand">[Primeiro Nome] <em>[Destaque Nome]</em></div>
-          <div class="tagline">[Resumo de Produtos/Serviços · Cidade - UF]</div>
-        </div>
-      </div>
-      <div class="chips layer-back" aria-label="Produtos ou Serviços">
-        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>[Item 1]</span>
-        <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/></svg>[Item 2]</span>
-      </div>
-      <div class="layer-pop" style="width:100%;display:flex;flex-direction:column;align-items:center;">
-        <a href="[LINK_AVALIACAO_GOOGLE]" class="stars-cta" target="_blank" rel="noopener">
-          <span class="stars-row" aria-hidden="true"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></span>
-          <span class="stars-label">Toque nas estrelas e avalie no Google</span>
-        </a>
-        <div class="proof" id="proof" hidden></div>
-      </div>
-      <div class="cta-row layer-front">
-        <a href="tel:+55[DDD][TELEFONE]" class="btn-act btn-call">Ligar agora</a>
-        <a href="https://wa.me/55[DDD][WHATSAPP]?text=Ol%C3%A1!%20Vim%20pelo%20link." class="btn-act btn-wa" target="_blank" rel="noopener">WhatsApp</a>
-      </div>
-      <div class="social-row layer-front">
-        <a href="[LINK_INSTAGRAM]" class="social-btn" target="_blank" rel="noopener">
-          <div class="social-icon" style="background:#2a1a2e;"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="#cc2366" stroke-width="1.8"/></svg></div>
-          <span class="social-label">Instagram</span>
-        </a>
-        <a href="[LINK_GOOGLE_MAPS_PESQUISA]" class="social-btn" target="_blank" rel="noopener">
-          <div class="social-icon" style="background:#1a2030;"><svg viewBox="0 0 24 24" fill="#EA4335"><circle cx="12" cy="12" r="10"/></svg></div>
-          <span class="social-label">Maps</span>
-        </a>
-        <button type="button" class="social-btn" onclick="salvarContato()">
-          <div class="social-icon" style="background:#1a2a1a;"><svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-          <span class="social-label">Salvar</span>
-        </button>
-        <button type="button" class="social-btn" onclick="abrirMais()">
-          <div class="social-icon" style="background:#2a2310;"><svg viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg></div>
-          <span class="social-label">Ver mais</span>
-        </button>
-      </div>
-      <div class="hours layer-back" id="hours"><span class="dot"></span><span id="hoursText">[Horário de Funcionamento Resumido]</span></div>
-      <div class="address layer-back" onclick="copiarEndereco()">
-        <span>[Rua e Número]</span><br>[Cidade]
-      </div>
-      <div class="ticker-banner layer-mid" aria-hidden="true">
-        <div class="ticker-track">
-          <span class="ticker-item">[Texto em destaque infinito 1]</span>
-          <span class="ticker-item">[Texto em destaque infinito 2]</span>
-        </div>
-      </div>
-      <footer class="footer layer-back">
-        <p class="footer-promo">Quer um link como este? <a href="https://wa.me/5511954950044" target="_blank" rel="noopener">Saiba mais</a></p>
-        <p class="footer-dev"><span>Desenvolvido por ImpulsoWeb10</span><button class="btn-gyro" id="toggleGyro" type="button" onclick="alternarGiroscopio()">Efeito 3D: OFF</button></p>
-      </footer>
-    </div>
-  </div>
-</div>
-<dialog class="sheet" id="sheetMais">
-  <div class="sheet-body">
-    <div class="sheet-head">
-      <h2>[Nome da Empresa]</h2>
-      <button type="button" class="sheet-close" onclick="fecharMais()">×</button>
-    </div>
-    <section>
-      <h3>O que você encontra</h3>
-      <ul class="svc-list">
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="6" x="2" y="2" rx="2"/><path d="M10 16v-2a2 2 0 0 1 2-2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="4" height="6" x="8" y="16" rx="1"/></svg>[Serviço/Produto Detalhado 1]</li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/></svg>[Serviço/Produto Detalhado 2]</li>
-      </ul>
-    </section>
-    <section>
-      <h3>Endereço e rotas</h3>
-      <p>[Rua e Número]<br>[Cidade]</p>
-      <div class="nav-buttons-grid">
-        <a href="[LINK_GOOGLE_MAPS_ROTA]" class="btn-nav-map" target="_blank" rel="noopener">Abrir no Google</a>
-        <a href="[LINK_WAZE_ROTA]" class="btn-nav-waze" target="_blank" rel="noopener">Abrir no Waze</a>
-      </div>
-    </section>
-    <section>
-      <h3>Perguntas Frequentes (FAQ)</h3>
-      <div class="faq-container">
-        <details class="faq-item">
-          <summary class="faq-question">[Pergunta 1]</summary>
-          <div class="faq-answer">[Resposta 1]</div>
-        </details>
-        <details class="faq-item">
-          <summary class="faq-question">[Pergunta 2]</summary>
-          <div class="faq-answer">[Resposta 2]</div>
-        </details>
-      </div>
-    </section>
-    <section class="gallery">
-      <img src="standard.png" alt="[Legenda Foto 1]" loading="lazy" decoding="async">
-      <img src="balde_16lts.jpg" alt="[Legenda Foto 2]" loading="lazy" decoding="async">
-      <img src="galao_3_6lts.jpg" alt="[Legenda Foto 3]" loading="lazy" decoding="async">
-      <img src="barrica.png" alt="[Legenda Foto 4]" loading="lazy" decoding="async">
-    </section>
-    <button type="button" class="btn-share" onclick="compartilhar()">Compartilhar este link</button>
-    <p class="toast" id="toast"></p>
-  </div>
-</dialog>
-<aside class="bg-seo">
-  <div>
-    <div class="txt">
-      <h1>[Nome da Empresa]</h1>
-      <h2>[Título de SEO Principal]</h2>
-      <p>[Texto descritivo longo otimizado para SEO parte 1]</p>
-    </div>
-    <div class="fotos">
-      <img src="standard.png" alt="[SEO Alt 1]" loading="lazy" decoding="async">
-      <img src="balde_16lts.jpg" alt="[SEO Alt 2]" loading="lazy" decoding="async">
-    </div>
-  </div>
-</aside>
 <script>
   const PAGE_URL = location.href.split('#')[0].split('?')[0];
   async function copiarEndereco() {
@@ -671,7 +544,7 @@ body::before{
   const sheet = document.getElementById('sheetMais');
   function abrirMais(){ if (typeof sheet.showModal === 'function') sheet.showModal(); else sheet.setAttribute('open',''); }
   function fecharMais(){ if (typeof sheet.close === 'function') sheet.close(); else sheet.removeAttribute('open'); }
-  sheet.addEventListener('click', function(e){ if (e.target === sheet) fecharMais(); });
+  sheet?.addEventListener('click', function(e){ if (e.target === sheet) fecharMais(); });
   function salvarContato(){
     const vcard = ['BEGIN:VCARD','VERSION:3.0','FN:[Nome da Empresa]','ORG:[Nome da Empresa]','TEL;TYPE=WORK,VOICE:+55[DDD][TELEFONE]','ADR;TYPE=WORK:;;[Rua e Número];[Cidade];;Brasil','URL:' + PAGE_URL,'END:VCARD'].join('\\r\\n');
     const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
@@ -695,9 +568,7 @@ body::before{
     const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
     frame.style.transform = 'rotateY(' + (x * 60) + 'deg) rotateX(' + (-y * 60) + 'deg)';
   });
-<\/script>
-</body>
-</html>`);
+</script>`);
 
 function gerarTudo() {
   const pid = document.getElementById('inPid').value.trim();
@@ -738,7 +609,6 @@ function gerarTudo() {
     imgsAlt.push(document.getElementById(`hidden_img${i}_alt`).value.trim() || altPadrao[i - 1]);
   }
 
-  // Decodificação e substituição dinâmica dos placeholders
   let htmlTraduzido = decodeURIComponent(htmlCodificado);
 
   htmlTraduzido = htmlTraduzido
