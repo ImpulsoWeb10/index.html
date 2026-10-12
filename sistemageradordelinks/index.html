@@ -68,7 +68,7 @@
 
     <div class="bg-cardbg border border-bordercol rounded-2xl p-6 md:p-8 flex flex-col gap-6 shadow-xl">
       
-      <!-- 3. CAIXA DE IMPORTAÇÃO DE IA (JSON) -->
+      <!-- CAIXA DE IMPORTAÇÃO DE IA (JSON) -->
       <div class="bg-blue-600/5 border border-blue-500/30 rounded-xl p-4">
         <div class="flex flex-col gap-2">
           <label class="text-xs font-bold text-blue-400 uppercase tracking-wider">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
@@ -93,7 +93,7 @@
       <input type="hidden" id="hidden_img3_url" /><input type="hidden" id="hidden_img3_name" /><input type="hidden" id="hidden_img3_alt" />
       <input type="hidden" id="hidden_img4_url" /><input type="hidden" id="hidden_img4_name" /><input type="hidden" id="hidden_img4_alt" />
 
-      <!-- 2. CAMPOS DO FORMULÁRIO -->
+      <!-- CAMPOS DO FORMULÁRIO -->
       <div>
         <h3 class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-4 pb-2 border-b border-bordercol">1. Bloco de Configuração & Links</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -304,7 +304,7 @@
     }
 
     /* ==========================================================
-       4. FUNÇÃO DE GERAÇÃO E DOWNLOAD VIA BLOB (BLINDADA)
+       FUNÇÃO DE GERAÇÃO E DOWNLOAD VIA BLOB (BLINDADA)
        ========================================================== */
     function gerarTudo() {
       const pid = document.getElementById('inPid').value.trim();
@@ -384,12 +384,11 @@
 
       const txtIntro = document.getElementById('hidden_intro').value.trim() || `A ${nome} é referência em ${segmento} em ${cidade}.`;
 
-      // Atualiza exibição das imagens no painel
       const imgListContent = document.getElementById('imgListContent');
       imgListContent.innerHTML = imgsName.map((n, idx) => `<div>${idx + 1}. Salvar como <strong class="text-white">${n}</strong> (${imgsAlt[idx]})</div>`).join('');
       document.getElementById('imgListBox').classList.remove('hidden');
 
-      // NOVO MODELO DE HTML DO CLIENTE ISOLADO EM TEMPLATE LITERAL LEVE
+      // MODELO DO CLIENTE COM O SCRIPT DE EFEITO 3D COMPLETO INTEGRADO
       const templateCliente = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -696,26 +695,57 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   async function compartilhar(){
     try { if (navigator.share) { await navigator.share({ title: document.title, text: '[NOME_EMPRESA]', url: PAGE_URL }); return; } await navigator.clipboard.writeText(PAGE_URL); alert('Link copiado!'); } catch (err) {}
   }
+  
+  /* CÓDIGO DO EFEITO 3D (MOUSE E GIROSCÓPIO) */
   const frame = document.getElementById('deviceFrame');
   const btnGyro = document.getElementById('toggleGyro');
   let giroscopioAtivo = false;
+  const configNivel1_5 = { intensidadeCelular: 1.5, intensidadeMouse: 60, anguloMax: 60 };
+
+  function handleOrientation(e){
+    if (!giroscopioAtivo || e.gamma === null || e.beta === null) return;
+    let x = Math.min(Math.max(e.gamma, -configNivel1_5.anguloMax), configNivel1_5.anguloMax);
+    let y = Math.min(Math.max(e.beta - 45, -configNivel1_5.anguloMax), configNivel1_5.anguloMax);
+    frame.style.transform = 'rotateY(' + (x * configNivel1_5.intensidadeCelular) + 'deg) rotateX(' + (-y * configNivel1_5.intensidadeCelular) + 'deg)';
+  }
+  function ativandoOorientacao(){
+    window.addEventListener('deviceorientation', handleOrientation);
+    giroscopioAtivo = true;
+    btnGyro.innerText = 'Efeito 3D: ON';
+    btnGyro.classList.add('active');
+  }
+  function desativarGiroscopio(){
+    window.removeEventListener('deviceorientation', handleOrientation);
+    giroscopioAtivo = false;
+    btnGyro.innerText = 'Efeito 3D: OFF';
+    btnGyro.classList.remove('active');
+    frame.style.transform = 'rotateY(0deg) rotateX(0deg)';
+  }
   function alternarGiroscopio(){
-    giroscopioAtivo = !giroscopioAtivo;
-    btnGyro.innerText = giroscopioAtivo ? 'Efeito 3D: ON' : 'Efeito 3D: OFF';
-    btnGyro.classList.toggle('active', giroscopioAtivo);
-    if (!giroscopioAtivo) frame.style.transform = 'rotateY(0deg) rotateX(0deg)';
+    if (giroscopioAtivo) { desativarGiroscopio(); return; }
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().then(function(state){
+        if (state === 'granted') ativandoOorientacao();
+        else alert('Permissão de orientação negada.');
+      }).catch(function(){ ativandoOorientacao(); });
+    } else {
+      ativandoOorientacao();
+    }
   }
   document.addEventListener('mousemove', function(e){
     if (!giroscopioAtivo) return;
     const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
     const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
-    frame.style.transform = 'rotateY(' + (x * 60) + 'deg) rotateX(' + (-y * 60) + 'deg)';
+    frame.style.transform = 'rotateY(' + (x * configNivel1_5.intensidadeMouse) + 'deg) rotateX(' + (-y * configNivel1_5.intensidadeMouse) + 'deg)';
+  });
+  document.addEventListener('mouseleave', function(){
+    if (giroscopioAtivo) frame.style.transform = 'rotateY(0deg) rotateX(0deg)';
   });
 <\/script>
 </body>
 </html>`;
 
-      // Substituição rápida e segura com .replaceAll() sem loops pesados
+      // Substituição limpa com .replaceAll()
       htmlFinal = templateCliente
         .replaceAll('[NOME_EMPRESA]', nome)
         .replaceAll('[CIDADE]', cidade)
