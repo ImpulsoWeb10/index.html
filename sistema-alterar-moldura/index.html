@@ -50,7 +50,7 @@
   <div id="modalLimpar" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
     <div class="bg-cardbg border border-bordercol rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
       <h3 class="font-syne font-bold text-lg mb-2 text-white">Deseja limpar todos os campos?</h3>
-      <p class="text-xs text-zinc-400 mb-6 leading-relaxed">O código HTML colado será apagado e o simulador reiniciado.</p>
+      <p class="text-xs text-zinc-400 mb-6 leading-relaxed">O código HTML colado será apagado e os controles resetados.</p>
       <div class="flex gap-3 justify-center">
         <button onclick="fecharModalLimpar()" class="bg-surface hover:bg-zinc-700 text-zinc-200 px-4 py-2 rounded-xl text-xs font-bold transition-all">Cancelar</button>
         <button onclick="executarLimpeza()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all">Sim, limpar tudo</button>
@@ -65,7 +65,7 @@
     <div class="lg:col-span-7 flex flex-col gap-6">
       <div class="text-center lg:text-left mb-2">
         <h1 class="text-3xl font-syne font-extrabold mb-2 tracking-tight">Compactação <span class="text-blue-500">Tela Única</span></h1>
-        <p class="text-sm text-zinc-400">Cole seu index.html e deixe o sistema travar o layout exatamente dentro de uma tela cheia sem rolagem.</p>
+        <p class="text-sm text-zinc-400">Cole seu index.html, ajuste a porcentagem na barra deslizante e encaixe o layout sem rolagem.</p>
       </div>
 
       <!-- 1. ENTRADA DE CÓDIGO HTML -->
@@ -82,9 +82,23 @@
         </button>
       </div>
 
-      <!-- 4. EXPORTAÇÃO BLINDADA (BLOB) -->
+      <!-- 2. BARRA DESLIZANTE DE ESCALA / COMPACTAÇÃO (%) -->
       <div class="bg-cardbg border border-bordercol rounded-2xl p-6 flex flex-col gap-4 shadow-xl">
-        <h2 class="text-sm font-bold text-green-400 uppercase tracking-wider pb-2 border-b border-bordercol">💾 2. Saída e Exportação</h2>
+        <h2 class="text-sm font-bold text-yellow-400 uppercase tracking-wider pb-2 border-b border-bordercol">📏 2. Ajuste de Escala Proporcional (%)</h2>
+        
+        <div class="flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <label class="text-xs font-semibold text-zinc-300">Intensidade de Compactação:</label>
+            <span id="rangeValor" class="text-xs font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md border border-blue-500/20">100%</span>
+          </div>
+          <input type="range" id="escalaSlider" min="60" max="100" value="100" class="w-full accent-blue-500 cursor-pointer h-2 bg-surface rounded-lg"/>
+          <span class="text-[11px] text-zinc-500">Arraste para diminuir o tamanho dos blocos proporcionalmente caso precise de mais respiro.</span>
+        </div>
+      </div>
+
+      <!-- 3. EXPORTAÇÃO BLINDADA (BLOB) -->
+      <div class="bg-cardbg border border-bordercol rounded-2xl p-6 flex flex-col gap-4 shadow-xl">
+        <h2 class="text-sm font-bold text-green-400 uppercase tracking-wider pb-2 border-b border-bordercol">💾 3. Saída e Exportação</h2>
         <button onclick="baixarHtmlCompactado()" class="w-full bg-green-600 hover:bg-green-500 text-white font-syne font-bold py-3.5 px-4 rounded-xl text-xs transition-all shadow-lg shadow-green-600/25 inline-flex items-center justify-center gap-2">
           💾 Salvar e Baixar HTML Compactado
         </button>
@@ -101,7 +115,7 @@
 
         <!-- Moldura de Celular Proporção 9:16 -->
         <div class="w-full h-[620px] max-w-[340px] bg-darkbg rounded-[32px] border-[6px] border-zinc-700 shadow-2xl relative overflow-hidden flex items-center justify-center transition-all duration-300 p-2">
-          <iframe id="previewIframe" class="w-full h-full rounded-2xl border-0 bg-[#061a10]" srcdoc="<div style='color:#fff;display:flex;height:100vh;align-items:center;justify-content:center;font-family:sans-serif;font-size:13px;text-align:center;padding:20px;'>Cole o seu index.html ao lado e clique em <b>Analisar e Encaixar na Tela</b></div>"></iframe>
+          <iframe id="previewIframe" class="w-full h-full rounded-2xl border-0 bg-[#061a10] transition-transform duration-200 origin-center" srcdoc="<div style='color:#fff;display:flex;height:100vh;align-items:center;justify-content:center;font-family:sans-serif;font-size:13px;text-align:center;padding:20px;'>Cole o seu index.html ao lado e clique em <b>Analisar e Encaixar na Tela</b></div>"></iframe>
         </div>
         <span class="text-[11px] text-zinc-500 mt-3">Visualização exata do enquadramento sem barra de rolagem.</span>
       </div>
@@ -109,11 +123,19 @@
 
   </main>
 
-  <!-- JAVASCRIPT DO SISTEMA DE COMPACTAÇÃO -->
+  <!-- JAVASCRIPT DO SISTEMA -->
   <script>
     const inputHtml = document.getElementById('inputHtml');
     const previewIframe = document.getElementById('previewIframe');
+    const escalaSlider = document.getElementById('escalaSlider');
+    const rangeValor = document.getElementById('rangeValor');
     let htmlProcessadoGlobal = '';
+
+    escalaSlider.addEventListener('input', (e) => {
+      const val = e.target.value;
+      rangeValor.textContent = val + '%';
+      previewIframe.style.transform = `scale(${val / 100})`;
+    });
 
     function analisarEEncaixar() {
       const htmlOriginal = inputHtml.value.trim();
@@ -124,7 +146,7 @@
 
       let htmlModificado = htmlOriginal;
 
-      // 1. Injeta ou substitui as regras no body para garantir display flex e altura de tela única sem overflow
+      // Injeta regras estritas de tela única e margens de folga (my-[4vh])
       if (htmlModificado.includes('body{') || htmlModificado.includes('body {')) {
         htmlModificado = htmlModificado.replace(/body\s*\{([^}]*)\}/i, (match, p1) => {
           let cssCorpo = p1;
@@ -137,7 +159,6 @@
         htmlModificado = htmlModificado.replaceAll('</head>', '<style>body{max-height:92vh;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;align-items:center;margin:auto 0;}</style></head>');
       }
 
-      // 2. Trava o contêiner principal (.app-wrapper ou .device-frame) com max-height proporcional e margin de folga (my-[4vh])
       if (htmlModificado.includes('.app-wrapper{') || htmlModificado.includes('.app-wrapper {')) {
         htmlModificado = htmlModificado.replace(/\.app-wrapper\s*\{([^}]*)\}/i, (match, p1) => {
           let cssApp = p1;
@@ -152,17 +173,21 @@
         htmlModificado = htmlModificado.replace(/\.device-frame\s*\{([^}]*)\}/i, (match, p1) => {
           let cssDev = p1;
           if (!cssDev.includes('max-height')) cssDev += ' max-height: 84vh;';
-          if (!cssDev.includes('overflow')) cssDev += ' overflow-y: auto;';
+          if (!cssDev.includes('overflow')) cssDev += ' overflow: hidden;';
           return `.device-frame { ${cssDev} }`;
         });
       }
 
-      // 3. Garante imagens e blocos internos compactados proporcionalmente (object-contain / max-h-full)
-      htmlModificado = htmlModificado.replaceAll('object-fit:cover', 'object-fit:contain');
+      // Aplica escala do slider se não estiver em 100%
+      const escalaVal = escalaSlider.value;
+      if (escalaVal !== '100') {
+        const fator = escalaVal / 100;
+        htmlModificado = htmlModificado.replaceAll('.device-frame{', `.device-frame{ transform: scale(${fator}); transform-origin: center; `);
+      }
 
       htmlProcessadoGlobal = htmlModificado;
       previewIframe.srcdoc = htmlProcessadoGlobal;
-      alert('🎉 Sucesso! Layout compactado e enquadrado perfeitamente em tela única.');
+      alert('🎉 Sucesso! Layout compactado, enquadrado e ajustado para tela única.');
     }
 
     function abrirModalLimpar() {
@@ -178,6 +203,9 @@
     function executarLimpeza() {
       inputHtml.value = '';
       htmlProcessadoGlobal = '';
+      escalaSlider.value = 100;
+      rangeValor.textContent = '100%';
+      previewIframe.style.transform = 'scale(1)';
       previewIframe.srcdoc = "<div style='color:#fff;display:flex;height:100vh;align-items:center;justify-content:center;font-family:sans-serif;font-size:13px;text-align:center;padding:20px;'>Cole o seu index.html ao lado e clique em <b>Analisar e Encaixar na Tela</b></div>";
       fecharModalLimpar();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -188,6 +216,12 @@
       if (!conteudoParaBaixar) {
         alert('⚠️ Por favor, analise o código ou cole o HTML antes de baixar.');
         return;
+      }
+
+      const escalaVal = escalaSlider.value;
+      if (escalaVal !== '100' && !conteudoParaBaixar.includes('transform: scale')) {
+        const fator = escalaVal / 100;
+        conteudoParaBaixar = conteudoParaBaixar.replaceAll('.device-frame{', `.device-frame{ transform: scale(${fator}); transform-origin: center; `);
       }
 
       const blob = new Blob([conteudoParaBaixar], { type: 'text/html;charset=utf-8' });
