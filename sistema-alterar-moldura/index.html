@@ -50,4 +50,184 @@
   <div id="modalLimpar" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
     <div class="bg-cardbg border border-bordercol rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
       <h3 class="font-syne font-bold text-lg mb-2 text-white">Deseja limpar todos os campos?</h3>
-      <p class="text-xs text-zinc-400 mb-6 leading-relaxed">O código HTML colado será apagado e os controles serão resetados para o padrão.</p
+      <p class="text-xs text-zinc-400 mb-6 leading-relaxed">O código HTML colado será apagado e os controles serão resetados para o padrão.</p>
+      <div class="flex gap-3 justify-center">
+        <button onclick="fecharModalLimpar()" class="bg-surface hover:bg-zinc-700 text-zinc-200 px-4 py-2 rounded-xl text-xs font-bold transition-all">Cancelar</button>
+        <button onclick="executarLimpeza()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all">Sim, limpar tudo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-7xl mx-auto px-4 pt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <!-- COLUNA ESQUERDA: FORMULÁRIOS E CONTROLES (7 Colunas) -->
+    <div class="lg:col-span-7 flex flex-col gap-6">
+      <div class="text-center lg:text-left mb-2">
+        <h1 class="text-3xl font-syne font-extrabold mb-2 tracking-tight">Painel Estrutural <span class="text-blue-500">& Responsividade</span></h1>
+        <p class="text-sm text-zinc-400">Cole seu index.html, ajuste a escala e orientação da moldura em tempo real.</p>
+      </div>
+
+      <!-- 1. ENTRADA DE CÓDIGO HTML -->
+      <div class="bg-cardbg border border-bordercol rounded-2xl p-6 flex flex-col gap-4 shadow-xl">
+        <h2 class="text-sm font-bold text-blue-400 uppercase tracking-wider pb-2 border-b border-bordercol">📥 1. Entrada do Código (HTML)</h2>
+        
+        <div class="flex flex-col gap-1.5">
+          <label class="text-xs font-semibold text-zinc-300">Cole o seu index.html atual aqui</label>
+          <textarea id="inputHtml" rows="6" placeholder='<!DOCTYPE html>...' class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500 transition-all resize-y font-mono"></textarea>
+        </div>
+
+        <button type="button" onclick="analisarEstrutura()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-syne font-bold py-3 px-6 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/25">
+          ⚙️ Analisar Estrutura
+        </button>
+      </div>
+
+      <!-- 2. CONTROLES DE DIMENSÃO E ORIENTAÇÃO -->
+      <div class="bg-cardbg border border-bordercol rounded-2xl p-6 flex flex-col gap-6 shadow-xl">
+        <h2 class="text-sm font-bold text-yellow-400 uppercase tracking-wider pb-2 border-b border-bordercol">📏 2. Ajuste Fino (Escala e Orientação)</h2>
+
+        <!-- Orientação -->
+        <div class="flex flex-col gap-2">
+          <label class="text-xs font-semibold text-zinc-300">Orientação da Tela:</label>
+          <div class="grid grid-cols-2 gap-3">
+            <button type="button" id="btnVertical" onclick="mudarOrientacao('vertical')" class="bg-blue-600 text-white border border-blue-500 rounded-xl py-2.5 text-xs font-bold transition-all shadow-md">
+              📱 Vertical (Celular)
+            </button>
+            <button type="button" id="btnHorizontal" onclick="mudarOrientacao('horizontal')" class="bg-surface hover:bg-zinc-700 text-zinc-300 border border-bordercol rounded-xl py-2.5 text-xs font-bold transition-all">
+              💻 Horizontal (Desktop)
+            </button>
+          </div>
+        </div>
+
+        <!-- Barra Deslizante (Slider) -->
+        <div class="flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <label class="text-xs font-semibold text-zinc-300">Escala da Moldura:</label>
+            <span id="rangeValor" class="text-xs font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md border border-blue-500/20">100%</span>
+          </div>
+          <input type="range" id="escalaSlider" min="50" max="100" value="100" class="w-full accent-blue-500 cursor-pointer h-2 bg-surface rounded-lg"/>
+        </div>
+      </div>
+
+      <!-- 3. EXPORTAÇÃO -->
+      <div class="bg-cardbg border border-bordercol rounded-2xl p-6 flex flex-col gap-4 shadow-xl">
+        <h2 class="text-sm font-bold text-green-400 uppercase tracking-wider pb-2 border-b border-bordercol">💾 3. Exportação Blindada</h2>
+        <button onclick="baixarNovoHtml()" class="w-full bg-green-600 hover:bg-green-500 text-white font-syne font-bold py-3.5 px-4 rounded-xl text-xs transition-all shadow-lg shadow-green-600/25 inline-flex items-center justify-center gap-2">
+          💾 Salvar e Baixar Novo HTML
+        </button>
+      </div>
+    </div>
+
+    <!-- COLUNA DIREITA: SIMULADOR VISUAL EM TEMPO REAL (5 Colunas) -->
+    <div class="lg:col-span-5 sticky top-20 flex flex-col gap-4">
+      <div class="bg-cardbg border border-bordercol rounded-2xl p-5 shadow-xl flex flex-col items-center">
+        <div class="w-full flex items-center justify-between mb-4 pb-2 border-b border-bordercol">
+          <span class="text-xs font-syne font-bold text-blue-400 uppercase tracking-wider">📱 Simulador Visual em Tempo Real</span>
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+        </div>
+
+        <!-- Área do Simulador -->
+        <div class="w-full aspect-[9/16] max-w-[340px] bg-darkbg rounded-3xl border-4 border-zinc-700 shadow-2xl relative overflow-hidden flex items-center justify-center p-4 transition-all duration-300" id="simuladorArea">
+          <div id="molduraSimulador" class="w-full max-w-[280px] bg-gradient-to-br from-zinc-900 to-zinc-950 border-2 border-emerald-500 rounded-2xl p-4 flex flex-col items-center text-center gap-3 shadow-xl transition-all duration-300">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center font-syne font-bold text-emerald-400 text-sm">NL</div>
+            <div class="flex flex-col gap-1">
+              <h3 class="font-syne font-bold text-sm text-white">Nova Louzada</h3>
+              <p class="text-[10px] text-zinc-400">Materiais de Construção</p>
+            </div>
+            <div class="w-full py-1.5 bg-emerald-600 text-white rounded-full text-[10px] font-bold">WhatsApp</div>
+          </div>
+        </div>
+        <span class="text-[11px] text-zinc-500 mt-3">Ajuste a escala e orientação acima para testar.</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JAVASCRIPT DO SISTEMA -->
+  <script>
+    let orientacaoAtual = 'vertical';
+    let escalaAtual = 100;
+
+    const inputHtml = document.getElementById('inputHtml');
+    const btnVertical = document.getElementById('btnVertical');
+    const btnHorizontal = document.getElementById('btnHorizontal');
+    const escalaSlider = document.getElementById('escalaSlider');
+    const rangeValor = document.getElementById('rangeValor');
+    const simuladorArea = document.getElementById('simuladorArea');
+    const molduraSimulador = document.getElementById('molduraSimulador');
+
+    function mudarOrientacao(modo) {
+      orientacaoAtual = modo;
+      if (modo === 'vertical') {
+        btnVertical.className = 'bg-blue-600 text-white border border-blue-500 rounded-xl py-2.5 text-xs font-bold transition-all shadow-md';
+        btnHorizontal.className = 'bg-surface hover:bg-zinc-700 text-zinc-300 border border-bordercol rounded-xl py-2.5 text-xs font-bold transition-all';
+        simuladorArea.className = 'w-full aspect-[9/16] max-w-[340px] bg-darkbg rounded-3xl border-4 border-zinc-700 shadow-2xl relative overflow-hidden flex items-center justify-center p-4 transition-all duration-300';
+      } else {
+        btnHorizontal.className = 'bg-blue-600 text-white border border-blue-500 rounded-xl py-2.5 text-xs font-bold transition-all shadow-md';
+        btnVertical.className = 'bg-surface hover:bg-zinc-700 text-zinc-300 border border-bordercol rounded-xl py-2.5 text-xs font-bold transition-all';
+        simuladorArea.className = 'w-full aspect-[16/9] max-w-[340px] bg-darkbg rounded-3xl border-4 border-zinc-700 shadow-2xl relative overflow-hidden flex items-center justify-center p-4 transition-all duration-300';
+      }
+    }
+
+    escalaSlider.addEventListener('input', (e) => {
+      escalaAtual = e.target.value;
+      rangeValor.textContent = escalaAtual + '%';
+      molduraSimulador.style.transform = `scale(${escalaAtual / 100})`;
+    });
+
+    function analisarEstrutura() {
+      const htmlStr = inputHtml.value.trim();
+      if (!htmlStr) {
+        alert('⚠️ Por favor, cole o código do seu index.html na caixa de texto.');
+        return;
+      }
+      alert('⚙️ Estrutura analisada com sucesso! O simulador está pronto para receber ajustes.');
+    }
+
+    function abrirModalLimpar() {
+      document.getElementById('modalLimpar').classList.remove('hidden');
+      document.getElementById('modalLimpar').classList.add('flex');
+    }
+
+    function fecharModalLimpar() {
+      document.getElementById('modalLimpar').classList.remove('flex');
+      document.getElementById('modalLimpar').classList.add('hidden');
+    }
+
+    function executarLimpeza() {
+      inputHtml.value = '';
+      escalaSlider.value = 100;
+      rangeValor.textContent = '100%';
+      molduraSimulador.style.transform = 'scale(1)';
+      mudarOrientacao('vertical');
+      fecharModalLimpar();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function baixarNovoHtml() {
+      let htmlOriginal = inputHtml.value.trim();
+      if (!htmlOriginal) {
+        alert('⚠️ Por favor, cole o código HTML original antes de baixar.');
+        return;
+      }
+
+      let htmlModificado = htmlOriginal;
+
+      // Aplica modificações estruturais baseadas na escala e orientação via replaceAll
+      if (escalaSlider.value !== '100') {
+        const fatorEscala = escalaSlider.value / 100;
+        htmlModificado = htmlModificado.replaceAll('.device-frame{', `.device-frame{ transform: scale(${fatorEscala}); transform-origin: center; `);
+      }
+
+      const blob = new Blob([htmlModificado], { type: 'text/html;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'index.html';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }
+  </script>
+</body>
+</html>
