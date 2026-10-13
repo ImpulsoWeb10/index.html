@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel de Ajuste Estrutural e Responsividade — ImpulsoWeb10</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            darkbg: '#09090b',
+            cardbg: '#18181b',
+            surface: '#27272a',
+            bordercol: 'rgba(255, 255, 255, 0.08)'
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    h1, h2, h3, .font-syne { font-family: 'Syne', sans-serif; }
+  </style>
+</head>
+<body class="bg-darkbg text-zinc-100 min-h-screen pb-20 selection:bg-blue-600 selection:text-white">
+
+  <!-- TOPO / HEADER -->
+  <nav class="sticky top-0 z-50 px-6 h-16 flex items-center justify-between bg-darkbg/90 backdrop-blur-md border-b border-bordercol">
+    <div class="flex items-center gap-3 font-syne font-bold text-lg">
+      <div class="flex gap-1">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+      </div>
+      <span>ImpulsoWeb10 <span class="text-blue-500">— Painel Estrutural</span></span>
+    </div>
+    <button onclick="abrirModalLimpar()" class="bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/30 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all">
+      🗑️ Limpar Tudo
+    </button>
+  </nav>
+
+  <!-- MODAL DE CONFIRMAÇÃO DE LIMPEZA -->
+  <div id="modalLimpar" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-cardbg border border-bordercol rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
+      <h3 class="font-syne font-bold text-lg mb-2 text-white">Deseja limpar todos os campos?</h3>
+      <p class="text-xs text-zinc-400 mb-6 leading-relaxed">O código HTML colado será apagado e os controles serão resetados para o padrão.</p
