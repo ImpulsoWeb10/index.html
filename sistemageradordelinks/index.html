@@ -106,6 +106,17 @@
             <label class="text-xs font-semibold text-zinc-400">WhatsApp (com DDD) *</label>
             <input type="text" id="inWa" placeholder="Ex: 551146432301" class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500"/>
           </div>
+          <div class="flex flex-col gap-1.5 md:col-span-2">
+            <label class="text-xs font-semibold text-zinc-400">Caminho do link da página (editável) — o QR Code, o Open Graph e o Schema usam exatamente este endereço</label>
+            <div class="flex gap-2">
+              <input type="text" id="inCaminhoLink" placeholder="https://avaliar.impulsoweb10.com.br/cliente/nome-da-empresa/" class="flex-1 min-w-0 bg-surface border border-bordercol rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-blue-500"/>
+              <button type="button" onclick="copiarCampo('inCaminhoLink', this)" class="shrink-0 bg-surface hover:bg-zinc-700 text-zinc-200 border border-bordercol px-3 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap">📋 Copiar</button>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+              <span id="infoCaminho" class="text-[11px] text-zinc-500">Preenchido automaticamente pelo nome da empresa. Pode editar se quiser outro caminho.</span>
+              <button type="button" onclick="restaurarCaminhoAuto()" class="text-[11px] text-blue-400 hover:underline font-medium whitespace-nowrap">↺ Restaurar automático</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -156,12 +167,18 @@
       
       <div class="mb-4">
         <label class="text-xs text-zinc-400 block mb-1">Link da Página do Cliente:</label>
-        <input type="text" id="outLinkCliente" readonly class="w-full bg-surface border border-bordercol rounded-xl p-3 text-xs text-zinc-300 font-mono select-all"/>
+        <div class="flex gap-2">
+          <input type="text" id="outLinkCliente" readonly class="flex-1 min-w-0 bg-surface border border-bordercol rounded-xl p-3 text-xs text-zinc-300 font-mono select-all"/>
+          <button type="button" onclick="copiarCampo('outLinkCliente', this)" class="shrink-0 bg-surface hover:bg-zinc-700 text-zinc-200 border border-bordercol px-3 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap">📋 Copiar</button>
+        </div>
       </div>
 
       <div class="mb-6">
         <label class="text-xs text-zinc-400 block mb-1">Link Direto de Avaliação Google:</label>
-        <input type="text" id="outLinkGoogle" readonly class="w-full bg-surface border border-bordercol rounded-xl p-3 text-xs text-zinc-300 font-mono select-all"/>
+        <div class="flex gap-2">
+          <input type="text" id="outLinkGoogle" readonly class="flex-1 min-w-0 bg-surface border border-bordercol rounded-xl p-3 text-xs text-zinc-300 font-mono select-all"/>
+          <button type="button" onclick="copiarCampo('outLinkGoogle', this)" class="shrink-0 bg-surface hover:bg-zinc-700 text-zinc-200 border border-bordercol px-3 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap">📋 Copiar</button>
+        </div>
       </div>
 
       <div class="text-center my-6 p-4 bg-surface/50 rounded-xl border border-bordercol">
@@ -203,6 +220,74 @@
         .replace(/^-+|-+$/g, "");
     }
 
+    /* ==========================================================
+       CAMINHO DO LINK (editável) + BOTÃO COPIAR
+       ========================================================== */
+    const BASE_LINK = 'https://avaliar.impulsoweb10.com.br/cliente/';
+    let caminhoManual = false;
+
+    function caminhoAutomatico() {
+      const nome = document.getElementById('inNome').value.trim();
+      const slug = formatarSlug(nome);
+      return slug ? BASE_LINK + slug + '/' : '';
+    }
+
+    function atualizarCaminhoAuto() {
+      if (caminhoManual) return;
+      document.getElementById('inCaminhoLink').value = caminhoAutomatico();
+    }
+
+    function restaurarCaminhoAuto() {
+      caminhoManual = false;
+      document.getElementById('inCaminhoLink').value = caminhoAutomatico();
+      document.getElementById('infoCaminho').textContent = 'Caminho automático restaurado a partir do nome da empresa.';
+    }
+
+    // Normaliza o que foi digitado: garante https://, tira index.html e fecha com "/"
+    function normalizarCaminho(valor) {
+      let l = String(valor || '').trim();
+      if (!l) return '';
+      if (!/^https?:\/\//i.test(l)) l = 'https://' + l.replace(/^\/+/, '');
+      l = l.replace(/index\.html?$/i, '');
+      if (!l.endsWith('/')) l += '/';
+      return l;
+    }
+
+    function slugDoCaminho(link, fallback) {
+      try {
+        const partes = new URL(link).pathname.split('/').filter(Boolean);
+        return partes.length ? partes[partes.length - 1] : fallback;
+      } catch (e) { return fallback; }
+    }
+
+    function copiarCampo(id, btn) {
+      const el = document.getElementById(id);
+      const texto = (el && el.value || '').trim();
+      if (!texto) { alert('Não há nada para copiar ainda.'); return; }
+      const feito = () => {
+        if (!btn) return;
+        const antes = btn.textContent;
+        btn.textContent = '✓ Copiado!';
+        setTimeout(() => { btn.textContent = antes; }, 1500);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texto).then(feito).catch(() => { el.select(); document.execCommand('copy'); feito(); });
+      } else {
+        el.select(); document.execCommand('copy'); feito();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('inNome').addEventListener('input', atualizarCaminhoAuto);
+      document.getElementById('inCaminhoLink').addEventListener('input', function () {
+        const v = this.value.trim();
+        caminhoManual = v !== '' && v !== caminhoAutomatico();
+        document.getElementById('infoCaminho').textContent = caminhoManual
+          ? 'Caminho editado manualmente — será usado no QR Code e nas tags de SEO.'
+          : 'Preenchido automaticamente pelo nome da empresa. Pode editar se quiser outro caminho.';
+      });
+    });
+
     function setVal(id, valor) {
       const el = document.getElementById(id);
       if (el) el.value = (valor === undefined || valor === null) ? '' : valor;
@@ -241,6 +326,7 @@
           setVal('inEndereco', base.enderecoCompleto);
           setVal('inSegmento', base.segmento);
           setVal('inServicos', base.produtosPrincipais);
+          atualizarCaminhoAuto();
         }
 
         const pc = dados.conteudo_enriquecido_desktop;
@@ -289,6 +375,9 @@
       document.getElementById('inEndereco').value = '';
       document.getElementById('inSegmento').value = '';
       document.getElementById('inServicos').value = '';
+      document.getElementById('inCaminhoLink').value = '';
+      caminhoManual = false;
+      document.getElementById('infoCaminho').textContent = 'Preenchido automaticamente pelo nome da empresa. Pode editar se quiser outro caminho.';
 
       document.querySelectorAll('input[type="hidden"]').forEach(h => h.value = '');
 
@@ -324,8 +413,11 @@
       const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
       document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
 
-      nomeEmpresaSlug = formatarSlug(nome);
-      const linkPaginaCliente = `https://avaliar.impulsoweb10.com.br/cliente/${nomeEmpresaSlug}/`;
+      const slugAuto = formatarSlug(nome) || 'cliente';
+      const campoCaminho = document.getElementById('inCaminhoLink');
+      const linkPaginaCliente = normalizarCaminho(campoCaminho.value) || (BASE_LINK + slugAuto + '/');
+      campoCaminho.value = linkPaginaCliente;
+      nomeEmpresaSlug = slugDoCaminho(linkPaginaCliente, slugAuto);
       document.getElementById('outLinkCliente').value = linkPaginaCliente;
 
       const qrDiv = document.getElementById('qrbox');
