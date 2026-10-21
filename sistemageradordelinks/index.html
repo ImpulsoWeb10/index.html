@@ -420,10 +420,10 @@
       nomeEmpresaSlug = slugDoCaminho(linkPaginaCliente, slugAuto);
       document.getElementById('outLinkCliente').value = linkPaginaCliente;
 
-      // Geração do QR Code com tratamento de protocolo e trim
+      // Geração do QR Code com tratamento de protocolo e trim estrito
       const qrDiv = document.getElementById('qrbox');
       qrDiv.innerHTML = '';
-      new QRCode(qrDiv, { text: linkPaginaCliente, width: 150, height: 150 });
+      new QRCode(qrDiv, { text: linkPaginaCliente.trim(), width: 150, height: 150 });
 
       const seoCanonical = document.getElementById('hidden_canonical').value.trim() || linkPaginaCliente;
       const seoH1 = document.getElementById('hidden_h1').value.trim() || `${nome} — ${cidade}`;
