@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gerador de QR Code e Pix</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--ink:#101828;--mute:#667085;--line:#e4e7ec;--btn:#101828;--btnt:#fff;--pix:#0e8f7e;--err:#b42318;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c111b;--card:#151b27;--ink:#f2f4f7;--mute:#98a2b3;--line:#263042;--btn:#f2f4f7;--btnt:#101828;--pix:#2dc4b0;--err:#f97066}}
+:root[data-theme="dark"]{--bg:#0c111b;--card:#151b27;--ink:#f2f4f7;--mute:#98a2b3;--line:#263042;--btn:#f2f4f7;--btnt:#101828;--pix:#2dc4b0;--err:#f97066}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:460px;margin:0 auto;padding:28px 16px 48px}
+h1{font-size:1.35rem;margin:0 0 4px;font-weight:700}
+.sub{margin:0 0 20px;color:var(--mute);font-size:.95rem}
+.tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);margin-bottom:20px}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:12px 4px;font:600 1rem system-ui,sans-serif;color:var(--mute);cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--pix);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+label{display:block;font-weight:600;font-size:.9rem;margin:14px 0 6px}
+label:first-child{margin-top:0}
+input{width:100%;font:1rem system-ui,sans-serif;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.row{display:grid;grid-template-columns:1.4fr 1fr;gap:12px}
+@media(max-width:420px){.row{grid-template-columns:1fr}}
+.btn{width:100%;border:0;border-radius:8px;padding:13px 16px;font:600 1rem system-ui,sans-serif;cursor:pointer;background:var(--btn);color:var(--btnt);margin-top:18px}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line);margin-top:10px}
+.btn.pix{background:var(--pix);color:#fff;margin-top:0}
+.hint{color:var(--mute);font-size:.85rem;margin:6px 0 0}
+.err{color:var(--err);font-weight:600;font-size:.9rem;min-height:1.3em;margin-top:10px}
+.out{margin-top:22px;padding-top:22px;border-top:1px solid var(--line);text-align:center}
+.qr{display:inline-block;background:#fff;padding:12px;border-radius:10px;border:1px solid var(--line);margin:14px 0 4px}
+.qr canvas{display:none!important}
+.qr img{display:block;width:100%;max-width:240px;height:auto}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:8px;font-weight:600;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<h1>Gerador de QR Code e Pix</h1>
+<p class="sub">Crie o QR Code de um link ou um botão de pagamento Pix.</p>
+
+<div class="tabs" role="tablist">
+<button role="tab" id="t1" aria-selected="true">QR Code</button>
+<button role="tab" id="t2" aria-selected="false">Botão Pix</button>
+</div>
+
+<section id="p1" class="card">
+<label for="url">Link</label>
+<input id="url" type="url" inputmode="url" placeholder="https://seusite.com.br" autocomplete="off">
+<button class="btn" id="gerarQr">Gerar QR Code</button>
+<div class="err" id="e1" role="alert"></div>
+<div class="out" id="o1" hidden>
+<div class="qr" id="qr1"></div>
+<button class="btn alt" id="baixarQr">Baixar QR Code</button>
+</div>
+</section>
+
+<section id="p2" class="card" hidden>
+<label for="chave">Chave Pix</label>
+<input id="chave" placeholder="CPF, CNPJ, e-mail, celular ou chave aleatória" autocomplete="off">
+<p class="hint">Celular com +55 e DDD. CPF e CNPJ só com números.</p>
+<div class="row">
+<div><label for="nome">Nome do recebedor</label><input id="nome" maxlength="25" autocomplete="off"></div>
+<div><label for="cidade">Cidade</label><input id="cidade" maxlength="15" autocomplete="off"></div>
+</div>
+<label for="valor">Valor (opcional)</label>
+<input id="valor" inputmode="decimal" placeholder="Ex.: 25,90" autocomplete="off">
+<button class="btn" id="gerarPix">Gerar botão Pix</button>
+<div class="err" id="e2" role="alert"></div>
+<div class="out" id="o2" hidden>
+<button class="btn pix" id="prevBtn">Pagar com Pix</button>
+<p class="hint">Ao tocar, o cliente copia o código e cola no app do banco.</p>
+<div class="qr" id="qr2"></div>
+<button class="btn alt" id="copiaPayload">Copiar Pix Copia e Cola</button>
+<button class="btn alt" id="copiaSnippet">Copiar código do botão para o site</button>
+<button class="btn alt" id="baixarPix">Baixar QR Code</button>
+</div>
+</section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on')},1800)}
+function copy(txt,msg){
+  function fb(){var a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(a);toast(msg)}
+  try{navigator.clipboard.writeText(txt).then(function(){toast(msg)},fb)}catch(e){fb()}
+}
+function qr(el,text,err){
+  el.innerHTML='';
+  if(typeof QRCode==='undefined'){err.textContent='Não foi possível carregar o gerador. Verifique a internet e recarregue a página.';return false}
+  try{new QRCode(el,{text:text,width:280,height:280,correctLevel:QRCode.CorrectLevel.M})}catch(e){err.textContent='Não foi possível gerar o QR Code.';return false}
+  return true;
+}
+function download(el,name){
+  var c=el.querySelector('canvas'),i=el.querySelector('img'),src=c?c.toDataURL('image/png'):(i&&i.src);if(!src)return;
+  var a=document.createElement('a');a.href=src;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+[['t1','p1'],['t2','p2']].forEach(function(p){
+  $(p[0]).addEventListener('click',function(){
+    ['t1','t2'].forEach(function(t){$(t).setAttribute('aria-selected',t===p[0])});
+    $('p1').hidden=p[1]!=='p1';$('p2').hidden=p[1]!=='p2';
+  });
+});
+$('gerarQr').addEventListener('click',function(){
+  var v=$('url').value.trim();$('e1').textContent='';
+  if(!v){$('e1').textContent='Cole um link para gerar o QR Code.';return}
+  if(!/^[a-z][a-z0-9+.-]*:\/\//i.test(v))v='https://'+v;
+  try{new URL(v)}catch(e){$('e1').textContent='Esse link não parece válido. Confira e tente de novo.';return}
+  $('url').value=v;
+  $('o1').hidden=!qr($('qr1'),v,$('e1'));
+});
+$('url').addEventListener('keydown',function(e){if(e.key==='Enter')$('gerarQr').click()});
+$('baixarQr').addEventListener('click',function(){download($('qr1'),'qrcode.png')});
+
+function clean(s,n){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9 ]/g,'').toUpperCase().trim().slice(0,n)}
+function f(id,v){return id+('0'+v.length).slice(-2)+v}
+function crc16(s){var c=0xFFFF;for(var i=0;i<s.length;i++){c^=s.charCodeAt(i)<<8;for(var j=0;j<8;j++)c=(c&0x8000)?((c<<1)^0x1021)&0xFFFF:(c<<1)&0xFFFF}return ('0000'+c.toString(16).toUpperCase()).slice(-4)}
+function payload(chave,nome,cidade,valor){
+  var p=f('00','01')+f('26',f('00','br.gov.bcb.pix')+f('01',chave))+f('52','0000')+f('53','986');
+  if(valor)p+=f('54',valor);
+  p+=f('58','BR')+f('59',nome)+f('60',cidade)+f('62',f('05','***'))+'6304';
+  return p+crc16(p);
+}
+var cur='',snippet='';
+$('gerarPix').addEventListener('click',function(){
+  $('e2').textContent='';
+  var chave=$('chave').value.trim(),nome=clean($('nome').value,25),cidade=clean($('cidade').value,15),vr=$('valor').value.trim().replace(/\./g,'').replace(',','.'),valor='';
+  if(!chave){$('e2').textContent='Informe a chave Pix.';return}
+  if(!nome){$('e2').textContent='Informe o nome do recebedor.';return}
+  if(!cidade){$('e2').textContent='Informe a cidade.';return}
+  if(vr){var n=parseFloat(vr);if(!(n>0)){$('e2').textContent='Valor inválido. Use, por exemplo, 25,90.';return}valor=n.toFixed(2)}
+  cur=payload(chave,nome,cidade,valor);
+  snippet='<button type="button" style="background:#0e8f7e;color:#fff;border:0;border-radius:8px;padding:14px 24px;font:600 17px system-ui,sans-serif;cursor:pointer" onclick="navigator.clipboard.writeText(\''+cur+'\').then(function(){alert(\'Pix Copia e Cola copiado! Abra o app do seu banco e cole na área Pix.\')})">Pagar com Pix</button>';
+  $('o2').hidden=!qr($('qr2'),cur,$('e2'));
+});
+$('prevBtn').addEventListener('click',function(){copy(cur,'Pix Copia e Cola copiado')});
+$('copiaPayload').addEventListener('click',function(){copy(cur,'Pix Copia e Cola copiado')});
+$('copiaSnippet').addEventListener('click',function(){copy(snippet,'Código do botão copiado')});
+$('baixarPix').addEventListener('click',function(){download($('qr2'),'qrcode-pix.png')});
+})();
+</script>
+</body>
+</html>
