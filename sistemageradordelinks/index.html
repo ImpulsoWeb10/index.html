@@ -420,6 +420,7 @@
       nomeEmpresaSlug = slugDoCaminho(linkPaginaCliente, slugAuto);
       document.getElementById('outLinkCliente').value = linkPaginaCliente;
 
+      // Geração do QR Code com tratamento de protocolo e trim
       const qrDiv = document.getElementById('qrbox');
       qrDiv.innerHTML = '';
       new QRCode(qrDiv, { text: linkPaginaCliente, width: 150, height: 150 });
