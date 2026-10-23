@@ -625,8 +625,8 @@
                 <div class="lg:col-span-7 h-[380px] lg:h-auto rounded-2xl overflow-hidden shadow-md border border-gray-200 relative">
                     <iframe 
                         title="Mapa de Localização Nova Louzada"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.213693245084!2d-46.34738862376288!3d-23.479495058229864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce7cc4859381d1%3A0x456a464ed7d7f835!2sNova%20Louzada%20Materiais%20para%20Constru%C3%A7%C3%A3o!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
-                        class="w-full h-full border-0" 
+                        src="https://maps.google.com/maps?q=Nova+Louzada+Materiais+para+Constru%C3%A7%C3%A3o,+Av.+Turmalina,+515+-+Est%C3%A2ncia+Fraternidade,+Itaquaquecetuba+-+SP,+08589-030&ftid=0x94ce3d33859301d1:0x526ac64edd35f835&z=16&output=embed" 
+                        class="w-full h-full border-0 min-h-[380px]" 
                         allowfullscreen="" 
                         loading="lazy" 
                         referrerpolicy="no-referrer-when-downgrade">
@@ -734,57 +734,92 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-950 text-gray-400 py-12 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-12 gap-8 pb-12 border-b border-gray-800">
+    <footer class="bg-gray-950 text-gray-400 py-16 border-t border-gray-800/80 relative overflow-hidden">
+        <!-- Elemento de iluminação decorativo de fundo -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-brand-orange to-transparent opacity-60"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid md:grid-cols-12 gap-10 pb-12 border-b border-gray-800/80">
                 
-                <!-- Coluna Logo/Sobre -->
-                <div class="md:col-span-5 space-y-4">
+                <!-- Coluna Logo / Sobre -->
+                <div class="md:col-span-5 space-y-5">
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 bg-brand-orange rounded-lg flex items-center justify-center text-white font-bold">
-                            <i class="fa-solid fa-trowel-bricks"></i>
+                        <div class="w-10 h-10 bg-gradient-to-tr from-brand-orange to-brand-amber rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                            <i class="fa-solid fa-trowel-bricks text-lg"></i>
                         </div>
-                        <span class="font-outfit font-bold text-white text-xl">NOVA LOUZADA</span>
+                        <div>
+                            <span class="font-outfit font-extrabold text-white text-xl tracking-tight block leading-none">NOVA LOUZADA</span>
+                            <span class="text-[10px] font-semibold text-brand-orange uppercase tracking-widest">Materiais para Construção</span>
+                        </div>
                     </div>
                     <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
-                        Mais de 30 anos oferecendo soluções completas em materiais para construção e reforma em Itaquaquecetuba e região.
+                        Mais de 30 anos de tradição e confiança oferecendo soluções completas do básico ao acabamento para obras e reformas em Itaquaquecetuba e região.
                     </p>
-                    <div class="flex items-center space-x-3 pt-2">
-                        <a href="https://instagram.com/novalouzada" target="_blank" rel="noopener" class="w-9 h-9 rounded-lg bg-gray-900 hover:bg-brand-orange text-white flex items-center justify-center transition-colors">
-                            <i class="fa-brands fa-instagram"></i>
+                    <div class="flex items-center space-x-3 pt-1">
+                        <a href="https://instagram.com/novalouzada" target="_blank" rel="noopener" aria-label="Instagram" class="w-10 h-10 rounded-xl bg-gray-900 border border-gray-800 hover:border-brand-orange hover:bg-brand-orange text-gray-300 hover:text-white flex items-center justify-center transition-all shadow-sm">
+                            <i class="fa-brands fa-instagram text-lg"></i>
                         </a>
-                        <a href="https://www.facebook.com/Novalouzada/" target="_blank" rel="noopener" class="w-9 h-9 rounded-lg bg-gray-900 hover:bg-brand-orange text-white flex items-center justify-center transition-colors">
-                            <i class="fa-brands fa-facebook-f"></i>
+                        <a href="https://www.facebook.com/Novalouzada/" target="_blank" rel="noopener" aria-label="Facebook" class="w-10 h-10 rounded-xl bg-gray-900 border border-gray-800 hover:border-brand-orange hover:bg-brand-orange text-gray-300 hover:text-white flex items-center justify-center transition-all shadow-sm">
+                            <i class="fa-brands fa-facebook-f text-base"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Coluna Links Rápidos -->
-                <div class="md:col-span-3 space-y-3">
-                    <h4 class="font-outfit font-bold text-white text-sm uppercase tracking-wider">Navegação</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#sobre" class="hover:text-white transition-colors">Sobre Nós</a></li>
-                        <li><a href="#produtos" class="hover:text-white transition-colors">Produtos & Serviços</a></li>
-                        <li><a href="#regiao" class="hover:text-white transition-colors">Cidades Atendidas</a></li>
-                        <li><a href="#localizacao" class="hover:text-white transition-colors">Endereço e Mapa</a></li>
-                        <li><a href="#faq" class="hover:text-white transition-colors">Perguntas Frequentes</a></li>
+                <div class="md:col-span-3 space-y-4">
+                    <h4 class="font-outfit font-bold text-white text-xs uppercase tracking-widest text-brand-amber">Navegação Rápida</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="#sobre" class="hover:text-brand-orange transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-brand-orange"></i> Sobre Nós</a></li>
+                        <li><a href="#produtos" class="hover:text-brand-orange transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-brand-orange"></i> Produtos & Serviços</a></li>
+                        <li><a href="#regiao" class="hover:text-brand-orange transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-brand-orange"></i> Região de Atendimento</a></li>
+                        <li><a href="#localizacao" class="hover:text-brand-orange transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-brand-orange"></i> Endereço e Mapa</a></li>
+                        <li><a href="#faq" class="hover:text-brand-orange transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-brand-orange"></i> Dúvidas Frequentes</a></li>
                     </ul>
                 </div>
 
-                <!-- Coluna Contato -->
-                <div class="md:col-span-4 space-y-3">
-                    <h4 class="font-outfit font-bold text-white text-sm uppercase tracking-wider">Atendimento</h4>
-                    <p class="text-sm">Av. Turmalina, 515 - Estância Fraternidade</p>
-                    <p class="text-sm">Itaquaquecetuba - SP, CEP 08589-030</p>
-                    <p class="text-sm font-semibold text-white pt-1">Tel: (11) 4648-6608 | WhatsApp: (11) 3486-4431</p>
+                <!-- Coluna Contato & Atendimento -->
+                <div class="md:col-span-4 space-y-4">
+                    <h4 class="font-outfit font-bold text-white text-xs uppercase tracking-widest text-brand-amber">Atendimento ao Cliente</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-location-dot text-brand-orange mt-1"></i>
+                            <span>Av. Turmalina, 515 - Estância Fraternidade<br>Itaquaquecetuba - SP, CEP 08589-030</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-phone text-brand-orange"></i>
+                            <a href="tel:1146486608" class="hover:text-white transition-colors">(11) 4648-6608</a>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-brands fa-whatsapp text-brand-whatsapp text-base"></i>
+                            <a href="https://wa.me/551134864431?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20solicitar%20um%20orçamento." target="_blank" rel="noopener" class="hover:text-white transition-colors">(11) 3486-4431 (Atendimento)</a>
+                        </li>
+                        <li class="flex items-center space-x-3 text-xs text-gray-500 pt-1">
+                            <i class="fa-regular fa-clock text-gray-400"></i>
+                            <span>Seg a Sex: 08h às 17h | Sáb: 08h às 12h30</span>
+                        </li>
+                    </ul>
                 </div>
 
             </div>
 
-            <!-- Bottom Copyright -->
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
-                <p>&copy; Nova Louzada Materiais para Construção. Todos os direitos reservados.</p>
-                <p class="mt-2 sm:mt-0">Itaquaquecetuba / SP</p>
+            <!-- Bottom Copyright e Assinatura ImpulsoWeb10 -->
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+                <p class="text-center md:text-left">
+                    &copy; Nova Louzada Materiais para Construção. Todos os direitos reservados.
+                </p>
+
+                <!-- Assinatura Agência ImpulsoWeb10 -->
+                <div class="flex items-center space-x-2 bg-gray-900/80 px-3.5 py-1.5 rounded-full border border-gray-800/80 shadow-inner">
+                    <span class="text-gray-400">Desenvolvimento:</span>
+                    <a href="https://wa.me/5511954950044?text=Olá!%20Quero%20saber%20mais%20sobre%20site%20igual%20do%20Dep%20Material%20louzada" 
+                       target="_blank" 
+                       rel="noopener" 
+                       class="font-semibold text-gray-200 hover:text-brand-orange transition-colors flex items-center gap-1.5 group"
+                       title="Desenvolvido por ImpulsoWeb10 - Clique para falar no WhatsApp">
+                        <span class="text-brand-amber font-bold group-hover:underline">ImpulsoWeb10</span>
+                        <i class="fa-brands fa-whatsapp text-brand-whatsapp text-sm group-hover:scale-110 transition-transform"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </footer>
