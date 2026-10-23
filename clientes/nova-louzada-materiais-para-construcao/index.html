@@ -1,1105 +1,916 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- SEO Tags -->
-  <title>Materiais para Construção em Itaquaquecetuba | Nova Louzada</title>
-  <meta name="description" content="Nova Louzada Materiais para Construção em Itaquaquecetuba: mais de 30 anos de tradição. Atendemos Suzano, Poá e Arujá. Peça orçamento no WhatsApp!">
-  <link rel="canonical" href="https://novalouzada.com.br/">
-
-  <!-- Google Fonts & FontAwesome -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Schema.org JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": ["HardwareStore", "LocalBusiness"],
-        "@id": "https://novalouzada.com.br/#localbusiness",
-        "name": "Nova Louzada Materiais para Construção",
-        "image": "https://novalouzada.com.br/img/nova-louzada-fachada.webp",
-        "telephone": "+55-11-4648-6608",
-        "priceRange": "$$",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Avenida Turmalina, 515 - Estância Fraternidade",
-          "addressLocality": "Itaquaquecetuba",
-          "addressRegion": "SP",
-          "postalCode": "08589-030",
-          "addressCountry": "BR"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": -23.4795,
-          "longitude": -46.3452
-        },
-        "url": "https://novalouzada.com.br/",
-        "sameAs": [
-          "https://instagram.com/novalouzada",
-          "https://www.facebook.com/Novalouzada/",
-          "https://www.google.com/maps/place/?q=place_id:ChIJ0WGThTN8zpQRNfhm105GasU"
-        ],
-        "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-            "opens": "08:00",
-            "closes": "17:00"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Saturday",
-            "opens": "08:00",
-            "closes": "12:30"
-          }
-        ]
-      }
-    ]
-  }
-  </script>
-
-  <style>
-    :root {
-      --primary: #E65100;
-      --primary-hover: #BF360C;
-      --primary-light: #FFF3E0;
-      --secondary: #1E293B;
-      --accent: #10B981;
-      --whatsapp: #25D366;
-      --whatsapp-hover: #1EBE5D;
-      --dark: #0F172A;
-      --light-bg: #F8FAFC;
-      --card-bg: #FFFFFF;
-      --text-main: #334155;
-      --text-muted: #64748B;
-      --border-color: #E2E8F0;
-      --radius: 12px;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-      --shadow-hover: 0 20px 30px -10px rgba(230, 81, 0, 0.15);
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-
-    body {
-      background-color: var(--light-bg);
-      color: var(--text-main);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    /* Utilitários */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 14px 28px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 1rem;
-      text-decoration: none;
-      transition: var(--transition);
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), #F57C00);
-      color: #FFF;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-hover);
-      background: linear-gradient(135deg, #EF6C00, #E65100);
-    }
-
-    .btn-whatsapp {
-      background-color: var(--whatsapp);
-      color: #FFF;
-    }
-
-    .btn-whatsapp:hover {
-      background-color: var(--whatsapp-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--secondary);
-      border: 2px solid var(--border-color);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    /* Efeito de Brilho na Logo */
-    .logo-container {
-      position: relative;
-      display: inline-block;
-      overflow: hidden;
-      border-radius: 8px;
-    }
-
-    .logo-container img {
-      display: block;
-      max-height: 55px;
-      width: auto;
-    }
-
-    .logo-shine::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -150%;
-      width: 100%;
-      height: 200%;
-      background: linear-gradient(
-        60deg,
-        rgba(255, 255, 255, 0) 20%,
-        rgba(255, 255, 255, 0.7) 50%,
-        rgba(255, 255, 255, 0) 80%
-      );
-      transform: rotate(25deg);
-      animation: shine 4.5s infinite;
-    }
-
-    @keyframes shine {
-      0% { left: -150%; }
-      30% { left: 150%; }
-      100% { left: 150%; }
-    }
-
-    .logo-container:hover .logo-shine::after {
-      animation: shine-hover 1s forwards;
-    }
-
-    @keyframes shine-hover {
-      0% { left: -150%; }
-      100% { left: 150%; }
-    }
-
-    /* Header */
-    header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      border-bottom: 1px solid var(--border-color);
-      padding: 12px 0;
-    }
-
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    nav ul {
-      display: flex;
-      list-style: none;
-      gap: 25px;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: var(--secondary);
-      font-weight: 600;
-      transition: var(--transition);
-      font-size: 0.95rem;
-    }
-
-    nav a:hover {
-      color: var(--primary);
-    }
-
-    /* Hero Section */
-    .hero {
-      padding: 80px 0 60px;
-      background: radial-gradient(circle at top right, #FFF3E0 0%, #F8FAFC 50%);
-      position: relative;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 50px;
-      align-items: center;
-    }
-
-    .badge-30 {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--primary-light);
-      color: var(--primary);
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 0.875rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-
-    .hero h1 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      color: var(--dark);
-      line-height: 1.2;
-      margin-bottom: 20px;
-    }
-
-    .hero p {
-      font-size: 1.125rem;
-      color: var(--text-muted);
-      margin-bottom: 30px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .hero-card-img {
-      position: relative;
-      text-align: center;
-    }
-
-    .hero-card-img img {
-      width: 100%;
-      max-width: 420px;
-      border-radius: var(--radius);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    }
-
-    /* Benefícios */
-    .benefits {
-      padding: 60px 0;
-      margin-top: -30px;
-      position: relative;
-      z-index: 10;
-    }
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-    }
-
-    .benefit-card {
-      background: var(--card-bg);
-      padding: 25px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border-color);
-      display: flex;
-      align-items: flex-start;
-      gap: 15px;
-      transition: var(--transition);
-    }
-
-    .benefit-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-    }
-
-    .benefit-icon {
-      background: var(--primary-light);
-      color: var(--primary);
-      width: 50px;
-      height: 50px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .benefit-info h3 {
-      font-size: 1.05rem;
-      color: var(--dark);
-      margin-bottom: 4px;
-    }
-
-    .benefit-info p {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-    }
-
-    /* Carrossel Galeria */
-    .gallery-section {
-      padding: 80px 0;
-      background: #FFF;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .section-title h2 {
-      font-size: 2.2rem;
-      color: var(--dark);
-      font-weight: 800;
-    }
-
-    .section-title p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      margin-top: 8px;
-    }
-
-    .carousel-container {
-      position: relative;
-      max-width: 900px;
-      margin: 0 auto;
-      overflow: hidden;
-      border-radius: 16px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    }
-
-    .carousel-track {
-      display: flex;
-      transition: transform 0.5s ease-in-out;
-    }
-
-    .carousel-slide {
-      min-width: 100%;
-      position: relative;
-    }
-
-    .carousel-slide img {
-      width: 100%;
-      height: 480px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .slide-caption {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(transparent, rgba(15, 23, 42, 0.9));
-      color: #FFF;
-      padding: 30px 25px 20px;
-    }
-
-    .slide-caption h3 {
-      font-size: 1.3rem;
-      margin-bottom: 6px;
-      color: #FFF;
-    }
-
-    .slide-caption p {
-      font-size: 0.95rem;
-      color: #E2E8F0;
-    }
-
-    .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.85);
-      color: var(--dark);
-      border: none;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      transition: var(--transition);
-      z-index: 10;
-    }
-
-    .carousel-btn:hover {
-      background: #FFF;
-      color: var(--primary);
-    }
-
-    .carousel-btn.prev { left: 15px; }
-    .carousel-btn.next { right: 15px; }
-
-    .carousel-dots {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 15px;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #CBD5E1;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .dot.active {
-      background: var(--primary);
-      width: 25px;
-      border-radius: 10px;
-    }
-
-    /* Produtos e Serviços */
-    .products-section {
-      padding: 80px 0;
-      background: var(--light-bg);
-    }
-
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 30px;
-    }
-
-    .product-card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 30px;
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow);
-    }
-
-    .product-card h3 {
-      font-size: 1.3rem;
-      color: var(--dark);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .product-card h3 i {
-      color: var(--primary);
-    }
-
-    .product-card p {
-      color: var(--text-muted);
-      margin-bottom: 20px;
-      font-size: 0.95rem;
-    }
-
-    .product-list {
-      list-style: none;
-    }
-
-    .product-list li {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
-      margin-bottom: 8px;
-      color: var(--text-main);
-    }
-
-    .product-list li i {
-      color: var(--accent);
-    }
-
-    /* Localização e Mapa */
-    .location-section {
-      padding: 80px 0;
-      background: #FFF;
-    }
-
-    .location-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-    }
-
-    .location-info h2 {
-      font-size: 2rem;
-      color: var(--dark);
-      margin-bottom: 15px;
-    }
-
-    .location-info p {
-      color: var(--text-muted);
-      margin-bottom: 25px;
-    }
-
-    .info-list {
-      list-style: none;
-      margin-bottom: 30px;
-    }
-
-    .info-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 15px;
-    }
-
-    .info-list i {
-      color: var(--primary);
-      font-size: 1.2rem;
-      margin-top: 3px;
-    }
-
-    .map-wrapper {
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border-color);
-    }
-
-    /* FAQ Accordion */
-    .faq-section {
-      padding: 80px 0;
-      background: var(--light-bg);
-    }
-
-    .faq-container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .faq-item {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      margin-bottom: 15px;
-      border: 1px solid var(--border-color);
-      overflow: hidden;
-    }
-
-    .faq-header {
-      width: 100%;
-      padding: 20px 25px;
-      text-align: left;
-      background: none;
-      border: none;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--dark);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .faq-header i {
-      transition: transform 0.3s ease;
-      color: var(--primary);
-    }
-
-    .faq-item.active .faq-header i {
-      transform: rotate(180deg);
-    }
-
-    .faq-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-      padding: 0 25px;
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    .faq-item.active .faq-content {
-      padding: 0 25px 20px;
-    }
-
-    /* Footer */
-    footer {
-      background: var(--dark);
-      color: #94A3B8;
-      padding: 60px 0 20px;
-      border-top: 3px solid var(--primary);
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 40px;
-      margin-bottom: 40px;
-    }
-
-    .footer-brand h3 {
-      color: #FFF;
-      font-size: 1.3rem;
-      margin-bottom: 15px;
-    }
-
-    .footer-links h4 {
-      color: #FFF;
-      font-size: 1rem;
-      margin-bottom: 15px;
-    }
-
-    .footer-links ul {
-      list-style: none;
-    }
-
-    .footer-links a {
-      color: #94A3B8;
-      text-decoration: none;
-      transition: var(--transition);
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .footer-links a:hover {
-      color: var(--primary);
-    }
-
-    .footer-bottom {
-      border-top: 1px solid #1E293B;
-      padding-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      font-size: 0.875rem;
-    }
-
-    .impulso-link {
-      color: #FFF;
-      text-decoration: none;
-      font-weight: 700;
-      padding: 4px 10px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 6px;
-      transition: var(--transition);
-    }
-
-    .impulso-link:hover {
-      background: var(--primary);
-      color: #FFF;
-    }
-
-    /* Floating WhatsApp Button */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      background-color: var(--whatsapp);
-      color: #FFF;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-      z-index: 999;
-      text-decoration: none;
-      transition: var(--transition);
-    }
-
-    .whatsapp-float:hover {
-      transform: scale(1.1);
-      background-color: var(--whatsapp-hover);
-    }
-
-    /* Responsividade */
-    @media (max-width: 992px) {
-      .hero-grid, .location-grid {
-        grid-template-columns: 1fr;
-      }
-      .footer-grid {
-        grid-template-columns: 1fr;
-      }
-      nav {
-        display: none;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Header -->
-  <header>
-    <div class="container header-content">
-      <div class="logo-container logo-shine">
-        <img src="logo-louzada-materiais-de-construcao.png" alt="Nova Louzada 30 Anos">
-      </div>
-      <nav>
-        <ul>
-          <li><a href="#inicio">Início</a></li>
-          <li><a href="#galeria">Galeria</a></li>
-          <li><a href="#produtos">Produtos</a></li>
-          <li><a href="#localizacao">Localização</a></li>
-          <li><a href="#faq">Dúvidas</a></li>
-        </ul>
-      </nav>
-      <a href="https://wa.me/551134864431?text=Olá!%20Gostaria%20de%20fazer%20um%20orçamento." class="btn btn-whatsapp" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i> WhatsApp
-      </a>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero" id="inicio">
-    <div class="container hero-grid">
-      <div>
-        <div class="badge-30">
-          <i class="fa-solid fa-award"></i> Mais de 30 Anos de Tradição
-        </div>
-        <h1>Materiais para Construção em Itaquaquecetuba</h1>
-        <p>A Nova Louzada atende suas obras e reformas do básico ao acabamento com preço justo, agilidade e entrega em toda a região.</p>
-        <div class="hero-buttons">
-          <a href="https://wa.me/551134864431?text=Olá!%20Quero%20solicitar%20um%20orçamento%20para%20minha%20obra." class="btn btn-primary" target="_blank">
-            <i class="fa-solid fa-calculator"></i> Peça seu Orçamento
-          </a>
-          <a href="#localizacao" class="btn btn-outline">
-            <i class="fa-solid fa-location-dot"></i> Como Chegar
-          </a>
-        </div>
-      </div>
-      <div class="hero-card-img">
-        <div class="logo-container logo-shine">
-          <img src="logo-louzada-materiais-de-construcao.png" alt="Logo Nova Louzada">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Benefícios -->
-  <section class="benefits">
-    <div class="container benefits-grid">
-      <div class="benefit-card">
-        <div class="benefit-icon"><i class="fa-solid fa-truck-fast"></i></div>
-        <div class="benefit-info">
-          <h3>Entrega na Região</h3>
-          <p>Itaquaquecetuba, Suzano, Poá e Arujá.</p>
-        </div>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon"><i class="fa-solid fa-store"></i></div>
-        <div class="benefit-info">
-          <h3>Retirada Rápida</h3>
-          <p>Retire seu pedido direto na loja.</p>
-        </div>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon"><i class="fa-solid fa-comments"></i></div>
-        <div class="benefit-info">
-          <h3>Orçamento Ágil</h3>
-          <p>Atendimento prático via WhatsApp.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Carrossel de Fotos Galeria -->
-  <section class="gallery-section" id="galeria">
-    <div class="container">
-      <div class="section-title">
-        <h2>Conheça a Nossa Estrutura</h2>
-        <p>Tradição, qualidade e dedicação em cada detalhe para você e sua obra.</p>
-      </div>
-
-      <div class="carousel-container">
-        <div class="carousel-track" id="carouselTrack">
-          <!-- Slide 1 -->
-          <div class="carousel-slide">
-            <img src="louzada-frente-loja.webp" alt="Fachada da Nova Louzada">
-            <div class="slide-caption">
-              <h3>Nossa Casa, Seu Ponto de Partida</h3>
-              <p>Uma fachada moderna e acolhedora na Avenida Turmalina, pronta para receber seus projetos com dedicação.</p>
-            </div>
-          </div>
-          <!-- Slide 2 -->
-          <div class="carousel-slide">
-            <img src="louzada-equipe-de-sucesso.webp" alt="Equipe Nova Louzada">
-            <div class="slide-caption">
-              <h3>Pessoas que Constroem Sonhos com Você</h3>
-              <p>Nossa equipe especialista une experiência e atendimento humanizado para orientar cada detalhe da sua obra.</p>
-            </div>
-          </div>
-          <!-- Slide 3 -->
-          <div class="carousel-slide">
-            <img src="espaco-piso-novos.webp" alt="Showroom de Pisos">
-            <div class="slide-caption">
-              <h3>Elegância e Qualidade sob Seus Pés</h3>
-              <p>Showroom com as mais novas tendências em pisos e revestimentos para transformar o seu ambiente.</p>
-            </div>
-          </div>
-          <!-- Slide 4 -->
-          <div class="carousel-slide">
-            <img src="espaco-piso-novos-2.webp" alt="Variedade em Revestimentos">
-            <div class="slide-caption">
-              <h3>Variedade para Cada Estilo de Vida</h3>
-              <p>Linhas exclusivas e acabamentos impecáveis que unem durabilidade, beleza e economia para o seu lar.</p>
-            </div>
-          </div>
-          <!-- Slide 5 -->
-          <div class="carousel-slide">
-            <img src="frete-entrega-qualidade.webp" alt="Frota de Entregas">
-            <div class="slide-caption">
-              <h3>Agilidade que Faz a Sua Obra Render</h3>
-              <p>Frota própria e logística eficiente garantindo a entrega rápida e segura dos seus materiais onde você precisar.</p>
-            </div>
-          </div>
-          <!-- Slide 6 -->
-          <div class="carousel-slide">
-            <img src="frete-entrega-qualidade-2.webp" alt="Cuidado na Logística">
-            <div class="slide-caption">
-              <h3>Compromisso em Cada Entrega</h3>
-              <p>O cuidado de quem entende que cada tijolo e saco de cimento traz o valor de uma conquista.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Botões do Carrossel -->
-        <button class="carousel-btn prev" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
-        <button class="carousel-btn next" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
-      </div>
-
-      <div class="carousel-dots" id="carouselDots"></div>
-    </div>
-  </section>
-
-  <!-- Produtos & Serviços -->
-  <section class="products-section" id="produtos">
-    <div class="container">
-      <div class="section-title">
-        <h2>Tudo em Um Só Lugar</h2>
-        <p>Soluções completas para construção civil, reforma e acabamentos.</p>
-      </div>
-      <div class="products-grid">
-        <div class="product-card">
-          <h3><i class="fa-solid fa-cubes"></i> Material Básico</h3>
-          <p>Tudo para estruturar sua obra do zero com segurança e garantia.</p>
-          <ul class="product-list">
-            <li><i class="fa-solid fa-check"></i> Blocos estruturais e tijolos</li>
-            <li><i class="fa-solid fa-check"></i> Cimento, areia e pedra</li>
-            <li><i class="fa-solid fa-check"></i> Argamassas e refratários</li>
-          </ul>
-        </div>
-        <div class="product-card">
-          <h3><i class="fa-solid fa-paint-roller"></i> Acabamento & Reformas</h3>
-          <p>As melhores marcas para dar o toque final de beleza ao seu projeto.</p>
-          <ul class="product-list">
-            <li><i class="fa-solid fa-check"></i> Pisos e revestimentos</li>
-            <li><i class="fa-solid fa-check"></i> Tintas e acessórios</li>
-            <li><i class="fa-solid fa-check"></i> Materiais hidráulicos e elétricos</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Localização e Mapa -->
-  <section class="location-section" id="localizacao">
-    <div class="container location-grid">
-      <div class="location-info">
-        <h2>Venha nos Visitar</h2>
-        <p>Estamos localizados na Estância Fraternidade, de fácil acesso para Itaquaquecetuba e região.</p>
-        <ul class="info-list">
-          <li>
-            <i class="fa-solid fa-location-dot"></i>
-            <div>
-              <strong>Endereço:</strong><br>
-              Avenida Turmalina, 515 - Estância Fraternidade<br>
-              Itaquaquecetuba - SP, 08589-030
-            </div>
-          </li>
-          <li>
-            <i class="fa-solid fa-clock"></i>
-            <div>
-              <strong>Horário de Funcionamento:</strong><br>
-              Segunda a Sexta: 08:00 às 17:00<br>
-              Sábado: 08:00 às 12:30
-            </div>
-          </li>
-          <li>
-            <i class="fa-solid fa-phone"></i>
-            <div>
-              <strong>Telefone:</strong><br>
-              (11) 4648-6608
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div class="map-wrapper">
-        <iframe 
-          width="100%" 
-          height="400" 
-          style="border:0;" 
-          allowfullscreen="" 
-          loading="lazy" 
-          referrerpolicy="no-referrer-when-downgrade"
-          src="https://maps.google.com/maps?q=Nova+Louzada+Materiais+para+Construção&ftid=0x94ce3d33859301d1:0x526ac64edd35f835&z=16&output=embed">
-        </iframe>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section class="faq-section" id="faq">
-    <div class="container">
-      <div class="section-title">
-        <h2>Perguntas Frequentes</h2>
-        <p>Tire suas dúvidas sobre nosso atendimento e entregas.</p>
-      </div>
-      <div class="faq-container">
-        <div class="faq-item">
-          <button class="faq-header">
-            Onde fica a loja?
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-          <div class="faq-content">
-            Estamos na Avenida Turmalina, 515 - Estância Fraternidade, Itaquaquecetuba - SP.
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-header">
-            Quais cidades vocês atendem?
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-          <div class="faq-content">
-            Entregamos em Itaquaquecetuba, Suzano, Poá e Arujá.
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-header">
-            É possível retirar os materiais na loja?
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-          <div class="faq-content">
-            Sim! Oferecemos opção de retirada rápida. Você pode encomendar pelo WhatsApp e retirar direto no balcão.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="logo-container logo-shine" style="margin-bottom: 15px;">
-            <img src="logo-louzada-materiais-de-construcao.png" alt="Nova Louzada">
-          </div>
-          <p>Mais de 30 anos construindo histórias e realizando sonhos junto com você em Itaquaquecetuba e região.</p>
-        </div>
-        <div class="footer-links">
-          <h4>Navegação</h4>
-          <ul>
-            <li><a href="#inicio">Início</a></li>
-            <li><a href="#galeria">Galeria</a></li>
-            <li><a href="#produtos">Produtos</a></li>
-            <li><a href="#localizacao">Localização</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Redes Sociais</h4>
-          <ul>
-            <li><a href="https://instagram.com/novalouzada" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a></li>
-            <li><a href="https://www.facebook.com/Novalouzada/" target="_blank"><i class="fa-brands fa-facebook"></i> Facebook</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <div>&copy; Nova Louzada Materiais para Construção. Todos os direitos reservados.</div>
-        <div>
-          Desenvolvido por: 
-          <a href="https://wa.me/5511954950044?text=Olá!%20Quero%20saber%20mais%20sobre%20site%20igual%20do%20Dep%20Material%20louzada" class="impulso-link" target="_blank">
-            ImpulsoWeb10
-          </a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Floating WhatsApp -->
-  <a href="https://wa.me/551134864431?text=Olá!%20Gostaria%20de%20fazer%20um%20orçamento." class="whatsapp-float" target="_blank" aria-label="WhatsApp">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
-
-  <!-- JavaScript Carrossel & Accordion -->
-  <script>
-    // Carrossel JavaScript
-    const track = document.getElementById('carouselTrack');
-    const slides = Array.from(track.children);
-    const nextBtn = document.getElementById('nextBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const dotsNav = document.getElementById('carouselDots');
-
-    let currentIndex = 0;
-
-    // Criar Dots
-    slides.forEach((_, index) => {
-      const dot = document.createElement('div');
-      dot.classList.add('dot');
-      if (index === 0) dot.classList.add('active');
-      dot.addEventListener('click', () => moveToSlide(index));
-      dotsNav.appendChild(dot);
-    });
-
-    const dots = Array.from(dotsNav.children);
-
-    function updateDots() {
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentIndex);
-      });
-    }
-
-    function moveToSlide(index) {
-      if (index < 0) index = slides.length - 1;
-      if (index >= slides.length) index = 0;
-      currentIndex = index;
-      track.style.transform = `translateX(-${currentIndex * 100}%)`;
-      updateDots();
-    }
-
-    nextBtn.addEventListener('click', () => moveToSlide(currentIndex + 1));
-    prevBtn.addEventListener('click', () => moveToSlide(currentIndex - 1));
-
-    // Auto Play
-    setInterval(() => {
-      moveToSlide(currentIndex + 1);
-    }, 5000);
-
-    // Accordion FAQ
-    const faqItems = document.querySelectorAll('.faq-item');
-    faqItems.forEach(item => {
-      const header = item.querySelector('.faq-header');
-      header.addEventListener('click', () => {
-        const isActive = item.classList.contains('active');
-        faqItems.forEach(i => i.classList.remove('active'));
-        if (!isActive) {
-          item.classList.add('active');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Louzada | Materiais para Construção em Itaquaquecetuba</title>
+    
+    <!-- SEO & Canonical -->
+    <meta name="description" content="Nova Louzada Materiais para Construção em Itaquaquecetuba: mais de 30 anos de tradição. Atendemos Suzano, Poá e Arujá. Peça orçamento no WhatsApp!">
+    <link rel="canonical" href="https://novalouzada.com.br/">
+    
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#E65100',
+                            amber: '#F57C00',
+                            dark: '#111827',
+                            slate: '#1E293B',
+                            light: '#F8FAFC',
+                            whatsapp: '#25D366',
+                            whatsappDark: '#128C7E'
+                        }
+                    },
+                    fontFamily: {
+                        outfit: ['Outfit', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
         }
-      });
-    });
-  </script>
+    </script>
+
+    <!-- Style Customizations & Logo Shine Effect -->
+    <style>
+        .gradient-hero {
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(30, 41, 59, 0.92) 100%), 
+                        url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+        }
+        .btn-glow {
+            box-shadow: 0 4px 20px -2px rgba(230, 81, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-glow:hover {
+            box-shadow: 0 8px 28px 0px rgba(230, 81, 0, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-whatsapp-glow {
+            box-shadow: 0 4px 20px -2px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-whatsapp-glow:hover {
+            box-shadow: 0 8px 28px 0px rgba(37, 211, 102, 0.6);
+            transform: translateY(-2px);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Continuous Metallic Shine Effect on Logo */
+        .logo-shine {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 0.75rem;
+        }
+        .logo-shine::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -150%;
+            width: 100%;
+            height: 200%;
+            background: linear-gradient(
+                60deg, 
+                rgba(255, 255, 255, 0) 20%, 
+                rgba(255, 255, 255, 0.75) 50%, 
+                rgba(255, 255, 255, 0) 80%
+            );
+            transform: rotate(25deg);
+            animation: shine-sweep 4s infinite ease-in-out;
+            pointer-events: none;
+        }
+        .logo-shine:hover::after {
+            animation: shine-sweep-fast 0.8s ease-in-out;
+        }
+
+        @keyframes shine-sweep {
+            0% { left: -150%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
+        }
+        @keyframes shine-sweep-fast {
+            0% { left: -150%; }
+            100% { left: 150%; }
+        }
+    </style>
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": [
+            "HardwareStore",
+            "LocalBusiness"
+          ],
+          "@id": "https://novalouzada.com.br/#localbusiness",
+          "name": "Nova Louzada Materiais para Construção",
+          "image": "https://novalouzada.com.br/img/nova-louzada-fachada.webp",
+          "telephone": "+55-11-4648-6608",
+          "priceRange": "$",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Avenida Turmalina, 515 - Estância Fraternidade",
+            "addressLocality": "Itaquaquecetuba",
+            "addressRegion": "SP",
+            "postalCode": "08589-030",
+            "addressCountry": "BR"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -23.4795,
+            "longitude": -46.3452
+          },
+          "url": "https://novalouzada.com.br/",
+          "sameAs": [
+            "https://instagram.com/novalouzada",
+            "https://www.facebook.com/Novalouzada/",
+            "https://www.google.com/maps/place/?q=place_id:ChIJ0WGThTN8zpQRNfhm105GasU"
+          ],
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday"
+              ],
+              "opens": "08:00",
+              "closes": "17:00"
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": "Saturday",
+              "opens": "08:00",
+              "closes": "12:30"
+            }
+          ],
+          "areaServed": {
+            "@type": "AdministrativeArea",
+            "name": "Itaquaquecetuba"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://novalouzada.com.br/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Onde fica a Nova Louzada Materiais para Construção em Itaquaquecetuba?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Estamos na Avenida Turmalina, 515 - Estância Fraternidade, Itaquaquecetuba - SP, CEP 08589-030. Chame no WhatsApp ou ligue (11) 4648-6608 e peça seu orçamento."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Quais cidades a Nova Louzada atende?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Atendemos Itaquaquecetuba, Suzano, Poá e Arujá. Consulte prazos e condições de entrega pelo WhatsApp."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "A Nova Louzada tem retirada na loja?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sim, oferecemos retirada na loja (curbside pickup). Avise pelo WhatsApp para deixarmos seu pedido separado na Avenida Turmalina, 515."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Há quanto tempo a Nova Louzada atua no mercado?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A Nova Louzada está no mercado há mais de 30 anos, atendendo obras e reformas de Itaquaquecetuba e região. Peça seu orçamento pelo WhatsApp."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Qual é o horário de funcionamento da Nova Louzada?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Atendemos de segunda a sexta, das 08:00 às 17:00, e aos sábados, das 08:00 às 12:30. Aos domingos a loja fica fechada."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="font-sans bg-gray-50 text-gray-800 antialiased selection:bg-brand-orange selection:text-white">
+
+    <!-- Header Sticky -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo with Shiny Effect -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="logo-shine p-1 bg-white rounded-xl shadow-sm border border-gray-100">
+                    <img src="logo-louzada-materiais-de-construcao.png" 
+                         alt="Nova Louzada 30 Anos" 
+                         class="h-12 w-auto object-contain transform group-hover:scale-105 transition-transform"
+                         onerror="this.onerror=null; this.src='https://placehold.co/120x60/E65100/ffffff?text=NOVA+LOUZADA';">
+                </div>
+                <div class="hidden sm:block">
+                    <span class="block font-outfit font-extrabold text-lg sm:text-xl tracking-tight text-gray-900 leading-none">NOVA LOUZADA</span>
+                    <span class="text-[10px] font-bold text-brand-orange uppercase tracking-wider">Materiais de Construção</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links (Desktop) -->
+            <nav class="hidden md:flex items-center space-x-8 font-medium text-sm text-gray-600">
+                <a href="#sobre" class="hover:text-brand-orange transition-colors">Sobre Nós</a>
+                <a href="#produtos" class="hover:text-brand-orange transition-colors">Produtos</a>
+                <a href="#regiao" class="hover:text-brand-orange transition-colors">Entregas</a>
+                <a href="#faq" class="hover:text-brand-orange transition-colors">Dúvidas</a>
+                <a href="#localizacao" class="hover:text-brand-orange transition-colors">Contato</a>
+            </nav>
+
+            <!-- Action CTA -->
+            <div class="flex items-center space-x-3">
+                <a href="https://wa.me/551134864431?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20solicitar%20um%20orçamento." 
+                   target="_blank" 
+                   rel="noopener"
+                   class="inline-flex items-center space-x-2 bg-brand-whatsapp hover:bg-brand-whatsappDark text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all btn-whatsapp-glow">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span class="hidden sm:inline">Orçamento Rápido</span>
+                    <span class="sm:hidden">WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-hero relative text-white py-20 lg:py-28 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Main Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-brand-amber text-xs sm:text-sm font-semibold tracking-wide">
+                        <i class="fa-solid fa-award text-brand-amber"></i>
+                        <span>Mais de 30 anos de Tradição e Confiança</span>
+                    </div>
+
+                    <h1 class="font-outfit font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight">
+                        Materiais para Construção em <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-amber to-orange-400">Itaquaquecetuba</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Crescendo com você na obra e na reforma. Atendimento completo do básico ao acabamento, com entrega ágil e os melhores preços da região.
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="https://wa.me/551134864431?text=Olá!%20Quero%20fazer%20um%20orçamento%20para%20minha%20obra." 
+                           target="_blank" 
+                           rel="noopener"
+                           class="w-full sm:w-auto inline-flex items-center justify-center space-x-3 bg-gradient-to-r from-brand-orange to-brand-amber text-white font-bold px-8 py-4 rounded-xl text-base btn-glow">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
+                            <span>Pedir Orçamento via WhatsApp</span>
+                        </a>
+                        
+                        <a href="#localizacao" 
+                           class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-4 rounded-xl text-base border border-white/20 backdrop-blur-sm transition-all">
+                            <i class="fa-solid fa-location-dot text-brand-amber"></i>
+                            <span>Ver Localização</span>
+                        </a>
+                    </div>
+
+                    <!-- Quick Stats Badges -->
+                    <div class="pt-8 grid grid-cols-3 gap-4 border-t border-white/10 max-w-lg mx-auto lg:mx-0">
+                        <div class="text-center lg:text-left">
+                            <p class="font-outfit text-2xl font-bold text-white">30+ Anos</p>
+                            <p class="text-xs text-gray-400">De Tradição</p>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <p class="font-outfit text-2xl font-bold text-white">4 Cidades</p>
+                            <p class="text-xs text-gray-400">Atendidas</p>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <p class="font-outfit text-2xl font-bold text-white">Express</p>
+                            <p class="text-xs text-gray-400">Retirada em Loja</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Hero Logo Card -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="glass-card rounded-3xl p-8 space-y-6 shadow-2xl relative max-w-md w-full border border-white/15 text-center">
+                        <div class="absolute -top-3 right-6 bg-brand-orange text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                            Tradição desde 1994
+                        </div>
+
+                        <!-- Shiny Hero Emblem -->
+                        <div class="pt-2">
+                            <div class="logo-shine p-4 bg-white/95 rounded-2xl shadow-xl inline-block border border-white/40">
+                                <img src="logo-louzada-materiais-de-construcao.png" 
+                                     alt="Nova Louzada Logo 30 Anos" 
+                                     class="h-32 sm:h-40 w-auto object-contain mx-auto"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/240x120/E65100/ffffff?text=NOVA+LOUZADA+30+ANOS';">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <h3 class="font-outfit text-xl font-bold text-white">
+                                Nova Louzada
+                            </h3>
+                            <p class="text-xs text-gray-300">
+                                Av. Turmalina, 515 - Estância Fraternidade<br>Itaquaquecetuba - SP
+                            </p>
+                        </div>
+
+                        <div class="pt-2 border-t border-white/10 space-y-2 text-xs text-gray-300">
+                            <div class="flex items-center justify-between">
+                                <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-brand-amber"></i> Seg a Sex</span>
+                                <span class="font-semibold text-white">08:00 às 17:00</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-brand-amber"></i> Sábados</span>
+                                <span class="font-semibold text-white">08:00 às 12:30</span>
+                            </div>
+                        </div>
+
+                        <a href="tel:1146486608" class="flex items-center justify-center space-x-2 w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm transition-colors border border-white/20">
+                            <i class="fa-solid fa-phone text-brand-amber"></i>
+                            <span>Ligar: (11) 4648-6608</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre / Diferenciais -->
+    <section id="sobre" class="py-16 sm:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-brand-orange font-bold text-xs uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full">Por que escolher a Nova Louzada?</span>
+                <h2 class="font-outfit font-extrabold text-3xl sm:text-4xl text-gray-900">
+                    Tradição e Segurança para Construir ou Reformar
+                </h2>
+                <p class="text-gray-600 text-sm sm:text-base">
+                    Há mais de três décadas atuando no segmento de materiais de construção civil com o lema "Crescendo com você".
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Card 1 -->
+                <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:shadow-xl hover:border-brand-orange/30 transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-orange-100 text-brand-orange flex items-center justify-center text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <h3 class="font-outfit font-bold text-lg text-gray-900 mb-2">30+ Anos de Mercado</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Experiência sólida na orientação para sua obra do básico até a fase final.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:shadow-xl hover:border-brand-orange/30 transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-orange-100 text-brand-orange flex items-center justify-center text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <h3 class="font-outfit font-bold text-lg text-gray-900 mb-2">Entrega Agilizada</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Atendimento logístico em Itaquaquecetuba, Suzano, Poá e Arujá sem perder tempo.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:shadow-xl hover:border-brand-orange/30 transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-orange-100 text-brand-orange flex items-center justify-center text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <h3 class="font-outfit font-bold text-lg text-gray-900 mb-2">Orçamento pelo Zap</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Envie sua lista de materiais e receba um orçamento detalhado com agilidade.
+                    </p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:shadow-xl hover:border-brand-orange/30 transition-all duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-orange-100 text-brand-orange flex items-center justify-center text-xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-map-pin"></i>
+                    </div>
+                    <h3 class="font-outfit font-bold text-lg text-gray-900 mb-2">Fácil Acesso</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Loja estrategicamente localizada na Estância Fraternidade com opção de retirada.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Soluções e Produtos -->
+    <section id="produtos" class="py-16 sm:py-24 bg-brand-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-brand-orange font-bold text-xs uppercase tracking-wider bg-orange-100/60 px-3 py-1 rounded-full">Soluções para sua Construção</span>
+                <h2 class="font-outfit font-extrabold text-3xl sm:text-4xl text-gray-900">
+                    Tudo para Sua Obra e Reforma em Um Só Lugar
+                </h2>
+                <p class="text-gray-600 text-sm sm:text-base">
+                    Trabalhamos com materiais de alta qualidade para garantir a estrutura ideal do seu projeto.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- Categoria 1 -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div class="space-y-4">
+                        <div class="inline-flex items-center space-x-2 text-brand-orange font-bold text-sm uppercase tracking-wide">
+                            <i class="fa-solid fa-cubes-stacked"></i>
+                            <span>Estrutura & Básico</span>
+                        </div>
+                        <h3 class="font-outfit font-bold text-2xl text-gray-900">Materiais de Construção Civil</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Itens essenciais para levantar, rebocar e estruturar. Conte com a orientação de especialistas para calcular a quantidade necessária sem desperdícios.
+                        </p>
+                        
+                        <ul class="space-y-2 pt-2">
+                            <li class="flex items-center text-sm text-gray-700 font-medium">
+                                <i class="fa-solid fa-circle-check text-brand-orange mr-2 text-xs"></i>
+                                Depósito completo e blocos estruturais
+                            </li>
+                            <li class="flex items-center text-sm text-gray-700 font-medium">
+                                <i class="fa-solid fa-circle-check text-brand-orange mr-2 text-xs"></i>
+                                Soluções do bruto ao acabamento final
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-6 mt-6 border-t border-gray-100">
+                        <a href="https://wa.me/551134864431?text=Olá!%20Gostaria%20de%20consultar%20preços%20de%20materiais%20básicos%20para%20obra." 
+                           target="_blank" 
+                           rel="noopener"
+                           class="inline-flex items-center text-brand-orange font-bold text-sm hover:text-brand-amber transition-colors">
+                            <span>Consultar Lista no WhatsApp</span>
+                            <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Categoria 2 -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div class="space-y-4">
+                        <div class="inline-flex items-center space-x-2 text-brand-orange font-bold text-sm uppercase tracking-wide">
+                            <i class="fa-solid fa-boxes-packing"></i>
+                            <span>Conveniência Logística</span>
+                        </div>
+                        <h3 class="font-outfit font-bold text-2xl text-gray-900">Retirada Expressa & Entrega</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Acelere o ritmo dos seus pedreiros. Deixe tudo separado com antecedência ou receba diretamente no canteiro de obras com total segurança.
+                        </p>
+                        
+                        <ul class="space-y-2 pt-2">
+                            <li class="flex items-center text-sm text-gray-700 font-medium">
+                                <i class="fa-solid fa-circle-check text-brand-orange mr-2 text-xs"></i>
+                                Retirada na loja (Curbside Pickup) rápida
+                            </li>
+                            <li class="flex items-center text-sm text-gray-700 font-medium">
+                                <i class="fa-solid fa-circle-check text-brand-orange mr-2 text-xs"></i>
+                                Entregas agendadas na região do Alto Tietê
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-6 mt-6 border-t border-gray-100">
+                        <a href="https://wa.me/551134864431?text=Olá!%20Gostaria%20de%20saber%20sobre%20as%20condições%20de%20entrega." 
+                           target="_blank" 
+                           rel="noopener"
+                           class="inline-flex items-center text-brand-orange font-bold text-sm hover:text-brand-amber transition-colors">
+                            <span>Consultar Frete e Prazos</span>
+                            <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Região de Atendimento -->
+    <section id="regiao" class="py-16 bg-brand-slate text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-8 items-center">
+                
+                <div class="lg:col-span-6 space-y-4">
+                    <span class="text-brand-amber font-bold text-xs uppercase tracking-wider">Cobertura Regional</span>
+                    <h2 class="font-outfit font-extrabold text-3xl sm:text-4xl">
+                        Atendemos Itaquaquecetuba e Cidades Vizinhas
+                    </h2>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                        Com base na Avenida Turmalina, garantimos agilidade na logística para obras situadas em pontos estratégicos da região.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center space-x-3">
+                            <i class="fa-solid fa-location-dot text-brand-orange text-lg"></i>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Itaquaquecetuba</h4>
+                                <p class="text-xs text-gray-400">Sede & Loja Física</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center space-x-3">
+                            <i class="fa-solid fa-truck text-brand-amber text-lg"></i>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Suzano</h4>
+                                <p class="text-xs text-gray-400">Entregas Rápida</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center space-x-3">
+                            <i class="fa-solid fa-truck text-brand-amber text-lg"></i>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Poá</h4>
+                                <p class="text-xs text-gray-400">Atendimento Regular</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center space-x-3">
+                            <i class="fa-solid fa-truck text-brand-amber text-lg"></i>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Arujá</h4>
+                                <p class="text-xs text-gray-400">Entregas sob Consulta</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Localização & Contato (Google Maps Iframe via Place ID) -->
+    <section id="localizacao" class="py-16 sm:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-brand-orange font-bold text-xs uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full">Venha nos visitar</span>
+                <h2 class="font-outfit font-extrabold text-3xl sm:text-4xl text-gray-900">
+                    Nossa Localização em Itaquaquecetuba
+                </h2>
+                <p class="text-gray-600 text-sm sm:text-base">
+                    Estamos na Estância Fraternidade com espaço pronto para atender você.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Informações de Contato -->
+                <div class="lg:col-span-5 bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100 flex flex-col justify-between">
+                    <div class="space-y-6">
+                        
+                        <div>
+                            <h3 class="font-outfit font-bold text-xl text-gray-900 mb-1">Nova Louzada</h3>
+                            <p class="text-xs text-brand-orange font-semibold uppercase">Materiais para Construção</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Endereço -->
+                            <div class="flex items-start space-x-3">
+                                <div class="w-10 h-10 rounded-lg bg-orange-100 text-brand-orange flex items-center justify-center text-lg flex-shrink-0">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-medium">Endereço Completo</p>
+                                    <p class="text-sm font-semibold text-gray-800">
+                                        Av. Turmalina, 515 - Estância Fraternidade<br>
+                                        Itaquaquecetuba - SP, 08589-030
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Horários -->
+                            <div class="flex items-start space-x-3">
+                                <div class="w-10 h-10 rounded-lg bg-orange-100 text-brand-orange flex items-center justify-center text-lg flex-shrink-0">
+                                    <i class="fa-regular fa-clock"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-medium">Horário de Atendimento</p>
+                                    <p class="text-sm font-semibold text-gray-800">Segunda a Sexta: 08:00 às 17:00</p>
+                                    <p class="text-sm font-semibold text-gray-800">Sábado: 08:00 às 12:30</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">Domingos e Feriados: Fechado</p>
+                                </div>
+                            </div>
+
+                            <!-- Telefones -->
+                            <div class="flex items-start space-x-3">
+                                <div class="w-10 h-10 rounded-lg bg-orange-100 text-brand-orange flex items-center justify-center text-lg flex-shrink-0">
+                                    <i class="fa-solid fa-headset"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-medium">Canais Diretos</p>
+                                    <p class="text-sm font-semibold text-gray-800">Telefone: (11) 4648-6608</p>
+                                    <p class="text-sm font-semibold text-gray-800">WhatsApp: (11) 3486-4431</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Botões Rápidos -->
+                    <div class="pt-6 mt-6 border-t border-gray-200 grid grid-cols-2 gap-3">
+                        <a href="https://www.google.com/maps/place/?q=place_id:ChIJ0WGThTN8zpQRNfhm105GasU" 
+                           target="_blank" 
+                           rel="noopener"
+                           class="inline-flex items-center justify-center space-x-2 bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-xl text-xs transition-colors">
+                            <i class="fa-solid fa-directions"></i>
+                            <span>Como Chegar</span>
+                        </a>
+
+                        <a href="https://wa.me/551134864431?text=Olá!%20Gostaria%20de%20falar%20com%20um%20atendente." 
+                           target="_blank" 
+                           rel="noopener"
+                           class="inline-flex items-center justify-center space-x-2 bg-brand-whatsapp hover:bg-brand-whatsappDark text-white font-medium py-3 px-4 rounded-xl text-xs transition-colors">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            <span>Chamar no Zap</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Google Maps Embed -->
+                <div class="lg:col-span-7 h-[380px] lg:h-auto rounded-2xl overflow-hidden shadow-md border border-gray-200 relative">
+                    <iframe 
+                        title="Mapa de Localização Nova Louzada"
+                        src="https://maps.google.com/maps?q=Nova+Louzada+Materiais+para+Constru%C3%A7%C3%A3o,+Av.+Turmalina,+515+-+Est%C3%A2ncia+Fraternidade,+Itaquaquecetuba+-+SP,+08589-030&ftid=0x94ce3d33859301d1:0x526ac64edd35f835&z=16&output=embed" 
+                        class="w-full h-full border-0 min-h-[380px]" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ (Perguntas Frequentes) -->
+    <section id="faq" class="py-16 sm:py-24 bg-brand-light">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-brand-orange font-bold text-xs uppercase tracking-wider bg-orange-100/60 px-3 py-1 rounded-full">Tire suas dúvidas</span>
+                <h2 class="font-outfit font-extrabold text-3xl sm:text-4xl text-gray-900">
+                    Perguntas Frequentes
+                </h2>
+                <p class="text-gray-600 text-sm sm:text-base">
+                    Confira as respostas para as principais dúvidas de nossos clientes.
+                </p>
+            </div>
+
+            <!-- Accordion container -->
+            <div class="space-y-4" id="accordion-faq">
+                
+                <!-- FAQ Item 1 -->
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm transition-all">
+                    <button class="faq-toggle w-full p-6 text-left flex items-center justify-between focus:outline-none">
+                        <span class="font-outfit font-bold text-base sm:text-lg text-gray-900 pr-4">
+                            Onde fica a Nova Louzada Materiais para Construção em Itaquaquecetuba?
+                        </span>
+                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center flex-shrink-0 transition-transform duration-300 icon-arrow">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-50 pt-4">
+                        Estamos localizados na Avenida Turmalina, 515 - Estância Fraternidade, Itaquaquecetuba - SP, CEP 08589-030. Você pode nos fazer uma visita ou chamar no WhatsApp (11) 3486-4431 / Ligar (11) 4648-6608 para solicitar seu orçamento.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm transition-all">
+                    <button class="faq-toggle w-full p-6 text-left flex items-center justify-between focus:outline-none">
+                        <span class="font-outfit font-bold text-base sm:text-lg text-gray-900 pr-4">
+                            Quais cidades a Nova Louzada atende?
+                        </span>
+                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center flex-shrink-0 transition-transform duration-300 icon-arrow">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-50 pt-4">
+                        Atendemos Itaquaquecetuba, Suzano, Poá e Arujá. Consulte prazos, taxas e condições de entrega diretamente pelo nosso WhatsApp.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm transition-all">
+                    <button class="faq-toggle w-full p-6 text-left flex items-center justify-between focus:outline-none">
+                        <span class="font-outfit font-bold text-base sm:text-lg text-gray-900 pr-4">
+                            A Nova Louzada tem retirada na loja?
+                        </span>
+                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center flex-shrink-0 transition-transform duration-300 icon-arrow">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-50 pt-4">
+                        Sim, oferecemos a modalidade de retirada na loja (curbside pickup). Você pode avisar antecipadamente via WhatsApp para que nossa equipe deixe seu pedido devidamente separado e pronto para retirada na Av. Turmalina, 515.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm transition-all">
+                    <button class="faq-toggle w-full p-6 text-left flex items-center justify-between focus:outline-none">
+                        <span class="font-outfit font-bold text-base sm:text-lg text-gray-900 pr-4">
+                            Há quanto tempo a Nova Louzada atua no mercado?
+                        </span>
+                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center flex-shrink-0 transition-transform duration-300 icon-arrow">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-50 pt-4">
+                        A Nova Louzada atua no mercado de materiais para construção há mais de 30 anos, construindo uma história sólida baseada em confiança, parceria e suporte a obras e reformas de todos os portes.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm transition-all">
+                    <button class="faq-toggle w-full p-6 text-left flex items-center justify-between focus:outline-none">
+                        <span class="font-outfit font-bold text-base sm:text-lg text-gray-900 pr-4">
+                            Qual é o horário de funcionamento da Nova Louzada?
+                        </span>
+                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center flex-shrink-0 transition-transform duration-300 icon-arrow">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6 text-gray-600 text-sm leading-relaxed border-t border-gray-50 pt-4">
+                        Atendemos de segunda a sexta-feira, das 08:00 às 17:00, e aos sábados, das 08:00 às 12:30. Aos domingos a loja permanece fechada.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-gray-400 py-16 border-t border-gray-800/80 relative overflow-hidden">
+        <!-- Accent line -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-brand-orange to-transparent opacity-60"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid md:grid-cols-12 gap-10 pb-12 border-b border-gray-800/80">
+                
+                <!-- Coluna Logo / Sobre -->
+                <div class="md:col-span-5 space-y-5">
+                    <div class="flex items-center space-x-3">
+                        <div class="logo-shine p-1 bg-white rounded-xl shadow-md">
+                            <img src="logo-louzada-materiais-de-construcao.png" 
+                                 alt="Nova Louzada Logo" 
+                                 class="h-10 w-auto object-contain"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/100x50/E65100/ffffff?text=NOVA+LOUZADA';">
+                        </div>
+                        <div>
+                            <span class="font-outfit font-extrabold text-white text-xl tracking-tight block leading-none">NOVA LOUZADA</span>
+                            <span class="text-[10px] font-semibold text-brand-orange uppercase tracking-widest">Materiais para Construção</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
+                        Mais de 30 anos de tradição e confiança oferecendo soluções completas do básico ao acabamento para obras e reformas em Itaquaquecetuba e região.
+                    </p>
+                    <div class="flex items-center space-x-3 pt-1">
+                        <a href="https://instagram.com/novalouzada" target="_blank" rel="noopener" aria-label="Instagram" class="w-10 h-10 rounded-xl bg-gray-900 border border-gray-800 hover:border-brand-orange hover:bg-brand-orange text-gray-300 hover:text-white flex items-center justify-center transition-all shadow-sm">
+                            <i class="fa-brands fa-instagram text-lg"></i>
+                        </a>
+                        <a href="https://www.facebook.com/Novalouzada/" target="_blank" rel="noopener" aria-label="Facebook" class="w-10 h-10 rounded-xl bg-gray-900 border border-gray-800 hover:border-brand-orange hover:bg-brand-orange text-gray-300 hover:text-white flex items-center justify-center transition-all shadow-sm">
+                            <i class="fa-brands fa-facebook-f text-base"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coluna Links Rápidos -->
+                <div class="md:col-span-3 space-y-4">
+                    <h4 class="font-outfit font-bold text-white text-xs uppercase tracking-widest text-brand-amber">Navegação Rápida</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="#sobre" class="hover:text-brand-orange transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-brand-orange"></i> Sobre Nós</a></li>
+                        <li><a href="#produtos" class="hover:text-brand-orange transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-brand-orange"></i> Produtos & Serviços</a></li>
+                        <li><a href="#regiao" class="hover:text-brand-orange transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-brand-orange"></i> Região de Atendimento</a></li>
+                        <li><a href="#localizacao" class="hover:text-brand-orange transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-brand-orange"></i> Endereço e Mapa</a></li>
+                        <li><a href="#faq" class="hover:text-brand-orange transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-brand-orange"></i> Dúvidas Frequentes</a></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna Contato & Atendimento -->
+                <div class="md:col-span-4 space-y-4">
+                    <h4 class="font-outfit font-bold text-white text-xs uppercase tracking-widest text-brand-amber">Atendimento ao Cliente</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-location-dot text-brand-orange mt-1"></i>
+                            <span>Av. Turmalina, 515 - Estância Fraternidade<br>Itaquaquecetuba - SP, CEP 08589-030</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-phone text-brand-orange"></i>
+                            <a href="tel:1146486608" class="hover:text-white transition-colors">(11) 4648-6608</a>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-brands fa-whatsapp text-brand-whatsapp text-base"></i>
+                            <a href="https://wa.me/551134864431?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20solicitar%20um%20orçamento." target="_blank" rel="noopener" class="hover:text-white transition-colors">(11) 3486-4431 (Atendimento)</a>
+                        </li>
+                        <li class="flex items-center space-x-3 text-xs text-gray-500 pt-1">
+                            <i class="fa-regular fa-clock text-gray-400"></i>
+                            <span>Seg a Sex: 08h às 17h | Sáb: 08h às 12h30</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Bottom Copyright & Agency Credit (ImpulsoWeb10) -->
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+                <p class="text-center md:text-left">
+                    &copy; Nova Louzada Materiais para Construção. Todos os direitos reservados.
+                </p>
+
+                <!-- Agency Signature -->
+                <div class="flex items-center space-x-2 bg-gray-900/80 px-3.5 py-1.5 rounded-full border border-gray-800/80 shadow-inner">
+                    <span class="text-gray-400">Desenvolvimento:</span>
+                    <a href="https://wa.me/5511954950044?text=Olá!%20Quero%20saber%20mais%20sobre%20site%20igual%20do%20Dep%20Material%20louzada" 
+                       target="_blank" 
+                       rel="noopener" 
+                       class="font-semibold text-gray-200 hover:text-brand-orange transition-colors flex items-center gap-1.5 group"
+                       title="Desenvolvido por ImpulsoWeb10 - Clique para falar no WhatsApp">
+                        <span class="text-brand-amber font-bold group-hover:underline">ImpulsoWeb10</span>
+                        <i class="fa-brands fa-whatsapp text-brand-whatsapp text-sm group-hover:scale-110 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Widget -->
+    <div class="fixed bottom-6 right-6 z-50 flex items-center space-x-3">
+        <a href="https://wa.me/551134864431?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20fazer%20um%20orçamento." 
+           target="_blank" 
+           rel="noopener"
+           aria-label="Atendimento via WhatsApp"
+           class="group relative flex items-center justify-center w-14 h-14 bg-brand-whatsapp hover:bg-brand-whatsappDark text-white rounded-full shadow-2xl transition-all duration-300 hover:scale-110 btn-whatsapp-glow">
+            
+            <i class="fa-brands fa-whatsapp text-3xl"></i>
+            
+            <!-- Tooltip -->
+            <span class="absolute right-16 bg-gray-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md pointer-events-none">
+                Fale conosco no WhatsApp
+            </span>
+        </a>
+    </div>
+
+    <!-- Accordion FAQ JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqToggles = document.querySelectorAll('.faq-toggle');
+
+            faqToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const iconArrow = this.querySelector('.icon-arrow');
+
+                    // Close all other items
+                    faqToggles.forEach(otherToggle => {
+                        if (otherToggle !== toggle) {
+                            otherToggle.nextElementSibling.classList.add('hidden');
+                            otherToggle.querySelector('.icon-arrow').style.transform = 'rotate(0deg)';
+                        }
+                    });
+
+                    // Toggle current item
+                    if (content.classList.contains('hidden')) {
+                        content.classList.remove('hidden');
+                        iconArrow.style.transform = 'rotate(180deg)';
+                    } else {
+                        content.classList.add('hidden');
+                        iconArrow.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
