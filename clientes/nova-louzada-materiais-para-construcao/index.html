@@ -41,7 +41,7 @@
         }
     </script>
 
-    <!-- Style Customizations -->
+    <!-- Style Customizations & Logo Shine Effect -->
     <style>
         .gradient-hero {
             background: linear-gradient(135deg, rgba(17, 24, 39, 0.95) 0%, rgba(30, 41, 59, 0.92) 100%), 
@@ -67,6 +67,44 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Continuous Metallic Shine Effect on Logo */
+        .logo-shine {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 0.75rem;
+        }
+        .logo-shine::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -150%;
+            width: 100%;
+            height: 200%;
+            background: linear-gradient(
+                60deg, 
+                rgba(255, 255, 255, 0) 20%, 
+                rgba(255, 255, 255, 0.75) 50%, 
+                rgba(255, 255, 255, 0) 80%
+            );
+            transform: rotate(25deg);
+            animation: shine-sweep 4s infinite ease-in-out;
+            pointer-events: none;
+        }
+        .logo-shine:hover::after {
+            animation: shine-sweep-fast 0.8s ease-in-out;
+        }
+
+        @keyframes shine-sweep {
+            0% { left: -150%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
+        }
+        @keyframes shine-sweep-fast {
+            0% { left: -150%; }
+            100% { left: 150%; }
         }
     </style>
 
@@ -182,17 +220,20 @@
 <body class="font-sans bg-gray-50 text-gray-800 antialiased selection:bg-brand-orange selection:text-white">
 
     <!-- Header Sticky -->
-    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all shadow-sm">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             
-            <!-- Logo -->
+            <!-- Logo with Shiny Effect -->
             <a href="#" class="flex items-center space-x-3 group">
-                <div class="w-11 h-11 bg-gradient-to-tr from-brand-orange to-brand-amber rounded-xl flex items-center justify-center text-white shadow-md transform group-hover:rotate-6 transition-transform">
-                    <i class="fa-solid font-bold fa-trowel-bricks text-xl"></i>
+                <div class="logo-shine p-1 bg-white rounded-xl shadow-sm border border-gray-100">
+                    <img src="logo-louzada-materiais-de-construcao.png" 
+                         alt="Nova Louzada 30 Anos" 
+                         class="h-12 w-auto object-contain transform group-hover:scale-105 transition-transform"
+                         onerror="this.onerror=null; this.src='https://placehold.co/120x60/E65100/ffffff?text=NOVA+LOUZADA';">
                 </div>
-                <div>
-                    <span class="block font-outfit font-extrabold text-xl sm:text-2xl tracking-tight text-gray-900 leading-none">NOVA LOUZADA</span>
-                    <span class="text-[11px] font-semibold text-brand-orange uppercase tracking-wider">Materiais de Construção</span>
+                <div class="hidden sm:block">
+                    <span class="block font-outfit font-extrabold text-lg sm:text-xl tracking-tight text-gray-900 leading-none">NOVA LOUZADA</span>
+                    <span class="text-[10px] font-bold text-brand-orange uppercase tracking-wider">Materiais de Construção</span>
                 </div>
             </a>
 
@@ -226,8 +267,8 @@
                 
                 <!-- Main Content -->
                 <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-brand-amber text-xs sm:text-sm font-semibold tracking-wide">
-                        <i class="fa-solid fa-award"></i>
+                    <div class="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-brand-amber text-xs sm:text-sm font-semibold tracking-wide">
+                        <i class="fa-solid fa-award text-brand-amber"></i>
                         <span>Mais de 30 anos de Tradição e Confiança</span>
                     </div>
 
@@ -273,50 +314,47 @@
                     </div>
                 </div>
 
-                <!-- Feature Glass Card Container -->
-                <div class="lg:col-span-5">
-                    <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
-                        <div class="absolute -top-3 -right-3 bg-brand-orange text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
-                            Loja Física
+                <!-- Featured Hero Logo Card -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="glass-card rounded-3xl p-8 space-y-6 shadow-2xl relative max-w-md w-full border border-white/15 text-center">
+                        <div class="absolute -top-3 right-6 bg-brand-orange text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                            Tradição desde 1994
                         </div>
 
-                        <h3 class="font-outfit text-xl font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-store text-brand-amber"></i>
-                            Atendimento Rápido e Direto
-                        </h3>
-
-                        <div class="space-y-4 text-sm text-gray-300">
-                            <div class="flex items-start space-x-3">
-                                <div class="mt-1 w-5 h-5 rounded-full bg-brand-orange/20 text-brand-amber flex items-center justify-center text-xs flex-shrink-0">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                                <span><strong>Endereço:</strong> Av. Turmalina, 515 - Estância Fraternidade, Itaquaquecetuba - SP</span>
-                            </div>
-
-                            <div class="flex items-start space-x-3">
-                                <div class="mt-1 w-5 h-5 rounded-full bg-brand-orange/20 text-brand-amber flex items-center justify-center text-xs flex-shrink-0">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                                <span><strong>Horário:</strong> Seg a Sex (08h às 17h) | Sáb (08h às 12h30)</span>
-                            </div>
-
-                            <div class="flex items-start space-x-3">
-                                <div class="mt-1 w-5 h-5 rounded-full bg-brand-orange/20 text-brand-amber flex items-center justify-center text-xs flex-shrink-0">
-                                    <i class="fa-solid fa-check"></i>
-                                </div>
-                                <span><strong>Modalidades:</strong> Entrega na obra ou Retirada na Loja (Curbside Pickup)</span>
+                        <!-- Shiny Hero Emblem -->
+                        <div class="pt-2">
+                            <div class="logo-shine p-4 bg-white/95 rounded-2xl shadow-xl inline-block border border-white/40">
+                                <img src="logo-louzada-materiais-de-construcao.png" 
+                                     alt="Nova Louzada Logo 30 Anos" 
+                                     class="h-32 sm:h-40 w-auto object-contain mx-auto"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/240x120/E65100/ffffff?text=NOVA+LOUZADA+30+ANOS';">
                             </div>
                         </div>
 
-                        <div class="pt-2 border-t border-white/10">
-                            <a href="tel:1146486608" class="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-sm transition-colors">
-                                <span class="flex items-center gap-2">
-                                    <i class="fa-solid fa-phone text-brand-amber"></i>
-                                    (11) 4648-6608
-                                </span>
-                                <span class="text-xs text-gray-400">Ligar agora</span>
-                            </a>
+                        <div class="space-y-2">
+                            <h3 class="font-outfit text-xl font-bold text-white">
+                                Nova Louzada
+                            </h3>
+                            <p class="text-xs text-gray-300">
+                                Av. Turmalina, 515 - Estância Fraternidade<br>Itaquaquecetuba - SP
+                            </p>
                         </div>
+
+                        <div class="pt-2 border-t border-white/10 space-y-2 text-xs text-gray-300">
+                            <div class="flex items-center justify-between">
+                                <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-brand-amber"></i> Seg a Sex</span>
+                                <span class="font-semibold text-white">08:00 às 17:00</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-brand-amber"></i> Sábados</span>
+                                <span class="font-semibold text-white">08:00 às 12:30</span>
+                            </div>
+                        </div>
+
+                        <a href="tel:1146486608" class="flex items-center justify-center space-x-2 w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm transition-colors border border-white/20">
+                            <i class="fa-solid fa-phone text-brand-amber"></i>
+                            <span>Ligar: (11) 4648-6608</span>
+                        </a>
                     </div>
                 </div>
 
@@ -324,7 +362,7 @@
         </div>
     </section>
 
-    <!-- Sobre / Diferenciais (O que você encontra) -->
+    <!-- Sobre / Diferenciais -->
     <section id="sobre" class="py-16 sm:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
@@ -533,7 +571,7 @@
         </div>
     </section>
 
-    <!-- Localização & Contato (Google Maps Iframe) -->
+    <!-- Localização & Contato (Google Maps Iframe via Place ID) -->
     <section id="localizacao" class="py-16 sm:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
@@ -735,7 +773,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-950 text-gray-400 py-16 border-t border-gray-800/80 relative overflow-hidden">
-        <!-- Elemento de iluminação decorativo de fundo -->
+        <!-- Accent line -->
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-brand-orange to-transparent opacity-60"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -744,8 +782,11 @@
                 <!-- Coluna Logo / Sobre -->
                 <div class="md:col-span-5 space-y-5">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-gradient-to-tr from-brand-orange to-brand-amber rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
-                            <i class="fa-solid fa-trowel-bricks text-lg"></i>
+                        <div class="logo-shine p-1 bg-white rounded-xl shadow-md">
+                            <img src="logo-louzada-materiais-de-construcao.png" 
+                                 alt="Nova Louzada Logo" 
+                                 class="h-10 w-auto object-contain"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/100x50/E65100/ffffff?text=NOVA+LOUZADA';">
                         </div>
                         <div>
                             <span class="font-outfit font-extrabold text-white text-xl tracking-tight block leading-none">NOVA LOUZADA</span>
@@ -802,13 +843,13 @@
 
             </div>
 
-            <!-- Bottom Copyright e Assinatura ImpulsoWeb10 -->
+            <!-- Bottom Copyright & Agency Credit (ImpulsoWeb10) -->
             <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
                 <p class="text-center md:text-left">
                     &copy; Nova Louzada Materiais para Construção. Todos os direitos reservados.
                 </p>
 
-                <!-- Assinatura Agência ImpulsoWeb10 -->
+                <!-- Agency Signature -->
                 <div class="flex items-center space-x-2 bg-gray-900/80 px-3.5 py-1.5 rounded-full border border-gray-800/80 shadow-inner">
                     <span class="text-gray-400">Desenvolvimento:</span>
                     <a href="https://wa.me/5511954950044?text=Olá!%20Quero%20saber%20mais%20sobre%20site%20igual%20do%20Dep%20Material%20louzada" 
@@ -841,7 +882,7 @@
         </a>
     </div>
 
-    <!-- JavaScript para Interatividade do Acordeão FAQ -->
+    <!-- Accordion FAQ JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const faqToggles = document.querySelectorAll('.faq-toggle');
