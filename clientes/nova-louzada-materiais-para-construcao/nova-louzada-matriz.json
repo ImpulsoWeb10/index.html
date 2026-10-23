@@ -1,0 +1,195 @@
+{
+  "dados_formulario_base": {
+    "placeId": "ChIJ0WGThTN8zpQRNfhm105GasU",
+    "nomeEmpresa": "Nova Louzada Materiais para Construção",
+    "whatsapp": "551134864431",
+    "instagram": "@novalouzada",
+    "cidadeEstado": "Itaquaquecetuba / SP",
+    "enderecoCompleto": "Avenida Turmalina, 515 - Estância Fraternidade, Itaquaquecetuba - SP, 08589-030",
+    "segmento": "Materiais para construção",
+    "produtosPrincipais": "Materiais de construção civil, blocos, depósito de material de construção, materiais para obra e reforma"
+  },
+  "conteudo_enriquecido_desktop": {
+    "seo_tags": {
+      "canonical": "https://novalouzada.com.br/",
+      "h1": "Materiais para Construção em Itaquaquecetuba",
+      "meta_description": "Nova Louzada Materiais para Construção em Itaquaquecetuba: mais de 30 anos de tradição. Atendemos Suzano, Poá e Arujá. Peça orçamento no WhatsApp!"
+    },
+    "arquitetura_h2_h4": {
+      "secao_principal_h2": {
+        "titulo_h2": "Nova Louzada: mais de 30 anos construindo com você em Itaquaquecetuba",
+        "introducao_bloco": "A Nova Louzada Materiais para Construção atende Itaquaquecetuba e região há mais de 30 anos, com o lema \"Crescendo com você\". Nossa loja fica na Avenida Turmalina, 515, na Estância Fraternidade, com atendimento para obras e reformas de todos os tamanhos. Acompanhe novidades no Instagram @novalouzada."
+      },
+      "secao_produtos_h2": {
+        "titulo_h2": "Tudo para a Sua Obra e Reforma em um Só Lugar",
+        "subsecoes_h3": [
+          {
+            "titulo_h3": "Materiais de Construção Civil",
+            "foco_produtos_conteudo": "Materiais básicos para levantar, rebocar e acabar a sua obra, com orientação de quem entende do assunto. Monte a lista e peça seu orçamento pelo WhatsApp.",
+            "detalhes_especificos_h4": [
+              "Depósito de material de construção e blocos",
+              "Atendimento para obras e reformas, do básico ao acabamento"
+            ]
+          },
+          {
+            "titulo_h3": "Retirada na Loja e Entrega na Região",
+            "foco_produtos_conteudo": "Retire seu pedido na loja ou consulte a entrega para Itaquaquecetuba, Suzano, Poá e Arujá, e ganhe tempo na obra.",
+            "detalhes_especificos_h4": [
+              "Retirada na loja (curbside pickup)",
+              "Regiões atendidas: Itaquaquecetuba, Suzano, Poá e Arujá"
+            ]
+          }
+        ]
+      },
+      "secao_localizacao_h2": {
+        "titulo_h2": "Material de Construção na Estância Fraternidade, em Itaquaquecetuba",
+        "chamada_local_conteudo": "Visite a Nova Louzada na Avenida Turmalina, 515 - Estância Fraternidade, Itaquaquecetuba - SP. Ligue (11) 4648-6608 ou chame no WhatsApp e peça seu orçamento."
+      }
+    },
+    "lista_beneficios_o_que_encontra": [
+      "Mais de 30 anos de experiência em materiais de construção",
+      "Retirada na loja e atendimento em Itaquaquecetuba, Suzano, Poá e Arujá",
+      "Orçamento rápido pelo WhatsApp",
+      "Localização de fácil acesso na Avenida Turmalina"
+    ],
+    "imagens_otimizadas_seo": [
+      {
+        "url_original": "",
+        "nome_arquivo_webp": "nova-louzada-materiais-construcao-itaquaquecetuba-fachada.webp",
+        "alt_descricao": "Fachada da Nova Louzada Materiais para Construção na Avenida Turmalina em Itaquaquecetuba SP"
+      },
+      {
+        "url_original": "",
+        "nome_arquivo_webp": "material-de-construcao-itaquaquecetuba-nova-louzada.webp",
+        "alt_descricao": "Materiais de construção para obra e reforma na Nova Louzada em Itaquaquecetuba"
+      }
+    ],
+    "faq_perguntas_frequentes": [
+      {
+        "pergunta": "Onde fica a Nova Louzada Materiais para Construção em Itaquaquecetuba?",
+        "resposta": "Estamos na Avenida Turmalina, 515 - Estância Fraternidade, Itaquaquecetuba - SP, CEP 08589-030. Chame no WhatsApp ou ligue (11) 4648-6608 e peça seu orçamento."
+      },
+      {
+        "pergunta": "Quais cidades a Nova Louzada atende?",
+        "resposta": "Atendemos Itaquaquecetuba, Suzano, Poá e Arujá. Consulte prazos e condições de entrega pelo WhatsApp."
+      },
+      {
+        "pergunta": "A Nova Louzada tem retirada na loja?",
+        "resposta": "Sim, oferecemos retirada na loja (curbside pickup). Avise pelo WhatsApp para deixarmos seu pedido separado na Avenida Turmalina, 515."
+      },
+      {
+        "pergunta": "Há quanto tempo a Nova Louzada atua no mercado?",
+        "resposta": "A Nova Louzada está no mercado há mais de 30 anos, atendendo obras e reformas de Itaquaquecetuba e região. Peça seu orçamento pelo WhatsApp."
+      },
+      {
+        "pergunta": "Qual é o horário de funcionamento da Nova Louzada?",
+        "resposta": "Atendemos de segunda a sexta, das 08:00 às 17:00, e aos sábados, das 08:00 às 12:30. Aos domingos a loja fica fechada."
+      }
+    ],
+    "schema_markup_json_ld": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": [
+            "HardwareStore",
+            "LocalBusiness"
+          ],
+          "@id": "https://novalouzada.com.br/#localbusiness",
+          "name": "Nova Louzada Materiais para Construção",
+          "image": "https://novalouzada.com.br/img/nova-louzada-fachada.webp",
+          "telephone": "+55-11-4648-6608",
+          "priceRange": "$",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Avenida Turmalina, 515 - Estância Fraternidade",
+            "addressLocality": "Itaquaquecetuba",
+            "addressRegion": "SP",
+            "postalCode": "08589-030",
+            "addressCountry": "BR"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -23.4795,
+            "longitude": -46.3452
+          },
+          "url": "https://novalouzada.com.br/",
+          "sameAs": [
+            "https://instagram.com/novalouzada",
+            "https://www.facebook.com/Novalouzada/",
+            "https://www.google.com/maps/place/?q=place_id:ChIJ0WGThTN8zpQRNfhm105GasU"
+          ],
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday"
+              ],
+              "opens": "08:00",
+              "closes": "17:00"
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": "Saturday",
+              "opens": "08:00",
+              "closes": "12:30"
+            }
+          ],
+          "areaServed": {
+            "@type": "AdministrativeArea",
+            "name": "Itaquaquecetuba"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://novalouzada.com.br/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Onde fica a Nova Louzada Materiais para Construção em Itaquaquecetuba?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Estamos na Avenida Turmalina, 515 - Estância Fraternidade, Itaquaquecetuba - SP, CEP 08589-030. Chame no WhatsApp ou ligue (11) 4648-6608 e peça seu orçamento."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Quais cidades a Nova Louzada atende?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Atendemos Itaquaquecetuba, Suzano, Poá e Arujá. Consulte prazos e condições de entrega pelo WhatsApp."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "A Nova Louzada tem retirada na loja?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sim, oferecemos retirada na loja (curbside pickup). Avise pelo WhatsApp para deixarmos seu pedido separado na Avenida Turmalina, 515."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Há quanto tempo a Nova Louzada atua no mercado?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A Nova Louzada está no mercado há mais de 30 anos, atendendo obras e reformas de Itaquaquecetuba e região. Peça seu orçamento pelo WhatsApp."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Qual é o horário de funcionamento da Nova Louzada?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Atendemos de segunda a sexta, das 08:00 às 17:00, e aos sábados, das 08:00 às 12:30. Aos domingos a loja fica fechada."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
