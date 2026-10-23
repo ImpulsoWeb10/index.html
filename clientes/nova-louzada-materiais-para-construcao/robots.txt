@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://novalouzada.com.br/sitemap.xml
