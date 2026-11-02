@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard GMB - Pizzaria Juliana e Favorita</title>
+    <title>Dashboard GMB - ImpulsoWeb10</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -52,7 +52,6 @@
             background-color: #0f172a;
             color: #f8fafc;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -78,17 +77,17 @@
             <!-- Título e Status -->
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-2xl shadow-lg shadow-red-900/30">
-                    <i class="fa-solid fa-pizza-slice"></i>
+                    <i class="fa-solid fa-store" id="header-icon"></i>
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h1 class="text-xl md:text-2xl font-bold text-white tracking-tight">Pizzaria Juliana e Favorita</h1>
+                        <h1 id="store-name-header" class="text-xl md:text-2xl font-bold text-white tracking-tight">Pizzaria Juliana e Favorita</h1>
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span> Perfil Ativo
                         </span>
                     </div>
                     <p class="text-xs md:text-sm text-slate-400 flex items-center gap-1.5 mt-0.5">
-                        <i class="fa-solid fa-location-dot text-rose-500"></i> Itaquaquecetuba, SP • Desempenho Google Meu Negócio
+                        <i class="fa-solid fa-location-dot text-rose-500"></i> <span id="store-address-header">Itaquaquecetuba, SP • Desempenho Google Meu Negócio</span>
                     </p>
                 </div>
             </div>
@@ -120,6 +119,39 @@
     <!-- Conteúdo Principal -->
     <main class="max-w-7xl mx-auto px-4 lg:px-8 mt-8 flex-1 w-full space-y-8">
 
+        <!-- Bar de Ferramentas: Importação CSV/Excel + Link Personalizado -->
+        <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            
+            <!-- Importar CSV / Excel -->
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-file-csv text-emerald-400 text-base"></i> Carregar Relatório (CSV / Excel)
+                </label>
+                <div class="flex items-center gap-2">
+                    <input type="file" id="csvFileInput" accept=".csv, .txt" class="hidden" onchange="handleFileUpload(event)">
+                    <button onclick="document.getElementById('csvFileInput').click()" class="w-full sm:w-auto px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md">
+                        <i class="fa-solid fa-upload"></i> Selecionar Arquivo CSV
+                    </button>
+                    <span id="file-name-display" class="text-xs text-slate-400 truncate max-w-[200px]">Nenhum arquivo importado</span>
+                </div>
+            </div>
+
+            <!-- Link Personalizado do Estabelecimento -->
+            <div class="flex flex-col gap-2">
+                <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-link text-blue-400 text-base"></i> Personalizar Nome e Endereço da Loja
+                </label>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="storeNameInput" placeholder="Nome do Estabelecimento" class="bg-darkBg border border-darkBorder rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 flex-1">
+                    <input type="text" id="storeAddressInput" placeholder="Endereço / Cidade" class="bg-darkBg border border-darkBorder rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 flex-1">
+                    <button onclick="updateStoreDetails()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-bold transition-all whitespace-nowrap shadow-md">
+                        Aplicar
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
         <!-- Banner Explicativo -->
         <div class="bg-gradient-to-r from-blue-900/40 via-indigo-900/20 to-darkCard border border-blue-500/20 rounded-2xl p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div class="flex items-start gap-4">
@@ -135,7 +167,7 @@
             </div>
             <div class="text-xs text-slate-400 bg-darkBg/60 px-3 py-2 rounded-lg border border-darkBorder flex items-center gap-2">
                 <i class="fa-solid fa-mobile-screen text-emerald-400 text-sm"></i>
-                <span>Dominância Mobile: <strong class="text-emerald-400 font-bold">90.2% das buscas</strong></span>
+                <span>Dominância Mobile: <strong id="mobile-share-badge" class="text-emerald-400 font-bold">90.2% das buscas</strong></span>
             </div>
         </div>
 
@@ -204,7 +236,7 @@
                 <div class="mt-4 flex items-baseline justify-between">
                     <h3 id="kpi-website" class="text-3xl font-extrabold text-white tracking-tight">8</h3>
                     <span id="kpi-website-badge" class="text-xs font-semibold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20 flex items-center gap-1">
-                        <i class="fa-solid fa-link"></i> Ativo Out
+                        <i class="fa-solid fa-link"></i> Ativo
                     </span>
                 </div>
                 <p class="text-xs text-slate-400 mt-2">Acessos ao menu / link externo</p>
@@ -245,11 +277,11 @@
                 <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-darkBorder text-center">
                     <div class="bg-darkBg p-2 rounded-xl border border-darkBorder">
                         <p class="text-xs text-slate-400">Smartphone</p>
-                        <p class="text-base font-bold text-emerald-400 mt-0.5">90.2%</p>
+                        <p id="mobile-percent-label" class="text-base font-bold text-emerald-400 mt-0.5">90.2%</p>
                     </div>
                     <div class="bg-darkBg p-2 rounded-xl border border-darkBorder">
                         <p class="text-xs text-slate-400">Desktop</p>
-                        <p class="text-base font-bold text-blue-400 mt-0.5">9.8%</p>
+                        <p id="desktop-percent-label" class="text-base font-bold text-blue-400 mt-0.5">9.8%</p>
                     </div>
                 </div>
             </div>
@@ -291,107 +323,30 @@
             </div>
         </div>
 
-        <!-- Recommendations & Insights Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <div class="bg-gradient-to-b from-darkCard to-darkBg border border-darkBorder rounded-2xl p-5">
-                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
-                    <i class="fa-brands fa-whatsapp text-xl"></i>
-                </div>
-                <h4 class="font-bold text-white text-base">Otimizar Cardápio no Mobile</h4>
-                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-                    Com 90.2% do público acessando pelo celular, insira um link direto para o WhatsApp ou Cardápio Digital no botão "Website" para converter mais visualizações em pedidos imediatos.
-                </p>
-            </div>
-
-            <div class="bg-gradient-to-b from-darkCard to-darkBg border border-darkBorder rounded-2xl p-5">
-                <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-4">
-                    <i class="fa-solid fa-map-pin text-xl"></i>
-                </div>
-                <h4 class="font-bold text-white text-base">Capitalizar Alta Intenção de Rotas</h4>
-                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-                    264 solicitações de rota demonstram forte apelo para retirada no local e clientes verificando se estão no raio de entrega. Destaque horários de funcionamento e raio de entrega na descrição.
-                </p>
-            </div>
-
-            <div class="bg-gradient-to-b from-darkCard to-darkBg border border-darkBorder rounded-2xl p-5">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-4">
-                    <i class="fa-solid fa-star text-xl"></i>
-                </div>
-                <h4 class="font-bold text-white text-base">Incentivar Avaliações com Foto</h4>
-                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-                    Peça aos clientes satisfeitos para deixarem avaliações com fotos das pizzas. Fichas com fotos de produtos no Google recebem até 42% mais pedidos de rota e chamadas.
-                </p>
-            </div>
-
-        </div>
-
     </main>
 
-    <!-- Footer -->
-    <footer class="max-w-7xl mx-auto px-4 lg:px-8 mt-12 text-center text-xs text-slate-500">
-        <p>© 2026 Pizzaria Juliana e Favorita • Relatório de Desempenho Google Meu Negócio</p>
+    <!-- Footer Personalizado com Marca ImpulsoWeb10 -->
+    <footer class="max-w-7xl mx-auto px-4 lg:px-8 mt-12 text-center text-xs text-slate-400 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-darkBorder/60 pt-6">
+        <div>
+            <p>© 2026 <strong id="store-name-footer" class="text-slate-200">Pizzaria Juliana e Favorita</strong> • <span id="store-address-footer">Itaquaquecetuba, SP</span></p>
+        </div>
+        <div class="flex items-center gap-2 bg-darkCard border border-darkBorder px-4 py-2 rounded-xl text-xs font-semibold text-slate-300">
+            <span>Desenvolvido por</span>
+            <span class="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent font-extrabold text-sm tracking-wide">ImpulsoWeb10</span>
+            <i class="fa-solid fa-rocket text-blue-400"></i>
+        </div>
     </footer>
 
     <!-- Script de Lógica e Gráficos -->
     <script>
-        // Dados Estruturados por Mês
-        const monthlyData = {
-            julho: {
-                label: 'Julho 2026',
-                searchMobile: 160,
-                searchPc: 29,
-                mapsMobile: 163,
-                mapsPc: 19,
-                totalViews: 371,
-                rotas: 44,
-                chamadas: 0,
-                website: 0,
-                growth: 'Base',
-                growthClass: 'text-slate-400'
-            },
-            agosto: {
-                label: 'Agosto 2026',
-                searchMobile: 274,
-                searchPc: 22,
-                mapsMobile: 166,
-                mapsPc: 19,
-                totalViews: 481,
-                rotas: 53,
-                chamadas: 0,
-                website: 0,
-                growth: '+29.65%',
-                growthClass: 'text-emerald-400'
-            },
-            setembro: {
-                label: 'Setembro 2026',
-                searchMobile: 258,
-                searchPc: 24,
-                mapsMobile: 144,
-                mapsPc: 17,
-                totalViews: 443,
-                rotas: 49,
-                chamadas: 125,
-                website: 0,
-                growth: '-7.90%',
-                growthClass: 'text-amber-400'
-            },
-            outubro: {
-                label: 'Outubro 2026',
-                searchMobile: 285,
-                searchPc: 28,
-                mapsMobile: 180,
-                mapsPc: 20,
-                totalViews: 513,
-                rotas: 62,
-                chamadas: 0,
-                website: 8,
-                growth: '+15.80%',
-                growthClass: 'text-emerald-400'
-            }
+        let monthlyData = {
+            julho: { label: 'Julho 2026', searchMobile: 160, searchPc: 29, mapsMobile: 163, mapsPc: 19, totalViews: 371, rotas: 44, chamadas: 0, website: 0, growth: 'Base', growthClass: 'text-slate-400' },
+            agosto: { label: 'Agosto 2026', searchMobile: 274, searchPc: 22, mapsMobile: 166, mapsPc: 19, totalViews: 481, rotas: 53, chamadas: 0, website: 0, growth: '+29.65%', growthClass: 'text-emerald-400' },
+            setembro: { label: 'Setembro 2026', searchMobile: 258, searchPc: 24, mapsMobile: 144, mapsPc: 17, totalViews: 443, rotas: 49, chamadas: 125, website: 0, growth: '-7.90%', growthClass: 'text-amber-400' },
+            outubro: { label: 'Outubro 2026', searchMobile: 285, searchPc: 28, mapsMobile: 180, mapsPc: 20, totalViews: 513, rotas: 62, chamadas: 0, website: 8, growth: '+15.80%', growthClass: 'text-emerald-400' }
         };
 
-        const totalConsolidado = {
+        let totalConsolidado = {
             label: 'Consolidado Total',
             totalViews: 2158,
             rotas: 264,
@@ -402,7 +357,6 @@
         let lineChartInstance = null;
         let donutChartInstance = null;
 
-        // Inicialização ao carregar a página
         window.onload = function() {
             initCharts();
             populateTable();
@@ -432,10 +386,7 @@
         }
 
         function initCharts() {
-            // Chart 1: Evolução Mensal (Linha)
             const ctxLine = document.getElementById('lineChartEvolucao').getContext('2d');
-            
-            // Gradiente para a linha
             const gradientBlue = ctxLine.createLinearGradient(0, 0, 0, 300);
             gradientBlue.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
             gradientBlue.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
@@ -443,23 +394,22 @@
             lineChartInstance = new Chart(ctxLine, {
                 type: 'line',
                 data: {
-                    labels: ['Julho', 'Agosto', 'Setembro', 'Outubro'],
+                    labels: Object.values(monthlyData).map(m => m.label.split(' ')[0]),
                     datasets: [
                         {
                             label: 'Visualizações Totais',
-                            data: [371, 481, 443, 513],
+                            data: Object.values(monthlyData).map(m => m.totalViews),
                             borderColor: '#3b82f6',
                             backgroundColor: gradientBlue,
                             borderWidth: 3,
                             fill: true,
                             tension: 0.4,
                             pointRadius: 5,
-                            pointBackgroundColor: '#60a5fa',
-                            pointHoverRadius: 8
+                            pointBackgroundColor: '#60a5fa'
                         },
                         {
                             label: 'Pedidos de Rotas',
-                            data: [44, 53, 49, 62],
+                            data: Object.values(monthlyData).map(m => m.rotas),
                             borderColor: '#f43f5e',
                             borderWidth: 2,
                             borderDash: [5, 5],
@@ -474,36 +424,15 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            labels: {
-                                color: '#94a3b8',
-                                font: { family: 'Inter', size: 12 }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: '#1e293b',
-                            titleColor: '#fff',
-                            bodyColor: '#cbd5e1',
-                            borderColor: '#334155',
-                            borderWidth: 1,
-                            padding: 10,
-                            displayColors: true
-                        }
+                        legend: { labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 } } }
                     },
                     scales: {
-                        x: {
-                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                            ticks: { color: '#94a3b8' }
-                        },
-                        y: {
-                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                            ticks: { color: '#94a3b8' }
-                        }
+                        x: { grid: { color: 'rgba(51, 65, 85, 0.3)' }, ticks: { color: '#94a3b8' } },
+                        y: { grid: { color: 'rgba(51, 65, 85, 0.3)' }, ticks: { color: '#94a3b8' } }
                     }
                 }
             });
 
-            // Chart 2: Dispositivos (Donut)
             const ctxDonut = document.getElementById('donutDeviceChart').getContext('2d');
             donutChartInstance = new Chart(ctxDonut, {
                 type: 'doughnut',
@@ -513,35 +442,19 @@
                         data: [1947, 211],
                         backgroundColor: ['#10b981', '#3b82f6'],
                         borderColor: '#1e293b',
-                        borderWidth: 3,
-                        hoverOffset: 6
+                        borderWidth: 3
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#94a3b8',
-                                font: { family: 'Inter', size: 11 },
-                                padding: 15
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: '#1e293b',
-                            borderColor: '#334155',
-                            borderWidth: 1
-                        }
-                    },
+                    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } } } },
                     cutout: '70%'
                 }
             });
         }
 
         function setPeriod(period) {
-            // Atualizar estado ativo dos botões
             document.querySelectorAll('.period-btn').forEach(btn => {
                 btn.classList.remove('bg-brand-600', 'text-white', 'shadow');
                 btn.classList.add('text-slate-400');
@@ -565,12 +478,6 @@
                 kpiRotas.innerText = totalConsolidado.rotas.toLocaleString('pt-BR');
                 kpiChamadas.innerText = totalConsolidado.chamadas.toLocaleString('pt-BR');
                 kpiWebsite.innerText = totalConsolidado.website.toLocaleString('pt-BR');
-
-                // Atualiza gráficos para visão global
-                if (donutChartInstance) {
-                    donutChartInstance.data.datasets[0].data = [1947, 211];
-                    donutChartInstance.update();
-                }
             } else if (monthlyData[period]) {
                 const data = monthlyData[period];
                 labelDisplay.innerText = `${data.label}`;
@@ -578,14 +485,84 @@
                 kpiRotas.innerText = data.rotas.toLocaleString('pt-BR');
                 kpiChamadas.innerText = data.chamadas.toLocaleString('pt-BR');
                 kpiWebsite.innerText = data.website.toLocaleString('pt-BR');
+            }
+        }
 
-                // Atualiza o gráfico de pizza conforme o mês
-                const totalMobile = data.searchMobile + data.mapsMobile;
-                const totalPc = data.searchPc + data.mapsPc;
-                if (donutChartInstance) {
-                    donutChartInstance.data.datasets[0].data = [totalMobile, totalPc];
-                    donutChartInstance.update();
+        // Função de leitura de arquivos CSV/Excel importados
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('file-name-display').innerText = file.name;
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const content = e.target.result;
+                parseCSV(content);
+            };
+
+            reader.readAsText(file);
+        }
+
+        // Parser simples e direto para ler dados de relatórios GMB
+        function parseCSV(text) {
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            if (lines.length < 2) return;
+
+            let totalSearchMobile = 0, totalMapsMobile = 0, totalSearchPc = 0, totalMapsPc = 0;
+            let totalRotas = 0, totalChamadas = 0, totalWebsite = 0;
+
+            lines.slice(1).forEach(line => {
+                const cols = line.split(/,|;/).map(c => c.trim().replace(/"/g, ''));
+                if (cols.length >= 2) {
+                    const val = parseInt(cols[cols.length - 1]) || 0;
+                    const headerOrName = line.toLowerCase();
+
+                    if (headerOrName.includes('mobile') && headerOrName.includes('search')) totalSearchMobile += val;
+                    else if (headerOrName.includes('mobile') && headerOrName.includes('maps')) totalMapsMobile += val;
+                    else if (headerOrName.includes('pc') || headerOrName.includes('desktop')) totalSearchPc += val;
+                    else if (headerOrName.includes('direction') || headerOrName.includes('rota')) totalRotas += val;
+                    else if (headerOrName.includes('call') || headerOrName.includes('chamada')) totalChamadas += val;
+                    else if (headerOrName.includes('website') || headerOrName.includes('site')) totalWebsite += val;
                 }
+            });
+
+            const totalMobile = totalSearchMobile + totalMapsMobile;
+            const totalPc = totalSearchPc + totalMapsPc;
+            const grandTotal = totalMobile + totalPc || 1;
+
+            const mobilePercent = ((totalMobile / grandTotal) * 100).toFixed(1);
+            const desktopPercent = (100 - mobilePercent).toFixed(1);
+
+            document.getElementById('mobile-percent-label').innerText = `${mobilePercent}%`;
+            document.getElementById('desktop-percent-label').innerText = `${desktopPercent}%`;
+            document.getElementById('mobile-share-badge').innerText = `${mobilePercent}% das buscas`;
+
+            if (donutChartInstance) {
+                donutChartInstance.data.datasets[0].data = [totalMobile || 1947, totalPc || 211];
+                donutChartInstance.update();
+            }
+
+            alert('Dados do arquivo importados e atualizados com sucesso!');
+        }
+
+        // Função para personalizar dados do Estabelecimento
+        function updateStoreDetails() {
+            const name = document.getElementById('storeNameInput').value.trim();
+            const address = document.getElementById('storeAddressInput').value.trim();
+
+            if (name) {
+                document.getElementById('store-name-header').innerText = name;
+                document.getElementById('store-name-footer').innerText = name;
+            }
+
+            if (address) {
+                document.getElementById('store-address-header').innerText = `${address} • Desempenho Google Meu Negócio`;
+                document.getElementById('store-address-footer').innerText = address;
+            }
+
+            if (name || address) {
+                alert('Informações do estabelecimento atualizadas!');
             }
         }
     </script>
