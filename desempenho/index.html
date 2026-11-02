@@ -119,21 +119,24 @@
     <!-- Conteúdo Principal -->
     <main class="max-w-7xl mx-auto px-4 lg:px-8 mt-8 flex-1 w-full space-y-8">
 
-        <!-- Bar de Ferramentas: Importação CSV/Excel + Link Personalizado -->
-        <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Bar de Ferramentas: Importação CSV/Excel + Link Personalizado + Botão Limpar -->
+        <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
             
-            <!-- Importar CSV / Excel -->
+            <!-- Importar CSV / Excel e Ações -->
             <div class="flex flex-col gap-2">
                 <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-file-csv text-emerald-400 text-base"></i> Carregar Relatório (CSV / Excel)
+                    <i class="fa-solid fa-file-csv text-emerald-400 text-base"></i> Carregar e Gerenciar Relatórios
                 </label>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
                     <input type="file" id="csvFileInput" accept=".csv, .txt" class="hidden" onchange="handleFileUpload(event)">
-                    <button onclick="document.getElementById('csvFileInput').click()" class="w-full sm:w-auto px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md">
-                        <i class="fa-solid fa-upload"></i> Selecionar Arquivo CSV
+                    <button onclick="document.getElementById('csvFileInput').click()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-md">
+                        <i class="fa-solid fa-upload"></i> Importar CSV
                     </button>
-                    <span id="file-name-display" class="text-xs text-slate-400 truncate max-w-[200px]">Nenhum arquivo importado</span>
+                    <button onclick="downloadReportAndClear()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-md">
+                        <i class="fa-solid fa-download"></i> Baixar Relatório e Limpar
+                    </button>
                 </div>
+                <span id="file-name-display" class="text-xs text-slate-400 truncate mt-1">Nenhum arquivo importado</span>
             </div>
 
             <!-- Link Personalizado do Estabelecimento -->
@@ -161,7 +164,7 @@
                 <div>
                     <h2 class="text-base md:text-lg font-semibold text-white">Relatório de Performance Local</h2>
                     <p class="text-xs md:text-sm text-slate-300 mt-0.5">
-                        Exibindo métricas do período selecionado: <strong id="period-display-label" class="text-blue-400">Consolidado (Junho a Outubro 2026)</strong>.
+                        Exibindo métricas do período selecionado: <strong id="period-display-label" class="text-blue-400">Consolidado Total</strong>.
                     </p>
                 </div>
             </div>
@@ -185,7 +188,7 @@
                 <div class="mt-4 flex items-baseline justify-between">
                     <h3 id="kpi-views" class="text-3xl font-extrabold text-white tracking-tight">2.158</h3>
                     <span id="kpi-views-badge" class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
-                        <i class="fa-solid fa-arrow-trend-up"></i> +19.4%
+                        <i class="fa-solid fa-arrow-trend-up"></i> Ativo
                     </span>
                 </div>
                 <p class="text-xs text-slate-400 mt-2">Ficha exibida no Busca e Maps</p>
@@ -488,7 +491,6 @@
             }
         }
 
-        // Função de leitura de arquivos CSV/Excel importados
         function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -504,7 +506,6 @@
             reader.readAsText(file);
         }
 
-        // Parser simples e direto para ler dados de relatórios GMB
         function parseCSV(text) {
             const lines = text.split('\n').filter(line => line.trim() !== '');
             if (lines.length < 2) return;
@@ -543,10 +544,9 @@
                 donutChartInstance.update();
             }
 
-            alert('Dados do arquivo importados e atualizados com sucesso!');
+            alert('Dados do arquivo importados com sucesso!');
         }
 
-        // Função para personalizar dados do Estabelecimento
         function updateStoreDetails() {
             const name = document.getElementById('storeNameInput').value.trim();
             const address = document.getElementById('storeAddressInput').value.trim();
@@ -564,6 +564,35 @@
             if (name || address) {
                 alert('Informações do estabelecimento atualizadas!');
             }
+        }
+
+        // Função para baixar relatório organizado e limpar os dados
+        function downloadReportAndClear() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Mes,Pesquisa_Mobile,Maps_Mobile,Total_Visualizacoes,Rotas_Solicitadas,Chamadas,Cliques_Website,Evolucao\n";
+
+            Object.keys(monthlyData).forEach(key => {
+                const m = monthlyData[key];
+                csvContent += `${m.label},${m.searchMobile},${m.mapsMobile},${m.totalViews},${m.rotas},${m.chamadas},${m.website},${m.growth}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "relatorio_gmb_organizado.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            setTimeout(() => {
+                document.getElementById('kpi-views').innerText = "0";
+                document.getElementById('kpi-rotas').innerText = "0";
+                document.getElementById('kpi-chamadas').innerText = "0";
+                document.getElementById('kpi-website').innerText = "0";
+                document.getElementById('file-name-display').innerText = "Dados limpos";
+
+                alert("O relatório CSV foi baixado com sucesso e a tela foi limpa!");
+            }, 500);
         }
     </script>
 </body>
