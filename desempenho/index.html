@@ -1,284 +1,203 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard GMB - ImpulsoWeb10</title>
-  
+  <title>Dashboard de Desempenho GMB - ImpulsoWeb10</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              400: '#60a5fa',
-              500: '#3b82f6',
-              600: '#2563eb',
-              900: '#1e3a8a',
-            },
-            darkBg: '#0f172a',
-            darkCard: '#1e293b',
-            darkBorder: '#334155'
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-  
-  <!-- Google Fonts Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- FontAwesome CDN para Ícones -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- PapaParse CDN para CSV -->
+  <!-- PapaParse CDN para parsing de CSV -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-  <!-- SheetJS (xlsx) para Exportar Excel -->
+  <!-- SheetJS (xlsx) para exportação Excel -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  
   <style>
     body {
-      font-family: 'Inter', sans-serif;
       background-color: #0f172a;
       color: #f8fafc;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+    .card-glass {
+      background: rgba(30, 41, 59, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
     }
-    ::-webkit-scrollbar-track {
-      background: #1e293b;
+    .btn-filter {
+      transition: all 0.2s ease;
     }
-    ::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #475569;
-    }
-    .btn-month.active {
-      background-color: #2563eb !important;
-      color: #ffffff !important;
-      box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+    .btn-filter.active {
+      background-color: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.4);
     }
   </style>
 </head>
-<body class="min-h-screen pb-12 flex flex-col">
+<body class="min-h-screen pb-12">
 
-  <!-- Header Principal -->
-  <header class="bg-darkCard/80 backdrop-blur-md border-b border-darkBorder sticky top-0 z-50 px-4 lg:px-8 py-4">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-      
-      <!-- Título e Status -->
+  <!-- CABEÇALHO SUPERIOR -->
+  <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-2xl shadow-lg shadow-red-900/30">
+        <div class="w-10 h-10 rounded-xl bg-orange-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-orange-600/30">
           <i class="fa-solid fa-store"></i>
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 id="store-name-display" class="text-xl md:text-2xl font-bold text-white tracking-tight">Pizzaria Juliana e Favorita</h1>
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span> Perfil Ativo
-            </span>
-          </div>
-          <p class="text-xs md:text-sm text-slate-400 flex items-center gap-1.5 mt-0.5">
-            <i class="fa-solid fa-location-dot text-rose-500"></i> <span id="store-address-display">Itaquaquecetuba, SP • Desempenho Google Meu Negócio</span>
-          </p>
+          <h1 id="store-name-display" class="text-xl font-bold text-white flex items-center gap-2">
+            Pizzaria Juliana e Favorita <span id="status-badge" class="text-xs font-normal bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">Perfil Ativo</span>
+          </h1>
+          <p id="store-address-display" class="text-xs text-slate-400">Estrada Promissão, 8 - Itaquaquecetuba, SP • Desempenho Google Meu Negócio</p>
         </div>
       </div>
 
-      <!-- Controles de Período -->
-      <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-        <div id="month-buttons-container" class="flex items-center bg-darkBg border border-darkBorder rounded-xl p-1 shadow-inner w-full md:w-auto overflow-x-auto">
-          <!-- Botões injetados dinamicamente via JS -->
-        </div>
+      <!-- BOTÕES DOS MESES + CONSOLIDADO TOTAL -->
+      <div id="month-buttons-container" class="flex flex-wrap items-center bg-slate-800/90 p-1.5 rounded-xl border border-slate-700/50 gap-1 text-xs">
+        <button onclick="filterByMonth('all')" id="btn-all" class="btn-filter active px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Consolidado Total</button>
+        <button onclick="filterByMonth('Junho')" id="btn-Junho" class="btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Junho</button>
+        <button onclick="filterByMonth('Julho')" id="btn-Julho" class="btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Julho</button>
+        <button onclick="filterByMonth('Agosto')" id="btn-Agosto" class="btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Agosto</button>
+        <button onclick="filterByMonth('Setembro')" id="btn-Setembro" class="btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Setembro</button>
+        <button onclick="filterByMonth('Outubro')" id="btn-Outubro" class="btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Outubro</button>
       </div>
-
     </div>
   </header>
 
-  <!-- Conteúdo Principal -->
-  <main class="max-w-7xl mx-auto px-4 lg:px-8 mt-8 flex-1 w-full space-y-8">
+  <main class="max-w-7xl mx-auto px-4 mt-6 space-y-6">
 
-    <!-- Bar de Ferramentas -->
-    <div class="bg-darkCard border border-darkBorder rounded-2xl p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-      
-      <!-- Importar CSV / Excel e Ações -->
-      <div class="flex flex-col gap-2">
-        <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-          <i class="fa-solid fa-file-csv text-emerald-400 text-base"></i> Carregar e Gerenciar Relatórios
-        </label>
-        <div class="flex flex-wrap items-center gap-2">
-          <label class="cursor-pointer px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-md">
-            <i class="fa-solid fa-upload"></i> Carregar CSV/Excel
-            <input type="file" id="csvFileInput" accept=".csv, .xlsx" onchange="handleFileUpload(event)" class="hidden">
-          </label>
-          <button onclick="clearDashboard()" class="px-4 py-2 bg-rose-600/80 hover:bg-rose-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-md">
-            <i class="fa-solid fa-trash-can"></i> Baixar Relatório e Limpar
-          </button>
+    <!-- BARRA DE CONTROLE, CUSTOMIZAÇÃO E UPLOAD -->
+    <div class="card-glass p-5 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+      <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Nome da Empresa / Loja</label>
+          <input type="text" id="custom-name-input" placeholder="Ex: Pizzaria Juliana e Favorita" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
         </div>
-        <span id="file-name-display" class="text-xs text-slate-400 truncate mt-1">Nenhum arquivo novo importado</span>
-      </div>
-
-      <!-- Link Personalizado do Estabelecimento -->
-      <div class="flex flex-col gap-2">
-        <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-          <i class="fa-solid fa-link text-blue-400 text-base"></i> Personalizar Nome e Endereço da Loja
-        </label>
-        <div class="flex flex-col sm:flex-row gap-2">
-          <input type="text" id="custom-link-input" placeholder="Nome do Estabelecimento" class="bg-darkBg border border-darkBorder rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 flex-1">
-          <input type="text" id="custom-address-input" placeholder="Endereço / Cidade" class="bg-darkBg border border-darkBorder rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 flex-1">
-          <button onclick="applyCustomInfo()" class="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-bold transition-all whitespace-nowrap shadow-md">
-            Aplicar
-          </button>
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Endereço Completo</label>
+          <input type="text" id="custom-address-input" placeholder="Ex: Estrada Promissão, 8 - Itaquaquecetuba, SP" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
         </div>
       </div>
 
+      <div class="flex items-end gap-2">
+        <button onclick="applyCustomInfo()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition">
+          <i class="fa-solid fa-check mr-1"></i> Aplicar
+        </button>
+        <label class="cursor-pointer bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition flex items-center gap-2">
+          <i class="fa-solid fa-file-csv text-emerald-400"></i> Carregar Ficheiro GMB
+          <input type="file" id="csv-file-input" accept=".csv, .xlsx" onchange="handleFileUpload(event)" class="hidden">
+        </label>
+        <button onclick="clearDashboard()" class="bg-rose-900/60 hover:bg-rose-600/80 text-rose-200 border border-rose-700/50 text-xs font-semibold px-4 py-2.5 rounded-lg transition flex items-center gap-2">
+          <i class="fa-solid fa-trash-can"></i> Limpar Dados
+        </button>
+      </div>
     </div>
 
-    <!-- Cards de KPI -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-      
-      <!-- KPI 1: Visualizações Totais -->
-      <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 hover:border-blue-500/50 transition-all group">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Visualizações Totais</span>
-          <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-eye text-lg"></i>
-          </div>
+    <!-- CARDS DE MÉTRICAS (KPIs) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="card-glass p-5 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Visualizações Totais</p>
+          <h2 id="kpi-views" class="text-2xl font-bold text-white mt-1">2.158</h2>
+          <p id="kpi-views-sub" class="text-xs text-emerald-400 mt-1"><i class="fa-solid fa-mobile-screen mr-1"></i>90,2% Mobile</p>
         </div>
-        <div class="mt-4 flex items-baseline justify-between">
-          <h3 id="kpi-views" class="text-3xl font-extrabold text-white tracking-tight">0</h3>
-          <span id="kpi-views-sub" class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
-            <i class="fa-solid fa-mobile-screen"></i> 0% Mobile
-          </span>
+        <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-eye"></i>
         </div>
-        <p class="text-xs text-slate-400 mt-2">Ficha exibida no Busca e Maps</p>
       </div>
 
-      <!-- KPI 2: Pedidos de Rotas -->
-      <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 hover:border-rose-500/50 transition-all group">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Pedidos de Rotas</span>
-          <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-diamond-turn-right text-lg"></i>
-          </div>
+      <div class="card-glass p-5 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Rotas Solicitadas</p>
+          <h2 id="kpi-routes" class="text-2xl font-bold text-rose-400 mt-1">264</h2>
+          <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-map-location-dot mr-1"></i>No Google Maps</p>
         </div>
-        <div class="mt-4 flex items-baseline justify-between">
-          <h3 id="kpi-routes" class="text-3xl font-extrabold text-white tracking-tight">0</h3>
-          <span class="text-xs font-semibold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20 flex items-center gap-1">
-            <i class="fa-solid fa-location-arrow"></i> Google Maps
-          </span>
+        <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-diamond-turn-right"></i>
         </div>
-        <p class="text-xs text-slate-400 mt-2">Clientes procurando o local</p>
       </div>
 
-      <!-- KPI 3: Chamadas Telefônicas -->
-      <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 hover:border-amber-500/50 transition-all group">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Chamadas Telefônicas</span>
-          <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-phone text-lg"></i>
-          </div>
+      <div class="card-glass p-5 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Chamadas Telefónicas</p>
+          <h2 id="kpi-calls" class="text-2xl font-bold text-amber-400 mt-1">125</h2>
+          <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-phone mr-1"></i>Interações diretas</p>
         </div>
-        <div class="mt-4 flex items-baseline justify-between">
-          <h3 id="kpi-calls" class="text-3xl font-extrabold text-white tracking-tight">0</h3>
-          <span class="text-xs font-semibold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 flex items-center gap-1">
-            <i class="fa-solid fa-headset"></i> Diretas
-          </span>
+        <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-phone-volume"></i>
         </div>
-        <p class="text-xs text-slate-400 mt-2">Ligações diretas da ficha</p>
       </div>
 
-      <!-- KPI 4: Cliques no Website -->
-      <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 hover:border-cyan-500/50 transition-all group">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Cliques no Website</span>
-          <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-globe text-lg"></i>
-          </div>
+      <div class="card-glass p-5 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Cliques no Website</p>
+          <h2 id="kpi-site" class="text-2xl font-bold text-emerald-400 mt-1">8</h2>
+          <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-arrow-pointer mr-1"></i>Link Externo</p>
         </div>
-        <div class="mt-4 flex items-baseline justify-between">
-          <h3 id="kpi-site" class="text-3xl font-extrabold text-white tracking-tight">0</h3>
-          <span class="text-xs font-semibold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20 flex items-center gap-1">
-            <i class="fa-solid fa-link"></i> Ativo
-          </span>
+        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+          <i class="fa-solid fa-globe"></i>
         </div>
-        <p class="text-xs text-slate-400 mt-2">Acessos ao menu / link externo</p>
       </div>
-
     </div>
 
-    <!-- Seção de Gráficos Principais -->
+    <!-- ÁREA DE GRÁFICOS -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- Gráfico 1: Evolução Mensal (Linha) -->
-      <div class="lg:col-span-2 bg-darkCard border border-darkBorder rounded-2xl p-5 md:p-6 flex flex-col justify-between">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <h3 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-chart-area text-blue-400"></i> Evolução das Visualizações Mensais
-            </h3>
-            <p class="text-xs text-slate-400 mt-0.5">Comparativo de alcance no Google Busca e Maps</p>
-          </div>
+      <div class="card-glass p-5 lg:col-span-2 flex flex-col justify-between">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-chart-line text-blue-400"></i> Evolução Mensal (Junho a Outubro)
+          </h3>
+          <span id="chart-period-indicator" class="text-xs text-slate-400">Visualizações vs Rotas</span>
         </div>
-        <div class="relative w-full h-72 md:h-80">
+        <div class="h-64 relative">
           <canvas id="lineChart"></canvas>
         </div>
       </div>
 
-      <!-- Gráfico 2: Distribuição por Dispositivo (Donut) -->
-      <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 md:p-6 flex flex-col justify-between">
-        <div>
-          <h3 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-mobile-retro text-emerald-400"></i> Origem por Dispositivo
+      <div class="card-glass p-5 flex flex-col justify-between">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-pie-chart text-emerald-400"></i> Dispositivo de Origem
           </h3>
-          <p class="text-xs text-slate-400 mt-0.5">Mobile vs. Computador (Desktop)</p>
+          <span class="text-xs text-slate-400">Mobile vs Desktop</span>
         </div>
-        <div class="relative w-full h-64 my-auto flex items-center justify-center">
+        <div class="h-64 relative flex items-center justify-center">
           <canvas id="pieChart"></canvas>
         </div>
       </div>
-
     </div>
 
-    <!-- Tabela Comparativa Detalhada -->
-    <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 md:p-6 overflow-hidden">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+    <!-- TABELA DE DETALHAMENTO MENSAL -->
+    <div class="card-glass p-5">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
         <div>
-          <h3 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-table-list text-amber-400"></i> Detalhamento Mensal Completo
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-table-list text-amber-400"></i> Detalhamento Mensal Completo (5 Meses)
           </h3>
-          <p class="text-xs text-slate-400 mt-0.5">Métricas mês a mês para análise de crescimento</p>
+          <p class="text-xs text-slate-400">Métricas segregadas mês a mês com taxa de evolução</p>
         </div>
-        <div class="text-xs text-slate-400 bg-darkBg border border-darkBorder px-3 py-1.5 rounded-lg flex items-center gap-2">
-          <i class="fa-solid fa-info-circle text-blue-400"></i> Fonte: Relatórios Oficiais GMB
-        </div>
+        <span class="text-xs bg-slate-800 text-slate-400 border border-slate-700 px-3 py-1 rounded-full">
+          <i class="fa-solid fa-circle-info mr-1 text-blue-400"></i> Fonte: Perfil da Empresa no Google
+        </span>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-xs md:text-sm">
+        <table class="w-full text-left text-xs">
           <thead>
-            <tr class="border-b border-darkBorder bg-darkBg/60 text-slate-400 uppercase text-[11px] font-semibold tracking-wider">
-              <th class="py-3 px-4 rounded-l-lg">Mês</th>
-              <th class="py-3 px-4">Pesquisa (Mobile)</th>
-              <th class="py-3 px-4">Maps (Mobile)</th>
-              <th class="py-3 px-4">Visualizações Totais</th>
-              <th class="py-3 px-4">Rotas Solicitadas</th>
-              <th class="py-3 px-4">Chamadas</th>
-              <th class="py-3 px-4">Cliques Site</th>
-              <th class="py-3 px-4 rounded-r-lg text-right">Evolução %</th>
+            <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider font-semibold">
+              <th class="pb-3 px-3">Mês</th>
+              <th class="pb-3 px-3">Pesquisa (Mobile)</th>
+              <th class="pb-3 px-3">Maps (Mobile)</th>
+              <th class="pb-3 px-3">Visualizações Totais</th>
+              <th class="pb-3 px-3">Rotas Solicitadas</th>
+              <th class="pb-3 px-3">Chamadas</th>
+              <th class="pb-3 px-3">Cliques Site</th>
+              <th class="pb-3 px-3">Evolução %</th>
             </tr>
           </thead>
-          <tbody id="detailed-table-body" class="divide-y divide-darkBorder text-slate-300">
-            <!-- Preenchido via JavaScript -->
+          <tbody id="detailed-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+            <!-- Linhas dinâmicas via JS -->
           </tbody>
         </table>
       </div>
@@ -286,41 +205,42 @@
 
   </main>
 
-  <!-- Footer Personalizado -->
-  <footer class="max-w-7xl mx-auto px-4 lg:px-8 mt-12 text-center text-xs text-slate-400 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-darkBorder/60 pt-6">
-    <div>
-      <p>© 2026 <strong id="footer-store-name" class="text-slate-200">Pizzaria Juliana e Favorita</strong> • <span id="footer-store-addr">Itaquaquecetuba, SP</span></p>
-    </div>
-    <div class="flex items-center gap-2 bg-darkCard border border-darkBorder px-4 py-2 rounded-xl text-xs font-semibold text-slate-300">
-      <span>Desenvolvido por</span>
-      <a href="https://impulsoweb10.com.br" target="_blank" class="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent font-extrabold text-sm tracking-wide hover:opacity-80 transition flex items-center gap-1">
-        ImpulsoWeb10 <i class="fa-solid fa-rocket text-blue-400 text-xs"></i>
-      </a>
+  <!-- RODAPÉ -->
+  <footer class="mt-12 text-center text-xs text-slate-500 border-t border-slate-800/80 pt-6">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3">
+      <p>© 2026 <span id="footer-store-name">Pizzaria Juliana e Favorita</span> • <span id="footer-store-addr">Itaquaquecetuba, SP</span></p>
+      <div class="inline-flex items-center gap-2 bg-slate-800/80 px-4 py-2 rounded-lg border border-slate-700/60 text-slate-300 font-semibold shadow-sm">
+        <span>Desenvolvido por</span>
+        <a href="https://impulsoweb10.com.br" target="_blank" class="text-blue-400 hover:text-blue-300 transition flex items-center gap-1">
+          ImpulsoWeb10 <i class="fa-solid fa-rocket text-xs"></i>
+        </a>
+      </div>
     </div>
   </footer>
 
-  <!-- Script de Lógica e Atualização Dinâmica -->
   <script>
-    let defaultData = [
-      { month: 'Julho 2026', searchMobile: 160, searchPc: 29, mapsMobile: 163, mapsPc: 19, totalViews: 371, routes: 44, calls: 0, site: 0, evolution: 'Base' },
+    // Conjunto de dados padrão para os 5 meses (Junho a Outubro de 2026)
+    let masterData = [
+      { month: 'Junho 2026', searchMobile: 158, searchPc: 6, mapsMobile: 159, mapsPc: 27, totalViews: 350, routes: 56, calls: 0, site: 0, evolution: 'Base' },
+      { month: 'Julho 2026', searchMobile: 160, searchPc: 29, mapsMobile: 163, mapsPc: 19, totalViews: 371, routes: 44, calls: 0, site: 0, evolution: '+6.00%' },
       { month: 'Agosto 2026', searchMobile: 274, searchPc: 22, mapsMobile: 166, mapsPc: 19, totalViews: 481, routes: 53, calls: 0, site: 0, evolution: '+29.65%' },
       { month: 'Setembro 2026', searchMobile: 258, searchPc: 24, mapsMobile: 144, mapsPc: 17, totalViews: 443, routes: 49, calls: 125, site: 0, evolution: '-7.90%' },
-      { month: 'Outubro 2026', searchMobile: 285, searchPc: 28, mapsMobile: 180, mapsPc: 20, totalViews: 513, routes: 62, calls: 0, site: 8, evolution: '+15.80%' }
+      { month: 'Outubro 2026', searchMobile: 285, searchPc: 26, mapsMobile: 180, mapsPc: 22, totalViews: 513, routes: 62, calls: 0, site: 8, evolution: '+15.80%' }
     ];
 
-    let currentData = [...defaultData];
+    let currentViewData = [...masterData];
+    let selectedMonthFilter = 'all';
     let lineChart = null;
     let pieChart = null;
 
     document.addEventListener('DOMContentLoaded', () => {
-      renderDashboard(currentData);
+      renderDashboard(currentViewData, masterData);
     });
 
-    function renderDashboard(data) {
-      updateCards(data);
-      renderTable(data);
-      renderCharts(data);
-      updateMonthButtons(currentData);
+    function renderDashboard(viewData, fullDataset) {
+      updateCards(viewData);
+      renderTable(viewData);
+      renderCharts(viewData, fullDataset);
     }
 
     function updateCards(data) {
@@ -333,12 +253,12 @@
         return;
       }
 
-      const totalViews = data.reduce((acc, curr) => acc + curr.totalViews, 0);
-      const totalSearchMobile = data.reduce((acc, curr) => acc + curr.searchMobile, 0);
-      const totalMapsMobile = data.reduce((acc, curr) => acc + curr.mapsMobile, 0);
-      const totalRoutes = data.reduce((acc, curr) => acc + curr.routes, 0);
-      const totalCalls = data.reduce((acc, curr) => acc + curr.calls, 0);
-      const totalSite = data.reduce((acc, curr) => acc + curr.site, 0);
+      const totalViews = data.reduce((acc, c) => acc + c.totalViews, 0);
+      const totalSearchMobile = data.reduce((acc, c) => acc + c.searchMobile, 0);
+      const totalMapsMobile = data.reduce((acc, c) => acc + c.mapsMobile, 0);
+      const totalRoutes = data.reduce((acc, c) => acc + c.routes, 0);
+      const totalCalls = data.reduce((acc, c) => acc + c.calls, 0);
+      const totalSite = data.reduce((acc, c) => acc + c.site, 0);
 
       const mobilePercentage = totalViews > 0 ? (((totalSearchMobile + totalMapsMobile) / totalViews) * 100).toFixed(1) : '0';
 
@@ -354,7 +274,7 @@
       tbody.innerHTML = '';
 
       if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">Nenhum dado encontrado. Carregue um arquivo CSV novo.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">Nenhum dado disponível para o filtro selecionado.</td></tr>`;
         return;
       }
 
@@ -364,25 +284,26 @@
         if (row.evolution.includes('-')) evolClass = 'text-amber-400 font-semibold';
 
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-darkBg/40 transition-colors';
+        tr.className = 'hover:bg-slate-800/40 transition';
         tr.innerHTML = `
-          <td class="py-3.5 px-4 font-semibold text-white">${row.month}</td>
-          <td class="py-3.5 px-4">${row.searchMobile}</td>
-          <td class="py-3.5 px-4">${row.mapsMobile}</td>
-          <td class="py-3.5 px-4 font-bold text-blue-400">${row.totalViews}</td>
-          <td class="py-3.5 px-4 text-rose-400 font-medium">${row.routes}</td>
-          <td class="py-3.5 px-4 text-amber-400 font-medium">${row.calls}</td>
-          <td class="py-3.5 px-4 text-cyan-400 font-medium">${row.site}</td>
-          <td class="py-3.5 px-4 text-right font-bold ${evolClass}">${row.evolution}</td>
+          <td class="py-3 px-3 font-semibold text-white">${row.month}</td>
+          <td class="py-3 px-3">${row.searchMobile}</td>
+          <td class="py-3 px-3">${row.mapsMobile}</td>
+          <td class="py-3 px-3 font-bold text-blue-400">${row.totalViews}</td>
+          <td class="py-3 px-3 text-rose-400 font-semibold">${row.routes}</td>
+          <td class="py-3 px-3 text-amber-400">${row.calls}</td>
+          <td class="py-3 px-3 text-emerald-400">${row.site}</td>
+          <td class="py-3 px-3 ${evolClass}">${row.evolution}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function renderCharts(data) {
-      const labels = data && data.length > 0 ? data.map(d => d.month) : ['Sem dados'];
-      const viewsData = data && data.length > 0 ? data.map(d => d.totalViews) : [0];
-      const routesData = data && data.length > 0 ? data.map(d => d.routes) : [0];
+    function renderCharts(viewData, fullDataset) {
+      const chartData = (selectedMonthFilter === 'all') ? fullDataset : viewData;
+      const labels = chartData.map(d => d.month);
+      const viewsData = chartData.map(d => d.totalViews);
+      const routesData = chartData.map(d => d.routes);
 
       if (lineChart) lineChart.destroy();
       const ctxLine = document.getElementById('lineChart').getContext('2d');
@@ -395,20 +316,20 @@
               label: 'Visualizações Totais',
               data: viewsData,
               borderColor: '#3b82f6',
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              backgroundColor: 'rgba(59, 130, 246, 0.15)',
               fill: true,
-              tension: 0.4,
+              tension: 0.35,
               borderWidth: 3,
-              pointRadius: 4
+              pointRadius: 5
             },
             {
-              label: 'Pedidos de Rotas',
+              label: 'Rotas Solicitadas',
               data: routesData,
               borderColor: '#f43f5e',
               backgroundColor: 'transparent',
-              tension: 0.3,
-              borderWidth: 2,
-              borderDash: [5, 5],
+              tension: 0.35,
+              borderWidth: 2.5,
+              borderDash: [4, 4],
               pointRadius: 4
             }
           ]
@@ -417,99 +338,90 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 } } }
+            legend: { labels: { color: '#94a3b8', font: { size: 11 } } }
           },
           scales: {
-            x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51, 65, 85, 0.3)' } },
-            y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51, 65, 85, 0.3)' } }
+            x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+            y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
           }
         }
       });
 
-      const totalMobile = data ? data.reduce((a, b) => a + b.searchMobile + b.mapsMobile, 0) : 0;
-      const totalPc = data ? data.reduce((a, b) => a + b.searchPc + b.mapsPc, 0) : 0;
+      const totalMobile = viewData.reduce((a, b) => a + b.searchMobile + b.mapsMobile, 0);
+      const totalPc = viewData.reduce((a, b) => a + b.searchPc + b.mapsPc, 0);
 
       if (pieChart) pieChart.destroy();
       const ctxPie = document.getElementById('pieChart').getContext('2d');
       pieChart = new Chart(ctxPie, {
         type: 'doughnut',
         data: {
-          labels: ['Mobile (Smartphones)', 'Desktop (Computadores)'],
+          labels: ['Mobile (Telemóvel)', 'Desktop (Computador)'],
           datasets: [{
             data: [totalMobile || 1, totalPc || 0],
             backgroundColor: ['#10b981', '#3b82f6'],
-            borderColor: '#1e293b',
-            borderWidth: 3
+            borderWidth: 0
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } } }
-          },
-          cutout: '70%'
+            legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } }
+          }
         }
       });
     }
 
-    function updateMonthButtons(data) {
+    function filterByMonth(monthName) {
+      selectedMonthFilter = monthName;
+
+      document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
+
+      if (monthName === 'all') {
+        document.getElementById('btn-all').classList.add('active');
+        currentViewData = [...masterData];
+      } else {
+        const btn = document.getElementById(`btn-${monthName}`);
+        if (btn) btn.classList.add('active');
+
+        currentViewData = masterData.filter(d => d.month.toLowerCase().includes(monthName.toLowerCase()));
+      }
+
+      renderDashboard(currentViewData, masterData);
+    }
+
+    function updateMonthButtonsDynamic(dataset) {
       const container = document.getElementById('month-buttons-container');
-      container.innerHTML = `<button onclick="selectMonth('all')" id="btn-all" class="btn-month active px-3 py-1.5 text-xs font-medium rounded-lg text-white transition-all whitespace-nowrap">Consolidado Total</button>`;
+      container.innerHTML = `<button onclick="filterByMonth('all')" id="btn-all" class="btn-filter active px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Consolidado Total</button>`;
       
-      data.forEach(d => {
+      dataset.forEach(d => {
         const monthName = d.month.split(' ')[0];
         const btn = document.createElement('button');
-        btn.onclick = () => selectMonth(monthName);
+        btn.onclick = () => filterByMonth(monthName);
         btn.id = `btn-${monthName}`;
-        btn.className = `btn-month px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white transition-all whitespace-nowrap`;
+        btn.className = `btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white`;
         btn.innerText = monthName;
         container.appendChild(btn);
       });
     }
 
-    function selectMonth(monthName) {
-      document.querySelectorAll('.btn-month').forEach(btn => {
-        btn.classList.remove('active', 'bg-brand-600', 'text-white');
-        btn.classList.add('text-slate-400');
-      });
-
-      if (monthName === 'all') {
-        const btnAll = document.getElementById('btn-all');
-        if (btnAll) btnAll.classList.add('active');
-        renderDashboard(currentData);
-      } else {
-        const btn = document.getElementById(`btn-${monthName}`);
-        if (btn) btn.classList.add('active');
-
-        const filtered = currentData.filter(d => d.month.toLowerCase().includes(monthName.toLowerCase()));
-        renderDashboard(filtered);
-      }
-    }
-
     function applyCustomInfo() {
-      const name = document.getElementById('custom-link-input').value.trim();
+      const name = document.getElementById('custom-name-input').value.trim();
       const addr = document.getElementById('custom-address-input').value.trim();
 
       if (name) {
-        document.getElementById('store-name-display').innerText = name;
+        document.getElementById('store-name-display').childNodes[0].nodeValue = name + ' ';
         document.getElementById('footer-store-name').innerText = name;
       }
       if (addr) {
         document.getElementById('store-address-display').innerText = addr + ' • Desempenho Google Meu Negócio';
         document.getElementById('footer-store-addr').innerText = addr;
       }
-
-      if (name || addr) {
-        alert('Informações da loja atualizadas!');
-      }
     }
 
     function handleFileUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
-
-      document.getElementById('file-name-display').innerText = file.name;
 
       Papa.parse(file, {
         header: true,
@@ -525,28 +437,26 @@
     function parseUploadedCSV(rows) {
       let parsed = [];
       rows.forEach((row, idx) => {
-        const searchMobile = parseInt(row['Pesquisa Google - Dispositivos móveis'] || row['searchMobile'] || row['Pesquisa (Mobile)'] || 0);
-        const searchPc = parseInt(row['Pesquisa Google - Computadores'] || row['searchPc'] || 0);
-        const mapsMobile = parseInt(row['Google Maps - Dispositivos móveis'] || row['mapsMobile'] || row['Maps (Mobile)'] || 0);
-        const mapsPc = parseInt(row['Google Maps - Computadores'] || row['mapsPc'] || 0);
-        const routes = parseInt(row['Orientações'] || row['routes'] || row['Rotas Solicitadas'] || 0);
+        const searchMobile = parseInt(row['Pesquisa Google - Dispositivos móveis'] || row['searchMobile'] || row['Pesquisa Mobile'] || 0);
+        const searchPc = parseInt(row['Pesquisa Google - Computadores'] || row['searchPc'] || row['Pesquisa PC'] || 0);
+        const mapsMobile = parseInt(row['Google Maps - Dispositivos móveis'] || row['mapsMobile'] || row['Maps Mobile'] || 0);
+        const mapsPc = parseInt(row['Google Maps - Computadores'] || row['mapsPc'] || row['Maps PC'] || 0);
+        const routes = parseInt(row['Orientações'] || row['routes'] || row['Orientações (Rotas)'] || 0);
         const calls = parseInt(row['Chamadas'] || row['calls'] || 0);
-        const site = parseInt(row['Cliques no website'] || row['site'] || row['Cliques Site'] || 0);
+        const site = parseInt(row['Cliques no website'] || row['site'] || row['Cliques no Website'] || 0);
 
-        const totalViews = searchMobile + searchPc + mapsMobile + mapsPc || parseInt(row['Visualizações Totais'] || 0);
+        const totalViews = searchMobile + searchPc + mapsMobile + mapsPc;
+        const monthName = row['Mês'] || row['Mês/Período'] || row['month'] || `Mês ${idx + 1}`;
 
         if (totalViews > 0 || routes > 0 || calls > 0) {
-          let evolution = 'Base';
-          if (idx > 0 && parsed[idx - 1]) {
-            const prevViews = parsed[idx - 1].totalViews;
-            if (prevViews > 0) {
-              const diff = ((totalViews - prevViews) / prevViews) * 100;
-              evolution = (diff >= 0 ? '+' : '') + diff.toFixed(2) + '%';
-            }
+          let evol = 'Base';
+          if (idx > 0 && parsed[idx - 1] && parsed[idx - 1].totalViews > 0) {
+            const diff = ((totalViews - parsed[idx - 1].totalViews) / parsed[idx - 1].totalViews) * 100;
+            evol = (diff >= 0 ? '+' : '') + diff.toFixed(2) + '%';
           }
 
           parsed.push({
-            month: row['Mês'] || row['month'] || row['Mes'] || `Mês ${idx + 1}`,
+            month: monthName,
             searchMobile,
             searchPc,
             mapsMobile,
@@ -555,32 +465,36 @@
             routes,
             calls,
             site,
-            evolution
+            evolution: evol
           });
         }
       });
 
       if (parsed.length > 0) {
-        currentData = parsed;
-        renderDashboard(currentData);
-        alert('Dados importados com sucesso! O dashboard foi atualizado.');
+        masterData = parsed;
+        currentViewData = [...masterData];
+        selectedMonthFilter = 'all';
+        updateMonthButtonsDynamic(masterData);
+        renderDashboard(currentViewData, masterData);
+        alert('Novos dados de GMB importados e dashboard atualizado!');
       }
     }
 
     function clearDashboard() {
-      // 1. Exporta relatório em Excel antes de zerar
-      exportToExcel(currentData);
+      exportToExcel(masterData);
 
-      // 2. Limpa completamente os dados e re-renderiza
-      currentData = [];
-      renderDashboard(currentData);
-      document.getElementById('file-name-display').innerText = 'Dados zerados / limpos';
+      masterData = [];
+      currentViewData = [];
+      selectedMonthFilter = 'all';
 
-      alert('O relatório Excel foi baixado com sucesso e os dados foram zerados!');
+      document.getElementById('month-buttons-container').innerHTML = `<button onclick="filterByMonth('all')" id="btn-all" class="btn-filter active px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Consolidado Total</button>`;
+      renderDashboard(currentViewData, masterData);
+
+      alert('Relatório exportado em Excel e dados zerados com sucesso!');
     }
 
     function exportToExcel(data) {
-      const exportData = (data && data.length > 0) ? data : defaultData;
+      const exportData = (data && data.length > 0) ? data : masterData;
       const ws = XLSX.utils.json_to_sheet(exportData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Desempenho GMB");
