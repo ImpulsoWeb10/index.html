@@ -1,505 +1,311 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard de Desempenho GMB - ImpulsoWeb10</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- PapaParse CDN para parsing de CSV -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-  <!-- SheetJS (xlsx) para exportação Excel -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <style>
-    body {
-      background-color: #0f172a;
-      color: #f8fafc;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
-    .card-glass {
-      background: rgba(30, 41, 59, 0.75);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 1rem;
-    }
-    .btn-filter {
-      transition: all 0.2s ease;
-    }
-    .btn-filter.active {
-      background-color: #2563eb;
-      color: #ffffff;
-      box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.4);
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard Perfil da Empresa no Google | ImpulsoWeb10</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{color-scheme:light;--bg:#f3f5fb;--card:#fff;--tx:#0f172a;--mut:#64748b;--bd:#e2e8f0;--pri:#4f46e5;--pri2:#06b6d4;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--inp:#f8fafc;--sh:0 4px 18px rgba(15,23,42,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0b1020;--card:#151b2e;--tx:#e8ecf8;--mut:#93a0bd;--bd:#252d47;--pri:#818cf8;--pri2:#22d3ee;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--inp:#0f1424;--sh:0 4px 18px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0b1020;--card:#151b2e;--tx:#e8ecf8;--mut:#93a0bd;--bd:#252d47;--pri:#818cf8;--pri2:#22d3ee;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--inp:#0f1424;--sh:0 4px 18px rgba(0,0,0,.4)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 14px 8px}
+header{background:linear-gradient(135deg,#4f46e5,#06b6d4);color:#fff;border-radius:18px;padding:20px;box-shadow:var(--sh)}
+header h1{margin:0 0 4px;font-size:1.45rem}
+header p{margin:0 0 14px;opacity:.9;font-size:.92rem}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fields label{font-size:.75rem;font-weight:600;opacity:.95;display:block;margin-bottom:3px}
+.fields input{width:100%;padding:10px 12px;border-radius:10px;border:0;font-size:.95rem;background:rgba(255,255,255,.95);color:#0f172a}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+button,.btn{font:inherit;font-size:.88rem;font-weight:600;border:0;border-radius:10px;padding:10px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.b1{background:#fff;color:#4338ca}.b2{background:#16a34a;color:#fff}.b3{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.5)}.b4{background:#dc2626;color:#fff}
+button:hover{filter:brightness(1.07)}
+h2{font-size:1.05rem;margin:26px 0 10px}
+.months{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.mc{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px;box-shadow:var(--sh);min-width:0}
+.mc input[type=month]{width:100%;padding:7px;border:1px solid var(--bd);border-radius:8px;background:var(--inp);color:var(--tx);font:inherit;font-size:.85rem}
+.mc .big{font-size:1.5rem;font-weight:800;margin-top:8px}
+.mc .sub{font-size:.75rem;color:var(--mut)}
+.mc .imp{margin-top:8px;width:100%;justify-content:center;background:var(--inp);color:var(--pri);border:1px dashed var(--pri);font-size:.78rem;padding:7px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;box-shadow:var(--sh)}
+.kpi .l{font-size:.78rem;color:var(--mut);font-weight:600}.kpi .v{font-size:1.7rem;font-weight:800;margin-top:2px}
+.kpi.main{background:linear-gradient(135deg,#4f46e5,#06b6d4);color:#fff;border:0}.kpi.main .l{color:#e0f2fe}
+.scroll{overflow-x:auto;background:var(--card);border:1px solid var(--bd);border-radius:14px;box-shadow:var(--sh)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.88rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--bd);text-align:center}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--card)}
+thead th{background:var(--inp);font-size:.78rem}
+td input{width:84px;padding:6px;text-align:center;border:1px solid var(--bd);border-radius:7px;background:var(--inp);color:var(--tx);font:inherit}
+tr.grp td{background:var(--inp);font-weight:700;color:var(--pri);font-size:.78rem;text-align:left}
+tr.tot td{font-weight:800;background:var(--inp)}
+td.tg,th.tg{font-weight:800;color:var(--pri)}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cc{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;box-shadow:var(--sh);min-width:0}
+.cc h3{margin:0 0 8px;font-size:.92rem}
+.cc .cv{position:relative;height:250px}
+.tips{display:grid;gap:10px}
+.tip{background:var(--card);border:1px solid var(--bd);border-left:5px solid var(--pri);border-radius:12px;padding:12px 14px;box-shadow:var(--sh)}
+.tip.ok{border-left-color:var(--ok)}.tip.warn{border-left-color:var(--warn)}.tip.bad{border-left-color:var(--bad)}
+.tip b{display:block;margin-bottom:2px}.tip span{color:var(--mut);font-size:.9rem}
+footer{text-align:center;color:var(--mut);font-size:.85rem;padding:24px 10px 18px}
+footer strong{color:var(--pri)}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#0f172a;color:#fff;padding:10px 16px;border-radius:10px;font-size:.88rem;opacity:0;pointer-events:none;transition:.25s;max-width:90vw;z-index:20}
+#toast.on{opacity:1}
+.empty{color:var(--mut);text-align:center;padding:30px 10px}
+@media(max-width:900px){.months{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}}
+@media(max-width:520px){.fields{grid-template-columns:1fr}.months{grid-template-columns:1fr 1fr}}
+@media print{header .bar,.imp,#toast{display:none}body{background:#fff}}
+</style>
 </head>
-<body class="min-h-screen pb-12">
+<body>
+<div class="wrap">
+<header>
+  <h1>📊 Dashboard do Perfil da Empresa no Google</h1>
+  <p>Acompanhe até 5 meses de desempenho, total geral, gráficos e dicas de melhoria.</p>
+  <div class="fields">
+    <div><label for="store">Nome da loja</label><input id="store" placeholder="Ex.: Pizzaria Juliana e Favorita"></div>
+    <div><label for="loc">Localidade</label><input id="loc" placeholder="Ex.: Itaquaquecetuba - SP"></div>
+  </div>
+  <div class="bar">
+    <button class="b1" id="btnImp">📥 Importar CSV/Excel do Google</button>
+    <button class="b2" id="btnXls">📗 Exportar para Excel</button>
+    <button class="b3" id="btnPrint">🖨️ Imprimir / PDF</button>
+    <button class="b4" id="btnClear">🗑️ Limpar</button>
+    <input type="file" id="fileAll" accept=".csv,.xlsx,.xls" multiple hidden>
+    <input type="file" id="fileOne" accept=".csv,.xlsx,.xls" hidden>
+  </div>
+</header>
 
-  <!-- CABEÇALHO SUPERIOR -->
-  <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-orange-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-orange-600/30">
-          <i class="fa-solid fa-store"></i>
-        </div>
-        <div>
-          <h1 id="store-name-display" class="text-xl font-bold text-white flex items-center gap-2">
-            Pizzaria Juliana e Favorita <span id="status-badge" class="text-xs font-normal bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">Perfil Ativo</span>
-          </h1>
-          <p id="store-address-display" class="text-xs text-slate-400">Estrada Promissão, 8 - Itaquaquecetuba, SP • Desempenho Google Meu Negócio</p>
-        </div>
-      </div>
+<h2>Meses analisados</h2>
+<div class="months" id="months"></div>
 
-      <!-- BOTÕES DOS MESES + CONSOLIDADO TOTAL -->
-      <div id="month-buttons-container" class="flex flex-wrap items-center bg-slate-800/90 p-1.5 rounded-xl border border-slate-700/50 gap-1 text-xs">
-        <button onclick="filterByMonth('all')" id="btn-all" class="btn-filter active px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Consolidado Total</button>
-        <button onclick="filterByMonth('Junho')" id="btn-Junho" class="btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Junho</button>
-        <button onclick="filterByMonth('Julho')" id="btn-Julho" class="btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Julho</button>
-        <button onclick="filterByMonth('Agosto')" id="btn-Agosto" class="btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Agosto</button>
-        <button onclick="filterByMonth('Setembro')" id="btn-Setembro" class="btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Setembro</button>
-        <button onclick="filterByMonth('Outubro')" id="btn-Outubro" class="btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Outubro</button>
-      </div>
-    </div>
-  </header>
+<h2>Total geral</h2>
+<div class="kpis" id="kpis"></div>
 
-  <main class="max-w-7xl mx-auto px-4 mt-6 space-y-6">
+<h2>Dados por mês (editável)</h2>
+<div class="scroll"><table id="tbl"></table></div>
 
-    <!-- BARRA DE CONTROLE, CUSTOMIZAÇÃO E UPLOAD -->
-    <div class="card-glass p-5 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
-      <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 mb-1">Nome da Empresa / Loja</label>
-          <input type="text" id="custom-name-input" placeholder="Ex: Pizzaria Juliana e Favorita" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 mb-1">Endereço Completo</label>
-          <input type="text" id="custom-address-input" placeholder="Ex: Estrada Promissão, 8 - Itaquaquecetuba, SP" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
-        </div>
-      </div>
+<h2>Gráficos</h2>
+<div class="charts">
+  <div class="cc"><h3>Visualizações × Interações por mês</h3><div class="cv"><canvas id="c1"></canvas></div></div>
+  <div class="cc"><h3>Onde as pessoas encontram você</h3><div class="cv"><canvas id="c2"></canvas></div></div>
+  <div class="cc"><h3>Ações dos clientes (total)</h3><div class="cv"><canvas id="c3"></canvas></div></div>
+  <div class="cc"><h3>Taxa de interação por mês (%)</h3><div class="cv"><canvas id="c4"></canvas></div></div>
+</div>
 
-      <div class="flex items-end gap-2">
-        <button onclick="applyCustomInfo()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition">
-          <i class="fa-solid fa-check mr-1"></i> Aplicar
-        </button>
-        <label class="cursor-pointer bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition flex items-center gap-2">
-          <i class="fa-solid fa-file-csv text-emerald-400"></i> Carregar Ficheiro GMB
-          <input type="file" id="csv-file-input" accept=".csv, .xlsx" onchange="handleFileUpload(event)" class="hidden">
-        </label>
-        <button onclick="clearDashboard()" class="bg-rose-900/60 hover:bg-rose-600/80 text-rose-200 border border-rose-700/50 text-xs font-semibold px-4 py-2.5 rounded-lg transition flex items-center gap-2">
-          <i class="fa-solid fa-trash-can"></i> Limpar Dados
-        </button>
-      </div>
-    </div>
+<h2>💡 Dicas sobre o resultado</h2>
+<div class="tips" id="tips"></div>
 
-    <!-- CARDS DE MÉTRICAS (KPIs) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="card-glass p-5 flex items-center justify-between">
-        <div>
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Visualizações Totais</p>
-          <h2 id="kpi-views" class="text-2xl font-bold text-white mt-1">2.158</h2>
-          <p id="kpi-views-sub" class="text-xs text-emerald-400 mt-1"><i class="fa-solid fa-mobile-screen mr-1"></i>90,2% Mobile</p>
-        </div>
-        <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
-          <i class="fa-solid fa-eye"></i>
-        </div>
-      </div>
+<footer>Desenvolvido por <strong>ImpulsoWeb10</strong> • Marketing digital para o comércio local</footer>
+</div>
+<div id="toast"></div>
 
-      <div class="card-glass p-5 flex items-center justify-between">
-        <div>
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Rotas Solicitadas</p>
-          <h2 id="kpi-routes" class="text-2xl font-bold text-rose-400 mt-1">264</h2>
-          <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-map-location-dot mr-1"></i>No Google Maps</p>
-        </div>
-        <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center text-xl">
-          <i class="fa-solid fa-diamond-turn-right"></i>
-        </div>
-      </div>
+<script>
+const MET=[
+ ['sm','Pesquisa Google – celular','v'],['sd','Pesquisa Google – computador','v'],
+ ['mm','Google Maps – celular','v'],['md','Google Maps – computador','v'],
+ ['calls','Chamadas','i'],['msgs','Mensagens','i'],['book','Agendamentos','i'],['dir','Pedidos de rota','i'],
+ ['web','Cliques no website','i'],['food','Pedidos de comida','i'],['menu','Cliques no cardápio','i'],['hotel','Reservas em hotéis','i']
+];
+const NORM={'pesquisa google - dispositivos moveis':'sm','pesquisa google - computadores':'sd','google maps - dispositivos moveis':'mm','google maps - computadores':'md','chamadas':'calls','mensagens':'msgs','agendamentos':'book','orientacoes':'dir','cliques no website':'web','pedidos de comida':'food','cliques no cardapio':'menu','reservas em hoteis':'hotel'};
+const MN=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const blank=()=>({m:'',v:{}});
+let S={store:'',loc:'',months:[blank(),blank(),blank(),blank(),blank()]};
+const $=id=>document.getElementById(id);
+const n=x=>Number(x)||0;
+const fmt=x=>Math.round(x).toLocaleString('pt-BR');
+function save(){try{localStorage.setItem('gmbdash',JSON.stringify(S))}catch(e){}}
+function load(){try{const t=localStorage.getItem('gmbdash');if(t){const o=JSON.parse(t);if(o&&Array.isArray(o.months)&&o.months.length===5)S=o}}catch(e){}}
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),3200)}
+function lbl(m,i){if(m&&/^\d{4}-\d{2}$/.test(m.m)){const[y,mo]=m.m.split('-');return MN[+mo-1]+'/'+y.slice(2)}return 'Mês '+(i+1)}
+function sum(m,t){return MET.filter(x=>x[2]===t).reduce((a,x)=>a+n(m.v[x[0]]),0)}
+function active(m){return /^\d{4}-\d{2}$/.test(m.m)||MET.some(x=>n(m.v[x[0]])>0)}
+function actives(){return S.months.map((m,i)=>({m,i})).filter(o=>active(o.m)&&(MET.some(x=>n(o.m.v[x[0]])>0)))}
+function tot(k){return S.months.reduce((a,m)=>a+n(m.v[k]),0)}
 
-      <div class="card-glass p-5 flex items-center justify-between">
-        <div>
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Chamadas Telefónicas</p>
-          <h2 id="kpi-calls" class="text-2xl font-bold text-amber-400 mt-1">125</h2>
-          <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-phone mr-1"></i>Interações diretas</p>
-        </div>
-        <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-xl">
-          <i class="fa-solid fa-phone-volume"></i>
-        </div>
-      </div>
+/* ---------- construção da tabela ---------- */
+function buildTable(){
+  let h='<thead><tr><th>Métrica</th>'+S.months.map((m,i)=>'<th id="th'+i+'"></th>').join('')+'<th class="tg">Total geral</th></tr></thead><tbody>';
+  const row=(k,name)=>'<tr><td>'+name+'</td>'+S.months.map((m,i)=>'<td><input type="number" min="0" inputmode="numeric" data-i="'+i+'" data-k="'+k+'"></td>').join('')+'<td class="tg" id="t_'+k+'"></td></tr>';
+  h+='<tr class="grp"><td colspan="7">VISUALIZAÇÕES DO PERFIL</td></tr>';
+  MET.filter(x=>x[2]==='v').forEach(x=>h+=row(x[0],x[1]));
+  h+='<tr class="tot"><td>Total de visualizações</td>'+S.months.map((m,i)=>'<td id="tv'+i+'"></td>').join('')+'<td class="tg" id="tvT"></td></tr>';
+  h+='<tr class="grp"><td colspan="7">INTERAÇÕES</td></tr>';
+  MET.filter(x=>x[2]==='i').forEach(x=>h+=row(x[0],x[1]));
+  h+='<tr class="tot"><td>Total de interações</td>'+S.months.map((m,i)=>'<td id="ti'+i+'"></td>').join('')+'<td class="tg" id="tiT"></td></tr></tbody>';
+  $('tbl').innerHTML=h;
+  $('tbl').querySelectorAll('input').forEach(inp=>inp.addEventListener('input',()=>{
+    const i=+inp.dataset.i,k=inp.dataset.k;
+    if(inp.value==='')delete S.months[i].v[k];else S.months[i].v[k]=Math.max(0,n(inp.value));
+    save();render();
+  }));
+}
+function fillInputs(){
+  $('store').value=S.store;$('loc').value=S.loc;
+  $('tbl').querySelectorAll('input').forEach(inp=>{const v=S.months[+inp.dataset.i].v[inp.dataset.k];inp.value=(v===undefined?'':v)});
+}
+function buildMonths(){
+  $('months').innerHTML=S.months.map((m,i)=>'<div class="mc"><input type="month" data-mi="'+i+'" value="'+(m.m||'')+'" aria-label="Mês '+(i+1)+'"><div class="big" id="mv'+i+'">–</div><div class="sub" id="ms'+i+'">visualizações</div><button class="imp" data-imp="'+i+'">📥 Importar arquivo</button></div>').join('');
+  $('months').querySelectorAll('input[type=month]').forEach(e=>e.addEventListener('input',()=>{S.months[+e.dataset.mi].m=e.value;save();render()}));
+  $('months').querySelectorAll('[data-imp]').forEach(b=>b.addEventListener('click',()=>{window._slot=+b.dataset.imp;$('fileOne').click()}));
+}
 
-      <div class="card-glass p-5 flex items-center justify-between">
-        <div>
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Cliques no Website</p>
-          <h2 id="kpi-site" class="text-2xl font-bold text-emerald-400 mt-1">8</h2>
-          <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-arrow-pointer mr-1"></i>Link Externo</p>
-        </div>
-        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
-          <i class="fa-solid fa-globe"></i>
-        </div>
-      </div>
-    </div>
+/* ---------- render ---------- */
+let CH={};
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+function render(){
+  const act=actives();
+  S.months.forEach((m,i)=>{
+    const v=sum(m,'v'),it=sum(m,'i');
+    $('mv'+i).textContent=v||it?fmt(v):'–';
+    $('ms'+i).textContent=v||it?'visualizações • '+fmt(it)+' interações':'sem dados';
+    $('th'+i).textContent=lbl(m,i);$('tv'+i).textContent=fmt(v);$('ti'+i).textContent=fmt(it);
+  });
+  MET.forEach(x=>$('t_'+x[0]).textContent=fmt(tot(x[0])));
+  const TV=S.months.reduce((a,m)=>a+sum(m,'v'),0),TI=S.months.reduce((a,m)=>a+sum(m,'i'),0);
+  $('tvT').textContent=fmt(TV);$('tiT').textContent=fmt(TI);
+  const rate=TV?TI/TV*100:0,nm=act.length;
+  $('kpis').innerHTML=
+   '<div class="kpi main"><div class="l">Visualizações (total)</div><div class="v">'+fmt(TV)+'</div></div>'+
+   '<div class="kpi"><div class="l">Interações (total)</div><div class="v">'+fmt(TI)+'</div></div>'+
+   '<div class="kpi"><div class="l">Taxa de interação</div><div class="v">'+rate.toFixed(1).replace('.',',')+'%</div></div>'+
+   '<div class="kpi"><div class="l">Média de visualizações/mês</div><div class="v">'+(nm?fmt(TV/nm):'0')+'</div></div>';
+  charts(act,TV);tips(act,TV,TI,rate);
+}
+function charts(act,TV){
+  const tx=css('--tx'),mut=css('--mut'),gr=css('--bd'),pri=css('--pri'),p2=css('--pri2');
+  Chart.defaults.color=mut;Chart.defaults.font.family='system-ui,sans-serif';
+  Object.values(CH).forEach(c=>c.destroy());CH={};
+  const labels=act.map(o=>lbl(o.m,o.i));
+  const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tx}}},scales:{x:{grid:{color:gr},ticks:{color:mut}},y:{grid:{color:gr},ticks:{color:mut},beginAtZero:true}}};
+  CH.a=new Chart($('c1'),{type:'bar',data:{labels,datasets:[{label:'Visualizações',data:act.map(o=>sum(o.m,'v')),backgroundColor:pri,borderRadius:6},{label:'Interações',data:act.map(o=>sum(o.m,'i')),backgroundColor:p2,borderRadius:6}]},options:base});
+  CH.b=new Chart($('c2'),{type:'doughnut',data:{labels:['Pesquisa – celular','Pesquisa – computador','Maps – celular','Maps – computador'],datasets:[{data:['sm','sd','mm','md'].map(tot),backgroundColor:['#4f46e5','#06b6d4','#f59e0b','#ec4899'],borderColor:css('--card')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:tx}}}}});
+  const ac=MET.filter(x=>x[2]==='i');
+  CH.c=new Chart($('c3'),{type:'bar',data:{labels:ac.map(x=>x[1]),datasets:[{label:'Total',data:ac.map(x=>tot(x[0])),backgroundColor:'#16a34a',borderRadius:6}]},options:{...base,indexAxis:'y',plugins:{legend:{display:false}}}});
+  CH.d=new Chart($('c4'),{type:'line',data:{labels,datasets:[{label:'Taxa %',data:act.map(o=>{const v=sum(o.m,'v');return v?+(sum(o.m,'i')/v*100).toFixed(2):0}),borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.2)',fill:true,tension:.3,pointRadius:5}]},options:{...base,plugins:{legend:{display:false}}}});
+}
+function tips(act,TV,TI,rate){
+  const T=[],add=(c,t,d)=>T.push([c,t,d]);
+  if(!act.length){$('tips').innerHTML='<div class="empty">Importe o arquivo do Google ou digite os números para ver as dicas aqui.</div>';return}
+  const nm=act.length;
+  if(nm>=2){
+    const a=sum(act[nm-2].m,'v'),b=sum(act[nm-1].m,'v');
+    if(a>0){const p=(b-a)/a*100,s=(p>=0?'+':'')+p.toFixed(0)+'%';
+      if(p>=10)add('ok','Visualizações em alta ('+s+')','Entre '+lbl(act[nm-2].m,act[nm-2].i)+' e '+lbl(act[nm-1].m,act[nm-1].i)+' o perfil ganhou alcance. Mantenha a rotina de posts, fotos novas e respostas às avaliações para sustentar o crescimento.');
+      else if(p<=-10)add('bad','Visualizações em queda ('+s+')','O alcance caiu no último mês. Publique novidades e ofertas no Perfil, adicione fotos recentes, confira horários e peça avaliações aos clientes.');
+      else add('info','Visualizações estáveis ('+s+')','O alcance está constante. Para crescer, teste posts semanais, produtos no perfil e palavras-chave do seu serviço na descrição.')}
+  }
+  const maps=tot('mm')+tot('md'),srch=tot('sm')+tot('sd'),mob=tot('sm')+tot('mm');
+  if(TV){
+    const pm=maps/TV*100,pmob=mob/TV*100;
+    if(pm>=50)add('info','Maioria vem pelo Google Maps ('+pm.toFixed(0)+'%)','Seus clientes procuram “perto de mim”. Mantenha endereço, pino no mapa e horário corretos e use fotos da fachada para facilitar a chegada.');
+    else add('info','Maioria vem pela Pesquisa Google ('+(100-pm).toFixed(0)+'%)','As pessoas buscam seu nome ou serviço. Reforce a descrição, as categorias e os serviços cadastrados com palavras que o cliente digita.');
+    if(pmob>=80)add('info','Acesso '+pmob.toFixed(0)+'% pelo celular','Quase todos chegam pelo celular: priorize botão de ligar, WhatsApp, rota e fotos rápidas de carregar.');
+  }
+  if(TV&&rate<5)add('warn','Taxa de interação baixa ('+rate.toFixed(1).replace('.',',')+'%)','Muita gente vê, pouca gente age. Melhore as fotos, adicione chamada para ação nos posts (ligue, peça, venha), mostre preços/cardápio e responda todas as avaliações.');
+  else if(TV&&rate>=15)add('ok','Ótima taxa de interação ('+rate.toFixed(1).replace('.',',')+'%)','Seu perfil converte bem as visualizações em ações. Aproveite para pedir avaliações e divulgar o link do perfil nas redes.');
+  else if(TV)add('info','Taxa de interação razoável ('+rate.toFixed(1).replace('.',',')+'%)','Há espaço para crescer: poste ofertas, mantenha fotos atualizadas e deixe os botões de contato bem visíveis.');
+  const dir=tot('dir'),calls=tot('calls'),web=tot('web'),msgs=tot('msgs'),food=tot('food'),menu=tot('menu');
+  if(TI&&dir/TI>=.5)add('ok','Pedidos de rota dominam as ações ('+dir+')','Clientes querem ir até você. Confirme horário de funcionamento (inclusive feriados) para evitar viagem perdida e atraso no atendimento.');
+  if(TV>50&&calls===0)add('warn','Nenhuma chamada registrada','Confira se o telefone está correto no perfil e destaque o contato nos posts. Considere um número de WhatsApp comercial.');
+  if(TV>50&&web===0)add('warn','Nenhum clique no website','Adicione o link do site ou da página de links no Perfil e nos posts. Um link de avaliação ou cardápio digital aumenta os cliques.');
+  if(TV>50&&msgs===0)add('info','Mensagens zeradas','Ative as mensagens do Perfil ou inclua o WhatsApp no botão de contato para abrir mais um canal de atendimento.');
+  if(TV>50&&food===0&&menu===0)add('info','Sem pedidos ou cliques no cardápio','Se o seu negócio vende comida ou produtos, cadastre cardápio/produtos e o link de pedidos no Perfil.');
+  add('info','Rotina que funciona','Publique ao menos 1 post por semana, adicione fotos novas todo mês, responda todas as avaliações e peça avaliação 5 estrelas ao final de cada atendimento.');
+  $('tips').innerHTML=T.map(t=>'<div class="tip '+t[0]+'"><b>'+t[1]+'</b><span>'+t[2]+'</span></div>').join('');
+  tips.last=T;
+}
 
-    <!-- ÁREA DE GRÁFICOS -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="card-glass p-5 lg:col-span-2 flex flex-col justify-between">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-sm font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-chart-line text-blue-400"></i> Evolução Mensal (Junho a Outubro)
-          </h3>
-          <span id="chart-period-indicator" class="text-xs text-slate-400">Visualizações vs Rotas</span>
-        </div>
-        <div class="h-64 relative">
-          <canvas id="lineChart"></canvas>
-        </div>
-      </div>
+/* ---------- importação ---------- */
+const nz=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+function parseWB(wb,fname){
+  const ws=wb.Sheets[wb.SheetNames[0]];
+  const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+  if(!rows.length)return null;
+  let hi=rows.findIndex(r=>r.some(c=>NORM[nz(c)]));
+  if(hi<0)return null;
+  const head=rows[hi];
+  let dr=null;
+  for(let r=hi+1;r<rows.length;r++){const row=rows[r];if(String(row[1]).trim()!==''||String(row[0]).trim()!==''){dr=row;break}}
+  if(!dr)return null;
+  const v={};head.forEach((c,ci)=>{const k=NORM[nz(c)];if(k)v[k]=n(dr[ci])});
+  const iName=head.findIndex(c=>nz(c)==='nome da empresa'),iAddr=head.findIndex(c=>nz(c)==='endereco');
+  const mt=String(fname).match(/(\d{4})-(\d{1,2})-\d{1,2}/);
+  return{v,m:mt?mt[1]+'-'+String(mt[2]).padStart(2,'0'):'',name:iName>=0?String(dr[iName]):'',addr:iAddr>=0?String(dr[iAddr]):''};
+}
+function readFile(f){return new Promise(res=>{
+  const r=new FileReader(),csv=/\.csv$/i.test(f.name);
+  r.onload=()=>{try{const wb=csv?XLSX.read(r.result,{type:'string'}):XLSX.read(r.result,{type:'array'});res(parseWB(wb,f.name))}catch(e){res(null)}};
+  r.onerror=()=>res(null);
+  csv?r.readAsText(f):r.readAsArrayBuffer(f);
+})}
+async function importFiles(files,slot){
+  let ok=0,bad=0;
+  const list=await Promise.all([...files].map(readFile));
+  list.sort((a,b)=>(a&&b)?a.m.localeCompare(b.m):0);
+  for(const d of list){
+    if(!d){bad++;continue}
+    let i=slot;
+    if(i==null){i=d.m?S.months.findIndex(m=>m.m===d.m):-1;if(i<0)i=S.months.findIndex(m=>!active(m)&&!MET.some(x=>n(m.v[x[0]])>0))}
+    if(i<0){bad++;continue}
+    S.months[i].v=d.v;if(d.m)S.months[i].m=d.m;
+    if(!S.store&&d.name)S.store=d.name;
+    if(!S.loc&&d.addr)S.loc=d.addr;
+    ok++;slot=null;
+  }
+  save();fillInputs();buildMonthsKeep();render();
+  toast(ok?ok+' arquivo(s) importado(s)'+(bad?' • '+bad+' não aproveitado(s)':''):'Não foi possível ler o(s) arquivo(s) ou os 5 meses já estão preenchidos.');
+}
+function buildMonthsKeep(){buildMonths()}
 
-      <div class="card-glass p-5 flex flex-col justify-between">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-sm font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-pie-chart text-emerald-400"></i> Dispositivo de Origem
-          </h3>
-          <span class="text-xs text-slate-400">Mobile vs Desktop</span>
-        </div>
-        <div class="h-64 relative flex items-center justify-center">
-          <canvas id="pieChart"></canvas>
-        </div>
-      </div>
-    </div>
+/* ---------- exportação ---------- */
+async function exportXls(){
+  const act=actives();
+  if(!act.length){toast('Não há dados para exportar.');return}
+  const cols=S.months.map((m,i)=>({m,i})).filter(o=>active(o.m)&&MET.some(x=>n(o.m.v[x[0]])>0));
+  const A=[['Dashboard – Perfil da Empresa no Google'],['Loja',S.store],['Localidade',S.loc],[],['Métrica',...cols.map(o=>lbl(o.m,o.i)),'Total geral']];
+  const line=(name,f)=>{const vals=cols.map(o=>f(o.m));A.push([name,...vals,vals.reduce((a,b)=>a+b,0)])};
+  MET.filter(x=>x[2]==='v').forEach(x=>line(x[1],m=>n(m.v[x[0]])));
+  line('TOTAL DE VISUALIZAÇÕES',m=>sum(m,'v'));
+  MET.filter(x=>x[2]==='i').forEach(x=>line(x[1],m=>n(m.v[x[0]])));
+  line('TOTAL DE INTERAÇÕES',m=>sum(m,'i'));
+  const ws=XLSX.utils.aoa_to_sheet(A);ws['!cols']=[{wch:34},...cols.map(()=>({wch:12})),{wch:14}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Dashboard');
+  const tp=(tips.last||[]).map(t=>[t[1],t[2]]);
+  const w2=XLSX.utils.aoa_to_sheet([['Dica','Detalhe'],...tp,[],['Gerado por ImpulsoWeb10']]);w2['!cols']=[{wch:44},{wch:110}];
+  XLSX.utils.book_append_sheet(wb,w2,'Dicas');
+  const buf=XLSX.write(wb,{type:'array',bookType:'xlsx'});
+  const name='dashboard-'+(S.store||'perfil').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.xlsx';
+  let dl=null;try{dl=await claude.use('downloads')}catch(e){}
+  if(dl){try{await dl.save({filename:name,data:buf});toast('Excel pronto!')}catch(e){if(!e||e.code!=='declined')toast('Não foi possível salvar o Excel.')}}
+  else{try{XLSX.writeFile(wb,name);toast('Excel gerado!')}catch(e){toast('Download indisponível neste ambiente.')}}
+}
 
-    <!-- TABELA DE DETALHAMENTO MENSAL -->
-    <div class="card-glass p-5">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
-        <div>
-          <h3 class="text-sm font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-table-list text-amber-400"></i> Detalhamento Mensal Completo (5 Meses)
-          </h3>
-          <p class="text-xs text-slate-400">Métricas segregadas mês a mês com taxa de evolução</p>
-        </div>
-        <span class="text-xs bg-slate-800 text-slate-400 border border-slate-700 px-3 py-1 rounded-full">
-          <i class="fa-solid fa-circle-info mr-1 text-blue-400"></i> Fonte: Perfil da Empresa no Google
-        </span>
-      </div>
+/* ---------- eventos ---------- */
+$('store').addEventListener('input',e=>{S.store=e.target.value;save()});
+$('loc').addEventListener('input',e=>{S.loc=e.target.value;save()});
+$('btnImp').onclick=()=>$('fileAll').click();
+$('fileAll').onchange=e=>{if(e.target.files.length)importFiles(e.target.files,null);e.target.value=''};
+$('fileOne').onchange=e=>{if(e.target.files.length)importFiles([e.target.files[0]],window._slot);e.target.value=''};
+$('btnXls').onclick=exportXls;
+$('btnPrint').onclick=()=>{try{window.print()}catch(e){toast('Use Ctrl+P para imprimir.')}};
+let armed=false;
+$('btnClear').onclick=()=>{
+  const b=$('btnClear');
+  if(!armed){armed=true;b.textContent='⚠️ Clique de novo para confirmar';setTimeout(()=>{armed=false;b.textContent='🗑️ Limpar'},3500);return}
+  armed=false;b.textContent='🗑️ Limpar';
+  S={store:'',loc:'',months:[blank(),blank(),blank(),blank(),blank()]};
+  try{localStorage.removeItem('gmbdash')}catch(e){}
+  buildMonths();fillInputs();render();toast('Tudo limpo.');
+};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>render());
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
-          <thead>
-            <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider font-semibold">
-              <th class="pb-3 px-3">Mês</th>
-              <th class="pb-3 px-3">Pesquisa (Mobile)</th>
-              <th class="pb-3 px-3">Maps (Mobile)</th>
-              <th class="pb-3 px-3">Visualizações Totais</th>
-              <th class="pb-3 px-3">Rotas Solicitadas</th>
-              <th class="pb-3 px-3">Chamadas</th>
-              <th class="pb-3 px-3">Cliques Site</th>
-              <th class="pb-3 px-3">Evolução %</th>
-            </tr>
-          </thead>
-          <tbody id="detailed-table-body" class="divide-y divide-slate-800/60 text-slate-300">
-            <!-- Linhas dinâmicas via JS -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- RODAPÉ -->
-  <footer class="mt-12 text-center text-xs text-slate-500 border-t border-slate-800/80 pt-6">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3">
-      <p>© 2026 <span id="footer-store-name">Pizzaria Juliana e Favorita</span> • <span id="footer-store-addr">Itaquaquecetuba, SP</span></p>
-      <div class="inline-flex items-center gap-2 bg-slate-800/80 px-4 py-2 rounded-lg border border-slate-700/60 text-slate-300 font-semibold shadow-sm">
-        <span>Desenvolvido por</span>
-        <a href="https://impulsoweb10.com.br" target="_blank" class="text-blue-400 hover:text-blue-300 transition flex items-center gap-1">
-          ImpulsoWeb10 <i class="fa-solid fa-rocket text-xs"></i>
-        </a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // Conjunto de dados padrão para os 5 meses (Junho a Outubro de 2026)
-    let masterData = [
-      { month: 'Junho 2026', searchMobile: 158, searchPc: 6, mapsMobile: 159, mapsPc: 27, totalViews: 350, routes: 56, calls: 0, site: 0, evolution: 'Base' },
-      { month: 'Julho 2026', searchMobile: 160, searchPc: 29, mapsMobile: 163, mapsPc: 19, totalViews: 371, routes: 44, calls: 0, site: 0, evolution: '+6.00%' },
-      { month: 'Agosto 2026', searchMobile: 274, searchPc: 22, mapsMobile: 166, mapsPc: 19, totalViews: 481, routes: 53, calls: 0, site: 0, evolution: '+29.65%' },
-      { month: 'Setembro 2026', searchMobile: 258, searchPc: 24, mapsMobile: 144, mapsPc: 17, totalViews: 443, routes: 49, calls: 125, site: 0, evolution: '-7.90%' },
-      { month: 'Outubro 2026', searchMobile: 285, searchPc: 26, mapsMobile: 180, mapsPc: 22, totalViews: 513, routes: 62, calls: 0, site: 8, evolution: '+15.80%' }
-    ];
-
-    let currentViewData = [...masterData];
-    let selectedMonthFilter = 'all';
-    let lineChart = null;
-    let pieChart = null;
-
-    document.addEventListener('DOMContentLoaded', () => {
-      renderDashboard(currentViewData, masterData);
-    });
-
-    function renderDashboard(viewData, fullDataset) {
-      updateCards(viewData);
-      renderTable(viewData);
-      renderCharts(viewData, fullDataset);
-    }
-
-    function updateCards(data) {
-      if (!data || data.length === 0) {
-        document.getElementById('kpi-views').innerText = '0';
-        document.getElementById('kpi-views-sub').innerHTML = '<i class="fa-solid fa-mobile-screen mr-1"></i>0% Mobile';
-        document.getElementById('kpi-routes').innerText = '0';
-        document.getElementById('kpi-calls').innerText = '0';
-        document.getElementById('kpi-site').innerText = '0';
-        return;
-      }
-
-      const totalViews = data.reduce((acc, c) => acc + c.totalViews, 0);
-      const totalSearchMobile = data.reduce((acc, c) => acc + c.searchMobile, 0);
-      const totalMapsMobile = data.reduce((acc, c) => acc + c.mapsMobile, 0);
-      const totalRoutes = data.reduce((acc, c) => acc + c.routes, 0);
-      const totalCalls = data.reduce((acc, c) => acc + c.calls, 0);
-      const totalSite = data.reduce((acc, c) => acc + c.site, 0);
-
-      const mobilePercentage = totalViews > 0 ? (((totalSearchMobile + totalMapsMobile) / totalViews) * 100).toFixed(1) : '0';
-
-      document.getElementById('kpi-views').innerText = totalViews.toLocaleString('pt-BR');
-      document.getElementById('kpi-views-sub').innerHTML = `<i class="fa-solid fa-mobile-screen mr-1"></i>${mobilePercentage}% Mobile`;
-      document.getElementById('kpi-routes').innerText = totalRoutes.toLocaleString('pt-BR');
-      document.getElementById('kpi-calls').innerText = totalCalls.toLocaleString('pt-BR');
-      document.getElementById('kpi-site').innerText = totalSite.toLocaleString('pt-BR');
-    }
-
-    function renderTable(data) {
-      const tbody = document.getElementById('detailed-table-body');
-      tbody.innerHTML = '';
-
-      if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">Nenhum dado disponível para o filtro selecionado.</td></tr>`;
-        return;
-      }
-
-      data.forEach((row) => {
-        let evolClass = 'text-slate-400';
-        if (row.evolution.includes('+')) evolClass = 'text-emerald-400 font-semibold';
-        if (row.evolution.includes('-')) evolClass = 'text-amber-400 font-semibold';
-
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-800/40 transition';
-        tr.innerHTML = `
-          <td class="py-3 px-3 font-semibold text-white">${row.month}</td>
-          <td class="py-3 px-3">${row.searchMobile}</td>
-          <td class="py-3 px-3">${row.mapsMobile}</td>
-          <td class="py-3 px-3 font-bold text-blue-400">${row.totalViews}</td>
-          <td class="py-3 px-3 text-rose-400 font-semibold">${row.routes}</td>
-          <td class="py-3 px-3 text-amber-400">${row.calls}</td>
-          <td class="py-3 px-3 text-emerald-400">${row.site}</td>
-          <td class="py-3 px-3 ${evolClass}">${row.evolution}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderCharts(viewData, fullDataset) {
-      const chartData = (selectedMonthFilter === 'all') ? fullDataset : viewData;
-      const labels = chartData.map(d => d.month);
-      const viewsData = chartData.map(d => d.totalViews);
-      const routesData = chartData.map(d => d.routes);
-
-      if (lineChart) lineChart.destroy();
-      const ctxLine = document.getElementById('lineChart').getContext('2d');
-      lineChart = new Chart(ctxLine, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Visualizações Totais',
-              data: viewsData,
-              borderColor: '#3b82f6',
-              backgroundColor: 'rgba(59, 130, 246, 0.15)',
-              fill: true,
-              tension: 0.35,
-              borderWidth: 3,
-              pointRadius: 5
-            },
-            {
-              label: 'Rotas Solicitadas',
-              data: routesData,
-              borderColor: '#f43f5e',
-              backgroundColor: 'transparent',
-              tension: 0.35,
-              borderWidth: 2.5,
-              borderDash: [4, 4],
-              pointRadius: 4
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { labels: { color: '#94a3b8', font: { size: 11 } } }
-          },
-          scales: {
-            x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-            y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
-          }
-        }
-      });
-
-      const totalMobile = viewData.reduce((a, b) => a + b.searchMobile + b.mapsMobile, 0);
-      const totalPc = viewData.reduce((a, b) => a + b.searchPc + b.mapsPc, 0);
-
-      if (pieChart) pieChart.destroy();
-      const ctxPie = document.getElementById('pieChart').getContext('2d');
-      pieChart = new Chart(ctxPie, {
-        type: 'doughnut',
-        data: {
-          labels: ['Mobile (Telemóvel)', 'Desktop (Computador)'],
-          datasets: [{
-            data: [totalMobile || 1, totalPc || 0],
-            backgroundColor: ['#10b981', '#3b82f6'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } }
-          }
-        }
-      });
-    }
-
-    function filterByMonth(monthName) {
-      selectedMonthFilter = monthName;
-
-      document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
-
-      if (monthName === 'all') {
-        document.getElementById('btn-all').classList.add('active');
-        currentViewData = [...masterData];
-      } else {
-        const btn = document.getElementById(`btn-${monthName}`);
-        if (btn) btn.classList.add('active');
-
-        currentViewData = masterData.filter(d => d.month.toLowerCase().includes(monthName.toLowerCase()));
-      }
-
-      renderDashboard(currentViewData, masterData);
-    }
-
-    function updateMonthButtonsDynamic(dataset) {
-      const container = document.getElementById('month-buttons-container');
-      container.innerHTML = `<button onclick="filterByMonth('all')" id="btn-all" class="btn-filter active px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Consolidado Total</button>`;
-      
-      dataset.forEach(d => {
-        const monthName = d.month.split(' ')[0];
-        const btn = document.createElement('button');
-        btn.onclick = () => filterByMonth(monthName);
-        btn.id = `btn-${monthName}`;
-        btn.className = `btn-filter px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white`;
-        btn.innerText = monthName;
-        container.appendChild(btn);
-      });
-    }
-
-    function applyCustomInfo() {
-      const name = document.getElementById('custom-name-input').value.trim();
-      const addr = document.getElementById('custom-address-input').value.trim();
-
-      if (name) {
-        document.getElementById('store-name-display').childNodes[0].nodeValue = name + ' ';
-        document.getElementById('footer-store-name').innerText = name;
-      }
-      if (addr) {
-        document.getElementById('store-address-display').innerText = addr + ' • Desempenho Google Meu Negócio';
-        document.getElementById('footer-store-addr').innerText = addr;
-      }
-    }
-
-    function handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-          if (results.data && results.data.length > 0) {
-            parseUploadedCSV(results.data);
-          }
-        }
-      });
-    }
-
-    function parseUploadedCSV(rows) {
-      let parsed = [];
-      rows.forEach((row, idx) => {
-        const searchMobile = parseInt(row['Pesquisa Google - Dispositivos móveis'] || row['searchMobile'] || row['Pesquisa Mobile'] || 0);
-        const searchPc = parseInt(row['Pesquisa Google - Computadores'] || row['searchPc'] || row['Pesquisa PC'] || 0);
-        const mapsMobile = parseInt(row['Google Maps - Dispositivos móveis'] || row['mapsMobile'] || row['Maps Mobile'] || 0);
-        const mapsPc = parseInt(row['Google Maps - Computadores'] || row['mapsPc'] || row['Maps PC'] || 0);
-        const routes = parseInt(row['Orientações'] || row['routes'] || row['Orientações (Rotas)'] || 0);
-        const calls = parseInt(row['Chamadas'] || row['calls'] || 0);
-        const site = parseInt(row['Cliques no website'] || row['site'] || row['Cliques no Website'] || 0);
-
-        const totalViews = searchMobile + searchPc + mapsMobile + mapsPc;
-        const monthName = row['Mês'] || row['Mês/Período'] || row['month'] || `Mês ${idx + 1}`;
-
-        if (totalViews > 0 || routes > 0 || calls > 0) {
-          let evol = 'Base';
-          if (idx > 0 && parsed[idx - 1] && parsed[idx - 1].totalViews > 0) {
-            const diff = ((totalViews - parsed[idx - 1].totalViews) / parsed[idx - 1].totalViews) * 100;
-            evol = (diff >= 0 ? '+' : '') + diff.toFixed(2) + '%';
-          }
-
-          parsed.push({
-            month: monthName,
-            searchMobile,
-            searchPc,
-            mapsMobile,
-            mapsPc,
-            totalViews,
-            routes,
-            calls,
-            site,
-            evolution: evol
-          });
-        }
-      });
-
-      if (parsed.length > 0) {
-        masterData = parsed;
-        currentViewData = [...masterData];
-        selectedMonthFilter = 'all';
-        updateMonthButtonsDynamic(masterData);
-        renderDashboard(currentViewData, masterData);
-        alert('Novos dados de GMB importados e dashboard atualizado!');
-      }
-    }
-
-    function clearDashboard() {
-      exportToExcel(masterData);
-
-      masterData = [];
-      currentViewData = [];
-      selectedMonthFilter = 'all';
-
-      document.getElementById('month-buttons-container').innerHTML = `<button onclick="filterByMonth('all')" id="btn-all" class="btn-filter active px-3 py-1.5 rounded-lg font-medium text-slate-300 hover:text-white">Consolidado Total</button>`;
-      renderDashboard(currentViewData, masterData);
-
-      alert('Relatório exportado em Excel e dados zerados com sucesso!');
-    }
-
-    function exportToExcel(data) {
-      const exportData = (data && data.length > 0) ? data : masterData;
-      const ws = XLSX.utils.json_to_sheet(exportData);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Desempenho GMB");
-      XLSX.writeFile(wb, "relatorio_desempenho_gmb_organizado.xlsx");
-    }
-  </script>
+load();buildMonths();buildTable();fillInputs();render();
+</script>
 </body>
 </html>
