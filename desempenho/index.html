@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard GMB - Pizzaria Juliana e Favorita</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            900: '#1e3a8a',
+                        },
+                        neon: {
+                            green: '#10b981',
+                            emerald: '#34d399',
+                            cyan: '#06b6d4',
+                            amber: '#f59e0b',
+                            red: '#ef4444'
+                        },
+                        darkBg: '#0f172a',
+                        darkCard: '#1e293b',
+                        darkBorder: '#334155'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome CDN para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12 flex flex-col">
+
+    <!-- Header Principal -->
+    <header class="bg-darkCard/80 backdrop-blur-md border-b border-darkBorder sticky top-0 z-50 px-4 lg:px-8 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            
+            <!-- Título e Status -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center text-white text-2xl shadow-lg shadow-red-900/30">
+                    <i class="fa-solid fa-pizza-slice"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl md:text-2xl font-bold text-white tracking-tight">Pizzaria Juliana e Favorita</h1>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span> Perfil Ativo
+                        </span>
+                    </div>
+                    <p class="text-xs md:text-sm text-slate-400 flex items-center gap-1.5 mt-0.5">
+                        <i class="fa-solid fa-location-dot text-rose-500"></i> Itaquaquecetuba, SP • Desempenho Google Meu Negócio
+                    </p>
+                </div>
+            </div>
+
+            <!-- Controles de Período -->
+            <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                <div class="flex items-center bg-darkBg border border-darkBorder rounded-xl p-1 shadow-inner w-full md:w-auto overflow-x-auto">
+                    <button onclick="setPeriod('all')" id="btn-all" class="period-btn px-3 py-1.5 text-xs font-medium rounded-lg text-white bg-brand-600 shadow transition-all whitespace-nowrap">
+                        Consolidado Total
+                    </button>
+                    <button onclick="setPeriod('julho')" id="btn-julho" class="period-btn px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white transition-all whitespace-nowrap">
+                        Julho
+                    </button>
+                    <button onclick="setPeriod('agosto')" id="btn-agosto" class="period-btn px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white transition-all whitespace-nowrap">
+                        Agosto
+                    </button>
+                    <button onclick="setPeriod('setembro')" id="btn-setembro" class="period-btn px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white transition-all whitespace-nowrap">
+                        Setembro
+                    </button>
+                    <button onclick="setPeriod('outubro')" id="btn-outubro" class="period-btn px-3 py-1.5 text-xs font-medium rounded-lg text-slate-400 hover:text-white transition-all whitespace-nowrap">
+                        Outubro
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 mt-8 flex-1 w-full space-y-8">
+
+        <!-- Banner Explicativo -->
+        <div class="bg-gradient-to-r from-blue-900/40 via-indigo-900/20 to-darkCard border border-blue-500/20 rounded-2xl p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-400 hidden sm:block">
+                    <i class="fa-solid fa-chart-line text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-base md:text-lg font-semibold text-white">Relatório de Performance Local</h2>
+                    <p class="text-xs md:text-sm text-slate-300 mt-0.5">
+                        Exibindo métricas do período selecionado: <strong id="period-display-label" class="text-blue-400">Consolidado (Junho a Outubro 2026)</strong>.
+                    </p>
+                </div>
+            </div>
+            <div class="text-xs text-slate-400 bg-darkBg/60 px-3 py-2 rounded-lg border border-darkBorder flex items-center gap-2">
+                <i class="fa-solid fa-mobile-screen text-emerald-400 text-sm"></i>
+                <span>Dominância Mobile: <strong class="text-emerald-400 font-bold">90.2% das buscas</strong></span>
+            </div>
+        </div>
+
+        <!-- Cards de KPI -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            
+            <!-- KPI 1: Visualizações Totais -->
+            <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 hover:border-blue-500/50 transition-all group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Visualizações Totais</span>
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-eye text-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-baseline justify-between">
+                    <h3 id="kpi-views" class="text-3xl font-extrabold text-white tracking-tight">2.158</h3>
+                    <span id="kpi-views-badge" class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-trend-up"></i> +19.4%
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-2">Ficha exibida no Busca e Maps</p>
+            </div>
+
+            <!-- KPI 2: Pedidos de Rotas -->
+            <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 hover:border-rose-500/50 transition-all group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Pedidos de Rotas</span>
+                    <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-diamond-turn-right text-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-baseline justify-between">
+                    <h3 id="kpi-rotas" class="text-3xl font-extrabold text-white tracking-tight">264</h3>
+                    <span id="kpi-rotas-badge" class="text-xs font-semibold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20 flex items-center gap-1">
+                        <i class="fa-solid fa-location-arrow"></i> 66.5% ações
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-2">Clientes procurando o local</p>
+            </div>
+
+            <!-- KPI 3: Chamadas Telefônicas -->
+            <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 hover:border-amber-500/50 transition-all group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Chamadas Telefônicas</span>
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-phone text-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-baseline justify-between">
+                    <h3 id="kpi-chamadas" class="text-3xl font-extrabold text-white tracking-tight">125</h3>
+                    <span id="kpi-chamadas-badge" class="text-xs font-semibold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 flex items-center gap-1">
+                        <i class="fa-solid fa-headset"></i> 31.5% ações
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-2">Ligações diretas da ficha</p>
+            </div>
+
+            <!-- KPI 4: Cliques no Website -->
+            <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 hover:border-cyan-500/50 transition-all group">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Cliques no Website</span>
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-globe text-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-baseline justify-between">
+                    <h3 id="kpi-website" class="text-3xl font-extrabold text-white tracking-tight">8</h3>
+                    <span id="kpi-website-badge" class="text-xs font-semibold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20 flex items-center gap-1">
+                        <i class="fa-solid fa-link"></i> Ativo Out
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-2">Acessos ao menu / link externo</p>
+            </div>
+
+        </div>
+
+        <!-- Seção de Gráficos Principais -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Gráfico 1: Evolução Mensal (Linha) -->
+            <div class="lg:col-span-2 bg-darkCard border border-darkBorder rounded-2xl p-5 md:p-6 flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-chart-area text-blue-400"></i> Evolução das Visualizações Mensais
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Comparativo de alcance no Google Busca e Maps</p>
+                    </div>
+                    <span class="text-xs bg-darkBg text-slate-300 border border-darkBorder px-2.5 py-1 rounded-lg">2026</span>
+                </div>
+                <div class="relative w-full h-72 md:h-80">
+                    <canvas id="lineChartEvolucao"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfico 2: Distribuição por Dispositivo (Donut) -->
+            <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 md:p-6 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-mobile-retro text-emerald-400"></i> Origem por Dispositivo
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Mobile vs. Computador (Desktop)</p>
+                </div>
+                <div class="relative w-full h-64 my-auto flex items-center justify-center">
+                    <canvas id="donutDeviceChart"></canvas>
+                </div>
+                <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-darkBorder text-center">
+                    <div class="bg-darkBg p-2 rounded-xl border border-darkBorder">
+                        <p class="text-xs text-slate-400">Smartphone</p>
+                        <p class="text-base font-bold text-emerald-400 mt-0.5">90.2%</p>
+                    </div>
+                    <div class="bg-darkBg p-2 rounded-xl border border-darkBorder">
+                        <p class="text-xs text-slate-400">Desktop</p>
+                        <p class="text-base font-bold text-blue-400 mt-0.5">9.8%</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tabela Comparativa Detalhada -->
+        <div class="bg-darkCard border border-darkBorder rounded-2xl p-5 md:p-6 overflow-hidden">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h3 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-table-list text-amber-400"></i> Detalhamento Mensal Completo
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Métricas mês a mês para análise de crescimento</p>
+                </div>
+                <div class="text-xs text-slate-400 bg-darkBg border border-darkBorder px-3 py-1.5 rounded-lg flex items-center gap-2">
+                    <i class="fa-solid fa-info-circle text-blue-400"></i> Fonte: Relatórios Oficiais GMB
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs md:text-sm">
+                    <thead>
+                        <tr class="border-b border-darkBorder bg-darkBg/60 text-slate-400 uppercase text-[11px] font-semibold tracking-wider">
+                            <th class="py-3 px-4 rounded-l-lg">Mês</th>
+                            <th class="py-3 px-4">Pesquisa (Mobile)</th>
+                            <th class="py-3 px-4">Maps (Mobile)</th>
+                            <th class="py-3 px-4">Visualizações Totais</th>
+                            <th class="py-3 px-4">Rotas Solicitadas</th>
+                            <th class="py-3 px-4">Chamadas</th>
+                            <th class="py-3 px-4">Cliques Site</th>
+                            <th class="py-3 px-4 rounded-r-lg text-right">Evolução %</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-darkBorder text-slate-300" id="table-body">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recommendations & Insights Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div class="bg-gradient-to-b from-darkCard to-darkBg border border-darkBorder rounded-2xl p-5">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                </div>
+                <h4 class="font-bold text-white text-base">Otimizar Cardápio no Mobile</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                    Com 90.2% do público acessando pelo celular, insira um link direto para o WhatsApp ou Cardápio Digital no botão "Website" para converter mais visualizações em pedidos imediatos.
+                </p>
+            </div>
+
+            <div class="bg-gradient-to-b from-darkCard to-darkBg border border-darkBorder rounded-2xl p-5">
+                <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-map-pin text-xl"></i>
+                </div>
+                <h4 class="font-bold text-white text-base">Capitalizar Alta Intenção de Rotas</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                    264 solicitações de rota demonstram forte apelo para retirada no local e clientes verificando se estão no raio de entrega. Destaque horários de funcionamento e raio de entrega na descrição.
+                </p>
+            </div>
+
+            <div class="bg-gradient-to-b from-darkCard to-darkBg border border-darkBorder rounded-2xl p-5">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-star text-xl"></i>
+                </div>
+                <h4 class="font-bold text-white text-base">Incentivar Avaliações com Foto</h4>
+                <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                    Peça aos clientes satisfeitos para deixarem avaliações com fotos das pizzas. Fichas com fotos de produtos no Google recebem até 42% mais pedidos de rota e chamadas.
+                </p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto px-4 lg:px-8 mt-12 text-center text-xs text-slate-500">
+        <p>© 2026 Pizzaria Juliana e Favorita • Relatório de Desempenho Google Meu Negócio</p>
+    </footer>
+
+    <!-- Script de Lógica e Gráficos -->
+    <script>
+        // Dados Estruturados por Mês
+        const monthlyData = {
+            julho: {
+                label: 'Julho 2026',
+                searchMobile: 160,
+                searchPc: 29,
+                mapsMobile: 163,
+                mapsPc: 19,
+                totalViews: 371,
+                rotas: 44,
+                chamadas: 0,
+                website: 0,
+                growth: 'Base',
+                growthClass: 'text-slate-400'
+            },
+            agosto: {
+                label: 'Agosto 2026',
+                searchMobile: 274,
+                searchPc: 22,
+                mapsMobile: 166,
+                mapsPc: 19,
+                totalViews: 481,
+                rotas: 53,
+                chamadas: 0,
+                website: 0,
+                growth: '+29.65%',
+                growthClass: 'text-emerald-400'
+            },
+            setembro: {
+                label: 'Setembro 2026',
+                searchMobile: 258,
+                searchPc: 24,
+                mapsMobile: 144,
+                mapsPc: 17,
+                totalViews: 443,
+                rotas: 49,
+                chamadas: 125,
+                website: 0,
+                growth: '-7.90%',
+                growthClass: 'text-amber-400'
+            },
+            outubro: {
+                label: 'Outubro 2026',
+                searchMobile: 285,
+                searchPc: 28,
+                mapsMobile: 180,
+                mapsPc: 20,
+                totalViews: 513,
+                rotas: 62,
+                chamadas: 0,
+                website: 8,
+                growth: '+15.80%',
+                growthClass: 'text-emerald-400'
+            }
+        };
+
+        const totalConsolidado = {
+            label: 'Consolidado Total',
+            totalViews: 2158,
+            rotas: 264,
+            chamadas: 125,
+            website: 8
+        };
+
+        let lineChartInstance = null;
+        let donutChartInstance = null;
+
+        // Inicialização ao carregar a página
+        window.onload = function() {
+            initCharts();
+            populateTable();
+            setPeriod('all');
+        };
+
+        function populateTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            Object.keys(monthlyData).forEach(key => {
+                const item = monthlyData[key];
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-darkBg/40 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 font-semibold text-white">${item.label}</td>
+                    <td class="py-3.5 px-4">${item.searchMobile}</td>
+                    <td class="py-3.5 px-4">${item.mapsMobile}</td>
+                    <td class="py-3.5 px-4 font-bold text-blue-400">${item.totalViews}</td>
+                    <td class="py-3.5 px-4 text-rose-400 font-medium">${item.rotas}</td>
+                    <td class="py-3.5 px-4 text-amber-400 font-medium">${item.chamadas}</td>
+                    <td class="py-3.5 px-4 text-cyan-400 font-medium">${item.website}</td>
+                    <td class="py-3.5 px-4 text-right font-bold ${item.growthClass}">${item.growth}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function initCharts() {
+            // Chart 1: Evolução Mensal (Linha)
+            const ctxLine = document.getElementById('lineChartEvolucao').getContext('2d');
+            
+            // Gradiente para a linha
+            const gradientBlue = ctxLine.createLinearGradient(0, 0, 0, 300);
+            gradientBlue.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
+            gradientBlue.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+
+            lineChartInstance = new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: ['Julho', 'Agosto', 'Setembro', 'Outubro'],
+                    datasets: [
+                        {
+                            label: 'Visualizações Totais',
+                            data: [371, 481, 443, 513],
+                            borderColor: '#3b82f6',
+                            backgroundColor: gradientBlue,
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#60a5fa',
+                            pointHoverRadius: 8
+                        },
+                        {
+                            label: 'Pedidos de Rotas',
+                            data: [44, 53, 49, 62],
+                            borderColor: '#f43f5e',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#f43f5e'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#94a3b8',
+                                font: { family: 'Inter', size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            titleColor: '#fff',
+                            bodyColor: '#cbd5e1',
+                            borderColor: '#334155',
+                            borderWidth: 1,
+                            padding: 10,
+                            displayColors: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Dispositivos (Donut)
+            const ctxDonut = document.getElementById('donutDeviceChart').getContext('2d');
+            donutChartInstance = new Chart(ctxDonut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Mobile (Smartphones)', 'Desktop (Computadores)'],
+                    datasets: [{
+                        data: [1947, 211],
+                        backgroundColor: ['#10b981', '#3b82f6'],
+                        borderColor: '#1e293b',
+                        borderWidth: 3,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#94a3b8',
+                                font: { family: 'Inter', size: 11 },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            borderColor: '#334155',
+                            borderWidth: 1
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        function setPeriod(period) {
+            // Atualizar estado ativo dos botões
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white', 'shadow');
+                btn.classList.add('text-slate-400');
+            });
+
+            const activeBtn = document.getElementById(`btn-${period}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow');
+                activeBtn.classList.remove('text-slate-400');
+            }
+
+            const labelDisplay = document.getElementById('period-display-label');
+            const kpiViews = document.getElementById('kpi-views');
+            const kpiRotas = document.getElementById('kpi-rotas');
+            const kpiChamadas = document.getElementById('kpi-chamadas');
+            const kpiWebsite = document.getElementById('kpi-website');
+
+            if (period === 'all') {
+                labelDisplay.innerText = 'Consolidado Total (Junho a Outubro 2026)';
+                kpiViews.innerText = totalConsolidado.totalViews.toLocaleString('pt-BR');
+                kpiRotas.innerText = totalConsolidado.rotas.toLocaleString('pt-BR');
+                kpiChamadas.innerText = totalConsolidado.chamadas.toLocaleString('pt-BR');
+                kpiWebsite.innerText = totalConsolidado.website.toLocaleString('pt-BR');
+
+                // Atualiza gráficos para visão global
+                if (donutChartInstance) {
+                    donutChartInstance.data.datasets[0].data = [1947, 211];
+                    donutChartInstance.update();
+                }
+            } else if (monthlyData[period]) {
+                const data = monthlyData[period];
+                labelDisplay.innerText = `${data.label}`;
+                kpiViews.innerText = data.totalViews.toLocaleString('pt-BR');
+                kpiRotas.innerText = data.rotas.toLocaleString('pt-BR');
+                kpiChamadas.innerText = data.chamadas.toLocaleString('pt-BR');
+                kpiWebsite.innerText = data.website.toLocaleString('pt-BR');
+
+                // Atualiza o gráfico de pizza conforme o mês
+                const totalMobile = data.searchMobile + data.mapsMobile;
+                const totalPc = data.searchPc + data.mapsPc;
+                if (donutChartInstance) {
+                    donutChartInstance.data.datasets[0].data = [totalMobile, totalPc];
+                    donutChartInstance.update();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
