@@ -72,7 +72,7 @@
       <div class="bg-blue-600/5 border border-blue-500/30 rounded-xl p-4">
         <div class="flex flex-col gap-2">
           <label class="text-xs font-bold text-blue-400 uppercase tracking-wider">🤖 Importar Dados de IA (Cole o JSON completo aqui)</label>
-          <textarea id="jsonAiInput" rows="3" placeholder='Cole aqui o JSON gerado pela IA (dados_formulario_base + conteudo_enriquecido_desktop)...' class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500 transition-all resize-y"></textarea>
+          <textarea id="jsonAiInput" rows="3" placeholder='Cole aqui o JSON gerado pela IA (suporta formato "empresa" ou base antiga)...' class="bg-surface border border-bordercol rounded-xl p-3 text-xs text-white focus:outline-none focus:border-blue-500 transition-all resize-y"></textarea>
           <button type="button" onclick="processarJsonAi()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/20">
             ✨ Processar e Preencher Campos
           </button>
@@ -222,9 +222,6 @@
         .replace(/^-+|-+$/g, "");
     }
 
-    /* ==========================================================
-       CAMINHO DO LINK (editável) + BOTÃO COPIAR
-       ========================================================== */
     const BASE_LINK = 'https://avaliar.impulsoweb10.com.br/cliente/';
     let caminhoManual = false;
 
@@ -245,7 +242,6 @@
       document.getElementById('infoCaminho').textContent = 'Caminho automático restaurado a partir do nome da empresa.';
     }
 
-    // Normaliza o que foi digitado: garante https://, tira index.html e fecha com "/"
     function normalizarCaminho(valor) {
       let l = String(valor || '').trim();
       if (!l) return '';
@@ -301,71 +297,6 @@
       return n;
     }
 
-    const IDS_VISIVEIS = ['inPid','inNome','inWa','inIg','inCidade','inEndereco','inSegmento','inServicos','inCaminhoLink'];
-
-    function resetarEstadoImportacao() {
-      IDS_VISIVEIS.forEach(id => setVal(id, ''));
-      document.querySelectorAll('input[type="hidden"]').forEach(h => h.value = '');
-      caminhoManual = false;
-      document.getElementById('infoCaminho').textContent = 'Preenchido automaticamente pelo nome da empresa. Pode editar se quiser outro caminho.';
-      document.getElementById('resBox').classList.add('hidden');
-      document.getElementById('qrbox').innerHTML = '';
-      document.getElementById('imgListBox').classList.add('hidden');
-      document.getElementById('imgListContent').innerHTML = '';
-      document.getElementById('outLinkCliente').value = '';
-      document.getElementById('outLinkGoogle').value = '';
-      htmlFinal = '';
-      nomeEmpresaSlug = 'cliente';
-    }
-
-    // O canonical vindo da IA é o endereço real da página: passa a ser o caminho do link (QR, OG e Schema)
-    function aplicarCanonicalNoCaminho(canonical) {
-      const c = String(canonical || '').trim();
-      if (!/^https?:\/\//i.test(c)) return;
-      const norm = normalizarCaminho(c);
-      document.getElementById('inCaminhoLink').value = norm;
-      caminhoManual = norm !== caminhoAutomatico();
-      document.getElementById('infoCaminho').textContent = caminhoManual
-        ? 'Caminho vindo do JSON (canonical) — será usado no QR Code e nas tags de SEO.'
-        : 'Preenchido automaticamente pelo nome da empresa. Pode editar se quiser outro caminho.';
-    }
-
-    // Aceita também o formato "empresa / contatos / perguntas_frequentes" e converte para o formato interno
-    function converterFormatoEmpresa(d) {
-      const e = d.empresa || {};
-      const end = e.endereco || {};
-      const ct = e.contatos || {};
-      const instUser = String(ct.instagram || '').trim().replace(/[?#].*$/, '').replace(/\/+$/, '').split('/').pop().replace('@', '');
-      const rua = [end.rua, end.numero].filter(Boolean).join(', ');
-      const enderecoCompleto = [rua, end.bairro].filter(Boolean).join(' - ');
-      const cidade = e.cidade || end.cidade || '';
-      const estado = e.estado || end.estado || '';
-      let waMsg = '';
-      try { waMsg = new URL(ct.whatsapp_link).searchParams.get('text') || ''; } catch (err) {}
-      const caminho = ct.cardapio_digital || ct.pagina || ct.link_pagina || '';
-      return {
-        dados_formulario_base: {
-          placeId: e.place_id || e.placeId || '',
-          nomeEmpresa: e.nome,
-          whatsapp: ct.whatsapp_principal,
-          instagram: instUser,
-          cidadeEstado: [cidade, estado].filter(Boolean).join(' - '),
-          enderecoCompleto: enderecoCompleto,
-          segmento: e.segmento || '',
-          produtosPrincipais: e.produtos_principais || e.produtos || '',
-          googleReviewUrl: end.google_review_url || ct.google_review_url || '',
-          whatsappMensagem: waMsg
-        },
-        conteudo_enriquecido_desktop: {
-          seo_tags: { canonical: caminho, h1: e.h1 || '', meta_description: e.descricao_meta || '' },
-          lista_beneficios_o_que_encontra: e.beneficios || [],
-          faq_perguntas_frequentes: d.perguntas_frequentes || [],
-          textos_seo_secoes: { introducao_bloco: e.slogan || '' },
-          imagens_otimizadas_seo: e.imagens || []
-        }
-      };
-    }
-
     function processarJsonAi() {
       try {
         let jsonTexto = document.getElementById('jsonAiInput').value.trim();
@@ -381,12 +312,68 @@
           return;
         }
         jsonTexto = jsonTexto.substring(primeiraChave, ultimaChave + 1);
-        let dados = JSON.parse(jsonTexto);
-        if (!dados.dados_formulario_base && !dados.conteudo_enriquecido_desktop && dados.empresa) dados = converterFormatoEmpresa(dados);
+        const dados = JSON.parse(jsonTexto);
 
-        // Nova importação = começa do zero (nada do cliente anterior fica para trás)
-        resetarEstadoImportacao();
+        // 1. SUPORTE AO FORMATO NOVO (empresa / perguntas_frequentes)
+        if (dados.empresa) {
+          const emp = dados.empresa;
+          const end = emp.endereco || {};
+          const cont = emp.contatos || {};
 
+          let pidExtraido = emp.placeId || '';
+          if (!pidExtraido && end.google_review_url) {
+            const matchPid = end.google_review_url.match(/placeid=([^&]+)/i);
+            if (matchPid) pidExtraido = matchPid[1];
+          }
+          if (pidExtraido) setVal('inPid', pidExtraido);
+          setVal('hidden_review_url', end.google_review_url);
+          let waMsgImp = '';
+          try { waMsgImp = new URL(cont.whatsapp_link).searchParams.get('text') || ''; } catch (err) {}
+          setVal('hidden_wa_msg', waMsgImp);
+
+          setVal('inNome', emp.nome);
+          setVal('inWa', normalizarWhatsapp(cont.whatsapp_principal));
+
+          const igLimpo = String(cont.instagram || '')
+            .replace(/^https?:\/\/(www\.)?instagram\.com\//i, '')
+            .replace(/\/.*$/, '')
+            .replace('@', '');
+          setVal('inIg', igLimpo);
+
+          const cidUf = [emp.cidade || end.cidade, emp.estado || end.estado].filter(Boolean).join(' - ');
+          setVal('inCidade', cidUf);
+
+          const endCompleto = [end.rua, end.numero, end.bairro].filter(Boolean).join(', ');
+          setVal('inEndereco', endCompleto);
+
+          setVal('inSegmento', emp.slogan);
+          setVal('inServicos', emp.descricao_meta);
+
+          if (cont.cardapio_digital) {
+            setVal('inCaminhoLink', cont.cardapio_digital);
+            caminhoManual = true;
+          } else {
+            atualizarCaminhoAuto();
+          }
+
+          setVal('hidden_canonical', cont.cardapio_digital || document.getElementById('inCaminhoLink').value);
+          setVal('hidden_h1', emp.nome ? `${emp.nome} — ${cidUf}` : '');
+          setVal('hidden_meta_description', emp.descricao_meta);
+          setVal('hidden_intro', emp.descricao_meta);
+
+          if (Array.isArray(dados.perguntas_frequentes)) {
+            setVal('hidden_faq_perguntas', JSON.stringify(dados.perguntas_frequentes));
+            const beneficios = dados.perguntas_frequentes.map(f => f.pergunta);
+            setVal('hidden_lista_beneficios', JSON.stringify(beneficios));
+          }
+
+          if (dados.configuracoes_visuais?.logo_imagem) {
+            setVal('hidden_img1_name', dados.configuracoes_visuais.logo_imagem);
+            setVal('hidden_img1_alt', `${emp.nome} - Logo`);
+          }
+        }
+
+        // 2. SUPORTE AO FORMATO ANTIGO (dados_formulario_base + conteudo_enriquecido_desktop)
         const base = dados.dados_formulario_base;
         if (base) {
           setVal('inPid', base.placeId);
@@ -405,7 +392,6 @@
         const pc = dados.conteudo_enriquecido_desktop;
         if (pc) {
           setVal('hidden_canonical', pc.seo_tags?.canonical);
-          aplicarCanonicalNoCaminho(pc.seo_tags?.canonical);
           setVal('hidden_h1', pc.seo_tags?.h1);
           setVal('hidden_meta_description', pc.seo_tags?.meta_description);
           setVal('hidden_lista_beneficios', JSON.stringify(pc.lista_beneficios_o_que_encontra || []));
@@ -422,16 +408,13 @@
             setVal(`hidden_img${i}_alt`, img.alt_descricao);
           }
         }
-        const faltando = [];
-        if (!base) faltando.push('dados_formulario_base');
-        if (!pc) faltando.push('conteudo_enriquecido_desktop');
-        const semDado = [];
-        if (!document.getElementById('inSegmento').value.trim()) semDado.push('Segmento');
-        if (!document.getElementById('inServicos').value.trim()) semDado.push('Produtos/Serviços');
-        if (semDado.length) setTimeout(() => alert('ℹ️ O JSON não trouxe: ' + semDado.join(' e ') + '. Preencha à mão nos campos antes de gerar (senão entra um texto padrão).'), 50);
-        alert(faltando.length
-          ? '⚠️ Importado, mas o JSON não trouxe: ' + faltando.join(', ') + '. Esses campos ficaram vazios/padrão.'
-          : '🎉 Sucesso! Todos os campos foram atualizados com o JSON. Agora clique em "Gerar" e depois em "Baixar index.html Completo".');
+
+        if (!dados.empresa && !base && !pc) {
+          alert('⚠️ O JSON é válido, mas não possui a estrutura esperada.');
+          return;
+        }
+
+        alert('🎉 Sucesso! Os dados foram importados e distribuídos para os campos.');
       } catch (e) {
         console.error(e);
         alert('❌ Erro de sintaxe no JSON: ' + e.message);
@@ -475,9 +458,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* ==========================================================
-       FUNÇÃO DE GERAÇÃO E DOWNLOAD VIA BLOB (BLINDADA)
-       ========================================================== */
     function gerarTudo() {
       const pid = document.getElementById('inPid').value.trim();
       const nome = document.getElementById('inNome').value.trim();
@@ -494,7 +474,7 @@
 
       if((!pid && !reviewUrl) || !nome) {
         alert("Por favor, preencha o Nome da Empresa e o Place ID (ou importe um JSON com o link de avaliação do Google).");
-        return;
+        return false;
       }
 
       const linkGoogleAvaliacao = reviewUrl || `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
@@ -959,6 +939,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
       document.getElementById('resBox').classList.remove('hidden');
       document.getElementById('resBox').scrollIntoView({ behavior: 'smooth' });
+      return true;
     }
 
     function baixarQRCode() {
@@ -974,10 +955,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
     // DOWNLOAD VIA BLOB BLINDADO CONTRA TRAVAMENTOS
     function baixarHTML() {
-      if (!htmlFinal) {
-        alert("Por favor, gere o cartão primeiro antes de baixar!");
-        return;
-      }
+      // Regenera com os dados que estão nos campos agora, para o arquivo sair sempre atualizado
+      if (!gerarTudo() || !htmlFinal) return;
       const blob = new Blob([htmlFinal], { type: 'text/html;charset=utf-8' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
