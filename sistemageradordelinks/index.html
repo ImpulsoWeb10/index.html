@@ -88,6 +88,8 @@
       <input type="hidden" id="hidden_intro" />
       <input type="hidden" id="hidden_produtos" />
       <input type="hidden" id="hidden_local" />
+      <input type="hidden" id="hidden_review_url" />
+      <input type="hidden" id="hidden_wa_msg" />
       <input type="hidden" id="hidden_img1_url" /><input type="hidden" id="hidden_img1_name" /><input type="hidden" id="hidden_img1_alt" />
       <input type="hidden" id="hidden_img2_url" /><input type="hidden" id="hidden_img2_name" /><input type="hidden" id="hidden_img2_alt" />
       <input type="hidden" id="hidden_img3_url" /><input type="hidden" id="hidden_img3_name" /><input type="hidden" id="hidden_img3_alt" />
@@ -328,6 +330,42 @@
         : 'Preenchido automaticamente pelo nome da empresa. Pode editar se quiser outro caminho.';
     }
 
+    // Aceita também o formato "empresa / contatos / perguntas_frequentes" e converte para o formato interno
+    function converterFormatoEmpresa(d) {
+      const e = d.empresa || {};
+      const end = e.endereco || {};
+      const ct = e.contatos || {};
+      const instUser = String(ct.instagram || '').trim().replace(/[?#].*$/, '').replace(/\/+$/, '').split('/').pop().replace('@', '');
+      const rua = [end.rua, end.numero].filter(Boolean).join(', ');
+      const enderecoCompleto = [rua, end.bairro].filter(Boolean).join(' - ');
+      const cidade = e.cidade || end.cidade || '';
+      const estado = e.estado || end.estado || '';
+      let waMsg = '';
+      try { waMsg = new URL(ct.whatsapp_link).searchParams.get('text') || ''; } catch (err) {}
+      const caminho = ct.cardapio_digital || ct.pagina || ct.link_pagina || '';
+      return {
+        dados_formulario_base: {
+          placeId: e.place_id || e.placeId || '',
+          nomeEmpresa: e.nome,
+          whatsapp: ct.whatsapp_principal,
+          instagram: instUser,
+          cidadeEstado: [cidade, estado].filter(Boolean).join(' - '),
+          enderecoCompleto: enderecoCompleto,
+          segmento: e.segmento || '',
+          produtosPrincipais: e.produtos_principais || e.produtos || '',
+          googleReviewUrl: end.google_review_url || ct.google_review_url || '',
+          whatsappMensagem: waMsg
+        },
+        conteudo_enriquecido_desktop: {
+          seo_tags: { canonical: caminho, h1: e.h1 || '', meta_description: e.descricao_meta || '' },
+          lista_beneficios_o_que_encontra: e.beneficios || [],
+          faq_perguntas_frequentes: d.perguntas_frequentes || [],
+          textos_seo_secoes: { introducao_bloco: e.slogan || '' },
+          imagens_otimizadas_seo: e.imagens || []
+        }
+      };
+    }
+
     function processarJsonAi() {
       try {
         let jsonTexto = document.getElementById('jsonAiInput').value.trim();
@@ -343,7 +381,8 @@
           return;
         }
         jsonTexto = jsonTexto.substring(primeiraChave, ultimaChave + 1);
-        const dados = JSON.parse(jsonTexto);
+        let dados = JSON.parse(jsonTexto);
+        if (!dados.dados_formulario_base && !dados.conteudo_enriquecido_desktop && dados.empresa) dados = converterFormatoEmpresa(dados);
 
         // Nova importação = começa do zero (nada do cliente anterior fica para trás)
         resetarEstadoImportacao();
@@ -358,6 +397,8 @@
           setVal('inEndereco', base.enderecoCompleto);
           setVal('inSegmento', base.segmento);
           setVal('inServicos', base.produtosPrincipais);
+          setVal('hidden_review_url', base.googleReviewUrl);
+          setVal('hidden_wa_msg', base.whatsappMensagem);
           atualizarCaminhoAuto();
         }
 
@@ -384,6 +425,10 @@
         const faltando = [];
         if (!base) faltando.push('dados_formulario_base');
         if (!pc) faltando.push('conteudo_enriquecido_desktop');
+        const semDado = [];
+        if (!document.getElementById('inSegmento').value.trim()) semDado.push('Segmento');
+        if (!document.getElementById('inServicos').value.trim()) semDado.push('Produtos/Serviços');
+        if (semDado.length) setTimeout(() => alert('ℹ️ O JSON não trouxe: ' + semDado.join(' e ') + '. Preencha à mão nos campos antes de gerar (senão entra um texto padrão).'), 50);
         alert(faltando.length
           ? '⚠️ Importado, mas o JSON não trouxe: ' + faltando.join(', ') + '. Esses campos ficaram vazios/padrão.'
           : '🎉 Sucesso! Todos os campos foram atualizados com o JSON. Agora clique em "Gerar" e depois em "Baixar index.html Completo".');
@@ -443,12 +488,16 @@
       const segmento = document.getElementById('inSegmento').value.trim() || 'Serviços';
       const servicos = document.getElementById('inServicos').value.trim() || 'Atendimento de Qualidade';
 
-      if(!pid || !nome) {
-        alert("Por favor, preencha pelo menos o Place ID e o Nome da Empresa.");
+      const reviewUrl = document.getElementById('hidden_review_url').value.trim();
+      const waMsgRaw = document.getElementById('hidden_wa_msg').value.trim();
+      const waTexto = waMsgRaw ? encodeURIComponent(waMsgRaw) : 'Olá!%20Vim%20pelo%20link.';
+
+      if((!pid && !reviewUrl) || !nome) {
+        alert("Por favor, preencha o Nome da Empresa e o Place ID (ou importe um JSON com o link de avaliação do Google).");
         return;
       }
 
-      const linkGoogleAvaliacao = `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
+      const linkGoogleAvaliacao = reviewUrl || `https://search.google.com/local/writereview?placeid=${encodeURIComponent(pid)}`;
       document.getElementById('outLinkGoogle').value = linkGoogleAvaliacao;
 
       const slugAuto = formatarSlug(nome) || 'cliente';
@@ -497,8 +546,8 @@
           if (Array.isArray(faqArr) && faqArr.length) {
             faqHtml = faqArr.map(f => `
               <details class="faq-item">
-                <summary class="faq-question">${f.pergunta}</summary>
-                <div class="faq-answer">${f.resposta}</div>
+                <summary class="faq-question">${f.icone ? f.icone + ' ' : ''}${f.pergunta}</summary>
+                <div class="faq-answer">${f.resposta}${f.texto_botao_cta ? `<a class="faq-cta" href="https://wa.me/${wa}?text=${encodeURIComponent(f.mensagem_whatsapp || 'Olá!')}" target="_blank" rel="noopener">${f.texto_botao_cta}</a>` : ''}</div>
               </details>
             `).join('');
           }
@@ -675,6 +724,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .faq-question::after{content:'+';font-size:1.1rem;color:#c9a96e;font-weight:700;transition:transform .2s}
 .faq-item[open] .faq-question::after{content:'−'}
 .faq-answer{font-size:.78rem;line-height:1.5;color:#c9d6e6;padding:0 .8rem .8rem .8rem;border-top:1px solid rgba(255,255,255,.06);margin-top:.1rem;padding-top:.45rem}
+.faq-cta{display:block;margin-top:.55rem;text-align:center;text-decoration:none;font-weight:700;font-size:.76rem;color:#04210f;background:#22c55e;border-radius:50px;padding:.5rem .8rem}
 .btn-share{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;min-height:46px;background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.35);border-radius:50px;font-family:inherit;font-weight:700;font-size:.86rem;cursor:pointer}
 .btn-share:hover{background:rgba(255,255,255,.16)}
 .btn-share svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -728,7 +778,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       </div>
       <div class="cta-row layer-front">
         <a href="tel:+[WHATSAPP]" class="btn-act btn-call">Ligar agora</a>
-        <a href="https://wa.me/[WHATSAPP]?text=Olá!%20Vim%20pelo%20link." class="btn-act btn-wa" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://wa.me/[WHATSAPP]?text=[WA_TEXTO]" class="btn-act btn-wa" target="_blank" rel="noopener">WhatsApp</a>
       </div>
       <div class="social-row layer-front">
         <a href="https://www.instagram.com/[INSTAGRAM]" class="social-btn" target="_blank" rel="noopener">
@@ -882,6 +932,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
         .replaceAll('[CIDADE]', cidade)
         .replaceAll('[SEGMENTO]', segmento)
         .replaceAll('[SERVICOS_RESUMO]', servicos)
+        .replaceAll('[WA_TEXTO]', waTexto)
         .replaceAll('[WHATSAPP]', wa)
         .replaceAll('[INSTAGRAM]', ig)
         .replaceAll('[ENDERECO]', endereco)
